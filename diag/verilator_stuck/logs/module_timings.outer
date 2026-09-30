@@ -1,0 +1,9 @@
+nohup: 忽略输入
+neon_fp rc=1 wall=0.081s
+muldiv rc=0 wall=0.092s
+mmu rc=0 wall=0.099s
+fp_state rc=0 wall=0.108s
+alu rc=0 wall=0.118s
+decode rc=0 wall=0.312s
+neon_int rc=0 wall=0.387s
+fp_scalar rc=124 wall=300.004s

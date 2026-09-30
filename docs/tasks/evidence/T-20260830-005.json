@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-005",
+  "state": "done",
+  "partial": false,
+  "base_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+  "head_sha": "ae2819a4090f342fb40cedb721e6e69c1093a0b7",
+  "merge_sha": "ae2819a4090f342fb40cedb721e6e69c1093a0b7",
+  "branch": "feature/T-20260830-005-fpga-e",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-005",
+  "scope": "FPGA-E: Quartus Prime Pro 21.4 partition/incremental compilation evaluation for Catapult A10 B5; remote QSF syntax and QDB export/import proof; no B5 full flow and no heavy B5 synthesis run.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-30T01:00:00+08:00",
+    "suite_start": "2026-08-30T01:50:00+08:00",
+    "suite_end": "2026-08-30T02:10:00+08:00",
+    "documents_written_at": "2026-08-30T02:06:34+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive -EncodedCommand <UTF-16LE base64>",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-005",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "note": "All experiments were created under build/T-20260830-005. No original QSF/SDC/RTL modified, no license content read, no full B5 flow started. Remote RTL is not synchronized with local current main; remote fp_scalar is the older pre-FPGA-C file.",
+    "project_exists": true,
+    "original_modified": false,
+    "license_read": false,
+    "full_flow_started": false
+  },
+  "toolchain": {
+    "quartus_sh": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe",
+    "quartus_syn": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+    "quartus_cdb": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_cdb.exe",
+    "os": "Windows / GamePC"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-remote-connect-001",
+      "source_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -NoProfile -NonInteractive -EncodedCommand <encoded>; Test-Path D:\\Projects\\fpga-altra\\lcvex; whoami; hostname",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Remote reachable; host GamePC; D:\\Projects\\fpga-altra\\lcvex exists."
+    },
+    {
+      "run_id": "owner-l0-partition-syntax-candidates-002",
+      "source_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "Create tiny top/child project under build/T-20260830-005/cand/* and run quartus_syn per candidate assignment; inspect QSF read errors.",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Valid instance assignment is 'set_instance_assignment -name PARTITION <name> -to <path>' without -section_id. PARTITION_NAME and PARTITION_NETLIST_TYPE are invalid/unsupported in 21.4 QSF."
+    },
+    {
+      "run_id": "owner-l0-partition-tiny-synth-003",
+      "source_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off varE -c varE",
+      "seed": null,
+      "wall_seconds": 3.2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 615,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Tiny partition project with child partition successfully synthesized; Quartus reported 2 partitions after elaboration and synthesized root_partition + child sequentially."
+    },
+    {
+      "run_id": "owner-l0-single-partition-command-004",
+      "source_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off --synthesis --partition child varE -c varE",
+      "seed": null,
+      "wall_seconds": 0.2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 323,
+      "disk_delta_mb": null,
+      "exit_code": 3,
+      "result": "fail_no_synthesis_snapshot",
+      "summary": "Direct single-partition synthesis from a freshly fully-synthesized project fails because link_rtl_design -snapshot synthesis cannot find the required pre-synthesis snapshot."
+    },
+    {
+      "run_id": "owner-l0-qdb-export-005",
+      "source_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "quartus_cdb varE -c varE --export_partition child --snapshot synthesized --file child.qdb",
+      "seed": null,
+      "wall_seconds": 1.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 1065,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Exported child synthesized snapshot to child.qdb (7859 bytes)."
+    },
+    {
+      "run_id": "owner-l0-qdb-import-006",
+      "source_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "quartus_cdb varImport -c varImport --import_partition child --file D:\\...\\varE\\child.qdb",
+      "seed": null,
+      "wall_seconds": 0.2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 300,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Import QDB command accepted; no errors."
+    },
+    {
+      "run_id": "owner-l0-import-then-resynthesis-007",
+      "source_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "quartus_sh --flow compile varImport -c varImport -start synthesis -end synthesis",
+      "seed": null,
+      "wall_seconds": 9.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 618,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "partial_not_skipped",
+      "summary": "After QDB import, synthesis still re-synthesized child partition from black-box RTL (stuck-at-GND), so the tested simple flow does not prove imported QDB replaces top-level RTL synthesis."
+    }
+  ],
+  "partition_plan": {
+    "tier1": "Single-project design partition assignments; creates partitions and lets quartus_syn synthesize each partition sequentially. Low effort, but whole-design analysis/elaboration still occurs first.",
+    "tier2": "Standalone partition synthesis + quartus_cdb --export_partition/--import_partition bottom-up assembly. Required if 70GB OOM is in whole-design elaboration.",
+    "instance_paths_soc_top": [
+      "core",
+      "coh.i_l1",
+      "coh.d_l1",
+      "coh.l2",
+      "coh",
+      "ddr_bridge",
+      "axi_master",
+      "emif_adapter"
+    ],
+    "instance_paths_a10_top": [
+      "soc.core",
+      "soc.coh.i_l1",
+      "soc.coh.d_l1",
+      "soc.coh.l2",
+      "soc.coh",
+      "soc.ddr_bridge",
+      "soc.axi_master",
+      "soc.emif_adapter"
+    ],
+    "verified_qsf_syntax": "set_instance_assignment -name PARTITION <partition_name> -to \"<instance_path>\"",
+    "not_verified": "Whether imported QDB partitions can be excluded from top-level synthesis; likely needs deeper block-based flow / preservation setting or fitter-stage import."
+  },
+  "expected_benefits": [
+    "Tier 2 bottom-up can reduce peak synthesis memory from one 70GB process to the largest standalone partition plus top-level glue.",
+    "Existing measurements suggest L1D ~3.6GB and AXI adapter ~0.9GB standalone, so most cache/core partitions may fit well below 70GB if individually synthesizable.",
+    "L2 remains the largest threat; it did not finish in >37min standalone before FPGA-B/C changes. Need rerun after reduced L2 geometry / potential multi-cycle/structural split.",
+    "A64_FP_SIMD=0 from FPGA-D provides a practical first-stage reduction; in Verilator it removed about 88-93% of elaboration size.",
+    "QDB export/import commands are available and may support incremental updates after only one partition changes."
+  ],
+  "risks": [
+    "Simple single-project partition may not help if OOM occurs during elaboration (T-101 soc_only log stopped at Elaborating before partition synthesis messages).",
+    "Bottom-up flow is not fully validated: our tiny import still re-synthesized the black-box partition.",
+    "Cross-partition boundary complexity may increase fitting/timing effort and can harm Fmax if interfaces are not constrained.",
+    "Remote RTL is not synchronized with local main; any B5 partition experiment must first update the remote experimental copy.",
+    "L2 and soc_coh standalone synthesis have previously timed out; additional structural RTL splitting may be needed before partition assembly.",
+    "No fit/STA/SOF evidence is produced by this task; full FPGA-F acceptance still requires full flow after partitions are stable."
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-005-fpga-e.md",
+      "sha256": "1c6011f3ebdafb1a3c39954e173baddecee43867d28201ef7d6932bf131499ad",
+      "bytes": null,
+      "owner": "T-20260830-005",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-005-fpga-e.md"
+    },
+    {
+      "id": "partition-template-qsf",
+      "uri": "fpga/catapult_a10/tools/partition_template.qsf",
+      "sha256": "d534da267f50b91d68718e7f083065c9eab573ce6bcb882addb6388ef2d3baa2",
+      "bytes": null,
+      "owner": "T-20260830-005",
+      "retain_until": "task-close",
+      "reproduce": "cat fpga/catapult_a10/tools/partition_template.qsf"
+    },
+    {
+      "id": "remote-experiment-dir",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-005",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-005",
+      "retain_until": "task-close",
+      "reproduce": "PowerShell list build/T-20260830-005; contains syntax/varE/varImport/cand experiments"
+    },
+    {
+      "id": "remote-varE-qsf",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-005\\varE\\varE.qsf",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-005",
+      "retain_until": "task-close",
+      "reproduce": "Verified valid partition QSF example"
+    },
+    {
+      "id": "remote-varE-qdb",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-005\\varE\\child.qdb",
+      "sha256": null,
+      "bytes": 7859,
+      "owner": "T-20260830-005",
+      "retain_until": "task-close",
+      "reproduce": "quartus_cdb varE -c varE --export_partition child --snapshot synthesized --file child.qdb"
+    }
+  ],
+  "known_limits": [
+    "No B5 partition synthesis or heavy synthesis was run; only tiny projects validated command syntax/tool behavior.",
+    "No complete B5 full flow; no fit/STA/SOF.",
+    "QDB import did not prevent re-synthesis in the simple test; exact bottom-up assembly flow remains to be validated in FPGA-F.",
+    "Did not read license; did not modify original QSF/SDC/RTL on remote or in repo.",
+    "Remote RTL version differs from local main."
+  ],
+  "status": "done",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.documents_written_at",
+        "old": "2026-08-30T02:10:00+08:00",
+        "new": "2026-08-30T02:06:34+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "ae2819a4090f342fb40cedb721e6e69c1093a0b7",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "complete",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "ae2819a4090f342fb40cedb721e6e69c1093a0b7",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-005-fpga-e.md",
+        "sha256": "1c6011f3ebdafb1a3c39954e173baddecee43867d28201ef7d6932bf131499ad",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "partition-template-qsf",
+        "uri": "fpga/catapult_a10/tools/partition_template.qsf",
+        "sha256": "d534da267f50b91d68718e7f083065c9eab573ce6bcb882addb6388ef2d3baa2",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  },
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T02:07:39+08:00",
+    "head_sha": "8c007e1e14f3bd7a9f2bbd4934257d385e574cbe",
+    "notes": "FPGA-E merged. Delivered partition_template.qsf and staged FPGA-F plan; no full B5 flow started.",
+    "merge_sha": "ae2819a4090f342fb40cedb721e6e69c1093a0b7",
+    "result_sha": "ae2819a4090f342fb40cedb721e6e69c1093a0b7"
+  }
+}

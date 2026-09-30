@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260928-004",
+  "label": "AARCH64-LINUX-FLASH-PAYLOAD-AND-BRAM-LOADER",
+  "state": "review",
+  "acceptance_status": "format-host-tests-and-independent-loader-build-pass-awaiting-integration-review",
+  "partial": false,
+  "base_sha": "8d24b68ba2f8d4d22fdff95309d6be008a0ea7d8",
+  "base_tree_sha": "e1baca950819febc6c739478274fd7154e5b8c6c",
+  "dispatch_parent_sha": "b14614d6e154a350614dae934be83fb5d58784fb",
+  "implementation_sha": "a2e314001a60a34fdd0d112e36d0fea012ca6329",
+  "implementation_tree_sha": "e2ad8d05aa6f566f680d680b5a174d1d71da9584",
+  "merge_sha": null,
+  "reported_at": "2026-09-28T01:23:24+08:00",
+  "branch": "feature/T-20260928-004-linux-flash-loader",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-004",
+  "owner": "flash_loader_agent",
+  "model": "not_explicitly_specified",
+  "timestamps": {
+    "dispatch_sent_at": "2026-09-28T00:15:41+08:00",
+    "work_received_at": "2026-09-28T00:18:41+08:00",
+    "implementation_committed_at": "2026-09-28T01:10:44+08:00",
+    "validation_finished_at": "2026-09-28T01:13:41+08:00",
+    "handoff_authored_at": "2026-09-28T01:23:24+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "change": {
+    "summary": "Added an AArch64-only versioned Linux Flash payload, strict host builder/parser, layout-generated loader constants, and an independent BRAM loader image build.",
+    "all_changed_paths": [
+      "fpga/catapult_a10/boot/linux_loader.S",
+      "fpga/catapult_a10/boot/linux_loader.ld",
+      "fpga/catapult_a10/boot/build_linux_loader.sh",
+      "fpga/catapult_a10/boot/linux_image_format.py",
+      "fpga/catapult_a10/boot/test_linux_image_format.py",
+      "fpga/catapult_a10/boot/linux_flash_layout.json",
+      "docs/handoffs/T-20260928-004-linux-flash-loader.md",
+      "docs/tasks/evidence/T-20260928-004.json"
+    ],
+    "tracked_source_sha256": {
+      "fpga/catapult_a10/boot/linux_loader.S": "cdf6ebbff3bc97e4c81e5ba24b5ce6fa05ce5ebb32713145b4313d16bc3adb1a",
+      "fpga/catapult_a10/boot/linux_loader.ld": "94417668ccc87133a10332b0e43749266f20167b3a6fd3231e6e3fac0425f509",
+      "fpga/catapult_a10/boot/build_linux_loader.sh": "1236297ec640344dfde0224424822e00019b8f6e89c9e3544b685b4dacb82978",
+      "fpga/catapult_a10/boot/linux_image_format.py": "80addb4db780cb84471051586d8c18bb53f3fc50e773dac4c4fddf7bed2c9f72",
+      "fpga/catapult_a10/boot/test_linux_image_format.py": "eae5b832539de061c33924db4c71d1e2fef6f0fff551698c5d1fbb36aa07860e",
+      "fpga/catapult_a10/boot/linux_flash_layout.json": "abb41581cf3dc57468925ce7c71edf2f06420b0cb65f8add9701b1ff0ac65ef5"
+    }
+  },
+  "format_contract": {
+    "magic_ascii": "LCVXARM!",
+    "version": 1,
+    "endianness": "little",
+    "header_bytes": 40,
+    "segment_count": 2,
+    "segment_bytes": 32,
+    "trailer_bytes": 8,
+    "descriptor_crc": "CRC-32/ISO-HDLC over header plus segment table",
+    "segment_crc": "CRC-32/ISO-HDLC over each entire DDR load span",
+    "segment_order": ["kernel", "dtb"],
+    "segment_source_semantics": "absolute physical Flash byte offset from EPCQL byte zero",
+    "payload_bin_and_hex_semantics": "relative to payload start at address zero; relative Intel HEX COF offset adds configured payload_offset exactly once",
+    "candidate_only_layout": {
+      "flash_aperture": "[0x10000000,0x18000000)",
+      "payload_offset": "0x04000000",
+      "physical_flash_capacity": "0x08000000",
+      "ddr": "[0x40000000,0x48000000)",
+      "kernel_address": "0x40200000",
+      "dtb_address": "0x47000000",
+      "is_integrated": false
+    }
+  },
+  "validation": [
+    {
+      "name": "Linux Flash format unit tests",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 fpga/catapult_a10/boot/test_linux_image_format.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "tests_passed": 18,
+      "coverage": [
+        "valid AArch64 Image + DTB package and address/CRC fields",
+        "CRC-32/ISO-HDLC known answer and descriptor/segment corruption",
+        "Flash/DDR out-of-range and 64-bit addition overflow",
+        "Flash/DDR address alignment and payload base alignment",
+        "Flash and DDR segment overlap and unsupported descriptor order",
+        "relative Intel HEX record addressing/checksums and CLI output"
+      ],
+      "input_note": "Tests use synthetic minimal Image and DTB fixtures; no real Linux image was packaged."
+    },
+    {
+      "name": "Independent AArch64 loader assemble/link/size/BRAM mirror",
+      "command": "fpga/catapult_a10/boot/build_linux_loader.sh",
+      "result": "PASS",
+      "exit_code": 0,
+      "tools": {
+        "assembler": "GNU assembler (GNU Binutils) 2.47",
+        "linker": "GNU ld (GNU Binutils) 2.47",
+        "objcopy": "GNU objcopy (GNU Binutils) 2.47",
+        "python": "Python 3.12.10"
+      },
+      "elf_machine": "AArch64",
+      "elf_entry": "0x0000000000000000",
+      "loader_bin_bytes": 2049,
+      "loader_image_limit_bytes": 61440,
+      "bram_bytes": 65536,
+      "mif": "WIDTH=64, DEPTH=8192; existing converter read every byte back against linux_loader.bin padded with zeroes",
+      "artifacts": [
+        {
+          "path": "fpga/catapult_a10/boot/build/linux-loader/linux_loader.elf",
+          "bytes": 72088,
+          "sha256": "5dc5ae0020c9ff74d7dabff03c869d97639f33389d3af445fd07e6726892c796",
+          "tracked": false
+        },
+        {
+          "path": "fpga/catapult_a10/boot/build/linux-loader/linux_loader.bin",
+          "bytes": 2049,
+          "sha256": "89968f6391209758f12e925bf05fb43dff6077e2ad0da5efd32914236a7da6db",
+          "tracked": false
+        },
+        {
+          "path": "fpga/catapult_a10/boot/build/linux-loader/linux_loader.hex",
+          "bytes": 6147,
+          "sha256": "ca02449ef45be65514df7611dfdfa784706889adc23eb2f35662767af590bf83",
+          "tracked": false
+        },
+        {
+          "path": "fpga/catapult_a10/boot/build/linux-loader/linux_loader.mif",
+          "bytes": 204942,
+          "sha256": "00d4d7b720c1eced0fe6c82cdf211b167700ce34099a19d6e3f0e2fe147b49ef",
+          "tracked": false
+        }
+      ]
+    },
+    {
+      "name": "Shell/JSON whitespace checks",
+      "command": "bash -n fpga/catapult_a10/boot/build_linux_loader.sh && python3 -m json.tool fpga/catapult_a10/boot/linux_flash_layout.json >/dev/null && git diff --check",
+      "result": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "resource_and_scope": {
+    "resource_class": "small local L0 host/unit and cross-assemble/link job; no heavy resource lock required",
+    "quartus": false,
+    "jtag": false,
+    "flash_programming": false,
+    "soc_or_board_simulation": false,
+    "rtl_or_top_modified": false,
+    "qsf_or_cof_modified": false,
+    "flash_aperture_integrated": false
+  },
+  "known_limits": [
+    "Flash aperture and payload offset remain candidate map values; platform RTL must implement the 1:1 byte mapping before this loader can run.",
+    "The CPU must enter at BRAM PC 0 with the active EL's SCTLR.M/C disabled; the loader rejects M/C enabled because it uses fixed physical addresses.",
+    "Each Flash access depends on the aperture bridge completing correctly; the loader bounds calibration wait and UART TX polling but does not time out a stuck Flash transaction.",
+    "Only embedded-initramfs Image plus DTB are represented; external initramfs requires a format extension and DTB initrd nodes.",
+    "No real Image/DTB, loader simulation, Quartus, board run, or cold boot was part of this task."
+  ],
+  "handoff": "docs/handoffs/T-20260928-004-linux-flash-loader.md",
+  "next": "Integration review, then platform lane must select the standalone linux_loader.mif and implement/verify the read-only CPU Flash aperture using the absolute-source-offset contract."
+}

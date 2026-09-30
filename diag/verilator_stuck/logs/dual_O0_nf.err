@@ -1,0 +1,16 @@
+%Warning-IMPLICITSTATIC: rtl/lcvex_l2_cluster.sv:196:11: Variable's lifetime implicitly set to static (IEEE 1800-2023 6.21)
+                                                       : ... The initializer value will only be set once
+                                                       : ... Suggest use 'static' before variable declaration'
+  196 |       int aj = (int'(rr_ptr) + ai) % CORE_COUNT;
+      |           ^~
+                         ... For warning description see https://verilator.org/warn/IMPLICITSTATIC?v=5.050
+                         ... Use "/* verilator lint_off IMPLICITSTATIC */" and lint_on around source to disable this message.
+-Info: Command Line disabled gate optimization with -fno-gate.  This may cause ordering problems.
+xargs: 无法运行命令 “x86_64-conda-linux-gnu-ar”: 没有那个文件或目录
+/bin/sh: 行 4: x86_64-conda-linux-gnu-ar: 未找到命令
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-ld: cannot find Vlcvex_c2_dualcore_tb__ALL.a: 没有那个文件或目录
+collect2: error: ld returned 1 exit status
+make: *** [Vlcvex_c2_dualcore_tb.mk:64：lcvex_c2_dualcore_tb] 错误 1
+%Error: 'make -C tmp_build/dual_O0_nf -f Vlcvex_c2_dualcore_tb.mk -j 2' exited with 2
+        ... See the manual at https://verilator.org/verilator_doc.html?v=5.050 for more assistance.
+%Error: Command Failed ulimit -s unlimited 2>/dev/null; exec /home/chiro/miniforge3/envs/lcvex/bin/verilator_bin --binary --timing --assert -O0 -Wno-fatal -Wno-UNOPTFLAT -j 2 --top-module lcvex_c2_dualcore_tb -Mdir tmp_build/dual_O0_nf -o lcvex_c2_dualcore_tb -f rtl/filelist.f rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv tb/sv/lcvex_c2_dualcore_tb.sv

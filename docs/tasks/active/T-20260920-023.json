@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-023",
+  "parent": "T-20260920-022",
+  "label": "B25-LOGIC-IMM-QUARTUS-REGRESSION",
+  "title": "Build a synthesis-visible regression for the two failing uart_getc logical immediates",
+  "kind": "verification-infrastructure",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-exhaustive-and-quartus-regression-pass",
+  "assigned_owner": "logicimm_test",
+  "depends_on": ["T-20260920-021"],
+  "base_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+  "branch": "verify/T-20260920-023-b25-logic-imm-quartus-regression",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-023",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-023-b25-logic-imm-quartus-regression",
+  "writes": [
+    "fpga/catapult_a10/tb/sv/lcvex_logic_imm_quartus_tb.sv",
+    "fpga/catapult_a10/tb/filelist_logic_imm_quartus.f",
+    "fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh",
+    "fpga/catapult_a10/tools/quartus_logic_imm/**",
+    "build/agents/T-20260920-023/** ignored logs/artifacts",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-023-b25-logic-imm-quartus-regression/**",
+    "docs/tasks/evidence/T-20260920-023.json",
+    "docs/handoffs/T-20260920-023-b25-logic-imm-quartus-regression.md"
+  ],
+  "scope": "Create a hermetic directed decoder/ALU regression and minimal Quartus 21.4 synthesis/post-map probe for the exact uart_getc opcodes. The old base must be retained as the negative control; do not edit RTL or expected architectural values.",
+  "directed_cases": [
+    "0x12003C06 AND W6,W0,#0xffff with W0=0x0000A43F -> W6=0x0000A43F",
+    "0x12001C00 AND W0,W0,#0xff with W0=0x0000A43F -> W0=0x0000003F",
+    "representative valid 32/64-bit masks compared against an independent reference decoder",
+    "reserved N/immr/imms combinations remain invalid/UDEF"
+  ],
+  "acceptance": "Behavioral oracle passes; a fresh old-SHA Quartus run deterministically records warning 16788 and/or wrong produced logic as a negative result; the runner is reusable on the merged fixed SHA and fails closed on warning, semantic mismatch, missing report or stale output.",
+  "resource": "All GamePC/Quartus activity must hold gamepc and use only the task remote root; local compile/simulation that is heavy must hold local. No concurrent writer may share its output path.",
+  "forbidden_regions": [
+    "tracked RTL, firmware, existing test expected results or common test registry",
+    "full physical fitter/STA/assembler unless mechanically required for a proven post-map semantic check and explicitly recorded",
+    "JTAG, board, FPGA configuration, Flash/JIC/EPCQ, reset or power",
+    "stopping unknown or pre-existing processes"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T14:03:44+08:00",
+    "agent_name": "logicimm_test",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "topic_commits": [
+      "30981e9601b50f4e4f047c8092a3c5109e05efeb",
+      "93b5ad75ca6d6ecefaa27c76a9aaa1d46a811914"
+    ],
+    "integration_commits": [
+      "4d565961d7fdca0257584ff8dadf8651cff721f1",
+      "90feb2c4929de3450828aedb33a7ef58bb75b9be"
+    ],
+    "candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+    "behavioral": "PASS exhaustive=16384 legal=11328 reserved=5056 exact=A43F/3F",
+    "old_negative": "PASS; fresh old synthesis reproduced warning 16788",
+    "fixed": "PASS; fresh candidate synthesis warning 16788 count 0",
+    "evidence": "docs/tasks/evidence/T-20260920-023.json",
+    "handoff": "docs/handoffs/T-20260920-023-b25-logic-imm-quartus-regression.md"
+  },
+  "created_at": "2026-09-20T14:00:39+08:00",
+  "updated_at": "2026-09-20T14:51:49+08:00"
+}

@@ -1,0 +1,607 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-004",
+  "label": "B25-PHYSICAL-ACCEPTANCE-AUDIT",
+  "state": "done",
+  "acceptance_status": "matrix-ready-read-only",
+  "partial": false,
+  "base_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "candidate_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "head_before_audit": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "branch": "verify/T-20260909-004-b25-physical-acceptance-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-004",
+  "timestamps": {
+    "original_sent_at": "2026-09-09T01:21:51+08:00",
+    "restart_recovery_received_at": "2026-09-09T01:46:47+08:00",
+    "reported_at": "2026-09-09T02:13:07+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "scope": "独立从 candidate HEAD、T-20260908-005/006/007 与 T-20260909-001 的 tracked evidence、Catapult QSF/SDC/manifest/checker 合同推导 T-20260909-002 的 physical acceptance matrix；本任务不运行 Quartus、GamePC、build、远端或板级动作。",
+  "physical_probe_contract": {
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical",
+    "quartus_project_dir": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/fpga/catapult_a10/quartus",
+    "artifact_token": "矩阵中的 <fresh> 均只允许展开为上述 fresh probe；不得替换为 T-006/T-20260907-042 或任何历史 database。",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG"
+  },
+  "read_set": [
+    "docs/tasks/evidence/T-20260908-005.json",
+    "docs/tasks/evidence/T-20260908-006.json",
+    "docs/tasks/evidence/T-20260908-007.json",
+    "docs/tasks/evidence/T-20260909-001.json",
+    "fpga/catapult_a10/quartus/catapult_a10.qpf",
+    "fpga/catapult_a10/quartus/catapult_a10.qsf",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/skeleton_manifest.json",
+    "fpga/catapult_a10/source.lock",
+    "fpga/catapult_a10/SHA256SUMS",
+    "fpga/catapult_a10/tools/check_platform.py",
+    "fpga/catapult_a10/tools/check_skeleton.py",
+    "fpga/catapult_a10/tools/check_synthesis_selector.py",
+    "fpga/catapult_a10/boot/check_image_contract.py"
+  ],
+  "candidate_inputs": {
+    "hashes": {
+      "fpga/catapult_a10/quartus/catapult_a10.qpf": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+      "fpga/catapult_a10/quartus/catapult_a10.qsf": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f",
+      "fpga/catapult_a10/platform_manifest.json": "c87aac08e855fc4ac30ad6ddfa4db19d41644b6ab5f660e80e628063545a5e9d",
+      "fpga/catapult_a10/skeleton_manifest.json": "35b47fb36402662776ed1e17cda9d2c2bba0c77f2940ae89d38b41ee684acc76",
+      "fpga/catapult_a10/SHA256SUMS": "764d5cf14617ec0a59d5b8ec030a179254594e1555fb8e070130e94670e17bd7",
+      "fpga/catapult_a10/source.lock": "2a2ca8107cb1713fbf558415911c4100a96244d9cfeb19091ecd0e8c6ea66629",
+      "fpga/catapult_a10/tools/check_platform.py": "88812d7a7b2f77f5c4574a7833646b52a1afe504aa6b2452c11c8d6ca9887300",
+      "fpga/catapult_a10/tools/check_skeleton.py": "7a5d76f2204b414a51a7da08319fbadc021bcf6649eee9991c32ade06ec9fa1e",
+      "fpga/catapult_a10/tools/check_synthesis_selector.py": "03e2159cd7727902384e28213b98bb5ed2c2ba8d10d3de774c638bcad432d305",
+      "fpga/catapult_a10/boot/check_image_contract.py": "daf8a4a12ef23419d53ab9b7803ecdb3b958d951bb8b47311e94cf6793b4aa9f",
+      "fpga/catapult_a10/tools/run_bram_init25_test.sh": "45974033dd43309e97ff8bbf97dac5402627ddb5441a9fea9fdefdf02248a8db",
+      "rtl/lcvex_bram_boot.sv": "7a3c4ae2328dbd81cd55ff5265e538db4ff312582ff9bfbee49bd9d3f837bf00",
+      "rtl/lcvex_cache_data_ram.sv": "6ecd3c206a52a7cb270c3b58dd823f9e8d0d5bcc9df6b797766850f8b91fba19",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "512247879ae635ec764b8dfd545d28200628f608bbc3078c3e94d060730783ad",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_reset_gate.sv": "0d7b5732231bb919bd3e1011d21348f107b0843b35df6e48439fb21e294c7c33"
+    },
+    "platform_manifest": {
+      "file_count": 50,
+      "source_project": "a10-linux-riscv",
+      "source_repo_path": "/home/chiro/projects/a10-linux-riscv",
+      "source_commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+      "qsf_source_path": "hw/quartus/vex_soc_ddr/vex_soc_ddr.qsf",
+      "sdc_source_path": "hw/quartus/vex_soc_ddr/vex_soc_ddr.sdc",
+      "source_hash_policy": "source.lock records source hashes; target hashes recomputed after import",
+      "golden_reuse": false
+    },
+    "physical_closure_expected": {
+      "formal_root_rtl_count": 47,
+      "platform_rtl_count": 2,
+      "project_file_count": 3,
+      "generated_mif_count": 1,
+      "canonical_manifest_count": 53,
+      "qsf_relative_alias_count": 47,
+      "platform_payload_count": 75,
+      "qsf_file_reference_count": 49,
+      "alias_policy": "在 T-002 fresh staging/remote root 建立 47 个 fpga/rtl/*.sv 逐字节 alias，source_path 指向根 rtl；alias 不是新 RTL 实现，也不进入 tracked source。",
+      "clean_checkout_note": "当前 clean checkout 仅有两个 platform rtl 文件；47 个 alias 是 T-002 candidate-only 物料，必须在 T-002 manifest 与 remote source verifier 中 materialize/hash-bind。"
+    },
+    "boot_image_expected": {
+      "elf_bytes": 68832,
+      "elf_sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231",
+      "bin_bytes": 957,
+      "bin_sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+      "hex_bytes": 2871,
+      "hex_sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa",
+      "mif_bytes": 204942,
+      "mif_sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+      "mif_width": 64,
+      "mif_depth": 8192,
+      "mif_records": 8192,
+      "expected_image_decoded_bytes": 65536,
+      "expected_image_decoded_sha256": "7889fff7ca07867da8827cede9d0444ed306b7a2be42e2b2f934ec66be9b643b",
+      "zero_pad_bytes": 64579,
+      "reset_word0": "0x58001700",
+      "reset_word1": "0x9100001f",
+      "first_mif_record": "0000 : 9100001F58001700;"
+    },
+    "qsf_sdc_static_contract": {
+      "qsf_active_synthesis_macro": "set_global_assignment -name VERILOG_MACRO SYNTHESIS",
+      "qsf_active_synthesis_macro_count": 1,
+      "qsf_unexpected_verilog_macro_count": 0,
+      "qsf_mif_assignment": "set_global_assignment -name MIF_FILE \"../boot/build/boot.mif\"",
+      "qsf_bram_assignment_count": 1,
+      "qsf_standalone_altsyncram_assignment_count": 0,
+      "sdc_clk_u59_period_ns": 10.0,
+      "sdc_sys_clk_25_divide_by": 4,
+      "sdc_sys_clk_25_expected_period_ns": 40.0,
+      "sdc_clk_y3_period_ns": 3.75,
+      "sdc_t045_targets": [
+        "emif_reset_cpu_meta_q",
+        "emif_poisoned_cpu_meta_q",
+        "cpu_rst_emif_meta_q"
+      ]
+    }
+  },
+  "prior_evidence_boundary": [
+    {
+      "task_id": "T-20260908-005",
+      "source_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+      "result": "Gate D PASS",
+      "may_support": "functional regression context only: scalar/MMU/cache/exception/random/baremetal-C regression",
+      "cannot_support": "25 MHz Quartus synthesis/fitter/STA, physical M20K/MIF consumption, DDR or board acceptance",
+      "evidence": "docs/tasks/evidence/T-20260908-005.json"
+    },
+    {
+      "task_id": "T-20260908-006",
+      "source_sha": "ff88f6985f632de19896e17763182d1f44bd9703",
+      "result": "synthesis blocked: Error 19544 followed by 16186",
+      "may_support": "historical first honest blocker and distinction between MIF recognition and consumption",
+      "cannot_support": "current candidate pass; fitter/STA/resource/M20K/DDR claims",
+      "evidence": "docs/tasks/evidence/T-20260908-006.json"
+    },
+    {
+      "task_id": "T-20260908-007",
+      "source_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+      "result": "hermetic selector/static platform closure PASS; no Quartus run",
+      "may_support": "sole SYNTHESIS contract, branch intent, behavior guard and candidate static closure",
+      "cannot_support": "actual Quartus elaboration, fitted M20K or MIF consumption",
+      "evidence": "docs/tasks/evidence/T-20260908-007.json"
+    },
+    {
+      "task_id": "T-20260909-001",
+      "source_sha": "5e89563ba5e6577d6f81df5f08a19769fcada2ef",
+      "result": "ELF-derived oracle and 13/13 negative matrix PASS",
+      "may_support": "独立 image derivation, BIN/HEX/MIF byte contract and boundary test contract",
+      "cannot_support": "Quartus M20K physical initialization or board image",
+      "evidence": "docs/tasks/evidence/T-20260909-001.json"
+    }
+  ],
+  "acceptance_matrix": [
+    {
+      "id": "SRC-001",
+      "claim": "T-002 使用精确 candidate source，物理输入、平台 payload、canonical source 与 QSF 相对 alias 完整且可重放。",
+      "stage": "preflight",
+      "quartus_query": "不适用；这是 Quartus 之前的 source gate。",
+      "exact_commands": [
+        "git rev-parse HEAD",
+        "git status --porcelain=v1 --untracked-files=all",
+        "python3 fpga/catapult_a10/tools/check_platform.py",
+        "python3 fpga/catapult_a10/tools/check_skeleton.py --require-boot-image --report-dir build/agents/T-20260909-002/prep/skeleton",
+        "python3 fpga/catapult_a10/tools/check_synthesis_selector.py",
+        "(cd fpga/catapult_a10 && sha256sum -c SHA256SUMS)",
+        "T-002 candidate verifier: manifest file-set/bytes/SHA-256 and every QSF reference resolution"
+      ],
+      "required_artifacts": [
+        "build/agents/T-20260909-002/sync/candidate_manifest.json",
+        "build/agents/T-20260909-002/sync/candidate_manifest.sha256",
+        "build/agents/T-20260909-002/sync/platform_payload_manifest.json",
+        "build/agents/T-20260909-002/prep/source_verify.log",
+        "build/agents/T-20260909-002/prep/selector-check.json",
+        "build/agents/T-20260909-002/prep/sha256sums.log"
+      ],
+      "pass_if": [
+        "HEAD=702bd8ee5295efe8a2ad9e094d6c12471a1d3089，运行前 status 为空且 non-doc source diff=0。",
+        "canonical manifest=53（47 root RTL+2 platform RTL+3 project+1 MIF），alias=47，platform payload=75，QSF refs=49，missing/extra/hash_bad=0。",
+        "candidate manifest canonical hash 与 sidecar hash 均匹配；QSF/SDC/QPF 与 candidate SHA 对应；remote source verifier 回读同一组 hash。",
+        "MIF 路径解析为 T-002 fresh root/fpga/catapult_a10/boot/build/boot.mif，不读取或复用旧 probe/database。"
+      ],
+      "fail_closed_if": [
+        "任一 source/target/alias 缺失、重复、bytes/SHA 不匹配、路径穿越、manifest 未绑定、QSF reference 未解析或 candidate HEAD 不精确。",
+        "静态 checker 未通过、只验证 50-file platform payload 而未验证 53+47 physical closure，或使用旧 T-006 manifest/database。"
+      ],
+      "status_from_this_audit": "matrix-defined; T-004 未执行 T-002 physical verifier"
+    },
+    {
+      "id": "IMG-001",
+      "claim": "boot ELF/BIN/HEX/MIF 和独立 expected image 是同一可追溯 64 KiB little-endian image。",
+      "stage": "preflight",
+      "quartus_query": "不适用；Quartus 消费另由 MIF-002 验收。",
+      "exact_commands": [
+        "LCVEX_BOOT_BUILD_DIR=build/agents/T-20260909-002/boot bash fpga/catapult_a10/boot/build.sh",
+        "python3 fpga/catapult_a10/boot/check_image_contract.py --emit --elf build/agents/T-20260909-002/boot/boot.elf --bin build/agents/T-20260909-002/boot/boot.bin --hex build/agents/T-20260909-002/boot/boot.hex --mif build/agents/T-20260909-002/boot/boot.mif --expected build/agents/T-20260909-002/oracle/expected_image.hex --manifest build/agents/T-20260909-002/oracle/image_manifest.json --source fpga/catapult_a10/boot/boot.S --source fpga/catapult_a10/boot/boot.ld --source fpga/catapult_a10/boot/build.sh --source fpga/catapult_a10/boot/bin_to_mif.py",
+        "python3 fpga/catapult_a10/boot/check_image_contract.py --check --elf build/agents/T-20260909-002/boot/boot.elf --bin build/agents/T-20260909-002/boot/boot.bin --hex build/agents/T-20260909-002/boot/boot.hex --mif build/agents/T-20260909-002/boot/boot.mif --expected build/agents/T-20260909-002/oracle/expected_image.hex --manifest build/agents/T-20260909-002/oracle/image_manifest.json --source fpga/catapult_a10/boot/boot.S --source fpga/catapult_a10/boot/boot.ld --source fpga/catapult_a10/boot/build.sh --source fpga/catapult_a10/boot/bin_to_mif.py"
+      ],
+      "required_artifacts": [
+        "build/agents/T-20260909-002/boot/boot.elf",
+        "build/agents/T-20260909-002/boot/boot.bin",
+        "build/agents/T-20260909-002/boot/boot.hex",
+        "build/agents/T-20260909-002/boot/boot.mif",
+        "build/agents/T-20260909-002/oracle/expected_image.hex",
+        "build/agents/T-20260909-002/oracle/image_manifest.json",
+        "build/agents/T-20260909-002/oracle/contract-emit.log",
+        "build/agents/T-20260909-002/oracle/contract-check.log"
+      ],
+      "pass_if": [
+        "IMAGE_CONTRACT_PASS mode=emit 与 mode=check；ELF PT_LOAD=957 bytes、expected=65536 bytes、zero pad=64579 bytes。",
+        "MIF WIDTH=64、DEPTH=8192、8192 explicit records、HEX radices、little-endian lane 0；ELF load=BIN=decoded HEX=MIF payload，mismatch=0。",
+        "reset word 0=0x58001700，LDR literal target=0x2e0，literal=__stack_top=0x10000；word 1=0x9100001f（ADD XSP,X0,#0）。",
+        "T-001 独立 oracle 的 13/13 negative contract 可作为 checker 能力依据，但 T-002 仍须 hash-bind fresh MIF。"
+      ],
+      "fail_closed_if": [
+        "缺失/错误路径、manifest hash stale、ELF/BIN/HEX/MIF 任一 mismatch、MIF record/width/depth/lane/padding 错误、reset contract 错误。",
+        "仅有 MIF 文件或 Quartus 报告中的路径识别，未有 checker --check 和 remote MIF SHA 回读。"
+      ],
+      "status_from_this_audit": "matrix-defined; expected values independently recorded from T-001"
+    },
+    {
+      "id": "SEL-001",
+      "claim": "Quartus 只定义一个 SYNTHESIS selector，并选择显式 BRAM/cache M20K 分支；行为 BRAM 与 standalone duplicate wrapper 不进入该 QSF。",
+      "stage": "preflight+synthesis",
+      "quartus_query": "catapult_a10.syn.rpt/syn.summary/syn.smsg 中查询 lcvex_bram_boot_altsyncram、lcvex_bram_boot_behav、altera_syncram、M20K；进入 fitter 后再用 task-local Quartus Tcl 记录实际 netlist cell names。",
+      "exact_commands": [
+        "python3 fpga/catapult_a10/tools/check_synthesis_selector.py",
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis",
+        "rg -n 'lcvex_bram_boot_(altsyncram|behav)|altera_syncram|M20K|VERILOG_MACRO|Error 19544' <fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.rpt <fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.summary <fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.smsg"
+      ],
+      "required_artifacts": [
+        "build/agents/T-20260909-002/prep/selector-check.json",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.summary",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.smsg",
+        "build/agents/T-20260909-002/quartus/synthesis.stdout.log",
+        "build/agents/T-20260909-002/quartus/synthesis.stderr.log"
+      ],
+      "pass_if": [
+        "check_synthesis_selector PASS；active macro count=1，unexpected macro=0，QSF BRAM assignment=1，standalone altsyncram assignment=0。",
+        "SYNTHESIS 分支在 Quartus synthesis evidence 中可见 lcvex_bram_boot_altsyncram/altera_syncram/M20K；lcvex_bram_boot_behav 不在 elaborated/synthesized design。",
+        "cache lcvex_cache_data_ram 的 synthesis cell 为 512-bit SINGLE_PORT altera_syncram、ram_block_type=M20K；simulation packed mem 不能作为 physical proof。"
+      ],
+      "fail_closed_if": [
+        "宏缺失、重复、带引号/其它宏、standalone lcvex_bram_boot_altsyncram.sv 被加入 QSF、行为模块出现在综合层次、Error 19544/16186 或 synthesis report 缺失。",
+        "只看预处理文本/静态 checker 而没有成功 Quartus synthesis netlist/report。"
+      ],
+      "status_from_this_audit": "T-007 static PASS only; T-002 must prove actual Quartus selection"
+    },
+    {
+      "id": "STAGE-001",
+      "claim": "T-002 physical stages 按 fresh candidate 串行完成，且每一阶段的失败都停止后续越级宣称。",
+      "stage": "ipgenerate→synthesis→fitter→sta_signoff",
+      "quartus_query": "每阶段使用对应 quartus_sh flow report 与 exit code；不接受旧 database、bypass 或重试替代。",
+      "exact_commands": [
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis",
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start fitter -end fitter",
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start sta_signoff -end sta_signoff"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.flow.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.summary",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary",
+        "build/agents/T-20260909-002/quartus/stage_*.lock.log"
+      ],
+      "pass_if": [
+        "ipgenerate 与 synthesis exit=0 且 errors=0；只有此时才可启动 fitter。",
+        "fitter exit=0、fit success 且生成有效 post-fit database；只有此时才可启动 signoff STA/custom query。",
+        "sta_signoff 工具 exit=0、summary 完整；Timing Closure 还必须满足后续所有 timing/DDR/CDC rows，不能只看工具 exit。"
+      ],
+      "fail_closed_if": [
+        "任一 stage exit 非零、报告/数据库缺失、超时/resource safety stop、stage 失败后 retry/bypass、或把 T-006 旧输出当作当前结果。",
+        "synthesis fail 时 fitter/STA/M20K/resource/clock/DDR/metastability 均为 unavailable；不能将 MIF recognition 当 consumption。"
+      ],
+      "status_from_this_audit": "matrix-defined; T-006 demonstrates the required fail-closed behavior"
+    },
+    {
+      "id": "MIF-002",
+      "claim": "boot MIF 被 Quartus 实际绑定到 boot M20K，而不是仅被 synthesis 当作 User-Specified Memory Initialization File 识别。",
+      "stage": "synthesis+fitter",
+      "quartus_query": "synthesis report input-file table 查询 ../boot/build/boot.mif；post-fit task-local Quartus Tcl quartus_sta -t report_mif_consumption.tcl 查询 boot cell 的 INIT_FILE/initialization 属性与 fit RAM entity；两者必须同时存在。",
+      "exact_commands": [
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis",
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start fitter -end fitter",
+        "quartus_sta -t report_mif_consumption.tcl"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.syn.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.summary",
+        "build/agents/T-20260909-002/sta/mif_consumption.tcl",
+        "build/agents/T-20260909-002/sta/mif_consumption.rpt",
+        "build/agents/T-20260909-002/sta/mif_consumption.stdout.log",
+        "build/agents/T-20260909-002/sta/mif_consumption.stderr.log",
+        "build/agents/T-20260909-002/sync/remote_mif_sha256.txt"
+      ],
+      "pass_if": [
+        "syn.rpt 明确列出 fresh boot.mif 且路径/hash 与 IMG-001 相同；post-fit report/query 找到 soc|bram|u_impl|u_ram（或 exact returned hierarchy）对应的 M20K/64-bit dual-port RAM。",
+        "Quartus query 的 boot RAM initialization property 指向同一 boot.mif，或等价的 post-fit initialization record 能由该 MIF hash 重现；fit RAM summary 中 boot instance 的 physical block allocation 非零。",
+        "cache data RAM 的各实际 u_data_ram 对象在 fit RAM summary 中均为 M20K；总 M20K 数与 resource extract 一致。"
+      ],
+      "fail_closed_if": [
+        "只有 syn.rpt 的 User-Specified Memory Initialization File 行，没有 post-fit RAM/init association；MIF hash 不一致、boot cell/fit row 缺失、query 返回 Nothing/no object。",
+        "synthesis-only、fitter 未运行、或通过行为仿真/expected HEX 推断 M20K/MIF consumption。"
+      ],
+      "status_from_this_audit": "T-006 explicitly not signed off; this row is the required T-002 distinction"
+    },
+    {
+      "id": "CLK-001",
+      "claim": "所有 B25 时钟实际被约束并达到 candidate 合同：clk_u59=100 MHz、sys_clk_25=25 MHz/40 ns、clk_y3=266.667 MHz reference，Qsys clk_100/clk_266 和 EMIF user clocks 连接正确。",
+      "stage": "sta_signoff/custom_sta",
+      "quartus_query": "quartus_sta -t report_clocks.tcl：TimeQuest report_clocks、clock source/sink/path cardinality 查询；同时读取 signoff STA Clock Summary。",
+      "exact_commands": [
+        "quartus_sta -t report_clocks.tcl",
+        "quartus_sta -t report_emif.tcl"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary",
+        "build/agents/T-20260909-002/sta/report_clocks.tcl",
+        "build/agents/T-20260909-002/sta/report_clocks.rpt",
+        "build/agents/T-20260909-002/sta/emif_clock_query.rpt"
+      ],
+      "pass_if": [
+        "report_clocks 有且仅有可追溯的 clk_u59 period=10.000 ns、sys_clk_25 source=clk_u59 divide=4 period=40.000 ns（容差±0.001 ns）、clk_y3 period=3.750 ns。",
+        "Qsys emif clk_100_clk 的实际 sink 由 clk_u59 驱动，clk_266_clk 由 clk_y3 驱动；EMIF user clock exact hierarchy emif|emif_bot|emif_bot_core_usr_clk 存在且有 timing paths。",
+        "所有 launch/latch clocks 均被 report_clocks 解析；无 unconstrained clock、missing generated clock 或 relevant ignored-clock warning。"
+      ],
+      "fail_closed_if": [
+        "sys_clk_25 缺失/不是 40 ns、generated-clock source/divide 不匹配、clk_y3/Qsys/EMIF clock 缺失或无 path、Qsys 100/266 接线不能由 netlist query 证明。",
+        "仅依据 QSF/SDC 文本或 top RTL 注释，未有 final STA Clock Summary。"
+      ],
+      "status_from_this_audit": "candidate static contract is recorded; no final clock report exists in T-004"
+    },
+    {
+      "id": "STA-SETUP-001",
+      "claim": "setup timing 在所有 relevant clocks/corners 非负，且 TNS/failing endpoints 为零。",
+      "stage": "sta_signoff",
+      "quartus_query": "signoff catapult_a10.sta.summary/.sta.rpt，custom quartus_sta -t report_timing.tcl 中 report_timing -setup -npaths 10 -detail full_path。",
+      "exact_commands": [
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start sta_signoff -end sta_signoff",
+        "quartus_sta -t report_timing.tcl"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "build/agents/T-20260909-002/sta/setup_full.rpt",
+        "build/agents/T-20260909-002/sta/setup_top10.rpt",
+        "build/agents/T-20260909-002/sta/setup_parsed.json"
+      ],
+      "pass_if": [
+        "sys_clk_25 及 EMIF user/PHY/cal clocks 的 setup WNS≥0、TNS=0、failing endpoints=0；summary 和详细 top-N 一致。",
+        "报告包含每条 top path 的 launch/latch clock、slack、data delay、logic levels、SDC exception；不把 Nothing to report 当作全局 pass。"
+      ],
+      "fail_closed_if": [
+        "任一 constrained clock setup negative、TNS<0、failing endpoint>0、summary 与 raw report 不一致、STA 未达成或报告为空。",
+        "任何 synthesis-only/fitter-only 结果、历史 sys_clk_50 报告或只报告 EMIF 正 slack 都不能通过 B25 setup gate。"
+      ],
+      "status_from_this_audit": "no current measurement; this is a hard acceptance gate"
+    },
+    {
+      "id": "STA-HOLD-001",
+      "claim": "hold timing 在所有 relevant clocks/corners 非负且无 violated endpoint。",
+      "stage": "sta_signoff",
+      "quartus_query": "quartus_sta -t report_timing.tcl 中 report_timing -hold -npaths 10 -detail full_path 与 STA summary。",
+      "exact_commands": [
+        "quartus_sta -t report_timing.tcl"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "build/agents/T-20260909-002/sta/hold_full.rpt",
+        "build/agents/T-20260909-002/sta/hold_top10.rpt"
+      ],
+      "pass_if": [
+        "所有 relevant clock/corner 的 hold WNS≥0、TNS=0、failing endpoints=0；EMIF↔sys_clk_25 crossings 的实际报告也无 violated path。"
+      ],
+      "fail_closed_if": [
+        "任一 hold negative/violated、clock/path 未约束、STA/custom report 缺失，或用 SDC false path 把未知路径静默消除。"
+      ],
+      "status_from_this_audit": "no current measurement; not implied by T-005 Gate D"
+    },
+    {
+      "id": "STA-CTRL-001",
+      "claim": "recovery、removal、minimum-pulse-width 三类异步/脉宽 timing 均非负。",
+      "stage": "sta_signoff",
+      "quartus_query": "quartus_sta -t report_timing.tcl 中 report_timing -recovery/-removal -npaths 10 -detail full_path 与 report_min_pulse_width -npaths 10；核对 STA summary。",
+      "exact_commands": [
+        "quartus_sta -t report_timing.tcl"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "build/agents/T-20260909-002/sta/recovery_full.rpt",
+        "build/agents/T-20260909-002/sta/removal_full.rpt",
+        "build/agents/T-20260909-002/sta/min_pulse_full.rpt"
+      ],
+      "pass_if": [
+        "recovery WNS≥0/TNS=0/failing=0，removal WNS≥0/TNS=0/failing=0，minimum-pulse WNS≥0/TNS=0/failing=0，且报告覆盖 sys_clk_25、EMIF 和 reset/calibration consuming clocks。"
+      ],
+      "fail_closed_if": [
+        "任一类 negative/violated、报告只给工具 exit=0 但 summary=Fail、路径被错误 filter、报告没有覆盖实际 clocks，或 fitter/STA 未运行。"
+      ],
+      "status_from_this_audit": "no current measurement; all three are independent hard gates"
+    },
+    {
+      "id": "CDC-T045-001",
+      "claim": "T-045 三个 SDC filter 实际 resolve 并应用，不能以 -nowarn 或源文本代替。",
+      "stage": "sta_signoff/custom_sta",
+      "quartus_query": "quartus_sta -t report_t045_sdc_filters.tcl 使用 get_registers -nowarn 后的 get_collection_size、report_exceptions -ignored，以及每一 from/to pair 的 report_timing/exception query；不得使用 opaque collection 的 llength 作为 cardinality 证明。",
+      "exact_commands": [
+        "quartus_sta -t report_t045_sdc_filters.tcl",
+        "quartus_sta -t report_emif.tcl"
+      ],
+      "required_artifacts": [
+        "build/agents/T-20260909-002/sta/report_t045_sdc_filters.tcl",
+        "build/agents/T-20260909-002/sta/t045_sdc_filters.rpt",
+        "build/agents/T-20260909-002/sta/t045_sdc_filters.json",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary"
+      ],
+      "required_filter_pairs": [
+        "emif|emif_bot|* -> *emif_adapter|emif_reset_cpu_meta_q*",
+        "*emif_adapter|emif_poisoned_q* -> *emif_adapter|emif_poisoned_cpu_meta_q* (false_path + max_delay=2.000 ns)",
+        "reset_gate_inst|logic_rst_n_q -> *emif_adapter|cpu_rst_emif_meta_q*"
+      ],
+      "pass_if": [
+        "三个 target collection cardinality>0，source collection/cardinality>0，实际 applied exception count>0 且对应 from/to names 可回读。",
+        "report_exceptions -ignored 中三个 filter 无 ignored/unresolved 条目；poisoned max-delay=2.000 ns 已应用且无 violation。",
+        "report 使用 final fitted database 与实测 EMIF clock names；所有 relevant SDC warnings/errors 已分类且没有被 -nowarn 隐藏。"
+      ],
+      "fail_closed_if": [
+        "任一 target/source count=0、applied count=0、只看 SDC 源文本、只看 no-warning、ignored filter>0、max_delay 未应用，或没有 final database。",
+        "把 T-045 filter 的存在误当作 CDC safety；filter resolve 通过也不能替代 RTL synchronizer/DDR/metastability gate。"
+      ],
+      "status_from_this_audit": "candidate SDC names recorded; actual resolve intentionally left to T-002"
+    },
+    {
+      "id": "DDR-001",
+      "claim": "DDR4 EMIF PHY/interface timing 与 calibration 相关报告为 Pass，且 EMIF↔sys_clk_25 crossing 有实际 margin。",
+      "stage": "sta_signoff/custom_sta",
+      "quartus_query": "quartus_sta -t report_emif.tcl：从 final report_clocks 返回的 canonical EMIF user/PHY/cal clocks 枚举 report_timing -setup -from_clock/-to_clock；同时读取 signoff STA 的 Double Data Rate (DDR) Summary。",
+      "exact_commands": [
+        "quartus_sta -t report_emif.tcl",
+        "quartus_sta -t report_clocks.tcl"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary",
+        "build/agents/T-20260909-002/sta/emif_to_user.rpt",
+        "build/agents/T-20260909-002/sta/user_to_emif.rpt",
+        "build/agents/T-20260909-002/sta/emif_cross.rpt",
+        "build/agents/T-20260909-002/sta/ddr_summary.rpt"
+      ],
+      "pass_if": [
+        "DDR Summary=Pass；Read Capture、Write、Address/Command、DQS Gating、Write Levelling 五项均有非负 margin 且 no violated。",
+        "EMIF user/PHY/cal clock report 有实际 paths；emif→sys_clk_25、sys_clk_25→emif 和 relevant cross setup reports 均无 violation，slack/clock names 可复核。",
+        "EMIF clocks 由 final report_clocks 实测，不把同一 opaque collection 或猜测的 wildcard 当作 cross。"
+      ],
+      "fail_closed_if": [
+        "DDR/EMIF report 缺失、显示 Fail/unknown/no paths、任一 margin negative、cross clock 未 resolve、只引用历史 T-035/T-058 数字，或 STA 未完成。"
+      ],
+      "status_from_this_audit": "no current measurement; T-006 explicitly stopped before DDR report"
+    },
+    {
+      "id": "CDC-META-001",
+      "claim": "Metastability summary 与实际 synchronizer chains 通过。",
+      "stage": "sta_signoff",
+      "quartus_query": "final catapult_a10.sta.rpt/.sta.summary 的 Metastability Summary；可用 quartus_sta -t report_emif.tcl 将 synchronizer rows/hash 单独导出。",
+      "exact_commands": [
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start sta_signoff -end sta_signoff",
+        "quartus_sta -t report_emif.tcl",
+        "rg -n -i 'Metastability Summary|synchronizer|MTBF|settling|timing violation' <fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt <fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.sta.summary",
+        "build/agents/T-20260909-002/sta/metastability_summary.rpt",
+        "build/agents/T-20260909-002/sta/metastability_summary.json"
+      ],
+      "pass_if": [
+        "Metastability Summary=Pass；synchronizer chains>0、shortest chain≥2 registers、timing-violation chains=0，MTBF/settling values present for every required corner。",
+        "报告来自同一 final fitted database，且 reset/calibration/FIFO CDC instances 与 T-045 filter inventory 不矛盾。"
+      ],
+      "fail_closed_if": [
+        "报告缺失/unknown/not analyzed、chain count=0、任一 violation、短链不足、corner 缺失，或只由 RTL 结构/历史报告推断。"
+      ],
+      "status_from_this_audit": "no current measurement; static RTL CDC intent is not physical metastability signoff"
+    },
+    {
+      "id": "FIT-RESOURCE-001",
+      "claim": "Arria 10 10AX115N4F40E3SG fitter 成功且所有资源 fit；M20K/block bits/PLL/DSP/ALM/register/pins 均可追溯。",
+      "stage": "fitter",
+      "quartus_query": "catapult_a10.fit.summary 与 catapult_a10.fit.rpt 的 Fitter Resource Usage/Resource Utilization tables；task-local parser 输出 resource_extract.json，并核对 QSF DEVICE。",
+      "exact_commands": [
+        "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start fitter -end fitter",
+        "rg -n -i 'Fitter Resource|Logic utilization|ALM|register|M20K|RAM|DSP|PLL|pins|Fit succeeded|overused' <fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.rpt <fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.summary"
+      ],
+      "required_artifacts": [
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.rpt",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.fit.summary",
+        "<fresh>/fpga/catapult_a10/quartus/output_files/catapult_a10.flow.rpt",
+        "build/agents/T-20260909-002/fit/resource_extract.json",
+        "build/agents/T-20260909-002/fit/resource_extract.log"
+      ],
+      "pass_if": [
+        "Fitter exit=0/fit success；DEVICE=10AX115N4F40E3SG；每一 resource used≤device capacity、无 overuse/unplaced/route failure。",
+        "ALM/register/pin/block-memory/M20K/DSP/PLL 数字来自 final fit summary；M20K>0 且与 MIF-002 的 boot/cache objects 一致，不能只报 synthesis estimate。",
+        "资源 parser 输入原始 fit report 并保存 hash；不把历史 121 M20K 等数字复制为当前结果。"
+      ],
+      "fail_closed_if": [
+        "fitter 未运行/exit 非零/summary 缺失、任一资源超容量、fit report 与 parser 不一致、M20K=0 或 boot/cache object 未分配，或只有 synthesis estimate。"
+      ],
+      "status_from_this_audit": "no current measurement; T-006 fitter not_run"
+    },
+    {
+      "id": "POLICY-001",
+      "claim": "T-002 只做允许的 non-destructive physical stages；不生成 assembler/bitstream，不连接 JTAG/board/Flash。",
+      "stage": "all/postflight",
+      "quartus_query": "无允许的 Quartus assembler/programmer query；对 fresh probe 做只读 artifact/process scan。",
+      "exact_commands": [
+        "final guard: EDA process count=0 and resource lock status=FREE",
+        "final artifact scan: recursively enumerate fresh probe extensions .sof,.jic,.rbf,.pof,.jbc,.svf,.jam",
+        "final command audit: reject quartus_asm/quartus_pgm/nios2-terminal/JTAG/board-reset/power/Flash-write invocations"
+      ],
+      "required_artifacts": [
+        "build/agents/T-20260909-002/postflight/final_guard.txt",
+        "build/agents/T-20260909-002/postflight/forbidden_artifact_scan.txt",
+        "build/agents/T-20260909-002/postflight/command_audit.txt"
+      ],
+      "pass_if": [
+        "T-002 physical evidence 的 assembler/bitstream stage 明确 not_run；fresh probe 禁止扩展名 artifact count=0；没有 quartus_asm/quartus_pgm/nios2-terminal/JTAG/board/Flash write。",
+        "EDA process postflight=0；未知用户进程未停止；旧 probe/database 未删除或复用。"
+      ],
+      "fail_closed_if": [
+        "出现任一 SOF/JIC/RBF/POF/JBC/SVF/JAM、assembler/programmer/JTAG/board/Flash 动作，或 guard/audit 缺失。即便 timing 全绿，也不能将 T-002 宣称为板级 release。"
+      ],
+      "status_from_this_audit": "T-004 itself performed no such action; row is a T-002 required postflight gate"
+    }
+  ],
+  "stage_semantics": [
+    {
+      "stage": "static/preflight",
+      "can_claim": ["candidate/source/MIF provenance", "manifest/alias closure", "sole SYNTHESIS static selector", "checker contract"],
+      "cannot_claim": ["Quartus elaboration", "M20K implementation/consumption", "post-fit clocks", "timing", "DDR", "metastability", "resource fit", "board behavior"]
+    },
+    {
+      "stage": "ipgenerate-only",
+      "can_claim": ["Qsys/IP generation exit and warnings"],
+      "cannot_claim": ["synthesis/netlist", "MIF consumption", "fitter/resource", "STA/CDC/DDR"]
+    },
+    {
+      "stage": "synthesis-success",
+      "can_claim": ["synthesis completed without errors", "report-level MIF recognition", "elaborated branch evidence if report/query proves it"],
+      "cannot_claim": ["actual fitted M20K/MIF consumption", "fit resources", "post-fit clock periods", "setup/hold/recovery/removal/min-pulse", "DDR/metastability"]
+    },
+    {
+      "stage": "synthesis-failure",
+      "can_claim": ["first error and preserved fresh failure scene", "MIF recognition only if syn report explicitly contains it"],
+      "cannot_claim": ["all downstream stages and every physical acceptance claim"],
+      "required_action": "stop; no bypass/retry/source modification; preserve fresh probe and report exact first error"
+    },
+    {
+      "stage": "fitter-success",
+      "can_claim": ["fit success", "final resource rows", "post-fit netlist objects", "M20K allocation only where fit/query rows prove it"],
+      "cannot_claim": ["timing closure", "T-045 filter resolve", "DDR/metastability pass", "assembler/board readiness"]
+    },
+    {
+      "stage": "sta-success-but-closure-fail",
+      "can_claim": ["measured timing/DDR/metastability values with hashes"],
+      "cannot_claim": ["timing closure", "T-002 all-gates acceptance", "assembler/bitstream/board release"],
+      "required_action": "record first negative gate; no assembler or board action"
+    },
+    {
+      "stage": "all-physical-gates-pass",
+      "can_claim": ["T-002 physical acceptance for allowed stages only"],
+      "cannot_claim": ["board programming or runtime board behavior; those require a separate explicit task/authorization"]
+    }
+  ],
+  "overall_decision": {
+    "result": "PASS_MATRIX_READY",
+    "physical_acceptance": "NOT_SIGNED_OFF_BY_T-004",
+    "reason": "T-004 交付的是可直接套用到 T-002 返回 evidence 的 fail-closed matrix；T-004 没有运行 Quartus/GamePC，也没有把 T-006 synthesis failure、T-007 static selector 或 T-001 oracle 提升为物理通过。",
+    "release_boundary": "即便 T-002 所有允许 stage 全绿，T-002 仍不得运行 assembler/bitstream/JTAG/board/Flash；任何 timing/DDR/CDC/resource/MIF evidence 缺失均保持 blocked。"
+  },
+  "policy": {
+    "rtl_modified": false,
+    "qsf_sdc_modified": false,
+    "test_modified": false,
+    "active_task_modified": false,
+    "tasks_project_status_roadmap_modified": false,
+    "other_worktree_read": false,
+    "t002_worktree_or_remote_probe_read": false,
+    "gamepc_or_quartus_used": false,
+    "build_run": false,
+    "assembler_or_bitstream": false,
+    "jtag_board_flash": false,
+    "remote_connection": false
+  },
+  "evidence": "docs/tasks/evidence/T-20260909-004.json",
+  "handoff": "docs/handoffs/T-20260909-004-b25-physical-acceptance-audit.md"
+}

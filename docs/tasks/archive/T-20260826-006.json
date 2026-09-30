@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-006",
+  "title": "P6 strict root Linux lite/main 链与 Gate E 候选窗口",
+  "kind": "linux-long-run",
+  "priority": "high",
+  "assigned_owner": "luna-monitor-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "从当前 QEMU/当前提交重新建立 strict root checkpoint 链，绑定物理核监控长跑；不修改 RTL/QEMU",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "仅在 lite/main 配置或 strict root manifest 依赖不清时启用"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审运行配置、输入 hash、checkpoint manifest 和 Gate E 证据边界"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "监控两个单核 QEMU/Verilator 作业、RSS/磁盘/孤儿进程和失败现场"
+  },
+  "phase": "done",
+  "parent": "T-20260826-005",
+  "depends_on": ["T-20260826-005"],
+  "writes": [
+    "docs/tasks/evidence/T-20260826-006.json",
+    "docs/handoffs/T-20260826-006-strict-linux-root.md"
+  ],
+  "reads": [
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/run_lockstep_resume.sh",
+    "sim/difftest/checkpoint.py",
+    "docs/handoffs/T-20260826-004-linux-resume.md",
+    "docs/handoffs/T-20260826-005-resume-provenance.md",
+    "docs/handoffs/099-qemu-nofp-scalar-line-20260825.md",
+    "docs/handoffs/100-lite-scalar-init-milestone-20260825.md",
+    "docs/ROADMAP.md",
+    "docs/PROJECT_STATUS.md"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/DIFFTEST.md",
+    "docs/DIFFTEST_QEMU_PLAN.md"
+  ],
+  "base_sha": "2c12302",
+  "branch": "verify/T-20260826-006-strict-linux-root",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-006",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 21600,
+    "cpus": [0, 1]
+  },
+  "validation": {
+    "l0": [
+      "strict root manifest preflight + input/QEMU hash check"
+    ],
+    "l1": [
+      "VERILATOR_JOBS=2 make lockstep-build-kernel-nofp",
+      "VERILATOR_JOBS=2 make lockstep-build-kernel",
+      "bash -n sim/difftest/run_lockstep_step.sh sim/difftest/run_lockstep_resume.sh"
+    ],
+    "l2": [
+      "lite strict root 10000 条与 manifest finalize",
+      "main strict root 10000 条与 manifest finalize"
+    ],
+    "l3": [],
+    "l4": [
+      "资源允许时 lite/main 各 500000–2000000 条，CKPT_EVERY=500000；逐窗口校验 complete manifest"
+    ],
+    "seeds": []
+  },
+  "acceptance": "lite/main 均从当前 QEMU/当前提交新建 strict root 链，输入/CPU/machine/DTB hash 绑定，至少短窗口通过并生成 complete manifest；资源默认不超过本地 50%（必要时 evidence 明确批准 75%）；无孤儿进程/系统 /tmp 大文件；长窗口仅作为 Gate E 候选，不能直接宣称 Gate E 完成。",
+  "created_at": "2026-08-26T08:20:00+08:00",
+  "updated_at": "2026-08-26T10:30:00+08:00",
+  "commits": [
+    "25780d7",
+    "8f0fc89",
+    "fa09735",
+    "78aa56a",
+    "f8d49fe",
+    "baa6f61",
+    "c9d88ac",
+    "42dee31",
+    "4943c0a",
+    "a8a2059"
+  ],
+  "handoff": "docs/handoffs/T-20260826-006-strict-linux-root.md",
+  "evidence": "docs/tasks/evidence/T-20260826-006.json",
+  "known_limits": [
+    "不复用 T-004 旧 init-only 链；每条线重新导出与 memory-backend machine 完全一致的 FDT。",
+    "主线可能在 mount_root/PSCI/WFI 等边界终止；失败现场必须保留并分类，不修改参考结果。"
+  ],
+  "next": "已完成并归档；另行创建 Gate E 冻结候选任务，不把本窗口直接标为阶段门通过。"
+}
+

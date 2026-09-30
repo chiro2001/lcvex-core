@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-016",
+  "label": "B25-RX-CPU-OBSERVABILITY-NOFP-PROFILE",
+  "state": "done",
+  "acceptance_status": "one-line-nofp-derivative-and-affected-l0-l2-pass",
+  "partial": false,
+  "base_sha": "17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b",
+  "base_tree_sha": "49ae77b46bac077d68cd5432a09eb64b51b07ebb",
+  "profile_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+  "profile_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+  "branch": "fpga/T-20260920-016-b25-rx-cpu-observability-nofp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-016",
+  "owner": "monitor_disasm",
+  "received_at": "2026-09-20T10:02:31+08:00",
+  "reported_at": "2026-09-20T10:11:58+08:00",
+  "implementation": {
+    "commit": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+    "changed_files": [
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv"
+    ],
+    "diff_stat": "1 insertion, 1 deletion",
+    "change": "parameter logic A64_FP_SIMD = 1'b1 -> 1'b0",
+    "profile_file_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+    "forbidden_regions_unchanged": true,
+    "functional_delta_scope_pass": true
+  },
+  "input_identity": {
+    "boot_source_sha256": "9d6685a95b5136d0cb34ff0671e48d1f6c1face0eb2973a56af046f8c05443a6",
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "image_expected_sha256": "872c3cbfdf9b1be3da2ef47f42543add6bb186e09e22169d1b169cc60918851",
+    "image_manifest_sha256": "6da645117ed879f78925a9eb529db953ea1f20a2e8478c034d732e046fe2e2e9",
+    "qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "qsf_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "bram_rtl_sha256": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+    "soc_pkg_sha256": "cc65e9f0c3d9afcb09b8095079620a63b4b830cc2872697b7073e267c9a7af3c",
+    "soc_top_sha256": "c04987cca052ca930c2c22c7a41e5b58684c4a0a67ed5dcb6e6211345af3d656"
+  },
+  "verification": {
+    "boot_build": {
+      "result": "PASS; 2011-byte AArch64 image",
+      "log_sha256": "b34d5d99afe36536484f4776476f5c8d0b60b3a93070e6061aa3db60c40d1b66"
+    },
+    "image_contract": {
+      "result": "PASS emit/check",
+      "manifest_sha256": "6da645117ed879f78925a9eb529db953ea1f20a2e8478c034d732e046fe2e2e9",
+      "boot_mif_width": 64,
+      "boot_mif_depth": 8192,
+      "boot_mif_records": 8192
+    },
+    "board_skeleton_lint": {
+      "result": "PASS",
+      "log_sha256": "403f05626a23d3c2e2e4ec809d8116c6378d9f0a1ec8bd5b0acd8198723df94a"
+    },
+    "platform_checker": {
+      "result": "PASS; PLATFORM_CHECK_PASS files=50 strict_source=OFF",
+      "log_sha256": "f8c18dc4e70dfda310691a9fe2519a04011ccb24a613249057859b1004010a17"
+    },
+    "synthesis_selector": {
+      "result": "PASS",
+      "log_sha256": "1b5d7d2ecaf80c7a6a0ed7756dc1523e27cb8fd906a9ec80b18fa73a7ad7a2f8"
+    },
+    "soc_nofp_lint": {
+      "result": "PASS; explicit -GA64_FP_SIMD=0",
+      "log_sha256": "05b1afb32fca5ed5e4c77d7c7942f5eeff7d9960d5ca050518c6d41ed4a45207"
+    },
+    "m20k_timing": {
+      "result": "PASS; BRAM_M20K_TIMING_TB PASS",
+      "log_sha256": "8a21b14ef2e7621849e6cda5c371690a44e19d25d4dbcadfbb5c07b93803cc8e"
+    },
+    "vendor_focused_status_observer": {
+      "result": "PASS; CATAPULT_STATUS_OBSERVABILITY_TEST PASS, RX_OBSERVER_UNIT PASS, JTAG_UART_TEST PASS, RX_RESPONSE_TRACE_FOCUSED_PASS",
+      "log_sha256": "07f0a4251575ebfaa97800e5134f26ca25a5177e323f2261bfe7251e892b08fd"
+    },
+    "t012_r4_equivalence": {
+      "result": "PASS; 33 filelist inputs unchanged and board top absent from filelist_soc.f/filelist_rx_response_trace.f",
+      "proof": "current profile differs from 17d8 only in board-top default; 17d8 differs from T-012 r4 source only in documentation closure",
+      "response_trace_run_log_sha256": "9114a3cd9c6594ab41774dd9ac367b3a4d909dce38f7931544f2f2afc384f62",
+      "vendor_smoke_log_sha256": "5c7eb4985b933bba429d20502dd650fc9b956bffa446eadd7f9a3d1a173cc4b4",
+      "vendor_wrapper_log_sha256": "36c1fe96fa10a2baacaf189489362d418f19c38ef652ce8909853b88eeacdfee"
+    },
+    "baseline_checker_note": {
+      "result": "not applicable to derivative",
+      "detail": "check_skeleton.py is bound to the full-FP skeleton_manifest board-top hash and default boot/build path; it correctly rejects this one-line profile. Updating that manifest is forbidden. Board skeleton lint, platform checker, image contract and explicit no-FP SoC lint are authoritative for this profile."
+    }
+  },
+  "resource_and_safety": {
+    "local_heavy_runs_under_resource_lock": true,
+    "local_min_available_mib": 8192,
+    "verilator_jobs": 1,
+    "gamepc_used": false,
+    "quartus_used": false,
+    "jtag_or_board_used": false,
+    "qsf_sdc_modified": false,
+    "rtl_other_than_declared_board_line_modified": false,
+    "assembler_or_configuration_artifact": false
+  },
+  "handoff": "docs/handoffs/T-20260920-016-b25-rx-cpu-observability-nofp-profile.md",
+  "next": "T-017 may use only this profile SHA/tree as the source for fresh GamePC synthesis/fitter/STA/UCP/custom physical flow. No full-FP closure claim is made."
+}

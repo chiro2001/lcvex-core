@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-036",
+  "base_sha": "3f89c78",
+  "candidate_status": "infra-fail",
+  "runs": [
+    {
+      "run_id": "owner-l3-gate-d-preflight-001",
+      "level": "L2/L3-subset",
+      "command": "taskset -c 0-5 VERILATOR_JOBS=5 run_gate_d.sh --parallel（make test + coverage）",
+      "exit_code": 0,
+      "result": "pass-subset",
+      "summary": "make test、coverage 全绿；已进入 M2-4b。"
+    },
+    {
+      "run_id": "owner-l3-gate-d-infra-abort-001",
+      "level": "L3",
+      "command": "T-036 run_gate_d.sh --parallel",
+      "exit_code": 143,
+      "result": "infra-fail",
+      "summary": "T-032 run_pinned PID 包装导致多个 QEMU 孤儿化，资源规划器持续 cpu_free=0；为保护系统资源终止 T-036 process group，未得到 Gate D 结论。",
+      "log": "build/agents/T-20260826-036/gate-d.log",
+      "log_sha256": "346f6da0f8f49c90508f99271431fbe6221e0b85a5f7aecf0f99c91cf63f6cc3"
+    }
+  ],
+  "known_limits": [
+    "本任务不代表 Gate D 通过或失败；RTL 子集未发现 mismatch，完整回归需在 T-037 修复后重新运行。",
+    "孤儿进程已按明确 T-036 worktree/QEMU 命令清理，日志和失败现场保留。"
+  ],
+  "next": "合并 T-037 runner PID 修复后重新登记新的 Gate D current SHA 任务。"
+}

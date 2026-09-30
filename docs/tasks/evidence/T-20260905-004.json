@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-004",
+  "state": "done",
+  "partial": false,
+  "base_sha": "1ccbb3baed633c9c64e7a078df4cad4ece69a2a5",
+  "head_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "branch": "timing/T-20260905-004-r16-core-issue-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-004",
+  "sent_at": "2026-09-05T02:38:19+08:00",
+  "received_at": "2026-09-05T02:38:20+08:00",
+  "reported_at": "2026-09-05T04:18:50+08:00",
+  "timestamps": {
+    "sent_at": "2026-09-05T02:38:19+08:00",
+    "received_at": "2026-09-05T02:38:20+08:00",
+    "reported_at": "2026-09-05T04:18:50+08:00"
+  },
+  "source_head_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+  "branch_head_sha": "719549fca7239735e48cfd90783d0aba09efbb52",
+  "documentation_commit_chain": [
+    "334520c162aea8ffe9e66deab0cc2663dc5cd807",
+    "d4819fed6da03230146983c0d3e5f63a536cb7a4",
+    "719549fca7239735e48cfd90783d0aba09efbb52"
+  ],
+  "batch_parent": "T-20260905-002",
+  "cone_id": "R16-CORE-IDEX-ISSUE-FANOUT",
+  "timing_input": {
+    "source_task": "T-20260902-058",
+    "source_merge_sha": "d6cd5c2290de19eb5c94e67fc2cf5af9bbd09eee",
+    "top50_clusters": {
+      "core_idex_muldiv": 4,
+      "core_mem_paddr2": 14
+    },
+    "shared_root": "idex_valid / issue-hold-enable cone"
+  },
+  "candidate_validation_failure": {
+    "candidate_label": "9712baf",
+    "candidate_sha": "9712baf59495d8a1e55d5f1e098b6c17ee802971",
+    "reported_at": "2026-09-05T04:05:00+08:00",
+    "stage": "joint L0/L1 fail-fast after complete FP/P7-1/3/4/5 coverage",
+    "failed_entry": "sim-sv-muldiv-req",
+    "failure": "MSUB X a=3,b=4,acc=7: RTL got 0xffffffffffff_fffb; stale SV/Cocotb expectation was 0x0000000000000007; correct acc-a*b is 0xffffffffffff_fffb.",
+    "specified_log": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-002/build/agents/T-20260905-002/joint-l0-l1-rerun1.log",
+      "sha256_at_capture": "6b4a9d895e61cce9629625013acb089aebc07f934939b09bdd113f8463b8e3e9",
+      "note": "指定 rerun1 路径在本次核对时已被后续运行覆盖，当前内容不再包含该 excerpt。"
+    },
+    "matching_failure_artifact": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-002/build/agents/T-20260905-002/joint-l0-l1-rerun2.log",
+      "sha256": "9bd519d262d252899bd6fc56f58b5b94ad158e4dade302fd2c0ab93a503361b5",
+      "line": 911,
+      "excerpt": "FAIL MSUB X: got fffffffffffffffb expect 0000000000000007"
+    }
+  },
+  "files": [
+    "rtl/lcvex_muldiv.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_muldiv_req_tb.sv",
+    "sim/cocotb/test_muldiv_req.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/handoffs/T-20260905-004-r16-core-issue-cut.md",
+    "docs/tasks/evidence/T-20260905-004.json"
+  ],
+  "implementation": {
+    "commits": [
+      {
+        "sha": "ad0d2c0",
+        "scope": "muldiv request capture/pending-to-active launch and age-qualified kill"
+      },
+      {
+        "sha": "a3a9b3a",
+        "scope": "EX/MEM registered PA1 to PA2 derivation and pair address assertions"
+      },
+      {
+        "sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+        "scope": "corrective removal of PA2 token; pure registered PA1+8 derivation and MUL W vector fix"
+      }
+    ],
+    "summary": "Capture all muldiv request inputs before iterative launch; busy covers pending+active and live inputs cannot leak. Derive PA2 purely from matching registered PA1 (+8), preserve W pair request +4, and retain pre-existing cross-page pair limitations without adding an ID/EX endpoint.",
+    "builder_contract": {
+      "emitted_words": 16,
+      "insn_entries_including_labels": 18,
+      "labels": 2,
+      "max_insns": 16,
+      "mul_w_vector": "0xffff_ffff_1234_5678 * 5 = 0x0000_0000_5b05_b058"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-git-diff-check",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T03:32:59+08:00",
+      "finished_at": "2026-09-05T03:32:59+08:00"
+    },
+    {
+      "run_id": "owner-python-json-static",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+      "command": "python3 AST parse sim/difftest/test_program.py sim/cocotb/test_muldiv_req.py; python3 JSON parse scripts/test_registry.json; static builder count=16 words from 18 Insn entries/2 labels",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T03:32:59+08:00",
+      "finished_at": "2026-09-05T03:32:59+08:00"
+    },
+    {
+      "run_id": "owner-registry-consistency",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+      "command": "python3 scripts/test_registry.py --check --check-consistency",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "76 registry entries; Makefile/source consistency pass"
+    },
+    {
+      "run_id": "owner-make-dry-run",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+      "command": "make -n sim-sv-muldiv-req sim-cocotb-muldiv-req difftest-muldiv-request",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "owner-shell-syntax",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+      "command": "bash -n sim/difftest/run_p6_lse.sh",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "owner-corrective-arithmetic-static",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "169f75cb5690141ad33f1a785ec8590a340189ee",
+      "command": "python3 arithmetic check for MUL/MUL_W/MADD/MSUB/SMADDL/SMSUBL/UMADDL/UMSUBL/UMULH/SMULH/UDIV/SDIV expectations",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T04:18:19+08:00",
+      "finished_at": "2026-09-05T04:18:50+08:00",
+      "notes": "MSUB X corrected to 0xffffffffffff_fffb; other arithmetic expectations cross-checked."
+    }
+  ],
+  "joint_acceptance": {
+    "l0": [
+      "microbench/标量路径受影响 smoke"
+    ],
+    "l1": [
+      "make compile",
+      "专用 muldiv SV/Cocotb all-op W/X/zero/reset/kill/done-hold",
+      "core sim-sv/backpressure/fetch-fifo/MMU/IRQ-young/IRQ-atomic suites",
+      "pair/LSE/LSE128/maint-v82/NEON-int/fetch-fault 定向单元"
+    ],
+    "l2": [
+      "difftest-rtl",
+      "difftest-hazard",
+      "difftest-muldiv-request",
+      "pair/LSE/LSE128/maint-v82/IRQ-atomic/STXR-IRQ/NEON-int/fetch-fault strict lockstep",
+      "P7 scalar/NEON sequences affected by shared core issue/enable"
+    ]
+  },
+  "not_run": [
+    "Verilator compile/simulation",
+    "Cocotb simulation",
+    "QEMU build/lockstep",
+    "generator/assembler",
+    "Quartus synthesis/fitter/signoff STA",
+    "FPGA assembler/SOF/programming"
+  ],
+  "known_limits": [
+    "Owner stops at review per Timing Batch rule; joint L0-L2 runs only on merged T-20260905-002 candidate.",
+    "Physical improvement is not measured by this lane; the next STA must re-check both original core clusters.",
+    "GPR LDP/STP/LDXP/STXP cross-page second translation and all-or-nothing remain pre-existing batch limitations; this lane does not expand them."
+  ],
+  "handoff": "docs/handoffs/T-20260905-004-r16-core-issue-cut.md",
+  "integrator_validation": "PASS; see T-20260905-002 evidence for the complete L0-L2 union and exact log hashes.",
+  "next": "Consume the Round16 physical report; no board action is authorized."
+}

@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-034",
+  "parent": "T-20260920-033",
+  "label": "B25-BOARD-RUNNER-TRANSPORT-SEAL",
+  "title": "Build and remotely validate a parameterized board runner bundle without hardware access",
+  "kind": "board-runner-infrastructure",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "blocked-bootstrap-before-remote-root",
+  "assigned_owner": "runner_t034",
+  "depends_on": ["T-20260920-032"],
+  "triggered_by": "T-033 stopped before preflight because an inline PowerShell parser pipeline was split by the Windows command layer; hardware invocation counts remained zero.",
+  "base_sha": "464026858d6f4061d14640ae065d7201a9e00691",
+  "branch": "infra/T-20260920-034-b25-board-runner-transport-seal",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-034",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-034-b25-board-runner-transport-seal",
+  "writes": [
+    "build/agents/T-20260920-034/** ignored parameterized runner bundle/logs",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-034-b25-board-runner-transport-seal/** task-owned no-hardware validation root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-034-prepare.ps1 task-owned bootstrap file",
+    "docs/tasks/evidence/T-20260920-034.json",
+    "docs/handoffs/T-20260920-034-b25-board-runner-transport-seal.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-032.json",
+    "docs/tasks/evidence/T-20260920-033.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-033/build/agents/T-20260920-033/tools/** read-only design input"
+  ],
+  "scope": "Create a task-ID/root-parameterized runner bundle for the next single-attempt board task. Validate local Bash/Python syntax, bootstrap a fresh GamePC task root through an uploaded PowerShell -File script, upload the exact bundle, verify local/remote hashes, and parse every PowerShell file through an uploaded validate_scripts.ps1 invoked with pwsh -File. Perform no JTAG, hardware, programmer, terminal or process-enumeration action.",
+  "bundle_contract": {
+    "parameterization": "No consumer task ID or consumer remote root is hardcoded. TaskRoot, TaskId, output roots and run labels are arguments; frozen candidate/golden identities may remain constants.",
+    "required_files": [
+      "prepare_task_root.ps1",
+      "validate_scripts.ps1",
+      "verify_seal.ps1",
+      "preflight.ps1",
+      "program_once.ps1",
+      "postflight.ps1",
+      "direct_terminal.py",
+      "run_board_once.sh"
+    ],
+    "single_use": "program_once.ps1 implements durable task-root candidate/golden marker guards and refuses a second invocation before quartus_pgm; run_board_once.sh contains no retry loop or replacement-upload path.",
+    "identity": "Implements the adopted T-032 exact programmer plus pre-input candidate-unique startup contract and retains all paced/RX/golden gates.",
+    "transport": "All remote PowerShell entrypoints use pwsh.exe -File with uploaded files. Inline -Command pipelines, stdin scripts and shell-sensitive PowerShell expressions are forbidden."
+  },
+  "acceptance": {
+    "freshness": "Remote validation root and bootstrap file must not preexist; do not delete or overwrite them.",
+    "local": "bash -n, Python py_compile and JSON manifest checks pass; bundle has a deterministic per-file SHA256 manifest.",
+    "remote": "Under gamepc lock, upload bootstrap to the existing build parent, invoke it with pwsh -File to create root/incoming, upload the exact bundle, then invoke validate_scripts.ps1 and verify_seal.ps1 only through pwsh -File. Every PowerShell AST parse has zero errors and every remote hash equals local.",
+    "parameter_audit": "Search proves no T-034/T-035 consumer task ID or consumer root is hardcoded in reusable bundle files; all hardware commands reside only behind normal execution paths and are not invoked by validation.",
+    "single_use_audit": "Static review proves candidate/golden marker creation precedes each programmer call and no second call/retry/reconnect path exists.",
+    "artifact": "Record bundle manifest/hash, remote AST result/hash, exact transport commands and a consumer handoff for a new board task.",
+    "boundary": "No jtagconfig, quartus_pgm, nios2-terminal, custom/standard jtagserver start/stop/query, FPGA configuration, Flash, reset or power."
+  },
+  "resource": "Every GamePC filesystem/parser action holds resource-lock gamepc. No heavy EDA process is started. Event-driven completion; no subagent polling.",
+  "forbidden_regions": [
+    "tracked RTL/firmware/QSF/SDC/IP/policy/test/expected modifications",
+    "JTAG/hardware/process enumeration, programmer, terminal, FPGA configuration, synthesis/fitter/STA/assembler",
+    "JIC/EPCQ/Flash, reset, power or process termination",
+    "inline PowerShell -Command pipelines or stdin execution",
+    "hardcoded next-task ID/root in reusable bundle",
+    "retry loops, script replacement after seal or more than one programmer path per mode"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T18:52:11+08:00",
+    "agent_name": "runner_t034",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "blocked",
+    "partial": true,
+    "topic_evidence_head": "b938007d40e73c5b9607bb1e22dda284b0f98800",
+    "integration_evidence_sha": "a01dbd17609c7ea46536af5b656b98709f466881",
+    "local_bundle_manifest_sha256": "5f7d83702ccf745d1e16a29ec2eba10f40f0cd06c66cd7b28d02624fa9dc60a2",
+    "corrected_prepare_sha256": "2d81bf5a529106f7660676f941e973c855139d5efb231550c42469359fccd104",
+    "failed_remote_bootstrap_sha256": "a83101c92a4afe9a67266f3afdd94b00bd9b900697e642294d7ed6d5a7db08e9",
+    "blocker": "immutable first remote bootstrap used unsupported Split-Path -LiteralPath/-Parent parameter set; remote root remained absent",
+    "hardware_counts": "candidate=0 golden=0 terminal=0 JTAG=0",
+    "evidence": "docs/tasks/evidence/T-20260920-034.json",
+    "handoff": "docs/handoffs/T-20260920-034-b25-board-runner-transport-seal.md",
+    "next": "new fresh no-hardware transport task using the corrected local bundle"
+  },
+  "created_at": "2026-09-20T18:51:11+08:00",
+  "updated_at": "2026-09-20T19:17:57+08:00"
+}

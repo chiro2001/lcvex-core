@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-062",
+  "state": "review",
+  "base_sha": "52144b450182cb18c6c0fc4689aff33e37e09eea",
+  "head_sha": "e8ae15965adb958605f2ad3dfe1a02620db01579",
+  "merge_sha": "",
+  "branch": "feature/T-20260827-062-b0-bootstrap",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-062",
+  "scope": "fpga/catapult_a10 B0 regenerable Quartus/Qsys skeleton over the T-052 15-file payload; QSF/SDC manifest/SHA256SUMS extension; offline checker/lint/recovery entrypoints",
+  "source": {
+    "project": "a10-linux-riscv",
+    "repo_path": "/home/chiro/projects/a10-linux-riscv",
+    "commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "read_only": true,
+    "note": "T-052 source.lock unchanged; QSF/SDC target hashes were extended for the B0+ skeleton while source hashes remain frozen"
+  },
+  "toolchain": {
+    "python3": {
+      "command": "python3 --version",
+      "version": "Python 3.12.10",
+      "exit_code": 0
+    },
+    "git": {
+      "command": "git --version",
+      "version": "git version 2.55.0",
+      "exit_code": 0
+    },
+    "verilator": {
+      "command": "conda run --no-capture-output -n lcvex verilator --version",
+      "version": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "exit_code": 0
+    },
+    "quartus_sh": {
+      "which_command": "command -v quartus_sh",
+      "which_exit_code": 1,
+      "status": "missing"
+    },
+    "ip-generate": {
+      "which_command": "command -v ip-generate",
+      "which_exit_code": 1,
+      "status": "missing"
+    },
+    "qsys-generate": {
+      "which_command": "command -v qsys-generate",
+      "which_exit_code": 1,
+      "status": "missing"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-platform-check-001",
+      "source_sha": "e8ae15965adb958605f2ad3dfe1a02620db01579",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PLATFORM_CHECK_PASS files=15; T-052 payload closure, source.lock, SHA256SUMS, platform anchors and extended QSF top-level/skeleton anchors all pass"
+    },
+    {
+      "run_id": "owner-l0-skeleton-check-002",
+      "source_sha": "e8ae15965adb958605f2ad3dfe1a02620db01579",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_skeleton.py",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SKELETON_CHECK_PASS files=5; TOOLCHAIN_MISSING quartus_sh,ip-generate,qsys-generate reported with recovery steps; offline pass is not a Quartus/STA claim"
+    },
+    {
+      "run_id": "owner-l0-json-bash-diff-003",
+      "source_sha": "e8ae15965adb958605f2ad3dfe1a02620db01579",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool fpga/catapult_a10/platform_manifest.json >/dev/null; python3 -m json.tool fpga/catapult_a10/skeleton_manifest.json >/dev/null; bash -n fpga/catapult_a10/tools/regenerate_qsys.sh; bash -n fpga/catapult_a10/tools/lint_platform.sh; git diff --check",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Both JSON manifests parse; regenerate_qsys.sh and lint_platform.sh pass bash -n; git diff --check is clean"
+    },
+    {
+      "run_id": "owner-l1-sv-lint-004",
+      "source_sha": "e8ae15965adb958605f2ad3dfe1a02620db01579",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "bash fpga/catapult_a10/tools/lint_platform.sh",
+      "seed": null,
+      "wall_seconds": 2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_CATAPULT_A10_SKELETON_LINT_PASS; Verilator 5.050 lint-only over top, reset gate and interface stubs; expected DECLFILENAME/PROCASSINIT/UNUSEDSIGNAL/UNDRIVEN warnings suppressed in the entrypoint"
+    },
+    {
+      "run_id": "owner-l1-qsys-regenerate-blocked-005",
+      "source_sha": "e8ae15965adb958605f2ad3dfe1a02620db01579",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "LCVEX_QSYS_REGEN_DIR=build/agents/T-20260827-062/qsys-regen-attempt bash fpga/catapult_a10/tools/regenerate_qsys.sh",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 1,
+      "exit_code": 127,
+      "result": "blocked",
+      "summary": "TOOL_MISSING command=ip-generate; recoverable report written; no generated.sha256 or Qsys_bb.diff produced; exact Quartus 21.4 regeneration remains the acceptance blocker"
+    },
+    {
+      "run_id": "owner-l0-quartus-required-blocked-006",
+      "source_sha": "e8ae15965adb958605f2ad3dfe1a02620db01579",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_skeleton.py --require-quartus --report-dir build/agents/T-20260827-062/quartus-required",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 1,
+      "exit_code": 127,
+      "result": "blocked",
+      "summary": "SKELETON_CHECK_BLOCKED_QUARTUS_MISSING with JSON recovery report; confirms strict toolchain gate exits 127 while offline checks remain green"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "skeleton-manifest",
+      "uri": "fpga/catapult_a10/skeleton_manifest.json",
+      "sha256": "fb49f06e6546c03aa5c330389043dbf9774eade140d6a0d02190bbb307e779bf",
+      "bytes": 3859,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_skeleton.py"
+    },
+    {
+      "id": "top-rtl",
+      "uri": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+      "sha256": "bfaf199e2e2d578a3fa5af1f3b8984c67280791223e742bbd3eb583bfc340fa8",
+      "bytes": 7248,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "bash fpga/catapult_a10/tools/lint_platform.sh"
+    },
+    {
+      "id": "reset-gate-rtl",
+      "uri": "fpga/catapult_a10/rtl/lcvex_catapult_a10_reset_gate.sv",
+      "sha256": "ef17525af97a52927568f02c3ff0ff346b6e9368a858d71f3c9b832f09a6820c",
+      "bytes": 3761,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "bash fpga/catapult_a10/tools/lint_platform.sh"
+    },
+    {
+      "id": "lint-stub",
+      "uri": "fpga/catapult_a10/tb/sv/lcvex_catapult_a10_stub.sv",
+      "sha256": "15a94b502df3449a3d988e3c1ace3e357a64bab8ec97c01dc0bfa96214538c7d",
+      "bytes": 3384,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "bash fpga/catapult_a10/tools/lint_platform.sh"
+    },
+    {
+      "id": "skeleton-checker",
+      "uri": "fpga/catapult_a10/tools/check_skeleton.py",
+      "sha256": "c2efe6a5cd0f4e976ac5ce74cc9e090cd6ac34b9819b637d7427f7ad523b346e",
+      "bytes": 5696,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_skeleton.py"
+    },
+    {
+      "id": "lint-entrypoint",
+      "uri": "fpga/catapult_a10/tools/lint_platform.sh",
+      "sha256": "0106567611469bdc43bb819b17d1d24d6e90ab468d3ba12e096f4bd13c37cddc",
+      "bytes": 1955,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "bash fpga/catapult_a10/tools/lint_platform.sh"
+    },
+    {
+      "id": "platform-checker-extended",
+      "uri": "fpga/catapult_a10/tools/check_platform.py",
+      "sha256": "ec16f5f0babe12dbb521a6bcf519d238ffaf592e048980a26850bd0caeae3814",
+      "bytes": 9514,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "qsf-extended",
+      "uri": "fpga/catapult_a10/quartus/catapult_a10.qsf",
+      "sha256": "cd04099a9db092c025a8b2b8cba5ca02ae63a497b69715ceaa0d727cadd54ac5",
+      "bytes": 10180,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "sdc-extended",
+      "uri": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "sha256": "536310b8d2b869a21e801631ee931af7ccd0b9d934e5c8cf672eb2b927de4531",
+      "bytes": 1336,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "target-sha256-list",
+      "uri": "fpga/catapult_a10/SHA256SUMS",
+      "sha256": "ed10a9273693b76b5e5bb40dc4c02ff70334b2f728502c4abbbc71f0abbc8a4b",
+      "bytes": 1588,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "offline-verify-log",
+      "uri": "build/agents/T-20260827-062/offline-verify.log",
+      "sha256": "5723a1181dc931c256ec6c9170dd4be16d97449c61fcf25bcab4bd1c7491166b",
+      "bytes": 3022,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "owner-l0-*-003 / owner-l1-sv-lint-004 / owner-l1-qsys-regenerate-blocked-005"
+    },
+    {
+      "id": "skeleton-toolchain-report",
+      "uri": "build/agents/T-20260827-062/skeleton-toolchain-report.json",
+      "sha256": "12a95470450b8668723581bb8159d705b095aa78d33b32ca594776e2f5589220",
+      "bytes": 591,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_skeleton.py"
+    },
+    {
+      "id": "skeleton-toolchain-report-required",
+      "uri": "build/agents/T-20260827-062/quartus-required/skeleton-toolchain-report.json",
+      "sha256": "21d3bf5d21b7036008473c5554a68752f3fdf14ccc2cfd28e57b2c09b43f38bd",
+      "bytes": 557,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_skeleton.py --require-quartus"
+    },
+    {
+      "id": "qsys-regenerate-attempt-log",
+      "uri": "build/agents/T-20260827-062/qsys-regen-attempt/regenerate.log",
+      "sha256": "1b65db3b6e66b8a2d2ff6794d1d674eb4bad861accc8ec11006b4aeb183914c8",
+      "bytes": 326,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "owner-l1-qsys-regenerate-blocked-005"
+    },
+    {
+      "id": "lint-log",
+      "uri": "build/agents/T-20260827-062/lint/lint.log",
+      "sha256": "ce064857114dadbf469f280a0c3640f7e72e91efd3b1c2f4d51055b059775587",
+      "bytes": 301,
+      "owner": "b0-bootstrap-062",
+      "retain_until": "review",
+      "reproduce": "bash fpga/catapult_a10/tools/lint_platform.sh"
+    }
+  ],
+  "regeneration": {
+    "status": "blocked",
+    "entrypoint": "fpga/catapult_a10/tools/regenerate_qsys.sh",
+    "required_tools": [
+      "ip-generate",
+      "qsys-generate",
+      "quartus_sh"
+    ],
+    "tool_missing_reason": "No Quartus Prime Pro/Qsys installation is present in PATH.",
+    "generated_sha256": null,
+    "interface_diff": null,
+    "acceptance_blocker": true
+  },
+  "known_limits": [
+    "Quartus/Qsys tools are missing: exact 21.4 Build 67 Qsys/IP regeneration, full compile and STA remain blocked (Gate F-BOARD).",
+    "flash/sfl/sfl_sys.qip references generated EPCQ/SFL sources that are not in the T-052 payload; regeneration must provide them before a real Quartus compile.",
+    "JTAG-UART and EPCQ Avalon slaves are idle tie-offs; B5 owns SoC wiring and boot.",
+    "No CPU, SoC interconnect, AXI4, Cache, bridge or RISC-V software is implemented.",
+    "DDR calibration/March, board test and QSF/SDC timing sign-off are not claimed.",
+    "QSF/SDC target hashes changed for the skeleton extension; T-052 source hashes and source.lock remain frozen."
+  ]
+}

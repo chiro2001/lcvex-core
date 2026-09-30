@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-014",
+  "label": "B25-QUARTUS-SYNTHESIS-PARALLEL-AB",
+  "title": "Measure and adopt safe Quartus synthesis parallelism",
+  "kind": "quartus-synthesis-throughput-experiment",
+  "priority": "high",
+  "phase": "proposed",
+  "dispatch_status": "deferred-during-25mhz-board-bringup",
+  "assigned_owner": "unassigned",
+  "depends_on": ["T-20260909-013"],
+  "base_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "scope": "Use fresh isolated probes to explain and improve the long single-root synthesis wall time. Test one variable per probe: processor ceiling only, explicit top-level design partitions with Auto effort, then FAST effort only if needed. Never reuse an experimental result as signoff without full fitter/STA and source provenance.",
+  "candidate_partition_paths": [
+    "soc|core",
+    "soc|coh",
+    "soc|ddr_bridge",
+    "soc|axi_master",
+    "soc|emif_adapter"
+  ],
+  "rules": [
+    "Do not assign soc|coh together with nested i_l1/d_l1/l2 partitions in the same variant.",
+    "First use a bounded worker-spawn probe to observe internal --parallel=N; do not spend a full 6-hour run on a variant that still reports only one root worker unless it is the control.",
+    "NUM_PARALLEL_PROCESSORS alone is a ceiling and must not be claimed to split root_partition.",
+    "SYNTHESIS_EFFORT FAST is unverified in this repository and must be isolated from partition changes.",
+    "A variant is adoptable only if synthesis wall time improves materially, peak memory is safe, and full fitter/STA plus T-011 timing/CDC/UCP checks pass."
+  ],
+  "acceptance": "At least one source-reproducible variant demonstrates measured wall-time improvement without timing/resource/CDC/waiver regression, or evidence proves the single-root bottleneck cannot be improved safely with these settings.",
+  "resource": "Every remote probe uses the gamepc resource lock; variants are serial, task-local and event-driven.",
+  "forbidden": [
+    "changing functional RTL or SDC to improve compile time",
+    "combining partition and FAST variables before single-variable evidence",
+    "assembler/SOF/JTAG/board/Flash actions",
+    "overwriting T-013 or prior remote probes"
+  ],
+  "created_at": "2026-09-09T16:35:00+08:00",
+  "updated_at": "2026-09-10T10:53:13+08:00"
+}

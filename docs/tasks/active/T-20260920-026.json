@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-026",
+  "label": "B25-LOGIC-IMM-REPAIR-NOFP-PROFILE",
+  "title": "Derive the scalar no-FP board profile from the Gate-D-passed logical-immediate repair candidate",
+  "kind": "board-profile",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "one-line-profile-and-affected-l0-l2-pass",
+  "assigned_owner": "profile_t026",
+  "depends_on": ["T-20260920-025"],
+  "base_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+  "base_tree_sha": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+  "branch": "fpga/T-20260920-026-b25-logic-imm-repair-nofp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-026",
+  "writes": [
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv::A64_FP_SIMD board-top default parameter only",
+    "build/agents/T-20260920-026/** ignored logs/artifacts",
+    "docs/tasks/evidence/T-20260920-026.json",
+    "docs/handoffs/T-20260920-026-b25-logic-imm-repair-nofp-profile.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-022.json",
+    "docs/tasks/evidence/T-20260920-025.json",
+    "T-20260920-016 no-FP derivation as a procedure template only"
+  ],
+  "scope": "Apply exactly the already accepted scalar board diagnostic delta A64_FP_SIMD=1'b1 to 1'b0 on candidate c31b3aea. Preserve the logical-immediate repair, every observer, firmware byte, M20K behavior, QSF and SDC. Commit and content-address the derivative before any GamePC staging.",
+  "validation": {
+    "scope": "Relative to c31b3aea, exactly one functional file and one removed/added parameter line; no unrelated cherry-pick, ledger or generated file counts as a functional delta.",
+    "repair_identity": "rtl/lcvex_decode.sv stays byte-identical to c31b3aea and the 16384-entry logical-immediate behavioral oracle remains PASS.",
+    "static": "Board-top/default no-FP lint, core/SoC explicit A64_FP_SIMD=0 lint, platform checker and synthesis-selector contract pass.",
+    "focused": "2011-byte boot image identity, M20K timing, vendor focused/status/observer and RX response trace remain valid.",
+    "soc": "Rerun no-FP vendor full-SoC if the exact input-equivalence proof to c31b3aea is incomplete; otherwise record byte-identical filelist/input hashes and why the board-top default is or is not consumed."
+  },
+  "acceptance": "A committed derivative has exactly the one intended functional line change, retains the logical-immediate fix, and all affected L0-L2 checks/equivalence proofs pass. It is explicitly a scalar diagnostic profile, not a full-FP release, and is the sole source for T-027 fresh physical.",
+  "resource": "Static/focused checks are light; any heavy Verilator run acquires local. This task does not use GamePC, Quartus, assembler, JTAG or the board.",
+  "forbidden_regions": [
+    "rtl/lcvex_decode.sv, core/SoC/observer/firmware RTL and all tests except the declared board-top parameter line",
+    "QSF/SDC/QEMU/reference/expected-result or common registry changes",
+    "GamePC/Quartus/assembler/JTAG/Flash/reset/power actions",
+    "claiming full-FP release equivalence"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T15:15:33+08:00",
+    "agent_name": "profile_t026",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "partial": false,
+    "profile_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+    "profile_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+    "evidence_head_sha": "375dfc1471eae5f49b6660da773447ecbd089168",
+    "functional_delta": "exactly A64_FP_SIMD board default 1'b1 -> 1'b0",
+    "logic_imm_identity": "rtl/lcvex_decode.sv SHA256 5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+    "validation": "16384 logic-imm oracle, boot/image, no-FP lint, platform/selector, M20K, vendor focused and explicit no-FP full-SoC PASS",
+    "evidence": "docs/tasks/evidence/T-20260920-026.json",
+    "handoff": "docs/handoffs/T-20260920-026-b25-logic-imm-repair-nofp-profile.md",
+    "next": "T-20260920-027 fresh physical from this exact profile only"
+  },
+  "created_at": "2026-09-20T15:14:30+08:00",
+  "updated_at": "2026-09-20T15:31:26+08:00"
+}

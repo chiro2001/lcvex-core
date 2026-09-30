@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-017",
+  "label": "FP-P3-ITER-SQRT-DIV",
+  "title": "FP/NEON FP-P3：iterative sqrt/div 与公共 round/pack 收敛",
+  "kind": "feature",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p3",
+  "agent_type": "rtl-iterative-refactor",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-016"
+  ],
+  "base_sha": "f2a31a9e32883ae8a697c1039fa95dec11f6b337",
+  "branch": "feature/T-20260902-017-fp-p3-iter-sqrt-div",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-017",
+  "scope": "按 docs/FP_NEON_PIPELINE_PLAN.md FP-P3：把 FSQRT/FDIV 变为可暂停、可 kill 的迭代状态机；根据综合 hierarchy 收敛共享 classify/round/pack。首轮不预判关键路径，FP-P5 后如有时序红项再开 FP-P3T 定向切级。",
+  "reads": [
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/FP_NEON_PIPELINE_BASELINE.md",
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-5_FP16_SQRT_MINMAX_ROUND.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "Makefile",
+    "sim/**",
+    "tb/**"
+  ],
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-017-fp-p3-iter-sqrt-div.md",
+    "docs/tasks/evidence/T-20260902-017.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "新增 iterative sqrt/div 状态机定向 SV/Cocotb PASS"
+    ],
+    "l1": [
+      "P7-1/3/4/5 SV+P7 Cocotb 全绿"
+    ],
+    "l2": [
+      "现有 P7 lockstep/L2 子集 PASS",
+      "latency 表固定并测试检查"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "FSQRT/FDIV 使用可暂停/可 kill 的迭代状态机；所有 op/format request-to-response latency 表固定并被测试检查；特殊值与四种 RMode raw-bit 不回归；reset/kill/response backpressure 覆盖；综合 hierarchy 未复制迭代器或 round/pack。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T03:18:00+08:00",
+  "updated_at": "2026-09-03T04:17:15+08:00",
+  "known_limits": [
+    "不运行 fit/STA/SOF；不引入多 transaction；不改变 raw-bit 语义；如远端 Quartus 不可用可不跑"
+  ],
+  "handoff": "docs/handoffs/T-20260902-017-fp-p3-iter-sqrt-div.md",
+  "evidence": "docs/tasks/evidence/T-20260902-017.json",
+  "next": "FP-P4 全量功能/性能 + 一/二 lane PPA sweep",
+  "dispatch": {
+    "sent_at": "2026-09-03T03:18:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-017",
+    "branch": "feature/T-20260902-017-fp-p3-iter-sqrt-div"
+  },
+  "head_sha": "e131c266adcfebc249b9ac49dee513af75b38306",
+  "merge_sha": "1a5db4d4b6db62328675e5d11bc77824fbd555c8",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T04:16:14+08:00",
+    "merged_at": "2026-09-03T04:17:15+08:00",
+    "recorded_at": "2026-09-03T04:17:15+08:00",
+    "notes": "FP-P3 iterative sqrt/div merged; make compile and sim-sv-fp-scalar pass at merge SHA. Quantified Quartus resource diff deferred."
+  }
+}

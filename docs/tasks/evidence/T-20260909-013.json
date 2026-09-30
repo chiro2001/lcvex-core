@@ -1,0 +1,353 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-013",
+  "label": "B25-FINAL-FRESH-PHYSICAL",
+  "state": "done",
+  "acceptance_status": "fresh-synthesis-fitter-sta-and-v2-invariant-physical-signoff-pass",
+  "partial": false,
+  "base_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "candidate_tree_sha": "b6b576ada19381d958375d5088d8dc468b99e5d4",
+  "source_evidence_commit": "72712675ff588b49a538f4567411abb9e4f76174",
+  "integration_commit": "c1484c43f762d99b54f58a5d0bc0d357c6f453cb",
+  "head_sha": "72712675ff588b49a538f4567411abb9e4f76174",
+  "head_semantics": "T-013 owner evidence content commit; candidate_sha/candidate_tree_sha identify the measured candidate. The later integration commit is recorded separately; this correction does not relabel either commit.",
+  "correction": {
+    "task_id": "T-20260910-002",
+    "recorded_at": "2026-09-10T09:52:50+08:00",
+    "scope": "document identity, artifact size/hash attribution and source precedence only",
+    "measured_results_changed": false
+  },
+  "finalization": {
+    "finalized_at": "2026-09-10T10:53:13+08:00",
+    "integration_head": "2e7974db34b075f66dc9430de641c470e8b22d7b",
+    "resolution_task": "T-20260910-001",
+    "evidence_correction_task": "T-20260910-002",
+    "result": "PASS; v2 invariant accepts the complete T-013 fresh raw report set without modifying any measured physical result"
+  },
+  "branch": "verify/T-20260909-013-b25-final-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-013",
+  "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260909-013-b25-final-fresh-physical",
+  "timestamps": {
+    "dispatch_sent_at": "2026-09-09T14:38:51+08:00",
+    "received_at": "2026-09-09T14:40:29+08:00",
+    "reported_at": "2026-09-10T00:18:57+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "candidate_identity": {
+    "sdc": {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "bytes": 14384,
+      "sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5"
+    },
+    "qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "qsf_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "platform_manifest_sha256": "b4bb4acc210d28ab22b20ee9d69682d14b25aa208691511dcbe9012950062dbe",
+    "platform_sha256sums_sha256": "23263db51fb4892ec0cf66f2e03bffdfbd8ddb8f90ef984b8942f1a6bfbf4fc9",
+    "physical_waiver_policy_sha256": "284f9c140bba1c36992de222189f08c2b6b57d328949facee2d2128f0812c393",
+    "generated_emif_sdc": {
+      "path": "build/agents/T-20260909-013/acceptance/remote/Qsys_emif_bot_altera_emif_arch_nf_191_3stv5pi.sdc",
+      "bytes": 52427,
+      "sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274"
+    },
+    "candidate_manifest": {
+      "canonical_entries": 53,
+      "qsf_relative_aliases": 47,
+      "canonical_sha256": "77872c4e94f28c9790246b3357a1e20b0b6b234d03edc62159f83fc39ad3ca95",
+      "manifest_sha256": "ace0f026a55731dcac01576204f64c18bf82253c89d310b1a45a149728eadf69",
+      "sidecar_sha256": "6996a4e70d900b112b4afbae3efe3d0cfec37c75d9534dcb31b4fcda9762e10c"
+    },
+    "platform_payload_manifest": {
+      "entries": 78,
+      "manifest_sha256": "5ecfb41015374afa8aa09f72b53dbac36ce2b856cbc4adc62991e88965927013",
+      "sidecar_sha256": "3f2acdcdeeaae709dc13f807dfd4a3a706583b462cd24bd4b576f928a4943934"
+    }
+  },
+  "boot_image": {
+    "elf": {"bytes": 68832, "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"},
+    "bin": {"bytes": 957, "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"},
+    "hex": {"bytes": 2871, "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"},
+    "mif": {"bytes": 204942, "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7", "width": 64, "depth": 8192, "records": 8192},
+    "expected_image_sha256": "4ef1195a185150b8ec9fba5acdcb0b44b4125e9f22a648db82368f26a4b2c57c",
+    "expected_image": {"path": "build/agents/T-20260909-013/oracle/expected_image.hex", "bytes": 196608, "sha256": "4ef1195a185150b8ec9fba5acdcb0b44b4125e9f22a648db82368f26a4b2c57c"},
+    "manifest": {"path": "build/agents/T-20260909-013/oracle/image_manifest.json", "bytes": 3562, "sha256": "b7514f476319aaf6cb6f9e1eef90f0b3c306ebeaf87635038e69b4fb111c015a"},
+    "contract_emit_check": "PASS/PASS"
+  },
+  "local_validation": {
+    "candidate_audit": "PASS; stage=174, QSF assignments=50/missing=0, MIF=64x8192/8192 records",
+    "platform": "PASS files=50",
+    "skeleton": "PASS files=6; Quartus tools unavailable locally (reported only)",
+    "selector": "PASS; one SYNTHESIS macro, one BRAM assignment, no standalone altsyncram",
+    "sha256sums": "PASS 50/50",
+    "fifo_payload_sdc": "PASS; 6/6 fault matrix",
+    "cdc_data_delay_sdc": "PASS; 10/10 fault matrix",
+    "waiver_fixture": "PASS; 18/18 negative cases and positive case",
+    "inventory_exporter_fixture": "PASS; 13/13 negative cases and positive checker",
+    "static_log": {"path": "build/agents/T-20260909-013/prep/static-closure.log", "bytes": 12933, "sha256": "86c7dd7693d15356c30a9ecb22344bffcedccf71c7afa01551f8ec0412be8777"},
+    "candidate_audit_log": {"path": "build/agents/T-20260909-013/prep/candidate-audit-final.log", "bytes": 761, "sha256": "0a98867c6c68867c36d9bbf362c08011e204b5f90cddd02b7fdfec1d61e8ad84"}
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "preflight": {
+      "root_preexisting": false,
+      "eda_process_count": 0,
+      "physical_total_mib": 63092.3,
+      "physical_free_mib": 41332.6,
+      "disk_d_free_bytes": 83031080960,
+      "result": "PASS"
+    },
+    "source_verify": {
+      "candidate_count": 53,
+      "alias_count": 47,
+      "platform_payload_count": 78,
+      "qsf_file_assignment_count": 50,
+      "qsf_missing_count": 0,
+      "mif_width": 64,
+      "mif_depth": 8192,
+      "mif_records": 8192,
+      "hash_bad_count": 0,
+      "forbidden_artifacts": 0,
+      "preexisting_quartus_databases": 0,
+      "result": "REMOTE_SOURCE_VERIFY_PASS",
+      "log": "build/agents/T-20260909-013/prep/remote-source-verify-final.lock.log"
+    },
+    "source_closure": {
+      "stage_file_count": 174,
+      "expected_manifest_union_count": 174,
+      "post_sync_manifest_sha256": "7ffb58891b845027eaa54c2987b3fcad5ff41756da9c1c5f17ed0f4bed868882",
+      "post_sync_manifest_lines": 174,
+      "result": "REMOTE_CLOSURE_AUDIT_PASS"
+    },
+    "post_stage_manifests": {
+      "post_synthesis": {"lines": 156, "sha256": "d10b8d131ca260a33e3cb2aafb9164a9475993c2106cf835bc4fbee6cf6a0fc5"},
+      "post_fitter": {"lines": 291, "sha256": "c1313618c7bfb830bedad9043b921dea344eb913128389affa43c263834311f4"},
+      "post_sta": {"lines": 297, "sha256": "038e2ea675703c542bd3d9ea527136ce80bf9e398f27661ee04540e3fadb8b5d"}
+    }
+  },
+  "stage_runs": [
+    {
+      "stage": "synthesis",
+      "quartus_command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis",
+      "started_at": "2026-09-09T15:04:50.5598832+08:00",
+      "finished_at": "2026-09-09T21:27:12.4567990+08:00",
+      "wall_seconds": 22941.897,
+      "exit_code": 0,
+      "quartus_report_elapsed": "06:20:46",
+      "quartus_pid": 38784,
+      "min_free_physical_mib": 31343.6,
+      "post_free_physical_mib": 41112.6,
+      "post_eda_count": 0,
+      "runner_samples": 757,
+      "runner_log_sha256": "7165694b5f831d467ad41181e1d256c671c941de4c2fd089bab8456b2b3cc197",
+      "reports": {
+        "syn_rpt": {"bytes": 3451421, "sha256": "557534c5dd9e4573291cb4143ef87721a7ac62135340ce6a9862ec487639347f"},
+        "syn_summary": {"bytes": 155, "sha256": "befd3af4b308b850934be3519649796023474219572dab483e755bbea5af6b04"},
+        "syn_smsg": {"bytes": 1136, "sha256": "e2192361987508ebff87d5999c72ed87ca8c2c92495ffd3467865f1ca5d6a096"}
+      }
+    },
+    {
+      "stage": "fitter",
+      "quartus_command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start fitter -end fitter",
+      "started_at": "2026-09-09T21:30:13.0409749+08:00",
+      "finished_at": "2026-09-09T22:10:15.1341109+08:00",
+      "wall_seconds": 2402.093,
+      "exit_code": 0,
+      "quartus_report_elapsed": "00:26:01",
+      "quartus_pid": 10128,
+      "min_free_physical_mib": 32334.6,
+      "post_free_physical_mib": 41953.4,
+      "post_eda_count": 0,
+      "runner_samples": 2,
+      "monitor_interval_correction": "1200 seconds after synthesis; one event every 20 minutes",
+      "runner_log_sha256": "79c9e362f36fd6020b968e48546f6d1310cbccefbc8050e7c0ceb95eaad8026b",
+      "fit_summary": {"device": "10AX115N4F40E3SG", "alms": "164,852 / 427,200 (39%)", "registers": 98067, "pins": "141 / 826 (17%)", "ram_blocks": "121 / 2,713 (4%)", "dsp_blocks": "186 / 1,518 (12%)", "plls": "3 / 112 (3%)"},
+      "reports": {
+        "fit_rpt": {"bytes": 2320805, "sha256": "fbb59400ce1b12bdef5a001ed4740776b8d87c9fc1a1400a22a4833cc3e246ad"},
+        "fit_summary": {"bytes": 705, "sha256": "5704c8eac7bed0dcb46a55b4103b96602efbda3213b64ebbbe6e5c9f5d75217b"},
+        "fit_pin": {"bytes": 199477, "sha256": "7a697345e1b7ddde6cfa125c151cc8e997495ee4888b3b65a6b78fe91e5d40fd"}
+      }
+    },
+    {
+      "stage": "sta_signoff",
+      "quartus_command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start sta_signoff -end sta_signoff",
+      "started_at": "2026-09-09T22:11:28.6046174+08:00",
+      "finished_at": "2026-09-09T22:31:30.2627513+08:00",
+      "wall_seconds": 1201.658,
+      "exit_code": 0,
+      "quartus_report_elapsed": "00:00:39",
+      "quartus_pid": 14864,
+      "min_free_physical_mib": 41986.4,
+      "post_free_physical_mib": 41971.9,
+      "post_eda_count": 0,
+      "runner_samples": 1,
+      "monitor_interval_correction": "1200 seconds after synthesis; one event every 20 minutes",
+      "runner_log_sha256": "0b65d8d4850a7b282eeb0bab4c7c8317609c9ba025d4443f802fb62318230a39",
+      "reports": {
+        "sta_rpt": {"bytes": 18079322, "sha256": "c164360a4cf5dc9f46921f42155a7e7b8dadd5b40ce7bddc01e15c6041c39a67"},
+        "sta_summary": {"bytes": 9361, "sha256": "b806e0922a59b20953af56a865c445c90a79b5705ec8a6e8703d92e21807e1e6"},
+        "sta_flow": {"bytes": 17621, "sha256": "e2316d702dfed3aaa352029d01645a21e1135a22e8bd0693c5c738ab24afa196"}
+      }
+    }
+  ],
+  "timing": {
+    "sys_clk_25": {"period_ns": 40.0, "frequency_mhz": 25.0, "setup_wns_ns": 8.085, "hold_wns_ns": 0.019, "recovery_wns_ns": 13.608, "removal_wns_ns": 0.181, "all_tns_ns": 0.0, "fmax_mhz": 31.33},
+    "global": {"setup_wns_ns": 0.320, "hold_wns_ns": 0.000, "recovery_wns_ns": 0.656, "removal_wns_ns": 0.174, "min_pulse_wns_ns": 0.120, "all_violations": 0},
+    "overall_report_set": {
+      "setup": {"paths": 50, "violated": 0, "worst_slack_ns": 8.085, "sha256": "034f7b8987acafda810abf1d906d5f4058b6637203c54b4db86c54875f497f1e"},
+      "hold": {"paths": 50, "violated": 0, "worst_slack_ns": 0.019, "sha256": "8e58327b765928d3980d8a2fb946d077a8a9559acaf3b404b89a09c102993900"},
+      "recovery": {"paths": 50, "violated": 0, "worst_slack_ns": 13.608, "sha256": "b268541db50a187c8877926e27a90f7082b42968815b289d66c968ded8211776"},
+      "removal": {"paths": 50, "violated": 0, "worst_slack_ns": 0.181, "sha256": "9f062795389f9e4dc15ab6a20e4212cb1d0aed34687a555ba83f1111e177887f"},
+      "min_pulse": {"paths": 50, "violated": 0, "worst_slack_ns": 0.120, "sha256": "90d40fd697da7dde4ffdbcbe8b82522e89bee6afa7212380804224b609923dbf"}
+    },
+    "cross_clock_queries": "both directions returned Nothing to report under complete user+EMIF SDC; no positive margin claimed from empty reverse/forward query",
+    "standard_sta_report": {"path": "build/agents/T-20260909-013/quartus/sta/catapult_a10.sta.rpt", "bytes": 18079322, "sha256": "c164360a4cf5dc9f46921f42155a7e7b8dadd5b40ce7bddc01e15c6041c39a67"}
+  },
+  "selector_and_inventory": {
+    "synthesis": {"errors": 0, "warnings": 235, "mif_input": "../boot/build/boot.mif", "behavior_bram_present": false, "actual_altera_syncram": true},
+    "fit_ram": {"boot": {"depth": 8192, "width": 64, "implementation_bits": 524288, "m20k_blocks": 32, "mif": "../boot/build/boot.mif"}, "l1": {"depth": 64, "width": 512, "m20k_blocks": 16}, "l2": {"depth": 64, "width": 512, "m20k_blocks": 16}},
+    "ddr": {"status": "Pass", "read_capture_ns": 0.027, "write_ns": 0.063, "address_command_ns": 0.368, "dqs_gating_ns": 1.177, "write_levelling_ns": 0.220},
+    "metastability": {"status": "Pass", "corners": 4, "synchronizer_chains": 27, "shortest_chain_registers": 2, "timing_violation_chains": 0, "excluded_chains": 23, "worst_case_mtbf_years": "1e+09", "settling_ns": {"slow_900mv_100c": 2.993, "slow_900mv_0c": 3.259, "fast_900mv_100c": 4.683, "fast_900mv_0c": 5.159}}
+  },
+  "fifo_payload_acceptance": {
+    "report_count": 24,
+    "nothing_to_report_count": 24,
+    "report_errors": 0,
+    "summary": {"path": "build/agents/T-20260909-013/acceptance/remote/reports/payload/payload_summary.tsv", "bytes": 4948, "sha256": "26426553533ff0a7126647d956c805e581e95e8230e5294d7146a036e2db016b"},
+    "exact_families": [
+      {"label": "request_mem_to_emif_req", "from": "*request_fifo|mem*", "to": "soc|emif_adapter|emif_req_q*", "complete_rows": 1, "ignored_rows": 0},
+      {"label": "response_mem_to_txn_local", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|txn_local_q*", "complete_rows": 1, "ignored_rows": 0},
+      {"label": "response_mem_to_read_len", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_len_q*", "complete_rows": 1, "ignored_rows": 0},
+      {"label": "response_mem_to_read_beat", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_beat_q*", "complete_rows": 1, "ignored_rows": 0},
+      {"label": "response_mem_to_read_line", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_line_q*", "complete_rows": 1, "ignored_rows": 0},
+      {"label": "response_mem_to_response_code", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|response_code_q*", "complete_rows": 1, "ignored_rows": 0}
+    ],
+    "result": "PASS"
+  },
+  "cdc_data_delay_acceptance": {
+    "summary": {"path": "build/agents/T-20260909-013/acceptance/remote/reports/data-delay/data_delay_summary.tsv", "bytes": 5320, "sha256": "b851642422abcfa6c4875398aca41357ac9db58d2aa954fe7423debf95bf0ed3"},
+    "path_contract": {"request_wr": 3, "request_rd": 3, "response_rd": 3, "response_wr": 3, "poison": 1},
+    "corners": {
+      "3_slow_900mv_0c": {"request_wr": 1.380, "request_rd": 1.477, "response_rd": 1.340, "response_wr": 1.533, "poison": 1.604},
+      "3_slow_900mv_100c": {"request_wr": 1.370, "request_rd": 1.474, "response_rd": 1.319, "response_wr": 1.551, "poison": 1.606},
+      "MIN_fast_900mv_0c": {"request_wr": 1.713, "request_rd": 1.764, "response_rd": 1.637, "response_wr": 1.748, "poison": 1.830},
+      "MIN_fast_900mv_100c": {"request_wr": 1.662, "request_rd": 1.715, "response_rd": 1.558, "response_wr": 1.691, "poison": 1.800}
+    },
+    "all_groups": 20,
+    "all_violations": 0,
+    "worst_slack_ns": 1.319,
+    "all_datapath_markers": "Max Delay Exception (Datapath Only)=2.000",
+    "target_exceptions": "all five Complete once per corner; zero matching rows in ignored reports",
+    "result": "PASS"
+  },
+  "ucp_and_waiver_acceptance": {
+    "unconstrained_clocks": ["altera_reserved_tck", "soc|emif_adapter|emif_rst_sync1_n"],
+    "combined_clone": {
+      "summary": {"illegal_clocks": 0, "clock_count": 2, "input_ports": 2, "input_paths": 61, "output_ports": 1, "output_paths": 4},
+      "reset": {"fast_recovery": {"paths": 626, "violated": 0, "worst_slack_ns": 1.308}, "fast_removal": {"paths": 626, "violated": 0, "worst_slack_ns": 0.220}, "slow_recovery": {"paths": 626, "violated": 0, "worst_slack_ns": 1.308}, "slow_removal": {"paths": 626, "violated": 0, "worst_slack_ns": 0.220}},
+      "summary_artifact": {"path": "build/agents/T-20260909-013/acceptance/remote/ucp/t007_summary.tsv", "bytes": 535643, "sha256": "4f2b9d5758e143bf584e09abdd744709504fd319ce8cc532beafc117e83e3c98"}
+    },
+    "isolated_fresh_clone": {
+      "summary": {"illegal_clocks": 0, "clock_count": 2, "input_ports": 2, "input_paths": 61, "output_ports": 1, "output_paths": 4, "tdi_paths": 25, "tms_paths": 36, "tdo_paths": 4},
+      "reset": {"fast_recovery": {"paths": 626, "violated": 0, "worst_slack_ns": 1.308}, "fast_removal": {"paths": 626, "violated": 0, "worst_slack_ns": 0.220}, "slow_recovery": {"paths": 626, "violated": 0, "worst_slack_ns": 1.308}, "slow_removal": {"paths": 626, "violated": 0, "worst_slack_ns": 0.220}},
+      "summary_artifact": {"path": "build/agents/T-20260909-013/acceptance/remote/control/ucp-fresh/ucp-fresh/t007_summary.tsv", "bytes": 535853, "sha256": "b66d5a7fb704df4940f422d3dc97009f641e29fa2d75ca5e1c6af30ffd3a84f0"}
+    },
+    "t010_policy_expected": {"input_paths": 63, "tdi_paths": 26, "tms_paths": 37, "tdo_paths": 4, "reset_recovery_paths": 627, "reset_removal_paths": 627},
+    "exporter_result": "FAIL; raw UCP summary counts differ from the exact T-010 contract",
+    "checker_result": "not invoked on fresh inventory because exporter fail-closed before emission",
+    "endpoint_diff": {"path": "build/agents/T-20260909-013/prep/ucp-endpoint-diff.json", "sha256": "347afd1601449253643130f342118c99b4535a6d0fd751bc5580c99040fde081"},
+    "interpretation": "fresh fitted netlist reproducibly has one fewer reset duplicate and one fewer TDI/TMS vendor duplicate path; no functional endpoint disappeared"
+  },
+  "ucp_v2_invariant_acceptance": {
+    "policy": "fpga/catapult_a10/physical_waivers_invariant.json",
+    "task": "T-20260910-001",
+    "contract_lineage": "T-20260909-007 / 702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+    "raw_t011": {"input_paths": 63, "reset_recovery_removal_paths": 627},
+    "raw_t013": {"input_paths": 61, "reset_recovery_removal_paths": 626},
+    "normalized_both": {"tdi_paths": 25, "tms_paths": 35, "tdo_paths": 4, "input_paths": 60, "reset_endpoints": 624},
+    "full_membership": "exact normalized member lists and canonical SHA-256 match across T-011/T-013 and fast/slow recovery/removal",
+    "integration_fixture": "2/2 positive PASS; 27/27 negative rejected",
+    "integration_exporter": "PASS",
+    "integration_checker": "PASS",
+    "inventory": {"path": "build/agents/T-20260910-001/integration/t013-invariant-inventory.json", "bytes": 62736, "sha256": "706a74342b61d018cf943987a42fd336933c46550c965ff8c4b07c4a1ed05e3f"},
+    "result": "PASS"
+  },
+  "warning_delta": {
+    "synthesis": {"current": 235, "baseline_t002": 235, "multiset_equal": true, "ids": {"13004": 1, "13024": 1, "13310": 2, "13410": 2, "13469": 2, "14284": 1, "14285": 1, "14320": 8, "16746": 1, "16749": 19, "16750": 1, "16788": 1, "19651": 1, "19887": 192, "276027": 2}},
+    "fitter": {"current": 12, "baseline_t002": 12, "multiset_equal": true, "ids": {"12677": 1, "15714": 1, "171167": 1, "17951": 1, "18326": 1, "18550": 1, "18655": 1, "332060": 1, "335093": 4}}
+  },
+  "evidence_quality": {
+    "measurement_identity": {
+      "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+      "candidate_tree_sha": "b6b576ada19381d958375d5088d8dc468b99e5d4",
+      "candidate_manifest_sha256": "ace0f026a55731dcac01576204f64c18bf82253c89d310b1a45a149728eadf69",
+      "owner_evidence_commit": "72712675ff588b49a538f4567411abb9e4f76174",
+      "integration_commit": "c1484c43f762d99b54f58a5d0bc0d357c6f453cb"
+    },
+    "ucp_summary_header_semantics": "The raw t007_summary.tsv task=T-20260909-007 and fitted_source_sha=702bd8ee fields identify the v1 contract lineage embedded in the reused report script; they are not the T-013 measurement identity. T-013 identity is the candidate/manifest/constraint tuple above.",
+    "metastability_source_precedence": {
+      "aggregate_summary": {"path": "build/agents/T-20260909-013/prep/final-acceptance-summary.json", "bytes": 25472, "sha256": "b8db2c23695551bb9fda9617032d530cc63b9f6bbb0a9de02b7c88d5db8266d5", "field": "metastability", "observed": "empty list"},
+      "authoritative_source": {"path": "build/agents/T-20260909-013/quartus/sta/catapult_a10.sta.rpt", "bytes": 18079322, "sha256": "c164360a4cf5dc9f46921f42155a7e7b8dadd5b40ce7bddc01e15c6041c39a67", "observed": "4 corners, 27 chains, shortest 2 registers, 0 timing-violation chains"},
+      "interpretation": "The aggregate parser omitted metastability rows; no missing value was synthesized. selector_and_inventory.metastability is transcribed from the authoritative standard STA report."
+    },
+    "endpoint_diff_validation": {
+      "path": "build/agents/T-20260909-013/prep/ucp-endpoint-diff.json",
+      "bytes": 9157,
+      "sha256": "347afd1601449253643130f342118c99b4535a6d0fd751bc5580c99040fde081",
+      "authority": "diagnostic only; raw T-011/T-013 reports remain authoritative",
+      "tms_duplicate_check": "verified against raw reports: T-011 old-only state[13]~DUPLICATE and hub_mode_reg[0]~DUPLICATE; T-013 new-only state[15]~DUPLICATE",
+      "result": "diagnostic names agree with raw reports"
+    },
+    "artifact_reference_audit": "All path+hash references were re-read from the designated T-013 worktree. The only content-preserving metadata correction was data_delay_summary.tsv bytes 5134 -> 5320; its SHA-256 was already correct."
+  },
+  "report_only_clone_provenance": {
+    "source_pre_manifest": {"lines": 539, "sha256": "20b93fa7b9cadc9ad0ea58ca6d1ad31d80820e265955bbeccb54e3edb39f3737"},
+    "source_post_manifest": {"lines": 539, "sha256": "20b93fa7b9cadc9ad0ea58ca6d1ad31d80820e265955bbeccb54e3edb39f3737"},
+    "source_query_diff_rows": 0,
+    "clone_baseline_manifest_sha256": "20b93fa7b9cadc9ad0ea58ca6d1ad31d80820e265955bbeccb54e3edb39f3737",
+    "clone_post_manifest_sha256": "8e95894f5d378b5c658567efe7625379a40201ecdc5dd18718c7c96c6602d5c3",
+    "clone_query_diff_rows": 22,
+    "ucp_fresh_clone_query_diff_rows": 14,
+    "partial_clone_archive": "attempts/ucp-fresh-interrupted-20260910T000159; 295 files; preserved after SSH reset",
+    "all_report_only": true
+  },
+  "safety": {
+    "synthesis": true,
+    "fitter": true,
+    "sta_signoff": true,
+    "assembler": false,
+    "quartus_asm": false,
+    "forbidden_bitstream_generated": false,
+    "quartus_pgm": false,
+    "nios2_terminal": false,
+    "jtag_or_board_action": false,
+    "reset_power_flash": false,
+    "source_rtl_modified": false,
+    "qsf_sdc_manual_modified": false,
+    "qemu_modified": false,
+    "all_remote_actions_under_gamepc_lock": true,
+    "stages_serial": true,
+    "remote_eda_after_final_acceptance": 0,
+    "remote_forbidden_artifacts": 0
+  },
+  "resolved_blockers": [
+    "T-010 strict waiver policy requires exact UCP input path count 63 and reset recovery/removal count 627; fresh fitted netlist produced 61 and 626 in two independent report-only clones.",
+    "The endpoint difference is fitter routability-optimization duplicate selection (old adapter duplicates state + timeout[8] + timeout[12], fresh timeout[3] + timeout[12]); user and generated SDC hashes are unchanged.",
+    "T-010 was not relaxed and no synthetic rows or T-011 inventory were reused. T-20260910-001 added a separate v2 full-membership invariant and accepted the actual T-013 raw reports on the integration SHA."
+  ],
+  "blockers": [],
+  "artifacts": [
+    {"id": "candidate-manifest", "path": "build/agents/T-20260909-013/sync/candidate_manifest.json", "bytes": 43325, "sha256": "ace0f026a55731dcac01576204f64c18bf82253c89d310b1a45a149728eadf69"},
+    {"id": "platform-payload-manifest", "path": "build/agents/T-20260909-013/sync/platform_payload_manifest.json", "bytes": 36416, "sha256": "5ecfb41015374afa8aa09f72b53dbac36ce2b856cbc4adc62991e88965927013"},
+    {"id": "post-sta-project-manifest", "path": "build/agents/T-20260909-013/remote-manifests/post-sta.project.full.tsv", "bytes": 43077, "sha256": "038e2ea675703c542bd3d9ea527136ce80bf9e398f27661ee04540e3fadb8b5d"},
+    {"id": "overall-report-hashes", "path": "build/agents/T-20260909-013/acceptance/overall.sha256.tsv", "bytes": 1703, "sha256": "5b86157eef2b21a994c8ca700589d302f6d5ee1aeba7db1af894132d5943ce6f"},
+    {"id": "payload-report-hashes", "path": "build/agents/T-20260909-013/acceptance/payload.sha256.tsv", "bytes": 4878, "sha256": "c25b04e23b5a27c3a57a15cccdb2ba105c6b0c884357d1dca4c4a6ba85ad18a3"},
+    {"id": "data-delay-report-hashes", "path": "build/agents/T-20260909-013/acceptance/data-delay.sha256.tsv", "bytes": 5134, "sha256": "84521255375c408198a3ee9d3fd55811fce4d40872c3349a2874d84c3dde947a"},
+    {"id": "ucp-report-hashes", "path": "build/agents/T-20260909-013/acceptance/ucp.sha256.tsv", "bytes": 4781, "sha256": "27fb872747ae96e9738ff8d86ea745c0c22ea32dc7df8d62b9a22a5ca9fa7ec7"},
+    {"id": "ucp-endpoint-diff", "path": "build/agents/T-20260909-013/prep/ucp-endpoint-diff.json", "bytes": 9157, "sha256": "347afd1601449253643130f342118c99b4535a6d0fd751bc5580c99040fde081"},
+    {"id": "full-acceptance-log", "path": "build/agents/T-20260909-013/prep/full-t011-acceptance.lock.log", "bytes": 2117, "sha256": "66d8c7e8d64d763cae71a1dc2854e1995854e52aa3a0dc8da25511744308ddda"},
+    {"id": "ucp-fresh-recovery-log", "path": "build/agents/T-20260909-013/prep/ucp-fresh-clone-and-report-recovery.lock.log", "bytes": 1492, "sha256": "e4121d66604a5aed8e6e80641052f06071b22985dd8675bdc4d04a88a22f5683"}
+  ],
+  "handoff": "docs/handoffs/T-20260909-013-b25-final-fresh-physical.md"
+}

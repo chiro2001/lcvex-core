@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-039",
+  "label": "PE-F1-PRE",
+  "parent": "T-20260830-033",
+  "title": "F1 取指 FIFO/epoch/early-restart 实施前契约与切片",
+  "kind": "performance-frontend-prework",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1-prework",
+  "agent_type": "design-prework",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "model_scope": "只冻结 F1 契约、状态边界、任务切片和验收；不修改 RTL/测试，不运行生成器、构建或仿真。",
+  "depends_on": [
+    "T-20260830-037"
+  ],
+  "base_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+  "branch": "feature/T-20260830-039-pe-f1-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-039",
+  "scope": "基于 F0 实测和当前 core/I-L1 RTL，给 F1 取指 FIFO、fetch epoch/flush 与 I-L1 critical-word-first/early-restart 建立可直接派发的实施契约。明确第一实现切片、默认关闭/回退策略、状态机与接口、异常/MMU/维护/reset 边界、计数器和测试矩阵。只交付 docs/handoff/evidence，不编码、不构建。",
+  "planning_guidance": {
+    "recommended_slicing": [
+      "F1a 先做 core 内 2-entry 取指 FIFO + fetch epoch/stale-response 丢弃，保持 I-L1 完整行后响应；默认参数关闭时等价旧路径。",
+      "F1b 在 F1a epoch/flush 契约稳定后，再做 I-L1 critical-word-first/early-restart；整行最后一个 beat 成功前不得发布 tag/valid。",
+      "F1c 性能计数/矩阵复测独立于功能实现，使用 F0 同 workload/source/image/tool 口径；不把 F1a/F1b 收益混为一项。"
+    ],
+    "must_freeze": [
+      "fetch request、translation 和 response 的身份/epoch；flush/reset/TLBI/IC invalidate 后 stale response 的唯一处理规则。",
+      "FIFO entry 字段、push/pop/flush 优先级、PC/指令/fault 绑定、IF/ID backpressure 和系统指令排空条件。",
+      "跨 4K page、跨 64B line、IABT、错误路径 fault、MMU off/on、WFI/IRQ/ERET 的行为。",
+      "F1b 目标 beat 返回与 fill_buf/metadata 可见性，refill fault 在 early word 已消费后的精确异常边界；若无法保持精确，必须把 F1b 标为后续风险门。",
+      "未来实施任务的精确写集、L0-L2 命令、SVA、回退参数和定量 acceptance。"
+    ],
+    "decision_rule": "如果 critical-word-first 会让 fault/metadata 提交无法保持精确，预研应明确建议只先实施 F1a，不得用模糊假设把 F1a/F1b 绑成一个大改动。"
+  },
+  "writes": [
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/handoffs/T-20260830-039-pe-f1-prework.md",
+    "docs/tasks/evidence/T-20260830-039.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/ARCHITECTURE.md",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_mmu.sv",
+    "rtl/lcvex_mem_arb.sv",
+    "tb/sv/**",
+    "sim/cocotb/**"
+  ],
+  "context_docs": [
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/ARCHITECTURE.md"
+  ],
+  "validation": {
+    "l0": [
+      "只读核对现有 fetch/flush/MMU/I-L1 状态机，交付逐状态/逐事件契约与引用行号",
+      "交付 F1a/F1b 分片 DAG、精确写集、L0-L2 测试矩阵、默认关闭和回退条件",
+      "git diff --check；确认只修改允许的三个 docs 文件"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "形成可直接登记 F1a 实现任务的冻结契约：FIFO/epoch/flush/fault/MMU/维护/reset 语义无关键空白，F1a 与 F1b 明确拆分，写集/验证/回退/定量指标齐全；不得声称已实现或已有性能收益。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T15:28:41+08:00",
+  "updated_at": "2026-08-30T16:04:58+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T15:30:28+08:00",
+    "agent_name": "t039_pe_f1_prework_luna",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-039"
+  },
+  "handoff": "docs/handoffs/T-20260830-039-pe-f1-prework.md",
+  "evidence": "docs/tasks/evidence/T-20260830-039.json",
+  "merge_sha": "5af67d6f039ba70e392664715898f7761ac5e92c",
+  "merged_at": "2026-08-30T16:04:58+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T16:04:58+08:00",
+    "status": "accepted",
+    "owner_head_sha": "75c0d275cbe8243b7ae7ccaf40b04cdaca752567",
+    "checks": [
+      "owner worktree clean and branch/base/head matched final report",
+      "only three declared docs files changed",
+      "git diff --check and evidence JSON validation passed",
+      "prework/handoff hashes matched evidence after timestamp correction",
+      "docs-only task correctly made no build/test/performance-pass claim"
+    ],
+    "notes": "接受 F1a 先行、F1b later-beat-fault 风险门后置的切片；F1a 与 F3 的 core RTL 必须串行合入。"
+  },
+  "known_limits": [
+    "docs-only：禁止修改 RTL/TB/sim/Makefile/filelist，禁止运行任何生成器、构建、仿真、QEMU 或 Quartus。",
+    "只冻结单核 F1；不引入 BTB/RAS、2-wide、多 outstanding 或架构推测提交。",
+    "不把静态推断写成实测性能收益。"
+  ],
+  "next": "集成者验收后登记 F1a 实现；F1b 必须等待 F1a epoch/flush 契约与回归稳定。"
+}

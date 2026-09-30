@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-029",
+  "label": "B25-LOGIC-IMM-REPAIR-UCP-RESET-PRODUCTION-PROFILE",
+  "state": "done",
+  "acceptance_status": "T027-fresh-normalized-ucp-reset-bound-and-integration-revalidated-with-warning-16788-out-of-scope",
+  "base_sha": "3992e66b204a7f9c0ce5d838d0dbe96c81fa7a02",
+  "logic_commit": "05ad2b2e2058a51168ae8863129dca6bb1960dea",
+  "implementation_head": "05ad2b2e2058a51168ae8863129dca6bb1960dea",
+  "evidence_parent": "01b1106f373837402286919496d4b16304bfe674",
+  "owner": "ucp_t029",
+  "branch": "infra/T-20260920-029-b25-logic-imm-repair-ucp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-029",
+  "sent_at": "2026-09-20T16:42:59+08:00",
+  "received_at": "2026-09-20T16:42:59+08:00",
+  "reported_at": "2026-09-20T17:05:00+08:00",
+  "next": "integration-review-and-merge",
+  "tool_channel": "dsh-default (platform default model channel; Sol not used)",
+  "source": {
+    "evidence": {
+      "path": "docs/tasks/evidence/T-20260920-027.json",
+      "sha256": "d68bcfb5238b5f108591b249ffc8d29cf185756b51cae7da1b63550792561892"
+    },
+    "measurement": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/analysis/t027-invariant-measurement.json",
+      "sha256": "a350136deccf9148eb976340752c4e57915a95da684333f5b83d2f312639777e"
+    },
+    "stage_manifest": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/sync/stage-manifest.json",
+      "sha256": "ad7643fdb7b66816776e5cffa8a2982e43979947da7de1711e411087f3dd1e4f"
+    },
+    "stage_archive": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/sync/stage-t027.tar.gz",
+      "sha256": "ccf37034cdeb6f5085406b67d285902a43ec99d59d819bcbbbb79d715b9bd8d2"
+    }
+  },
+  "policy": {
+    "path": "fpga/catapult_a10/physical_waivers_invariant.json",
+    "bytes": 17353,
+    "sha256": "474a907a0b1e4dfe7f6327ed582ffcad1d0deb6976d6ca080ace86b6a6d83df8",
+    "prior_canonical_digest": "c116e580f03b3366b15425a2ed934dc671207bf874a5660cb299520920f03acc",
+    "canonical_digest": "b437b56554e6ea4b57ede797a956fe11ee2e9bf92a2a31149e7ca9d3a8bea8b3",
+    "delta": [
+      "provenance.accepted_profiles.T-20260920-027",
+      "provenance.report_profiles.T-20260920-027"
+    ],
+    "non_profile_semantics_identical": true,
+    "accepted_profile": {
+      "task_id": "T-20260920-027",
+      "candidate_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+      "candidate_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+      "branch": "verify/T-20260920-027-b25-logic-imm-repair-fresh-physical",
+      "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027",
+      "candidate_manifest": {
+        "canonical_entries": 53,
+        "qsf_relative_aliases": 47,
+        "canonical_sha256": "99747827eb371fb6766c284a109baf118dd06d26c7a08f84a91b8334e1c3c9bf",
+        "manifest_sha256": "ce9da04bb4edb22014f7d9506bcb54ddfadc3961071fc0a46446f88a3356314f",
+        "stage_manifest_sha256": "ad7643fdb7b66816776e5cffa8a2982e43979947da7de1711e411087f3dd1e4f",
+        "stage_archive_sha256": "ccf37034cdeb6f5085406b67d285902a43ec99d59d819bcbbbb79d715b9bd8d2",
+        "stage_file_count": 174,
+        "stage_qsf_reference_count": 50
+      },
+      "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+      "device": "10AX115N4F40E3SG",
+      "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+      "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+      "source_pre_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06",
+      "source_post_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06",
+      "report_only": true
+    },
+    "report_profile": {
+      "summary_contract": "6e9162d7c6672258c22ff7e49f35c29e1066fdf8e7847df162a783a9f1dfe938",
+      "ucp_fast": "84f5fe6dc8c93f8fc2620b9ae5c6f25ba67c79d17fcdd0dfc405602142e5cccf",
+      "ucp_slow": "84f5fe6dc8c93f8fc2620b9ae5c6f25ba67c79d17fcdd0dfc405602142e5cccf",
+      "fast_recovery": "bde3cf0a3e46c8739952cedc4ac579ea491cde2b4e265f0dc7c870a2ca119533",
+      "fast_removal": "2fd40574d423c456778d7a4e6c8451572119397b36be04b842664659ace846d8",
+      "slow_recovery": "7b88c265b6024aa399a60b5208f1032a4ec150c203eca241fb56c48657adeab4",
+      "slow_removal": "b89bf5f648d2205fd9824c1d9ce83c54e20f234c3a37a9ac02cdce25564ba289"
+    }
+  },
+  "derived_artifacts": {
+    "candidate_manifest": {
+      "path": "build/agents/T-20260920-029/analysis/t027-candidate-manifest.json",
+      "bytes": 43404,
+      "sha256": "ce9da04bb4edb22014f7d9506bcb54ddfadc3961071fc0a46446f88a3356314f"
+    },
+    "measurement_provenance": {
+      "path": "build/agents/T-20260920-029/analysis/t027-measurement.json",
+      "bytes": 1328,
+      "sha256": "a4f772830fa8c25c807aa01e53e7db08e627c71fc7455231201d8fbd026bfb58"
+    },
+    "inventory": {
+      "path": "build/agents/T-20260920-029/analysis/t027-invariant-inventory.json",
+      "bytes": 71049,
+      "sha256": "8a494d62200f994c5b1ed78bbe6b5ddbbfb606bcfa9f9ea8085d2ab0b6bc06ef"
+    }
+  },
+  "measurement": {
+    "normalized_ucp_input_paths": 60,
+    "normalized_reset_paths": 624,
+    "ports": {
+      "altera_reserved_tdi": 25,
+      "altera_reserved_tms": 35,
+      "altera_reserved_tdo": 4
+    },
+    "reset_families": {
+      "emif_req_q": 606,
+      "emif_state_q": 4,
+      "timeout_count_q": 13,
+      "calibration_gate": 1
+    },
+    "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+    "violations": 0,
+    "worst_slack_ns": {
+      "fast_recovery": 1.388,
+      "fast_removal": 0.238,
+      "slow_recovery": 1.388,
+      "slow_removal": 0.238
+    },
+    "raw_summary_sha256": "32666688163eb12f314420267d756c92cb74805075b3c93f89c887e4e9a14d32",
+    "summary_contract_sha256": "6e9162d7c6672258c22ff7e49f35c29e1066fdf8e7847df162a783a9f1dfe938",
+    "source_pre_post_equal": true
+  },
+  "verification": {
+    "json": "PASS",
+    "exporter": "PHYSICAL_WAIVER_INVARIANT_EXPORT_PASS",
+    "checker": "PASS normalized_ucp=60 normalized_reset=624",
+    "fixture_matrix": "2/2 positive PASS; 27/27 negative rejected",
+    "python_compile": "PASS",
+    "git_diff_check": "PASS",
+    "commands": [
+      "python3 -m json.tool fpga/catapult_a10/physical_waivers_invariant.json",
+      "python3 build/agents/T-20260920-029/derive_candidate_manifest.py /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/sync/stage /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/sync/stage-manifest.json /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/boot /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/sync/stage-t027.tar.gz build/agents/T-20260920-029/analysis/t027-candidate-manifest.json",
+      "python3 build/agents/T-20260920-029/make_t027_measurement.py build/agents/T-20260920-029/analysis/t027-candidate-manifest.json build/agents/T-20260920-029/analysis/t027-measurement.json",
+      "python3 fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py --policy fpga/catapult_a10/physical_waivers_invariant.json --provenance build/agents/T-20260920-029/analysis/t027-measurement.json --candidate-manifest build/agents/T-20260920-029/analysis/t027-candidate-manifest.json --user-sdc /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/sync/stage/fpga/catapult_a10/quartus/catapult_a10.sdc --generated-sdc /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/fitted-clone/fpga/catapult_a10/qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot/altera_emif_arch_nf_191/synth/Qsys_emif_bot_altera_emif_arch_nf_191_3stv5pi.sdc --source-pre-manifest /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/control/source-pre.tsv --source-post-manifest /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/control/source-post.tsv --summary /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/analysis/t007_summary_contract.tsv --ucp-fast /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/ucp/t007_fast_unconstrained_paths.rpt --ucp-slow /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/ucp/t007_slow_unconstrained_paths.rpt --fast-recovery /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/ucp/t007_fast_emif_reset_to_adapter_recovery.rpt --fast-removal /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/ucp/t007_fast_emif_reset_to_adapter_removal.rpt --slow-recovery /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/ucp/t007_slow_emif_reset_to_adapter_recovery.rpt --slow-removal /home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/ucp/t007_slow_emif_reset_to_adapter_removal.rpt --output build/agents/T-20260920-029/analysis/t027-invariant-inventory.json",
+      "python3 fpga/catapult_a10/tools/check_physical_waiver_invariants.py --policy fpga/catapult_a10/physical_waivers_invariant.json --inventory build/agents/T-20260920-029/analysis/t027-invariant-inventory.json --json",
+      "python3 build/agents/T-20260920-029/run_invariant_fixture.py --output-dir build/agents/T-20260920-029/invariant-fixture",
+      "python3 -m py_compile fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py fpga/catapult_a10/tools/check_physical_waiver_invariants.py fpga/catapult_a10/tools/run_physical_waiver_invariant_fixture.py build/agents/T-20260920-029/export_physical_waiver_invariant_inventory.py build/agents/T-20260920-029/check_physical_waiver_invariants.py build/agents/T-20260920-029/run_invariant_fixture.py build/agents/T-20260920-029/derive_candidate_manifest.py build/agents/T-20260920-029/make_measurement_provenance.py build/agents/T-20260920-029/make_t027_measurement.py",
+      "git diff --check"
+    ],
+    "logs": {
+      "export": {"path": "build/agents/T-20260920-029/logs/export.log", "sha256": "6277736bcba03545d404befb0a5e5f8a8a3c65d6e98494a9e4fafa13dadf08ca"},
+      "checker": {"path": "build/agents/T-20260920-029/logs/check.stdout", "sha256": "f4c929cf1e8e956545b5db44c1c55d2639b4da86d36733d63d227c03157a48ba"},
+      "fixture": {"path": "build/agents/T-20260920-029/invariant-fixture/matrix.json", "sha256": "fd4b7c4c557fce545ee6eee1107caaf70c4f09a95160765c31217bd7b0dd5d0b"},
+      "fixture_log": {"path": "build/agents/T-20260920-029/logs/fixture-t029.log", "sha256": "fd4b7c4c557fce545ee6eee1107caaf70c4f09a95160765c31217bd7b0dd5d0b"},
+      "py_compile": {"path": "build/agents/T-20260920-029/logs/pycompile.log", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    }
+  },
+  "integration": {
+    "reviewed_at": "2026-09-20T17:11:15+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "validation_sha": "ac4ec38d7796e483c854034e9674d515174fe671",
+    "validation_tree_sha": "de8895fefe1664aa7265a878f9690ca98711eec7",
+    "topic_logic_commit": "05ad2b2e2058a51168ae8863129dca6bb1960dea",
+    "topic_evidence_head": "0262e7a96becc4b75f7c59ff60ca8cf104494140",
+    "exporter": "PHYSICAL_WAIVER_INVARIANT_EXPORT_PASS",
+    "checker": "PASS normalized_ucp=60 normalized_reset=624",
+    "inventory_sha256": "8a494d62200f994c5b1ed78bbe6b5ddbbfb606bcfa9f9ea8085d2ab0b6bc06ef",
+    "fixture": "2/2 positive PASS; 27/27 negative rejected",
+    "fixture_matrix_path": "build/agents/T-20260910-001/t029-merged-fixture/matrix.json",
+    "fixture_matrix_sha256": "2e379f26f3302bd4b013940711445f47b8e08f2748bf83057f1fbd7272673ab0",
+    "python_compile": "PASS",
+    "git_diff_check": "PASS",
+    "resource": "local light checks only; no heavy lock, GamePC, Quartus, assembler, JTAG or board access"
+  },
+  "safety": {
+    "warning_16788": "out of scope; no waiver, filtering, suppression, or policy change",
+    "gamepc": false,
+    "quartus": false,
+    "assembler": false,
+    "jtag_board_flash": false,
+    "rtl_qsf_sdc_modified": false,
+    "raw_t027_measurement_or_evidence_modified": false,
+    "resource": "local light checks only; no local heavy lock and no GamePC"
+  },
+  "known_limits": [
+    "T-027 synthesis remains blocked by one vendor-generated warning 16788; this profile records only report-only normalized UCP/reset evidence and does not waive it.",
+    "The v2 exporter consumes the T-007 contract summary derivative (hash 6e9162d7c6672258c22ff7e49f35c29e1066fdf8e7847df162a783a9f1dfe938); the untouched T-027 raw run summary remains bound separately by raw_summary_sha256.",
+    "No Quartus, assembler, JTAG, board, flash, reset-power, RTL, QSF, SDC, or expected-result action was performed."
+  ],
+  "handoff": "docs/handoffs/T-20260920-029-b25-logic-imm-repair-ucp-profile.md"
+}

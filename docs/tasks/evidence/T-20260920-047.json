@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-047",
+  "label": "B25-DDR-CONTROL-GOLDEN-ONLY-RECOVERY",
+  "state": "done",
+  "acceptance_status": "pass-live-exact-golden-proven",
+  "partial": false,
+  "base_sha": "0cdfb2734eddc5e81715b665db06b3e375fe570b",
+  "head_sha": null,
+  "evidence_parent_sha": "0cdfb2734eddc5e81715b665db06b3e375fe570b",
+  "branch": "verify/T-20260920-047-b25-ddr-golden-recovery",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-047",
+  "owner": "root",
+  "sent_at": "2026-09-20T22:19:25+08:00",
+  "received_at": "2026-09-20T22:19:25+08:00",
+  "remote_started_at": "2026-09-20T22:21:00.1040464+08:00",
+  "program_started_at": "2026-09-20T22:21:02.1021592+08:00",
+  "program_finished_at": "2026-09-20T22:21:50.1049267+08:00",
+  "reported_at": "2026-09-20T22:22:32+08:00",
+  "source": {
+    "tools": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036/build/agents/T-20260920-036/tools",
+    "source_manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "byte_identical_all_nine": true,
+    "task_manifest": {"path": "build/agents/T-20260920-047/script-manifest.json", "bytes": 1639, "sha256": "3ae9c311e152eaedae129fef4e7528f26be6870ea799e0afab38c57ef64144e5"},
+    "remote_ast": {"result": "PASS", "files": 6, "parse_failure_count": 0, "path": "build/agents/T-20260920-047/run/remote-ast.log", "bytes": 1996, "sha256": "b722b83cf0acfd73654aede2397c7f4176c7771ff7655d433e741aa9bcb64156"},
+    "remote_seal": {"result": "PASS", "checked_count": 9, "path": "build/agents/T-20260920-047/run/remote-seal.log", "bytes": 4785, "sha256": "0c32b88262f9e35bc8d546d192f081baffb974925f1c64261748b253a4e4f745"}
+  },
+  "scope": {
+    "hardware_access": true,
+    "golden_programmer_invocations": 1,
+    "golden_programmer_success": true,
+    "candidate_programmer_invocations": 0,
+    "terminal_sessions": 0,
+    "m_commands": 0,
+    "jtagconfig_invocations": 1,
+    "fpga_configurations": 1,
+    "jic_epcq_flash_actions": 0,
+    "reset_or_power_actions": 0,
+    "standard_or_unknown_process_stops": 0,
+    "task_owned_server_stops": 1,
+    "remote_access_after_window": false
+  },
+  "golden_program": {
+    "result": "PASS",
+    "marker": {"path": "build/agents/T-20260920-047/run/recovery/golden-quartus-pgm.once", "bytes": 65, "sha256": "7b1239211f4f2f8052f4966a2b4ced444ca950b89cf719e5188133365b20fbb9"},
+    "programmer_pid": 8044,
+    "exit_code": 0,
+    "tool_success": true,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "jtag_id_match": true,
+    "identity": {
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F",
+      "jtag_id": "0x02E060DD"
+    },
+    "program_result": {"path": "build/agents/T-20260920-047/run/recovery/program-golden-recovery/runtime/program-result.json", "bytes": 8558, "sha256": "53cd268d1878d6e45d9b9eb6148f602f04121e86464ddb8bbbcd55fcf35a0e4b"},
+    "stdout": {"path": "build/agents/T-20260920-047/run/recovery/program-golden-recovery/runtime/quartus_pgm.stdout.log", "bytes": 2266, "sha256": "a6333fd96a50181286814543c6703e5ea63257e93757154f43801d9abb83fdd2"},
+    "stderr": {"path": "build/agents/T-20260920-047/run/recovery/program-golden-recovery/runtime/quartus_pgm.stderr.log", "bytes": 104, "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"}
+  },
+  "final_enumeration": {
+    "command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\jtagconfig.exe -n",
+    "invocations": 1,
+    "ssh_exit": 0,
+    "cable_match": true,
+    "jtag_id_match": true,
+    "golden_design_hash_match": true,
+    "uart_match": true,
+    "phy_match": true,
+    "output": {"path": "build/agents/T-20260920-047/run/final-jtagconfig.log", "bytes": 576, "sha256": "0174d434496c709c6e0399d3fb511810b69c6eb81cbbf44772d9600a79db2ac4"}
+  },
+  "runner_note": {
+    "wrapper_exit": 1,
+    "reason": "The final enumeration matcher expected the JTAG ID text with 0x prefix, while jtagconfig prints 02E060DD. The output independently matches exact cable, bare ID, golden design hash, UART and PHY; the preceding golden programmer transaction is authoritative PASS.",
+    "stdout_pid_lines": 0,
+    "program_result_golden_invocations": 1,
+    "acceptance_basis": "successful exact golden programmer transaction plus the single final standard-chain enumeration; no hardware retry or post-window access"
+  },
+  "artifacts": {
+    "summary": {"path": "build/agents/T-20260920-047/run/summary.txt", "bytes": 2877, "sha256": "0d0cbb4ba590200c516dc312865d1e3327381562cc6d6b098b35610b11f5b485"},
+    "resource_status_held": {"path": "build/agents/T-20260920-047/run/resource-status-held.log", "bytes": 119, "sha256": "72b400eefee394b0c54500003c83700374fda1a8a627c5fb79b97aaa86b57218"},
+    "resource_status_after": "local FREE; gamepc FREE"
+  },
+  "final_board_state": "live exact golden proven",
+  "integration_review": {
+    "reviewed_at": "2026-09-20T22:24:21+08:00",
+    "branch": "batch/T-20260920-039-b25-post-bringup",
+    "evidence_import_sha": "870786798eb612d440a4c5f1237739fc1ce6ef21",
+    "evidence_import_tree": "c81475fbc5d49790b80d74a5d3ed1c7f873d885b",
+    "topic_evidence_head": "4d20e645",
+    "program_result_recheck": "PASS; one golden and zero candidate invocations",
+    "final_enumeration_recheck": "PASS after normalizing the optional 0x textual prefix; exact cable/ID/design/UART/PHY present",
+    "safety_recheck": "PASS; candidate/terminal/m/Flash/reset/power/standard-or-unknown-stop all zero",
+    "result": "PASS"
+  },
+  "next": "Closed. T-041 is resolved as DDR PASS; no further GamePC action is required before local microbench implementation."
+}

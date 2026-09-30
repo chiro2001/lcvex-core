@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-024",
+  "label": "A10-RTL-CDC-HARDEN",
+  "title": "A10 RTL CDC/reset synchronization hardening（EMIF adapter）",
+  "kind": "fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-a10-cdc-rtl",
+  "agent_type": "rtl-cdc-fix",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-022"
+  ],
+  "base_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+  "branch": "fix/T-20260902-024-a10-rtl-cdc-harden",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-024",
+  "scope": "修复 T-20260902-021/022 记录的 RTL CDC/reset 风险：EMIF adapter 直接使用未同步 cal_fail、CPU reset 直接进入 EMIF 侧 FSM/复位释放等。加入同步器/复位释放逻辑，保持功能语义，并在本地 lint/仿真验证。",
+  "reads": [
+    "docs/handoffs/T-20260902-021-a10-cdc-sdc-fix.md",
+    "docs/handoffs/T-20260902-022-fp-p5-rerun.md",
+    "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "fpga/catapult_a10/rtl/**",
+    "rtl/**",
+    "Makefile",
+    "sim/**",
+    "tb/**"
+  ],
+  "writes": [
+    "fpga/catapult_a10/rtl/**",
+    "rtl/**（如需要）",
+    "docs/handoffs/T-20260902-024-a10-rtl-cdc-harden.md",
+    "docs/tasks/evidence/T-20260902-024.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "相关 lint/smoke PASS"
+    ],
+    "l1": [
+      "git diff --check",
+      "CDC 同步器/复位释放定向或形式检查"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "正式 RTL 对已知跨域/复位路径有同步或复位释放；本地 lint/仿真通过；为下一轮 FP-P5 STA 提供 RTL。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T08:52:00+08:00",
+  "updated_at": "2026-09-03T09:05:15+08:00",
+  "known_limits": [
+    "不运行 Quartus fit/STA；不修改 Qsys 生成物；不改变功能语义"
+  ],
+  "handoff": "docs/handoffs/T-20260902-024-a10-rtl-cdc-harden.md",
+  "evidence": "docs/tasks/evidence/T-20260902-024.json",
+  "next": "FP-P5 rerun",
+  "dispatch": {
+    "sent_at": "2026-09-03T08:53:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-024",
+    "branch": "fix/T-20260902-024-a10-rtl-cdc-harden"
+  },
+  "head_sha": "1a25c656a6a22b60f6c7b399006b2ef8769cf5f5",
+  "merge_sha": "ede264837cc6eea57aeb116e9b5237428381f768",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T09:04:32+08:00",
+    "merged_at": "2026-09-03T09:05:15+08:00",
+    "recorded_at": "2026-09-03T09:05:15+08:00",
+    "notes": "A10 RTL CDC/reset hardening merged; next FP-P5 rerun with T-023 if merged."
+  }
+}

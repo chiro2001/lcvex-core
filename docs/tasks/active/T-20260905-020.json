@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-020",
+  "label": "R18-QUARTUS-PHYSICAL",
+  "title": "Run a fresh A10 physical probe for the R18 timing batch",
+  "kind": "quartus-physical-validation",
+  "priority": "critical",
+  "phase": "preparation",
+  "dispatch_status": "local-gate-passed-preflight-pending",
+  "assigned_owner": "codex-integrator-physical",
+  "agent_type": "physical-validation",
+  "depends_on": ["T-20260905-019"],
+  "dependency_gate": "T-019 source 50b046b69341c13c4b93fffd89e5dda7d81590ff passed focused, joint L0/L1, expected-fail and L2 A-F with 3400 strict commits before any remote physical action.",
+  "source_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "documentation_parent_sha": "056e88f759e57056a6df8c81ed55045a4b527f7a",
+  "branch": "verify/T-20260905-020-r18-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-020",
+  "remote": {
+    "host": "192.168.101.5",
+    "computer": "GAMEPC",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "probe": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260905-020-r18-timing-probe\\real_a10_full_fp",
+    "project": "real_a10_full_fp",
+    "revision": "real_a10_full_fp"
+  },
+  "baseline": {
+    "task": "T-20260905-014",
+    "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+    "fmax_mhz": 43.0,
+    "setup_slack_ns": -3.256,
+    "tns_ns": -21736.217,
+    "failing_endpoints": 18309,
+    "top50": "50/50 idex_valid -> fp_exec.state.TX_DONE, 26 levels"
+  },
+  "scope": "Create a new isolated source/project manifest from the exact R18 physical source, regenerate the Quartus-21.4 compatibility copy, then run guarded synthesis, fitter, signoff STA and custom directional/top-N queries serially. Report measured timing only.",
+  "writes": [
+    "docs/tasks/active/T-20260905-020.json",
+    "docs/tasks/evidence/T-20260905-020.json",
+    "docs/handoffs/T-20260905-020-r18-quartus-physical.md",
+    "build/agents/T-20260905-020/**",
+    "the single fresh remote probe directory declared above"
+  ],
+  "forbidden_regions": [
+    "formal RTL/source changes",
+    "QEMU fork/plugin/reference results",
+    "T-014 or any existing Quartus database",
+    "quartus_asm and all assembler/bitstream stages",
+    "SOF/JIC/RBF/POF/JBC/SVF/JAM generation",
+    "quartus_pgm, JTAG/Flash writes, programming, power-on or board test"
+  ],
+  "directional_acceptance": [
+    "idex_valid to fp_exec.state.TX_DONE old cone count/slack/levels",
+    "pp_pre to pack_scan, pack_scan to pack_pre, pack_pre to pack_mid and pack_mid to slot_result",
+    "exmem_valid, memwb_wb_rd and exmem_wb_rd to acc and acc_flags",
+    "global sys_clk_50 top-50 and replacement cluster classification"
+  ],
+  "resource": {
+    "local": "preparation/read-only monitoring only while remote Quartus runs",
+    "remote": "one Quartus process; MaxRunSeconds=43200 per stage; MinFreeMb=16384 admission target; no overlap with another EDA process",
+    "safety": "fresh read-only resource/EDA/forbidden-artifact preflight; any guard breach or nonzero stage exit stops before the next stage"
+  },
+  "acceptance": "Fresh manifest and canonical QSF closure pass; synthesis, fitter and signoff/custom STA complete under guards. A negative setup result is accepted only as an honest timing observation and starts another RTL batch; it never releases assembler or board actions.",
+  "created_at": "2026-09-05T22:24:39+08:00",
+  "updated_at": "2026-09-05T22:24:39+08:00",
+  "evidence": "docs/tasks/evidence/T-20260905-020.json",
+  "handoff": "docs/handoffs/T-20260905-020-r18-quartus-physical.md",
+  "board_policy": "No Quartus assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on, or board test without explicit user permission."
+}

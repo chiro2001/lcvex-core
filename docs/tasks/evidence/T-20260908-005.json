@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-005",
+  "label": "B25-GATE-D-RERUN",
+  "state": "done",
+  "acceptance_status": "pass",
+  "partial": false,
+  "source_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+  "branch": "verify/T-20260908-005-b25-gate-d-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-005",
+  "owner": "codex-integrator",
+  "sent_at": "2026-09-08T12:38:30+08:00",
+  "started_at": "2026-09-08T12:38:19+08:00",
+  "finished_at": "2026-09-08T12:52:30+08:00",
+  "reported_at": "2026-09-08T12:56:30+08:00",
+  "timezone": "Asia/Shanghai",
+  "objective": "在包含 T-001/T-002/T-004 的 B25 候选上完成完整 Gate D，验证修复没有引入标量、MMU、Cache、异常、随机或 baremetal-C 回归。",
+  "candidate": {
+    "registered_base": "5ac1ea27",
+    "checked_out_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+    "rtl_scope_sha256": {
+      "rtl/lcvex_decode.sv": "d1a1d2fbcf865a34aa33cca4e8586804bacd02f5f3853af1839a96be1febcc67",
+      "rtl/lcvex_core.sv": "f635b30ca57ff286339adc1a5003579e73c2f7032b211cb29b41ef0dfa3c4031",
+      "rtl/lcvex_fp_scalar.sv": "c30396fef6f3bc55fef912a9d1e6ee807efb8a85eb72870763d63df4487521e4",
+      "rtl/lcvex_neon_fp.sv": "32a6d6948135240482274ac2a8111337cfbfc8ee9063dd2e37ff3d253963abee"
+    }
+  },
+  "validation": {
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260908-005 codex_gate_d --min-local-available-mib 8192 --meta verilator_jobs=1 --meta parallel_batches=3 --meta stage=make_test_plus_gate_d -- bash -lc 'VERILATOR_JOBS=1 bash sim/difftest/run_gate_d.sh --parallel'",
+    "exit_code": 0,
+    "log": "build/agents/T-20260908-005/gate-d.log",
+    "log_sha256": "c55b719bb2abd7dfe0a5982852201231195583ef00fafab1426507b8c26b6e88",
+    "time_log": "build/agents/T-20260908-005/gate-d.time",
+    "time_log_sha256": "8cb721108ca68c60112cc8f125ed634485a9216da644c8a875cd4230b4abd58d",
+    "groups": {
+      "make_test": "pass",
+      "coverage": "pass; build/coverage/merged.dat sha256=5842d7316b279b12328e875eb81409441f878743133f1523b6ad94e53927960c",
+      "m2_r1_directed": "40/40 pass in base and full-cache",
+      "delay2_cache": "32/32 pass, including hard_reg_offset and hard_postpre",
+      "p5a_hardening": "26/26 pass",
+      "gate_c": "7/7 pass",
+      "p5a_mmu": "3/3 pass",
+      "p4b": "5/5 pass",
+      "random": "seed 1/2/3 × 100000; 300006 commits; pass",
+      "coverage_accounting": "expected_hit=62/62; observed_families=63",
+      "baremetal_c": "image 1104 bytes; 200/200 commits pass",
+      "overall": "PASS: Gate D 系统回归全部通过"
+    },
+    "random_artifacts": {
+      "random_1.trace": {"bytes": 3937845, "sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e"},
+      "random_2.trace": {"bytes": 3948075, "sha256": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768"},
+      "random_3.trace": {"bytes": 3947467, "sha256": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"},
+      "random_1_results.xml": "6e47065e817aebae45d2b425418a6e2f8341a9f7e1bdffabe5a4af25591c8b9f",
+      "random_2_results.xml": "3de52c24fcb02b82774a370a6d15a26251e9da2c6ab02595bc371ba427e6c979",
+      "random_3_results.xml": "4a647348cd4f3db6a88ea9611634fddcc0f7899ccd70ce25441ed06c30cd0ef9"
+    },
+    "baremetal_artifact": {
+      "path": "build/difftest/bm_c.bin",
+      "bytes": 1104,
+      "sha256": "ed2f093617883206c3e56614b41f6942fa08985067bb82ad8b93972347964fc2"
+    },
+    "verilator": {
+      "version": "Verilator 5.050 2026-07-01",
+      "max_reported_allocated_mb": 196.238,
+      "jobs": 1,
+      "parallel_planner": [4, 3, 3]
+    }
+  },
+  "tools": {
+    "qemu_system_aarch64": {
+      "version": "11.1.0",
+      "sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e"
+    },
+    "qemu_plugin": {
+      "path": "qemu/plugins/lcvex_difftest.so",
+      "sha256": "eb15936f42dbad28a534f6bcf06b64abb6b1e491a41a80b4074eed97bb407009",
+      "built_serially": true
+    },
+    "run_lockstep_step_sha256": "f9c413072527e580185b22a696d3004911a1a5248f701962842eb21c5e36418e",
+    "run_gate_d_sha256": "21e55129476439e6e4d3dccec44a1dcf150bc6d821d8d48576c52f7cc3e992c7"
+  },
+  "resource_lock": {
+    "resource": "local",
+    "min_local_available_mib": 8192,
+    "verilator_jobs": 1,
+    "parallel_batches": 3,
+    "lock_log": "build/agents/T-20260908-005/resource-lock.runner.log",
+    "lock_log_sha256": "a5f4e72b4ee82a5a5170b19c3db8696b989992b40f1db1be7e76609f50da533b",
+    "inside_status": "local BUSY pid=1440495 project=lcvex task=T-20260908-005 agent=codex_gate_d",
+    "after_status": "local FREE; gamepc FREE",
+    "after_status_log": "build/agents/T-20260908-005/status-inside.log",
+    "after_status_log_sha256": "609c026e16fa9f333cb7e3e2e1eb890ae04e3bfbd5d58b5bbc00cae42006df53",
+    "max_rss_kib": null,
+    "rss_note": "环境无外部 /usr/bin/time；锁协议不记录历史峰值 RSS。Verilator allocated 报告的最大值为 196.238 MB，作为可复核的构建内存下界/指标。",
+    "system_tmp_used": false
+  },
+  "policy": {
+    "assertions_disabled": false,
+    "difftest_comparisons_disabled": false,
+    "reference_or_golden_modified": false,
+    "test_expectations_modified": false,
+    "random_traces_complete": true,
+    "gamepc_quartus_jtag_board_flash_used": false,
+    "assembler_or_sof": false,
+    "source_modified_during_run": false
+  },
+  "blockers": [
+    "T-042 fresh 25 MHz synthesis/fitter/STA remains the next physical gate.",
+    "No SOF/JTAG/programming/power/board result is claimed by this Gate D task."
+  ],
+  "risks": [
+    "Gate D is functional evidence only; it does not establish Quartus timing closure or board behavior.",
+    "The full runner writes ignored build/difftest and coverage artifacts inside this isolated worktree; these are not source inputs."
+  ],
+  "next": "Freeze candidate 90627b5, update T-042 physical input manifest, acquire gamepc lock for one fresh synthesis/fitter/STA run, then use the explicitly authorized nios2-terminal only after a valid board image is available.",
+  "handoff": "docs/handoffs/T-20260908-005-b25-gate-d-rerun.md"
+}

@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-110",
+  "source_task": "T-20260829-099",
+  "source_head": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+  "source_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099",
+  "audit_ref": "EXT-05-001",
+  "created": "2026-08-30T00:05:00+0800",
+  "persisted": [
+    {
+      "id": "gate-d-pass-log",
+      "uri": "docs/evidence/artifacts/T-20260829-099/gate-d-pass.log.txt",
+      "sha256": "c3ef8e5c765f2dec64dd908772b9b9ca74032dd8251e6ea3decb8c802afa3279",
+      "bytes": 339567,
+      "retention": "git",
+      "note": "T-099 PASS gate log full copy"
+    },
+    {
+      "id": "gate-d-fail-log",
+      "uri": "docs/evidence/artifacts/T-20260829-099/gate-d-fail.log.txt",
+      "sha256": "700fb2a1fadd0d7d891d192cbba740d6d48e4f4afb04d70da9bc8568ee3003e0",
+      "bytes": 92486,
+      "retention": "git",
+      "note": "T-099 first RED log full copy"
+    },
+    {
+      "id": "random-1-results",
+      "uri": "docs/evidence/artifacts/T-20260829-099/random_1_results.xml",
+      "sha256": "6a4605002dfc7cd477b8857922000373aa7b738537bd53751be0987b4d51a492",
+      "bytes": 401,
+      "retention": "git",
+      "note": "Cocotb result XML seed 1"
+    },
+    {
+      "id": "random-2-results",
+      "uri": "docs/evidence/artifacts/T-20260829-099/random_2_results.xml",
+      "sha256": "cc99f8ac4f41a172c6cc6a51d22f617a8b30714af7b19ff33a2dc7d2a595dbfc",
+      "bytes": 401,
+      "retention": "git",
+      "note": "Cocotb result XML seed 2"
+    },
+    {
+      "id": "random-3-results",
+      "uri": "docs/evidence/artifacts/T-20260829-099/random_3_results.xml",
+      "sha256": "89d455b3cee89eb7de7129451810d2df8d0cc9b2f30b7907af2e23c9779f3bbc",
+      "bytes": 400,
+      "retention": "git",
+      "note": "Cocotb result XML seed 3"
+    },
+    {
+      "id": "coverage-insn-map",
+      "uri": "docs/evidence/artifacts/T-20260829-099/insn_map.txt",
+      "sha256": "f4a2fcbade7de4451433253f35601aa219bc131dc5a05f0403e663065e2faf2c",
+      "bytes": 1274,
+      "retention": "git",
+      "note": "Instruction map/coverage summary"
+    },
+    {
+      "id": "coord-step-log",
+      "uri": "docs/evidence/artifacts/T-20260829-099/step-coord.log.txt",
+      "sha256": "54e5e3efbe10918befbbed5512f4fd4afb84a39b109eeda52366b4274e0ae31f",
+      "bytes": 13232,
+      "retention": "git",
+      "note": "Lockstep coordinator step log"
+    },
+    {
+      "id": "qemu-step-log",
+      "uri": "docs/evidence/artifacts/T-20260829-099/step-qemu.log.txt",
+      "sha256": "208b9320855dcddb31ddd95d8356d26861c791136615aafb78cd2c058ab00c24",
+      "bytes": 70,
+      "retention": "git",
+      "note": "QEMU step log stub"
+    },
+    {
+      "id": "trace-excerpts",
+      "uri": "docs/evidence/artifacts/T-20260829-099/random-trace-excerpts.txt",
+      "sha256": "1a369bf6471c06365ad316993ac2f6843dd6d75fc5f856f13dcb3cf5f7ea854b",
+      "bytes": 25563,
+      "retention": "git",
+      "note": "Per-seed trace metadata + first/last lines; full traces not committed"
+    }
+  ],
+  "large_references": [
+    {
+      "id": "random-1-trace",
+      "uri": "build/difftest/random_1.trace",
+      "absolute_source_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/random_1.trace",
+      "sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e",
+      "bytes": 3937845,
+      "retention": "artifact store",
+      "note": "gzip full trace, not committed; summary persisted [copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099]"
+    },
+    {
+      "id": "random-2-trace",
+      "uri": "build/difftest/random_2.trace",
+      "absolute_source_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/random_2.trace",
+      "sha256": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768",
+      "bytes": 3948075,
+      "retention": "artifact store",
+      "note": "gzip full trace, not committed; summary persisted [copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099]"
+    },
+    {
+      "id": "random-3-trace",
+      "uri": "build/difftest/random_3.trace",
+      "absolute_source_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/random_3.trace",
+      "sha256": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46",
+      "bytes": 3947467,
+      "retention": "artifact store",
+      "note": "gzip full trace, not committed; summary persisted [copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099]"
+    },
+    {
+      "id": "coverage-merged",
+      "uri": "build/coverage/merged.dat",
+      "absolute_source_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/coverage-merged.dat",
+      "sha256": "6e14afc91dc3d47bd3a5aa26d87a9d9d3750023f423d8f7652b2c7467eacfeab",
+      "bytes": 3157568,
+      "retention": "artifact store",
+      "note": "coverage db not committed; insn_map persisted [copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099]"
+    },
+    {
+      "id": "coordinator-base",
+      "uri": "build/verilator_lockstep/lockstep_coordinator",
+      "absolute_source_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/lockstep_coordinator_base",
+      "sha256": "38d84dc9ea5c51e77155e887fb07f6e5e5f86ecd4cfec415a31da21d3e34a095",
+      "bytes": null,
+      "retention": "artifact store",
+      "note": "binary not committed; rebuild command in T-099 evidence [copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099]"
+    },
+    {
+      "id": "coordinator-l1dl2",
+      "uri": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+      "absolute_source_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/lockstep_coordinator_l1dl2",
+      "sha256": "94c7b439e26eba28d85a5b8f3bbd49fe8531ca192ac31cd79b430671bebb3662",
+      "bytes": null,
+      "retention": "artifact store",
+      "note": "binary not committed; rebuild command in T-099 evidence [copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099]"
+    },
+    {
+      "id": "coordinator-l1dl2-delay2",
+      "uri": "build/verilator_lockstep_l1dl2_d2/lockstep_coordinator",
+      "absolute_source_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/lockstep_coordinator_l1dl2_d2",
+      "sha256": "3af917576d9d6c7d938d7db2e83af25f1a5d93a8edac0a2fde8bc6f6ac4dfee0",
+      "bytes": null,
+      "retention": "artifact store",
+      "note": "binary not committed; rebuild command in T-099 evidence [copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099]"
+    }
+  ],
+  "unretrievable": [],
+  "notes": "All small text artifacts copied into Git docs/evidence/artifacts; large traces/coverage/coordinators copied to /home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099 with SHA256SUMS.",
+  "artifact_store": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099"
+}

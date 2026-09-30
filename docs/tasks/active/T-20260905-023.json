@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-023",
+  "label": "R19-TIMING-BATCH",
+  "title": "Integrate and validate the R19 core-control and FP balanced-scan lanes",
+  "kind": "timing-batch-integration",
+  "priority": "critical",
+  "phase": "local-validation-done",
+  "dispatch_status": "ready-for-fresh-physical",
+  "assigned_owner": "codex-integrator",
+  "agent_type": "batch-integration",
+  "depends_on": ["T-20260905-021", "T-20260905-022"],
+  "base_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "candidate_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "branch": "batch/T-20260905-023-r19",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-023",
+  "members": [
+    {
+      "task": "T-20260905-021",
+      "write_set": ["rtl/lcvex_core.sv", "tb/sv/lcvex_core_tb.sv", "sim/cocotb/test_core_syskill.py"],
+      "goal": "shorten the residual core FP response-ready control cone without changing transaction ownership"
+    },
+    {
+      "task": "T-20260905-022",
+      "write_set": ["rtl/lcvex_fp_scalar.sv", "tb/sv/lcvex_fp_scalar_r18_tb.sv"],
+      "goal": "replace round_pack_scan's 256-bit linear priority search with a balanced encoder"
+    }
+  ],
+  "timing_input": {
+    "physical_task": "T-20260905-020",
+    "status": "R18 remote candidate is synced but synthesis has not started because the remote interactive workload remains material",
+    "baseline_task": "T-20260905-014",
+    "baseline_sys_clk_50": {
+      "fmax_mhz": 43.0,
+      "setup_slack_ns": -3.256,
+      "tns_ns": -21736.217,
+      "failing_endpoints": 18309
+    }
+  },
+  "scope": "Review and cherry-pick the two mutually disjoint R19 member commits into one candidate, resolve only integration test assumptions, then run the focused member tests followed by the complete affected L0-L2 union on one exact candidate SHA. Physical validation is a later exact-SHA task after functional acceptance and resource admission.",
+  "writes": [
+    "member RTL and tests through reviewed cherry-picks",
+    "integration-only test or registry changes needed to run member tests",
+    "docs/tasks/active/T-20260905-021.json",
+    "docs/tasks/active/T-20260905-022.json",
+    "docs/tasks/active/T-20260905-023.json",
+    "docs/tasks/evidence/T-20260905-021.json",
+    "docs/tasks/evidence/T-20260905-022.json",
+    "docs/tasks/evidence/T-20260905-023.json",
+    "docs/handoffs/T-20260905-023-r19-timing-batch.md"
+  ],
+  "forbidden_regions": [
+    "QEMU fork/plugin/reference results",
+    "QSF/SDC timing exceptions",
+    "assertion disable or expected-result weakening",
+    "parallel heavy validation",
+    "assembler/bitstream/JTAG/programming/power-on/board test"
+  ],
+  "validation": {
+    "focused": "T-021 core response-control SV/Cocotb and T-022 scalar balanced-scan exhaustive focused test",
+    "l0_l1": "registered affected core/backpressure/MMU/IRQ/FP direct/P7 union including T-012 natural overlap and expected-fail BFM",
+    "l2": "strict QEMU lockstep union selected from the last green R18 A-F matrix",
+    "physical": "not part of this task; create a fresh exact-R19 physical task only after local validation passes"
+  },
+  "acceptance": "Both member diffs pass independent review, focused tests and the affected L0-L2 union on one exact SHA. No timing improvement is claimed until synthesis/fitter/signoff STA reports top-N and directional paths.",
+  "resource": "One heavy local queue at CPU<=50%, MemoryMax=16G, MemorySwapMax=0 and VERILATOR_JOBS=1. RTL analysis and review may continue in parallel outside the heavy queue.",
+  "created_at": "2026-09-05T23:12:56+08:00",
+  "updated_at": "2026-09-06T00:02:27+08:00",
+  "local_validation": {
+    "result": "pass",
+    "focused": "registry plus balanced-scan, FP wrapper, core response-hold SV and standalone Cocotb",
+    "l0_l1": "affected union pass; T-012 natural FP/data-MMU overlap blocked_cycles=3 consume=1 exmem_captures=1 fp_commits=1 load_commits=1",
+    "expected_fail": "outer=2/program=1 at rtl/lcvex_core.sv:4817",
+    "l2": "strict D+E affected union pass; 1155 commits"
+  },
+  "evidence": "docs/tasks/evidence/T-20260905-023.json",
+  "handoff": "docs/handoffs/T-20260905-023-r19-timing-batch.md",
+  "board_policy": "No Quartus assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on or board test without explicit user permission."
+}

@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-015",
+  "state": "done",
+  "base_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+  "head_sha": "2c7bb598cbea684e184b29429ad332cc34643af2",
+  "merge_sha": "2c7bb598cbea684e184b29429ad332cc34643af2",
+  "branch": "feature/T-20260830-015-perf-mixed",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-015",
+  "sent_at": "2026-08-30T02:30:00+0800",
+  "received_at": "2026-08-30T02:30:00+0800",
+  "reported_at": "2026-08-30T02:57:06+0800",
+  "owner": "T-20260830-015-perf-mixed-owner",
+  "model": "dsh-default",
+  "label": "P-MIXED",
+  "title": "混合真实 kernel CRC/矩阵/排序/哈希 workload",
+  "writes": [
+    "baremetal/perf/t_kernel_crc.c",
+    "baremetal/perf/t_kernel_matmul.c",
+    "baremetal/perf/t_kernel_sort.c",
+    "baremetal/perf/t_kernel_hash.c",
+    "docs/handoffs/T-20260830-015-perf-mixed.md",
+    "docs/tasks/evidence/T-20260830-015.json"
+  ],
+  "toolchain": {
+    "host_gcc": "16.1.1 20260728",
+    "aarch64_gcc": "16.1.0",
+    "os": "Linux",
+    "cgroup": "not used (L0 only, no heavy build)"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-diff-check-001",
+      "source_sha": "791f203bc7e33fdfa4f5b48d827770ecd11a2792",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace/patch errors."
+    },
+    {
+      "run_id": "owner-l0-cross-compile-002",
+      "source_sha": "791f203bc7e33fdfa4f5b48d827770ecd11a2792",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "for f in baremetal/perf/t_kernel_crc.c baremetal/perf/t_kernel_matmul.c baremetal/perf/t_kernel_sort.c baremetal/perf/t_kernel_hash.c; do aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -Wall -Wextra -c \"$f\" -o /tmp/$(basename \"${f%.c}\").o; done",
+      "wall_seconds": 0.5,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All four perf kernel C files cross-compile cleanly for AArch64 freestanding."
+    },
+    {
+      "run_id": "owner-l0-host-sanity-003",
+      "source_sha": "791f203bc7e33fdfa4f5b48d827770ecd11a2792",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "gcc -O2 -Wall -Wextra -o /tmp/perf_driver /tmp/perf_driver.c baremetal/perf/t_kernel_crc.c baremetal/perf/t_kernel_matmul.c baremetal/perf/t_kernel_sort.c baremetal/perf/t_kernel_hash.c && /tmp/perf_driver",
+      "wall_seconds": 0.2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Host functional sanity: crc=0 matmul=0 sort=0 hash=0."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-perf-crc",
+      "owner": "T-20260830-015",
+      "uri": "baremetal/perf/t_kernel_crc.c",
+      "reproduce": "git show 791f203bc7e33fdfa4f5b48d827770ecd11a2792:baremetal/perf/t_kernel_crc.c",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "794f3cc3872ed6916aa1780d315916624303032be7c613a401294e4ea62fe372"
+    },
+    {
+      "id": "artifact-perf-matmul",
+      "owner": "T-20260830-015",
+      "uri": "baremetal/perf/t_kernel_matmul.c",
+      "reproduce": "git show 791f203bc7e33fdfa4f5b48d827770ecd11a2792:baremetal/perf/t_kernel_matmul.c",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "dcba9597152c735452a33295b463e92a4cdbf981aefe4df3527cb5489901aeaf"
+    },
+    {
+      "id": "artifact-perf-sort",
+      "owner": "T-20260830-015",
+      "uri": "baremetal/perf/t_kernel_sort.c",
+      "reproduce": "git show 791f203bc7e33fdfa4f5b48d827770ecd11a2792:baremetal/perf/t_kernel_sort.c",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "ac1a5bf436cf851dcff3f263af150c8aaabcb837ea966a7f0f8f40318b266a43"
+    },
+    {
+      "id": "artifact-perf-hash",
+      "owner": "T-20260830-015",
+      "uri": "baremetal/perf/t_kernel_hash.c",
+      "reproduce": "git show 791f203bc7e33fdfa4f5b48d827770ecd11a2792:baremetal/perf/t_kernel_hash.c",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "d6b4e821edaf1977b80e85381ce6bd8a184a442e02bd878501ab70da14de0d76"
+    }
+  ],
+  "known_limits": [
+    "Not run: Verilator, Quartus, QEMU lockstep, L1/L2/L3, performance cycle measurement.",
+    "P-INFRA (T-20260830-010) is not merged; perf_common.h and perf JSON reporting are not wired yet.",
+    "These files are functional sanity workloads; they do not claim architecture/Fmax or A10 results."
+  ],
+  "next": "Integrator reviews and merges; then P-INFRA can include these kernels in the perf build/run harness and collect cycle data at the merge SHA.",
+  "status": "done",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:01:32+08:00",
+    "head_sha": "034d73b06175b17f2c211a465eba3f0c8b8d5ddc",
+    "notes": "P-MIXED merged. Four kernel workloads (crc/matmul/sort/hash) with run_perf aliases; cross-compile and host sanity pass.",
+    "merge_sha": "2c7bb598cbea684e184b29429ad332cc34643af2",
+    "result_sha": "2c7bb598cbea684e184b29429ad332cc34643af2"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "2c7bb598cbea684e184b29429ad332cc34643af2",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "2c7bb598cbea684e184b29429ad332cc34643af2",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-perf-crc",
+        "uri": "baremetal/perf/t_kernel_crc.c",
+        "sha256": "794f3cc3872ed6916aa1780d315916624303032be7c613a401294e4ea62fe372",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-perf-matmul",
+        "uri": "baremetal/perf/t_kernel_matmul.c",
+        "sha256": "dcba9597152c735452a33295b463e92a4cdbf981aefe4df3527cb5489901aeaf",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-perf-sort",
+        "uri": "baremetal/perf/t_kernel_sort.c",
+        "sha256": "ac1a5bf436cf851dcff3f263af150c8aaabcb837ea966a7f0f8f40318b266a43",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-perf-hash",
+        "uri": "baremetal/perf/t_kernel_hash.c",
+        "sha256": "d6b4e821edaf1977b80e85381ce6bd8a184a442e02bd878501ab70da14de0d76",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

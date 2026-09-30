@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260919-006",
+  "label": "B25-NOFP-VOLATILE-SOF-PACKAGE",
+  "state": "done",
+  "acceptance_status": "quartus-assembler-success-and-volatile-sof-frozen",
+  "partial": false,
+  "physical_candidate_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+  "physical_candidate_tree_sha": "d5baa6b05f5f8824236c816980ab6e6d48578594",
+  "branch": "verify/T-20260919-006-b25-nofp-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-006",
+  "owner": "root",
+  "dependencies": {
+    "gate_d": {"task": "T-20260919-002", "status": "PASS"},
+    "physical": {"task": "T-20260919-004", "status": "PASS", "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260919-004-b25-nofp-fresh-physical"},
+    "ucp_invariant": {"task": "T-20260919-005", "status": "PASS"}
+  },
+  "timestamps": {
+    "run_started_at": "2026-09-20T00:00:16.2959149+08:00",
+    "copy_started_at": "2026-09-20T00:00:18.3482910+08:00",
+    "copy_finished_at": "2026-09-20T00:00:19.1461722+08:00",
+    "assembler_started_at": "2026-09-20T00:00:20.2197515+08:00",
+    "assembler_finished_at": "2026-09-20T00:01:05.6218570+08:00",
+    "run_finished_at": "2026-09-20T00:01:07.9207906+08:00",
+    "reported_at": "2026-09-20T00:02:34+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "source": "D:/Projects/fpga-altra/lcvex/build/T-20260919-004-b25-nofp-fresh-physical/fpga/catapult_a10",
+    "target": "D:/Projects/fpga-altra/lcvex/build/T-20260919-006-b25-nofp-volatile-sof/fpga/catapult_a10",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "pre_eda_count": 0,
+    "post_eda_count": 0,
+    "pre_free_physical_mib": 40117.7,
+    "assembler_pre_free_physical_mib": 39784.6,
+    "source_bytes": 469035670,
+    "pre_disk_d_free_bytes": 79481131008
+  },
+  "source_identity": {
+    "qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "qsf_remote_raw_sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46",
+    "qsf_lf_normalized_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "fit_report_sha256": "49c2cf4a09d6d4a8ee297412887e17fe291ae6117bf8469fc5ce063d1473bc84",
+    "sta_report_sha256": "4f90ac713553ebf4afdf4e0dad5d7c35c1c445b8aacd1b8f17bdc60d46039764",
+    "source_project_files": 297,
+    "source_project_manifest_sha256": "37f9cc759429b07bc96dfffd60f0d46698e2b56958ebe9bf1f0d9d42665dfa8c",
+    "source_full_files": 539,
+    "source_pre_manifest_sha256": "08ff39ac093531ebab9b32400d5a481761e447c4b64f8e879bacf0abea99d64c",
+    "source_post_manifest_sha256": "08ff39ac093531ebab9b32400d5a481761e447c4b64f8e879bacf0abea99d64c",
+    "clone_pre_manifest_sha256": "08ff39ac093531ebab9b32400d5a481761e447c4b64f8e879bacf0abea99d64c",
+    "copy_diff_count": 0,
+    "source_immutability_diff_count": 0,
+    "source_preexisting_config_count": 0,
+    "source_post_config_count": 0
+  },
+  "assembler": {
+    "invocation_count": 1,
+    "command": "quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10",
+    "pid": 30436,
+    "exit_code": 0,
+    "elapsed": "00:00:45",
+    "peak_virtual_memory_mib": 7063,
+    "result": "Successful",
+    "errors": 0,
+    "warnings": 0,
+    "loaded_snapshots": ["root_partition/final", "auto_fab_0/final"],
+    "runner": {"bytes": 26805, "sha256": "12874c205090ec94338d00f15d5d86c8345d6e1e5dcae189dfa29b15d694b27b"},
+    "stdout_sha256": "969f4d9a5c61274ee0d96f75de4647fe6f7e3da922a6bccd5c4b20c9a45bfc7e",
+    "stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"
+  },
+  "database_postflight": {
+    "pre_files": 225,
+    "post_files": 228,
+    "pre_manifest_sha256": "86de28d9e9009801a6fa200ba5ef0ed16243333ab3bbb76c084262f346a03992",
+    "post_manifest_sha256": "a3e9ea0d114b3dc85afcdf5a4909bda36a944d97437ac2750f7c300a60054d8a",
+    "added_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/catapult_a10.asm.qmsgdb"
+    ],
+    "changed_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/runlog.db"
+    ],
+    "removed_paths": [],
+    "added_allowlist_diff_count": 0,
+    "changed_allowlist_diff_count": 0,
+    "physical_database_change_count": 0
+  },
+  "artifacts": {
+    "sof": {
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260919-006-b25-nofp-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "local_path": "build/agents/T-20260919-006/sof/catapult_a10.sof",
+      "bytes": 36842110,
+      "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7",
+      "quartus_checksum": "0x31426358",
+      "design_hash": "DAE55641F59510866D2107F480818B86",
+      "jtag_usercode": "0xFFFFFFFF"
+    },
+    "assembler_report": {"path": "build/agents/T-20260919-006/sof/catapult_a10.asm.rpt", "bytes": 10175, "sha256": "ad0adbe9b27c48b07e368f58641e96c623eedba76ab6b24338267a3c37cb5652"},
+    "flow_report": {"path": "build/agents/T-20260919-006/sof/catapult_a10.flow.rpt", "bytes": 17933, "sha256": "1b45dcb285e869a9be5fc44c488d6d520d72ab4e75c05ebdfa1af3eea270b942"},
+    "result_json": {"path": "build/agents/T-20260919-006/remote-evidence/runtime/result.json", "bytes": 4737, "sha256": "5269c8408f022c1534bd24c8b93298874974b2cbfbd4ceac3085c8c2aba01f9d"},
+    "run_log": {"path": "build/agents/T-20260919-006/runtime/assembler.lock.log", "bytes": 5583, "sha256": "2f6e2f834098f1abcdddfdc8c5a8ba9eebe893601cb5ee022a75f8871a509ba5"}
+  },
+  "artifact_cardinality": {"sof": 1, "pof": 0, "jic": 0, "rbf": 0, "jbc": 0, "svf": 0, "jam": 0},
+  "resource_lock": {"resource": "gamepc", "all_remote_actions_locked": true, "final_status": "gamepc FREE"},
+  "safety_and_scope": {
+    "source_project_modified": false,
+    "synthesis_fitter_sta_rerun": false,
+    "quartus_pgm_or_jtag": false,
+    "nios2_terminal": false,
+    "fpga_configured": false,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "unknown_process_stopped": false
+  },
+  "handoff": "docs/handoffs/T-20260919-006-b25-nofp-volatile-sof.md",
+  "next": "T-20260919-007 may use only this exact SOF identity for the already-authorized volatile configuration and JTAG-UART BOOT/READY/PONG/echo test."
+}

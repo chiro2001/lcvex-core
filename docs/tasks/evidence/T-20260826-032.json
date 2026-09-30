@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-032",
+  "base_sha": "91e99d5",
+  "head_sha": "abd5a1f",
+  "candidate_status": "pass-local",
+  "runs": [
+    {
+      "run_id": "owner-l0-step-runner-001",
+      "level": "L0",
+      "command": "bash -n sim/difftest/run_lockstep_step.sh && git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-step-pin-smoke-001",
+      "level": "L0",
+      "command": "IMAGE=/home/chiro/projects/mycpu/lcvex/build/difftest/q6_svc.bin COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 MAX_INSNS=1 COORD_PIN=8 QEMU_PIN=9 bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "step 模式 1 条与 QEMU 一致；显式 PLUGIN、COORD_PIN、QEMU_PIN 参数路径生效。"
+    }
+  ],
+  "changed_behavior": {
+    "plugin": "PLUGIN 环境变量可覆盖当前 worktree 默认 plugin 路径。",
+    "pin": "COORD_PIN/QEMU_PIN 分别绑定协调器与 QEMU；未设置时保持不绑定，PIN 可兼容同时绑定旧入口。"
+  },
+  "known_limits": [
+    "仅验证 step runner 参数和单步 smoke，不替代 Gate D/Gate E。",
+    "完整 Linux 长跑仍由 T-031 单独取证。"
+  ]
+}

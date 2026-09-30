@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-020",
+  "label": "B25-RX-CPU-OBSERVABILITY-VOLATILE-SOF",
+  "state": "done",
+  "acceptance_status": "single-assembler-sof-pass-source-and-physical-db-immutable",
+  "partial": false,
+  "base_sha": "b56e1bd50091a5aba360d90bfe703913acf2bbae",
+  "branch": "verify/T-20260920-020-b25-rx-cpu-observability-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-020",
+  "owner": "monitor_disasm",
+  "received_at": "2026-09-20T12:55:24+08:00",
+  "reported_at": "2026-09-20T13:10:00+08:00",
+  "input_contract": {
+    "candidate_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+    "candidate_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+    "remote_source": "D:/Projects/fpga-altra/lcvex/build/T-20260920-017-b25-rx-cpu-observability-fresh-physical",
+    "remote_target": "D:/Projects/fpga-altra/lcvex/build/T-20260920-020-b25-rx-cpu-observability-volatile-sof",
+    "source_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "qsf_normalized_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "fit_report_sha256": "97646725ad87044e11372cf08ed2e2d436eaeb6387c5bdaf144006eed38c2401",
+    "sta_report_sha256": "40e620b716039a1c672d95b07f1ab1c2467bcbaacafdefeaa9c717683c596e39"
+  },
+  "runner": {
+    "local_runner_sha256": "c8bcc52e9d6670ac3613dbc8fbc79ae23256295c115d42b9c6fd4b74f6917045",
+    "remote_runner_sha256": "c8bcc52e9d6670ac3613dbc8fbc79ae23256295c115d42b9c6fd4b74f6917045",
+    "command": "quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10",
+    "invocation_count": 1,
+    "assembler_rerun_after_finalize_fix": false,
+    "first_runner_issue": "PowerShell result JSON serialization used Text.UTF8Encoding without the [type] qualifier after assembler already succeeded; finalize audit corrected evidence without rerunning assembler.",
+    "finalize_script_sha256": "8abf5f2cc6b53a9a2caf0c42c58615237c71e473d433d24680abb938bf5eaa90"
+  },
+  "freshness_and_immutability": {
+    "remote_preflight_root_absent": true,
+    "pre_eda_count": 0,
+    "source_pre_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "source_post_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "source_manifest_equal": true,
+    "clone_baseline_equal_source": true,
+    "database_pre_file_count": 225,
+    "database_added_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/catapult_a10.asm.qmsgdb"
+    ],
+    "database_changed_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/runlog.db"
+    ],
+    "database_removed_paths": [],
+    "physical_database_change_count": 0,
+    "config_artifacts": {"sof": 1, "pof": 0, "jic": 0, "rbf": 0, "jbc": 0, "svf": 0, "jam": 0},
+    "post_eda_count": 0
+  },
+  "assembler": {
+    "wrapper_exit_note": "PowerShell Process.ExitCode was blank, but assembler report/stdout success markers were present; finalize audit accepted report identity.",
+    "quartus_errors": 0,
+    "quartus_warnings": 0,
+    "stdout_success": true,
+    "report_success": true,
+    "generated_emif_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+    "sof": {
+      "bytes": 36842101,
+      "sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd",
+      "quartus_checksum": "0x3159F8A0",
+      "design_hash": "4DAED3C37174544441E6912B371092CA",
+      "jtag_usercode": "0xFFFFFFFF",
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-020-b25-rx-cpu-observability-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "local_path": "build/agents/T-20260920-020/remote-evidence/catapult_a10.sof"
+    },
+    "report_sha256": "95aa374b0b3667e89085e0c300fb69058699353430b3b9a6478800505872765d",
+    "flow_report_sha256": "7149c723f6d68e28ba529092ffec4a6f4be1a3dc4190cf9f5e05fa7d6837c28a",
+    "result_json_sha256": "cb1b2353ee36bd5e1bf1bb15afebcfad6c4e8bdc4e883ff848f684b5ddf5cb43"
+  },
+  "resource_and_safety": {
+    "all_gamepc_actions_locked": true,
+    "gamepc_final": "FREE",
+    "quartus_asm_only": true,
+    "synthesis_fitter_sta": false,
+    "quartus_pgm": false,
+    "jtag_terminal": false,
+    "fpga_configuration": false,
+    "flash_jic_epcq": false,
+    "reset_power": false,
+    "unknown_process_stopped": false
+  },
+  "handoff": "docs/handoffs/T-20260920-020-b25-rx-cpu-observability-volatile-sof.md",
+  "next": "Only a separately authorized volatile board interaction may consume this exact SOF; no persistent configuration or board reset is implied."
+}

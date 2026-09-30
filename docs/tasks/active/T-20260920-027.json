@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-027",
+  "label": "B25-LOGIC-IMM-REPAIR-FRESH-PHYSICAL",
+  "title": "Run fresh no-FP Quartus synthesis, fitter, STA and physical invariants for the logical-immediate repair",
+  "kind": "fpga-physical-gate",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-source-qualified-physical-acceptance-pass",
+  "assigned_owner": "physical_t027",
+  "depends_on": ["T-20260920-025", "T-20260920-026"],
+  "candidate_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+  "candidate_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+  "candidate_base_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+  "branch": "verify/T-20260920-027-b25-logic-imm-repair-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-027-b25-logic-imm-repair-fresh-physical",
+  "writes": [
+    "build/agents/T-20260920-027/** ignored local staging/runners/logs/reports",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-027-b25-logic-imm-repair-fresh-physical/** task-owned remote root",
+    "docs/tasks/evidence/T-20260920-027.json",
+    "docs/handoffs/T-20260920-027-b25-logic-imm-repair-fresh-physical.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-022.json",
+    "docs/tasks/evidence/T-20260920-025.json",
+    "docs/tasks/evidence/T-20260920-026.json",
+    "T-20260920-017 accepted fresh-physical runners and report schemas as templates only"
+  ],
+  "input_contract": {
+    "profile_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+    "profile_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+    "a64_fp_simd": 0,
+    "logic_imm_decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "qsf_reference_count": 50,
+    "expected_stage_files": 174,
+    "old_negative_warning_16788": 2,
+    "fixed_probe_warning_16788": 0
+  },
+  "stages": [
+    "preflight-and-fresh-root",
+    "source-stage-and-manifest",
+    "synthesis",
+    "fitter",
+    "sta-signoff",
+    "overall-and-custom-reports",
+    "ucp-reset-report-only-measurement",
+    "final-acceptance-and-collection"
+  ],
+  "scope": "Build a fresh task-owned Quartus project from profile 2a1cd5c5 and the frozen 2011-byte boot image. Recompute every source/stage manifest, run synthesis, fitter and STA from no prior database, then generate overall timing, CDC/metastability, FIFO payload, data-delay and UCP/reset reports. Do not run assembler or create configuration artifacts.",
+  "acceptance": {
+    "freshness": "Remote root must not preexist; no db/incremental_db/output_files/config artifact is imported. T-017/T-020/T-023/T-027-old or any other physical DB/SOF is never copied.",
+    "source": "174-file stage and all 50 QSF references close; local/remote pre/post manifests and bound QPF/QSF/SDC/boot/RTL hashes match profile 2a1cd5c5 and remain immutable.",
+    "repair": "Staged rtl/lcvex_decode.sv has the frozen repair hash; full SoC Quartus synthesis is Successful/0 errors and contains zero warning 16788. Filtering or waiving that warning is forbidden.",
+    "flow": "Quartus 21.4 synthesis, fitter and sta_signoff each exit 0, Successful, 0 errors, one process at a time.",
+    "timing": "sys_clk_25 and global setup/hold/recovery/removal/min-pulse all nonnegative; clocks/exceptions/ignored rows reviewed; Fmax and EMIF crossings recorded.",
+    "physical": "DDR/metastability PASS; FIFO payload 24/24; data-delay 20/20 with correct cardinality; no unexpected exception/ignored rows.",
+    "ucp": "Fresh raw UCP/reset reports normalize to the established 60/624, TDI/TMS/TDO 25/35/4, families 606/4/13/1 with zero violations and nonnegative recovery/removal. This task records measurement only; any tracked policy/profile edit requires an independent follow-up task.",
+    "artifact_boundary": "SOF/POF/JIC/RBF/JBC/SVF/JAM counts all zero; assembler is a separate task only after acceptance and policy integration."
+  },
+  "resource": "Every GamePC action holds resource-lock gamepc. One Quartus process at a time; max processors 16 on the 24-thread host, minimum free physical memory 8192 MiB, exclusive lock means no separate 16 GiB cap. Use task-local paths and event-driven monitoring with waits up to one hour.",
+  "forbidden_regions": [
+    "tracked source/profile/QSF/SDC/RTL/firmware/test modifications",
+    "T-017/T-020 or any prior DB, reports or configuration artifacts as current physical evidence",
+    "waiving/filtering warning 16788 or changing expected physical cardinalities",
+    "assembler and all SOF/POF/JIC/RBF/JBC/SVF/JAM generation",
+    "JTAG/board/Flash/reset/power actions",
+    "stopping unknown or pre-existing processes"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T15:33:56+08:00",
+    "agent_name": "physical_t027",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "partial": false,
+    "candidate_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+    "evidence_head_sha": "1ca6a6c933e73f25787669ce51675da9c65bac9a",
+    "integrated_evidence_sha": "806d7358b49d1edc622e6157baa7a11f70a07adb",
+    "passed": "fresh 174-file/50-QSF stage; synthesis, fitter and STA Successful with zero errors; all timing, FIFO 24/24, data-delay 20/20 and normalized UCP/reset checks pass",
+    "warning_contract": "T-028 proves tracked RTL/IP warning 16788 count zero and exactly one raw generated SLD identity bound to normalized topology SHA b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e; any drift fails closed",
+    "superseded_condition": "the original unqualified whole-project Warning 16788 zero-count condition mixed the repaired decoder defect with a deterministic Quartus-generated SLD padding identity",
+    "warning_evidence": "docs/tasks/evidence/T-20260920-028.json",
+    "production_invariant_profile": "docs/tasks/evidence/T-20260920-029.json",
+    "safety": "assembler/configuration artifacts/JTAG/board/Flash/reset/power actions all absent",
+    "evidence": "docs/tasks/evidence/T-20260920-027.json",
+    "handoff": "docs/handoffs/T-20260920-027-b25-logic-imm-repair-fresh-physical.md",
+    "next": "assembler/SOF packaging from this exact fitted database; do not filter, waive or suppress raw warnings"
+  },
+  "created_at": "2026-09-20T15:32:19+08:00",
+  "updated_at": "2026-09-20T17:13:14+08:00"
+}

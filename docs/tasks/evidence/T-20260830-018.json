@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-018",
+  "state": "done",
+  "base_sha": "512bd8dec98557db419472a627306cce987f0198",
+  "head_sha": "e235f839a5e34082a939a9d4935eabf4ea297ece",
+  "merge_sha": "e235f839a5e34082a939a9d4935eabf4ea297ece",
+  "branch": "feature/T-20260830-018-c4-8-scale",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-018",
+  "owner": "T-20260830-018-c4-8-owner",
+  "model": "dsh-default",
+  "label": "C4-8",
+  "title": "C4 8核规模测量：CORE_COUNT=8 lint/elab + synthetic L1 smoke + 资源趋势",
+  "scope": "按 docs/C4_SCALE_PREWORK.md 对 CORE_COUNT=8 运行参数化 Verilator lint/elaboration、有限 synthetic L1 smoke、资源/延迟趋势；记录最高通过规模；不宣称 8核完整功能/架构合规/Linux SMP。",
+  "files": [
+    "tb/sv/lcvex_c4_cluster8_tb.sv",
+    "docs/handoffs/T-20260830-018-c4-8-scale.md",
+    "docs/tasks/evidence/T-20260830-018.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12",
+    "cgroup": {
+      "method": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0",
+      "memory_max_bytes": 17179869184,
+      "memory_swap_max_bytes": 0,
+      "used_for": "all Verilator builds/runs listed below"
+    }
+  },
+  "qemu": {},
+  "c4_scale": {
+    "report_id": "c4-scale-008",
+    "task_id": "T-20260830-018",
+    "source_sha": "7a26a5df7ef72d8f27983408d6c55f64ca31c1d9",
+    "year_month_day": "2026-08-30",
+    "core_count": 8,
+    "config": {
+      "CORE_ID_W": 4,
+      "SOURCE_ID_W": 4,
+      "TRANSACTION_ID_W": 8,
+      "SHARER_W": 8,
+      "OWNER_W": 8,
+      "OWNER_ENCODING": "one-hot",
+      "DIR_ENTRIES": 1024,
+      "ARB_MODE": "FLAT_RR",
+      "REQ_QUEUE_DEPTH": 1,
+      "PER_BANK": false,
+      "USE_REAL_CORE": false
+    },
+    "environment": {
+      "tool": "verilator",
+      "tool_version": "5.050",
+      "os": "linux",
+      "cpu_count": 12,
+      "memory_mb": 29645,
+      "timeout_s": 7200
+    },
+    "compile": {
+      "status": "pass",
+      "primary_command": "verilator --lint-only --no-assert --no-timing --top-module lcvex_l2_cluster -GCORE_COUNT=8 -GMEM_LINES=1024",
+      "exit_code": 0,
+      "wall_seconds": 1.053,
+      "peak_rss_mb": 63.3,
+      "generated_files": "0.201 MB / 3 C++ files",
+      "elaboration_error": null,
+      "cluster_top_nofp": {
+        "status": "pass",
+        "exit_code": 0,
+        "wall_seconds": 5.881,
+        "peak_rss_mb": 285.4,
+        "generated_files": "33.986 MB / 31 C++ files"
+      },
+      "cluster_top_full_fp": {
+        "status": "pass",
+        "exit_code": 0,
+        "wall_seconds": 347.029,
+        "peak_rss_mb": 2762.7,
+        "generated_files": "449.620 MB / 129 C++ files"
+      }
+    },
+    "smoke": {
+      "status": "pass",
+      "command": "./build/c4_cluster8_obj/lcvex_c4_cluster8_tb",
+      "exit_code": 0,
+      "wall_seconds": 0.004,
+      "peak_rss_mb": 17.5,
+      "coverage": {
+        "read_shared": true,
+        "read_unique": true,
+        "upgrade": true,
+        "writeback": true,
+        "clean_invalidate": false,
+        "bypass": false,
+        "multi_sharer_probe": true,
+        "dirty_owner_migration": true,
+        "reset_fault": true
+      },
+      "failures": [],
+      "transactions": 21,
+      "probes": 14,
+      "avg_latency_cycles": 17,
+      "total_cycles": 403
+    },
+    "resource": {
+      "peak_rss_mb": 551.6,
+      "build_time_s": 25.789,
+      "sim_time_s": 0.004,
+      "peak_disk_mb": null,
+      "generated_cpp_files": 12
+    },
+    "trend": {
+      "dir_bits": 8,
+      "dir_owner_bits": 8,
+      "dir_entry_estimate_bits": 21,
+      "dir_entry_estimate_lines_1024_bits": 21504,
+      "arb_comb_depth": "flat round-robin + full N-way fallback (CORE_COUNT=8)",
+      "probe_max_serial_probes": 7,
+      "refill_beats": 8,
+      "writeback_beats": 8,
+      "cluster_throughput_lines_per_cycle": 0.0521,
+      "throughput_note": "21 transactions over 403 cycles, global single transaction and serial probes"
+    },
+    "known_limits": [
+      "未接入完整 core，仅 synthetic L1/BFM；USE_REAL_CORE=false。",
+      "未启动 Quartus/板级/物理签核。",
+      "不宣称 8核完整功能、Linux SMP、架构合规。",
+      "未覆盖 clean/invalidate/bypass/reset-fault 定向（本任务非目标）。",
+      "default FP 全 cluster 8核 lint/elab 需要约 348s/2.76GB；本任务在 300s 前台窗口未完成，但后台 347s 已通过。"
+    ],
+    "verdict": "scale-candidate"
+  },
+  "runs": [
+    {
+      "run_id": "c4-8-lint-l2-001",
+      "source_sha": "7a26a5df7ef72d8f27983408d6c55f64ca31c1d9",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- python3 /tmp/measure_run.py -- conda run --no-capture-output -n lcvex verilator --lint-only --no-assert --no-timing -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_l2_cluster -GCORE_COUNT=8 -GMEM_LINES=1024 rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv",
+      "seed": null,
+      "wall_seconds": 1.053,
+      "cpu_count": 1,
+      "peak_rss_mb": 63.3,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "CORE_COUNT=8 l2_cluster lint/elaboration PASS; Verilator built 0.201 MB/3 C++ files; only UNSIGNED warning."
+    },
+    {
+      "run_id": "c4-8-lint-cluster-nofp-002",
+      "source_sha": "7a26a5df7ef72d8f27983408d6c55f64ca31c1d9",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- python3 /tmp/measure_run.py -- conda run --no-capture-output -n lcvex verilator --lint-only --no-assert --no-timing -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_cluster_top -GCORE_COUNT=8 -GCOHERENCE_ENABLE=1 -GA64_FP_SIMD=0 -f rtl/filelist.f rtl/lcvex_l2_cluster.sv rtl/lcvex_c3_sysctrl.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv",
+      "seed": null,
+      "wall_seconds": 5.881,
+      "cpu_count": 1,
+      "peak_rss_mb": 285.4,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "CORE_COUNT=8 cluster_top no-FP coherent lint/elaboration PASS; 33.986 MB/31 C++ files; only existing PINCONNECTEMPTY/WIDTHTRUNC warnings."
+    },
+    {
+      "run_id": "c4-8-smoke-build-003",
+      "source_sha": "7a26a5df7ef72d8f27983408d6c55f64ca31c1d9",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- python3 /tmp/measure_run.py -- conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_c4_cluster8_tb -Mdir build/c4_cluster8_obj -o lcvex_c4_cluster8_tb rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv tb/sv/lcvex_c4_cluster8_tb.sv",
+      "seed": null,
+      "wall_seconds": 25.789,
+      "cpu_count": 1,
+      "peak_rss_mb": 551.6,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "8-core synthetic L1 smoke TB build PASS; Verilator built 4.143 MB/12 C++ files."
+    },
+    {
+      "run_id": "c4-8-smoke-run-004",
+      "source_sha": "7a26a5df7ef72d8f27983408d6c55f64ca31c1d9",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- python3 /tmp/measure_run.py -- ./build/c4_cluster8_obj/lcvex_c4_cluster8_tb",
+      "seed": null,
+      "wall_seconds": 0.004,
+      "cpu_count": 1,
+      "peak_rss_mb": 17.5,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C4_CLUSTER8_TB PASS: 21 tx, 14 probes, avg 17 cycles, no deadlock; covers ReadShared/ReadUnique/Upgrade/WriteBack + fault/reset."
+    },
+    {
+      "run_id": "c4-8-lint-cluster-full-005",
+      "source_sha": "7a26a5df7ef72d8f27983408d6c55f64ca31c1d9",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- python3 /tmp/measure_run.py -- conda run --no-capture-output -n lcvex verilator --lint-only --no-assert --no-timing -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_cluster_top -GCORE_COUNT=8 -GCOHERENCE_ENABLE=1 -f rtl/filelist.f rtl/lcvex_l2_cluster.sv rtl/lcvex_c3_sysctrl.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv",
+      "seed": null,
+      "wall_seconds": 347.029,
+      "cpu_count": 1,
+      "peak_rss_mb": 2762.7,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Full default-FP 8-core cluster_top lint/elab PASS in background after 347.029s; Verilator built 449.620 MB/129 C++ files, allocated 2703.977 MB, peak RSS 2.76GB."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "c4-8-smoke-tb",
+      "uri": "tb/sv/lcvex_c4_cluster8_tb.sv",
+      "sha256": "07a85432660d675dd6d6104010fd1dcdc17dac380ba564ceca2c93693c5ccddc",
+      "bytes": 0,
+      "owner": "T-20260830-018-c4-8-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c4_cluster8_tb.sv"
+    },
+    {
+      "id": "c4-8-handoff",
+      "uri": "docs/handoffs/T-20260830-018-c4-8-scale.md",
+      "sha256": "67d85d02d953709c1b4c512cd72cc56145e337d7f2c6054926a0c86b030c9683",
+      "bytes": 0,
+      "owner": "T-20260830-018-c4-8-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:docs/handoffs/T-20260830-018-c4-8-scale.md"
+    }
+  ],
+  "known_limits": [
+    "这是 CORE_COUNT=8 规模测量，不代表 8/16/32 核功能完成。",
+    "未运行 Quartus，未做物理签核。",
+    "未修改 RTL 功能，未引入 ACE/CHI/SVE；只新增 synthetic smoke TB。",
+    "有限 smoke 用 synthetic L1 client；未跑完整 core 8核指令级并发。",
+    "default FP 全 cluster 8核 lint/elab 已通过但耗时约 348s/2.76GB；若继续 16/32 需更长窗口/更大内存或裁剪路径。"
+  ],
+  "next": "模块级 8核 smoke 与 default/no-FP cluster lint 均通过；可继续 16/32 模块级趋势。完整 16/32 default-FP lint/elab 预计耗时/内存显著上升，建议优先使用 synthetic/no-FP 路径或先测模块级趋势。",
+  "status": "done",
+  "handoff_sha": "1437d23d8eb3e4380e0f0bb21d26a9a6ec197971",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T04:00:38+08:00",
+    "head_sha": "3eb55e3",
+    "notes": "C4-8 merged via cherry-pick. 8-core lint/elab PASS, synthetic smoke 21 transactions/403 cycles, no deadlock. Scale-candidate only.",
+    "merge_sha": "e235f839a5e34082a939a9d4935eabf4ea297ece",
+    "result_sha": "e235f839a5e34082a939a9d4935eabf4ea297ece"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "e235f839a5e34082a939a9d4935eabf4ea297ece",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "1437d23d8eb3e4380e0f0bb21d26a9a6ec197971",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "e235f839a5e34082a939a9d4935eabf4ea297ece",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

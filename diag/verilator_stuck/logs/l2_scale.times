@@ -1,0 +1,4 @@
+l2-16-wf rc=0 wall=0.067s
+l2-256-wf rc=0 wall=0.099s
+l2-1024-wf rc=0 wall=0.272s
+l2-1024-wf-assert rc=0 wall=0.955s

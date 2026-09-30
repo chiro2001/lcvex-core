@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-003",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "subagent_smoke_pass",
+  "source_sha": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+  "result_commit": null,
+  "worktree": "none (read-only smoke)",
+  "command": "dsh subagent read-only smoke invocation",
+  "result": {
+    "status": "pass",
+    "head": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+    "branch": "feature/p7-final",
+    "files_modified": 0,
+    "heavy_jobs_started": 0,
+    "summary": "subagent 调用成功；只读核验仓库身份、关键文件、工具链均通过"
+  },
+  "report": {
+    "task": "T-20260902-003",
+    "state": "done",
+    "base": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+    "head": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+    "branch": "feature/p7-final",
+    "worktree": "none (read-only smoke)",
+    "sent_at": "2026-09-02T01:27:00+08:00",
+    "received_at": "2026-09-02T01:27:05+08:00",
+    "reported_at": "2026-09-02T01:27:09+08:00",
+    "files": "无修改",
+    "tests": "pwd/HEAD/branch/status/关键文件/verilator/python/qemu/任务JSON 只读核验通过",
+    "blockers": "无",
+    "next": "主 Agent 确认后继续重新派发 T-20260902-001/002"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.10",
+    "qemu_present": true
+  },
+  "boundaries": [
+    "纯只读冒烟测试，未修改任何文件",
+    "未运行 Verilator/Quartus/Gate/锁步",
+    "未创建 worktree 或 git 写操作"
+  ],
+  "next": "确认子代理调用链路正常，按接手文档重新派发 T-20260902-001/002"
+}

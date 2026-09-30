@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-115",
+  "state": "done",
+  "base_sha": "de3000bbddcea6c1799b2001c7820784db225e8e",
+  "head_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+  "handoff_sha": "e88d57645eb97b2da5a54f8c14d5faba9920ca54",
+  "merge_sha": "8f42401f41107e91bd55daa54ca41928ed65f2bc",
+  "branch": "feature/T-20260829-115-aud-10-test-registry",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-115",
+  "sent_at": "2026-08-30T00:00:00+0800",
+  "received_at": "2026-08-30T00:00:00+0800",
+  "reported_at": "2026-08-30T00:15:53+08:00",
+  "owner": "external-audit-action-subagent",
+  "model": "current-session",
+  "label": "AUD-10",
+  "title": "补 test registry 入口与反向一致性检查",
+  "scope": "修复 EXT-05-004：补齐 P7/FP/NEON、多核 cluster、FPGA/CDC 已有稳定入口；增加 registry-Makefile/runner 最小反向检查；明确部分清单。不修改 RTL，不启动 Quartus。",
+  "files": [
+    "Makefile",
+    "scripts/test_registry.json",
+    "scripts/test_registry.py",
+    "scripts/test_registry_test.py",
+    "docs/TEST_ENHANCEMENT_PLAN.md",
+    "docs/domains/README.md",
+    "docs/handoffs/T-20260829-115-aud-10.md",
+    "docs/tasks/evidence/T-20260829-115.json"
+  ],
+  "toolchain": {
+    "python": "3.12",
+    "verilator": "not-run",
+    "quartus": "not-run"
+  },
+  "qemu": {
+    "used": false
+  },
+  "stats": {
+    "registry_before": 22,
+    "registry_after": 63,
+    "added_entries": 41,
+    "added_domains": [
+      "fpga-platform",
+      "multicore-cluster"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "t115-diff-check",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "source_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "工作区 diff 无空白错误。"
+    },
+    {
+      "run_id": "t115-registry-json",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/test_registry.py --check",
+      "source_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "63 项 schema 校验通过；新增 P7/FP/NEON、多核、FPGA/CDC 域条目。"
+    },
+    {
+      "run_id": "t115-registry-consistency",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/test_registry.py --check-consistency",
+      "source_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "source_consistency 中登记的 Makefile targets/runner scripts 均被 registry command 引用；前向 Makefile 目标检查通过。"
+    },
+    {
+      "run_id": "t115-unit",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/test_registry_test.py",
+      "source_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "registry 校验、过滤、CLI JSON 和一致性检查单测全部通过。"
+    },
+    {
+      "run_id": "t115-make-check",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make test-registry-check",
+      "source_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Makefile 入口同时执行 schema + consistency 检查。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t115-registry-json-diff",
+      "uri": "git diff scripts/test_registry.json",
+      "owner": "T-20260829-115",
+      "retain_until": "task-close",
+      "sha256": "see git show fbd24b0",
+      "bytes": null,
+      "reproduce": "git show fbd24b0 -- scripts/test_registry.json"
+    }
+  ],
+  "known_limits": [
+    "registry 为 A0 手工部分清单，source_consistency 只覆盖显式登记的入口，不枚举全部 Makefile 目标。",
+    "C3 四核无主线可运行功能测试，未登记为 available。",
+    "C2 指令级 litmus/CAS/barrier 未闭合，仅登记模块级/消息传递 TB。",
+    "P7 expected-reject fault BFM 不作为绿色回归。",
+    "Quartus full flow/STA 依赖外部工具，未启动；CDC 证据沿用已有 T-064/T-067/B5 材料。"
+  ],
+  "next": "集成者在合并 SHA 上重跑 make test-registry-check 和 python3 scripts/test_registry_test.py；若有新稳定入口需同步 source_consistency。",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "reported_at",
+        "old": "2026-08-30T00:20:00+0800",
+        "new": "2026-08-30T00:15:53+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "8f42401f41107e91bd55daa54ca41928ed65f2bc",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "integrator_review": {
+    "received_at": "2026-08-30T00:17:53+08:00",
+    "status": "accepted",
+    "head_sha": "539ef8dccc8a9e06b04ecfd65d20dc309e56ad00",
+    "notes": "AUD-10 merged. Registry 22->63 entries, added fpga-platform/multicore-cluster domains, test-registry-check now schema+consistency, make test-registry-check PASS.",
+    "merge_sha": "8f42401f41107e91bd55daa54ca41928ed65f2bc",
+    "result_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b"
+  }
+}

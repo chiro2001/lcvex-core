@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-055",
+  "state": "done",
+  "base_sha": "94725bf3c8452c471d76c4c637f33bdd21cf8884",
+  "head_sha": "dbc9a8733e3fc3073527ffda05a404fa5d267bf1",
+  "merge_sha": "48930ae4fa4ef9050c2560d5fa5cbe012d76117e",
+  "branch": "feature/T-20260827-055-b3-l2-wb",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-055",
+  "scope": "B3 独立 64B write-back/write-allocate L2、CORE_COUNT=1 probe/maintenance 及 SV/Cocotb 验证",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.x (lcvex)",
+    "cocotb": "2.0.1",
+    "git": "2.55.0"
+  },
+  "qemu": {
+    "status": "not in scope",
+    "release": "",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": null,
+  "runs": [
+    {
+      "run_id": "owner-l1-sv-build-run-001",
+      "source_sha": "94725bf",
+      "runner_role": "continuation-owner",
+      "level": "L1",
+      "command": "mkdir -p build/agents/T-20260827-055/obj_dir_final5 && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 4 --top-module lcvex_l2_wb_tb -Mdir build/agents/T-20260827-055/obj_dir_final5 -o lcvex_l2_wb_tb rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l2_probe.sv tb/sv/lcvex_l2_wb_bfm.sv tb/sv/lcvex_l2_wb_tb.sv",
+      "seed": "0x05512026",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator compile with --timing --assert -Wall passed."
+    },
+    {
+      "run_id": "owner-l1-sv-run-002",
+      "source_sha": "94725bf",
+      "runner_role": "continuation-owner",
+      "level": "L1",
+      "command": "build/agents/T-20260827-055/obj_dir_final5/lcvex_l2_wb_tb",
+      "seed": "0x05512026",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PASS: lcvex_l2_wb_tb; operations=93 accepted=903; SVA 无失败。",
+      "log": "build/agents/T-20260827-055/sv-final-pass2.log"
+    },
+    {
+      "run_id": "owner-l1-cocotb-003",
+      "source_sha": "94725bf",
+      "runner_role": "continuation-owner",
+      "level": "L1",
+      "command": "mkdir -p build/agents/T-20260827-055/cocotb_final && conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.l2_wb SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-055/build/agents/T-20260827-055/cocotb_final SEED=0x00b30551",
+      "seed": "0x00b30551",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 1/1 PASS，仿真 2430ns；覆盖 write-allocate、dirty writeback、READY hold、ID 和 fault retry。",
+      "log": "sim/cocotb/results.xml"
+    },
+    {
+      "run_id": "owner-l0-hygiene-004",
+      "source_sha": "94725bf",
+      "runner_role": "continuation-owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260827-055.json && git diff --check",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "证据 JSON 和空白检查通过。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "sv-executable",
+      "uri": "build/agents/T-20260827-055/obj_dir_final5/lcvex_l2_wb_tb",
+      "sha256": "9bbcf1610ad7b80027ca1dd4b15ee7648e9af06446543eb83538cd11b3cbfbf6",
+      "bytes": 649504,
+      "owner": "continuation-owner",
+      "retain_until": "review",
+      "reproduce": "owner-l1-sv-build-run-001"
+    },
+    {
+      "id": "cocotb-executable",
+      "uri": "build/agents/T-20260827-055/cocotb_final/Vtop",
+      "sha256": "8a824492135e427f7003d646725e7d94aa9c2afb7c1c156d18e46e8465137bb4",
+      "bytes": 498296,
+      "owner": "continuation-owner",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-003"
+    },
+    {
+      "id": "cocotb-results",
+      "uri": "sim/cocotb/results.xml",
+      "sha256": "1c733f5b065d3d24ada66fd2a21a10ad7960f5856a133c5dda636319ce52872b",
+      "bytes": 418,
+      "owner": "continuation-owner",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-003"
+    }
+  ],
+  "known_limits": [
+    "固定 CORE_COUNT=1、2-way、64B line、单 outstanding；不支持多核一致性或并发事务。",
+    "BFM 是有限字节模型，不代表真实 SRAM/AXI4、ECC、SoC、FPGA 或 Gate D。",
+    "模块未接入 core/L1/SoC，未修改 rtl/filelist.f、现有 lcvex_l2_tb、B0 FPGA 目录、P7/B0/B1/B2 或 active task JSON。",
+    "Cocotb wrapper 不暴露 probe；probe/maintenance/global scan 由独立 SV TB 覆盖。"
+  ],
+  "transient_validation_notes": [
+    "一次尝试直接对打包 mem_rsp_t 输出字段使用 $stable 在 Verilator 中触发采样差异，已改为保留工具稳定的 valid-hold SVA；Cocotb 对完整响应 payload/ID hold 做了独立检查。"
+  ],
+  "integration_validation": {
+    "runner_role": "root-integrator",
+    "line": "feature/fpga-catapult-a10",
+    "source_sha": "48930ae4fa4ef9050c2560d5fa5cbe012d76117e",
+    "result": "pass_l0_l1",
+    "runs": [
+      {
+        "run_id": "integrator-l0-json-diff-005",
+        "level": "L0",
+        "command": "python3 -m json.tool docs/tasks/evidence/T-20260827-055.json && git diff --check",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-l1-sv-006",
+        "level": "L1",
+        "seed": "0x05512026",
+        "command": "mkdir -p build/agents/T-20260827-055/fpga-line/sv/obj_dir && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 4 --top-module lcvex_l2_wb_tb -Mdir build/agents/T-20260827-055/fpga-line/sv/obj_dir -o lcvex_l2_wb_tb rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l2_probe.sv tb/sv/lcvex_l2_wb_bfm.sv tb/sv/lcvex_l2_wb_tb.sv && build/agents/T-20260827-055/fpga-line/sv/obj_dir/lcvex_l2_wb_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "SV 93 transactions/903 downstream beats，SVA 无失败，26us 仿真。"
+      },
+      {
+        "run_id": "integrator-l1-cocotb-007",
+        "level": "L1",
+        "seed": "0x00b30551",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.l2_wb SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-fpga-catapult-a10/build/agents/T-20260827-055/fpga-line/cocotb SEED=0x00b30551",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "Cocotb 1/1 PASS，2430ns。"
+      }
+    ],
+    "remaining_limits": [
+      "B3 未接入 L1/core/SoC、真实 AXI/EMIF、QEMU 或 Gate D/F；后续 B4/L1 coherence 负责系统接线。"
+    ]
+  },
+  "next": "B3 模块级 candidate 已在 clean FPGA line 验收；后续进入 B4/L1 coherence 与系统接线。",
+  "finalized_at": "2026-08-27T06:30:09+08:00"
+}

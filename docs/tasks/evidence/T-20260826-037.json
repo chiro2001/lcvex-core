@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-037",
+  "base_sha": "e678792",
+  "head_sha": "e3e132b",
+  "candidate_status": "pass-local",
+  "runs": [
+    {
+      "run_id": "owner-l0-runner-pid-001",
+      "level": "L0",
+      "command": "bash -n sim/difftest/run_lockstep_step.sh && git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-runner-cleanup-001",
+      "level": "L0/L2",
+      "command": "MAX_INSNS=100000 COORD_PIN=10 QEMU_PIN=11 run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "100000 条与 QEMU 一致；结束后无 T-037 worktree 的 QEMU/coordinator 孤儿进程。"
+    }
+  ],
+  "root_cause": "T-032 的 run_pinned shell function 在后台执行时让 $! 指向包装 subshell，run_lockstep_step.sh 的 TERM 只终止包装层，QEMU 孤儿化。",
+  "fix": "run_pinned 的有/无 pin 两条路径均使用 exec，后台 PID 直接对应 taskset/目标进程。",
+  "known_limits": ["需要合入后重跑 T-036 Gate D，确认并行 runner 不再泄漏进程。"]
+}

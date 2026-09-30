@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-021",
+  "label": "A10-CDC-SDC-FIX",
+  "title": "A10 SDC/CDC 修复：-quiet->-nowarn 与 EMIF/DDR 异步约束",
+  "kind": "fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-a10-sdc-fix",
+  "agent_type": "constraint-fix",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-019"
+  ],
+  "base_sha": "87e7e0b047e1e80bd2f1f192fd3f1dbf3b2bd4be",
+  "branch": "fix/T-20260902-021-a10-cdc-sdc-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-021",
+  "scope": "把 T-20260902-019 远端隔离验证过的 SDC 兼容修复（`-quiet` -> `-nowarn` 8 处）落入正式 fpga/catapult_a10 SDC；修复 EMIF core_usr_clk ↔ sys_clk_50 异步/CDC、hold/removal/DDR Core 负 slack 约束；本地做静态/脚本检查，不运行完整 fit/STA。",
+  "reads": [
+    "docs/handoffs/T-20260902-019-fp-p5-physical.md",
+    "docs/tasks/evidence/T-20260902-019.json",
+    "fpga/catapult_a10/**",
+    "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "docs/FPGA_PLAN.md"
+  ],
+  "writes": [
+    "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "fpga/catapult_a10/**（约束文件）",
+    "docs/handoffs/T-20260902-021-a10-cdc-sdc-fix.md",
+    "docs/tasks/evidence/T-20260902-021.json"
+  ],
+  "validation": {
+    "l0": [
+      "SDC 语法/脚本检查或 Quartus read 通过"
+    ],
+    "l1": [
+      "git diff --check",
+      "约束可被 Quartus 21.4 接受"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "正式 SDC 含 -nowarn 兼容修复；EMIF/DDR CDC 约束有明确依据并进入 FP-P5 rerun 验证。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 4096,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 15,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T07:02:00+08:00",
+  "updated_at": "2026-09-03T07:21:05+08:00",
+  "known_limits": [
+    "不运行完整 fit/STA（FP-P5 rerun 验证）；不修改 Qsys IP 生成物；不读 license"
+  ],
+  "handoff": "docs/handoffs/T-20260902-021-a10-cdc-sdc-fix.md",
+  "evidence": "docs/tasks/evidence/T-20260902-021.json",
+  "next": "FP-P5 rerun synthesis/fit/STA 验证",
+  "dispatch": {
+    "sent_at": "2026-09-03T07:03:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-021",
+    "branch": "fix/T-20260902-021-a10-cdc-sdc-fix"
+  },
+  "head_sha": "8dc219734a112c2df16dbe4201903f25f83bd052",
+  "merge_sha": "afe775647b765a6222928268eb870bdeaa29c4bd",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T07:20:39+08:00",
+    "merged_at": "2026-09-03T07:21:05+08:00",
+    "recorded_at": "2026-09-03T07:21:05+08:00",
+    "notes": "A10 SDC/CDC fix merged; -nowarn and EMIF async constraints accepted. RTL CDC hardening still separate."
+  }
+}

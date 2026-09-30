@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-004",
+  "label": "PE-F1A-H04",
+  "parent": "T-20260830-033",
+  "title": "F1a commit_ready/IFID hold 原子性修复",
+  "kind": "frontend-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-ready-hold",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260830-045", "T-20260830-046"],
+  "base_sha": "19d266a7dcffe43de7e0fdcc7057f8881be6a47f",
+  "branch": "feature/T-20260831-004-f1a-ready-hold",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-004",
+  "scope": "修复 T-045 H-04：FIFO-on 且 commit_ready=0、memwb_valid=0/无其它 stall 时，fetch_fifo_pop 被禁止但 IF/ID 未保持，可能清除有效 IFID entry。修改前建立精确 directed failing case，证明 IFID/FIFO/token 的丢失窗口；只修 ready/consume/hold 原子性，保持 feature-off 逐周期语义、公共 ABI 和 T-046 committed-marker 修复。新增 SV/Cocotb/strict-lockstep/backpressure 回归。不处理 fault-head H-03 或 F1b。",
+  "planning_guidance": {
+    "root_cause_gate": [
+      "构造 commit_ready=0 且 WB 为空、IFID valid、FIFO count>0 的窗口；pre-fix 必须显示 pop=0、stall_if=0、IFID 被清或 token/PC 跳失，再修改 RTL。",
+      "比较候选方案：移除 pop 对 commit_ready 的全局依赖，或在 IFID 接收边界显式 hold；选择能保持 valid/ready 语义且不形成组合环的最小修复，并说明为何。",
+      "不得简单把 commit_ready 加到架构提交以外状态更新、不得过滤 trace/commit；修复点必须在 frontend consume/hold。"
+    ],
+    "invariants": [
+      "commit_ready=0 时已有 WB 条目由 stall_wb 保持；WB 为空时允许或冻结前端都必须不丢不重，恢复 ready 后 commit sequence 连续。",
+      "FIFO head/token 在未 pop 时稳定；IFID valid entry 在未 transfer/flush 时稳定；pop 与 IFID replace/consume 同拍原子。",
+      "reset/flush/exception/IRQ/maintenance 优先级不变，T-046 token/SVA 与 dmem hold 修复继续通过。",
+      "feature-off 不增加新 stall 或周期变化；默认 FETCH_FIFO_ENABLE=0 不变。"
+    ],
+    "validation_order": [
+      "L0：pre-fix failing SV/Cocotb case；post-fix local SVA/token test。",
+      "L1：commit_ready 下降发生在 WB empty/FIFO 0/1/2、IFID valid/empty、push+pop、branch flush、dmem hold 等组合；feature-off backpressure。",
+      "L2：新增 hard_fetch_ready_hold strict lockstep，base/cache/delay2；重跑 T-046 hard_fetch_duplicate 与现有 5 镜像。",
+      "用 T-044 trace 对 ready-hold program 比较 off/on complete sequence；不运行完整 Gate D。"
+    ],
+    "stop_conditions": [
+      "pre-fix 无法复现 H-04 或真实问题来自 commit packet/外部 checker",
+      "需要修改 pkg/I-L1/MMU/arb/SoC TB/QEMU/public ABI",
+      "修复扩大到 H-03 fault-head、F1b 或通过过滤测试掩盖问题",
+      "feature-off 周期/commit/backpressure 语义变化"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_f1a.sh",
+    "docs/F1A_COMMIT_READY_HOLD_FIX.md",
+    "docs/handoffs/T-20260831-004-f1a-ready-hold.md",
+    "docs/tasks/evidence/T-20260831-004.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/F1A_COMMIT_DIVERGENCE.md",
+    "docs/F1A_DUPLICATE_RETIREMENT_FIX.md", "docs/handoffs/T-20260830-045-f1a-static-audit.md",
+    "docs/tasks/evidence/T-20260830-046.json", "sim/microbench/microbench_runner.cc",
+    "scripts/compare_commit_traces.py", "Makefile", "tb/sv/lcvex_soc_tb.sv"
+  ],
+  "validation": {
+    "l0": ["pre/post ready=0 WB-empty IFID/FIFO token directed SV assertion", "git diff --check、写集、token reset/hold/flush 静态核对"],
+    "l1": ["F1a Cocotb randomized commit_ready/response delay and T-046 dmem/token regressions", "feature-off SV/Cocotb commit backpressure and core lint"],
+    "l2": ["hard_fetch_ready_hold + existing F1a 6 images x base/cache/delay2 strict lockstep", "ready-hold off/on commit trace strict equal"],
+    "l3": [], "l4": []
+  },
+  "acceptance": "pre-fix H-04 窗口可审计复现；修复后 commit_ready 任意下降/恢复不丢不重，FIFO/IFID/token/commit 序列保持，新增和既有 SV/Cocotb/feature-off/strict-lockstep 全绿。默认关闭不变，不宣称 H-03/F1b/完整性能。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 8192, "timeout_s": 3600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 60, "extension_increment_minutes": 60, "max_minutes": 180, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {
+    "status": "released",
+    "reason": "T-004 合并 SHA 最小受限 SV/H04 验收通过，释放本地重型 Verilator/lockstep 队列",
+    "released_at": "2026-08-31T11:32:35+08:00",
+    "release_rule": "一次一个 MemoryMax=15G/MemorySwapMax=0/CPUQuota=50%/-j1 作业；不与 Quartus/full Gate 并发"
+  },
+  "created_at": "2026-08-31T02:23:14+08:00",
+  "updated_at": "2026-08-31T11:35:35+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T02:27:13+08:00",
+    "agent_name": "t041_pe_f1a_impl_luna",
+    "agent_reuse_note": "复用已完成 T-046 的 gpt-5.6-luna(max) agent；当前只持有 T-20260831-004。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-004"
+  },
+  "handoff": "docs/handoffs/T-20260831-004-f1a-ready-hold.md",
+  "evidence": "docs/tasks/evidence/T-20260831-004.json",
+  "merge_sha": "48c3d46d62447af7711eac3063afc63089debfb1",
+  "merged_at": "2026-08-31T11:34:46+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-31T05:35:30+08:00",
+    "independent_reviewed_at": "2026-08-31T05:48:33+08:00",
+    "accepted_at": "2026-08-31T11:35:35+08:00",
+    "status": "accepted_h04_atomic_ready_transfer",
+    "owner_head_sha": "bae5dc899e40bd9eeb8732a297c02d72facdc5f3",
+    "owner_correction_tip": "74cf7289c9fa630dc583cc612fc3ee3bdcae6901",
+    "checks": [
+      "pre-fix H-04 WB-empty/ready-low IFID drop reproduced; functional fix removes only direct commit_ready gating from FIFO pop",
+      "independent one-pass review found no functional RTL blocker; SVA metadata limits corrected before acceptance",
+      "all declared logs/images/coordinators/traces hashes verified; 18/18 strict lockstep and 14/14 off/on trace evidence retained",
+      "merge SHA rebuilt sim-sv-fetch-fifo and H04 probe under MemoryMax=15G/MemorySwapMax=0/CPUQuota=50%/-j1; peak 3.2G and 129.7M, swap 0",
+      "final SVA proves old IFID to ID/EX and old FIFO head to new IFID PC/epoch/seq atomically; H-03 fault head excluded"
+    ],
+    "notes": "L2 coordinator/trace runner 固定 commit_ready=1；真实 ready 背压由 SV/Cocotb 覆盖。owner 最后一次 SVA-only follow-up 因平台用量上限失败，集成者仅接管断言/证据尾项，功能逻辑未再改变。"
+  },
+  "known_limits": ["H-03 FIFO fault-head 与 F1b later-beat fault 继续后置。", "不运行完整 Gate D、Linux、Quartus、B5/full flow。"],
+  "next": "以 48c3d46 为 base 登记 H-03 fault-head/IABT 精确消费任务；闭合后重跑完整 F1c。"
+}

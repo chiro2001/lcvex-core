@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-014",
+  "base_sha": "2a2a2b7",
+  "head_sha": "b2e53f030b17baa262ed7b8fa08e411aa4823bda",
+  "merge_sha": "a4906c0",
+  "runs": [
+    {
+      "run_id": "owner-l0-backpressure-001",
+      "source_sha": "b2e53f0",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "VERILATOR_JOBS=1 make sim-sv-backpressure",
+      "seed": null,
+      "wall_seconds": 21.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 136,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "integrator-l0-backpressure-002",
+      "source_sha": "a4906c0",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "taskset -c 0 env VERILATOR_JOBS=1 make sim-sv-backpressure",
+      "seed": null,
+      "wall_seconds": 21.6,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": 136,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "known_limits": ["仅补 backpressure TB restore pins；新 candidate Gate D 需重新运行。"]
+}

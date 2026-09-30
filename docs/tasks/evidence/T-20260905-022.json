@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-022",
+  "label": "R19-FP-BALANCED-SCAN",
+  "state": "accepted-local-physical-pending",
+  "partial": true,
+  "acceptance_status": "integrator_affected_l0_l2_pass_physical_pending",
+  "base_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "worktree_start_sha": "b1041c1347dfffe79e44d2006d013baa404c35eb",
+  "implementation_head": "d237ca4cab48813e7d5101207eaaf7275a958e62",
+  "documentation_tip": "Owner commit is intentionally not self-referenced; the final owner commit SHA is reported with this handoff and merge_sha remains for the integrator.",
+  "merge_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "branch": "timing/T-20260905-022-r19-fp-balanced-scan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-022",
+  "sent_at": "2026-09-05T22:52:53+08:00",
+  "received_at": "2026-09-05T22:52:53+08:00",
+  "reported_at": "2026-09-05T23:11:14+08:00",
+  "depends_on": ["T-20260905-019"],
+  "cone_id": "R19-FP-BALANCED-SCAN",
+  "timing_input": {
+    "source_task": "T-20260905-019",
+    "source_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+    "baseline_task": "T-20260905-014",
+    "baseline_report": "docs/tasks/evidence/T-20260905-014.json",
+    "clock": "sys_clk_50",
+    "old_directional_path": "pp_pre -> pack_pre",
+    "old_worst_slack_ns": -2.103,
+    "old_logic_levels": 59,
+    "current_physical_status": "fresh R18/R19 STA pending; no timing improvement claimed by owner"
+  },
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_scalar_r18_tb.sv",
+      "docs/handoffs/T-20260905-022-r19-fp-balanced-scan.md",
+      "docs/tasks/evidence/T-20260905-022.json"
+    ],
+    "rtl_sha256": "9c821e3cfc60c031c803b3791989fe01532b681e91eef4d82a0f690ff8c693d0",
+    "focused_tb_sha256": "2d161e0b8b373bb243d50e36a6f4369cea2cb4a582c4ed60db02092f4a9af811",
+    "summary": "Replaced round_pack_scan's descending 256-bit first-set-bit loop with a fixed synthesizable hierarchy: sixteen 16-bit reductions, four quadrant reductions, hierarchical highest-group selection, and a four-level 16-bit local encoder. round_pack_scan still bypasses the scan for special values and predecoded lead_valid, and still derives e=exp2+lead.",
+    "encoder": {
+      "input_bits": 256,
+      "group_count": 16,
+      "group_width": 16,
+      "output_bits": "[8]=valid, [7:4]=selected group, [3:0]=selected bit",
+      "zero_output": "valid=0; round_pack_scan sets is_zero=1 and leaves e=0",
+      "special_output": "round_pack_scan does not invoke magnitude scan and keeps lead_valid=0",
+      "predecoded_output": "pre.lead_valid=1 keeps pre.lead and computes e from pre.exp2+pre.lead"
+    },
+    "invariants": {
+      "round_pack_p2": "unchanged",
+      "state_enum": "unchanged",
+      "latency": "unchanged; no state or register boundary added",
+      "formats": "scan metadata is format-independent and is carried for H/S/D; paired-half callers still invoke it per lane",
+      "architectural_interface": "unchanged",
+      "false_path": false,
+      "assertions_disabled": false,
+      "reference_results_modified": false
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-diff-check-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b1041c1347dfffe79e44d2006d013baa404c35eb",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-verilator-iter-lint-002",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b1041c1347dfffe79e44d2006d013baa404c35eb",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0"
+    },
+    {
+      "run_id": "owner-focused-build-003",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b1041c1347dfffe79e44d2006d013baa404c35eb",
+      "command": "git diff --check && mkdir -p build/agents/T-20260905-022/focused/obj_dir4 && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fp_scalar_r18_tb -Mdir build/agents/T-20260905-022/focused/obj_dir4 -o lcvex_fp_scalar_r18_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r18_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050; single compile thread; reported allocated memory 114.375 MB"
+    },
+    {
+      "run_id": "owner-focused-runtime-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "b1041c1347dfffe79e44d2006d013baa404c35eb",
+      "command": "build/agents/T-20260905-022/focused/obj_dir4/lcvex_fp_scalar_r18_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "既有 R18 normal/tiny/pause/kill/reset/valid-drop 边界全绿；新增 zero、special、predecoded lead，以及 H/S/D 各 256 个 lead position（每个位置同时带一个更低位以检查优先级）全绿。"
+    },
+    {
+      "run_id": "owner-verilator-legacy-lint-005",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b1041c1347dfffe79e44d2006d013baa404c35eb",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL --top-module lcvex_fp_scalar_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_tb.sv",
+      "exit_code": 0,
+      "result": "pass_with_preexisting_pinmissing_warnings",
+      "notes": "仅报告既有 legacy TB 未连接 iter_busy/iter_done 的 PINMISSING；无本任务新增诊断。"
+    },
+    {
+      "run_id": "owner-evidence-json-parse-006",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b1041c1347dfffe79e44d2006d013baa404c35eb",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260905-022.json >/dev/null && git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t022-focused-verilator-binary",
+      "uri": "build/agents/T-20260905-022/focused/obj_dir4/lcvex_fp_scalar_r18_tb",
+      "sha256": "43af91ae1e0b33f2ab74a5e6479c1907ab30e76232fc37cbdfb613ad1016792f",
+      "bytes": 869960,
+      "owner": "codex-r19-scan",
+      "retain_until": "task-close",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fp_scalar_r18_tb -Mdir build/agents/T-20260905-022/focused/obj_dir4 -o lcvex_fp_scalar_r18_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r18_tb.sv"
+    }
+  ],
+  "integrator_validation": {
+    "candidate_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+    "independent_review": "pass: all 256 indices, multi-hot highest priority, zero/special/predecoded bypass and 4-state behavior reviewed with no RTL blocker",
+    "owner_provenance_note": "Owner run source_sha fields name the clean worktree parent because the tests ran before the commit; the recorded RTL/TB hashes bind that content. Integrator reruns below bind acceptance to the immutable candidate SHA.",
+    "focused": {
+      "result": "pass",
+      "log": "build/agents/T-20260905-023/1c566325/focused/all.log",
+      "sha256": "08672b72e1efd5a76cbfa2fd85539be2d69dbf7ad049ae414af39609c21f480f",
+      "summary": "zero/special/predecoded and H/S/D x 256 leading positions plus R18 normal/tiny/pause/kill/reset/valid-drop"
+    },
+    "l0_l1": {
+      "result": "pass",
+      "log": "build/agents/T-20260905-023/1c566325/l0-l1/all.log",
+      "sha256": "91f392857ac60b819a6c47fea269d092570cf42ce43fff31034fdf8e46c72a9b",
+      "summary": "scalar/NEON H/S/D, FMA/conversion, sqrt/minmax/round and backpressure suites all pass"
+    },
+    "l2": {
+      "result": "pass",
+      "scope": "affected strict D+E union",
+      "strict_commits": 1155,
+      "batch_d_sha256": "b72128baba8d37fe78f86b437e0c711b6517f7308c8e346d3959be46997c97e0",
+      "batch_e_sha256": "b47fd3fb4ccf147dca3756b0ded3123f618a66b3a1d6c45a90a7b4ab4aa650e1"
+    },
+    "physical_timing": "pending; balanced structure may still expose quadrant priority or 16:1 mux paths"
+  },
+  "not_run": [
+    "full Gate D and the unaffected L2 A-C/F batches",
+    "Quartus synthesis/fitter/signoff STA and new top-N",
+    "assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on and board test"
+  ],
+  "policy": {
+    "active_task_modified": true,
+    "core_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "round_pack_p2_modified": false,
+    "state_enum_or_latency_modified": false,
+    "false_path_added": false,
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "heavy_verilator_or_qemu_started": true,
+    "quartus_or_assembler_started": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false
+  },
+  "known_limits": [
+    "Owner focused L0/L1 is green, but the integrator must rerun the affected union on the merged candidate; this evidence is not an L2 or Gate D result.",
+    "Actual post-fit timing, logic depth, area and top-N replacement require fresh STA using the merged SHA and the R18 physical manifest.",
+    "The legacy linear leading_one_index helper used by iterative DIV/SQRT predecode was intentionally outside this task's round_pack_scan write region and was not changed.",
+    "No timing improvement or timing closure is claimed until fresh physical STA."
+  ],
+  "validation": {
+    "write_set_review": "pass: RTL, focused SV test, handoff and evidence only",
+    "rtl_lint": "pass",
+    "focused_verilator_compile": "pass",
+    "focused_runtime": "pass",
+    "legacy_parameter_lint": "pass_with_preexisting_pinmissing_warnings",
+    "json_parse": "pass",
+    "heavy_validation": "integrator_affected_l0_l2_pass",
+    "physical_validation": "pending"
+  },
+  "handoff": "docs/handoffs/T-20260905-022-r19-fp-balanced-scan.md",
+  "next": "Integrator reviews this single-lane commit, merges it into the R19 batch candidate with T-021 as permitted by the parent write-region contract, reruns affected L0-L2, then performs one fresh synthesis/fitter/signoff STA; no board action is authorized."
+}

@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: LCVEX <noreply@lcvex.local>
+Date: Tue, 25 Aug 2026 19:00:00 +0800
+Subject: [PATCH 8/8] plugin: expose CNTVCT at wait resume
+
+LCVEX step mode needs to distinguish an actual WFI/WFxT halt from a helper
+that returns immediately because cpu_has_work() is true. Expose the current
+virtual CNTVCT through the existing LCVEX plugin API so the plugin can report
+the exact timer value when a real wait resumes. The Verilator coordinator
+uses this sideband to synchronize its non-architectural idle clock without
+using host time.
+
+---
+ include/plugins/qemu-plugin.h   | 5 +++++
+ target/arm/tcg/lcvex-difftest.c | 12 ++++++++++++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/include/plugins/qemu-plugin.h b/include/plugins/qemu-plugin.h
+index 0000000000..0000000000 100644
+--- a/include/plugins/qemu-plugin.h
++++ b/include/plugins/qemu-plugin.h
+@@ -334,5 +334,10 @@
+ QEMU_PLUGIN_API
+ int qemu_lcvex_difftest_restore_timer_state(const char *path);
+-
++/* 当前 step 回调中的 CNTVCT_EL0 架构可见值。等待恢复时 plugin 将它传给
++ * Verilator 协调器以校正 DUT 虚拟计时；非 LCVEX step 或错误 vCPU 返回
++ * UINT64_MAX。 */
++QEMU_PLUGIN_API
++uint64_t qemu_lcvex_difftest_get_cntvct(unsigned int vcpu_index);
++
+ /** struct qemu_plugin_tb - Opaque handle for a translation block */
+ struct qemu_plugin_tb;
+diff --git a/target/arm/tcg/lcvex-difftest.c b/target/arm/tcg/lcvex-difftest.c
+index 0000000000..0000000000 100644
+--- a/target/arm/tcg/lcvex-difftest.c
++++ b/target/arm/tcg/lcvex-difftest.c
+@@ -132,5 +132,17 @@
+     return lcvex_timer_offset_valid ? lcvex_timer_offset : 0;
+ }
+-
++uint64_t qemu_lcvex_difftest_get_cntvct(unsigned int vcpu_index)
++{
++    CPUState *cs = qemu_get_cpu(vcpu_index);
++    CPUARMState *env;
++
++    if (!qemu_lcvex_difftest_active() || cs == NULL || cs != current_cpu) {
++        return UINT64_MAX;
++    }
++    env = cpu_env(cs);
++    return gt_get_countervalue(env) -
++           gt_direct_access_timer_offset(env, GTIMER_VIRT);
++}
++
+ int qemu_lcvex_difftest_restore_timer_state(const char *path)
+ {

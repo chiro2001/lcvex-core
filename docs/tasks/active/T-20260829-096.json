@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-096",
+  "label": "B3-contextidr",
+  "parent": "T-20260828-072",
+  "title": "B3 后续：CONTEXTIDR_EL1 与系统寄存器全量 reset/权限矩阵 probe",
+  "kind": "core-isa-b3-contextidr-probe",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "409c6fa0ac893a647f2fd1053b1ac2e5bedb9360",
+  "branch": "feature/T-20260829-096-b3-contextidr-probe",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-096",
+  "scope": "承接 T-093：优先实现 CONTEXTIDR_EL1（core 状态、reset、EL0/EL1 权限、checkpoint 影响评估），并补系统寄存器全量 reset/权限矩阵 probe（qemu_sysreg_inventory 或等价），对照 V82-BASE+SELECTED-EXT 清单标记支持/未支持/后置。",
+  "writes": [
+    "rtl/**",
+    "tb/sv/**",
+    "sim/**",
+    "docs/handoffs/T-20260829-096-b3-contextidr-probe.md",
+    "docs/tasks/evidence/T-20260829-096.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_GAPS.md",
+    "docs/handoffs/T-20260829-093-b3-remainder.md",
+    "rtl/**",
+    "tb/**",
+    "scripts/**"
+  ],
+  "validation": {
+    "l0": [
+      "make compile 默认优化通过",
+      "CONTEXTIDR_EL1 MRS/MSR/reset/权限定向 TB 通过"
+    ],
+    "l1": [
+      "系统寄存器全量矩阵 probe 输出可机检，不与已支持清单冲突"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "CONTEXTIDR_EL1 正确实现且 checkpoint/sidecar 影响说明清晰；矩阵 probe 交付明确的已支持/后置/未知清单。",
+  "next": "B3 关键缺口闭合后进入 B4 覆盖闭合；若存在未知项则继续拆分。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T12:08:05+08:00",
+  "updated_at": "2026-08-29T12:08:05+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T12:08:05+08:00",
+    "agent_name": "b3_contextidr_probe",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-096"
+  },
+  "known_limits": [
+    "任何 QEMU/checkpoint 协议改动必须显式声明并做最小切片。",
+    "不引入 SVE/POST-V82；不启动 Quartus。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-096-b3-contextidr-probe.md",
+  "evidence": "docs/tasks/evidence/T-20260829-096.json",
+  "merge_sha": "fb687e039eb937c3dee1f34244e676271e635726",
+  "merged_at": "2026-08-29T12:17:18+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T12:17:18+08:00",
+    "status": "accepted",
+    "head_sha": "86a2d7bfdf6efc34ca83f6f0a8c7d452399504de",
+    "notes": "B3 CONTEXTIDR_EL1 implemented (EL1 RW, reset 0); all B3 SV TBs and make compile pass. Checkpoint/sidecar v4 full restore remains as separate global task, explicitly not claimed."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T12:40:00+0800",
+        "new": "2026-08-29T12:08:05+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T12:40:00+0800",
+        "new": "2026-08-29T12:08:05+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T12:40:00+0800",
+        "new": "2026-08-29T12:08:05+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T13:00:00+0800",
+        "new": "2026-08-29T12:17:18+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T13:00:00+0800",
+        "new": "2026-08-29T12:17:18+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "592744fa63a8f57857bbe0a6615979247d4591ab",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "592744fa63a8f57857bbe0a6615979247d4591ab"
+}

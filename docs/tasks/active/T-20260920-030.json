@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-030",
+  "label": "B25-LOGIC-IMM-REPAIR-VOLATILE-SOF",
+  "title": "Generate one content-addressed volatile SOF from the accepted T-027 fitted database",
+  "kind": "assembler-package",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-single-assembler-sof-pass",
+  "assigned_owner": "asm_t030",
+  "depends_on": ["T-20260920-026", "T-20260920-027", "T-20260920-028", "T-20260920-029"],
+  "base_sha": "2e7d237bb9d442ed3d174eb606140786e8428717",
+  "branch": "verify/T-20260920-030-b25-logic-imm-repair-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-030",
+  "remote_source": "D:/Projects/fpga-altra/lcvex/build/T-20260920-027-b25-logic-imm-repair-fresh-physical",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof",
+  "writes": [
+    "build/agents/T-20260920-030/** ignored assembler runners/logs/artifacts",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/** task-owned exact clone",
+    "docs/tasks/evidence/T-20260920-030.json",
+    "docs/handoffs/T-20260920-030-b25-logic-imm-repair-volatile-sof.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-020.json and its task-local runner as the accepted assembler template only",
+    "docs/tasks/evidence/T-20260920-027.json",
+    "docs/tasks/evidence/T-20260920-028.json",
+    "docs/tasks/evidence/T-20260920-029.json",
+    "T-027 remote source root read-only"
+  ],
+  "input_contract": {
+    "physical_candidate_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+    "physical_candidate_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+    "source_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06",
+    "stage_manifest_sha256": "ad7643fdb7b66816776e5cffa8a2982e43979947da7de1711e411087f3dd1e4f",
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "qsf_sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46",
+    "qsf_normalized_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "fit_report_sha256": "2c6793d38a70a5717b6e5589e5b231f672f91e0fc77f40c0122cee1bb6bf15ba",
+    "sta_report_sha256": "27a2a95ee39f2298b46a8f6aad57e00d701f9b3e8280bc1b1ef6272eca4a9fd1",
+    "normalized_sld_sopcinfo_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+    "preexisting_configuration_artifacts": 0
+  },
+  "scope": "Create a never-before-used task-owned byte-identical clone of the accepted T-027 post-STA project, verify source and fitted database identities, invoke Quartus assembler exactly once, and seal the single volatile catapult_a10.sof with size, SHA-256, Quartus checksum, design hash and JTAG usercode.",
+  "acceptance": {
+    "freshness": "The T-030 remote root must not preexist. Copy only from the exact T-027 accepted physical root; never import T-017/T-020 or any other DB/SOF.",
+    "source": "T-027 source pre/post manifest remains identical and the T-030 clone baseline matches it byte-for-byte; QPF/QSF/SDC/boot/fit/STA identities match the input contract.",
+    "database": "The fitted database payload remains unchanged. Only an explicitly reviewed assembler metadata delta is allowed, with zero removed paths and zero changes below final/partitioned/synthesized payloads.",
+    "assembler": "Invoke exactly once: quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10. Require Successful, zero errors, zero warnings and exact command identity in stdout/report.",
+    "artifacts": "Exactly one catapult_a10.sof exists; POF/JIC/RBF/JBC/SVF/JAM counts are zero. Record and fetch SOF bytes/hash/checksum/design hash/usercode plus reports and immutable manifests.",
+    "warning_boundary": "No synthesis warning is hidden or reinterpreted. T-028 remains the source-qualified synthesis acceptance evidence; assembler neither filters nor regenerates synthesis evidence.",
+    "boundary": "No synthesis, fitter, STA, source edit, programmer, JTAG terminal, FPGA configuration, Flash/JIC/EPCQ, reset, power or unknown-process termination."
+  },
+  "resource": "Every GamePC preflight/clone/query/assembler/fetch action holds resource-lock gamepc. Require no conflicting EDA/programmer/terminal process; never stop an unknown or pre-existing process. One Quartus process only, event-driven monitoring with waits up to one hour.",
+  "forbidden_regions": [
+    "tracked source, RTL, firmware, QSF, SDC, IP, policy or expected-result modification",
+    "synthesis, fitter, STA, timing optimization or reuse of another candidate database/SOF",
+    "POF/JIC/RBF/JBC/SVF/JAM and all persistent Flash/EPCQ formats",
+    "quartus_pgm, jtagconfig, nios2-terminal, FPGA configuration, board/SoC reset or power action",
+    "stopping unknown or pre-existing processes"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T17:16:04+08:00",
+    "agent_name": "asm_t030",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "partial": false,
+    "topic_evidence_head": "9125403ab74ce6ba290120a43f74a9b1122cc476",
+    "integration_validation_sha": "1d879ab79e8b30a495237c10aa07c91f07a9a2e5",
+    "assembler_invocation_count": 1,
+    "database_delta": "added=3 changed=3 removed=0 physical_payload_changed=0",
+    "sof": {
+      "bytes": 36842105,
+      "sha256": "bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264",
+      "quartus_checksum": "0x315AC2B3",
+      "design_hash": "0CC907F3DD48A9C78864E3C5BD66B9AF",
+      "jtag_usercode": "0xFFFFFFFF",
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof"
+    },
+    "persistent_formats": "POF/JIC/RBF/JBC/SVF/JAM all zero",
+    "evidence": "docs/tasks/evidence/T-20260920-030.json",
+    "handoff": "docs/handoffs/T-20260920-030-b25-logic-imm-repair-volatile-sof.md",
+    "next": "authorized volatile board interaction with paced ?/p/d/Z and golden rollback control"
+  },
+  "created_at": "2026-09-20T17:15:01+08:00",
+  "updated_at": "2026-09-20T17:36:12+08:00"
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-041",
+  "label": "PE-F1A",
+  "parent": "T-20260830-033",
+  "title": "F1a 2-entry fetch FIFO 与 local epoch/quarantine",
+  "kind": "performance-frontend-implementation",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-impl",
+  "agent_type": "implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "model_scope": "按 T-039 冻结契约实现 F1a；首回合只编码/测试骨架，不运行构建或仿真，等待集成者释放重型测试槽。",
+  "depends_on": [
+    "T-20260830-039"
+  ],
+  "base_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+  "branch": "feature/T-20260830-041-pe-f1a-fetch-fifo",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-041",
+  "scope": "实现 F1a：core 内可关闭的 2-entry fetch FIFO、local fetch epoch/token 与 flush 后 stale-response quarantine；MMU 取指翻译和 I-L1 请求仍各最多一个在途，I-L1 仍完整行成功后响应。新增定向 SV/Cocotb/锁步测试骨架和必要入口。默认关闭时保持旧前端行为；不实现 F1b early-restart、BTB/RAS、多 outstanding 或推测提交。首回合完成代码/测试骨架后主动报告 test_slot_requested，不运行任何构建/仿真；后续由集成者 follow-up 释放串行测试槽。",
+  "planning_guidance": {
+    "implementation": [
+      "以 docs/PERFORMANCE_F1_PREWORK.md 为冻结依据；FIFO 深度固定 2，entry 至少含 valid/epoch/seq/pc_va/insn/fault/fsc。",
+      "公共 mem_req_t/mem_rsp_t ABI 不改；保持一个 fetch translation 和一个 imem request 在途。flush/reset/TLBI/IC/异常/IRQ/WFI/ERET 后旧 response 只能消费丢弃，quarantine 清空前不得发新请求。",
+      "统一 frontend_kill 只 bump epoch 一次；reset 清 FIFO/IFID/context，data/response 不得跨 epoch push、译码或 IABT merge。",
+      "默认参数 FETCH_FIFO_ENABLE=0 必须走语义等价 legacy 路径；enabled 路径不改变 commit_packet、架构状态只在 commit 更新、commit_ready 背压语义。",
+      "F1a 不修改 lcvex_l1_i/mmu/mem_arb/pkg；若 local quarantine 无法成立，停止并报告需要 F1a-proto，不得扩大写集。"
+    ],
+    "test_slot": "首回合禁止运行 Verilator/Cocotb/QEMU/生成器；提交 code+test scaffolding+partial evidence 后主动回报。只有收到集成者带时间戳 follow-up 才能按 cgroup<16GiB、-j1 串行运行 L0-L2。",
+    "stop_conditions": [
+      "需要两个无身份 fetch/MMU response 同时在途",
+      "stale response 可能进入 FIFO/IFID/fault merge",
+      "需要修改 pkg/l1_i/mmu/mem_arb 或 G5 写集",
+      "standalone reset-vector fetch fault 需要伪造 commit packet",
+      "默认关闭路径无法保持现有行为"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/cocotb/Makefile.fetch_fifo",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_f1a.sh",
+    "Makefile",
+    "docs/handoffs/T-20260830-041-pe-f1a-fetch-fifo.md",
+    "docs/tasks/evidence/T-20260830-041.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/COMMIT_PACKET.md",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_mmu.sv",
+    "rtl/lcvex_mem_arb.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/lcvex_core_tb.sv",
+    "tb/sv/lcvex_commit_backpressure_tb.sv",
+    "sim/cocotb/test_lcvex_core.py",
+    "sim/difftest/run_lockstep_step.sh"
+  ],
+  "context_docs": [
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/ARCHITECTURE.md"
+  ],
+  "validation": {
+    "l0": [
+      "首回合仅 git diff --check、允许写集和测试骨架静态核对；不运行构建/仿真",
+      "test slot 释放后：F1a 定向 SV 覆盖 FIFO push/pop/full、flush 优先、stale response、reset 和 commit_ready"
+    ],
+    "l1": [
+      "test slot 释放后：Cocotb 覆盖 MMU on/off、branch/system/TLBI/IC/IRQ/WFI/ERET、随机 response delay/backpressure",
+      "feature off 的 core/soc/commit backpressure 受影响回归"
+    ],
+    "l2": [
+      "test slot 释放后：定向 QEMU strict lockstep，覆盖 branch、MMU、维护、WFI/IRQ 和 fetch fault 边界"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "feature off 路径回归等价；feature on 的 2-entry FIFO 在所有 kill/reset/MMU/维护/异常边界不丢不重、不接收 stale response，单发射/顺序提交和 commit backpressure 保持。完整 L0-L2 未执行前只能 active/review，不能 done；不宣称 F1b 或性能收益。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "test_slot": {
+    "status": "completed",
+    "reason": "T-038 owns current heavy Verilator/remote synthesis wave",
+    "released_at": "2026-08-30T16:51:53+08:00",
+    "release_rule": "integrator follow-up with Asia/Shanghai sent_at after T-038 active heavy work ends"
+  },
+  "created_at": "2026-08-30T16:11:40+08:00",
+  "updated_at": "2026-08-30T19:17:56+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T16:15:06+08:00",
+    "agent_name": "t041_pe_f1a_impl_luna",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-041"
+  },
+  "handoff": "docs/handoffs/T-20260830-041-pe-f1a-fetch-fifo.md",
+  "evidence": "docs/tasks/evidence/T-20260830-041.json",
+  "merge_sha": "372b4a9fa92bd17584e196844d55526df8f7563b",
+  "merged_at": "2026-08-30T19:17:56+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T19:17:56+08:00",
+    "status": "accepted",
+    "owner_head_sha": "8e91df54ae251869779b3e7ebcaaf735df158aa0",
+    "checks": [
+      "owner worktree clean and ten-file write set matched",
+      "feature-on coordinator build commands and three binary variants independently verified",
+      "owner diagnostic failure hashes matched evidence",
+      "merge-SHA feature-on SV/Cocotb and feature-off lint/backpressure passed",
+      "merge-SHA feature-on fetch/MMU/TLBI strict lockstep 6/6 and feature-off MMU/TLBI 2/2 passed",
+      "combined G5+F1a Catapult SoC lint passed"
+    ],
+    "notes": "F1a accepted with public single-outstanding/no-response-ID constraint. F1b and performance benefit remain unclaimed and separately gated."
+  },
+  "known_limits": [
+    "首回合不运行构建、仿真、QEMU 或生成器；重型验证必须等集成者 follow-up。",
+    "不实现 F1b critical-word-first、BTB/RAS、2-wide、多 outstanding 或公共协议 ID。",
+    "不修改 G5 cache RAM 写集、QEMU fork 或 checkpoint 协议。"
+  ],
+  "next": "F1a 已合入并验收；F1b 继续受 later-beat-fault safety gate 阻塞，性能收益须由 F1c 同 SHA 测量任务验证。"
+}

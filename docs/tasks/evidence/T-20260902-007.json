@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-007",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+  "head_sha": "d0439d6d6e8d3002c311f8c5d368389e3cc28695",
+  "branch": "verify/T-20260902-007-a10-full-fp-synth-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-007",
+  "scope": "在远端隔离 probe 用 T-004 修复后的 RTL 重跑真实 A10 full-FP synthesis，采集 wall/峰值/退出/资源估计；只到 synthesis，不运行 fit/STA/SOF。",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "candidate_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-002\\candidate",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-007-probe",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-007-probe\\real_a10_full_fp",
+    "project_name": "real_a10_full_fp",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "license_read": false,
+    "original_candidate_modified": false
+  },
+  "preflight": {
+    "timestamp": "2026-09-02T13:07:52.4222402+08:00",
+    "candidate_exists": true,
+    "candidate_child_count": 4,
+    "probe_project_exists": true,
+    "project_qpf_exists": true,
+    "project_qsf_exists": true,
+    "project_sdc_exists": true,
+    "src_fp_scalar_exists": true,
+    "src_neon_fp_exists": true,
+    "src_neon_int_exists": true,
+    "physical_total_mb": 63092.3,
+    "physical_free_mb": 48079.1,
+    "pagefile_allocated_mb": 12800,
+    "pagefile_current_mb": 175,
+    "pagefile_available_mb": 12625.0,
+    "safe_window_mb": 48563.3,
+    "disk_d_free_gb": 86.99,
+    "eda_compile_processes": []
+  },
+  "source_sync": {
+    "files": [
+      {
+        "name": "lcvex_fp_scalar.sv",
+        "local_len": 69768,
+        "local_sha256": "e9ad934edc8638a35cd28ea27d14df8ad5a37d2c907af83325c11e1885086af1",
+        "remote_len": 69768,
+        "remote_sha256": "E9AD934EDC8638A35CD28EA27D14DF8AD5A37D2C907AF83325C11E1885086AF1"
+      },
+      {
+        "name": "lcvex_neon_fp.sv",
+        "local_len": 7429,
+        "local_sha256": "7fe04325421ddc9cb589f484fcb79b535a92145a250c327c561cb44cf344cb2c",
+        "remote_len": 7429,
+        "remote_sha256": "7FE04325421DDC9CB589F484FCB79B535A92145A250C327C561CB44CF344CB2C"
+      },
+      {
+        "name": "lcvex_neon_int.sv",
+        "local_len": 6709,
+        "local_sha256": "08683b3dc40f267c59fecbf489e8409748fd77f25bf215e668efa1f8d95a764f",
+        "remote_len": 6624,
+        "remote_sha256": "D974A96C8DF32E7BF46A2DAC911CD1D415E6A7DBDEE2E8D34C577B5BFDC66723",
+        "note": "probe modified (added full lane-width clamps); repo file unchanged"
+      }
+    ],
+    "repository_rtl_modified": false
+  },
+  "compatibility_patch": {
+    "file": "src/lcvex_neon_int.sv",
+    "purpose": "Quartus 21.4 static elaboration still reports index*32 out of range for set_lane because loop index is not proven within lane_count; clamp all lane widths to legal maxima (8->15, 16->7, 32->3, 64->1) as in T-001 simple patch.",
+    "diff_artifact_local": "build/agents/T-20260902-007/lcvex_neon_int.quartus-compat.patch (build/ ignored, not committed)",
+    "repo_change_pending": true
+  },
+  "runs": [
+    {
+      "run_id": "full-fp-t004-as-is",
+      "stage": "synthesis",
+      "project": "real_a10_full_fp",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "result": "fail_elaboration",
+      "started_at": "2026-09-02T13:08:40.6230368+08:00",
+      "finished_at": "2026-09-02T13:09:51.1777045+08:00",
+      "wall_s": 70.555,
+      "exit_code": 3,
+      "peak_private_mb": 2283.4,
+      "peak_working_set_mb": 2276.0,
+      "peak_virtual_mb": 7038.7,
+      "errors": "lcvex_neon_int.sv(85): index 128 is out of range [127:0] for 'set_lane'",
+      "warnings": 20,
+      "resource_available": false,
+      "note": "T-004 as merged only guarded 64-bit lane indices; Quartus 21.4 reports 32-bit lane slice out of range before synthesis."
+    },
+    {
+      "run_id": "full-fp-probe-clamp",
+      "stage": "synthesis",
+      "project": "real_a10_full_fp",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "result": "pass",
+      "started_at": "2026-09-02T13:11:16.6477603+08:00",
+      "finished_at": "2026-09-02T15:12:31.8073579+08:00",
+      "wall_s": 7275.16,
+      "exit_code": 0,
+      "peak_private_mb": 12618.9,
+      "peak_working_set_mb": 12248.3,
+      "peak_virtual_mb": 17632.1,
+      "samples": 6802,
+      "safety_stopped": false,
+      "safe_window_mb": 41333.2,
+      "stop_at_mb": 39266.5,
+      "errors": 0,
+      "warnings": 38,
+      "resource": {
+        "estimate_alms": 493378,
+        "combinational_aluts": 731869,
+        "dedicated_logic_registers": 80715,
+        "io_pins": 144,
+        "mlab_bits": 0,
+        "block_memory_bits": 247276,
+        "dsp_blocks": 186,
+        "plls": 1,
+        "max_fanout_node": "sys_clk_div2",
+        "max_fanout": 73081,
+        "total_fanout": 3589334
+      },
+      "reports": [
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-007-probe\\real_a10_full_fp\\output_files\\real_a10_full_fp.syn.rpt",
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-007-probe\\real_a10_full_fp\\output_files\\real_a10_full_fp.syn.summary"
+      ],
+      "note": "All lane widths clamped in probe src; elaboration passed and synthesis completed with final resource report."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-007-a10-full-fp-synth-rerun.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-007.json"
+    },
+    {
+      "id": "remote-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-007-probe\\real_a10_full_fp",
+      "artifacts": [
+        "monitor_result.json (sha256 28CBEFAF034E6D8E69A4A879AA0FD203D329541B731F2DD30884A5E716416EF2)",
+        "output_files/real_a10_full_fp.syn.rpt (sha256 3C8C3BF64FB9DB1FC56C29AB37A6C955F5BA7153B4C58FAF0508153C378700BC)",
+        "output_files/real_a10_full_fp.syn.summary (sha256 76114C059E5680A7F0C4669180E4995EE90DF01F888A60B3667F09886F2DEB05)",
+        "output_files/real_a10_full_fp.syn.smsg (sha256 4FA0089DF02EDA796F8A94767ED519808605EBC897F5DB397FA2C02CC82475B3)",
+        "output_files/real_a10_full_fp.flow.rpt (sha256 E10FC4FBC2003595ADDFBD694DECDB648BA801E1E484A357BAED5169F2387E3C)"
+      ]
+    }
+  ],
+  "known_limits": [
+    "T-004 merged RTL still has incomplete Quartus lane-index protection; first run failed at elaboration.",
+    "The successful synthesis used a probe-only lcvex_neon_int.sv full lane-width clamp; repository RTL is unchanged and still needs the fix.",
+    "Full-FP resource estimate is very large (ALM 493,378, DSP 186); fitter/STA are not run and must be staged individually.",
+    "No fit/STA/assembler/SOF/JIC/programming run.",
+    "No license content read; no candidate original files modified; no files deleted."
+  ],
+  "next": "Merge lane-index full clamp into rtl/lcvex_neon_int.sv, rerun on merge SHA, then proceed to fitter/STA/assembler with single-job staged execution.",
+  "timestamps": {
+    "sent_at": "2026-09-02T13:05:00+08:00",
+    "received_at": "2026-09-02T13:03:55+08:00",
+    "reported_at": "2026-09-02T15:14:40+08:00"
+  },
+  "merge_sha": "60738c36c8a1cd171e18c6635e720b284b81c263",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-02T15:14:40+08:00",
+    "merged_at": "2026-09-02T15:16:50+08:00",
+    "recorded_at": "2026-09-02T15:16:50+08:00",
+    "notes": "Blocked evidence merged; probe-only full lane clamp succeeded, repo RTL fix pending"
+  }
+}

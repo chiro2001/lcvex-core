@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-001",
+  "label": "B25-QUARTUS-SV-COMPAT",
+  "title": "Remove Quartus-incompatible input-port defaults without changing FP control semantics",
+  "kind": "rtl-compatibility-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-gate-d-green",
+  "assigned_owner": "b25_physical",
+  "depends_on": [],
+  "follows_from": "T-20260907-042",
+  "base_sha": "004b62c19cf2ff4dfd0fb721332fc3a651ed7b99",
+  "branch": "fix/T-20260908-001-b25-quartus-sv-compat",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-001",
+  "scope": "Make lcvex_fp_scalar and its internal divider legal in Quartus Prime Pro 21.4 by removing input declaration defaults and proving every instantiation explicitly drives the affected controls. Preserve all FP iterative kill/pause behavior and latency.",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv::FP_ITER=0 scalar_lane instantiation only",
+    "tb/sv/lcvex_fp_scalar_tb.sv::dut port connections only",
+    "tb/sv/lcvex_fp_scalar_p7_4_tb.sv::dut port connections only",
+    "tb/sv/lcvex_fp_scalar_p7_5_tb.sv::dut port connections only",
+    "new task-specific focused test/runner only if needed",
+    "docs/tasks/evidence/T-20260908-001.json",
+    "docs/handoffs/T-20260908-001-b25-quartus-sv-compat.md",
+    "build/agents/T-20260908-001/** ignored artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260907-042.json",
+    "all lcvex_fp_scalar/lcvex_fp_divider instantiations",
+    "existing R18/R20/R21 FP focused tests"
+  ],
+  "validation": [
+    "Enumerate all affected module instantiations and prove no port becomes floating.",
+    "Run syntax/lint plus the existing focused FP iterative control tests; acquire local for any heavy Verilator build.",
+    "Do not run GamePC Quartus in this task; the integration candidate gets one fresh physical rerun after merge."
+  ],
+  "acceptance": "No SystemVerilog input port has a declaration initializer; every affected control is explicitly connected; focused Verilator behavior is unchanged and lint passes.",
+  "resource": {
+    "lock": "local-if-heavy",
+    "policy": "Use resource-lock run local for every heavy build; task-local TMPDIR/build output; return 75 means wait."
+  },
+  "forbidden_regions": [
+    "rtl outside lcvex_fp_scalar.sv unless the integrator expands writes",
+    "QEMU/reference/test expectation changes",
+    "GamePC/Quartus/assembler/SOF/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T11:18:18+08:00",
+  "updated_at": "2026-09-08T13:14:54+08:00",
+  "result_head": "66a1883c2bb312944e2e893e71107250b4da8f3e",
+  "integrated_head": "269342c5",
+  "integrator_review": {
+    "received_at": "2026-09-08T11:44:47+08:00",
+    "reviewed_at": "2026-09-08T11:45:43+08:00",
+    "status": "accepted-gate-d-green",
+    "blocker": null,
+    "followup_received_at": "2026-09-08T12:02:41+08:00",
+    "followup_reviewed_at": "2026-09-08T12:04:18+08:00",
+    "gate_d_candidate_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+    "gate_d_evidence": "docs/tasks/evidence/T-20260908-005.json",
+    "pending": "No local task acceptance item remains; fresh Quartus physical is a downstream gate and waits for GamePC recovery."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-08T11:23:14+08:00",
+    "agent_name": "b25_physical",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "8316a1b8b94010ea31cf791e441e3f065197e841"
+  }
+}

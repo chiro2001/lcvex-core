@@ -1,0 +1,333 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-074",
+  "label": "A0 开源综合工具链能力矩阵与可行性验证",
+  "state": "review",
+  "captured_at": "2026-08-29T02:01:14+08:00",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "branch": "feature/T-20260829-074-a0-toolchain-capability",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-074",
+  "verdict": {
+    "verilator_sv_consume": "PASS for minimal, package/struct/interface/modport samples, real lcvex_axi4_master/lcvex_l2, and full lcvex_core lint (exit 0, ~552s). Full SoC-top lint elaborates but exits 1 on 12 warnings (UNSIGNED/MULTIDRIVEN), not on unsupported SV syntax.",
+    "yosys_direct_sv_synth": "BLOCKED for current RTL. Yosys cannot parse package/import, interface/modport ports, or unpacked-array ports in rtl/lcvex_core.sv. A plain-Verilog subset is synthesizable.",
+    "sv2v": "UNAVAILABLE in this environment; no prebuilt binary found and AUR build failed on missing Haskell package files from the configured mirror.",
+    "nextpnr_ecp5": "AVAILABLE and verified on a minimal ECP5 smoke (LFE5U-85F). It is an ECP5 proxy only, not Arria 10 / Quartus.",
+    "vtr": "Package (VPR 9.0.0) installed but not used for A0 acceptance; no full VTR architecture/flow exercised."
+  },
+  "tools": {
+    "verilator_project": "5.050 conda-forge lcvex",
+    "verilator_oss": "5.051 devel v5.050-281-g1ad9acd22",
+    "yosys_oss": "0.68+136 (git c30457480-dirty)",
+    "yosys_system": "0.66-1 Arch extra",
+    "nextpnr": "nextpnr-0.11.1-18-gdec04b3b (oss-cad-suite 20260828)",
+    "iverilog_oss": "14.0 devel s20260301-391-g64f13540a",
+    "iverilog_system": "13.0-1 Arch extra",
+    "sv2v": "N/A (not found)",
+    "vtr_vpr": "9.0.0-dev+unkown Arch vtr 9.0.0-1"
+  },
+  "inputs": {
+    "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60",
+    "rtl/lcvex_core.sv": "331b11adc1f4e191dcbdc3f59cf54203c48faa1efee46d3d9d34c59a0186a31e",
+    "rtl/lcvex_axi4_master.sv": "0fdaf8e151a1136e0641f8fc073757a1b9c7bc3b5a5248ca71f5b76171892fe2",
+    "rtl/lcvex_l2.sv": "b879bed0e925823d24b0f5493751bba6824fc4560d7f3941370e0dd468866422",
+    "rtl/lcvex_catapult_soc_top.sv": "f8082f8a0c28af6dc2af5f87972df5b8e1c6f74ebd65f8f6df43f6c3f23f0ff3",
+    "rtl/filelist.f": "a28a62a38dcaba3f3752b01f9ba8cbb7b6d7ec81170aaac304bb5a6844fbb63c",
+    "fpga/catapult_a10/tb/filelist_soc.f": "6008d3a14aba77b15c7c09e8a59419def6f7f491f0ef76f7dd136aeca23dae8d",
+    "fpga/opensynth/examples/minimal_counter.sv": "04ce2be24e939a96aef4f8e65d69f02f14d75b9a16e5c5d2686fdd85bb6edbdb",
+    "fpga/opensynth/examples/sv_pkg_struct.sv": "dcc509af4d2bfadb55c2eee750ec4780ff928f266af68ab94ca8a421fcffd20d",
+    "fpga/opensynth/examples/sv_features.sv": "95e4c054921c814f3182d7ee443958d8a8df5911d746618320ddc2937a50abd6"
+  },
+  "feature_blockers": [
+    {
+      "feature": "package + import",
+      "tools_fail": [
+        "yosys (system 0.66 and oss 0.68)"
+      ],
+      "tools_pass": [
+        "verilator",
+        "iverilog (pkg_struct sample)"
+      ],
+      "evidence": "yosys_pkg_struct.log: syntax error unexpected TOK_IMPORT; core/axi4/l2 Yosys logs also fail at import or package-typed ports.",
+      "severity": "blocker for direct Yosys synthesis of current RTL"
+    },
+    {
+      "feature": "packed struct / enum",
+      "tools_fail": [
+        "yosys (blocked by import before reaching struct elaboration)"
+      ],
+      "tools_pass": [
+        "verilator",
+        "iverilog"
+      ],
+      "evidence": "sv_pkg_struct.sv and rtl/lcvex_pkg.sv; Verilator no-Wall exit 0; Icarus exit 0 on pkg_struct; Yosys fails at import.",
+      "severity": "blocker once package/import is needed; not established independently in Yosys"
+    },
+    {
+      "feature": "interface + modport",
+      "tools_fail": [
+        "yosys",
+        "iverilog"
+      ],
+      "tools_pass": [
+        "verilator"
+      ],
+      "evidence": "sv_features.sv line 32 syntax error (unexpected TOK_ID expecting ')' or ',' or '=') in Yosys; Icarus port declaration syntax error.",
+      "severity": "blocker for interface-based designs; current LCVEX RTL does not use interface/modport in its own source."
+    },
+    {
+      "feature": "unpacked array ports",
+      "tools_fail": [
+        "yosys"
+      ],
+      "tools_pass": [
+        "verilator"
+      ],
+      "evidence": "rtl/lcvex_core.sv line 42: output logic [63:0] fp_v_lo [0:31] -> Yosys syntax error unexpected '['.",
+      "severity": "blocker for direct Yosys elaboration of lcvex_core."
+    },
+    {
+      "feature": "SVA concurrent assertions",
+      "tools_fail": [
+        "iverilog (core/l2 logs: concurrent_assertion_item not supported / property_spec errors)"
+      ],
+      "tools_pass": [
+        "verilator (as lint/sim)"
+      ],
+      "evidence": "iverilog_lcvex_l2.log, iverilog_lcvex_core.log.",
+      "severity": "not relevant to synthesis but blocks iverilog as a full RTL parser."
+    },
+    {
+      "feature": "inside expression",
+      "tools_fail": [
+        "iverilog (core: sorry inside expressions not supported yet)"
+      ],
+      "tools_pass": [
+        "verilator"
+      ],
+      "evidence": "iverilog_lcvex_core.log lines with inside expressions.",
+      "severity": "blocks Icarus as real-core parser."
+    },
+    {
+      "feature": "vendor primitives / PLL / EMIF / Avalon / Qsys",
+      "tools": "N/A in rtl/",
+      "evidence": "grep found no Altera/Quartus primitives in rtl/*.sv; lcvex_catapult_soc_top exposes Avalon-MM/EMIF ports to external Qsys IP and instantiates only generic LCVEX RTL. There is no A10 device model in Yosys/nextpnr; ECP5 is not A10.",
+      "severity": "must be blackbox/stub for future A2; no A10 signoff claim."
+    }
+  ],
+  "attempts": [
+    {
+      "id": "minimal-counter-verilator",
+      "input": "fpga/opensynth/examples/minimal_counter.sv",
+      "tool": "verilator 5.050",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module minimal_counter -Wall fpga/opensynth/examples/minimal_counter.sv",
+      "result": "PASS",
+      "exit": 0,
+      "log": "fpga/opensynth/logs/verilator_minimal.log"
+    },
+    {
+      "id": "minimal-counter-yosys-ecp5",
+      "input": "fpga/opensynth/examples/minimal_counter.sv",
+      "tool": "yosys 0.68+136 (oss-cad-suite)",
+      "command": "yosys -q -p 'read_verilog -sv fpga/opensynth/examples/minimal_counter.sv; synth_ecp5 -json /tmp/minimal_ecp5.json'",
+      "result": "PASS",
+      "exit": 0,
+      "note": "Generated ECP5 JSON; this is a plain SV subset, not LCVEX RTL.",
+      "log": "fpga/opensynth/logs/oss_yosys_minimal_synth.log"
+    },
+    {
+      "id": "minimal-counter-nextpnr-ecp5-smoke",
+      "input": "/tmp/minimal_ecp5.json (from above)",
+      "tool": "nextpnr-ecp5 0.11.1-18",
+      "command": "nextpnr-ecp5 --json /tmp/minimal_ecp5.json --85k --package CABGA381 --seed 1 --lpf-allow-unconstrained --report /tmp/minimal_report.json --write /tmp/minimal_routed.json",
+      "result": "PASS",
+      "exit": 0,
+      "note": "ECP5 LFE5U-85F smoke: TRELLIS_FF 8/83640, TRELLIS_COMB 16/83640, TRELLIS_IO 11/365, reported Fmax ~371.20 MHz at 12 MHz target. This is not Arria 10 and is not a signoff.",
+      "log": "fpga/opensynth/logs/oss_nextpnr_ecp5_full.log"
+    },
+    {
+      "id": "sv-pkg-struct-verilator",
+      "input": "fpga/opensynth/examples/sv_pkg_struct.sv",
+      "tool": "verilator 5.050",
+      "command": "verilator --lint-only --top-module pkg_struct_sample fpga/opensynth/examples/sv_pkg_struct.sv",
+      "result": "PASS",
+      "exit": 0,
+      "note": "Parsed package, enum and packed struct. With -Wall only style/UNUSED warnings, not parse errors.",
+      "log": "fpga/opensynth/logs/verilator_pkg_struct_nowall.log"
+    },
+    {
+      "id": "sv-pkg-struct-yosys",
+      "input": "fpga/opensynth/examples/sv_pkg_struct.sv",
+      "tool": "yosys 0.68+136",
+      "command": "yosys -q -p 'read_verilog -sv fpga/opensynth/examples/sv_pkg_struct.sv; hierarchy -top pkg_struct_sample'",
+      "result": "FAIL",
+      "exit": 1,
+      "failure": "syntax error, unexpected TOK_IMPORT at line 20 (import pkg_struct_pkg::*)",
+      "log": "fpga/opensynth/logs/yosys_pkg_struct.log"
+    },
+    {
+      "id": "sv-pkg-struct-iverilog",
+      "input": "fpga/opensynth/examples/sv_pkg_struct.sv",
+      "tool": "iverilog 13.0",
+      "command": "iverilog -g2012 -s pkg_struct_sample -o /tmp/pkg_ivl.vvp fpga/opensynth/examples/sv_pkg_struct.sv",
+      "result": "PASS",
+      "exit": 0,
+      "log": "fpga/opensynth/logs/iverilog_pkg_struct.log"
+    },
+    {
+      "id": "sv-features-verilator",
+      "input": "fpga/opensynth/examples/sv_features.sv",
+      "tool": "verilator 5.050",
+      "command": "verilator --lint-only --top-module feature_sample fpga/opensynth/examples/sv_features.sv",
+      "result": "PASS",
+      "exit": 0,
+      "note": "Parsed package + packed struct + interface + modport.",
+      "log": "fpga/opensynth/logs/verilator_sv_features_nowall.log"
+    },
+    {
+      "id": "sv-features-yosys",
+      "input": "fpga/opensynth/examples/sv_features.sv",
+      "tool": "yosys 0.68+136",
+      "command": "yosys -q -p 'read_verilog -sv fpga/opensynth/examples/sv_features.sv; hierarchy -top feature_sample'",
+      "result": "FAIL",
+      "exit": 1,
+      "failure": "line 32 syntax error, unexpected TOK_ID, expecting ')' or ',' or '=' (interface modport port)",
+      "log": "fpga/opensynth/logs/oss_yosys_sv_features.log"
+    },
+    {
+      "id": "sv-features-iverilog",
+      "input": "fpga/opensynth/examples/sv_features.sv",
+      "tool": "iverilog 14.0 devel (oss-cad-suite)",
+      "command": "iverilog -g2012 -s feature_sample -o /tmp/oss_feat.vvp fpga/opensynth/examples/sv_features.sv",
+      "result": "FAIL",
+      "exit": 2,
+      "failure": "line 32 syntax error / errors in port declarations (interface/modport not supported)",
+      "log": "fpga/opensynth/logs/oss_iverilog_sv_features.log"
+    },
+    {
+      "id": "real-lcvex-axi4-master-verilator",
+      "input": "rtl/lcvex_axi4_pkg.sv + rtl/lcvex_axi4_master.sv",
+      "tool": "verilator 5.050",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module lcvex_axi4_master rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv",
+      "result": "PASS",
+      "exit": 0,
+      "log": "fpga/opensynth/logs/verilator_lcvex_axi4_master.log"
+    },
+    {
+      "id": "real-lcvex-axi4-master-yosys",
+      "input": "rtl/lcvex_axi4_pkg.sv + rtl/lcvex_axi4_master.sv",
+      "tool": "yosys 0.66/0.68",
+      "command": "yosys -q -p 'read_verilog -sv rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv; hierarchy -top lcvex_axi4_master'",
+      "result": "FAIL",
+      "exit": 1,
+      "failure": "line 91 syntax error, unexpected TOK_IMPORT (import lcvex_axi4_pkg::*)",
+      "log": "fpga/opensynth/logs/yosys_lcvex_axi4_master.log"
+    },
+    {
+      "id": "real-lcvex-axi4-master-iverilog",
+      "input": "rtl/lcvex_axi4_pkg.sv + rtl/lcvex_axi4_master.sv",
+      "tool": "iverilog 13.0",
+      "command": "iverilog -g2012 -s lcvex_axi4_master -o /tmp/axi_ivl.vvp rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv",
+      "result": "PASS",
+      "exit": 0,
+      "log": "fpga/opensynth/logs/iverilog_lcvex_axi4_master.log"
+    },
+    {
+      "id": "real-lcvex-l2-verilator",
+      "input": "rtl/lcvex_pkg.sv + rtl/lcvex_l2.sv",
+      "tool": "verilator 5.050",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module lcvex_l2 rtl/lcvex_pkg.sv rtl/lcvex_l2.sv",
+      "result": "PASS",
+      "exit": 0,
+      "log": "fpga/opensynth/logs/verilator_lcvex_l2.log"
+    },
+    {
+      "id": "real-lcvex-l2-yosys",
+      "input": "rtl/lcvex_pkg.sv + rtl/lcvex_l2.sv",
+      "tool": "yosys 0.66/0.68",
+      "command": "yosys -q -p 'read_verilog -sv rtl/lcvex_pkg.sv rtl/lcvex_l2.sv; hierarchy -top lcvex_l2'",
+      "result": "FAIL",
+      "exit": 1,
+      "failure": "line 38 syntax error, unexpected TOK_IMPORT (import lcvex_pkg::*)",
+      "log": "fpga/opensynth/logs/yosys_lcvex_l2.log"
+    },
+    {
+      "id": "real-lcvex-l2-iverilog",
+      "input": "rtl/lcvex_pkg.sv + rtl/lcvex_l2.sv",
+      "tool": "iverilog 13.0",
+      "command": "iverilog -g2012 -s lcvex_l2 -o /tmp/l2_ivl.vvp rtl/lcvex_pkg.sv rtl/lcvex_l2.sv",
+      "result": "FAIL",
+      "exit": 7,
+      "failure": "SVA concurrent assertions / property_spec not supported (lines around 276-281)",
+      "log": "fpga/opensynth/logs/iverilog_lcvex_l2.log"
+    },
+    {
+      "id": "real-lcvex-core-yosys",
+      "input": "rtl/lcvex_pkg.sv + rtl/lcvex_core.sv",
+      "tool": "yosys 0.66/0.68",
+      "command": "yosys -q -p 'read_verilog -sv rtl/lcvex_pkg.sv rtl/lcvex_core.sv; hierarchy -top lcvex_core'",
+      "result": "FAIL",
+      "exit": 1,
+      "failure": "line 42 syntax error unexpected '[' (unpacked array ports fp_v_lo [0:31]), before package/import can be evaluated",
+      "log": "fpga/opensynth/logs/yosys_lcvex_core.log"
+    },
+    {
+      "id": "real-lcvex-core-iverilog",
+      "input": "rtl/lcvex_pkg.sv + rtl/lcvex_core.sv",
+      "tool": "iverilog 13.0",
+      "command": "iverilog -g2012 -s lcvex_core -o /tmp/core_ivl.vvp rtl/lcvex_pkg.sv rtl/lcvex_core.sv",
+      "result": "FAIL",
+      "exit": 48,
+      "failure": "inside expressions not supported, concurrent assertions not supported, continuous-assignment syntax errors",
+      "log": "fpga/opensynth/logs/iverilog_lcvex_core.log"
+    },
+    {
+      "id": "real-lcvex-core-verilator-full-lint",
+      "input": "rtl/filelist.f (top lcvex_core)",
+      "tool": "verilator 5.050 (conda lcvex)",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only -Wall --top-module lcvex_core -f rtl/filelist.f",
+      "result": "PASS",
+      "exit": 0,
+      "note": "Verilator 5.050 lint-only on lcvex_core with full rtl/filelist.f completed in this worktree: Walltime 551.606s, cpu 547.503s, 44 modules, exit 0.",
+      "log": "fpga/opensynth/logs/verilator_lcvex_core.log"
+    },
+    {
+      "id": "real-lcvex-soc-top-verilator-full-lint",
+      "input": "fpga/catapult_a10/tb/filelist_soc.f (top lcvex_catapult_soc_top)",
+      "tool": "verilator 5.050 (conda lcvex)",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module lcvex_catapult_soc_top -f fpga/catapult_a10/tb/filelist_soc.f",
+      "result": "FAIL (warnings, not syntax/parser)",
+      "exit": 1,
+      "note": "Verilator successfully parsed/elaborated SoC hierarchy; only warnings (UNSIGNED + MULTIDRIVEN in lcvex_bram_boot.sv) caused exit 1.",
+      "failure": "Verilator elaborated the SoC hierarchy and reported 12 warnings, then exited: UNSIGNED (many) and MULTIDRIVEN (rtl/lcvex_bram_boot.sv mem has multiple always_ff writers). No unsupported-SV or interface/modport syntax error.",
+      "log": "fpga/opensynth/logs/verilator_lcvex_soc_top.log"
+    },
+    {
+      "id": "sv2v-install-attempt",
+      "tool": "sv2v",
+      "command": "yay -S --noconfirm --needed sv2v",
+      "result": "FAIL",
+      "exit": 1,
+      "failure": "AUR source package requires GHC/Haskell deps; the configured TUNA mirror returned HTTP 404 for haskell-tasty, haskell-vector, haskell-optparse-applicative, haskell-primitive, etc. No packages installed.",
+      "fallback": "Use Verilator as SV consumer/lint oracle; use plain-Verilog subset for Yosys; defer sv2v to A1 if a binary/source can be obtained."
+    }
+  ],
+  "fallback_plan": {
+    "A1_core_memory_proxy": [
+      "Blocked at direct Yosys read of lcvex_pkg/lcvex_core. Required next step is either obtain sv2v/another SV-to-Verilog converter, or create a generated Verilog 'flat' view (not modifying rtl/) that expands package structs/imports and replaces unpacked-array ports.",
+      "If no converter is available, A1 should restrict to plain-Verilog proxy modules or use Verilator for structural/statistical proxies (LUT/FF proxy is not available via Verilator)."
+    ],
+    "nextpnr": [
+      "ECP5 nextpnr is available; it can only give ECP5 proxy P&R on designs Yosys can synthesize. It cannot be used as A10 signoff or to infer Arria 10 timing."
+    ],
+    "SoC": [
+      "Verilator can parse the SoC hierarchy (no interface/modport/vendor primitives in rtl/); for open synthesis, external Avalon/EMIF/JTAG-UART IP must be blackboxed/stubbed in A2."
+    ]
+  },
+  "go_no_go": {
+    "parse_core": "GO for Verilator lint (full lcvex_core + rtl/filelist.f PASS in this worktree; walltime ~552s). NO-GO for Yosys direct read without sv2v/flattening.",
+    "parse_cache": "GO for Verilator lint on lcvex_l2 (and AXI4 master); NO-GO for Yosys direct read due package/import.",
+    "parse_soc": "GO for Verilator parser/elaboration path (full SoC lint reached warning phase and exited 1 due 12 warnings: UNSIGNED/MULTIDRIVEN, not syntax). NO-GO for Yosys direct read without conversion. Vendor IP remains external/blackbox.",
+    "A10_signoff": "NOT CLAIMED. ECP5 nextpnr smoke is only a proxy; no Arria 10 device pack, no Quartus, no board signoff."
+  },
+  "head_sha": "42622212067c6939f972eda1c8bd40f2d6b51e4c"
+}

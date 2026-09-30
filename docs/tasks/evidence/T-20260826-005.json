@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-005",
+  "base_sha": "c8aad5b78943b42168c241d31a78d5f08efa3864",
+  "head_sha": "aa51aec",
+  "merge_sha": "3131bb7",
+  "toolchain": {
+    "python_conda": "3.12.14",
+    "environment": "conda:lcvex"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches_sha256": "",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6"
+  },
+  "rtl_filelist_sha256": "",
+  "runs": [
+    {
+      "run_id": "owner-l0-pycompile-001",
+      "source_sha": "",
+      "runner_role": "integrator-takeover",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/difftest/checkpoint.py sim/difftest/checkpoint_resume_manifest_smoke.py",
+      "seed": null,
+      "wall_seconds": 0.1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-resume-fixture-001",
+      "source_sha": "",
+      "runner_role": "integrator-takeover",
+      "level": "L0",
+      "command": "python3 sim/difftest/checkpoint_resume_manifest_smoke.py",
+      "seed": null,
+      "wall_seconds": 0.2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l1-regression-001",
+      "source_sha": "",
+      "runner_role": "integrator-takeover",
+      "level": "L1",
+      "command": "make checkpoint-manifest-smoke checkpoint-resume-manifest-smoke trace-manifest-smoke && bash -n sim/difftest/run_lockstep_resume.sh sim/difftest/run_lockstep_step.sh",
+      "seed": null,
+      "wall_seconds": 2.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l2-step-publish-001",
+      "source_sha": "",
+      "runner_role": "integrator-takeover",
+      "level": "L2",
+      "command": "KERNEL=0 DIFF_CKPT=1 CKPT_EVERY=10 MAX_INSNS=30 make/runner fixture (hard_psci)",
+      "seed": null,
+      "wall_seconds": 34.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "note": "生成并回读 complete root manifest；local artifacts 9/19/29，global offset 0。"
+    }
+  ],
+  "artifacts": [],
+  "known_limits": [
+    "未启动 Linux/QEMU 长跑；只运行小型 fixture 和现有 manifest smoke。",
+    "旧无 provenance 链保持历史读取兼容（若已有完整旧摘要），但不能作为新 resume parent；pending/incomplete 新 manifest 明确拒绝。",
+    "当前 runner 的 CKPT_EVERY>0 resume 需要 parent 已有完整 manifest/provenance；旧 T-004 lite init-only 链会被拒绝，需重新建立 strict root 链。"
+  ]
+}

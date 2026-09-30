@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-018",
+  "state": "done",
+  "partial": false,
+  "base_sha": "1d57fa9dadc92d9c85ad755ce0debd0c6fc0acb7",
+  "head_sha": "1d57fa9dadc92d9c85ad755ce0debd0c6fc0acb7",
+  "branch": "verify/T-20260902-018-fp-p4-func-perf-ppa",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-018",
+  "scope": "FP-P4: full FP/NEON functional/performance verification on the FP-P1/P2/P3 shared single-lane engine, plus one-lane vs two-lane PPA area probe (synthesis only).",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "jobs": "VERILATOR_JOBS=1 for local"
+  },
+  "runs": [
+    {
+      "run_id": "compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-2-neon",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-2-neon",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass"
+    },
+    {
+      "run_id": "cocotb-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "summary": "5/5 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-3",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "summary": "4/4 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-4",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "summary": "5/5 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-5",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "summary": "8/8 PASS"
+    },
+    {
+      "run_id": "lockstep-p7-1",
+      "command": "make VERILATOR_JOBS=1 p7-1-fp-scalar",
+      "result": "pass",
+      "summary": "28 A76 required lockstep PASS"
+    },
+    {
+      "run_id": "lockstep-p7-3",
+      "command": "make VERILATOR_JOBS=1 p7-3-neon-fp",
+      "result": "pass",
+      "summary": "48 A76 required lockstep PASS"
+    },
+    {
+      "run_id": "lockstep-p7-4",
+      "command": "make VERILATOR_JOBS=1 p7-4-fma-convert",
+      "result": "pass",
+      "summary": "94 A76 required lockstep PASS"
+    },
+    {
+      "run_id": "lockstep-p7-5",
+      "command": "make VERILATOR_JOBS=1 p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "summary": "102 A76 required lockstep PASS"
+    },
+    {
+      "run_id": "perf-fp-scalar",
+      "runner": "build/agents/T-20260902-018/microbench_runner_fp",
+      "image": "build/microbench/perf_fp_scalar.bin",
+      "result": "pass",
+      "cycles": 255382,
+      "retired_insn": 65963,
+      "ipc": 0.258292,
+      "commit_digest": "b0efde5ed79308a1",
+      "memory_digest": "4078dabba91c60f0",
+      "fp": {
+        "fp_issue": 41176,
+        "fp_busy_cycles": 98736,
+        "fp_rsp_wait_cycles": 57560,
+        "fp_slot_done": 41176
+      }
+    },
+    {
+      "run_id": "perf-fp-fp16",
+      "runner": "build/agents/T-20260902-018/microbench_runner_fp",
+      "image": "build/microbench/perf_fp_fp16.bin",
+      "result": "pass",
+      "cycles": 311633,
+      "retired_insn": 82013,
+      "ipc": 0.263172,
+      "commit_digest": "34d6e3bf9d8ba016",
+      "memory_digest": "a8dddf1e0170212e",
+      "fp": {
+        "fp_issue": 65605,
+        "fp_busy_cycles": 131210,
+        "fp_rsp_wait_cycles": 65605,
+        "fp_slot_done": 65605
+      }
+    },
+    {
+      "run_id": "perf-neon-vect",
+      "runner": "build/agents/T-20260902-018/microbench_runner_fp",
+      "image": "build/microbench/perf_neon_vect.bin",
+      "result": "pass",
+      "cycles": 310977,
+      "retired_insn": 66721,
+      "ipc": 0.214553,
+      "commit_digest": "5c1d4f0a0f31cfe7",
+      "memory_digest": "3ba6dea5f6c76128",
+      "fp": {
+        "fp_issue": 36891,
+        "fp_busy_cycles": 135267,
+        "fp_rsp_wait_cycles": 98376,
+        "fp_slot_done": 98376
+      }
+    },
+    {
+      "run_id": "perf-neon-fp-chain",
+      "runner": "build/agents/T-20260902-018/microbench_runner_fp",
+      "image": "build/agents/T-20260902-018/mb/neon_fp_chain.bin",
+      "result": "pass",
+      "cycles": 35409,
+      "retired_insn": 5654,
+      "ipc": 0.159677,
+      "commit_digest": "3fe4c8f156476675",
+      "memory_digest": "98ad0e170c2a6d90",
+      "fp": {
+        "fp_issue": 4608,
+        "fp_busy_cycles": 23040,
+        "fp_rsp_wait_cycles": 18432,
+        "fp_slot_done": 18432
+      }
+    },
+    {
+      "run_id": "perf-scalar-fp16-chain",
+      "runner": "build/agents/T-20260902-018/microbench_runner_fp",
+      "image": "build/agents/T-20260902-018/mb/scalar_fp16_chain.bin",
+      "result": "pass",
+      "cycles": 38999,
+      "retired_insn": 10266,
+      "ipc": 0.263238,
+      "commit_digest": "63693a9b7d625793",
+      "memory_digest": "2aee23a42102b9c7",
+      "fp": {
+        "fp_issue": 8201,
+        "fp_busy_cycles": 16402,
+        "fp_rsp_wait_cycles": 8201,
+        "fp_slot_done": 8201
+      }
+    }
+  ],
+  "resource": {
+    "one_lane": {
+      "project": "fp_exec_one",
+      "status": "pass",
+      "remote_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-018-probe\\fp_exec_one",
+      "top": "lcvex_fp_exec",
+      "alms": 93564,
+      "combinational_aluts": 133689,
+      "dedicated_logic_registers": 1733,
+      "dsp_blocks": 24,
+      "io_pins": 904,
+      "max_fanout": 1733,
+      "total_fanout": 641560,
+      "wall_s": 1487.948,
+      "peak_virtual_mb": 2255,
+      "syn_report_sha256": "76034cab574b3683f2d62cb97ac187b68800a25b3d91ba5a09c611d8ca0ab955",
+      "flow_report_sha256": "e2e1556c9bd363bf8a8c27a50102358c86be7bccae2fa5e579957ddf310f2a52",
+      "hierarchy": {
+        "lcvex_fp_exec_alut": 133689,
+        "scalar_unit_alut": 132606,
+        "scalar_unit_reg": 848,
+        "scalar_unit_dsp": 24,
+        "divider_alut": 235,
+        "divider_reg": 433,
+        "sqrt_alut": 773,
+        "sqrt_reg": 390
+      }
+    },
+    "two_lane": {
+      "project": "fp_exec_two",
+      "status": "pass",
+      "remote_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-018-probe\\fp_exec_two",
+      "top": "fp_exec_two_top",
+      "alms": 187024,
+      "combinational_aluts": 267283,
+      "dedicated_logic_registers": 3466,
+      "dsp_blocks": 48,
+      "io_pins": 903,
+      "max_fanout": 3466,
+      "total_fanout": 1281755,
+      "wall_s": 1706.078,
+      "peak_virtual_mb": 4343,
+      "note": "area-only duplicate of two lcvex_fp_exec engines, not an integrated functional 2-lane scheduler",
+      "syn_report_sha256": "ef354bbdaf4aa83470d682db170908c70788fdd9ac4aed05c77c83da1e2cac34",
+      "flow_report_sha256": "bf69d72ad3d75b2d324ca431d0a9528a15e3c77348e6362e71ae505b5df44233"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "ppa-doc",
+      "uri": "docs/FP_NEON_PIPELINE_PPA.md"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-018-fp-p4-func-perf-ppa.md"
+    },
+    {
+      "id": "perf-summary",
+      "uri": "build/agents/T-20260902-018/perf_summary.json"
+    },
+    {
+      "id": "custom-runner",
+      "uri": "build/agents/T-20260902-018/custom_runner_vtop.cc"
+    },
+    {
+      "id": "custom-neon-chain",
+      "uri": "build/agents/T-20260902-018/mb/neon_fp_chain.c"
+    },
+    {
+      "id": "custom-scalar-fp16-chain",
+      "uri": "build/agents/T-20260902-018/mb/scalar_fp16_chain.c"
+    }
+  ],
+  "known_limits": [
+    "Custom pure-compute chains are reconstructed equivalents, not byte-identical to deleted FP-P0 sources.",
+    "Two-lane probe is an area-only duplicate wrapper, not a functional 2-lane scheduler.",
+    "No full-top synthesis, fitter, STA, or SOF was run.",
+    "P7-2 Cocotb was not part of the task-specified Cocotb set; historical P7-2 red remains outside this task.",
+    "L2 lockstep ran P7-1/3/4/5 main required only; edge/rounding/sequence subsets not run."
+  ],
+  "next": "Integrator review; if full-FP physical implementation needed, dispatch FP-P5.",
+  "timestamps": {
+    "sent_at": "2026-09-03T04:18:30+08:00",
+    "received_at": "2026-09-03T04:20:00+08:00",
+    "reported_at": "2026-09-03T05:25:11+0800"
+  },
+  "merge_sha": "ae2c3c9a29ad456d514bea6d13df32d56f257c9f",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T05:25:43+08:00",
+    "merged_at": "2026-09-03T05:26:05+08:00",
+    "recorded_at": "2026-09-03T05:26:05+08:00",
+    "notes": "FP-P4 merged and accepted"
+  }
+}

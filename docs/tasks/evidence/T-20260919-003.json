@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260919-003",
+  "label": "B25-NOFP-BRINGUP-PROFILE",
+  "state": "done",
+  "acceptance_status": "scalar-profile-frozen-local-l0-l2-pass",
+  "partial": false,
+  "base_sha": "b05521e6f0ee09a15898545bac429ee78e7014f7",
+  "dispatch_head_sha": "0f965d22f305cd7d0ca6b35ff37a163428ef0a0d",
+  "profile_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+  "profile_tree_sha": "d5baa6b05f5f8824236c816980ab6e6d48578594",
+  "branch": "fpga/T-20260919-003-b25-nofp-bringup-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-003",
+  "owner": "root",
+  "timestamps": {
+    "created_at": "2026-09-19T22:17:56+08:00",
+    "profile_committed_at": "2026-09-19T22:19:00+08:00",
+    "heavy_validation_finished_at": "2026-09-19T23:00:10+08:00",
+    "reported_at": "2026-09-19T23:00:38+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "change": {
+    "path": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+    "diff": "parameter logic A64_FP_SIMD = 1'b1 -> 1'b0",
+    "lines_added": 1,
+    "lines_removed": 1,
+    "profile_file_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+    "non_ledger_changed_paths": [
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv"
+    ],
+    "scope_audit_sha256": "e0df16b9eb0e11b18b9af79d1d6d23d72f094f55c142930979c6987303e69297"
+  },
+  "profile_contract": {
+    "purpose": "Fast first-board validation of corrected PC=0 boot, polling JTAG-UART and DDR diagnostic path.",
+    "monitor_scalar_only": true,
+    "monitor_disassembly_sha256": "879aaea4f5f57043469fb9aa31ba46d086025f13b61eb97ab6f59cfe5b4ec8ec",
+    "parameter_propagation": "board default 0 -> board-to-SoC -> SoC-to-core -> g_fp_simd generate gate",
+    "architectural_limit": "FP/NEON execution units are removed. Software must not execute FP/NEON; this profile does not claim complete UDEF/trap semantics for those instructions.",
+    "release_limit": "This profile is not the final full-FP/P7 release candidate and is not merged over the full-FP integration baseline."
+  },
+  "boot_identity": {
+    "elf_sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231",
+    "bin_sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+    "hex_sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa",
+    "mif_sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7"
+  },
+  "validation": [
+    {
+      "name": "parameter and scalar monitor contract",
+      "result": "PASS",
+      "checks": [
+        "board_default_zero",
+        "board_to_soc",
+        "soc_to_core",
+        "core_generate_gate",
+        "monitor contains no FP/NEON mnemonic"
+      ],
+      "parameter_log_sha256": "a09ef0a947a7e7298a88406d5d31a4ddca870679dd540e289b010e62177a0b64"
+    },
+    {
+      "name": "no-FP core/SoC/platform lint and synthesis selector",
+      "result": "PASS",
+      "core_elaboration_mb": 3.051,
+      "soc_elaboration_mb": 5.739,
+      "platform_elaboration_mb": 5.669,
+      "log": {
+        "path": "build/agents/T-20260919-003/static-final.log",
+        "bytes": 36271,
+        "sha256": "804918d7f9594745f29be97b6041da1f78f3b4d4c4efd2bb56c65ae19230b5b7"
+      }
+    },
+    {
+      "name": "corrected synthesis-M20K focused timing",
+      "result": "BRAM_M20K_TIMING_TB PASS",
+      "rtl_sha256": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+      "wrapper_log": {
+        "path": "build/agents/T-20260919-003/m20k-timing-wrapper.log",
+        "bytes": 4860,
+        "sha256": "dca91eaf88b85fdc2f0437d6cb975e4422558d2e3c920c27c262a730f76a706f"
+      },
+      "run_log_sha256": "21fcf525857617ccb2bc2e5ac379f2dfa6f5e886a0e3cab46c8bc61b2f3787a0"
+    },
+    {
+      "name": "no-FP B25 resident-monitor SoC smoke",
+      "command": "resource-lock run local lcvex T-20260919-003 root ... verilator --binary ... -GA64_FP_SIMD=0 ... lcvex_catapult_soc_tb",
+      "result": "PASS",
+      "scenarios": [
+        "cal-ok PASS with DDR adapter activity",
+        "CAL-WAIT/no-ddr mode=0 PASS",
+        "CAL-FAIL/no-ddr mode=2 PASS",
+        "all scenarios reach READY and pass PONG/echo checks"
+      ],
+      "build_log": {
+        "path": "build/agents/T-20260919-003/nofp-soc-smoke/verilator-build.log",
+        "bytes": 12964,
+        "sha256": "ba1f93af65b952cb24dbeafa84308609e70acfb4082b85684068abcca39f377a"
+      },
+      "run_log": {
+        "path": "build/agents/T-20260919-003/nofp-soc-smoke/smoke.log",
+        "bytes": 454,
+        "sha256": "3f564a375e76f2a071aa0453c47177f2327443f58c0571d390d34d97874ee324"
+      },
+      "result_log_sha256": "e55bffe26b789decc37cc3e8f6135bb319d16610cfd7f850fc853687e6559d8a"
+    }
+  ],
+  "resource_lock": {
+    "resource": "local",
+    "queue_policy": "Five-minute attempts only after return 75; no unlocked fallback.",
+    "queue_log": {
+      "path": "build/agents/T-20260919-003/local-queue.log",
+      "bytes": 527,
+      "sha256": "67a939c721776acab2e7261212bf38a1e4f4dedb70986de6f55d01bd7f9bd921"
+    },
+    "result": "The queue observed pypto-x ownership, later acquired local through resource-lock, ran the smoke and released it; final task-owned lock count is zero."
+  },
+  "safety_and_scope": {
+    "full_fp_baseline_modified": false,
+    "qemu_or_reference_modified": false,
+    "qsf_or_sdc_modified": false,
+    "assertion_disabled": false,
+    "gamepc_or_quartus_run": false,
+    "assembler_or_sof": false,
+    "jtag_board_flash_reset_power": false
+  },
+  "handoff": "docs/handoffs/T-20260919-003-b25-nofp-bringup-profile.md",
+  "next": "T-20260919-004 synthesis is already PASS under the pipeline gate. This completed profile now releases its fitter and STA stages. T-20260919-002 Gate D remains an independent release-before-assembler gate."
+}

@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-038",
+  "state": "done",
+  "partial": false,
+  "base_sha": "df41e8880058ddf6a826278346002691fc006ace",
+  "head_sha": "3c04893a2814f76e37f4fdab3f3e3ef452b4df86",
+  "branch": "fix/T-20260902-038-fp-ppother-slotres-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-038",
+  "scope": "FP-PPOTHER-SLOTRES-CUT: break the FP scalar pp_other -> slot_result_r combinational cone reported by T-037 by adding a second-stage fp_other_mid_t register in scalar_unit for MIN/MAX, FRINT, and FP->int; keep raw-bit/FPCR/FPSR/order semantics and update fixed latency assertions.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv",
+      "docs/handoffs/T-20260902-038-fp-ppother-slotres-cut.md",
+      "docs/tasks/evidence/T-20260902-038.json"
+    ],
+    "summary": "In release FP_ITER=1 g_iter, added IT_OTHER pipeline stage and fp_other_mid_t ot_mid/ot_mid_lo/ot_mid_hi registers. Stage 1 (IT_IDLE) still captures unpacked/FZ-flushed operands to pp_other*; stage 2 (IT_OTHER) performs the expensive compare/shift/magnitude/saturate work for FMIN/FMAX/FMINNM/FMAXNM, FRINT, FCVTZS/FCVTZU and writes ot_mid*; stage 3 (IT_PREP) does only final select/normalize/pack/int result. This splits the T-037 pp_other.pa.exp2 -> slot_result_r path (51 levels / 26.489 ns / -6.207 ns). FCMP remains on the original two-stage pp_other path.",
+    "latency_table": {
+      "scalar_minmax": {
+        "before": 4,
+        "after": 5
+      },
+      "scalar_frint": {
+        "before": 4,
+        "after": 5
+      },
+      "scalar_fcvtzs_fcvtzu": {
+        "before": 4,
+        "after": 5
+      },
+      "scalar_fcmp": {
+        "before": 4,
+        "after": 4
+      },
+      "neon_frint_2s": {
+        "before": 7,
+        "after": 9
+      },
+      "neon_2s_noniter_other": {
+        "before": 7,
+        "after": 9
+      },
+      "scalar_fadd_fmul_fma_scvtf_ucvtf_fcvt": {
+        "before": 5,
+        "after": 5
+      },
+      "scalar_fdiv_s": {
+        "before": 259,
+        "after": 259
+      },
+      "scalar_fsqrt_s_d": {
+        "before": 67,
+        "after": 67
+      },
+      "scalar_fdiv_h": {
+        "before": 516,
+        "after": 516
+      },
+      "neon_fsqrt_2s": {
+        "before": 133,
+        "after": 133
+      }
+    },
+    "semantics": {
+      "raw_bit": "unchanged; same unpack/FZ/round/saturate rules, only split into decision+final stages",
+      "commit_order": "unchanged; single outstanding fp_exec transaction and one held response",
+      "fpsr_fpcr": "unchanged; FPCR snapshot at acceptance, FPSR OR behavior preserved",
+      "fcmp_nzcv": "unchanged; CMP still uses pp_other two-stage finish",
+      "fp_to_gpr": "unchanged; FCVTZS/FCVTZU int_result pipeline still driven through staged ot_mid",
+      "kill_reset": "ot_mid* registers cleared on reset/kill with other pipeline registers"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator lint-only on lcvex_core with release filelist"
+    },
+    {
+      "run_id": "lcvex_fp_exec_tb",
+      "command": "conda run -n lcvex verilator --binary --timing --assert -j 1 --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir/Vlcvex_fp_exec_tb",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Updated FMIN.S=5, FMAX.S=5, FCVTZS.S=5, NEON FRINTZ.2S=9; includes single issue, held response, kill/reset, FDIV/FSQRT latency probes"
+    },
+    {
+      "run_id": "sim-sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-cocotb-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=5 PASS=5 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "sim-cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=4 PASS=4 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "sim-cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=5 PASS=5 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=8 PASS=8 FAIL=0 SKIP=0",
+      "notes": "First run caught a staged-minmax FMAX selection bug (returned min); fixed by encoding FMIN/FMAX selection choice in mm_use_a. Rerun after fix is all green."
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/signoff STA (next FP-P5 rerun required)",
+    "A76 required L2 lockstep sub-suite (not affected by this FP unit cut)"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-038-fp-ppother-slotres-cut.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-038.json"
+    }
+  ],
+  "known_limits": [
+    "No physical timing run in this task; actual Fmax/slack must be confirmed by FP-P5 rerun.",
+    "FP p_other non-CMP scalar operations and corresponding NEON slots gained one pipeline cycle.",
+    "If STA still shows pp_other -> ot_mid or ot_mid -> slot_result as top, a further split (e.g. FRINT shift vs normalize, minmax 256-bit compare) may be needed.",
+    "FCMP remains on the original two-stage pp_other path; if it becomes a new top a dedicated minmax-style cut may be needed."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-04T01:08:00+08:00",
+    "received_at": "2026-09-04T01:10:00+08:00",
+    "reported_at": "2026-09-04T01:31:46+08:00"
+  },
+  "merge_sha": "0aca936cc8b1dcd58b75e7594d9e0c0d6b1c5808",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T01:31:46+08:00",
+    "merged_at": "2026-09-04T01:32:30+08:00",
+    "recorded_at": "2026-09-04T01:32:30+08:00",
+    "notes": "FP pp_other->slot_result cut merged and accepted"
+  }
+}

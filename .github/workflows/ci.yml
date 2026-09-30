@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  # GitHub Actions 自动 CI 已禁用（用户指令）。
+  # 禁用原因：CI 测试时间过长，已耗尽 GitHub 额度；本地测试完善，
+  # 且当前实现/合入均在本地任务中并行管理。
+  # 仅保留手动 workflow_dispatch；恢复自动触发需用户明确授权。
+  workflow_dispatch:
+
+env:
+  QEMU_COMMIT: 84f07211cc5b4fc6a371559bf8a5de4fb068e648
+
+jobs:
+  pr-fast:
+    name: PR-fast（无 QEMU）
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-variant: Miniforge3
+          environment-file: env/environment.yml
+          activate-environment: lcvex
+          auto-activate-base: false
+      - name: 配置 conda zlib 链接路径
+        run: |
+          echo "LIBRARY_PATH=$CONDA_PREFIX/lib${LIBRARY_PATH:+:$LIBRARY_PATH}" >> "$GITHUB_ENV"
+          echo "CPATH=$CONDA_PREFIX/include${CPATH:+:$CPATH}" >> "$GITHUB_ENV"
+      - name: PR-fast 门禁
+        run: bash scripts/ci-fast.sh
+      - name: 上传门禁日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-fast-logs
+          path: build/ci-fast/
+
+  pr-difftest:
+    name: PR-difftest（QEMU 锁步）
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - name: glib 开发头文件
+        run: sudo apt-get update && sudo apt-get install -y libglib2.0-dev zlib1g-dev
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-variant: Miniforge3
+          environment-file: env/environment.yml
+          activate-environment: lcvex
+          auto-activate-base: false
+      - name: 配置 conda zlib 链接路径
+        run: |
+          echo "LIBRARY_PATH=$CONDA_PREFIX/lib${LIBRARY_PATH:+:$LIBRARY_PATH}" >> "$GITHUB_ENV"
+          echo "CPATH=$CONDA_PREFIX/include${CPATH:+:$CPATH}" >> "$GITHUB_ENV"
+      - name: 缓存 QEMU fork（固定版本 + 补丁哈希）
+        uses: actions/cache@v4
+        with:
+          path: ../qemu
+          key: qemu-${{ env.QEMU_COMMIT }}-${{ hashFiles('qemu/patches/*.patch') }}
+      - name: QEMU fork 准备（幂等）
+        run: bash qemu/scripts/apply-patches.sh
+      - name: 构建 QEMU（命中缓存时跳过）
+        run: bash scripts/build-qemu.sh
+      - name: 构建 difftest 插件
+        run: make -C qemu/plugins
+      - name: PR-difftest 门禁
+        run: bash scripts/ci-difftest.sh
+      - name: 上传门禁日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-difftest-logs
+          path: build/ci-difftest/
+
+  nightly:
+    name: nightly（长回归 + 延迟注入 + patch 重放）
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - name: glib 开发头文件
+        run: sudo apt-get update && sudo apt-get install -y libglib2.0-dev zlib1g-dev
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-variant: Miniforge3
+          environment-file: env/environment.yml
+          activate-environment: lcvex
+          auto-activate-base: false
+      - name: 配置 conda zlib 链接路径
+        run: |
+          echo "LIBRARY_PATH=$CONDA_PREFIX/lib${LIBRARY_PATH:+:$LIBRARY_PATH}" >> "$GITHUB_ENV"
+          echo "CPATH=$CONDA_PREFIX/include${CPATH:+:$CPATH}" >> "$GITHUB_ENV"
+      - name: 缓存 QEMU fork
+        uses: actions/cache@v4
+        with:
+          path: ../qemu
+          key: qemu-${{ env.QEMU_COMMIT }}-${{ hashFiles('qemu/patches/*.patch') }}
+      - name: QEMU fork 准备
+        run: bash qemu/scripts/apply-patches.sh
+      - name: 构建 QEMU
+        run: bash scripts/build-qemu.sh
+      - name: nightly 门禁
+        run: bash scripts/ci-nightly.sh
+      - name: 上传门禁日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-nightly-logs
+          path: build/ci-nightly/

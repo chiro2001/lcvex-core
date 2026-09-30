@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-036",
+  "label": "RTL-COMPAT-AUDIT",
+  "parent": "T-20260828-067",
+  "title": "未提交 Quartus 兼容 RTL 改动审计与处理",
+  "kind": "rtl-compat-audit-handle",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "f7d3002",
+  "branch": "feature/T-20260830-036-rtl-compat-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-036",
+  "scope": "审计并处理之前在 feature/p7-final 主工作区发现的未提交 RTL 改动（已集中到 feature/T-20260830-036-rtl-compat-audit 分支）：rtl/lcvex_decode.sv、rtl/lcvex_alu.sv、rtl/lcvex_fp_scalar.sv。这些改动疑似为 Quartus Prime 21.4 综合兼容改写（避免函数结果直接部分选择、移除端口默认值等）。要求：确认每处改动的目的、语义等价性、对 Verilator/Quartus 的影响；运行 make compile 与相关 FP/decode/ALU 回归；若正确则整理为可合入提交，若错误则修复或回退并给出证据；不得把未验证改动合入主线。",
+  "writes": [
+    "docs/handoffs/T-20260830-036-rtl-compat-audit.md",
+    "docs/tasks/evidence/T-20260830-036.json",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_alu.sv",
+    "rtl/lcvex_fp_scalar.sv"
+  ],
+  "reads": [
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_alu.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "tb/**",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "docs/handoffs/T-20260830-029-fpga-g2.md",
+    "docs/handoffs/T-20260830-030-fpga-g3.md"
+  ],
+  "validation": {
+    "l0": [
+      "make compile 默认优化通过",
+      "每个改动有语义说明/证据"
+    ],
+    "l1": [
+      "相关 FP/decode/ALU 定向 TB 通过",
+      "明确是否可合入或需回退"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "未提交 RTL 改动被审计并处理：要么整理成可合入的验证过的提交，要么回退并说明原因；有 handoff/evidence。",
+  "next": "若可合入，集成者复核并合入 main；否则保留审计结论。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.4
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T22:30:00+0800",
+  "updated_at": "2026-08-30T22:30:00+0800",
+  "known_limits": [
+    "不在 main 分支直接提交；不在未验证情况下合入。",
+    "不修改 Quartus QSF/SDC；不启动完整 B5 full flow。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-036-rtl-compat-audit.md",
+  "evidence": "docs/tasks/evidence/T-20260830-036.json",
+  "merge_sha": "8cbe41d",
+  "merged_at": "2026-08-30T23:30:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-30T23:30:00+0800",
+    "status": "accepted",
+    "head_sha": "d486d9bb7008167821160d40553c08b7222d10df",
+    "notes": "Quartus 21.4 compatibility RTL audit: all semantic-equivalent rewrites, make compile and related FP/decode/ALU/L2/Core TB PASS per owner. Cherry-picked RTL + handoff/evidence onto main."
+  }
+}

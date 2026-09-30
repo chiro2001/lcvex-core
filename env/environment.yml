@@ -1,0 +1,12 @@
+name: lcvex
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - verilator=5.050
+  - make=4.4.1
+  - zlib
+  - pip
+  - pip:
+      - cocotb==2.0.1
+      - pytest==8.3.5

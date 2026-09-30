@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-050",
+  "base_sha": "b63db0153d82e1362c04b0be2fecb7eed67f1d91",
+  "head_sha": "7127c255ecb25073501ddec9440f9ece5117a397",
+  "merge_sha": "dd0934ab3aab984137cb90a44516b6002882a327",
+  "scope": "只落实P7与Catapult A10双轨路线、AMBA AXI4 Full、单核一致性/未来多核预留、验证门和多Agent流程；未修改RTL、QEMU、脚本、厂商IP或参考结果。",
+  "toolchain": {
+    "git": "repository-provided",
+    "python": "python3",
+    "quartus_target": "21.4.0 Pro Build 67 (platform input only; not run)"
+  },
+  "rtl_filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+  "commits": [
+    "9c4e585029d5a010d3e0c4e713034b151b8d68aa",
+    "7127c255ecb25073501ddec9440f9ece5117a397"
+  ],
+  "decisions": {
+    "branches": [
+      "feature/p7-fp-neon",
+      "feature/fpga-catapult-a10",
+      "feature/p7-final"
+    ],
+    "axi": "AMBA AXI4 Full；Catapult canonical DATA_WIDTH=128，64B line为4拍INCR；首版单ID/单outstanding；Avalon仅限板级512-bit EMIF适配层。",
+    "coherence": "当前CORE_COUNT=1，闭合D-L1/L2写回、PTW、I/D维护、probe和checkpoint PoC；预留source/transaction/probe/owner/sharer，未来多核实现后置。",
+    "platform": "Microsoft Catapult v3 / Arria 10 10AX115N4F40E3SG / Quartus Pro 21.4 Build 67 / EPCQL1024 / 266.667MHz DDR ref / 512-bit Avalon-MM EMIF。",
+    "release_gates": [
+      "Gate F-ISA",
+      "Gate F-MEM",
+      "Gate F-BOARD",
+      "Gate F-RELEASE"
+    ]
+  },
+  "documents": {
+    "docs/P7_FPGA_PARALLEL_PLAN.md": "2ad137ad5da4e3a7e2f0537188af598d522067d81347c6736f61332022681482",
+    "docs/FPGA_PLAN.md": "40471f4d0aaf93729f89a6e63acd03ee7aa6f7c00d5ca30104bbd17593413a63",
+    "docs/decisions/ADR-20260827-003-p7-fpga-parallel-axi4.md": "c6c96b9b228669beea4f9c2d2ae2ad461d8446fe7c55ebe1731da52b6471802e"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-doc-static-001",
+      "source_sha": "7127c255ecb25073501ddec9440f9ece5117a397",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check b63db015..HEAD；尾随空白、仅docs写集、关键Markdown链接和AMBA AXI4/branch/CORE_COUNT/Gate锚点静态检查",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 1,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-platform-audit-002",
+      "source_sha": "7127c255ecb25073501ddec9440f9ece5117a397",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "只读核对a10-linux-riscv的tools.lock、vex_soc_ddr.qsf/.sdc、vex_soc_ddr_top.v、Qsys_bb.v和docs/04上板证据",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "确认器件/Quartus/时钟/异步CDC/512-bit Avalon-MM/byte-enable/burstcount和双SOF到Linux /init；未运行PoC构建。"
+    },
+    {
+      "run_id": "owner-l0-registry-003",
+      "source_sha": "7127c255ecb25073501ddec9440f9ece5117a397",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_registry.py --check",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "22项registry结构校验通过。"
+    }
+  ],
+  "artifacts": [],
+  "integration_validation": {
+    "source_sha": "dd0934ab3aab984137cb90a44516b6002882a327",
+    "runner_role": "root-integrator",
+    "level": "L0",
+    "command": "git diff --check；task/evidence JSON；test_registry.py --check；外部平台链接；AXI4/branch/CORE_COUNT/Gate锚点；仅docs写集；三份权威文档SHA256",
+    "exit_code": 0,
+    "result": "pass",
+    "summary": "集成SHA保持任务写集，22项registry通过，Catapult源链接存在，AXI4/双轨/单核与多核预留/四级Gate锚点完整，文档hash与owner evidence一致。"
+  },
+  "known_limits": [
+    "没有实现或验证AXI4、写回Cache、CDC、EMIF适配器、可综合SoC或AArch64板级启动。",
+    "没有运行Verilator/QEMU/Gate D/Quartus/Linux或真机测试；本任务只有文档L0。",
+    "完整2GiB、ECC/RAS、物理UART/LED、多核MESI/ACE/CHI和P10产品化后置。",
+    "P7-0与B0-Platform须由压缩上下文后的新调度轮分别登记，当前未启动。"
+  ]
+}

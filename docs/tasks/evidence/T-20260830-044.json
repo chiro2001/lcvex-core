@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-044",
+  "label": "PE-F1A-DYN",
+  "state": "review",
+  "partial": false,
+  "base_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+  "head_sha": "654e7bda5567084ede986138f5f429cb46ff609c",
+  "diagnostic_source_sha": "5f7120ac768f2c5257f7ae1899787829e6065ed9",
+  "comparator_source_sha": "cbd63645441677907caecb99857e01240b8cae47",
+  "branch": "verify/T-20260830-044-f1a-commit-divergence",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-044",
+  "owner": "luna-f1a-divergence",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "sent_at": "2026-08-30T22:13:05+08:00",
+  "received_at": "2026-08-30T22:14:00+08:00",
+  "reported_at": "2026-08-30T22:49:22+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-08-30T22:13:05+08:00",
+    "received_at": "2026-08-30T22:14:00+08:00",
+    "reported_at": "2026-08-30T22:49:22+08:00",
+    "test_slot_released_at": "2026-08-30T22:11:16+08:00"
+  },
+  "scope": "为 microbench runner 增加默认关闭的 commit JSONL trace 和流式首差异比较器；在同一 diagnostic source 上重建 nocache_d0 f0/f1a，验证 alu_latency 负对照并诊断 fp_scalar、mem_seq 首个 commit divergence。只诊断，不修 RTL/TB/QEMU/workload/参考结果。",
+  "files_written": [
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "scripts/compare_commit_traces.py",
+    "docs/F1A_COMMIT_DIVERGENCE.md",
+    "docs/handoffs/T-20260830-044-f1a-commit-divergence.md",
+    "docs/tasks/evidence/T-20260830-044.json"
+  ],
+  "implementation": {
+    "trace_cli": "--trace FILE",
+    "trace_default": "off",
+    "trace_schema": "lcvex-commit-trace-v1",
+    "trace_records": ["header", "commit", "footer"],
+    "active_effects_only": true,
+    "architecture_fields": ["seq", "pc", "insn", "next_pc"],
+    "effect_fields": ["gpr", "gpr2", "gpr3", "sp", "nzcv", "memory", "exception", "monitor", "vector", "fpcr", "fpsr"],
+    "fetch_context_fields": ["epoch", "occupancy", "peak", "push", "pop", "flush", "stale_drain", "stale_drop"],
+    "comparison_ignores": ["seq", "cycle", "fetch"],
+    "comparison_categories": ["equal", "duplicate", "skip", "wrong-path", "effect-mismatch", "termination-boundary"],
+    "rtl_tb_qemu_workload_modified": false
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cross_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "perf_cflags": "-O2",
+    "python": "3.12",
+    "max_cycles_alu": 5000000,
+    "max_cycles_fp": 1000000,
+    "git_clean_at_freeze": true
+  },
+  "resources": {
+    "reserved_cpu": 2,
+    "memory_max_mb": 15360,
+    "memory_swap_max_mb": 0,
+    "cgroup": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0",
+    "makeflags": "-j1",
+    "verilator_jobs": 1,
+    "heavy_builds_serialized": true,
+    "runner_builds": {
+      "f0": {"wall_seconds": 277.686, "allocated_mb": 1043.039, "binary_sha256": "7b360cdc249c70e31e822178b4d16226d0ac08b88aea3f5dcf2d0656fea3fbf9"},
+      "f1a": {"wall_seconds": 283.622, "allocated_mb": 1043.512, "binary_sha256": "dc952cfead34c5f7e9e9c1fb2d38fde77ce895fe52f7e3db3485ca6a5e814a2a"}
+    },
+    "simulation_rss_mb_approx": {"alu_f0": 136.266, "alu_f1a": 136.238, "fp_f0": 136.383, "fp_f1a": 136.562, "mem_f0": 136.145, "mem_f1a": 136.344}
+  },
+  "provenance": {
+    "base_config": "nocache_d0",
+    "cache": {"I_L1": 0, "D_L1": 0, "L2": 0},
+    "MEM_DELAY_MODE": 0,
+    "FIFO_DEPTH": 2,
+    "same_workload_image_per_pair": true,
+    "same_toolchain_per_pair": true,
+    "same_source_sha_per_pair": true,
+    "same_non_fifo_params_per_pair": true,
+    "source_hashes": {
+      "alu_latency": "30d2ef74f7061346b6abbae656eff50e490f3f23317956547b02dceb18a9a8c4",
+      "fp_scalar": "01d8124e7e69917227b2ac615c373583bcf2e00db89b10e905d78e2879052039",
+      "mem_seq": "01f52347582bb256f284835595eaed3b1710ab89ab2e2da33815a0e624fb2846"
+    },
+    "image_hashes": {
+      "alu_latency": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+      "fp_scalar": "49fb782bb39c54c13ec9d34b1c028a749347fbc86c1a0b1a36aeca8e9fb5ac70",
+      "mem_seq": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527"
+    },
+    "toolchain_version": "aarch64-linux-gnu-gcc (GCC) 16.1.0"
+  },
+  "negative_control": {
+    "workload": "alu_latency",
+    "no_trace": {
+      "f0": {"status": "pass", "cycles": 2500171, "retired_insn": 750049, "commit_digest": "e02f90ea8089a4f1", "memory_digest": "0dd7f555d8ef95bf", "report_sha256": "7b93764a8b18a474cadbaf51e36d0f9e22f902d64c93125638f3b59f6cf9f820"},
+      "f1a": {"status": "pass", "cycles": 2000136, "retired_insn": 750049, "commit_digest": "e02f90ea8089a4f1", "memory_digest": "0dd7f555d8ef95bf", "report_sha256": "172e39a771d4e4ba9cefe210cd6437113fdd434b081f4c936e62a281c7546bef"}
+    },
+    "expected_t043_values_preserved": true
+  },
+  "traces": [
+    {"id": "alu_f0", "workload": "alu_latency", "mode": "f0", "path": "build/agents/T-20260830-044/traces/alu_f0.jsonl", "records": 750049, "bytes": 202569750, "sha256": "3d5be64ea62361d2d333cd94b604fa3ada02863e6c499c24d174a314d41d233d", "status": "pass", "cycles": 2500171, "retired_insn": 750049},
+    {"id": "alu_f1a", "workload": "alu_latency", "mode": "f1a", "path": "build/agents/T-20260830-044/traces/alu_f1a.jsonl", "records": 750049, "bytes": 203664107, "sha256": "03fd8d371c39a3f183cc24544d3b97f5c806df3a53ebd3454413b26ce782aa16", "status": "pass", "cycles": 2000136, "retired_insn": 750049},
+    {"id": "fp_f0", "workload": "fp_scalar", "mode": "f0", "path": "build/agents/T-20260830-044/traces/fp_f0.jsonl", "records": 65963, "bytes": 19975709, "sha256": "57b487563be7219db39f79649a7c795053f872116909f9c7ad653053062b2ebb", "status": "pass", "cycles": 226593, "retired_insn": 65963},
+    {"id": "fp_f1a", "workload": "fp_scalar", "mode": "f1a", "path": "build/agents/T-20260830-044/traces/fp_f1a.jsonl", "records": 65965, "bytes": 20069206, "sha256": "f557cf5afe4b676a64fb109ad8805b33cbc6933749d52d9f482db44a44d5ac3d", "status": "pass", "cycles": 172989, "retired_insn": 65965},
+    {"id": "mem_f0", "workload": "mem_seq", "mode": "f0", "path": "build/agents/T-20260830-044/traces/mem_f0.jsonl", "records": 803657, "bytes": 224843212, "sha256": "53961e052ed8f2197b631efb7b4bb5ece473b5910f4171d956012d51a2f46a15", "status": "pass", "cycles": 3042223, "retired_insn": 803657},
+    {"id": "mem_f1a", "workload": "mem_seq", "mode": "f1a", "path": "build/agents/T-20260830-044/traces/mem_f1a.jsonl", "records": 803667, "bytes": 226055027, "sha256": "824518d1b299e5a7755f0ac28a1b36a7a87bbf6834c6fe60dea87bda8d589cfc", "status": "pass", "cycles": 2582793, "retired_insn": 803667}
+  ],
+  "comparisons": [
+    {"id": "alu", "path": "build/agents/T-20260830-044/comparisons/alu.json", "bytes": 8925, "sha256": "700230bf71718e0de1396420eb736339e45c1136454dacda0ed66a2fcc8a1938", "status": "equal", "category": "equal", "records_compared": 750049},
+    {
+      "id": "fp",
+      "path": "build/agents/T-20260830-044/comparisons/fp.json",
+      "bytes": 15073,
+      "sha256": "175dd620ffccba9ade7737038ab9f8f7de64b76782699ecf3004a35a44c1ca2e",
+      "status": "mismatch",
+      "category": "duplicate",
+      "records_compared": 65957,
+      "first_mismatch": {
+        "off_index": 65958,
+        "on_index": 65958,
+        "reason": "on trace repeated its previous PC/insn",
+        "off": {"seq": 65958, "cycle": 226575, "pc": "0x0000000044000578", "insn": "0xfd40041f", "next_pc": "0x000000004400057c", "effects": {"vector": [{"rd": 31, "lo": "0x41f0000000000000", "hi": "0x0000000000000000"}]}, "fetch": {"epoch": 0, "occupancy": 0, "peak": 0, "push": 0, "pop": 0, "flush": 0, "stale_drain": 0, "stale_drop": 0}},
+        "on": {"seq": 65958, "cycle": 172970, "pc": "0x0000000044000574", "insn": "0xbd47703f", "next_pc": "0x0000000044000578", "effects": {"vector": [{"rd": 31, "lo": "0x000000004f800000", "hi": "0x0000000000000000"}]}, "fetch": {"epoch": 50, "occupancy": 0, "peak": 2, "push": 0, "pop": 0, "flush": 0, "stale_drain": 0, "stale_drop": 0}},
+        "on_previous_same_pc_insn": true,
+        "on_following_pc_insns": ["0x0000000044000574/0xbd47703f", "0x0000000044000578/0xfd40041f"],
+        "disassembly": {"off": "44000578: fd40041f ldr d31, [x0, #8]", "on": "44000574: bd47703f ldr s31, [x1, #1904]"}
+      },
+      "footer": {"off": {"status": "pass", "retired_insn": 65963, "commit_digest": "0x78dbdb2d365390ea", "memory_digest": "0x4078dabba91c60f0"}, "on": {"status": "pass", "retired_insn": 65965, "commit_digest": "0x1cbe38d7f5aa2933", "memory_digest": "0x4078dabba91c60f0"}},
+      "provenance_equal": true
+    },
+    {
+      "id": "mem",
+      "path": "build/agents/T-20260830-044/comparisons/mem.json",
+      "bytes": 14513,
+      "sha256": "fbf19cceccc4c1eba01cf1289dee0ca90348a951195339f3aa3a99ac1cd1930c",
+      "status": "mismatch",
+      "category": "duplicate",
+      "records_compared": 15,
+      "first_mismatch": {
+        "off_index": 16,
+        "on_index": 16,
+        "reason": "on trace repeated its previous PC/insn",
+        "off": {"seq": 16, "cycle": 61, "pc": "0x0000000044000108", "insn": "0xf86a7967", "next_pc": "0x000000004400010c", "effects": {"gpr": {"rd": 7, "value": "0x0000000000001000"}}, "fetch": {"epoch": 0, "occupancy": 0, "peak": 0, "push": 0, "pop": 0, "flush": 0, "stale_drain": 0, "stale_drop": 0}},
+        "on": {"seq": 16, "cycle": 48, "pc": "0x0000000044000104", "insn": "0xaa0a03e6", "next_pc": "0x0000000044000108", "effects": {"gpr": {"rd": 6, "value": "0x0000000000000000"}}, "fetch": {"epoch": 3, "occupancy": 1, "peak": 1, "push": 0, "pop": 1, "flush": 0, "stale_drain": 0, "stale_drop": 0}},
+        "on_previous_same_pc_insn": true,
+        "on_following_pc_insns": ["0x0000000044000104/0xaa0a03e6", "0x0000000044000108/0xf86a7967"],
+        "disassembly": {"off": "44000108: f86a7967 ldr x7, [x11, x10, lsl #3]", "on": "44000104: aa0a03e6 mov x6, x10"}
+      },
+      "footer": {"off": {"status": "pass", "retired_insn": 803657, "commit_digest": "0x826084b57439f54a", "memory_digest": "0x6b40dea7a6ade5c3"}, "on": {"status": "pass", "retired_insn": 803667, "commit_digest": "0x2cb364e799addcd1", "memory_digest": "0x6b40dea7a6ade5c3"}},
+      "provenance_equal": true
+    }
+  ],
+  "classification": {
+    "alu": "equal architectural commit sequence; raw file SHA differs only because cycle/fetch context differs",
+    "fp_scalar": "duplicate retirement: two extra 0x44000574/bd47703f commits before 0x44000578",
+    "mem_seq": "duplicate retirement: two extra 0x44000104/aa0a03e6 commits before 0x44000108",
+    "inactive_payload_false_positive": false,
+    "termination_only": false
+  },
+  "hypotheses": [
+    {
+      "rank": 1,
+      "name": "FIFO pop 与 IF/ID consume/replace 未原子绑定",
+      "evidence": "fetch_fifo_pop predicate at rtl/lcvex_core.sv:812-819 is not directly tied to IF/ID advance; IF/ID replacement is at :2564-2577. mem_seq first duplicate occurs with occupancy=1,pop=1.",
+      "falsification": "Expose FIFO head pc/seq and IF/ID advance; if head is next sequential entry and old IF/ID was accepted on the duplicate edge, reject this hypothesis.",
+      "next_fix_writes": ["rtl/lcvex_core.sv", "tb/sv/lcvex_fetch_fifo_tb.sv", "sim/cocotb/test_fetch_fifo.py"]
+    },
+    {
+      "rank": 2,
+      "name": "flush 后 tail/context 与已有 IF/ID entry 重叠",
+      "evidence": "F1a push metadata is assembled from fetch_pc_r/fetch_ctx_* at rtl/lcvex_core.sv:855-884, while frontend_kill/epoch cleanup is at :795-801; duplicate appears after epoch activity.",
+      "falsification": "Internal head/tail pc_va/seq/epoch remains monotonic and distinct across first duplicate.",
+      "next_fix_writes": ["rtl/lcvex_core.sv", "tb/sv/lcvex_fetch_fifo_tb.sv"]
+    },
+    {
+      "rank": 3,
+      "name": "inactive commit payload digest 假阳性",
+      "evidence": "Rejected: dynamic records have repeated PC/insn and active vector/GPR effects; commit-only mismatch is not the explanation.",
+      "falsification": "Already falsified by fp_scalar/mem_seq first records.",
+      "next_fix_writes": []
+    },
+    {
+      "rank": 4,
+      "name": "cache/delay timing exposes a latent frontend hazard",
+      "evidence": "T-043 showed delay0/cache divergence and delay1 mostly equal; first duplicates already occur at nocache_d0, so timing is likely trigger rather than root cause.",
+      "falsification": "Cross-run delay1/cache/backpressure traces with same source and confirm or eliminate the duplicate edge.",
+      "next_fix_writes": ["rtl/lcvex_core.sv", "tb/sv/lcvex_fetch_fifo_tb.sv"]
+    }
+  ],
+  "tests": [
+    {"run_id": "l0-static-fixture", "level": "L0", "command": "python3 -m py_compile scripts/compare_commit_traces.py sim/microbench/perf_runner.py && python3 scripts/compare_commit_traces.py --self-test && python3 scripts/compare_commit_traces.py --help && git diff --check", "result": "pass", "exit_code": 0},
+    {"run_id": "image-alu", "level": "L0", "command": "make perf-build PERF_NAME=alu_latency", "result": "pass", "exit_code": 0},
+    {"run_id": "image-fp", "level": "L0", "command": "make perf-build PERF_NAME=fp_scalar", "result": "pass", "exit_code": 0},
+    {"run_id": "image-mem", "level": "L0", "command": "make perf-build PERF_NAME=mem_seq", "result": "pass", "exit_code": 0},
+    {"run_id": "runner-f0", "level": "L1/L2", "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 make PERF_RUNNER_DIR=build/microbench_runner_diag_f0 PERF_I_L1=0 PERF_D_L1=0 PERF_L2=0 PERF_MEM_DELAY_MODE=0 PERF_FETCH_FIFO_ENABLE=0 microbench-build-config", "result": "pass", "exit_code": 0},
+    {"run_id": "runner-f1a", "level": "L1/L2", "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 make PERF_RUNNER_DIR=build/microbench_runner_diag_f1a PERF_I_L1=0 PERF_D_L1=0 PERF_L2=0 PERF_MEM_DELAY_MODE=0 PERF_FETCH_FIFO_ENABLE=1 microbench-build-config", "result": "pass", "exit_code": 0},
+    {"run_id": "alu-no-trace", "level": "L1", "command": ["systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 sim/microbench/perf_runner.py --runner build/microbench_runner_diag_f0/microbench_runner --image build/microbench/perf_alu_latency.bin --name alu_latency --max-cycles 5000000 --git-sha 5f7120ac768f2c5257f7ae1899787829e6065ed9 --measurement-source-sha 5f7120ac768f2c5257f7ae1899787829e6065ed9 --param BASE_CONFIG=nocache_d0 --param I_L1=0 --param D_L1=0 --param L2=0 --param MEM_DELAY_MODE=0 --param FETCH_FIFO_ENABLE=0 --param FETCH_FIFO_DEPTH=2 --param FIFO_VARIANT=f0 --out build/agents/T-20260830-044/no_trace_alu_f0.json", "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 sim/microbench/perf_runner.py --runner build/microbench_runner_diag_f1a/microbench_runner --image build/microbench/perf_alu_latency.bin --name alu_latency --max-cycles 5000000 --git-sha 5f7120ac768f2c5257f7ae1899787829e6065ed9 --measurement-source-sha 5f7120ac768f2c5257f7ae1899787829e6065ed9 --param BASE_CONFIG=nocache_d0 --param I_L1=0 --param D_L1=0 --param L2=0 --param MEM_DELAY_MODE=0 --param FETCH_FIFO_ENABLE=1 --param FETCH_FIFO_DEPTH=2 --param FIFO_VARIANT=f1a --out build/agents/T-20260830-044/no_trace_alu_f1a.json"], "result": "pass; expected cycles/retired/digest preserved", "exit_code": 0},
+    {"run_id": "alu-trace-compare", "level": "L1/L2", "command": "python3 scripts/compare_commit_traces.py --off build/agents/T-20260830-044/traces/alu_f0.jsonl --on build/agents/T-20260830-044/traces/alu_f1a.jsonl --out build/agents/T-20260830-044/comparisons/alu.json", "result": "equal", "exit_code": 0, "records": 750049},
+    {"run_id": "fp-trace-compare", "level": "L2", "command": "python3 scripts/compare_commit_traces.py --off build/agents/T-20260830-044/traces/fp_f0.jsonl --on build/agents/T-20260830-044/traces/fp_f1a.jsonl --out build/agents/T-20260830-044/comparisons/fp.json", "result": "duplicate first mismatch", "exit_code": 1, "first_mismatch_index": 65958},
+    {"run_id": "mem-trace-compare", "level": "L2", "command": "python3 scripts/compare_commit_traces.py --off build/agents/T-20260830-044/traces/mem_f0.jsonl --on build/agents/T-20260830-044/traces/mem_f1a.jsonl --out build/agents/T-20260830-044/comparisons/mem.json", "result": "duplicate first mismatch", "exit_code": 1, "first_mismatch_index": 16}
+  ],
+  "artifact_sha256": {
+    "sim/microbench/microbench_runner.cc": "8a8537be1bd5fb51c04f709a511d072e118a61350fd66eab57f01b457acf2c02",
+    "sim/microbench/perf_runner.py": "37623f06d44ff5b97a890447c500ba9b4edf6c89afd6bb196c25918750640122",
+    "scripts/compare_commit_traces.py": "b8f155ca8bd5a19c57ac344138b79d96983c69dc35fb282f2a609525d17334b8",
+    "docs/F1A_COMMIT_DIVERGENCE.md": "d07e5ab30a9444daa6724f7edaf9f10a06db17f74e7086b52dee673834524f09",
+    "docs/handoffs/T-20260830-044-f1a-commit-divergence.md": "74d9534273ddc37c2295a31cbffbb3f3eacc6548f861cd941863dfe258a9f124"
+  },
+  "blockers": [
+    "F1a commit sequence 在 fp_scalar/mem_seq 出现 duplicate retirement，无法安全签核 FIFO-on。",
+    "公开顶层没有 FIFO head/tail pc/seq、IF/ID advance 或 stall 细节，无法在本任务内证明唯一 RTL 根因；不扩大写集。"
+  ],
+  "risks": [
+    "trace 是诊断工具，比较器忽略 cycle/fetch 观测字段；raw trace SHA 不要求相同。",
+    "完整 trace 为 20-226 MB 级 build-only 文件，不进入 Git；需保留 SHA 和有限窗口。",
+    "未运行 QEMU strict lockstep、Gate D、Linux、Quartus、B5/full flow。"
+  ],
+  "integrator_review": {
+    "received_at": "2026-08-30T23:00:08+08:00",
+    "merge_sha": "32980cef21a6decc3e4edf4df465556e0afca548",
+    "status": "accepted_duplicate_retirement_diagnosis",
+    "review_source_sha": "e519109bcb2ec4705eeb59bab5003ed7d176c423",
+    "checks": {
+      "write_set_and_hashes": "pass",
+      "comparator_self_test": "pass",
+      "owner_full_comparison_replay": "alu equal；fp duplicate@65958；mem duplicate@16；三个 comparison JSON SHA 与 evidence 完全一致",
+      "short_mem_reproduction": "1000-cycle off/on trace 在 index 16 重现 on PC=0x44000104 duplicate；same source/image/provenance",
+      "merge_sha_reproduction": "fixture PASS；merge SHA 32980ce 短 trace 同样 duplicate@16；相关 source 与 reviewed source 字节一致"
+    },
+    "short_trace_artifacts": {
+      "review_f0_sha256": "da593cf2810b30190eb1e05bfb33b6326ae3c6faf2b11d3fd3a88ab068958cda",
+      "review_f1a_sha256": "653d3d66f4d7cad3be1c9be84179bba2636140b90d6010116ee373fefee6b04a",
+      "review_compare_sha256": "fa2cd4f6a3fb5e50f4af9f6edce17d58065ab1d611fbb14fbd461a3136582a2c",
+      "merge_f0_sha256": "72b3c8db17d288fda55e2cd3d7eeb843215eb8ab758260fd53b45af180005bd3",
+      "merge_f1a_sha256": "87756f7dadb619c8a63badab2160f07ed046353b9b9605c0f3b9869213859499",
+      "merge_compare_sha256": "ce2115abf061582f9a1ada5c59736706e6b0683663d7e3a4c2f2fd0071c23bbf"
+    },
+    "decision": "验收动态诊断和 opt-in trace 基础设施；F1a 继续默认关闭，下一任务修复 duplicate retirement 并以 strict trace/lockstep 验证。"
+  },
+  "next": "保持 FETCH_FIFO_ENABLE=0；登记精确 RTL 修复任务，优先收紧 FIFO pop 与 IF/ID consume/replace 原子绑定并加入 head/seq/advance SVA，再以相同 workload/source 通过严格 lockstep 后重测。"
+}

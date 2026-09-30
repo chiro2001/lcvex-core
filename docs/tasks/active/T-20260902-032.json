@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-032",
+  "label": "L1I-CORE-OPERAND-CUT",
+  "title": "L1 I-cache/core operand path setup cut (49L/32.3ns)",
+  "kind": "rtl-timing-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-l1i-core-operand-cut",
+  "agent_type": "local-rtl-sim",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-031"
+  ],
+  "base_sha": "5523201b025b45a16afb477de113b71bccad85c8",
+  "branch": "fix/T-20260902-032-l1i-core-operand-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-032",
+  "scope": "打断 sys_clk_50 setup top-1: core idex_d.operand_a[13] -> i_l1|rsp_data_r[18]（49 逻辑级 / 32.334ns / -12.446ns），保持取指/L1 I-cache 语义。",
+  "reads": [
+    "docs/handoffs/T-20260902-031-fp-p5-rerun-round4.md",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/**",
+    "sim/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-032-l1i-core-operand-cut.md",
+    "docs/tasks/evidence/T-20260902-032.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS"
+    ],
+    "l1": [
+      "sim-sv/sim-sv-l1i/core cocotb/锁步相关 PASS"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "本地功能/回归全绿；不改变取指/I-cache 语义；后续 FP-P5 rerun 观察 setup top-1 离开 i_l1 rsp_data_r。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T20:40:00+08:00",
+  "updated_at": "2026-09-03T20:57:10+08:00",
+  "known_limits": [
+    "不引入猜测执行；不改 cache coherence 语义；不做 false_path；不改变异步复位"
+  ],
+  "handoff": "docs/handoffs/T-20260902-032-l1i-core-operand-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260902-032.json",
+  "next": "合并后重跑 FP-P5；若 setup 闭合则 assembler/SOF 门",
+  "dispatch": {
+    "sent_at": "2026-09-03T20:41:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "f018a343-9168-457d-932f-f8fbb37a51c4",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-032",
+    "branch": "fix/T-20260902-032-l1i-core-operand-cut"
+  },
+  "head_sha": "04bccffd8eb283cdeab08787f3696c2fd7ce6e19",
+  "merge_sha": "abd784e65a6c20f76af30044cbfab46115786513",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T20:56:50+08:00",
+    "merged_at": "2026-09-03T20:57:10+08:00",
+    "recorded_at": "2026-09-03T20:57:10+08:00",
+    "notes": "ID/EX GPR forwarding cut merged; compile passes. Next FP-P5 rerun with T-032."
+  }
+}

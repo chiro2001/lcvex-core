@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-021",
+  "label": "B25-RX-CPU-OBSERVABILITY-BOARD-INTERACTION",
+  "title": "Volatile-configure the T-020 SOF and prove BOOT/READY/PONG/echo with CPU-visible RX evidence",
+  "kind": "board-bringup-gate",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "completed-rxpath-pass-cpu-visible-load-fail-golden-rollback-pass",
+  "assigned_owner": "board_t021",
+  "depends_on": ["T-20260920-020", "existing-user-volatile-Quartus-JTAG-authorization"],
+  "base_sha": "7e7cef6586583c4d421b29fc01c226d4c021bb09",
+  "branch": "verify/T-20260920-021-b25-rx-cpu-observability-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-021-b25-rx-cpu-observability-board-interaction",
+  "writes": [
+    "build/agents/T-20260920-021/** ignored board logs/transcripts",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-021-b25-rx-cpu-observability-board-interaction/** task-owned logs and server clone",
+    "docs/tasks/evidence/T-20260920-021.json",
+    "docs/handoffs/T-20260920-021-b25-rx-cpu-observability-board-interaction.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-020.json",
+    "docs/tasks/evidence/T-20260920-011.json and its task-owned programming/direct-terminal runners as templates only",
+    "docs/tasks/evidence/T-20260920-012.json",
+    "docs/tasks/evidence/T-20260920-013.json",
+    "docs/tasks/evidence/T-20260920-014.json",
+    "fpga/catapult_a10/boot/README.md"
+  ],
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。直接使用这个命令行即可读取和交互。",
+    "authorized_scope": "Configure the exact frozen T-020 SOF into FPGA volatile SRAM and use the direct JTAG-MPSSE terminal for bounded receive/transmit testing.",
+    "excluded": [
+      "JIC/EPCQ/Flash write or erase and every persistent programming format",
+      "power cycle or board/SoC reset",
+      "stopping the standard jtagserver, an unknown process or any pre-existing process"
+    ]
+  },
+  "candidate_sof": {
+    "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-020-b25-rx-cpu-observability-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+    "bytes": 36842101,
+    "sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd",
+    "quartus_checksum": "0x3159F8A0",
+    "design_hash": "4DAED3C37174544441E6912B371092CA",
+    "jtag_usercode": "0xFFFFFFFF"
+  },
+  "golden_rollback": {
+    "remote_path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+    "bytes": 36844906,
+    "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "quartus_checksum": "0x31510BB6",
+    "design_hash": "193DE4BC8A30F3ED5F1F"
+  },
+  "console": {
+    "command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "device": 1,
+    "instance": 0,
+    "input_sequence": ["?", "p", "d", "Z"],
+    "input_rule": "Use one live direct terminal. Wait for READY and startup TX drain, then send each raw single character separately and wait for its response/diagnostic evidence before the next; do not substitute ordinary-file stdin or batch the four bytes."
+  },
+  "scope": "Preflight the golden-running board and exact SOF identity, configure only volatile FPGA SRAM using the task-owned 15 MHz programming server, attach the user-specified direct terminal immediately, and prove deterministic bidirectional firmware interaction plus three-layer RX observability. On functional failure only, restore the content-addressed golden SOF before release.",
+  "expected": {
+    "startup": ["LCVEX25 BOOT", "CAL-OK|CAL-WAIT|CAL-FAIL", "DDR-OK|DDR-FAIL", "READY", "RXDBG"],
+    "status": "Input '?' produces CLOCK25 plus current CAL and DDR state.",
+    "ping": "Input 'p' produces PONG.",
+    "debug": "Input 'd' produces an immediate RXDBG line.",
+    "echo": "Input 'Z' produces exactly one target-side Z echo.",
+    "hardware_path": "RXPATH proves bridge, PoC and core dmem raw response words agree for the accepted bytes, including final 0xA45A, with counts advancing and fault clear.",
+    "firmware_path": "RXCPU proves four valid getc and dispatch events, final getc low16 0xA45A, final dispatch class=5/byte=0x5A, and successful putc/TX activity."
+  },
+  "acceptance": "The exact T-020 SOF configures successfully and one direct terminal session proves LCVEX25 BOOT, READY, CLOCK25 status, PONG, immediate debug response, printable Z echo, RXPATH bridge=PoC=dmem, and RXCPU getc/dispatch/putc/TX progression. Indirect bridge-only evidence is insufficient.",
+  "procedure": {
+    "preflight": "Under gamepc lock require exact candidate/golden identities, expected JTAG ID 0x02E060DD, no conflicting EDA/programmer/terminal or port-1310 listener, and identify/preserve the standard Quartus jtagserver (historically PID 5640) without assuming a stale PID is still live.",
+    "program": "Clone only the known task-owned custom server files, verify their hashes and 15 MHz/channel-0 configuration, start one owned foreground server, run quartus_pgm for volatile SOF configuration, require configuration/operation success plus candidate checksum/JTAG ID, then stop only the recorded owned server PID.",
+    "interact": "Run the exact direct nios2-terminal command, capture the complete first-session transcript, wait for READY/TX drain, and conduct the paced four-byte sequence in that same terminal.",
+    "finish": "If full acceptance passes, stop only the task-owned terminal and leave the candidate running. If any functional acceptance item fails, stop only task-owned processes, restore the exact golden SOF by volatile configuration, and verify golden design identity/output before releasing the lock."
+  },
+  "resource": "Hold resource-lock gamepc across every remote/JTAG action and treat the cable as exclusive. Use event-driven monitoring with waits up to one hour; do not poll frequently.",
+  "forbidden_regions": [
+    "JIC/EPCQ/Flash write or erase and all persistent formats",
+    "power cycle, board/SoC reset or physical manipulation",
+    "broad process-name termination or stopping the standard jtagserver, unknown or pre-existing processes",
+    "unverified SOF, cable, device, instance, checksum or JTAG ID substitution",
+    "synthesis, fitter, STA, assembler or tracked RTL/firmware/test changes"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T13:16:46+08:00",
+    "agent_name": "board_t021",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "blocked-board-functional",
+    "partial": true,
+    "task_head_sha": "5ac57828283c2403c3c5499ba8aecb2777782491",
+    "integration_evidence_sha": "35146f9e36ee48293ea68a859f184cf64f43bc77",
+    "candidate_programming": "PASS; exact T-020 SOF, checksum 0x3159F8A0, JTAG ID 0x02E060DD",
+    "boot_ready": "PASS; LCVEX25 BOOT, CAL-WAIT, DDR-FAIL, READY",
+    "hardware_path": "PASS for '?'; bridge/PoC/dmem all 0x0000A43F, event counts 1/1/1, fault 0",
+    "firmware_path": "FAIL; getc raw low16 0x0000 and dispatch class 0/byte 0, so CLOCK25 response absent",
+    "remaining_inputs": "p/d/Z intentionally not sent after the first paced acceptance failure",
+    "golden_rollback": "PASS; design hash 193DE4BC8A30F3ED5F1F independently verified",
+    "final_board_state": "golden SOF running",
+    "safety": "No JIC/EPCQ/Flash, reset or power action; standard jtagserver PID 5640 preserved; only task-owned processes stopped",
+    "evidence": "docs/tasks/evidence/T-20260920-021.json",
+    "handoff": "docs/handoffs/T-20260920-021-b25-rx-cpu-observability-board-interaction.md",
+    "next": "Diagnose and repair response-data alignment between the observed core dmem response and the firmware-visible load/writeback value; add a failing regression before rebuilding the physical chain"
+  },
+  "created_at": "2026-09-20T13:15:07+08:00",
+  "updated_at": "2026-09-20T13:45:32+08:00"
+}

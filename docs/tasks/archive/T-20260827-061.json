@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-061",
+  "title": "P7 Gate-F 前置：冻结候选完整 Gate D 与 P6 兼容审计",
+  "kind": "gate-verification",
+  "priority": "high",
+  "assigned_owner": "root-integrator",
+  "agent_type": "integration-gate",
+  "model": "",
+  "model_selection": "只读审计/监控优先省略 model，平台默认 gpt-5.6-luna[max]；重型 Gate D 由集成者串行执行",
+  "reasoning_effort": "max",
+  "phase": "done",
+  "execution": {
+    "dispatch_pending": false,
+    "agent_id": "01a043d8-6c72-7f90-97ef-4d72c019b06b",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "派单时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T23:30:52+08:00",
+    "timezone": "Asia/Shanghai",
+    "elapsed_basis": "reported_at - dispatch_sent_at"
+  },
+  "review_record": {
+    "agent_id": "01a043d8-6c72-7f90-97ef-4d72c019b06b",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "派单时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "sent_at": "2026-08-27T23:30:52+08:00",
+    "received_at": "2026-08-27T23:31:38+08:00",
+    "reported_at": "2026-08-27T23:35:32+08:00",
+    "elapsed_seconds": 280,
+    "source_sha": "d3dfe7a",
+    "status": "go",
+    "blocking_points": [],
+    "conclusion": "detached 候选干净；Gate D 入口、50% 资源边界、P7-0～P7-3 L0-L2、P6 max/checkpoint 和 provenance 可追溯；BOARD/CI/Linux 后置明确。",
+    "next": "集成者串行执行完整 Gate D。"
+  },
+  "run": {
+    "observed_at": "2026-08-27T23:36:48+08:00",
+    "reported_at": "2026-08-27T23:44:45+08:00",
+    "elapsed_seconds": 477,
+    "command": "bash sim/difftest/run_gate_d.sh --parallel",
+    "exit_code": 0,
+    "result": "pass",
+    "log": "build/agents/T-20260827-061/gate-d.log",
+    "log_sha256": "96797862c04a86f35b43ba6068115a96911fb929c8025b743faf7df903b75c8c",
+    "coverage_sha256": "6e14afc91dc3d47bd3a5aa26d87a9d9d3750023f423d8f7652b2c7467eacfeab",
+    "random_coverage": "expected_hit=60/60; seed 1/2/3 each 100k pass",
+    "baremetal_c": "200/200 pass"
+  },
+  "parent": "T-20260827-060",
+  "depends_on": ["T-20260827-051", "T-20260827-058", "T-20260827-059", "T-20260827-060"],
+  "base_sha": "d3dfe7a",
+  "branch": "detached-gate-T-20260827-061",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-gate-T-20260827-061",
+  "writes": [
+    "docs/tasks/evidence/T-20260827-061.json",
+    "docs/handoffs/T-20260827-061-gate-f-preflight.md"
+  ],
+  "reads": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/VERIFICATION.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md",
+    "sim/difftest/run_gate_d.sh",
+    "scripts/test_registry.json",
+    "docs/tasks/archive/T-20260827-051.json",
+    "docs/tasks/archive/T-20260827-058.json",
+    "docs/tasks/archive/T-20260827-059.json",
+    "docs/tasks/archive/T-20260827-060.json",
+    "docs/tasks/evidence/T-20260827-060.json"
+  ],
+  "context_docs": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/VERIFICATION.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md"
+  ],
+  "resource": {
+    "cpu": 6,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": ["frozen SHA、QEMU/plugin/coordinator/filelist、task/evidence JSON preflight"],
+    "l1": ["make test、make coverage"],
+    "l2": ["P7-0/P7-1/P7-2/P7-3 required lockstep and P6 max/checkpoint compatibility"],
+    "l3": ["bash sim/difftest/run_gate_d.sh --parallel、固定输入/provenance、无孤儿进程"],
+    "l4": ["仅记录 Gate-F 后续板级/Linux/nightly 缺口，不在本任务伪称完成"],
+    "seeds": [1, 2, 3]
+  },
+  "acceptance": "在冻结 SHA d3dfe7a 对应候选上完成完整 Gate D；验证 P7 L0-L2、P6 max/checkpoint 兼容、固定输入/provenance 和可重放日志；明确 Gate F-BOARD/CI/Linux 等剩余边界。失败必须保留现场，不关闭断言、不跳过差分。",
+  "created_at": "2026-08-27T23:05:46+08:00",
+  "updated_at": "2026-08-27T23:05:46+08:00",
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260827-061.json",
+  "handoff": "docs/handoffs/T-20260827-061-gate-f-preflight.md",
+  "known_limits": [
+    "本任务不实现 RTL/QEMU/FPGA 功能；Gate-F-BOARD、CI 晋级和 Linux/nightly 仍需独立证据。"
+  ],
+  "next": "任务已完成并归档；Gate-F-BOARD、CI/Linux/nightly 和最终发布 tag 仍待项目级收口。"
+}

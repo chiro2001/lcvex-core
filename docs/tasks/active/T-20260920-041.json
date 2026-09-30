@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-041",
+  "parent": "T-20260920-039",
+  "label": "B25-DDR-M-COMMAND-CONTROL",
+  "title": "Classify B25 DDR after late calibration with one m-command board control",
+  "kind": "board-diagnostic",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "ddr-pass-golden-resolved-by-t047",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-030", "T-20260920-038", "T-20260920-040"],
+  "resolved_by": "T-20260920-047",
+  "base_sha": "fb8fe47e333bdf713219567b228067da3487f2c8",
+  "branch": "verify/T-20260920-041-b25-ddr-m-control",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-041",
+  "authorization": "Existing user authorization permits Quartus/JTAG volatile configuration and testing; scope remains one candidate session plus exact golden restoration, with no persistent or reset/power action.",
+  "writes": [
+    "task-owned ignored board artifacts",
+    "task-owned remote root/bootstrap",
+    "docs/handoffs/T-20260920-041-b25-ddr-m-control.md",
+    "docs/tasks/evidence/T-20260920-041.json"
+  ],
+  "reads": [
+    "tracked T-040 board runner",
+    "T-030 exact candidate SOF",
+    "T-038 exact golden contract"
+  ],
+  "scope": "Exactly one candidate program, one terminal session that waits for CAL-OK then sends m and ?, and one exact golden restore. Classify DDR without changing RTL or firmware.",
+  "acceptance": "Record CAL-OK followed by a deterministic m response and post-m status, then restore and prove exact golden. DDR-OK closes only the magic read/write sub-gate; DDR-FAIL becomes a separate blocker and does not block BRAM microbench.",
+  "forbidden_regions": ["retry", "JIC/EPCQ/Flash", "reset", "power cycle", "standard/unknown process stop", "candidate or firmware modification"],
+  "resource": "One uninterrupted resource-lock gamepc window.",
+  "dispatch": {
+    "sent_at": "2026-09-20T22:11:22+08:00",
+    "agent_name": "root",
+    "model": "main-agent current session",
+    "monitoring": "direct implementation; one resource-locked hardware window only after local contract review"
+  },
+  "result": {
+    "status": "done-partial-run-resolved-by-successor",
+    "partial": true,
+    "candidate": "PASS; exact T-030 transaction",
+    "ddr": "PASS; startup CAL-WAIT/DDR-FAIL, first ? CAL-OK/DDR-FAIL, only m DDR-OK, post-m ? CAL-OK/DDR-OK",
+    "golden": "FAIL; sole programmer attempt hit JTAG chain error 86; cached postflight is not live proof",
+    "original_live_final_state": "unproven; most recent proven identity was candidate before successor recovery",
+    "successor_golden_recovery": "PASS in T-20260920-047; live exact golden proven",
+    "final_board_state": "live exact golden proven by T-20260920-047",
+    "resolved_by": "T-20260920-047",
+    "safety": "no retry, Flash/JIC/EPCQ, reset, power or standard/unknown process stop",
+    "evidence": "docs/tasks/evidence/T-20260920-041.json",
+    "handoff": "docs/handoffs/T-20260920-041-b25-ddr-m-control.md",
+    "next": "closed; continue local T-042 microbench/CoreMark without rerunning this board control"
+  },
+  "created_at": "2026-09-20T21:35:43+08:00",
+  "updated_at": "2026-09-20T22:24:21+08:00"
+}

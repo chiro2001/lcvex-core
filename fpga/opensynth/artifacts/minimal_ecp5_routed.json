@@ -1,0 +1,1906 @@
+{
+  "creator": "Next Generation Place and Route (Version nextpnr-0.11.1-18-gdec04b3b)",
+  "modules": {
+    "top": {
+      "settings": {
+        "route": "00000000000000000000000000000001",
+        "router/tmg_ripup": "0 ",
+        "router1/useEstimate": "1 ",
+        "router1/fullCleanupReroute": "1 ",
+        "router1/cleanupReroute": "1 ",
+        "router1/maxIterCnt": "200",
+        "arch.disable_router_lutperm": "0 ",
+        "place": "00000000000000000000000000000001",
+        "placer1/startTemp": "1.000000",
+        "placer1/minBelsForGridPick": "64",
+        "placer1/netShareWeight": "0.000000",
+        "placer1/constraintWeight": "10.000000",
+        "placerHeap/cellPlacementTimeout": "8",
+        "placerHeap/noCtrlSet": "0 ",
+        "placerHeap/netShareWeight": "0.000000",
+        "placerHeap/parallelRefine": "0 ",
+        "pack": "00000000000000000000000000000001",
+        "synth": "00000000000000000000000000000001",
+        "placerHeap/timingWeight": "10 ",
+        "placerHeap/criticalityExponent": "2",
+        "placerHeap/beta": "0.900000",
+        "placerHeap/alpha": "0.100000",
+        "seed": "0000100000011111110100000010000100001110101100100101111000000000",
+        "arch.type": "lfe5u_85f",
+        "arch.name": "ecp5",
+        "router": "router1",
+        "placer": "heap",
+        "auto_freq": "00000000000000000000000000000000",
+        "timing_driven": "00000000000000000000000000000001",
+        "target_freq": "12000000.000000",
+        "arch.speed": "6",
+        "arch.package": "CABGA381"
+      },
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "fpga/opensynth/examples/minimal_counter.sv:4.1-19.10",
+        "dynports": "00000000000000000000000000000001"
+      },
+      "ports": {
+        "rst_n": {
+          "direction": "input",
+          "bits": [ 2136 ]
+        },
+        "en": {
+          "direction": "input",
+          "bits": [ 2135 ]
+        },
+        "count": {
+          "direction": "output",
+          "bits": [ 2148, 2157, 2160, 2163, 2166, 2154, 2151, 2143 ]
+        },
+        "clk": {
+          "direction": "input",
+          "bits": [ 2133 ]
+        }
+      },
+      "cells": {
+        "$gbuf$clk$TRELLIS_IO_IN": {
+          "hide_name": 1,
+          "type": "DCCA",
+          "parameters": {
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000101",
+            "NEXTPNR_BEL": "X67/Y0/TDCC0"
+          },
+          "port_directions": {
+            "CE": "input",
+            "CLKO": "output",
+            "CLKI": "input"
+          },
+          "connections": {
+            "CE": [  ],
+            "CLKO": [ 2301 ],
+            "CLKI": [ 2272 ]
+          }
+        },
+        "$nextpnr_CCU2C_1$CCU2_COMB1": {
+          "hide_name": 1,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "0000000000001010",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X23/Y32/SLICEB.K1"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [  ],
+            "F": [  ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2298 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [  ],
+            "A": [  ]
+          }
+        },
+        "$nextpnr_CCU2C_1$CCU2_COMB0": {
+          "hide_name": 1,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "0000000000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X23/Y32/SLICEB.K0"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2298 ],
+            "F": [ 2177 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2280 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [  ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1$CCU2_COMB1": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "1100110000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X23/Y32/SLICEA.K1",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2280 ],
+            "F": [ 2141 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2295 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2255 ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1$CCU2_COMB0": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "1100110000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X23/Y32/SLICEA.K0",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2295 ],
+            "F": [ 2150 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2176 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2258 ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_3$CCU2_COMB1": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "1100110000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICED.K1",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2176 ],
+            "F": [ 2153 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2292 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2260 ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_3$CCU2_COMB0": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "1100110000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICED.K0",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2292 ],
+            "F": [ 2165 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2208 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2262 ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_2$CCU2_COMB1": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "1100110000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEC.K1",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2208 ],
+            "F": [ 2162 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2289 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2264 ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_2$CCU2_COMB0": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "1100110000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEC.K0",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2289 ],
+            "F": [ 2159 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2193 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2266 ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_1$CCU2_COMB1": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "1100110000000000",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEB.K1",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2193 ],
+            "F": [ 2156 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2286 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2268 ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_1$CCU2_COMB0": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "0110011010101010",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEB.K0",
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2286 ],
+            "F": [ 2198 ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2278 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [ 2270 ],
+            "A": [  ]
+          }
+        },
+        "$nextpnr_CCU2C_0$CCU2_COMB1": {
+          "hide_name": 1,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "YES",
+            "INITVAL": "1111111111111111",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEA.K1"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2278 ],
+            "F": [  ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [ 2283 ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [  ],
+            "A": [  ]
+          }
+        },
+        "$nextpnr_CCU2C_0$CCU2_COMB0": {
+          "hide_name": 1,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "WREMUX": "WRE",
+            "CCU2_INJECT1": "NO",
+            "INITVAL": "0000000000001010",
+            "MODE": "CCU2"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEA.K0"
+          },
+          "port_directions": {
+            "OFX": "output",
+            "FCO": "output",
+            "F": "output",
+            "WCK": "input",
+            "WRE": "input",
+            "WAD3": "input",
+            "WAD2": "input",
+            "WAD1": "input",
+            "WAD0": "input",
+            "WD": "input",
+            "DI1": "input",
+            "DI0": "input",
+            "FXB": "input",
+            "FXA": "input",
+            "FCI": "input",
+            "F1": "input",
+            "M": "input",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "OFX": [  ],
+            "FCO": [ 2283 ],
+            "F": [  ],
+            "WCK": [  ],
+            "WRE": [  ],
+            "WAD3": [  ],
+            "WAD2": [  ],
+            "WAD1": [  ],
+            "WAD0": [  ],
+            "WD": [  ],
+            "DI1": [  ],
+            "DI0": [  ],
+            "FXB": [  ],
+            "FXA": [  ],
+            "FCI": [  ],
+            "F1": [  ],
+            "M": [  ],
+            "D": [  ],
+            "C": [  ],
+            "B": [  ],
+            "A": [ 2274 ]
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_LUT4_Z": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "INITVAL": "0000000011111111"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X21/Y32/SLICEA.K0",
+            "src": "/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:114.33-115.56",
+            "module_not_derived": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "F": "output",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "F": [ 2147 ],
+            "D": [ 2270 ],
+            "C": [  ],
+            "B": [  ],
+            "A": [  ]
+          }
+        },
+        "count[5]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X126/Y32/PIOC",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2260 ],
+            "B": [ 2154 ]
+          }
+        },
+        "count[6]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X0/Y32/PIOB",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2258 ],
+            "B": [ 2151 ]
+          }
+        },
+        "count[7]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X126/Y32/PIOD",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2255 ],
+            "B": [ 2143 ]
+          }
+        },
+        "en$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "INPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X0/Y32/PIOC",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:10.30-10.32",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [ 2252 ],
+            "T": [  ],
+            "I": [  ],
+            "B": [ 2135 ]
+          }
+        },
+        "rst_n$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "INPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X126/Y32/PIOB",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:9.30-9.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [ 2250 ],
+            "T": [  ],
+            "I": [  ],
+            "B": [ 2136 ]
+          }
+        },
+        "clk$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "INPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X69/Y0/PIOB",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:8.30-8.33",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [ 2272 ],
+            "T": [  ],
+            "I": [  ],
+            "B": [ 2133 ]
+          }
+        },
+        "count[4]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X0/Y35/PIOD",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2262 ],
+            "B": [ 2166 ]
+          }
+        },
+        "$PACKER_VCC": {
+          "hide_name": 1,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "INITVAL": "1111111111111111"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X53/Y21/SLICEA.K0"
+          },
+          "port_directions": {
+            "F": "output",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "F": [ 2276 ],
+            "D": [  ],
+            "C": [  ],
+            "B": [  ],
+            "A": [  ]
+          }
+        },
+        "count[0]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X126/Y32/PIOA",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2270 ],
+            "B": [ 2148 ]
+          }
+        },
+        "count[1]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X0/Y32/PIOD",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2268 ],
+            "B": [ 2157 ]
+          }
+        },
+        "rst_n_LUT4_D": {
+          "hide_name": 0,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "INITVAL": "0000000011111111"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X113/Y32/SLICEB.K0",
+            "src": "/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:114.33-115.56",
+            "module_not_derived": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "F": "output",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "F": [ 2142 ],
+            "D": [ 2250 ],
+            "C": [  ],
+            "B": [  ],
+            "A": [  ]
+          }
+        },
+        "count[2]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X0/Y32/PIOA",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2266 ],
+            "B": [ 2160 ]
+          }
+        },
+        "count[3]$tr_io": {
+          "hide_name": 0,
+          "type": "TRELLIS_IO",
+          "parameters": {
+            "DATAMUX_MDDR": "PADDO",
+            "DATAMUX_ODDR": "PADDO",
+            "DIR": "OUTPUT"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X69/Y0/PIOA",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35",
+            "IO_TYPE": "LVCMOS33"
+          },
+          "port_directions": {
+            "IOLTO": "input",
+            "IOLDO": "input",
+            "O": "output",
+            "T": "input",
+            "I": "input",
+            "B": "inout"
+          },
+          "connections": {
+            "IOLTO": [  ],
+            "IOLDO": [  ],
+            "O": [  ],
+            "T": [  ],
+            "I": [ 2264 ],
+            "B": [ 2163 ]
+          }
+        },
+        "$PACKER_GND": {
+          "hide_name": 1,
+          "type": "TRELLIS_COMB",
+          "parameters": {
+            "INITVAL": "0000000000000000"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y31/SLICEB.K0"
+          },
+          "port_directions": {
+            "F": "output",
+            "D": "input",
+            "C": "input",
+            "B": "input",
+            "A": "input"
+          },
+          "connections": {
+            "F": [ 2274 ],
+            "D": [  ],
+            "C": [  ],
+            "B": [  ],
+            "A": [  ]
+          }
+        },
+        "count_TRELLIS_FF_Q_7": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICED.FF0",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2262 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2165 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        },
+        "count_TRELLIS_FF_Q_6": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEC.FF1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2264 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2162 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        },
+        "count_TRELLIS_FF_Q_5": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEC.FF0",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2266 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2159 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        },
+        "count_TRELLIS_FF_Q_4": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICEB.FF1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2268 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2156 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        },
+        "count_TRELLIS_FF_Q_3": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X22/Y32/SLICED.FF1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2260 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2153 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        },
+        "count_TRELLIS_FF_Q_2": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X23/Y32/SLICEA.FF0",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2258 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2150 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        },
+        "count_TRELLIS_FF_Q_1": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X21/Y32/SLICEA.FF0",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2270 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2147 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        },
+        "count_TRELLIS_FF_Q": {
+          "hide_name": 0,
+          "type": "TRELLIS_FF",
+          "parameters": {
+            "SD": "1 ",
+            "SRMODE": "ASYNC",
+            "REGSET": "RESET",
+            "LSRMUX": "LSR",
+            "GSR": "DISABLED",
+            "CLKMUX": "CLK",
+            "CEMUX": "CE"
+          },
+          "attributes": {
+            "BEL_STRENGTH": "00000000000000000000000000000001",
+            "NEXTPNR_BEL": "X23/Y32/SLICEA.FF1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:13.5-18.8|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/cells_map_trellis.v:73.163-73.222",
+            "module_not_derived": "00000000000000000000000000000001",
+            "always_ff": "00000000000000000000000000000001"
+          },
+          "port_directions": {
+            "Q": "output",
+            "LSR": "input",
+            "DI": "input",
+            "CLK": "input",
+            "CE": "input"
+          },
+          "connections": {
+            "Q": [ 2255 ],
+            "LSR": [ 2142 ],
+            "DI": [ 2141 ],
+            "CLK": [ 2301 ],
+            "CE": [ 2252 ]
+          }
+        }
+      },
+      "netnames": {
+        "$glbnet$clk$TRELLIS_IO_IN": {
+          "hide_name": 1,
+          "bits": [ 2301 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/CLK2_SLICE;X22/Y32/0_0_MUXCLK2->0_0_CLK2_SLICE;5;X22/Y32/MUXCLK2;X22/Y32/0_0_CLK0->0_0_MUXCLK2;5;X22/Y32/CLK1_SLICE;X22/Y32/0_0_MUXCLK1->0_0_CLK1_SLICE;5;X22/Y32/MUXCLK1;X22/Y32/0_0_CLK0->0_0_MUXCLK1;5;X22/Y32/G_HPBX0000;;5;X22/Y32/CLK3_SLICE;X22/Y32/0_0_MUXCLK3->0_0_CLK3_SLICE;5;X22/Y32/MUXCLK3;X22/Y32/0_0_CLK0->0_0_MUXCLK3;5;X22/Y32/CLK0;X22/Y32/0_0_G_HPBX0000->0_0_CLK0;5;X12/Y22/G_VPTX0000;X12/Y22/0_0_G_HPRX0000->0_0_G_VPTX0000;5;X13/Y32/R_HPBX0000;X13/Y32/0_0_G_VPTX0000->0_0_R_HPBX0000;5;X21/Y32/G_HPBX0000;;5;X21/Y32/CLK0_SLICE;X21/Y32/0_0_MUXCLK0->0_0_CLK0_SLICE;5;X21/Y32/MUXCLK0;X21/Y32/0_0_CLK0->0_0_MUXCLK0;5;X21/Y32/CLK0;X21/Y32/0_0_G_HPBX0000->0_0_CLK0;5;X30/Y22/G_VPTX0000;X30/Y22/0_0_G_HPRX0000->0_0_G_VPTX0000;5;X31/Y32/L_HPBX0000;X31/Y32/0_0_G_VPTX0000->0_0_L_HPBX0000;5;X23/Y32/G_HPBX0000;;5;X23/Y32/CLK0_SLICE;X23/Y32/0_0_MUXCLK0->0_0_CLK0_SLICE;5;X23/Y32/MUXCLK0;X23/Y32/0_0_CLK0->0_0_MUXCLK0;5;X23/Y32/CLK0;X23/Y32/0_0_G_HPBX0000->0_0_CLK0;5;X0/Y0/G_LRPCLK0;X68/Y70/-68_-70_G_VPFS0000->-68_-70_G_LRPCLK0;5;X0/Y0/G_LLPCLK0;X67/Y70/-67_-70_G_VPFS0000->-67_-70_G_LLPCLK0;5;X0/Y0/G_URPCLK0;X68/Y22/-68_-22_G_VPFS0000->-68_-22_G_URPCLK0;5;X0/Y0/G_CLKO_TDCC0;;5;X0/Y0/G_VPFS0000;X67/Y0/-67_0_G_CLKO_TDCC0->-67_0_G_VPFS0000;5;X0/Y0/G_ULPCLK0;X67/Y22/-67_-22_G_VPFS0000->-67_-22_G_ULPCLK0;5",
+            "ECP5_IS_GLOBAL": "00000000000000000000000000000001"
+          }
+        },
+        "$nextpnr_CCU2C_1$CCU2_FCI_INT": {
+          "hide_name": 1,
+          "bits": [ 2298 ] ,
+          "attributes": {
+            "ROUTING": "X23/Y32/FCIB1_SLICE;;1"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1$CCU2_FCI_INT": {
+          "hide_name": 0,
+          "bits": [ 2295 ] ,
+          "attributes": {
+            "ROUTING": "X23/Y32/FCIA1_SLICE;;1"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_3$CCU2_FCI_INT": {
+          "hide_name": 0,
+          "bits": [ 2292 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCID1_SLICE;;1"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_2$CCU2_FCI_INT": {
+          "hide_name": 0,
+          "bits": [ 2289 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCIC1_SLICE;;1"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_1$CCU2_FCI_INT": {
+          "hide_name": 0,
+          "bits": [ 2286 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCIB1_SLICE;;1"
+          }
+        },
+        "$nextpnr_CCU2C_0$CCU2_FCI_INT": {
+          "hide_name": 1,
+          "bits": [ 2283 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCIA1_SLICE;;1"
+          }
+        },
+        "$nextpnr_CCU2C_1$CIN": {
+          "hide_name": 1,
+          "bits": [ 2280 ] ,
+          "attributes": {
+            "ROUTING": "X23/Y32/FCOA_SLICE;;1;X23/Y32/FCIB_SLICE;X23/Y32/0_0_FCOA_SLICE->0_0_FCIB_SLICE;1"
+          }
+        },
+        "$nextpnr_CCU2C_0$COUT": {
+          "hide_name": 1,
+          "bits": [ 2278 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCOA_SLICE;;1;X22/Y32/FCIB_SLICE;X22/Y32/0_0_FCOA_SLICE->0_0_FCIB_SLICE;1"
+          }
+        },
+        "clk": {
+          "hide_name": 0,
+          "bits": [ 2133 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count[0]": {
+          "hide_name": 0,
+          "bits": [ 2148 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_1_S0": {
+          "hide_name": 0,
+          "bits": [ 2198 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count[1]": {
+          "hide_name": 0,
+          "bits": [ 2157 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count[2]": {
+          "hide_name": 0,
+          "bits": [ 2160 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_1_COUT": {
+          "hide_name": 0,
+          "bits": [ 2193 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCOB_SLICE;;1;X22/Y32/FCIC_SLICE;X22/Y32/0_0_FCOB_SLICE->0_0_FCIC_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/ccu2c_sim.vh:9.9-9.13",
+            "abc9_carry": "00000000000000000000000000000001"
+          }
+        },
+        "count[3]": {
+          "hide_name": 0,
+          "bits": [ 2163 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count[4]": {
+          "hide_name": 0,
+          "bits": [ 2166 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count[5]": {
+          "hide_name": 0,
+          "bits": [ 2154 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count[6]": {
+          "hide_name": 0,
+          "bits": [ 2151 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count[7]": {
+          "hide_name": 0,
+          "bits": [ 2143 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "en": {
+          "hide_name": 0,
+          "bits": [ 2135 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "rst_n": {
+          "hide_name": 0,
+          "bits": [ 2136 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_COUT": {
+          "hide_name": 0,
+          "bits": [ 2177 ] ,
+          "attributes": {
+            "ROUTING": " ",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/ccu2c_sim.vh:9.9-9.13",
+            "abc9_carry": "00000000000000000000000000000001"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_3_COUT": {
+          "hide_name": 0,
+          "bits": [ 2176 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCO_SLICE;;1;X22/Y32/FCO;X22/Y32/0_0_FCO_SLICE->0_0_FCO;1;X23/Y32/HFIE0000;X22/Y32/0_0_FCO->1_0_HFIE0000;1;X23/Y32/FCI;X23/Y32/0_0_HFIE0000->0_0_FCI;1;X23/Y32/FCI_SLICE;X23/Y32/0_0_FCI->0_0_FCI_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/ccu2c_sim.vh:9.9-9.13",
+            "abc9_carry": "00000000000000000000000000000001"
+          }
+        },
+        "rst_n$TRELLIS_IO_IN": {
+          "hide_name": 0,
+          "bits": [ 2250 ] ,
+          "attributes": {
+            "ROUTING": "X126/Y32/JPADDIB_PIO;;1;X126/Y32/JDIB;X126/Y32/0_0_JPADDIB_PIO->0_0_JDIB;1;X125/Y32/JQ5;X126/Y32/0_0_JDIB->-1_0_JQ5;1;X122/Y32/H06W0303;X125/Y32/0_0_JQ5->-3_0_H06W0303;1;X116/Y32/H06W0303;X119/Y32/3_0_H06W0303->-3_0_H06W0303;1;X113/Y32/H01W0100;X113/Y32/3_0_H06W0303->0_0_H01W0100;1;X113/Y32/B2;X113/Y32/0_0_H01W0100->0_0_B2;1;X113/Y32/D2_SLICE;X113/Y32/0_0_B2->0_0_D2_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:9.30-9.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI_CCU2C_S1_2_COUT": {
+          "hide_name": 0,
+          "bits": [ 2208 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/FCOC_SLICE;;1;X22/Y32/FCID_SLICE;X22/Y32/0_0_FCOC_SLICE->0_0_FCID_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:74.7-80.4|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/ccu2c_sim.vh:9.9-9.13",
+            "abc9_carry": "00000000000000000000000000000001"
+          }
+        },
+        "$PACKER_VCC_NET": {
+          "hide_name": 1,
+          "bits": [ 2276 ] ,
+          "attributes": {
+            "ROUTING": " "
+          }
+        },
+        "$PACKER_GND_NET": {
+          "hide_name": 1,
+          "bits": [ 2274 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y31/F2_SLICE;;1;X22/Y31/F2;X22/Y31/0_0_F2_SLICE->0_0_F2;1;X22/Y32/V02S0201;X22/Y31/0_0_F2->0_1_V02S0201;1;X22/Y32/H00L0000;X22/Y32/0_0_V02S0201->0_0_H00L0000;1;X22/Y32/A0;X22/Y32/0_0_H00L0000->0_0_A0;1;X22/Y32/A0_SLICE;X22/Y32/0_0_A0->0_0_A0_SLICE;1"
+          }
+        },
+        "count[4]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2262 ] ,
+          "attributes": {
+            "ROUTING": "X19/Y32/H06W0303;X22/Y32/0_0_Q6->-3_0_H06W0303;1;X13/Y32/H06W0303;X16/Y32/3_0_H06W0303->-3_0_H06W0303;1;X7/Y32/H06W0303;X10/Y32/3_0_H06W0303->-3_0_H06W0303;1;X4/Y35/V06S0303;X4/Y32/3_0_H06W0303->0_3_V06S0303;1;X1/Y35/H06W0303;X4/Y35/0_0_V06S0303->-3_0_H06W0303;1;X1/Y36/V02S0501;X1/Y35/0_0_H06W0303->0_1_V02S0501;1;X1/Y37/JA3;X1/Y37/0_-1_V02S0501->0_0_JA3;1;X0/Y35/JPADDOD;X0/Y35/1_2_JA3->0_0_JPADDOD;1;X0/Y35/PADDOD_PIO;X0/Y35/0_0_JPADDOD->0_0_PADDOD_PIO;1;X22/Y32/Q6_SLICE;;1;X22/Y32/Q6;X22/Y32/0_0_Q6_SLICE->0_0_Q6;1;X22/Y32/V00B0000;X22/Y32/0_0_Q6->0_0_V00B0000;1;X22/Y32/B6;X22/Y32/0_0_V00B0000->0_0_B6;1;X22/Y32/B6_SLICE;X22/Y32/0_0_B6->0_0_B6_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[4]": {
+          "hide_name": 0,
+          "bits": [ 2165 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/F6_SLICE;;1;X22/Y32/F6;X22/Y32/0_0_F6_SLICE->0_0_F6;1;X22/Y32/DI6;X22/Y32/0_0_F6->0_0_DI6;1;X22/Y32/DI6_SLICE;X22/Y32/0_0_DI6->0_0_DI6_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "count[3]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2264 ] ,
+          "attributes": {
+            "ROUTING": "X25/Y32/H06E0303;X22/Y32/0_0_Q5->3_0_H06E0303;1;X31/Y32/H06E0003;X28/Y32/-3_0_H06E0303->3_0_H06E0003;1;X37/Y32/H06E0103;X34/Y32/-3_0_H06E0003->3_0_H06E0103;1;X43/Y32/H06E0103;X40/Y32/-3_0_H06E0103->3_0_H06E0103;1;X49/Y32/H06E0103;X46/Y32/-3_0_H06E0103->3_0_H06E0103;1;X55/Y32/H06E0103;X52/Y32/-3_0_H06E0103->3_0_H06E0103;1;X61/Y32/H06E0203;X58/Y32/-3_0_H06E0103->3_0_H06E0203;1;X67/Y32/H06E0203;X64/Y32/-3_0_H06E0203->3_0_H06E0203;1;X70/Y29/V06N0203;X70/Y32/-3_0_H06E0203->0_-3_V06N0203;1;X70/Y23/V06N0303;X70/Y26/0_3_V06N0203->0_-3_V06N0303;1;X70/Y17/V06N0003;X70/Y20/0_3_V06N0303->0_-3_V06N0003;1;X70/Y11/V06N0103;X70/Y14/0_3_V06N0003->0_-3_V06N0103;1;X70/Y5/V06N0203;X70/Y8/0_3_V06N0103->0_-3_V06N0203;1;X70/Y1/V01N0101;X70/Y2/0_3_V06N0203->0_-1_V01N0101;1;X69/Y1/H02W0501;X70/Y1/0_0_V01N0101->-1_0_H02W0501;1;X69/Y1/JA0;X69/Y1/0_0_H02W0501->0_0_JA0;1;X69/Y0/JPADDOA;X69/Y0/0_1_JA0->0_0_JPADDOA;1;X69/Y0/PADDOA_PIO;X69/Y0/0_0_JPADDOA->0_0_PADDOA_PIO;1;X22/Y32/Q5_SLICE;;1;X22/Y32/Q5;X22/Y32/0_0_Q5_SLICE->0_0_Q5;1;X22/Y32/A5;X22/Y32/0_0_Q5->0_0_A5;1;X22/Y32/B5_SLICE;X22/Y32/0_0_A5->0_0_B5_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[3]": {
+          "hide_name": 0,
+          "bits": [ 2162 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/F5_SLICE;;1;X22/Y32/F5;X22/Y32/0_0_F5_SLICE->0_0_F5;1;X22/Y32/DI5;X22/Y32/0_0_F5->0_0_DI5;1;X22/Y32/DI5_SLICE;X22/Y32/0_0_DI5->0_0_DI5_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "count[2]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2266 ] ,
+          "attributes": {
+            "ROUTING": "X19/Y32/H06W0203;X22/Y32/0_0_Q4->-3_0_H06W0203;1;X13/Y32/H06W0203;X16/Y32/3_0_H06W0203->-3_0_H06W0203;1;X7/Y32/H06W0203;X10/Y32/3_0_H06W0203->-3_0_H06W0203;1;X3/Y32/H02W0701;X4/Y32/3_0_H06W0203->-1_0_H02W0701;1;X1/Y32/H02W0701;X2/Y32/1_0_H02W0701->-1_0_H02W0701;1;X1/Y32/JA0;X1/Y32/0_0_H02W0701->0_0_JA0;1;X0/Y32/JPADDOA;X0/Y32/1_0_JA0->0_0_JPADDOA;1;X0/Y32/PADDOA_PIO;X0/Y32/0_0_JPADDOA->0_0_PADDOA_PIO;1;X22/Y32/Q4_SLICE;;1;X22/Y32/Q4;X22/Y32/0_0_Q4_SLICE->0_0_Q4;1;X22/Y32/H00R0000;X22/Y32/0_0_Q4->0_0_H00R0000;1;X22/Y32/B4;X22/Y32/0_0_H00R0000->0_0_B4;1;X22/Y32/B4_SLICE;X22/Y32/0_0_B4->0_0_B4_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[2]": {
+          "hide_name": 0,
+          "bits": [ 2159 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/F4_SLICE;;1;X22/Y32/F4;X22/Y32/0_0_F4_SLICE->0_0_F4;1;X22/Y32/DI4;X22/Y32/0_0_F4->0_0_DI4;1;X22/Y32/DI4_SLICE;X22/Y32/0_0_DI4->0_0_DI4_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "count[1]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2268 ] ,
+          "attributes": {
+            "ROUTING": "X19/Y32/H06W0003;X22/Y32/0_0_Q3->-3_0_H06W0003;1;X13/Y32/H06W0103;X16/Y32/3_0_H06W0003->-3_0_H06W0103;1;X7/Y32/H06W0103;X10/Y32/3_0_H06W0103->-3_0_H06W0103;1;X1/Y32/H06W0203;X4/Y32/3_0_H06W0103->-3_0_H06W0203;1;X1/Y33/V02S0701;X1/Y32/0_0_H06W0203->0_1_V02S0701;1;X1/Y34/JA3;X1/Y34/0_-1_V02S0701->0_0_JA3;1;X0/Y32/JPADDOD;X0/Y32/1_2_JA3->0_0_JPADDOD;1;X0/Y32/PADDOD_PIO;X0/Y32/0_0_JPADDOD->0_0_PADDOD_PIO;1;X22/Y32/Q3_SLICE;;1;X22/Y32/Q3;X22/Y32/0_0_Q3_SLICE->0_0_Q3;1;X22/Y32/B3;X22/Y32/0_0_Q3->0_0_B3;1;X22/Y32/B3_SLICE;X22/Y32/0_0_B3->0_0_B3_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[1]": {
+          "hide_name": 0,
+          "bits": [ 2156 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/F3_SLICE;;1;X22/Y32/F3;X22/Y32/0_0_F3_SLICE->0_0_F3;1;X22/Y32/DI3;X22/Y32/0_0_F3->0_0_DI3;1;X22/Y32/DI3_SLICE;X22/Y32/0_0_DI3->0_0_DI3_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "count[5]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2260 ] ,
+          "attributes": {
+            "ROUTING": "X25/Y32/H06E0203;X22/Y32/0_0_Q7->3_0_H06E0203;1;X31/Y32/H06E0303;X28/Y32/-3_0_H06E0203->3_0_H06E0303;1;X37/Y32/H06E0303;X34/Y32/-3_0_H06E0303->3_0_H06E0303;1;X43/Y32/H06E0303;X40/Y32/-3_0_H06E0303->3_0_H06E0303;1;X49/Y32/H06E0003;X46/Y32/-3_0_H06E0303->3_0_H06E0003;1;X55/Y32/H06E0003;X52/Y32/-3_0_H06E0003->3_0_H06E0003;1;X61/Y32/H06E0103;X58/Y32/-3_0_H06E0003->3_0_H06E0103;1;X67/Y32/H06E0103;X64/Y32/-3_0_H06E0103->3_0_H06E0103;1;X73/Y32/H06E0103;X70/Y32/-3_0_H06E0103->3_0_H06E0103;1;X79/Y32/H06E0203;X76/Y32/-3_0_H06E0103->3_0_H06E0203;1;X85/Y32/H06E0203;X82/Y32/-3_0_H06E0203->3_0_H06E0203;1;X91/Y32/H06E0203;X88/Y32/-3_0_H06E0203->3_0_H06E0203;1;X97/Y32/H06E0203;X94/Y32/-3_0_H06E0203->3_0_H06E0203;1;X103/Y32/H06E0203;X100/Y32/-3_0_H06E0203->3_0_H06E0203;1;X109/Y32/H06E0203;X106/Y32/-3_0_H06E0203->3_0_H06E0203;1;X115/Y32/H06E0203;X112/Y32/-3_0_H06E0203->3_0_H06E0203;1;X119/Y32/H01E0101;X118/Y32/-3_0_H06E0203->1_0_H01E0101;1;X122/Y32/H06E0303;X119/Y32/0_0_H01E0101->3_0_H06E0303;1;X125/Y33/V02S0501;X125/Y32/-3_0_H06E0303->0_1_V02S0501;1;X125/Y34/JA0;X125/Y34/0_-1_V02S0501->0_0_JA0;1;X126/Y32/JPADDOC;X126/Y32/-1_2_JA0->0_0_JPADDOC;1;X126/Y32/PADDOC_PIO;X126/Y32/0_0_JPADDOC->0_0_PADDOC_PIO;1;X22/Y32/Q7_SLICE;;1;X22/Y32/Q7;X22/Y32/0_0_Q7_SLICE->0_0_Q7;1;X22/Y32/A7;X22/Y32/0_0_Q7->0_0_A7;1;X22/Y32/B7_SLICE;X22/Y32/0_0_A7->0_0_B7_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[5]": {
+          "hide_name": 0,
+          "bits": [ 2153 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/F7_SLICE;;1;X22/Y32/F7;X22/Y32/0_0_F7_SLICE->0_0_F7;1;X22/Y32/DI7;X22/Y32/0_0_F7->0_0_DI7;1;X22/Y32/DI7_SLICE;X22/Y32/0_0_DI7->0_0_DI7_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "count[6]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2258 ] ,
+          "attributes": {
+            "ROUTING": "X20/Y32/H06W0003;X23/Y32/0_0_Q0->-3_0_H06W0003;1;X14/Y32/H06W0103;X17/Y32/3_0_H06W0003->-3_0_H06W0103;1;X8/Y32/H06W0203;X11/Y32/3_0_H06W0103->-3_0_H06W0203;1;X4/Y32/H02W0701;X5/Y32/3_0_H06W0203->-1_0_H02W0701;1;X2/Y32/H02W0701;X3/Y32/1_0_H02W0701->-1_0_H02W0701;1;X1/Y32/JA3;X1/Y32/1_0_H02W0701->0_0_JA3;1;X0/Y32/JPADDOB;X0/Y32/1_0_JA3->0_0_JPADDOB;1;X0/Y32/PADDOB_PIO;X0/Y32/0_0_JPADDOB->0_0_PADDOB_PIO;1;X23/Y32/Q0_SLICE;;1;X23/Y32/Q0;X23/Y32/0_0_Q0_SLICE->0_0_Q0;1;X23/Y32/V00T0000;X23/Y32/0_0_Q0->0_0_V00T0000;1;X23/Y32/B0;X23/Y32/0_0_V00T0000->0_0_B0;1;X23/Y32/B0_SLICE;X23/Y32/0_0_B0->0_0_B0_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[6]": {
+          "hide_name": 0,
+          "bits": [ 2150 ] ,
+          "attributes": {
+            "ROUTING": "X23/Y32/F0_SLICE;;1;X23/Y32/F0;X23/Y32/0_0_F0_SLICE->0_0_F0;1;X23/Y32/DI0;X23/Y32/0_0_F0->0_0_DI0;1;X23/Y32/DI0_SLICE;X23/Y32/0_0_DI0->0_0_DI0_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "count[0]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2270 ] ,
+          "attributes": {
+            "ROUTING": "X24/Y32/H06E0003;X21/Y32/0_0_Q0->3_0_H06E0003;1;X30/Y32/H06E0103;X27/Y32/-3_0_H06E0003->3_0_H06E0103;1;X36/Y32/H06E0103;X33/Y32/-3_0_H06E0103->3_0_H06E0103;1;X42/Y32/H06E0203;X39/Y32/-3_0_H06E0103->3_0_H06E0203;1;X48/Y32/H06E0303;X45/Y32/-3_0_H06E0203->3_0_H06E0303;1;X54/Y32/H06E0003;X51/Y32/-3_0_H06E0303->3_0_H06E0003;1;X60/Y32/H06E0003;X57/Y32/-3_0_H06E0003->3_0_H06E0003;1;X66/Y32/H06E0003;X63/Y32/-3_0_H06E0003->3_0_H06E0003;1;X72/Y32/H06E0103;X69/Y32/-3_0_H06E0003->3_0_H06E0103;1;X78/Y32/H06E0103;X75/Y32/-3_0_H06E0103->3_0_H06E0103;1;X84/Y32/H06E0103;X81/Y32/-3_0_H06E0103->3_0_H06E0103;1;X90/Y32/H06E0103;X87/Y32/-3_0_H06E0103->3_0_H06E0103;1;X96/Y32/H06E0203;X93/Y32/-3_0_H06E0103->3_0_H06E0203;1;X102/Y32/H06E0203;X99/Y32/-3_0_H06E0203->3_0_H06E0203;1;X108/Y32/H06E0203;X105/Y32/-3_0_H06E0203->3_0_H06E0203;1;X114/Y32/H06E0203;X111/Y32/-3_0_H06E0203->3_0_H06E0203;1;X120/Y32/H06E0203;X117/Y32/-3_0_H06E0203->3_0_H06E0203;1;X124/Y32/H02E0701;X123/Y32/-3_0_H06E0203->1_0_H02E0701;1;X125/Y32/JA0;X125/Y32/-1_0_H02E0701->0_0_JA0;1;X126/Y32/JPADDOA;X126/Y32/-1_0_JA0->0_0_JPADDOA;1;X126/Y32/PADDOA_PIO;X126/Y32/0_0_JPADDOA->0_0_PADDOA_PIO;1;X21/Y32/D0;X21/Y32/0_0_Q0->0_0_D0;1;X21/Y32/D0_SLICE;X21/Y32/0_0_D0->0_0_D0_SLICE;1;X21/Y32/Q0_SLICE;;1;X21/Y32/Q0;X21/Y32/0_0_Q0_SLICE->0_0_Q0;1;X22/Y32/H01E0001;X21/Y32/0_0_Q0->1_0_H01E0001;1;X22/Y32/A2;X22/Y32/0_0_H01E0001->0_0_A2;1;X22/Y32/B2_SLICE;X22/Y32/0_0_A2->0_0_B2_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[0]": {
+          "hide_name": 0,
+          "bits": [ 2147 ] ,
+          "attributes": {
+            "ROUTING": "X21/Y32/F0_SLICE;;1;X21/Y32/F0;X21/Y32/0_0_F0_SLICE->0_0_F0;1;X21/Y32/DI0;X21/Y32/0_0_F0->0_0_DI0;1;X21/Y32/DI0_SLICE;X21/Y32/0_0_DI0->0_0_DI0_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "count[7]$TRELLIS_IO_OUT": {
+          "hide_name": 0,
+          "bits": [ 2255 ] ,
+          "attributes": {
+            "ROUTING": "X26/Y32/H06E0103;X23/Y32/0_0_Q1->3_0_H06E0103;1;X32/Y32/H06E0203;X29/Y32/-3_0_H06E0103->3_0_H06E0203;1;X38/Y32/H06E0203;X35/Y32/-3_0_H06E0203->3_0_H06E0203;1;X44/Y32/H06E0303;X41/Y32/-3_0_H06E0203->3_0_H06E0303;1;X50/Y32/H06E0003;X47/Y32/-3_0_H06E0303->3_0_H06E0003;1;X56/Y32/H06E0103;X53/Y32/-3_0_H06E0003->3_0_H06E0103;1;X62/Y32/H06E0203;X59/Y32/-3_0_H06E0103->3_0_H06E0203;1;X68/Y32/H06E0303;X65/Y32/-3_0_H06E0203->3_0_H06E0303;1;X74/Y32/H06E0003;X71/Y32/-3_0_H06E0303->3_0_H06E0003;1;X80/Y32/H06E0003;X77/Y32/-3_0_H06E0003->3_0_H06E0003;1;X86/Y32/H06E0003;X83/Y32/-3_0_H06E0003->3_0_H06E0003;1;X92/Y32/H06E0103;X89/Y32/-3_0_H06E0003->3_0_H06E0103;1;X98/Y32/H06E0103;X95/Y32/-3_0_H06E0103->3_0_H06E0103;1;X104/Y32/H06E0103;X101/Y32/-3_0_H06E0103->3_0_H06E0103;1;X110/Y32/H06E0103;X107/Y32/-3_0_H06E0103->3_0_H06E0103;1;X116/Y32/H06E0103;X113/Y32/-3_0_H06E0103->3_0_H06E0103;1;X122/Y32/H06E0203;X119/Y32/-3_0_H06E0103->3_0_H06E0203;1;X125/Y33/V02S0701;X125/Y32/-3_0_H06E0203->0_1_V02S0701;1;X125/Y34/JA3;X125/Y34/0_-1_V02S0701->0_0_JA3;1;X126/Y32/JPADDOD;X126/Y32/-1_2_JA3->0_0_JPADDOD;1;X126/Y32/PADDOD_PIO;X126/Y32/0_0_JPADDOD->0_0_PADDOD_PIO;1;X23/Y32/Q1_SLICE;;1;X23/Y32/Q1;X23/Y32/0_0_Q1_SLICE->0_0_Q1;1;X23/Y32/B1;X23/Y32/0_0_Q1->0_0_B1;1;X23/Y32/B1_SLICE;X23/Y32/0_0_B1->0_0_B1_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:11.30-11.35"
+          }
+        },
+        "rst_n_LUT4_D_Z": {
+          "hide_name": 0,
+          "bits": [ 2142 ] ,
+          "attributes": {
+            "ROUTING": "X22/Y32/MUXLSR2;X22/Y32/0_0_LSR0->0_0_MUXLSR2;1;X22/Y32/LSR2_SLICE;X22/Y32/0_0_MUXLSR2->0_0_LSR2_SLICE;1;X21/Y32/LSR1;X21/Y32/1_0_H02W0301->0_0_LSR1;1;X21/Y32/MUXLSR0;X21/Y32/0_0_LSR1->0_0_MUXLSR0;1;X21/Y32/LSR0_SLICE;X21/Y32/0_0_MUXLSR0->0_0_LSR0_SLICE;1;X28/Y32/H02W0301;X29/Y32/3_0_H06W0003->-1_0_H02W0301;1;X26/Y32/H02W0301;X27/Y32/1_0_H02W0301->-1_0_H02W0301;1;X24/Y32/H02W0301;X25/Y32/1_0_H02W0301->-1_0_H02W0301;1;X23/Y32/LSR0;X23/Y32/1_0_H02W0301->0_0_LSR0;1;X23/Y32/MUXLSR0;X23/Y32/0_0_LSR0->0_0_MUXLSR0;1;X23/Y32/LSR0_SLICE;X23/Y32/0_0_MUXLSR0->0_0_LSR0_SLICE;1;X22/Y32/LSR1;X22/Y32/0_0_H02W0301->0_0_LSR1;1;X22/Y32/MUXLSR1;X22/Y32/0_0_LSR1->0_0_MUXLSR1;1;X22/Y32/LSR1_SLICE;X22/Y32/0_0_MUXLSR1->0_0_LSR1_SLICE;1;X113/Y32/F2_SLICE;;1;X113/Y32/F2;X113/Y32/0_0_F2_SLICE->0_0_F2;1;X110/Y32/H06W0103;X113/Y32/0_0_F2->-3_0_H06W0103;1;X104/Y32/H06W0203;X107/Y32/3_0_H06W0103->-3_0_H06W0203;1;X98/Y32/H06W0203;X101/Y32/3_0_H06W0203->-3_0_H06W0203;1;X92/Y32/H06W0203;X95/Y32/3_0_H06W0203->-3_0_H06W0203;1;X86/Y32/H06W0303;X89/Y32/3_0_H06W0203->-3_0_H06W0303;1;X80/Y32/H06W0003;X83/Y32/3_0_H06W0303->-3_0_H06W0003;1;X74/Y32/H06W0103;X77/Y32/3_0_H06W0003->-3_0_H06W0103;1;X68/Y32/H06W0203;X71/Y32/3_0_H06W0103->-3_0_H06W0203;1;X62/Y32/H06W0203;X65/Y32/3_0_H06W0203->-3_0_H06W0203;1;X56/Y32/H06W0303;X59/Y32/3_0_H06W0203->-3_0_H06W0303;1;X50/Y32/H06W0303;X53/Y32/3_0_H06W0303->-3_0_H06W0303;1;X44/Y32/H06W0303;X47/Y32/3_0_H06W0303->-3_0_H06W0303;1;X38/Y32/H06W0303;X41/Y32/3_0_H06W0303->-3_0_H06W0303;1;X32/Y32/H06W0003;X35/Y32/3_0_H06W0303->-3_0_H06W0003;1;X26/Y32/H06W0003;X29/Y32/3_0_H06W0003->-3_0_H06W0003;1;X22/Y32/H02W0301;X23/Y32/3_0_H06W0003->-1_0_H02W0301;1;X22/Y32/LSR0;X22/Y32/0_0_H02W0301->0_0_LSR0;1;X22/Y32/MUXLSR3;X22/Y32/0_0_LSR0->0_0_MUXLSR3;1;X22/Y32/LSR3_SLICE;X22/Y32/0_0_MUXLSR3->0_0_LSR3_SLICE;1"
+          }
+        },
+        "count_TRELLIS_FF_Q_DI[7]": {
+          "hide_name": 0,
+          "bits": [ 2141 ] ,
+          "attributes": {
+            "ROUTING": "X23/Y32/F1_SLICE;;1;X23/Y32/F1;X23/Y32/0_0_F1_SLICE->0_0_F1;1;X23/Y32/DI1;X23/Y32/0_0_F1->0_0_DI1;1;X23/Y32/DI1_SLICE;X23/Y32/0_0_DI1->0_0_DI1_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:17.22-17.34|/tmp/oss_cad/oss-cad-suite/lib/../share/yosys/lattice/arith_map_ccu2c.v:34.26-34.27",
+            "force_downto": "00000000000000000000000000000001"
+          }
+        },
+        "clk$TRELLIS_IO_IN": {
+          "hide_name": 0,
+          "bits": [ 2272 ] ,
+          "attributes": {
+            "ROUTING": "X69/Y0/JPADDIB_PIO;;1;X69/Y0/JDIB;X69/Y0/0_0_JPADDIB_PIO->0_0_JDIB;1;X70/Y1/JQ0;X69/Y0/0_0_JDIB->1_1_JQ0;1;X73/Y1/H06E0003;X70/Y1/0_0_JQ0->3_0_H06E0003;1;X75/Y1/H02W0001;X76/Y1/-3_0_H06E0003->-1_0_H02W0001;1;X75/Y1/JD7;X75/Y1/0_0_H02W0001->0_0_JD7;1;X0/Y0/G_JTRQPCLKCIB1;X67/Y0/8_1_JD7->-67_0_G_JTRQPCLKCIB1;1;X0/Y0/G_TDCC0CLKI;X67/Y0/-67_0_G_JTRQPCLKCIB1->-67_0_G_TDCC0CLKI;1;X0/Y0/G_CLKI_TDCC0;X67/Y0/-67_0_G_TDCC0CLKI->-67_0_G_CLKI_TDCC0;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:8.30-8.33"
+          }
+        },
+        "en$TRELLIS_IO_IN": {
+          "hide_name": 0,
+          "bits": [ 2252 ] ,
+          "attributes": {
+            "ROUTING": "X21/Y32/H02W0701;X22/Y32/0_1_V02N0701->-1_0_H02W0701;1;X21/Y32/H00R0100;X21/Y32/0_0_H02W0701->0_0_H00R0100;1;X21/Y32/CE0;X21/Y32/0_0_H00R0100->0_0_CE0;1;X21/Y32/CE0_SLICE;X21/Y32/0_0_CE0->0_0_CE0_SLICE;1;X23/Y32/H02E0701;X22/Y32/0_1_V02N0701->1_0_H02E0701;1;X23/Y32/H00R0100;X23/Y32/0_0_H02E0701->0_0_H00R0100;1;X23/Y32/CE0;X23/Y32/0_0_H00R0100->0_0_CE0;1;X23/Y32/CE0_SLICE;X23/Y32/0_0_CE0->0_0_CE0_SLICE;1;X22/Y32/CE1;X22/Y32/0_0_H00R0100->0_0_CE1;1;X22/Y32/CE1_SLICE;X22/Y32/0_0_CE1->0_0_CE1_SLICE;1;X22/Y32/CE2;X22/Y32/0_0_H00R0100->0_0_CE2;1;X22/Y32/CE2_SLICE;X22/Y32/0_0_CE2->0_0_CE2_SLICE;1;X0/Y32/JPADDIC_PIO;;1;X0/Y32/JDIC;X0/Y32/0_0_JPADDIC_PIO->0_0_JDIC;1;X1/Y34/JF5;X0/Y32/0_0_JDIC->1_2_JF5;1;X4/Y34/H06E0303;X1/Y34/0_0_JF5->3_0_H06E0303;1;X10/Y34/H06E0003;X7/Y34/-3_0_H06E0303->3_0_H06E0003;1;X16/Y34/H06E0103;X13/Y34/-3_0_H06E0003->3_0_H06E0103;1;X22/Y34/H06E0203;X19/Y34/-3_0_H06E0103->3_0_H06E0203;1;X22/Y33/V02N0701;X22/Y34/0_0_H06E0203->0_-1_V02N0701;1;X22/Y32/H00R0100;X22/Y32/0_1_V02N0701->0_0_H00R0100;1;X22/Y32/CE3;X22/Y32/0_0_H00R0100->0_0_CE3;1;X22/Y32/CE3_SLICE;X22/Y32/0_0_CE3->0_0_CE3_SLICE;1",
+            "src": "fpga/opensynth/examples/minimal_counter.sv:10.30-10.32"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-002",
+  "label": "B25-POSTPRE-WRITEBACK",
+  "title": "Fix AArch64 pre/post-index base writeback architecture mismatch",
+  "kind": "rtl-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-batch-union",
+  "assigned_owner": "b25_gate_d",
+  "depends_on": [],
+  "follows_from": "T-20260907-046",
+  "base_sha": "004b62c19cf2ff4dfd0fb721332fc3a651ed7b99",
+  "branch": "fix/T-20260908-002-b25-postpre-writeback",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-002",
+  "scope": "Reproduce the first Gate D failure at hard_postpre seq=21 (ldrb w5,[x20,#4]!), identify why RTL writes x20=0x44090015 instead of 0x44090014, and implement the smallest architectural fix covering register/SP, 32/64-bit load/store and pre/post-index hazards.",
+  "writes": [
+    "rtl/lcvex_decode.sv::single/pair pre/post-index decode blocks only",
+    "rtl/lcvex_core.sv::wb3/address-forwarding/hazard logic only",
+    "one new uniquely named focused test and runner if required",
+    "docs/tasks/evidence/T-20260908-002.json",
+    "docs/handoffs/T-20260908-002-b25-postpre-writeback.md",
+    "build/agents/T-20260908-002/** ignored artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260907-046.json",
+    "existing hard_postpre image and lockstep runners",
+    "decode/writeback/forwarding logic relevant to wb3_extra"
+  ],
+  "validation": [
+    "Preserve a focused reproduction of the exact seq=21 mismatch before the fix.",
+    "Run hard_postpre in base, cache and delay2 modes plus focused unit/SVA checks after the fix, all heavy work under local resource-lock.",
+    "Check Rt==Rn, SP base, load/store sizes and pre/post-index addressing/writeback ordering; record exact commands and first failure if any."
+  ],
+  "acceptance": "The exact directed mismatch is fixed in all three modes without weakening difftest/assertions, and the base update value and memory effective address match AArch64 semantics across the focused matrix.",
+  "resource": {
+    "lock": "local",
+    "policy": "Acquire resource-lock run local for all compilation/lockstep; task-local TMPDIR/build output; return 75 means wait."
+  },
+  "forbidden_regions": [
+    "QEMU fork/reference/golden/test expectation changes",
+    "FP scalar RTL owned by T-20260908-001",
+    "full Gate D (integration reruns it after merge)",
+    "GamePC/Quartus/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T11:18:18+08:00",
+  "updated_at": "2026-09-08T13:14:54+08:00",
+  "result_head": "4974442da609e7d2b190f380304c565ad55294db",
+  "integrated_head": "2184cab2",
+  "integrator_review": {
+    "received_at": "2026-09-08T12:02:42+08:00",
+    "reviewed_at": "2026-09-08T12:08:08+08:00",
+    "status": "accepted-batch-union",
+    "batch_candidate_sha": "3ffd0c119f691ab0aef98984cddf1ba0c5ab208a",
+    "batch_validation": "T-002 base/cache/delay2 each 180/180 pass; T-004 six-matrix union each 45/45 pass.",
+    "gate_d_candidate_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+    "gate_d_evidence": "docs/tasks/evidence/T-20260908-005.json",
+    "pending": "none; full Gate D is green"
+  },
+  "merge_sha": "3ffd0c119f691ab0aef98984cddf1ba0c5ab208a",
+  "write_regions_note": "Shared-file exception with T-20260908-004: T-002 owns only pre/post-index and wb3-related regions; it must not edit the register-offset single load/store block owned by T-004 or common decode typedefs/ports.",
+  "dispatch": {
+    "sent_at": "2026-09-08T11:23:14+08:00",
+    "agent_name": "b25_gate_d",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "8316a1b8b94010ea31cf791e441e3f065197e841"
+  }
+}

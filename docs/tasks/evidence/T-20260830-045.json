@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-045",
+  "label": "PE-F1A-STATIC",
+  "state": "review",
+  "partial": false,
+  "owner": "luna-f1a-static-audit",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "base_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+  "head_sha": "3d953e4a2dba1b255876ca520973d5c5b68d0198",
+  "content_sha": "3d953e4a2dba1b255876ca520973d5c5b68d0198",
+  "merge_sha": "",
+  "branch": "verify/T-20260830-045-f1a-static-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-045",
+  "sent_at": "2026-08-30T22:13:05+08:00",
+  "received_at": "2026-08-30T22:33:14+08:00",
+  "reported_at": "2026-08-30T22:47:26+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-08-30T22:13:05+08:00",
+    "received_at": "2026-08-30T22:33:14+08:00",
+    "reported_at": "2026-08-30T22:47:26+08:00"
+  },
+  "scope": "docs-only 静态 RTL 因果审阅：分析 F1a FIFO/epoch/quarantine 与 legacy fetch/IFID/flush/memory-stall 交互，解释 T-043 timing-sensitive 多退休模式；不修改 RTL/TB/sim/QEMU/workload/reference，不运行生成器、构建、仿真或 QEMU。",
+  "files_written": [
+    "docs/handoffs/T-20260830-045-f1a-static-audit.md",
+    "docs/tasks/evidence/T-20260830-045.json"
+  ],
+  "tests": "docs-only/static jq/text checks + git diff --check; no build/sim/QEMU/generator",
+  "read_files": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "/home/chiro/projects/mycpu/lcvex/docs/tasks/active/T-20260830-045.json",
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/PERFORMANCE_F1_RESULTS.md",
+    "docs/handoffs/T-20260830-041-pe-f1a-fetch-fifo.md",
+    "docs/tasks/evidence/T-20260830-041.json",
+    "docs/handoffs/T-20260830-043-pe-f1c-results.md",
+    "docs/tasks/evidence/T-20260830-043.json",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.json",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.csv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/difftest/run_f1a.sh",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_mmu.sv",
+    "rtl/lcvex_mem_arb.sv",
+    "rtl/lcvex_mem_delay.sv",
+    "rtl/lcvex_mem_router.sv",
+    "rtl/lcvex_mem_ram.sv",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "scripts/run_perf_matrix.py",
+    "baremetal/microbench_main.c",
+    "baremetal/startup_mb.s",
+    "baremetal/perf/t_fp_scalar.c",
+    "baremetal/perf/t_fp_fp16.c",
+    "baremetal/perf/t_neon_vect.c",
+    "baremetal/perf/t_mem_seq.c",
+    "baremetal/perf/t_mem_random.c",
+    "baremetal/perf/t_mem_ldst.c",
+    "baremetal/perf/t_kernel_sort.c",
+    "baremetal/perf/t_kernel_crc.c",
+    "baremetal/perf/t_kernel_hash.c",
+    "baremetal/perf/t_kernel_matmul.c",
+    "/home/chiro/projects/mycpu/lcvex/docs/tasks/active/T-20260830-044.json"
+  ],
+  "source_artifacts": {
+    "t043_measurement_source_sha": "b2b0a96894596ade51e8409fc7b9d4eb566cfe63",
+    "t043_matrix_json_sha256": "5f08726819567b6fb096d4fa44e94b5733a46fa7b5fbb8d4fdc8886235d0dfce",
+    "t043_matrix_csv_sha256": "9d3afbaf24bdc75483a311a0ff543f989e0d4a65c96922cfc5ba39f1f4a01351",
+    "t043_results_sha256": "223aa09cee0b3273290c0366cd31b75f4ecb05bb60810cd2f6bebca5492e6cad",
+    "t041_content_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+    "t041_head_sha": "8e91df54ae251869779b3e7ebcaaf735df158aa0"
+  },
+  "read_only_commands": [
+    {
+      "run_id": "worktree-check-001",
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'; git status --short --branch; git rev-parse HEAD; git branch --show-current",
+      "source_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+      "result": "read-only-pass",
+      "summary": "2026-08-30T22:14:25+0800；专用 worktree clean，HEAD/base 和 branch 正确。"
+    },
+    {
+      "run_id": "required-doc-read-001",
+      "command": "sed 只读阅读 AGENTS.md、docs/MULTI_AGENT_WORKFLOW.md、T-045 JSON、PERFORMANCE_F1_PREWORK/RESULTS、T-041/T-043 handoff/evidence",
+      "source_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+      "result": "read-only-pass",
+      "summary": "完成任务边界、F1a 契约、T-041 implementation evidence 与 T-043 measurement gate failure 审阅。"
+    },
+    {
+      "run_id": "artifact-schema-audit-001",
+      "command": "jq '.schema,.provenance,.configs,.workloads,(.rows[0]|keys)' docs/evidence/artifacts/T-20260830-043/f1c_matrix.json; jq pair grouping for status/retired/commit/memory/effect mismatches",
+      "source_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+      "result": "read-only-pass",
+      "summary": "确认 196 rows、98 pairs、177 pass/19 timeout/0 fail；retired mismatch=42、memory effect/count mismatch=6、status mismatch=1、commit-only mismatch=0。"
+    },
+    {
+      "run_id": "artifact-pattern-audit-001",
+      "command": "jq grouped pair summary for negative controls, mismatch workload/base list, fetch FIFO counters and selected deltas",
+      "source_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+      "result": "read-only-pass",
+      "summary": "负对照 alu_latency/ctrl_branch/kernel_crc/kernel_hash/kernel_matmul 的可完成 pair 严格等价；6 个 memory mismatch 和唯一 timeout/pass pair 已列出。"
+    },
+    {
+      "run_id": "rtl-causal-read-001",
+      "command": "nl/sed/rg 只读阅读 rtl/lcvex_core.sv F1a declarations/guards/issue-response/FIFO/IFID/stall/commit/SVA、soc TB、fetch FIFO TB/Cocotb 和 run_f1a.sh",
+      "source_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+      "result": "read-only-pass",
+      "summary": "形成 enabled fetch→MMU/IMEM→FIFO→IFID→pipeline→commit 的行级因果图，审阅同拍 push/pop、flush/response、data stall 和 kill/epoch。"
+    },
+    {
+      "run_id": "memory-workload-read-001",
+      "command": "sed 只读阅读 lcvex_l1_i/mmu/mem_arb/mem_delay/router/ram、microbench runner、perf matrix 和相关 14 workload source",
+      "source_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+      "result": "read-only-pass",
+      "summary": "确认 runner 以 magic store commit 结束，解释 pass/pass retired mismatch 与 memory digest 相等/不等的含义。"
+    },
+    {
+      "run_id": "docs-validation-001",
+      "command": "git diff --check; jq empty docs/tasks/evidence/T-20260830-045.json; test -z \"$(git status --porcelain)\"; git diff --name-only ab6e44f6de301a50dd8930b7e457ee6e4ba3d424..HEAD",
+      "source_sha": "b6035d0db10d9f989aa5d62e81e6d6d2f495097b",
+      "result": "pass",
+      "summary": "最终 metadata 前静态检查通过：JSON、whitespace、clean worktree 和两文件写集；未运行任何构建、仿真、QEMU 或生成器。"
+    }
+  ],
+  "t043_observations": {
+    "rows": 196,
+    "pairs": 98,
+    "status_counts": {"pass": 177, "timeout": 19, "fail": 0},
+    "strict_equal_pairs": "56/98",
+    "pass_pass_pairs": 88,
+    "retired_mismatch_pairs": 42,
+    "memory_digest_or_effect_count_mismatch_pairs": 6,
+    "status_mismatch_pairs": ["nocache_d1/mem_random"],
+    "commit_only_mismatch_pairs": 0,
+    "memory_mismatch_pairs": [
+      "fullcache_d1/neon_vect",
+      "fullcache_d2/neon_vect",
+      "l1i_d0/neon_vect",
+      "l1id_l2_d0/neon_vect",
+      "nocache_d1/mem_random",
+      "nocache_d1/mem_seq"
+    ],
+    "negative_controls": ["alu_latency", "ctrl_branch", "kernel_crc", "kernel_hash", "kernel_matmul"],
+    "f1a_fifo_global": {
+      "occupancy_max": 2,
+      "peak_signal_max": 2,
+      "overflow": 0,
+      "push": 29476582,
+      "pop": 28935387,
+      "flush": 6580600,
+      "epoch_bumps": 6580600,
+      "stale_drop": 5595112,
+      "stale_drain_cycles": 5269955
+    },
+    "interpretation": "FIFO bound counters do not prove instruction sequence equivalence. pass/pass memory digest equal with retired delta can be extra control/compare/no-op commits; memory digest/effect-count mismatch requires actual memory/vector effect first-trace inspection."
+  },
+  "hypotheses": [
+    {
+      "id": "H-01",
+      "rank": 1,
+      "confidence": "likely",
+      "scope": "T-043 d0/cache affected classes; no unique root without T-044 trace",
+      "title": "frontend kill 与同拍 IMEM response 在无 response ID 下错误归属",
+      "source_conditions": [
+        "rtl/lcvex_core.sv:795-801 frontend_kill 聚合 flush/system/IRQ/WFI/TLBI/restore",
+        "rtl/lcvex_core.sv:826-844 current response 依赖 pending+epoch，kill 时 current=false，stale drop 仅由 ready/valid 计算",
+        "rtl/lcvex_core.sv:1773-1778 kill/stale 时 imem_rsp_ready 强制为 1",
+        "rtl/lcvex_core.sv:1971-1994 kill 时同步清 context/设置 stale，rtl/lcvex_core.sv:2442-2492 主时序清 pending"
+      ],
+      "t044_first_trace_signature": "seq=k-1 完全相同；first mismatch 邻近 fetch_fifo_flush=1、fetch_epoch+1，delay0 同拍 fetch_stale_rsp_drop=1 或 delay1/2 先出现 fetch_stale_drain=1；随后 f1a PC/insn/next_pc skip/repeat/sequence shift。",
+      "exclusion": "first mismatch 前后无 frontend_kill/flush/stale/drop，且 FIFO entry 的 PC/epoch/seq 与 IFID 连续；则排除 H-01。",
+      "minimal_fix_writeset": "先限于 rtl/lcvex_core.sv + F1a SV/Cocotb；若 trace 证明单 context 不足，再独立登记 lcvex_pkg/lcvex_l1_i/lcvex_mmu/lcvex_mem_arb/mem_delay/mem_ram sideband task。",
+      "tests": "d0/d1/d2、I-L1/cache 下控制 IMEM response 在 branch/system flush 同拍、前一拍、后一拍到达；验证 stale 不 push、response 恰一次、PC/epoch/seq 连续。"
+    },
+    {
+      "id": "H-02",
+      "rank": 2,
+      "confidence": "likely",
+      "scope": "T-043 memory/NEON/FP/sort 交界；6 个 memory mismatch 待证伪",
+      "title": "FIFO pop 与 IFID/stall/data response 不是同一个原子 fire",
+      "source_conditions": [
+        "rtl/lcvex_core.sv:812-821 fetch_fifo_pop 是独立展开谓词，不直接检查 ifid_valid/mem_busy/stall_if",
+        "rtl/lcvex_core.sv:1728-1735 stall_id/stall_if 另一路包含 EX/MEM 不可前进、data translation、load-use、stale",
+        "rtl/lcvex_core.sv:2564-2578 IFID 只有 stall_if 才保持，否则 pop=0 会清 valid",
+        "rtl/lcvex_core.sv:1260-1271,2594-2606 data_wait_for_translation/trans_done_for_ifid 决定 data op 是否可入 EX"
+      ],
+      "t044_first_trace_signature": "first mismatch 落在 LDR/STR/LDP/STP/NEON memory 或 FP load 邻近；出现 pop 与 dmem_pending/mem_busy/data_wait/load_use 交界，候选形状为 pop=0 && stall_if=0 且 IFID valid 掉落，或 pop=1 时 EX/MEM data op 仍未可前进；6 对的 mem_we/addr/strb/count 随后首次分叉。",
+      "exclusion": "first mismatch 是纯 ALU/control，或窗口内 IFID valid/PC/insn 保持、pop 与 stall_if 同值且 EX/MEM 已可前进，则排除 H-02。",
+      "minimal_fix_writeset": "rtl/lcvex_core.sv；新增/扩展 tb/sv/lcvex_fetch_fifo_tb.sv 与 sim/cocotb/test_fetch_fifo.py 定向边界，不改公共 ABI，除非 trace 证明必须加 response ID。",
+      "tests": "FIFO count=0/1/2 push+pop、dmem response 同拍、load-use/FP load-use、LDP/STP/NEON pair、commit_ready backpressure；逐条比较 PC/retired/memory effect。"
+    },
+    {
+      "id": "H-03",
+      "rank": 3,
+      "confidence": "confirmed",
+      "scope": "条件 correctness gap，主要解释 fetch-fault timeout，不解释无 fault 的 pass/pass mismatch",
+      "title": "FIFO fault head 没有架构消费路径",
+      "source_conditions": [
+        "rtl/lcvex_core.sv:835-884、2459-2469 可把 IMEM/MMU fault push 到 FIFO",
+        "rtl/lcvex_core.sv:803-806、812-819、4127-4129 fetch_fifo_head_fault 只阻止 pop/issue 并出现在 SVA",
+        "rtl/lcvex_core.sv:1690-1717 sys_at_id 只读 IFID decode/dabt/system op，不读 FIFO fault head",
+        "rtl/lcvex_core.sv:2564-2578 fault head 时 pop=0 且 stall_if 未含 head_fault，IFID 可能被清空"
+      ],
+      "t044_first_trace_signature": "f1a 出现 fault entry/head_fault=1、count>0；pop=0、fetch/imem accept=0，IFID 不装 fault，随后无 IABT/fault commit，最终无下一 commit/timeout。",
+      "exclusion": "timeout 窗口没有 fetch fault entry，或旧 fetch_faulted/fetch_merge_wb 路径已经产生正确 IABT，则排除 H-03。",
+      "minimal_fix_writeset": "rtl/lcvex_core.sv + fetch fault SV/Cocotb 定向测试；不得在本静态任务修改。",
+      "tests": "MMU fetch fault、IMEM fault、FIFO 满后 fault_pending、fault 与 branch/TLBI/reset 同拍；检查 fault PC/FSC、IABT merge 与 no-stale。"
+    },
+    {
+      "id": "H-04",
+      "rank": 4,
+      "confidence": "confirmed",
+      "scope": "独立 backpressure gap，不是 T-043 恒 commit_ready=1 的直接根因",
+      "title": "commit_ready=0 时 pop 被禁但 IFID 未必保持",
+      "source_conditions": [
+        "rtl/lcvex_core.sv:812-819 fetch_fifo_pop 含 commit_ready",
+        "rtl/lcvex_core.sv:2564-2578 IFID hold 只看 stall_if，未直接看 !commit_ready",
+        "当 commit_ready=0、memwb_valid=0、无其它 stall 且 FIFO count>0 时，stall_wb/stall_if=0、pop=0，IFID valid 会清零"
+      ],
+      "t044_first_trace_signature": "commit_ready 下降后出现 fifo_count>0,pop=0,stall_if=0,ifid_valid 1→0；ready 恢复后第一条 PRE/COMMIT 缺少原 IFID PC 或 PC 跳跃。",
+      "exclusion": "memwb_valid&&!commit_ready 使 stall_wb=stall_if=1，或 FIFO count=0/IFID 已无效，则排除 H-04；T-043 runner 恒定 ready=1。",
+      "minimal_fix_writeset": "rtl/lcvex_core.sv + fetch FIFO SV/Cocotb；增加 ready atomic hold assertion 和完整后续指令比较。",
+      "tests": "在不同 FIFO occupancy、无/有 WB 条目时拉低 commit_ready，检查 IFID/FIFO/PC/commit packet 全保持。"
+    },
+    {
+      "id": "H-05",
+      "rank": 5,
+      "confidence": "possible",
+      "scope": "maintenance/system boundary only；不是无 system op workload 的优先解释",
+      "title": "maintenance start 与 system commit/redirect 重复 kill/epoch",
+      "source_conditions": [
+        "rtl/lcvex_core.sv:795-801 frontend_kill 同时含 sys_maint_at_id&&maint_state==MS_IDLE、sys_commit、tlb_invalidate、sys_fetch_redirect",
+        "rtl/lcvex_core.sv:3935-4031 maintenance FSM 从 MS_IDLE 进入 MS_DONE/REQ，随后 sys_commit 可再次 kill",
+        "rtl/lcvex_core.sv:1438-1455 system redirect 对 FIFO count/pending 也触发 kill"
+      ],
+      "t044_first_trace_signature": "IC/TLBI/maintenance/ERET PC 附近两个相邻周期 fetch_fifo_flush=1 且 epoch 连续加二，随后 target fetch 重发；无维护/系统边界应排除。",
+      "exclusion": "只出现一次统一 kill/epoch bump，或 first mismatch 没有 system/maintenance op，则排除 H-05。",
+      "minimal_fix_writeset": "rtl/lcvex_core.sv + maintenance/TLBI/IC SV/Cocotb/lockstep boundary tests；一次 redirect 只聚合一次 kill。",
+      "tests": "sys_fetch_redirect、IC IVAU/IALLU、TLBI、ERET、commit_ready 和 in-flight response 组合。"
+    }
+  ],
+  "validation": {
+    "tests_run": false,
+    "build_run": false,
+    "simulation_run": false,
+    "qemu_run": false,
+    "generator_run": false,
+    "quartus_run": false,
+    "git_diff_check": "pass",
+    "json_parse": "pass",
+    "write_set_check": "pass",
+    "note": "只读 jq/text/static review；T-041/T-043 historical test PASS 不迁移为当前 source SHA 新 PASS。"
+  },
+  "conclusion": "静态因果图已闭合；H-01/H-02 是与 T-043 timing-sensitive 多退休模式最相关的 likely 候选，H-03/H-04 是源码可确认的条件 correctness gap，H-05 是 maintenance 边界 possible 候选。没有 T-044 first-trace 时不声称唯一根因。",
+  "blockers": [
+    "T-043 只有 56/98 strict-equivalent pairs；retired mismatch=42、memory effect/count mismatch=6、status mismatch=1，FIFO-on 性能签核必须保持关闭。",
+    "需要 T-044 在同一诊断 source SHA 上提供 first-trace，区分 duplicate retirement、skipped/wrong-path、memory effect 和终止边界。",
+    "H-03 FIFO fault head 无消费路径、H-04 commit_ready/IFID hold 不对称需独立修复/回归。"
+  ],
+  "risks": [
+    "无动态 trace 无法确认 H-01/H-02/H-05 的具体首分歧；静态证据不能替代 commit-level diagnosis。",
+    "T-043 perf runner 以 magic store commit 结束，retired delta 可能是额外 branch/compare/no-op，也可能是真正 skip/repeat；memory digest 相等不能证明架构序列等价。",
+    "公共 mem_rsp_t 无 response ID；F1a single-outstanding/local quarantine 假设一旦不成立，需独立扩大协议写集。",
+    "T-043 timeout 行受 5M cycle 上限影响，不能直接解释为 RTL deadlock；F1b、Gate D、Linux、Quartus 未运行。"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-045-f1a-static-audit.md",
+      "sha256": "c842e111c4d2360191312956d2ed012b86529dd1cb71f57b6f811260c5afdf27",
+      "bytes": 21418,
+      "owner": "T-20260830-045",
+      "retain_until": "task-close",
+      "reproduce": "sha256sum docs/handoffs/T-20260830-045-f1a-static-audit.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260830-045.json",
+      "sha256": "self-referential; bind via final Git tip",
+      "bytes": null,
+      "owner": "T-20260830-045",
+      "retain_until": "task-close",
+      "reproduce": "jq empty docs/tasks/evidence/T-20260830-045.json"
+    }
+  ],
+  "head_semantics": {
+    "content_sha": "3d953e4a2dba1b255876ca520973d5c5b68d0198 (technical audit commit)",
+    "head_sha": "3d953e4a2dba1b255876ca520973d5c5b68d0198 (technical content tree)",
+    "final_tip_sha": "不能在 evidence 自身内容中预写；以 owner FINAL head 为准",
+    "self_reference": "evidence artifact hash is intentionally self-referential"
+  },
+  "integrator_review": {
+    "received_at": "2026-08-30T22:49:33+08:00",
+    "merge_sha": "09a9eca8e6765dc43c8e0bcb5b2845c90eacaa03",
+    "status": "accepted_static_audit",
+    "owner_head_sha": "1e0bfb5889bc09aa0bb6d8a25d56ac3c8b98286e",
+    "checks": [
+      "docs-only two-file write set and clean worktree verified",
+      "handoff SHA256 and evidence JSON verified",
+      "H-03/H-04 source conditions independently confirmed；T-043 runner commit_ready 恒 1，因此 H-04 不作为本次 retired mismatch 直接根因",
+      "H-01/H-02/H-05 保持可证伪 hypothesis，等待 T-044 trace"
+    ],
+    "decision": "接受 T-045 为静态因果输入；不签核 F1a，不登记具体 RTL 补丁直到动态首分歧到达。"
+  },
+  "next": "T-044 先用 alu_latency 负对照，再对 fp_scalar/mem_seq 捕获 first-trace；动态结论后由集成者登记精确 RTL 修复任务，保持 FIFO 默认关闭。"
+}

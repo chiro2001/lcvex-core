@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-103",
+  "state": "done",
+  "base_sha": "2a697bb922e6e7af353d399b2f0e6f6bb26d150c",
+  "head_sha": "208b6a4cfee37ad86df4268ac3ad2018b3723769",
+  "merge_sha": "cd43247f7367a1d390a82f3e3273c5022b2023a3",
+  "branch": "feature/T-20260829-103-c4-dualcore-baseline",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-092",
+  "sent_at": "2026-08-29T20:30:00+0800",
+  "received_at": "2026-08-29T20:30:00+0800",
+  "reported_at": "2026-08-29T20:54:07+08:00",
+  "owner": "T-20260829-103-c4-baseline-owner",
+  "model": "dsh-default",
+  "label": "C4-dualcore-baseline",
+  "title": "C4 CORE_COUNT=2 baseline measurement",
+  "scope": "只读测量现有 C2 CORE_COUNT=2 配置的编译/elaboration、有限事务 smoke、目录/仲裁/PoC proxy；不修改 RTL/TB；不引入 ACE/CHI/SVE；不启动 Quartus。",
+  "files": [
+    "docs/C4_DUALCORE_BASELINE.md",
+    "docs/handoffs/T-20260829-103-c4-dualcore-baseline.md",
+    "docs/tasks/evidence/T-20260829-103.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "c4-base-001",
+      "source_sha": "2a697bb922e6e7af353d399b2f0e6f6bb26d150c",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_l1_msi_tb (cgroup MemoryMax=16G, MemorySwapMax=0)",
+      "seed": null,
+      "wall_seconds": 24.046,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "L1MSI build: max RSS 434.5 MB, Verilator Walltime 22.928s, allocated 48.188 MB."
+    },
+    {
+      "run_id": "c4-base-002",
+      "source_sha": "2a697bb922e6e7af353d399b2f0e6f6bb26d150c",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_dualcore_tb (cgroup MemoryMax=16G, MemorySwapMax=0)",
+      "seed": null,
+      "wall_seconds": 371.038,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "DUALCORE build: max RSS 3364 MB, Verilator Walltime 369.680s, allocated 814.473 MB."
+    },
+    {
+      "run_id": "c4-base-003",
+      "source_sha": "2a697bb922e6e7af353d399b2f0e6f6bb26d150c",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "LCVEX_C2_L1_MSI_TB smoke under cgroup",
+      "seed": null,
+      "wall_seconds": 0.018,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "28 PASS checks, max RSS 15.6 MB."
+    },
+    {
+      "run_id": "c4-base-004",
+      "source_sha": "2a697bb922e6e7af353d399b2f0e6f6bb26d150c",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "LCVEX_C2_DUALCORE_TB smoke under cgroup",
+      "seed": null,
+      "wall_seconds": 0.02,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "51 commit events, both cores observe 0x5a, max RSS 15.7 MB."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "c4-baseline-report",
+      "uri": "docs/C4_DUALCORE_BASELINE.md",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-103-c4-baseline-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:docs/C4_DUALCORE_BASELINE.md"
+    }
+  ],
+  "known_limits": [
+    "这是 CORE_COUNT=2 baseline，不代表 4/8/16/32 核功能完成。",
+    "未运行 Quartus，未做物理签核。",
+    "未修改 RTL/TB，未引入 ACE/CHI/SVE。"
+  ],
+  "next": "C3 四核稳定后按 docs/C4_SCALE_PREWORK.md 测量 8/16/32 规模。",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "reported_at",
+        "old": "2026-08-29T20:55:00+0800",
+        "new": "2026-08-29T20:54:07+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "cd43247f7367a1d390a82f3e3273c5022b2023a3",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "9d09ca10192011aa8cf3e5847bcd44f4b50b13ae",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "208b6a4cfee37ad86df4268ac3ad2018b3723769",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "handoff_sha": "9d09ca10192011aa8cf3e5847bcd44f4b50b13ae",
+  "integrator_review": {
+    "received_at": "2026-08-29T20:55:52+08:00",
+    "status": "accepted",
+    "head_sha": "eff8c776e662bba1cbca325ee42c8a8887516f27",
+    "notes": "C4 dual-core baseline accepted. CORE_COUNT=2: dualcore build 371s/3.36GB RSS; l1_msi build 24s/434MB; both smoke PASS. Used systemd-run cgroup MemoryMax=16G, -j1. Docs only, no RTL changes. Baseline only, not 4/8/16/32 correctness.",
+    "merge_sha": "cd43247f7367a1d390a82f3e3273c5022b2023a3",
+    "result_sha": "208b6a4cfee37ad86df4268ac3ad2018b3723769"
+  }
+}

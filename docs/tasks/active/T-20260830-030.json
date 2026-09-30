@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-030",
+  "label": "FPGA-G3",
+  "parent": "T-20260828-067",
+  "title": "A10 Qsys/debug fabric 关闭与原工程路径副本",
+  "kind": "fpga-exp",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "f4a24a69a40c6b7a477ca2120f367455b31d115f",
+  "branch": "feature/T-20260830-030-fpga-g3",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-030",
+  "scope": "实验关闭 alt_sld_fab_0/JTAG debug fabric 或完整复制原 lcvex 目录保持路径层级，再跑 ipgenerate/synthesis/fitter-only；目标解决 A10 顶层卡死与 Cannot load synthesized database。",
+  "writes": [
+    "docs/handoffs/T-20260830-030-fpga-g3.md",
+    "docs/tasks/evidence/T-20260830-030.json",
+    "fpga/**",
+    "rtl/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260830-016-fpga-f3.md",
+    "docs/handoffs/T-20260830-020-fpga-f4.md",
+    "docs/handoffs/T-20260830-008-fpga-f2.md",
+    "docs/handoffs/T-20260829-102-t067-module-synth.md",
+    "rtl/**",
+    "fpga/**"
+  ],
+  "validation": {
+    "l0": [
+      "远程实验有日志/结论",
+      "git diff --check"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付实验数据/可行性结论；如果不可行，给出精确证据。",
+  "next": "根据结果决定后续 FPGA-G 任务。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T19:00:00+0800",
+  "updated_at": "2026-08-30T19:00:00+0800",
+  "known_limits": [
+    "不修改远端原始正式 QSF/SDC/RTL；不读 license；不启动完整 B5 full flow。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-030-fpga-g3.md",
+  "evidence": "docs/tasks/evidence/T-20260830-030.json",
+  "merge_sha": "b908fee",
+  "merged_at": "2026-08-30T21:00:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-30T21:00:00+0800",
+    "status": "accepted",
+    "head_sha": "d247a7e",
+    "notes": "G3: A10 blackbox+altsyncram passes synthesis/fitter/STA/assembler to SOF; original path copy not effective; alt_sld_fab not blocker. Merge evidence only."
+  }
+}

@@ -1,0 +1,399 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260828-063",
+  "state": "done",
+  "base_sha": "837112e9d801e98545479abf34eb5ffb1f1a4e81",
+  "head_sha": "6d7f465136b387ccd33fcff831e2a02d4ccc5d36",
+  "merge_sha": "d0f6e82",
+  "branch": "feature/T-20260828-063-catapult-project-create",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-063",
+  "scope": "在 D:\\Projects\\fpga-altra\\lcvex 创建可重生成的 Catapult A10 Quartus 工程，执行 Qsys/IP 再生成，并打通 synthesis/fit/STA；只写 project_root 与 worktree，不触碰其他远端目录",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-28T00:40:00+08:00",
+    "first_probe_at": "2026-08-28T00:41:42+08:00",
+    "qsys_generate": "2026-08-28T00:43:10+08:00 .. 2026-08-28T00:44:00+08:00",
+    "ip_generate_clear": "2026-08-28T00:44:53+08:00 .. 2026-08-28T00:46:20+08:00",
+    "epcq_generate": "2026-08-28T00:49:01+08:00 .. 2026-08-28T00:49:11+08:00",
+    "smoke_compile_pass": "2026-08-28T00:55:07+08:00 .. 2026-08-28T01:01:58+08:00",
+    "documents_written_at": "2026-08-28T01:10:00+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive",
+    "powershell_version": "7.6.3",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "project_created": true,
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "license_path_exists": true,
+    "license_content_read": false,
+    "parent_was_writable": true,
+    "disk_free_gb": 112.5,
+    "cpu_count": 24,
+    "total_memory_gb": 61.6,
+    "free_memory_gb": 27.2,
+    "tree": {
+      "files": 510,
+      "dirs": 165,
+      "total_bytes": 131808530,
+      "top_level": [
+        "build",
+        "flash",
+        "jtag_uart",
+        "qsys",
+        "quartus",
+        "tools",
+        "platform_manifest.json",
+        "README.md",
+        "SHA256SUMS",
+        "source.lock"
+      ]
+    }
+  },
+  "toolchain": {
+    "quartus_sh": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe",
+      "version": "Quartus Prime Shell Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "exit_code": 0
+    },
+    "quartus_syn": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+      "version": "Quartus Prime Synthesis Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "exit_code": 0
+    },
+    "quartus_fit": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_fit.exe",
+      "version": "Quartus Prime Fitter Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "exit_code": 0
+    },
+    "quartus_sta": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sta.exe",
+      "version": "Quartus Prime Timing Analyzer Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "exit_code": 0
+    },
+    "quartus_ipgenerate": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_ipgenerate.exe",
+      "version": "Quartus Prime IP Generation Tool Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "help_exit_code": 0,
+      "note": "Pro 官方 IP 再生成工具；替代受限的 ip-generate"
+    },
+    "qsys_generate": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\qsys\\bin\\qsys-generate.exe",
+      "help_exit_code": 0,
+      "version_switch_exit_code": 1,
+      "note": "21.4 qsys-generate 无 --version 开关（--help exit 0）"
+    },
+    "ip_generate": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\qsys\\bin\\ip-generate.exe",
+      "help_exit_code": 3,
+      "help_result": "ip-generate for Platform Designer in Quartus Pro is only available under acdstest resource",
+      "note": "遗留工具受限；本任务使用 quartus_ipgenerate"
+    }
+  },
+  "skeleton": {
+    "created_at": "2026-08-28T00:42:00+08:00",
+    "copied_files": 21,
+    "payload_hash_policy": "remote Get-FileHash SHA256 vs repo SHA256SUMS",
+    "payload_hash_match": "identical (15/15 platform payload + README/SHA256SUMS/manifest/source.lock/tools)",
+    "remote_sha256_manifest": "build\\T-20260828-063\\provenance\\remote_sha256.txt",
+    "skeleton_after_generation_unchanged": {
+      "quartus/catapult_a10.qpf": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+      "quartus/catapult_a10.qsf": "13d9180879c3bf9c8e3f95c813fc0065b907805a266d4e70bb186b67b43fe9e9",
+      "quartus/catapult_a10.sdc": "00cf85789667f3643983a84cdf5d6fd3e61c0fbc9d522bb9807462937be20656",
+      "qsys/ddr4_bot/Qsys.qsys": "3da27e815b3f89dd89129a856794ad1da8f4cfe4d5b7b8aee7d525ab4bc79ca6",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_clk_100.ip": "e6e6fd4fab1316d04912b47ff10de9f7db2d673bf3553c0bb92f007172d89000",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_clk_266.ip": "2a7b0a68a95db76fa38517b93e0ef31946c26786433c83520b70e32c3b91454d",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot.ip": "89d3b8e1caed52d713e1530cb2576b4406f1577599ef4f0a7bee34880620e667",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_reset_controller_0.ip": "d637c58b09fa886e328d122373cca884cc427c1b961a430501c7d9d69cd007b2"
+    }
+  },
+  "regeneration": {
+    "qsys_generate": {
+      "command": "qsys-generate D:\\Projects\\fpga-altra\\lcvex\\qsys\\ddr4_bot\\Qsys.qsys --synthesis=VERILOG --parallel=4",
+      "exit_code": 0,
+      "started_at": "2026-08-28T00:43:10+08:00",
+      "ended_at": "2026-08-28T00:44:00+08:00",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-063\\qsys-ip-regen\\qsys_generate_Qsys.log",
+      "log_sha256": "2f51b94285fce366137b0cc5bd415a895f8358f92252a9cf2278b8f21fe9108c",
+      "generated_files_under_qsys": 177,
+      "generated_tree_manifest": "build\\T-20260828-063\\provenance\\generated_qsys_tree.sha256.txt",
+      "emif_summary": "Qsys_emif_bot done with 24 modules, 105 files"
+    },
+    "quartus_ipgenerate_project": {
+      "command": "quartus_ipgenerate catapult_a10 --rev=catapult_a10 --generate_project_ip_files --synthesis=verilog --parallel=on --clear_ip_generation_dirs",
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 6,
+      "started_at": "2026-08-28T00:44:53+08:00",
+      "ended_at": "2026-08-28T00:46:20+08:00",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-063\\qsys-ip-regen\\quartus_ipgenerate_clear_project.log",
+      "log_sha256": "c9d65721eccab9aa59509e86ca6d2231a579fb010ca87ce12d298c7864421d93",
+      "ip_files_found": 5,
+      "note": "Qsys.qsys + Qsys_clk_100/266 + Qsys_emif_bot + Qsys_reset_controller_0"
+    },
+    "epcq_standalone": {
+      "command": "quartus_ipgenerate catapult_a10 --rev=catapult_a10 --generate_ip_file --ip_file=../flash/sfl/ip/sfl_sys/epcq.ip --synthesis=verilog --clear_ip_generation_dirs",
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 0,
+      "started_at": "2026-08-28T00:49:01+08:00",
+      "ended_at": "2026-08-28T00:49:11+08:00",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-063\\qsys-ip-regen\\quartus_ipgenerate_epcq_genipfile.log",
+      "output": "flash\\sfl\\ip\\sfl_sys\\epcq\\ (6 modules, 7 files)",
+      "sfl_system_input_present": false,
+      "sfl_gap": "repo B0 payload lacks flash/sfl/sfl_sys.qsys; full SFL regeneration blocked at input level"
+    },
+    "qsys_bb_diff": {
+      "baseline": {
+        "path": "fpga/catapult_a10/qsys/ddr4_bot/Qsys/Qsys_bb.v (repo; copied to build/.../qsys-ip-regen/baseline/)",
+        "bytes": 3161,
+        "sha256": "91076193c924b44691a78fa34c47442e234a9b6a206a34f2a1bd74aad029ae50"
+      },
+      "generated": {
+        "path": "qsys\\ddr4_bot\\Qsys\\Qsys_bb.v",
+        "bytes": 3165,
+        "sha256": "083b56d54accaa99f66f1013f2a9d7e98721f35e7cdd5a19e88ec265a1a8f616"
+      },
+      "verdict": "different",
+      "characterization": "content identical; only trailing blank line + CRLF/LF line-ending normalization differs (repo 36 lines LF, generated 37 lines with CRLF blank). Generated file is byte-identical to T-057 recorded PoC Windows file (083b56d5...).",
+      "diff_file": "build\\T-20260828-063\\qsys-ip-regen\\Qsys_bb.fc.txt"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-ssh-pwsh-connect-001",
+      "level": "L0",
+      "command": "ssh -o BatchMode=yes -o ConnectTimeout=10 192.168.101.5 pwsh -NoProfile -NonInteractive -EncodedCommand <base64>",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SSH/pwsh 7.6.3 OK; host GAMEPC; default shell quirk (cmd) requires explicit pwsh"
+    },
+    {
+      "run_id": "owner-tool-probe-002",
+      "level": "L0",
+      "command": "version/help probes for quartus_sh/syn/fit/sta/ipgenerate/qsys-generate/ip-generate; Test-Path license",
+      "exit_code": 0,
+      "result": "pass_with_findings",
+      "summary": "all tools 21.4.0 Build 67; ip-generate blocked (acdstest, exit 3); quartus_ipgenerate available; license path exists, content not read"
+    },
+    {
+      "run_id": "owner-skeleton-create-003",
+      "level": "L0",
+      "command": "New-Item dirs + scp 21 files from fpga/catapult_a10",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "project root created; remote SHA256 matches repo SHA256SUMS exactly; manifest saved"
+    },
+    {
+      "run_id": "owner-qsys-generate-004",
+      "level": "L1",
+      "command": "qsys-generate Qsys.qsys --synthesis=VERILOG --parallel=4",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Qsys + EMIF + PLL + reset generated; Qsys_bb.v differs from repo only in trailing newline/line endings"
+    },
+    {
+      "run_id": "owner-ipgenerate-project-005",
+      "level": "L1",
+      "command": "quartus_ipgenerate catapult_a10 --rev=catapult_a10 --generate_project_ip_files --synthesis=verilog --parallel=on --clear_ip_generation_dirs",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "5 IP files regenerated; 0 errors / 6 warnings"
+    },
+    {
+      "run_id": "owner-epcq-standalone-006",
+      "level": "L1",
+      "command": "quartus_ipgenerate ... --generate_ip_file --ip_file=../flash/sfl/ip/sfl_sys/epcq.ip ...",
+      "exit_code": 0,
+      "result": "pass_with_gap",
+      "summary": "epcq generated; sfl_sys.qsys missing from repo input, so full SFL regenerate remains blocked"
+    },
+    {
+      "run_id": "owner-main-dryrun-007",
+      "level": "L2",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -print_only",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "5 flow tasks listed (IP Generation, Analysis & Synthesis, Fitter, Timing Analysis (Signoff), Assembler)"
+    },
+    {
+      "run_id": "owner-main-synth-008",
+      "level": "L2",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis",
+      "exit_code": 3,
+      "result": "blocked_expected",
+      "summary": "IP Generation OK; synthesis fails: top-level design entity catapult_a10 undefined (no TOP_LEVEL_ENTITY by design); warning: flash/sfl/synth/sfl_sys.v missing",
+      "log": "build\\T-20260828-063\\qsys-ip-regen\\quartus_sh_compile_to_synthesis.log"
+    },
+    {
+      "run_id": "owner-smoke-v1-009",
+      "level": "L2",
+      "command": "quartus_sh --flow compile smoke_qsys (Qsys top, only Qsys.qip)",
+      "exit_code": 3,
+      "result": "fail_learned",
+      "summary": "Qsys.qip is not self-contained: sub-IP entities undefined until their qips are added"
+    },
+    {
+      "run_id": "owner-smoke-v2-010",
+      "level": "L2",
+      "command": "quartus_sh --flow compile smoke_qsys (Qsys top, 5 qips)",
+      "exit_code": 3,
+      "result": "partial",
+      "summary": "synthesis PASS; fitter FAIL: design requires 1267 IO_PAD > device 1239 because Qsys top exposes Avalon user ports as pads"
+    },
+    {
+      "run_id": "owner-smoke-v3-011",
+      "level": "L3",
+      "command": "quartus_sh --flow compile smoke_qsys (lcvex_smoke_top wrapper, 5 qips)",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "full compile pass: synthesis + fit + STA + assembler; 0 errors / 10 warnings",
+      "started_at": "2026-08-28T00:55:07+08:00",
+      "ended_at": "2026-08-28T01:01:58+08:00",
+      "elapsed": "00:06:51",
+      "log": "build\\T-20260828-063\\smoke\\smoke_compile_v3.log"
+    }
+  ],
+  "smoke_compile": {
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-063\\smoke\\quartus",
+    "top_level_entity": "lcvex_smoke_top",
+    "rtl": "build\\T-20260828-063\\smoke\\rtl\\lcvex_smoke_top.v",
+    "rtl_role": "test-only wrapper instantiating generated Qsys and tie-off Avalon-MM user ports; NOT the future LCVEX wrapper",
+    "qips_referenced": [
+      "qsys/ddr4_bot/Qsys/Qsys.qip",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_clk_100/Qsys_clk_100.qip",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_clk_266/Qsys_clk_266.qip",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot/Qsys_emif_bot.qip",
+      "qsys/ddr4_bot/ip/Qsys/Qsys_reset_controller_0/Qsys_reset_controller_0.qip"
+    ],
+    "fit_summary": {
+      "status": "Successful - Fri Aug 28 01:00:54 2026",
+      "device": "10AX115N4F40E3SG",
+      "logic_utilization_alms": "4,413 / 427,200 (1%)",
+      "total_registers": 8538,
+      "total_pins": "133 / 826 (16%)",
+      "total_block_memory_bits": "174,592 / 55,562,240 (<1%)",
+      "total_ram_blocks": "26 / 2,713 (<1%)",
+      "total_dsp_blocks": "0 / 1,518 (0%)",
+      "total_plls": "3 / 112 (3%)",
+      "critical_warning": "1 of 122 pins without exact location assignment (reset_in); benign for smoke"
+    },
+    "sta": {
+      "status": "Quartus Prime Timing Analyzer was successful. 0 errors, 1 warning",
+      "warning": "Design is not fully constrained for setup/hold requirements (Avalon user ports tie-off in smoke)",
+      "emif_internal_slack_fast_model": {
+        "address_command": 0.184,
+        "core_setup_hold": "1.776 / 0.015",
+        "core_recovery_removal": "2.108 / 0.146",
+        "dqs_gating": 0.588,
+        "read_capture": 0.014,
+        "write": 0.031,
+        "write_levelling": 0.11
+      },
+      "fmax_summary": {
+        "clk_266_clk": "476.64 MHz",
+        "clk_100_clk": "1317.52 MHz (restricted 645.16 MHz, minimum pulse width limit)",
+        "emif_vco": "1066.67 MHz (DDR4 2133 MT/s class)"
+      }
+    },
+    "assembler": "successful, 0 errors / 0 warnings",
+    "artifacts": {
+      "sof": {
+        "path": "build\\T-20260828-063\\smoke\\quartus\\output_files\\smoke_qsys.sof",
+        "bytes": 36825753,
+        "sha256": "ace39c8730906e247dd507904a63557c368d2d7737cba5be949968440881653c"
+      },
+      "fit_rpt": {
+        "path": "build\\T-20260828-063\\smoke\\quartus\\output_files\\smoke_qsys.fit.rpt",
+        "bytes": 1325846,
+        "sha256": "01dbff6377dbac516a30e18d32c2afdfc0e4d9d74e731241e1c2eb31d64b3c53"
+      },
+      "sta_rpt": {
+        "path": "build\\T-20260828-063\\smoke\\quartus\\output_files\\smoke_qsys.sta.rpt",
+        "bytes": 14019241,
+        "sha256": "1255b19d62ef816c24e01ad6010f9046f778662c52c0a3eb7735b0d4815f6e8c"
+      },
+      "asm_rpt": {
+        "path": "build\\T-20260828-063\\smoke\\quartus\\output_files\\smoke_qsys.asm.rpt",
+        "bytes": 8570,
+        "sha256": "f2be5c7e6fd52c0be6bee30ce3d294980b0fe448d46dd39e4d3eeeeba20ff314"
+      },
+      "syn_rpt": "build\\T-20260828-063\\smoke\\quartus\\output_files\\smoke_qsys.syn.rpt (1,839,368 bytes)"
+    }
+  },
+  "known_limits_and_blockers": [
+    "Main catapult_a10 project has no top-level entity by design (B0 constraint fragment); full compile blocked until LCVEX wrapper adds TOP_LEVEL_ENTITY.",
+    "flash/sfl/sfl_sys.qsys input is missing from repo B0 payload; epcq.ip generated standalone but full SFL regeneration remains blocked at input level (T-052 follow-up).",
+    "legacy ip-generate.exe is restricted to acdstest resource; quartus_ipgenerate used instead.",
+    "Speed grade inconsistency (Qsys/system=2 vs EMIF/device=3) from platform_manifest remains open; smoke STA is toolchain proof, not board sign-off.",
+    "Smoke STA reports 'Design is not fully constrained' because Avalon-MM user ports are tie-off; final constraint closure belongs to the LCVEX wrapper task.",
+    "No Verilator/Gate D runs performed locally (out of scope); all verification was remote Quartus/Qsys or lightweight local checks."
+  ],
+  "protected_files_not_modified": [
+    "docs/tasks/active/T-20260828-063.json",
+    "docs/tasks/TASKS.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md",
+    "Linux integration RTL",
+    "QEMU fork",
+    "remote paths outside D:\\Projects\\fpga-altra\\lcvex"
+  ],
+  "writes_performed": [
+    "D:\\Projects\\fpga-altra\\lcvex\\** (skeleton + generated + build logs/reports)",
+    "docs/handoffs/T-20260828-063-catapult-project-create.md",
+    "docs/tasks/evidence/T-20260828-063.json"
+  ],
+  "artifacts": [
+    {
+      "id": "remote-provenance-remote-sha256",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-063\\provenance\\remote_sha256.txt",
+      "role": "skeleton hash manifest"
+    },
+    {
+      "id": "remote-generated-tree-sha256",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-063\\provenance\\generated_qsys_tree.sha256.txt",
+      "role": "generated qsys tree hash manifest (177 files)"
+    },
+    {
+      "id": "remote-artifacts-sha256",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-063\\provenance\\remote_artifacts.sha256.txt",
+      "role": "key artifact hash manifest"
+    },
+    {
+      "id": "repo-handoff",
+      "uri": "docs/handoffs/T-20260828-063-catapult-project-create.md",
+      "role": "human-readable summary"
+    },
+    {
+      "id": "repo-evidence",
+      "uri": "docs/tasks/evidence/T-20260828-063.json",
+      "role": "precise facts"
+    }
+  ],
+  "next": [
+    "Provide LCVEX wrapper top-level (and optionally add flash/sfl/sfl_sys.qsys input), then run quartus_sh --flow compile catapult_a10 full flow on the same machine.",
+    "Integrate smoke/scripts into repo if desired; currently smoke lives only under remote build dir.",
+    "Close speed-grade mismatch and run final STA on the real wrapper design.",
+    "T-052 owner to backfill sfl_sys.qsys into fpga/catapult_a10 payload and update SHA256SUMS."
+  ],
+  "integration_review": {
+    "reviewed_at": "2026-08-28T01:11:00+08:00",
+    "reviewer": "root-integrator",
+    "writes_audit": "pass: only docs/handoffs/T-20260828-063-catapult-project-create.md and docs/tasks/evidence/T-20260828-063.json; worktree clean at 380f2ac",
+    "rechecks": [
+      {
+        "run_id": "integrator-json-001",
+        "command": "python3 -m json.tool docs/tasks/evidence/T-20260828-063.json",
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-diff-check-002",
+        "command": "git diff --check",
+        "result": "pass"
+      }
+    ],
+    "remote_cross_check": "payload SHA256 15/15 matches repo SHA256SUMS; Qsys_bb.v generated vs baseline content identical (line-ending only); smoke compile exit 0"
+  }
+}

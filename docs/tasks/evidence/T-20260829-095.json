@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-095",
+  "state": "done",
+  "base_sha": "0a134db800ffda1e10d2a7955c85ca0f2c3c4f32",
+  "head_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+  "merge_sha": "fccb67453a09c5d566a5b620ff0403ecea46e9fc",
+  "branch": "feature/T-20260829-095-c3-fourcore-implementation",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-095",
+  "sent_at": "2026-08-29T21:10:00+0800",
+  "received_at": "2026-08-29T21:10:00+0800",
+  "reported_at": "2026-08-29T21:10:00+0800",
+  "owner": "T-20260829-095-c3-owner",
+  "model": "dsh-default",
+  "label": "C3",
+  "title": "C3 四核功能实现（定向与完整四核均通过）",
+  "scope": "CORE_COUNT=4 参数化、目录 MSI 扩展、共享 PoC/system 路由、GIC/PSCI-lite sysctrl、四核启动/停止/reset、共享内存定向、C2 回归；不引入 ACE/CHI/SVE；不启动 Quartus；不修改 QEMU/checkpoint。",
+  "files": [
+    "rtl/lcvex_l2_cluster.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "rtl/lcvex_c3_sysctrl.sv",
+    "tb/sv/lcvex_c3_fourcore_tb.sv",
+    "tb/sv/lcvex_c3_cluster4_tb.sv",
+    "tb/sv/lcvex_c3_sysctrl_tb.sv",
+    "tb/sv/lcvex_c3_timer_tb.sv",
+    "docs/handoffs/T-20260829-095-c3-fourcore-implementation.md",
+    "docs/tasks/evidence/T-20260829-095.json",
+    "rtl/lcvex_core_wrap.sv",
+    "tb/sv/lcvex_c3_cluster4_multi_tb.sv"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "linux",
+    "python": "3.12",
+    "cgroup": {
+      "method": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0",
+      "memory_max_bytes": 17179869184,
+      "used_for": "all Verilator builds/runs listed below"
+    }
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 whitespace 错误。"
+    },
+    {
+      "run_id": "owner-l1-001",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- ... verilator --binary --timing --assert --top-module lcvex_c3_sysctrl_tb ... && lcvex_c3_sysctrl_tb",
+      "seed": null,
+      "wall_seconds": 3,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C3_SYSCTRL_TB PASS：CPU_ON/OFF/reset、SGI/EOI、SEV、status。"
+    },
+    {
+      "run_id": "owner-l1-002",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- ... verilator --binary --timing --assert --top-module lcvex_c3_cluster4_tb ... && lcvex_c3_cluster4_tb",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C3_CLUSTER4_TB PASS：四核 ReadShared 建立 4-sharer、WriteBack 清目录。"
+    },
+    {
+      "run_id": "owner-l1-003",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- ... verilator --binary --timing --assert --top-module lcvex_c2_cluster_tb ... && lcvex_c2_cluster_tb",
+      "seed": null,
+      "wall_seconds": 5,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_CLUSTER_TB PASS：C2 双核目录 MSI 全序列回归。"
+    },
+    {
+      "run_id": "owner-l0-004",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- verilator --lint-only --no-assert --no-timing --top-module lcvex_l2_cluster -GCORE_COUNT=1 -GMEM_LINES=16 ...",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "CORE_COUNT=1 l2_cluster lint/elaboration 通过。"
+    },
+    {
+      "run_id": "owner-l0-005",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- verilator --lint-only --no-assert --no-timing --top-module lcvex_l2_cluster -GCORE_COUNT=4 -GMEM_LINES=16 ...",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "CORE_COUNT=4 l2_cluster lint/elaboration 通过。"
+    },
+    {
+      "run_id": "owner-l1-006",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- ... verilator --binary --timing --assert --top-module lcvex_c3_timer_tb ... && lcvex_c3_timer_tb",
+      "seed": null,
+      "wall_seconds": 185,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C3_TIMER_TB PASS：修复单核程序加载位索引后观察到 timer_phys_irq。"
+    },
+    {
+      "run_id": "owner-l1-007",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- ... verilator --binary --timing --assert --output-split-cfuncs 16 --output-split 200 --top-module lcvex_c3_fourcore_tb ... (A64_FP_SIMD=0, no fp_scalar/neon source files)",
+      "seed": null,
+      "wall_seconds": 73,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "完整四核 A64_FP_SIMD=0 二进制构建通过：27.838MB/1382 C++ files, cgroup 16GiB 下 ~73s。"
+    },
+    {
+      "run_id": "owner-l1-008",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 120 /tmp/c3_fourcore_obj2/lcvex_c3_fourcore_tb",
+      "seed": null,
+      "wall_seconds": 0.1,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "完整四核运行 PASS：L1_SETS=64 后四核均观察到 flag=0x5a（0-commit 与 set 冲突均已解决）。"
+    },
+    {
+      "run_id": "owner-l1-009",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- ... verilator --binary --timing --assert --top-module lcvex_c3_cluster4_multi_tb ... && lcvex_c3_cluster4_multi_tb",
+      "seed": null,
+      "wall_seconds": 3,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C3_CLUSTER4_MULTI_TB PASS：multi-sharer Upgrade 和 ReadUnique（四 sharer -> M owner3，旧 sharer 全失效）均通过。"
+    },
+    {
+      "run_id": "owner-l1-010",
+      "source_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- ... verilator --binary ... post-fix regression matrix ...",
+      "seed": null,
+      "wall_seconds": 300,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "修复后回归：sysctrl PASS、cluster4 PASS、C2 PASS、CORE_COUNT=1/4 lint PASS、timer PASS、multi-sharer ReadUnique PASS、完整 fourcore PASS（flag=0x5a）。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "rtl/lcvex_l2_cluster.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-095-c3-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_l2_cluster.sv"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "rtl/lcvex_cluster_top.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-095-c3-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_cluster_top.sv"
+    },
+    {
+      "id": "artifact-003",
+      "uri": "rtl/lcvex_c3_sysctrl.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-095-c3-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_c3_sysctrl.sv"
+    },
+    {
+      "id": "artifact-004",
+      "uri": "tb/sv/lcvex_c3_sysctrl_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-095-c3-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c3_sysctrl_tb.sv"
+    },
+    {
+      "id": "artifact-005",
+      "uri": "tb/sv/lcvex_c3_cluster4_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-095-c3-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c3_cluster4_tb.sv"
+    },
+    {
+      "id": "artifact-006",
+      "uri": "rtl/lcvex_core_wrap.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-095-c3-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_core_wrap.sv"
+    },
+    {
+      "id": "artifact-007",
+      "uri": "tb/sv/lcvex_c3_cluster4_multi_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-095-c3-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c3_cluster4_multi_tb.sv"
+    }
+  ],
+  "known_limits": [
+    "完整四核 A64_FP_SIMD=0 构建/运行均 PASS：0-commit 根因 core_clk 门控、共享 flag 不可见根因 L1_SETS 过小均已修复。",
+    "多 sharer Upgrade/ReadUnique 定向均 PASS：ReadUnique 多 sharer 根因是 round-robin fallback 中 Verilator 对循环内局部变量生成错误，改为直接表达式后四核可正确选中 core3 并逐核失效。",
+    "lcvex_c3_timer_tb 已修复通过；根因为单核程序加载位索引写错，非 GIC/Timer 时序问题。",
+    "lcvex_c3_sysctrl 是 GIC/PSCI-lite，不是完整 GICv2/GICD/GICC 架构模型。",
+    "未实现 TLB shootdown、checkpoint v4、完整 PSCI/GIC、Linux SMP。",
+    "未引入 ACE/CHI/SVE；未启动 Quartus；未修改 QEMU/checkpoint。"
+  ],
+  "next": "C3 当前全部已列定向/完整四核测试 PASS；可进入 merge review（尚未 merge）。",
+  "report_head_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+  "status": "done",
+  "handoff_sha": "9ccea89e16b2f140cc42ad8a2658b4fab7f7ac66",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:38:00+08:00",
+    "head_sha": "9ccea89e16b2f140cc42ad8a2658b4fab7f7ac66",
+    "notes": "C3 merged. All C3 directed + full fourcore matrix PASS; ReadUnique arb fallback fixed. make compile pass. Known limits: GIC/PSCI-lite, no TLB shootdown/checkpoint v4/Linux SMP.",
+    "merge_sha": "fccb67453a09c5d566a5b620ff0403ecea46e9fc",
+    "result_sha": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "9ccea89e16b2f140cc42ad8a2658b4fab7f7ac66",
+        "reason": "resolve handoff commit from active/proposed handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "4e09dc13387377a9e17b74e2b32b1337c3ca6c80",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  }
+}

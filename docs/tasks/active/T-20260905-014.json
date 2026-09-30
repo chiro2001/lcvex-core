@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-014",
+  "label": "R17-QUARTUS-PHYSICAL",
+  "title": "Run a fresh A10 physical probe for the R17 timing batch",
+  "kind": "quartus-physical-validation",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-observation-timing-open",
+  "assigned_owner": "codex-r17-physical",
+  "agent_type": "physical-validation",
+  "depends_on": [
+    "T-20260905-013",
+    "T-20260905-015"
+  ],
+  "dependency_gate": "Local manifest/scripts may be prepared now. No remote access, file sync, Quartus process, or probe creation is allowed until the integrator confirms the exact 738cc14 candidate completed the full registered L0-L2 union, including the corrected NEON fetch-fault semantic guard.",
+  "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "physical_rtl_parent_sha": "0166ede4abab06aff35c06159acdde7570cafa6e",
+  "physical_rtl_equivalence": "T-015 changes only Makefile, sim/difftest, task and handoff/evidence files; formal/platform RTL and FPGA project inputs are byte-identical to 0166ede.",
+  "branch": "verify/T-20260905-014-r17-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-014",
+  "remote": {
+    "host": "192.168.101.5",
+    "computer": "GAMEPC",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "probe": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260905-014-r17-fp-acc-control-probe\\real_a10_full_fp",
+    "project": "real_a10_full_fp",
+    "revision": "real_a10_full_fp"
+  },
+  "baseline": {
+    "task": "T-20260905-008",
+    "source_sha": "bab301e04f69cda154a8c9bb44f77af286ff579a",
+    "sys_clk_50_setup_ns": -4.797,
+    "tns_ns": -34241.243,
+    "failing_endpoints": 20559,
+    "fmax_mhz": 40.33,
+    "top50": {
+      "pp_pre_to_pack_mid": 26,
+      "core_control_to_fp_acc": 24
+    }
+  },
+  "scope": "From the exact clean source SHA, create a new isolated 52-entry source/project manifest and fresh remote Quartus database; rebuild the Quartus-21.4-only fp_scalar compatibility copy by removing exactly four default port values; run guarded synthesis, fitter and signoff STA serially; extract full setup/hold/recovery/removal/min-pulse, DDR/metastability, sys_clk_50 Fmax/top-50 and directional queries for the removed and replacement cones.",
+  "writes": [
+    "docs/tasks/active/T-20260905-014.json",
+    "docs/tasks/evidence/T-20260905-014.json",
+    "docs/handoffs/T-20260905-014-r17-quartus-physical.md",
+    "build/agents/T-20260905-014/**",
+    "the single fresh remote probe directory declared above"
+  ],
+  "forbidden_regions": [
+    "formal RTL/source commits",
+    "QEMU fork/plugin/reference results",
+    "T-008 or any existing remote Quartus database",
+    "quartus_asm and all assembler/bitstream stages",
+    "SOF/JIC/RBF/POF/JBC/SVF/JAM generation",
+    "quartus_pgm, JTAG/Flash writes, programming, power-on or board test"
+  ],
+  "manifest": {
+    "expected_count": 52,
+    "contents": "47 formal rtl/*.sv + 2 platform RTL + QPF/QSF/SDC",
+    "closure": "remote count=52, missing=0, extra=0, bad=0 before synthesis",
+    "compatibility_copy": "Generate from current fp_scalar source; remove only iter_kill, iter_pause, divider kill and divider pause default values; record formal hash, patched hash and exact diff. Never reuse the T-008 patched blob."
+  },
+  "stages": [
+    "preflight and fresh probe/manifest closure",
+    "ipgenerate through synthesis",
+    "fitter",
+    "sta_signoff",
+    "custom setup/hold/recovery/removal/min-pulse, DDR/metastability and EMIF directional reports",
+    "sys_clk_50 setup top-50 plus directional old/new cone queries",
+    "parser/cluster/hash/postflight"
+  ],
+  "directional_acceptance": [
+    "old pp_pre to pack_mid direct path returns 0 paths",
+    "exmem_valid, memwb_wb_rd and exmem_wb_rd to fp_exec.acc/acc_flags each return 0 paths",
+    "report and cluster pp_pre-to-pack_pre, pack_pre-to-pack_mid, pack_mid-to-slot_result, slot_result-to-acc and any new top-N cones"
+  ],
+  "resource": {
+    "local": "preparation only; no heavy local work in parallel with T-013",
+    "remote": "one Quartus process; MaxRunSeconds=43200 per stage; MinFreeMb=16384; pre/post EDA_COUNT=0; do not stop jtagserver or non-EDA processes",
+    "safety": "guard breach, nonzero stage exit, or manifest mismatch stops the flow and forbids the next stage"
+  },
+  "acceptance": "The fresh probe is bound to the exact source/project manifest; synthesis and fitter exit zero within resource gates; signoff and all directional/top-50 evidence are complete and hashed. Timing improvement is reported from measured STA only. Timing closure requires all setup/hold/DDR/metastability gates, but a negative setup result is an honest physical result and triggers the next RTL timing batch rather than assembler or board actions.",
+  "created_at": "2026-09-05T13:22:12+08:00",
+  "updated_at": "2026-09-05T19:48:39+08:00",
+  "owner_head_sha": "59d3942ebca2648e7af5cb1edde2fa645e3175da",
+  "merge_sha": "8f88c05",
+  "evidence": "docs/tasks/evidence/T-20260905-014.json",
+  "handoff": "docs/handoffs/T-20260905-014-r17-quartus-physical.md",
+  "review": {
+    "status": "accepted_for_timing_observation_blocked",
+    "summary": "Fresh synthesis/fitter/STA evidence is valid and improved Fmax/setup/TNS, but sys_clk_50 setup remains negative and six core-control-to-acc/flags directional queries remain nonzero. Continue with R18; no assembler or board release."
+  },
+  "board_policy": "No Quartus assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on, or board test without explicit user permission."
+}

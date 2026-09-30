@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-039",
+  "state": "done",
+  "partial": false,
+  "label": "PE-F1-PRE",
+  "title": "F1 取指 FIFO/epoch/early-restart 实施前契约与切片",
+  "owner": "luna-f1-prework",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "base_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+  "head_sha": "19e01ce4892c32f0dbc2ae8ec8923a4473969b86",
+  "content_sha": "f74666627ff8e574e94931985f8b5f2210622138",
+  "merge_sha": "5af67d6f039ba70e392664715898f7761ac5e92c",
+  "branch": "feature/T-20260830-039-pe-f1-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-039",
+  "sent_at": "2026-08-30T15:30:28+08:00",
+  "received_at": "2026-08-30T15:43:12+08:00",
+  "reported_at": "2026-08-30T16:00:34+08:00",
+  "followup_sent_at": "2026-08-30T15:59:49+08:00",
+  "followup_received_at": "2026-08-30T16:00:19+08:00",
+  "followup_reported_at": "2026-08-30T16:00:34+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-08-30T15:30:28+08:00",
+    "received_at": "2026-08-30T15:43:12+08:00",
+    "reported_at": "2026-08-30T16:00:34+08:00"
+  },
+  "scope": "docs-only：冻结 F1a/F1b/F1c 的 fetch FIFO、epoch、flush、fault、MMU、维护、reset 和验证契约；不修改 RTL/TB/sim/Makefile，不运行生成器、构建、仿真、QEMU 或 Quartus。",
+  "toolchain": {
+    "verilator": "not run",
+    "cocotb": "not run",
+    "python": "not used for tests",
+    "cross_gcc": "not run",
+    "quartus": "not started"
+  },
+  "qemu": {
+    "release": "not used",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "read_files": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "/home/chiro/projects/mycpu/lcvex/docs/tasks/active/T-20260830-039.json",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/ARCHITECTURE.md",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_mmu.sv",
+    "rtl/lcvex_mem_arb.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_mem_delay.sv",
+    "rtl/lcvex_mem_ram.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "tb/sv/lcvex_core_tb.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_l1_i_tb.sv",
+    "tb/sv/lcvex_mmu_tb.sv",
+    "tb/sv/lcvex_commit_backpressure_tb.sv",
+    "tb/sv/lcvex_cluster_tb.sv",
+    "tb/sv/lcvex_c2_reset_fault_tb.sv",
+    "tb/sv/lcvex_c3_timer_tb.sv",
+    "sim/cocotb/test_lcvex_core.py",
+    "sim/cocotb/test_commit_backpressure.py",
+    "sim/cocotb/test_lcvex_cluster.py",
+    "sim/difftest/test_program.py (取指/MMU/维护/WFI/IRQ 相关区段)",
+    "sim/difftest/run_p5a.sh",
+    "sim/difftest/run_p4b.sh",
+    "sim/difftest/run_gate_c.sh",
+    "sim/difftest/run_m2_4b.sh",
+    "sim/difftest/run_p6_wfi.sh",
+    "sim/difftest/run_gate_d.sh",
+    "Makefile (相关入口只读核对)"
+  ],
+  "outputs": [
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/handoffs/T-20260830-039-pe-f1-prework.md",
+    "docs/tasks/evidence/T-20260830-039.json"
+  ],
+  "read_only_commands": [
+    {
+      "run_id": "worktree-check-001",
+      "command": "git status --short --branch && git rev-parse HEAD && git branch --show-current",
+      "source_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+      "exit_code": 0,
+      "result": "read-only-pass",
+      "summary": "确认专用 worktree 干净、HEAD 与任务 base_sha 一致、分支正确。"
+    },
+    {
+      "run_id": "inventory-001",
+      "command": "wc -l AGENTS.md docs/MULTI_AGENT_WORKFLOW.md docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md docs/PERFORMANCE_BASELINE_MATRIX.md docs/PERFORMANCE_WORKLOAD_PLAN.md docs/COMMIT_PACKET.md docs/ARCHITECTURE.md rtl/lcvex_core.sv rtl/lcvex_l1_i.sv rtl/lcvex_mmu.sv rtl/lcvex_mem_arb.sv",
+      "source_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+      "exit_code": 0,
+      "result": "read-only-pass",
+      "summary": "完成任务要求的主文档和四个目标 RTL 文件行数核对；任务 JSON 从集成根只读读取。"
+    },
+    {
+      "run_id": "source-read-001",
+      "command": "sed/nl/rg 只读阅读 core fetch/flush/commit/reset、I-L1 refill/maintenance、MMU walk/TLBI、mem_arb、相关 SV/Cocotb/lockstep 测试入口",
+      "source_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+      "exit_code": 0,
+      "result": "read-only-pass",
+      "summary": "形成逐状态源码引用、F1a/F1b DAG、FIFO/epoch/flush/fault 契约和 F1b later-beat fault 风险结论；未执行测试。"
+    },
+    {
+      "run_id": "doc-scope-001",
+      "command": "检查允许写集并使用 apply_patch 创建三个交付文档；不触碰 RTL/TB/sim/Makefile",
+      "source_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+      "exit_code": 0,
+      "result": "docs-only-pass",
+      "summary": "仅创建任务允许的 PERFORMANCE_F1_PREWORK、handoff 和 evidence 文件。"
+    },
+    {
+      "run_id": "timestamp-check-001",
+      "command": "python3 scripts/check_task_timestamps.py --scope live --exit-code",
+      "source_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+      "exit_code": 1,
+      "result": "blocked-unrelated-live-ledger",
+      "summary": "本任务时间戳单调；检查被集成根中既有 T-20260830-027/029/030/031/032/036/037 等未来历史台账时间阻断，未修改无关任务 JSON。"
+    }
+  ],
+  "validation": {
+    "tests_run": false,
+    "build_run": false,
+    "simulation_run": false,
+    "qemu_run": false,
+    "quartus_run": false,
+    "planned_check": "git diff --check 与 python3 -m json.tool（仅文档/JSON 检查）"
+  },
+  "conclusion": {
+    "f1a": "建议立即登记：core 内 2-entry FIFO + local fetch token/epoch + flush 后 stale quarantine；I-L1 保持完整行响应；MMU/I-L1 各自最多一个在途。",
+    "f1b": "风险门：现有 mem_rsp_t 无 response ID/epoch/background-fault 分类，later refill beat fault 在 early word 消费后无法保持精确异常；默认关闭。",
+    "f1c": "独立复测 F0/f1a/f1ab，同 workload/image/tool/source 口径；不宣称静态性能收益。"
+  },
+  "known_limits": [
+    "本任务没有运行任何测试；read-only/doc-only 结果不等于 RTL 或锁步通过。",
+    "全局 live 时间戳检查返回非零，原因是集成根既有任务的未来历史台账时间；本任务字段已通过人工单调性核对，且未越权修改无关任务。",
+    "F1a 依赖公共单 outstanding response 合约；若入口允许无 tag 的多取指事务，必须另立 F1a-proto。",
+    "现有协议对复位后无 predecessor 的 standalone fetch fault 只有 merge-only 边界，需独立异常协议任务。",
+    "F1b 在 background fault/line-completion 契约冻结前不应实现或打开。",
+    "F0 历史性能数字来自不同 SHA，F1c 必须先同 SHA 重跑基线。"
+  ],
+  "correction_record": {
+    "reported_at": {
+      "old": "2026-08-30T15:54:41+08:00",
+      "new": "2026-08-30T16:00:34+08:00",
+      "reason": "原 reported_at 早于 evidence-only metadata 提交 010e7d6/cf014d8/19e01ce；follow-up 纠正时间晚于旧 branch tip。"
+    },
+    "content_sha": "f74666627ff8e574e94931985f8b5f2210622138",
+    "pre_correction_tip": "19e01ce4892c32f0dbc2ae8ec8923a4473969b86",
+    "metadata_commits": [
+      "010e7d6",
+      "cf014d8",
+      "19e01ce"
+    ],
+    "note": "content_sha 仅表示主技术文档内容提交；最终 branch tip 以本次 FINAL 回报 head 为准，避免 evidence 自引用。"
+  },
+  "artifacts": [
+    {
+      "id": "f1-prework",
+      "uri": "docs/PERFORMANCE_F1_PREWORK.md",
+      "sha256": "46f7fb4bdc6b86c9920c3fe66e286dc2222ac98d3d5cc6d31b27853d5c8b3207",
+      "owner": "T-20260830-039",
+      "retain_until": "implementation-start",
+      "reproduce": "sha256sum docs/PERFORMANCE_F1_PREWORK.md"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-039-pe-f1-prework.md",
+      "sha256": "6de714e0a0170acb36311b5280cec41502cba08f7da5b157fd1cb0429645fa2a",
+      "owner": "T-20260830-039",
+      "retain_until": "task-close",
+      "reproduce": "sha256sum docs/handoffs/T-20260830-039-pe-f1-prework.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260830-039.json",
+      "sha256": "self-referential; bind via final Git commit",
+      "owner": "T-20260830-039",
+      "retain_until": "task-close",
+      "reproduce": "python3 -m json.tool docs/tasks/evidence/T-20260830-039.json"
+    }
+  ],
+  "integration": {
+    "reviewed_at": "2026-08-30T16:04:58+08:00",
+    "result": "accepted",
+    "owner_head_sha": "75c0d275cbe8243b7ae7ccaf40b04cdaca752567",
+    "merge_sha": "5af67d6f039ba70e392664715898f7761ac5e92c",
+    "checks": [
+      "clean owner worktree",
+      "declared three-file write set only",
+      "git diff --check",
+      "JSON parse",
+      "artifact hashes"
+    ],
+    "tests": "docs-only task; no build or simulation required or claimed"
+  },
+  "next": "集成者验收后登记 F1a-impl；F1b 等 F1a epoch/flush 回归和 fault safety gate。"
+}

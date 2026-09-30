@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-046",
+  "label": "PE-F1A-FIX",
+  "parent": "T-20260830-033",
+  "title": "F1a duplicate retirement RTL 修复与回归",
+  "kind": "frontend-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-duplicate-fix",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260830-041",
+    "T-20260830-043",
+    "T-20260830-044",
+    "T-20260830-045"
+  ],
+  "base_sha": "c7081f4ba790ba9bf81d48d7acbc083828529055",
+  "branch": "feature/T-20260830-046-f1a-duplicate-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046",
+  "scope": "修复 F1a FIFO-on 在 data/FP stall 边界的 duplicate retirement。修改前先用小型 directed probe 追踪 FIFO head/seq、IFID/IDEX/EXMEM/MEMWB valid/PC 与 consume/advance，证明 mem_seq PC 0x44000104 和 fp_scalar PC 0x44000574 的最早复制级；只修最早失效的 handshake/hold 规则。新增定向 SV/Cocotb/strict-lockstep 回归，并用 T-044 opt-in trace 证明 alu_latency 负对照保持、fp_scalar/mem_seq off/on commit sequence 严格相同。默认关闭不变，不顺带修 fault-head、commit_ready hold 或 F1b。",
+  "planning_guidance": {
+    "root_cause_gate": [
+      "pre-fix 必须先在本 worktree 重现 mem_seq 1000-cycle first duplicate，并用内部层级观测确定相同 fetch/FIFO token 是在 FIFO、IFID、IDEX、EXMEM 还是 MEMWB 首次出现两次；不得仅凭最终 commit trace 猜修点。",
+      "允许在 core 内增加非架构 debug/assert token（epoch/seq）并随 IFID→IDEX→EXMEM→MEMWB 传播，但不得改变 commit packet/public memory ABI；debug token reset/flush/hold/advance 必须明确。",
+      "检查 data transaction start/complete、load-use、FP/vector load、同拍 FIFO pop+IFID replace 和 branch redirect；修复应落在 earliest broken valid/ready/consume 边界。",
+      "若证明 duplicate 源于无 response ID 或需要修改 pkg/I-L1/MMU/arb，立即 blocked，不能扩大写集。"
+    ],
+    "implementation": [
+      "保持 FETCH_FIFO_ENABLE=0 legacy 路径逐周期语义；FIFO-on 仍单 MMU/单 I-L1 在途、depth=2、单发射顺序提交。",
+      "不得用过滤重复 commit、修改 runner digest、降低 workload、增大 timeout 或跳过比较掩盖错误；必须消除内部重复 entry/transfer。",
+      "新增局部 SVA/定向检查：同一 epoch/fetch token 最多进入 IFID/IDEX/commit 一次；stall hold 不产生二次 transfer；consume 与 replace 同拍原子；flush 后旧 token 不前进。",
+      "H-03 FIFO fault head 无消费路径与 H-04 commit_ready/IFID hold gap 另立后续任务；除非 duplicate 的直接修复天然触及同一条件，否则本任务只记录、不扩大 scope。"
+    ],
+    "validation_order": [
+      "L0：pre-fix directed reproduction + root-cause cycle log；实现后先跑 dedicated SV/Cocotb，小矩阵再扩展。",
+      "L1：feature-on load/data/FP stall、FIFO count 0/1/2、push+pop、flush/stale、随机 response delay；feature-off core/backpressure 回归。",
+      "L2：T-044 alu_latency/fp_scalar/mem_seq off/on trace；三者架构序列严格相同且 mem/fp retired 恢复基线。随后跑现有 run_f1a strict lockstep 及新增 duplicate program。",
+      "只有 L0-L2 全绿、无新增 timeout/断言，才能 review；不运行 Gate D/Linux/Quartus/B5。"
+    ],
+    "stop_conditions": [
+      "pre-fix 无法重现或无法证明 earliest duplicate stage",
+      "需要修改 rtl/lcvex_pkg.sv、lcvex_l1_i.sv、lcvex_mmu.sv、lcvex_mem_arb.sv、公共 commit/memory layout 或 QEMU fork",
+      "修复让 feature-off 周期/commit 变化，或用测试/runner 过滤重复",
+      "修复 fault-head/commit_ready/F1b 等独立问题导致任务边界失控"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_f1a.sh",
+    "docs/F1A_DUPLICATE_RETIREMENT_FIX.md",
+    "docs/handoffs/T-20260830-046-f1a-duplicate-fix.md",
+    "docs/tasks/evidence/T-20260830-046.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/PERFORMANCE_F1_RESULTS.md",
+    "docs/F1A_COMMIT_DIVERGENCE.md",
+    "docs/handoffs/T-20260830-045-f1a-static-audit.md",
+    "docs/tasks/evidence/T-20260830-041.json",
+    "docs/tasks/evidence/T-20260830-043.json",
+    "docs/tasks/evidence/T-20260830-044.json",
+    "docs/tasks/evidence/T-20260830-045.json",
+    "sim/microbench/microbench_runner.cc",
+    "scripts/compare_commit_traces.py",
+    "Makefile",
+    "tb/sv/lcvex_soc_tb.sv"
+  ],
+  "validation": {
+    "l0": [
+      "pre-fix mem_seq first duplicate@16 的内部 FIFO/IFID/IDEX/EXMEM/MEMWB cycle probe",
+      "dedicated SV：load/data stall 与 FIFO consume/replace/token-once assertions",
+      "git diff --check、写集、默认参数与 reset/flush token 静态核对"
+    ],
+    "l1": [
+      "Cocotb：load/FP/vector stall、FIFO 0/1/2、push+pop、flush/stale、delay/backpressure；feature-off regression",
+      "T-044 comparator fixture 与 trace-default-off 回归"
+    ],
+    "l2": [
+      "alu_latency/fp_scalar/mem_seq nocache_d0 off/on full trace strict equal",
+      "现有 F1a strict lockstep + 新增 duplicate directed program，base/cache/delay2"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "pre-fix earliest duplicate stage 有可审计证据；修复后 mem_seq/fp_scalar 不再重复，alu_latency/fp_scalar/mem_seq off/on 架构 trace 严格相同，定向 SV/Cocotb/strict lockstep 与 feature-off 回归全绿。默认仍为 FETCH_FIFO_ENABLE=0；不宣称 F1b 或最终性能收益。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 15360,
+    "disk_mb": 12288,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 60,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "test_slot": {
+    "status": "released",
+    "reason": "T-044/T-045 已完成，T-046 独占重型 Verilator/lockstep 队列",
+    "released_at": "2026-08-30T23:02:04+08:00",
+    "release_rule": "一次一个 MemoryMax=15G/MemorySwapMax=0、-j1 重型作业；禁止并发 Gate/Quartus/QEMU 长跑"
+  },
+  "created_at": "2026-08-30T23:02:04+08:00",
+  "updated_at": "2026-08-31T02:20:27+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T23:03:19+08:00",
+    "agent_name": "t041_pe_f1a_impl_luna",
+    "agent_reuse_note": "复用已完成 T-044 的 gpt-5.6-luna(max) agent；当前只持有 T-046。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046"
+  },
+  "handoff": "docs/handoffs/T-20260830-046-f1a-duplicate-fix.md",
+  "evidence": "docs/tasks/evidence/T-20260830-046.json",
+  "merge_sha": "0ac83754d1000c9f4c66408eda97831fac407ed3",
+  "merged_at": "2026-08-31T02:18:14+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-31T02:20:27+08:00",
+    "status": "accepted_duplicate_fix",
+    "owner_head_sha": "58da13b278be627d9ca43e96987bb126c192c309",
+    "technical_content_sha": "c86329e46da5d2adec261ec4c235a214866b1075",
+    "checks": [
+      "8-file task write set and corrected Luna(max)/timestamp/resource provenance verified",
+      "independent d2 and explicit d0 SV TB rebuilt under MemoryMax=15G/MemorySwapMax=0/CPUQuota=50%/-j1",
+      "merge SHA d0 probe reproduced cycle47 single commit with memwb_committed=1 and cycle48 no duplicate",
+      "merge SHA 5 images x base/cache/delay2 strict lockstep 15/15 cases PASS at 32/32 commits",
+      "merge SHA T-046 relevant RTL/test/doc content byte-identical to independently rebuilt review source"
+    ],
+    "notes": "接受 MEM/WB committed-marker 修复。未运行完整 Gate D；H-03 fault-head、H-04 commit-ready hold、F1b 和完整 F1c 仍为后续独立门。"
+  },
+  "known_limits": [
+    "本任务不修 H-03 fault-head、H-04 commit-ready hold 或 F1b later-beat fault。",
+    "不运行 Gate D、Linux、Quartus、B5/full flow，不读取 license。"
+  ],
+  "next": "依次登记 H-03 FIFO fault-head 架构消费与 H-04 commit-ready/IFID hold 修复；两项闭合后重新冻结 source SHA 并重跑完整 F1c 196-row 矩阵。"
+}

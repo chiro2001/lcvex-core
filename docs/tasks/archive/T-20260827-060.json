@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-060",
+  "title": "P7-3 选定 NEON 浮点 2S/4S/2D 垂直实现",
+  "kind": "isa-rtl-difftest",
+  "priority": "high",
+  "assigned_owner": "p7-3-neon-fp-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现 P7 协议选定的 Advanced SIMD 2S/4S/2D 浮点 FADD/FSUB/FMUL/FCM comparison；复用 P7-0 FPCR/FPSR/FPEN、V raw state、commit/backpressure 和 P7-2 NEON pipeline 边界；不实现 FMA、FP16、vector conversion、sqrt、estimate、min/max、structured/lane/pair memory、SVE、Cache/AXI/FPGA 或 QEMU fork。",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "P7-0/P7-1/P7-2 已冻结状态、raw FP 语义和提交边界；任务边界固定为协议表中的 2S/4S/2D add/sub/mul/compare，疑点升级，不自行扩大范围。"
+  },
+  "review": {
+    "agent_type": "luna-readonly-audit",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "required": true,
+    "scope": "只做一次 Luna one-pass-blocking 收口审计：检查最终 diff、完整 A76 矩阵、FPCR DN/FZ/RMode、NaN/signed-zero/FPSR raw bits、FPEN trap、单 V 写回、commit/backpressure、unsupported UDEF、P7-1/P7-2/P6 回归、写集和 evidence；不修改文件、不运行测试。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "仅在实现 diff、协议契约和验收证据完成后做一次必要方向审查；机械证据修复不重复方向审查，除非 RTL 或协议发生实质变化。"
+  },
+  "disabled_profiles": ["deepseek-v4-flash[max]"],
+  "phase": "done",
+  "execution": {
+    "dispatch_pending": false,
+    "agent_id": "01a0435a-efd0-7601-b5ea-15b1527ee0bd",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "派单时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T21:13:38+08:00",
+    "timezone": "Asia/Shanghai",
+    "elapsed_basis": "reported_at - dispatch_sent_at",
+    "budget_policy": {
+      "initial_minutes": 30,
+      "extension_increment_minutes": 15,
+      "max_minutes": null,
+      "soft_target_minutes": 60,
+      "hard_stop": false
+    }
+  },
+  "owner_final_report": {
+    "agent_id": "01a0435a-efd0-7601-b5ea-15b1527ee0bd",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "派单时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "sent_at": "2026-08-27T21:13:38+08:00",
+    "received_at": "2026-08-27T21:14:03+08:00",
+    "reported_at": "2026-08-27T22:47:14+08:00",
+    "elapsed_seconds": 5616,
+    "base_sha": "884db7d572e6f72340e63218ded3cc2906230e68",
+    "implementation_head": "f37670d",
+    "verification_head": "6fbc620",
+    "docs_head": "41a837d",
+    "branch": "feature/T-20260827-060-p7-3-neon-fp",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-060",
+    "state": "review",
+    "tests": "P7-3 SV/Cocotb 普通与 delay2、A76 完整矩阵 48/48；P7-2 8/8、31/31、fetch-fault 20/20；P7-1 28/38/18/388；P6 scalar 40/40；15/15 evidence binding audit、compile、JSON、diff check 均通过。",
+    "blockers": [],
+    "known_limit": "只支持 2S/4S/2D FADD/FSUB/FMUL/quiet FCMEQ；完整 FP exception-enable、未列 FP 族、SVE、Cache/AXI/FPGA 和 Gate D/F 后置。",
+    "next": "集成者进行一次性 Luna read-only audit，随后合并并在 merge SHA 复跑 L0-L2。"
+  },
+  "review_record": {
+    "agent_id": "01a043b2-818d-7b22-8070-1d30fabe2817",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "派单时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "sent_at": "2026-08-27T22:49:17+08:00",
+    "received_at": "2026-08-27T22:49:17+08:00",
+    "reported_at": "2026-08-27T22:53:28+08:00",
+    "elapsed_seconds": 251,
+    "source_sha": "41a837d",
+    "status": "go",
+    "blocking_points": [],
+    "conclusion": "48/48 完整 A76 矩阵、15/15 evidence provenance、17/17 写集和 QEMU source_changes=none 均核对通过；无进入 integrating 的必须阻断项。",
+    "next": "集成者串行合并 owner 提交，在 merge SHA 复跑 L0-L2。"
+  },
+  "integration": {
+    "runner_role": "root-integrator",
+    "line": "feature/p7-fp-neon",
+    "source_sha": "9c6adee",
+    "merge_sha": "9c6adee",
+    "status": "pass_l0_l2",
+    "validated_at": "2026-08-27T23:01:04+08:00",
+    "validated": "compile、P7-3 SV/Cocotb 普通与 delay2、A76 48/48、P7-2 SV/Cocotb 普通与 delay2、31/31、20/20、P7-1 28/38/18/388、P6 40/40 全通过。",
+    "known_limit": "只支持 2S/4S/2D FADD/FSUB/FMUL/quiet FCMEQ；未列 FP 族、完整 FP exception-enable、SVE、Cache/AXI/FPGA 和 Gate D/F 后置。"
+  },
+  "parent": "T-20260827-059",
+  "depends_on": ["T-20260827-059", "T-20260827-050"],
+  "base_sha": "884db7d572e6f72340e63218ded3cc2906230e68",
+  "branch": "feature/T-20260827-060-p7-3-neon-fp",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-060",
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/filelist.f",
+    "sim/cocotb/Makefile",
+    "sim/cocotb/Makefile.fp_scalar",
+    "sim/cocotb/Makefile.p7_2_neon",
+    "tb/sv/lcvex_neon_fp_tb.sv",
+    "sim/cocotb/Makefile.p7_3_neon_fp",
+    "sim/cocotb/test_p7_3_neon_fp.py",
+    "sim/cocotb/test_p7_2_neon.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "docs/P7-3_NEON_FP.md",
+    "docs/handoffs/T-20260827-060-p7-3-neon-fp.md",
+    "docs/tasks/evidence/T-20260827-060.json"
+  ],
+  "reads": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-2_NEON_INT.md",
+    "docs/handoffs/T-20260827-058-final.md",
+    "docs/tasks/archive/T-20260827-059.json",
+    "docs/tasks/evidence/T-20260827-059.json",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/filelist.f",
+    "tb/sv/lcvex_soc_tb.sv",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_lockstep_step.sh",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_difftest.c"
+  ],
+  "context_docs": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-2_NEON_INT.md",
+    "docs/tasks/archive/T-20260827-059.json",
+    "docs/tasks/evidence/T-20260827-059.json",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": null,
+    "soft_target_minutes": 60,
+    "hard_stop": false,
+    "extend_when": "仅在 owner 按 Asia/Shanghai 提供 sent_at/received_at/reported_at、实际耗时、文件、验证、阻断和剩余工作且持续有产出时延长。"
+  },
+  "validation": {
+    "l0": [
+      "task/evidence/handoff JSON 通过 python3 -m json.tool；git diff --check",
+      "Verilator lint/elaboration；P7-3 raw encoder 与 unsupported encoding 边界",
+      "2S/4S/2D lane mapping、FPCR mask、FPEN trap 和 raw NaN/FPSR 静态边界"
+    ],
+    "l1": [
+      "独立 SV raw-bit 覆盖 2S/4S/2D add/sub/mul/compare、NaN、Inf、signed zero、FZ/DN/RMode 和 FPSR sticky flags",
+      "Cocotb 覆盖真实 pipeline、V forwarding、单 V commit/backpressure、FPEN 四态 trap、fault/no-effect、unsupported UDEF",
+      "scalar FP 与 NEON FP/NEON integer 跨单元 hazard；不改变 P7-2 Q memory 契约"
+    ],
+    "l2": [
+      "Cortex-A76 FP_NEON=required strict lockstep：P7-3 每个选定编码及边界 raw FP state 一致",
+      "P7-2 NEON 31/fetch-fault 20、P7-1 28/38/18/388、P6 scalar 40 回归",
+      "QEMU 11.1.0/既有 plugin 只读复用，不修改 QEMU fork"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "实现并验证协议中选定的 NEON 2S/4S/2D FADD、FSUB、FMUL、quiet compare；FPCR DN/FZ/RMode、NaN payload、signed zero、FPSR sticky flags 按 raw bits 与 Cortex-A76 required lockstep 一致，FPEN trap、commit backpressure、V forwarding 和 unsupported UDEF 有 SV/Cocotb/定向程序/handoff/evidence。不得宣称完整 NEON/FP，不得实现 FMA、FP16、转换、sqrt、estimate、minmax、structured/lane/pair、SVE、Cache/AXI/FPGA 或修改 QEMU fork。",
+  "created_at": "2026-08-27T21:12:35+08:00",
+  "updated_at": "2026-08-27T23:03:40+08:00",
+  "commits": ["58d7187", "3256406", "f37670d", "6fbc620", "41a837d", "9c6adee"],
+  "handoff": "docs/handoffs/T-20260827-060-p7-3-neon-fp.md",
+  "evidence": "docs/tasks/evidence/T-20260827-060.json",
+  "known_limits": [
+    "只支持协议规定的 2S/4S/2D vector FP 算术和 quiet compare；FMA、FP16、转换及未列 FP 族后置。",
+    "复用现有单核 scalar memory/commit、V raw state 和 P7-2 pipeline；不接 Cache/AXI4/EMIF/FPGA。",
+    "完整 FP exception enable、P8 SVE 和 Gate-F 仍不属于本任务。"
+  ],
+  "next": "任务已完成并归档；P7 Gate-F、完整 Gate D 和阶段发布仍待项目级收口。"
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-016",
+  "base_sha": "a9514e8820a93a96b1e1c639f1d6bd308f5da44d",
+  "head_sha": "cfac7e0bcd014671dc82ad233b7f1dc4cd4c851f",
+  "merge_sha": "b2d9215",
+  "toolchain": {
+    "environment": "conda:lcvex",
+    "verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0"
+  },
+  "qemu": {
+    "release": "",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": "",
+  "runs": [
+    {
+      "run_id": "owner-l0-crc-001",
+      "source_sha": "cfac7e0bcd014671dc82ad233b7f1dc4cd4c851f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "taskset -c 0 env VERILATOR_JOBS=1 make sim-sv-crc",
+      "seed": null,
+      "wall_seconds": 9.493956953,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "integrator-l0-crc-002",
+      "source_sha": "b2d9215",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "taskset -c 0 env VERILATOR_JOBS=1 make sim-sv-crc",
+      "seed": null,
+      "wall_seconds": 9.1,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": 40,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "owner-l0-crc-001-log",
+      "uri": "build/agents/T-20260826-016/sim-sv-crc.log",
+      "sha256": "acac95642b78fc7fc8381654099e72c3d8597cd0abb452d562887da4ff37a2f1",
+      "bytes": 5295,
+      "owner": "owner",
+      "retain_until": "",
+      "reproduce": "taskset -c 0 env VERILATOR_JOBS=1 make sim-sv-crc"
+    }
+  ],
+  "known_limits": [
+    "只验证 CRC 独立 SV testbench 的 L0；未运行可选的全量 make test，也不能据此宣称 Gate D。",
+    "obj_dir_crc 是本地构建产物，不纳入 Git；集成者应在合并 SHA 重跑指定命令。"
+  ]
+}

@@ -1,0 +1,36 @@
+# Template: Quartus Prime Pro 21.4 design partition assignments for LCVEX
+# Catapult A10 B5 experimental QSF.  Do NOT append to the formal
+# fpga/catapult_a10/quartus/catapult_a10.qsf unless this is an explicit
+# experimental copy/revision.
+#
+# Verified syntax in 21.4.0 Build 67:
+#   set_instance_assignment -name PARTITION <partition_name> -to "<instance_path>"
+# Do NOT use -section_id; old PARTITION_NAME / PARTITION_NETLIST_TYPE are invalid
+# or ignored in modern Pro QSF.
+#
+# Paths below assume TOP_LEVEL_ENTITY = lcvex_catapult_soc_top.
+# If TOP_LEVEL_ENTITY = lcvex_catapult_a10_top, prefix each path with "soc.".
+
+# Core / scalar + FP/NEON (inside lcvex_core)
+set_instance_assignment -name PARTITION core        -to "core"
+
+# Optionally split FP/NEON units inside core.  Multiple assignments may be
+# combined into one partition by using the same partition name, or wrapped
+# in RTL first; validate before adopting.
+# set_instance_assignment -name PARTITION fp          -to "core.fp_scalar"
+# set_instance_assignment -name PARTITION fp          -to "core.neon_fp"
+# set_instance_assignment -name PARTITION fp          -to "core.neon_int"
+
+# Cache/coherence instances inside lcvex_catapult_soc_coh
+set_instance_assignment -name PARTITION l1i         -to "coh.i_l1"
+set_instance_assignment -name PARTITION l1d         -to "coh.d_l1"
+set_instance_assignment -name PARTITION l2          -to "coh.l2"
+set_instance_assignment -name PARTITION coh         -to "coh"
+
+# DDR/AXI/EMIF chain inside lcvex_catapult_soc_top
+set_instance_assignment -name PARTITION ddr_bridge  -to "ddr_bridge"
+set_instance_assignment -name PARTITION axi_master  -to "axi_master"
+set_instance_assignment -name PARTITION emif_adapter -to "emif_adapter"
+
+# Root partition is implicit; small glue (router/bram/jtag/epcq/status) stays
+# in root unless assigned elsewhere.

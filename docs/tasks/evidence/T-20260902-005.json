@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-005",
+  "label": "F1A-DEFAULT-ON-PARAM",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "default_on_param_propagation_and_smoke_lint_pass",
+  "base_sha": "732aa5691134b2aaef64b50c570da2b7ad001497",
+  "head_sha": "2c3b0aec5a40b3e850d000477119b2b3c5a4d6e1",
+  "head_sha_note": "implementation commit; handoff/evidence carried by the following docs-only commit",
+  "branch": "feature/T-20260902-005-f1a-default-on",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-005",
+  "owner": "dsh-perf-f1a-param",
+  "model": "deepseek-v4-flash",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-02T03:04:30+08:00",
+    "recovery_sent_at": "2026-09-02T08:18:53+08:00",
+    "received_at": "2026-09-02T08:19:00+08:00",
+    "reported_at": "2026-09-02T08:42:43+08:00"
+  },
+  "scope": "将 F1a FETCH_FIFO_ENABLE/DEPTH/EPOCH_W 参数传播到 core_wrap、cluster_top、catapult_soc_top、catapult_a10_top 与 TB/Makefile，并把默认开关改为 1；保留显式 0 关闭 F0 路径；运行默认-on smoke/lint 与 F0 lint。",
+  "writes": [
+    "Makefile",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "rtl/lcvex_catapult_soc_top.sv",
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "docs/handoffs/T-20260902-005-f1a-default-on.md",
+    "docs/tasks/evidence/T-20260902-005.json"
+  ],
+  "functional_boundaries": [
+    "lcvex_core.sv 未修改；F1a 功能语义、提交协议、FIFO/epoch 逻辑不变",
+    "未运行 Gate D / full matrix / QEMU lockstep / Linux / Quartus / board",
+    "F0 可通过 FETCH_FIFO_ENABLE=0 或 PERF_FETCH_FIFO_ENABLE=0 显式保留"
+  ],
+  "propagation": [
+    {
+      "file": "rtl/lcvex_core_wrap.sv",
+      "defaults": "FETCH_FIFO_ENABLE=1, FETCH_FIFO_DEPTH=2, FETCH_EPOCH_W=8",
+      "pass_to": "rtl/lcvex_core"
+    },
+    {
+      "file": "rtl/lcvex_cluster_top.sv",
+      "defaults": "FETCH_FIFO_ENABLE=1, FETCH_FIFO_DEPTH=2, FETCH_EPOCH_W=8",
+      "pass_to": "lcvex_core_wrap per core"
+    },
+    {
+      "file": "rtl/lcvex_catapult_soc_top.sv",
+      "defaults": "FETCH_FIFO_ENABLE=1, FETCH_FIFO_DEPTH=2, FETCH_EPOCH_W=8",
+      "pass_to": "rtl/lcvex_core"
+    },
+    {
+      "file": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+      "defaults": "FETCH_FIFO_ENABLE=1, FETCH_FIFO_DEPTH=2, FETCH_EPOCH_W=8",
+      "pass_to": "lcvex_catapult_soc_top",
+      "note": "task JSON listed rtl/lcvex_catapult_a10_top.sv; repository actual path is fpga/catapult_a10/rtl/"
+    },
+    {
+      "file": "tb/sv/lcvex_soc_tb.sv",
+      "change": "FETCH_FIFO_ENABLE default 0 -> 1",
+      "pass_to": "lcvex_core"
+    },
+    {
+      "file": "Makefile",
+      "change": "PERF_FETCH_FIFO_ENABLE ?= 0 -> ?= 1; compile adds -Wno-UNUSEDSIGNAL for known F1a raw_control_flow warning",
+      "pass_to": "microbench-build-config"
+    }
+  ],
+  "runs": [
+    {
+      "id": "make-compile",
+      "command": "make compile",
+      "result": "pass",
+      "exit_code": 0,
+      "note": "added -Wno-UNUSEDSIGNAL to compile target; no RTL core change"
+    },
+    {
+      "id": "make-test-f1a",
+      "command": "env VERILATOR_JOBS=1 make test-f1a",
+      "result": "pass",
+      "exit_code": 0,
+      "detail": "SV F1a FIFO/epoch/quarantine/backpressure skeleton PASS (3 commits)"
+    },
+    {
+      "id": "make-f1a-control-flow-fence-smoke",
+      "command": "env VERILATOR_JOBS=1 make f1a-control-flow-fence-smoke",
+      "result": "pass",
+      "exit_code": 0,
+      "detail": "cache-off/cache-on/delay2 SV smoke and T010_IABT negative control PASS"
+    },
+    {
+      "id": "make-cocotb-f1a",
+      "command": "env VERILATOR_JOBS=1 make cocotb-f1a",
+      "result": "pass",
+      "exit_code": 0,
+      "detail": "cocotb 3/3 PASS: test_fetch_fifo, test_fetch_fifo_ready_randomized, test_control_flow_fetch_fence"
+    },
+    {
+      "id": "lint-tb-default-on",
+      "command": "verilator --lint-only --timing --assert --top-module lcvex_soc_tb (no -G, default FETCH_FIFO_ENABLE=1)",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "id": "lint-tb-f0",
+      "command": "verilator --lint-only --timing --assert --top-module lcvex_soc_tb -GFETCH_FIFO_ENABLE=0 -GFETCH_FIFO_DEPTH=2 -GFETCH_EPOCH_W=8",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "id": "lint-soc-top-f0",
+      "command": "verilator --lint-only --top-module lcvex_catapult_soc_top -GFETCH_FIFO_ENABLE=0 -GFETCH_FIFO_DEPTH=2 -GFETCH_EPOCH_W=8 -f fpga/catapult_a10/tb/filelist_soc.f",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "id": "lint-core-wrap-f0",
+      "command": "verilator --lint-only --top-module lcvex_core_wrap -GFETCH_FIFO_ENABLE=0 -f rtl/filelist.f rtl/lcvex_core_wrap.sv",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "id": "lint-cluster-top-f0",
+      "command": "verilator --lint-only --top-module lcvex_cluster_top -GFETCH_FIFO_ENABLE=0 -f rtl/filelist.f rtl/lcvex_core_wrap.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_c3_sysctrl.sv rtl/lcvex_cluster_top.sv",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "id": "lint-platform",
+      "command": "bash fpga/catapult_a10/tools/lint_soc.sh; bash fpga/catapult_a10/tools/lint_platform.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "detail": "lcvex_catapult_soc_top and lcvex_catapult_a10_top default-on lint PASS"
+    },
+    {
+      "id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "conda_env": "lcvex",
+    "verilator_jobs": 1,
+    "worktree_only": true
+  },
+  "not_run": [
+    "Gate D",
+    "196-row/98-pair full performance matrix rerun",
+    "QEMU lockstep",
+    "Linux long-run",
+    "Quartus full flow / board"
+  ],
+  "next": [
+    "integrator re-run required L0/L1 subset at merge SHA",
+    "default-on full Gate D (T-013)",
+    "final FPGA candidate resync"
+  ],
+  "merge_sha": "057a1c159ab9632deb574acece62d1d9bd57e19a",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T08:43:42+08:00",
+    "merged_at": "2026-09-02T08:44:15+08:00",
+    "recorded_at": "2026-09-02T08:44:15+08:00",
+    "notes": "Merged F1a default-on parameter propagation; subagent L0/L1 tests accepted; T-013 full Gate D still pending"
+  }
+}

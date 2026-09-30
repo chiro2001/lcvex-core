@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-058",
+  "title": "P7-1 选定 FP32/FP64 标量算术与基础访存垂直实现",
+  "kind": "isa-rtl-difftest",
+  "priority": "high",
+  "assigned_owner": "p7-1-scalar-fp-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现 P7 协议已选定的 FP32/FP64 标量 FMOV、FADD、FSUB、FMUL、FDIV、FCMP 与基础单寄存器 FP 标量访存；必须使用 raw IEEE-754 位语义、既有 FPCR/FPSR/FPEN 和 scalar commit 边界；不实现 FMA、sqrt、转换、FP16、NEON、SVE、完整 FP exception enable 或 Cache/AXI/FPGA 接线。",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "P7-0 已冻结 FP state/wire/commit/checkpoint 契约；本任务边界由集成者固定，直接进入受限实现，必要的协议疑点升级而不自行扩范围。"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只做一次阻断式审查：检查指令选择/编码、FPCR/FPSR/NaN/raw-bit 语义、FPEN/trap、commit effect、写集和 QEMU required lockstep 验收；不提供逐行实现，不修改文件。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "P7-0 已完成一次最终审查；P7-1 只在实现 diff/验收证据完成后做一次必要方向审查，协议或写集实质变化才重开。"
+  },
+  "review_record": {
+    "agent_id": "01a041ac-9f9c-7300-b77d-92480affec8f",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T13:23:30+08:00",
+    "received_at": "2026-08-27T13:24:09+08:00",
+    "reported_at": "2026-08-27T13:29:23+08:00",
+    "elapsed_seconds": 353,
+    "source_sha": "b5243e5fc9fe9726c5789379acc9e93a431c0cc4",
+    "status": "block",
+    "blocking_points": [
+      "FZ=0 的 FP32/FP64 subnormal 指数错误，当前 edge 仅覆盖 FZ=1。",
+      "FP16/保留 type 被寄存器算术解码 mask 吞掉。",
+      "B/H scalar memory 未限制 size=10/11，越过 P7-1/P7-2 边界。",
+      "Inf/0 错置 FPSR.DZC，只有有限非零值除零才应置位。",
+      "owner evidence 未绑定最终三提交 head，部分 command 含省略号，缺少最终 P6 回归与新增负测。"
+    ],
+    "next": "原 owner 定向修复并重建可重放 evidence；集成者随后复跑 L0-L2。"
+  },
+  "review_repair_record": {
+    "agent_id": "01a041ac-9f9c-7300-b77d-92480affec8f",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T13:52:56+08:00",
+    "received_at": "2026-08-27T13:53:36+08:00",
+    "reported_at": "2026-08-27T13:56:32+08:00",
+    "elapsed_seconds": 216,
+    "source_sha": "6d4faa1165f8971fc63dd947036e80de2fa19e44",
+    "status": "block_evidence",
+    "blocking_points": [
+      "reserved type=10 缺少真实负例",
+      "388 条序列缺少仓内可重建 generator 命令",
+      "标准/edge 最终成功日志路径不存在或被后续运行覆盖",
+      "最终 head/evidence/handoff 未统一绑定",
+      "P6 scalar QEMU 回归未记录"
+    ],
+    "conclusion": "RTL 四项语义修复已确认；补齐机械 evidence 后无需再次方向审查，除非 RTL 再发生实质变化。",
+    "resolution": "owner 已加入 reserved type、仓内 sequence generator、最终独立日志和 P6 scalar 回归；由集成者在 f937352 复跑确认。"
+  },
+  "disabled_profiles": ["deepseek-v4-flash[max]"],
+  "phase": "done",
+  "execution": {
+    "dispatch_pending": false,
+    "agent_id": "01a04175-8434-7731-a0f3-d844f6962b40",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "待 spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "budget_minutes": 30,
+    "budget_policy": {
+      "initial_minutes": 30,
+      "extension_increment_minutes": 15,
+      "max_minutes": 60,
+      "extend_when": "owner 在自然里程碑提供 sent_at/received_at/reported_at、可审阅文件、验证结果、阻断和剩余工作，且写集稳定；不因等待窗口到期自动中断。"
+    },
+    "clock": {
+      "dispatch_sent_at": "2026-08-27T12:23:16+08:00",
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at"
+    }
+  },
+  "continuation_execution": {
+    "agent_id": "01a04175-8434-7731-a0f3-d844f6962b40",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "恢复同一 owner，派单省略 model，按项目路由为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T13:31:02+08:00",
+    "budget_minutes": 30,
+    "budget_policy": {
+      "initial_minutes": 30,
+      "extension_increment_minutes": 15,
+      "max_minutes": 45,
+      "extend_when": "owner 在修复自然里程碑提供实际时间戳、修复文件、测试和剩余工作；只要有稳定产出不强制结束。"
+    },
+    "state": "done",
+    "received_at": "2026-08-27T13:32:46+08:00",
+    "reported_at": "2026-08-27T13:51:31+08:00",
+    "elapsed_seconds": 1229,
+    "scope": "只修复 Sol review 的 subnormal、FP16/保留 type、B/H scalar memory、Inf/0 DZC 和最终 evidence 可重放性；保持 P7-1 写集，不扩展到 P7-2/Cache/AXI/QEMU fork。",
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at"
+    }
+  },
+  "evidence_repair_execution": {
+    "agent_id": "01a04175-8434-7731-a0f3-d844f6962b40",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "恢复同一 owner，派单省略 model，按项目路由为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T14:00:56+08:00",
+    "budget_minutes": 30,
+    "budget_policy": {
+      "initial_minutes": 30,
+      "extension_increment_minutes": 15,
+      "max_minutes": 45,
+      "extend_when": "owner 在自然里程碑提供完整可重放命令、日志/hash、负例和实际时间戳；只要有稳定产出不强制结束。"
+    },
+    "state": "done",
+    "received_at": "2026-08-27T14:02:25+08:00",
+    "reported_at": "2026-08-27T14:20:04+08:00",
+    "elapsed_seconds": 1148,
+    "scope": "只补 reserved type 负例、generator/provenance、最终标准/edge 日志、最终 head 绑定和 P6 scalar 回归；不改已确认 RTL 语义，不扩展到 P7-2/Cache/AXI/QEMU fork。",
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at"
+    }
+  },
+  "parent": "T-20260827-051",
+  "depends_on": ["T-20260827-051", "T-20260827-050"],
+  "base_sha": "bf3dab04ca2a0ca0a5993c72888a7d065548c6cb",
+  "branch": "feature/T-20260827-058-p7-1-fp-scalar",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058",
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/filelist.f",
+    "tb/sv/lcvex_fp_scalar_tb.sv",
+    "sim/cocotb/Makefile.fp_scalar",
+    "sim/cocotb/Makefile",
+    "sim/cocotb/test_p7_fp_scalar.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/handoffs/T-20260827-058-p7-1-fp-scalar.md",
+    "docs/tasks/evidence/T-20260827-058.json",
+    "docs/handoffs/T-20260827-058-final.md"
+  ],
+  "reads": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-0_FP_STATE.md",
+    "docs/handoffs/T-20260827-051-final.md",
+    "docs/tasks/archive/T-20260827-051.json",
+    "docs/tasks/evidence/T-20260827-051-resume.json",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/filelist.f",
+    "tb/sv/lcvex_soc_tb.sv",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_lockstep_step.sh",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_difftest.c"
+  ],
+  "context_docs": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-0_FP_STATE.md",
+    "docs/handoffs/T-20260827-051-final.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md"
+  ],
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "task/evidence/handoff JSON 通过 python3 -m json.tool；git diff --check",
+      "FP32/FP64 raw encoding builder 与 unsupported encoding 负测",
+      "Verilator lint/elaboration；FPCR/FPSR/FPEN reset/mask/trap 静态边界"
+    ],
+    "l1": [
+      "独立 SV/Cocotb 覆盖 FMOV、FADD、FSUB、FMUL、FDIV、FCMP 的 S/D 定向位模式",
+      "正负零、无穷、有限数、NaN payload、subnormal、FPCR DN/FZ/RMode（实际支持范围必须文档化）和 FPSR sticky flags",
+      "FPEN trap 无副作用、标量提交/背压、基础 scalar FP load/store 字节使能和 fault 边界"
+    ],
+    "l2": [
+      "Cortex-A76 FP_NEON=required strict lockstep：每个支持编码 raw V/FPCR/FPSR/提交包一致",
+      "QEMU existing 0012 patch/plugin required handshake；P6 scalar 回归与 unsupported negative path",
+      "不得修改 QEMU fork；不得把 host floating point 或 epsilon 比较作为 RTL oracle"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "以受限垂直切片实现并验证协议中选定的 FP32/FP64 标量 FMOV/FADD/FSUB/FMUL/FDIV/FCMP 与基础单寄存器 FP 标量访存；结果和 NaN/FPSR/FPCR 按 raw bits 与 Cortex-A76 QEMU strict lockstep 比较，FPEN trap/背压/访存 fault 不产生错误副作用；同时具备 SV、Cocotb、定向程序、handoff/evidence 和明确 unsupported 矩阵。不得宣称完整 ARMv8.2-A FP/NEON，不得实现 FMA/转换/FP16/NEON/SVE，不得修改 AXI/Cache/FPGA 或 QEMU fork。",
+  "created_at": "2026-08-27T12:16:08+08:00",
+  "updated_at": "2026-08-27T15:03:28+08:00",
+  "commits": [
+    "fecd4f86b6bccd7cfcacac41c9d4f9555389b61a",
+    "93d8290ec8bcdd39f8a9ecae29e0a8bcba49c60f",
+    "b5243e5fc9fe9726c5789379acc9e93a431c0cc4",
+    "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+    "6d4faa1165f8971fc63dd947036e80de2fa19e44",
+    "0b67325a4aa364625d60720a8b15204f05bf1c53",
+    "dbfbebfcbaab5f0f0cf55dcbc48d049f04a996f9",
+    "f93735241682ba8ff543c52e8ccda87f35927877"
+  ],
+  "integration": {
+    "runner_role": "root-integrator",
+    "line": "feature/p7-fp-neon",
+    "source_sha": "f93735241682ba8ff543c52e8ccda87f35927877",
+    "status": "pass_l0_l2",
+    "merge_sha": "f93735241682ba8ff543c52e8ccda87f35927877",
+    "validated": "compile、scalar/FP SV、P7 Cocotb 5/5、backpressure SV/Cocotb 2/2、A76 required 28/38/18/388、P6 scalar 40；source-list MODMISSING 已修复并复测"
+  },
+  "handoff": "docs/handoffs/T-20260827-058-final.md",
+  "evidence": "docs/tasks/evidence/T-20260827-058.json",
+  "known_limits": [
+    "P7-1 使用现有单核 scalar memory/commit 边界；不接 B 线 L1/L2/AXI4/EMIF。",
+    "算术实现必须采用可综合整数/位级语义，禁止以 host float、epsilon 或宽松 NaN 匹配通过测试。",
+    "P7-2 NEON 整数、P7-3 NEON 浮点、FP exception enable、FMA/转换和 P8 SVE 后置。"
+  ],
+  "blockers": [],
+  "next": "T-058 已完成集成复测并满足归档条件；归档后登记 P7-2 NEON 整数/单 Q 访存任务，同时保持 B 线独立。"
+}

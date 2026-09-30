@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-038",
+  "parent": "T-20260920-037",
+  "label": "B25-GOLDEN-ONLY-VOLATILE-RECOVERY",
+  "title": "Restore and prove the exact golden SOF without rerunning candidate or terminal",
+  "kind": "board-recovery",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-live-golden-proven",
+  "assigned_owner": "golden_t038",
+  "depends_on": ["T-20260920-030", "T-20260920-036"],
+  "dependency_exception": "T-037 fully passed candidate functionality but its sole golden programmer attempt failed; this successor is restricted to golden-only recovery and must not rerun candidate or terminal.",
+  "base_sha": "2e18aa0224ad01388bf624c9476e4a2bf11c95fa",
+  "branch": "verify/T-20260920-038-b25-golden-only-volatile-recovery",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-038",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-038-b25-golden-only-volatile-recovery",
+  "remote_bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-038-prepare.ps1",
+  "authorization": {
+    "source": "Existing user authorization for Quartus/JTAG volatile configuration and test plus the T-037 failure policy requiring golden restoration.",
+    "scope": "Exactly one volatile programming attempt of the frozen golden SOF and read-only final enumeration.",
+    "excluded": ["candidate SOF", "terminal", "JIC/EPCQ/Flash", "reset", "power cycle", "unknown/standard process stop"]
+  },
+  "writes": [
+    "build/agents/T-20260920-038/** ignored sealed tools/recovery evidence",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-038-b25-golden-only-volatile-recovery/** task-owned root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-038-prepare.ps1 task-owned bootstrap",
+    "docs/tasks/evidence/T-20260920-038.json",
+    "docs/handoffs/T-20260920-038-b25-golden-only-volatile-recovery.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-036.json",
+    "docs/tasks/evidence/T-20260920-037.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036/build/agents/T-20260920-036/tools/** exact sealed bundle",
+    "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof"
+  ],
+  "runner_contract": {
+    "source_manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "tools_immutable": true,
+    "program_script_sha256": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e",
+    "prepare_sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d",
+    "validate_sha256": "73632da1b96e445df0302be273ee777e11da218e71f43183e7c33aebe1646592",
+    "verify_sha256": "7fd26eac819fa141dbf9b7a2255bc8854cc5f6175c6ec42179e2edca30eeac85"
+  },
+  "golden_contract": {
+    "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+    "bytes": 36844906,
+    "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "checksum": "0x31510BB6",
+    "design_hash": "193DE4BC8A30F3ED5F1F",
+    "jtag_id": "0x02E060DD",
+    "console_cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "program_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310"
+  },
+  "scope": "Copy the exact T-036 sealed bundle unchanged, create a task-specific manifest, fresh-bootstrap and revalidate AST/seal, invoke the sealed program_once.ps1 exactly once in golden mode, then directly enumerate the standard JTAG chain. No candidate or terminal path is present.",
+  "acceptance": {
+    "immutability": "All nine tool hashes equal T-036; only a T-038 manifest and task-specific Bash recovery wrapper are new. No reusable tool edits.",
+    "freshness": "T-038 root/bootstrap absent; one bootstrap/upload; remote AST 6/6 and seal 9/9 PASS before recovery.",
+    "preconditions": "program_once.ps1 itself requires exact candidate/golden file identities, no conflicting EDA/programmer/terminal, port1310 free and one preserved standard jtagserver. The cached pre-recovery design hash is not used as a gate.",
+    "single_use": "Invoke program_once.ps1 exactly once with Mode=golden and one run label. Durable golden marker count=1; candidate marker absent; candidate programmer/terminal counts=0; no retry.",
+    "programmer": "Require exact golden path/checksum/JTAG-ID, exit0, configuration and operation success, Quartus programmer 0 errors/0 warnings, owned server stopped, standard server preserved, post-busy=0 and port1310 free.",
+    "final_chain": "After successful programmer only, invoke jtagconfig.exe -n once through the preserved standard server. Require cable/JTAG-ID, golden design hash and JTAG UART/PHY nodes. Combined successful golden transaction plus final chain proves live golden.",
+    "artifact": "Fetch marker, program result/stdout/stderr/server manifest and final enumeration; hash-bind every artifact and final resource status.",
+    "boundary": "Candidate SOF, nios2-terminal, input bytes, reset/power/Flash and process termination remain zero."
+  },
+  "failure_policy": "One recovery attempt only. Any setup/AST/seal/precondition/programmer/enumeration failure ends the task with live state unproven; no replacement script, root recreation, retry, candidate/terminal, reset/power or Flash action.",
+  "resource": "One uninterrupted resource-lock gamepc window for setup, single golden programming, fetch and final enumeration.",
+  "forbidden_regions": [
+    "any sealed tool modification",
+    "candidate programming or terminal interaction",
+    "more than one golden marker/programmer call or any retry",
+    "JIC/EPCQ/Flash, reset, power cycle, standard/unknown process stop",
+    "claiming final golden from cached enumeration without a successful golden programmer transaction"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T20:18:31+08:00",
+    "agent_name": "golden_t038",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "acceptance": "PASS; one exact golden volatile programming transaction plus one final standard-server chain enumeration proves the live FPGA is the frozen golden design.",
+    "topic_evidence_head": "bb3404fd16f777f5802f83d99146279ad6149698",
+    "integration_evidence_import_sha": "e48a303a",
+    "integration_hash_correction_sha": "99764a05",
+    "golden_program": "PASS; Quartus programmer PID 18828 exited 0 with configuration, operation, checksum and JTAG-ID acceptance and 0 errors/0 warnings.",
+    "final_chain": "PASS; exact cable/JTAG ID/golden design hash plus JTAG UART #0 and JTAG PHY #0.",
+    "final_board_state": "live golden proven",
+    "safety": "candidate programmer=0, terminal=0, JIC/EPCQ/Flash=0, reset/power=0, standard/unknown process stop=0; only task-owned server PID 56352 stopped.",
+    "evidence": "docs/tasks/evidence/T-20260920-038.json",
+    "handoff": "docs/handoffs/T-20260920-038-b25-golden-only-volatile-recovery.md",
+    "next": "No further GamePC access or hardware rerun is required for this closeout."
+  },
+  "created_at": "2026-09-20T20:17:08+08:00",
+  "updated_at": "2026-09-20T20:39:54+08:00"
+}

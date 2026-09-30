@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-015",
+  "candidate_sha": "a9514e8820a93a96b1e1c639f1d6bd308f5da44d",
+  "head_sha": "a9514e8820a93a96b1e1c639f1d6bd308f5da44d",
+  "merge_sha": "4c9f512",
+  "toolchain": {
+    "python": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "make": "GNU Make 4.4.1",
+    "cpu_binding": "0-5",
+    "memory_limit_mb": 8192,
+    "resource_escalation": false
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_path": "../qemu/build/qemu-system-aarch64",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_path": "qemu/VERSION",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_source_path": "qemu/plugins/lcvex_difftest.c",
+    "plugin_source_sha256": "8e9a8ba9ef4fce3044423db6faf09532fbda5c92bbf1f4fa204d66c239d452a2",
+    "note": "QEMU/plugin 仅只读使用；未修改外部 fork。"
+  },
+  "rtl": {
+    "filelist_path": "rtl/filelist.f",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "crc_tb_sha256": "59c2ddb4c9aa0a009cfbb2ffbcc8072a1c412eb32f08245bca20243ae5de4ef2"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-toolcheck-001",
+      "source_sha": "a9514e8",
+      "runner_role": "luna-monitor-agent",
+      "level": "L0",
+      "command": "taskset -c 0-5 bash scripts/toolcheck.sh",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 3.0,
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260826-015/logs/toolcheck.log",
+      "log_sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9"
+    },
+    {
+      "run_id": "owner-l1-make-test-001",
+      "source_sha": "a9514e8",
+      "runner_role": "luna-monitor-agent",
+      "level": "L1",
+      "command": "VERILATOR_JOBS=6 taskset -c 0-5 make test",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 148.0,
+      "peak_rss_mb": 371,
+      "disk_delta_mb": 857,
+      "exit_code": 2,
+      "result": "fail",
+      "first_failure": {
+        "stage": "sim-sv-crc",
+        "tool": "verilator --binary --timing --assert -Wall -j 6",
+        "source": "tb/sv/lcvex_crc_tb.sv:21:13",
+        "message": "PINMISSING: lcvex_alu dut 缺少 cin；Exiting due to 1 warning(s)",
+        "rtl_port": "rtl/lcvex_alu.sv:19:31",
+        "reference_not_modified": true,
+        "prior_smokes": "core/backpressure/PL061/MMIO 等在日志中通过"
+      },
+      "log": "build/agents/T-20260826-015/logs/make-test.log",
+      "log_sha256": "d4c57921cad3e1f7e4f8a1782cc0bf9c60af941a929bc45add989fdb4805b8e5"
+    },
+    {
+      "run_id": "owner-l1-coverage-001",
+      "level": "L1",
+      "command": "taskset -c 0-5 make coverage",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    },
+    {
+      "run_id": "owner-l2-difftest-001",
+      "level": "L2",
+      "command": "VERILATOR_JOBS=6 taskset -c 0-5 make difftest difftest-hazard p4c p5a p6-lse p6-wfi",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    },
+    {
+      "run_id": "owner-l3-gate-d-001",
+      "level": "L3",
+      "command": "VERILATOR_JOBS=6 taskset -c 0-5 bash sim/difftest/run_gate_d.sh --parallel",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "toolcheck-log",
+      "path": "build/agents/T-20260826-015/logs/toolcheck.log",
+      "sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9",
+      "bytes": 291,
+      "status": "pass"
+    },
+    {
+      "id": "make-test-first-failure-log",
+      "path": "build/agents/T-20260826-015/logs/make-test.log",
+      "sha256": "d4c57921cad3e1f7e4f8a1782cc0bf9c60af941a929bc45add989fdb4805b8e5",
+      "bytes": 140340,
+      "status": "preserved"
+    },
+    {
+      "id": "compile-failure-scene",
+      "path": "obj_dir* and obj_dir_crc",
+      "bytes_mb": 857,
+      "status": "preserved outside Git"
+    }
+  ],
+  "known_limits": [
+    "T-014 已修正 backpressure restore pins，本次继续发现 CRC testbench 的 lcvex_alu 实例缺少 cin。",
+    "按首个真实失败立即停止，coverage、L2 定向差分和 run_gate_d 未执行；本 evidence 不能宣称 Gate D 通过。",
+    "未提升资源、未启动 Linux 长跑或额外重型 QEMU 作业，也未修改 RTL/QEMU/参考或任务注册表。"
+  ]
+}

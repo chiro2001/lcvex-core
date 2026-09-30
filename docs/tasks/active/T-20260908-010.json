@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-010",
+  "label": "B25-BOOT-WORD-PROVENANCE",
+  "title": "Determine the authoritative reset-vector bytes across ELF, BIN, HEX and MIF",
+  "kind": "read-only-image-provenance-review",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-stale-test-provenance",
+  "assigned_owner": "b25_gate_d",
+  "depends_on": [],
+  "follows_from": "T-20260908-007",
+  "base_sha": "8f8faac30119c1db734a2ecd0394b4aad24e881b",
+  "branch": "verify/T-20260908-010-b25-boot-word-provenance",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-010",
+  "scope": "Trace why lcvex_bram_init25_tb expects reset word 0x9100001f580017c0 while the current deterministic boot build produces 0x9100001f58001700. Establish the authoritative instruction/data bytes from source, linker layout, ELF disassembly, BIN, byte HEX and 64-bit MIF, including the commit that changed the literal offset. Do not modify source or expectations.",
+  "writes": [
+    "docs/tasks/evidence/T-20260908-010.json",
+    "docs/handoffs/T-20260908-010-b25-boot-word-provenance.md",
+    "build/agents/T-20260908-010/** ignored audit artifacts"
+  ],
+  "reads": [
+    "fpga/catapult_a10/boot/**",
+    "tb/sv/lcvex_bram_init25_tb.sv",
+    "git history affecting the boot assembly/link layout and test",
+    "docs/tasks/evidence/T-20260907-039.json and T-20260908-007 facts supplied in dispatch"
+  ],
+  "validation": [
+    "Rebuild the boot image without editing source and record tool/hash provenance.",
+    "Disassemble the first instructions and decode the LDR literal immediate/target for both old and current words.",
+    "Prove byte-for-byte agreement or disagreement among ELF load image, boot.bin, boot.hex and boot.mif first word and whole payload.",
+    "Identify whether the hardcoded constant is stale, the image is wrong, or the result is indeterminate."
+  ],
+  "acceptance": "An evidence-backed verdict names one authoritative reset-vector value and exact cause/history; no tracked design/test file is modified.",
+  "resource": "Boot build/disassembly only; acquire local only if the existing entry classifies it heavy. No GamePC/Quartus.",
+  "forbidden_regions": [
+    "all RTL/firmware/test expectation/QSF/manifest modifications",
+    "GamePC/Quartus/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T23:59:37+08:00",
+  "updated_at": "2026-09-09T00:26:06+08:00",
+  "result_head": "7d50852e",
+  "result_evidence": "docs/tasks/evidence/T-20260908-010.json",
+  "integrated_head": "e86996d8",
+  "followup_task": "T-20260909-001",
+  "dispatch": {
+    "sent_at": "2026-09-09T00:01:15+08:00",
+    "agent_name": "b25_gate_d",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "193cf281f55c9c3792737c73b4adfec2a86d027c"
+  }
+}

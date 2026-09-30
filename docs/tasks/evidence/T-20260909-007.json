@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-007",
+  "label": "B25-UNCONSTRAINED-CLOCK-AUDIT",
+  "state": "audit-complete",
+  "acceptance_status": "pass-with-explicit-waiver-recommendations",
+  "partial": false,
+  "base_sha": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "physical_source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "head_sha_source_snapshot": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "branch": "verify/T-20260909-007-b25-unconstrained-clock-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-007",
+  "owner": "b25_unconstrained_clock_audit",
+  "scope": "只读审计 T-002 frozen fitted DB 的 altera_reserved_tck、soc|emif_adapter|emif_rst_sync1_n 及 reserved JTAG ports；不重跑 synthesis/fitter/assembler，不改 RTL/QSF/SDC/QEMU，不连接 JTAG/板卡/Flash。",
+  "timestamps": {
+    "sent_at": "2026-09-09T10:35:01+08:00",
+    "received_at": "2026-09-09T10:35:01+08:00",
+    "worktree_head_checked_at": "2026-09-09T10:37:42+08:00",
+    "preflight_at": "2026-09-09T10:39:16.8690861+08:00",
+    "fitted_db_inventory_at": "2026-09-09T10:39:49.0733269+08:00",
+    "generated_sdc_inventory_at": "2026-09-09T12:18:22.5047747+08:00",
+    "final_sta_started_at": "2026-09-09T12:22:06.4949013+08:00",
+    "final_sta_finished_at": "2026-09-09T12:23:07.4102175+08:00",
+    "postflight_at": "2026-09-09T12:32:02.7451404+08:00",
+    "reported_at": "2026-09-09T12:32:40+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "quartus_sta": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sta.exe",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-002-b25-physical",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-002-b25-physical\\fpga\\catapult_a10\\quartus",
+    "runtime_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-002-b25-physical\\runtime\\T-20260909-007",
+    "fitted_database_reused": true,
+    "synthesis_rerun": false,
+    "fitter_rerun": false,
+    "signoff_sta_rerun": false,
+    "assembler_rerun": false,
+    "bitstream_generated": false
+  },
+  "resource_lock": {
+    "resource": "gamepc",
+    "project": "lcvex",
+    "task": "T-20260909-007",
+    "agent": "b25_unconstrained_clock_audit",
+    "lock_acquired_for_all_remote_actions": true,
+    "busy_return_75_waits": [
+      "2026-09-09T10:48:18+08:00 T-005 PID 853833",
+      "2026-09-09T10:51:13+08:00 T-006 PID 866842",
+      "2026-09-09T10:52:25+08:00 T-005 PID 875485",
+      "2026-09-09T11:53:11+08:00 T-006 PID 949904",
+      "2026-09-09T11:58:30+08:00 T-006 PID 957600"
+    ],
+    "final_stage": {
+      "stage": "sta_unconstrained_clock_audit_final4",
+      "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260909-007 b25_unconstrained_clock_audit --meta stage=sta_unconstrained_clock_audit_final4 --meta source_sha=702bd8ee5295efe8a2ad9e094d6c12471a1d3089 --meta fitted_db_probe=T-20260909-002-b25-physical --meta quartus_sta_count=1 --meta generated_vendor_sdc=true --meta prior_harness_retries=true -- sh -c 'scp -o BatchMode=yes -o ConnectTimeout=10 build/agents/T-007/runtime/t007_unconstrained_clock_audit.tcl build/agents/T-007/runtime/t007_run_quartus_sta.ps1 192.168.101.5:D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-20260909-007/ && ssh -o BatchMode=yes -o ConnectTimeout=10 192.168.101.5 pwsh.exe -NoLogo -NoProfile -NonInteractive -File D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-20260909-007/t007_run_quartus_sta.ps1'",
+      "lock_exit_code": 0,
+      "quartus_sta_exit_code": 0,
+      "wall_seconds": 60.915,
+      "free_physical_before_mb": 42921.4,
+      "free_physical_after_mb": 42888.6,
+      "eda_processes_before": 0,
+      "eda_processes_after": 0,
+      "quartus_peak_virtual_mb": 6582,
+      "wrapper_log": "build/agents/T-007/runtime/resource_lock_sta_final4.stdout.log",
+      "wrapper_log_sha256": "3d38c55cc39b7469568e39ef3e9d2a8759ca986cdfdf0b4fe8275f677971bb59",
+      "final_lock_status": "gamepc FREE"
+    },
+    "total_quartus_sta_processes": 5,
+    "accepted_final_processes": 1,
+    "retry_policy": "四次前序 process 均为脚本/接口 harness 错误并在 lock 内退出；无并发 quartus_sta，最终结果只采用最后一次成功且 DB hash unchanged 的 process。"
+  },
+  "fitted_database_hashes": {
+    "catapult_a10.qpf": {"bytes": 34, "sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd"},
+    "catapult_a10.qsf_remote_normalized": {"bytes": 13972, "sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46", "candidate_raw_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe", "normalized_content_equal": true},
+    "catapult_a10.sdc": {"bytes": 13943, "sha256": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f"},
+    "catapult_a10.fit.summary": {"bytes": 705, "sha256": "176f857fb23d050fe425f0cb81bd28d289503105928ae074d94db651b851d600"},
+    "catapult_a10.sta.summary": {"bytes": 9138, "sha256": "e1c979959907d7d3dee6500046d0b6dd2d95e65e876a7bb3e1b53ad74d157246"},
+    "report.fit.rdb": {"bytes": 2206331, "sha256": "665b7e780c79c075df54ebbf399eb3608fa75e22039ddf13d04d477ab995f9e4"},
+    "report.sta.rdb": {"bytes": 1986200, "sha256": "99c94c64b43bbf498e24e95a142ea5a4c79845a49ee7bc52ce9a308a1a91704a"},
+    "timing_netlist.tdb": {"bytes": 144745105, "sha256": "4ae224b69788cab868212b01395cf5580fd95744fed72847730398013797dcda"},
+    "chip.chip.cdb": {"bytes": 67322, "sha256": "69b45acf1bd8db9076e8980af16652ccdb9b2790b5e44dbf04436f4de3c554e6"},
+    "pre_post_equal": true
+  },
+  "generated_vendor_sdc": [
+    {"owner": "Qsys EMIF", "path": "fpga/catapult_a10/qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot/altera_emif_arch_nf_191/synth/Qsys_emif_bot_altera_emif_arch_nf_191_3stv5pi.sdc", "bytes": 52427, "sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274"},
+    {"owner": "Qsys JTAG DC streaming", "path": "fpga/catapult_a10/qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot/altera_jtag_dc_streaming_191/synth/altera_avalon_st_jtag_interface.sdc", "bytes": 911, "sha256": "50c01997a1d3e9171e132bf2cffa6e2aed46784c5cf7e93574321d9d6683cf12"},
+    {"owner": "Qsys reset controller", "path": "fpga/catapult_a10/qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot/altera_reset_controller_1921/synth/altera_reset_controller.sdc", "bytes": 1620, "sha256": "901e9f96d7e8449813ec8f5d5bab823e64c32e49653e3a8c78c35bbdb1485c70"},
+    {"owner": "Qsys reset controller duplicate instance", "path": "fpga/catapult_a10/qsys/ddr4_bot/ip/Qsys/Qsys_reset_controller_0/altera_reset_controller_1921/synth/altera_reset_controller.sdc", "bytes": 1620, "sha256": "901e9f96d7e8449813ec8f5d5bab823e64c32e49653e3a8c78c35bbdb1485c70"}
+  ],
+  "reports": {
+    "summary": {"path": "build/agents/T-007/runtime/remote_final5/t007_summary.tsv", "bytes": 535681, "sha256": "2b29a4e7ae5b94a06296a7f173ca16b69f8226fa4ab1461d55f5e4855d6fd6e6"},
+    "parsed": {"path": "build/agents/T-007/analysis/t007_parsed.json", "sha256": "91a918b3aed6443fc5d6ea333914b0f10f1382c0df314c840233c1d90d9a4c4b"},
+    "artifact_hashes": {"path": "build/agents/T-007/analysis/t007_artifact_hashes.txt", "sha256": "9390341fdbe6e3eb92903e7d08a1098dd15f7fd57f0850de27e0b123513b4b40", "entries": 314},
+    "fast_unconstrained_paths": {"path": "build/agents/T-007/runtime/remote_final5/t007_fast_unconstrained_paths.rpt", "bytes": 39714, "sha256": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906"},
+    "slow_unconstrained_paths": {"path": "build/agents/T-007/runtime/remote_final5/t007_slow_unconstrained_paths.rpt", "bytes": 39714, "sha256": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906"},
+    "fast_clocks": {"path": "build/agents/T-007/runtime/remote_final5/t007_fast_clocks.rpt", "bytes": 18060, "sha256": "cbf45bbac4cba88bb404679e76055f2d0932fdadadb20cf7c7d93e139f6628e7"},
+    "slow_clocks": {"path": "build/agents/T-007/runtime/remote_final5/t007_slow_clocks.rpt", "bytes": 18060, "sha256": "cbf45bbac4cba88bb404679e76055f2d0932fdadadb20cf7c7d93e139f6628e7"},
+    "fast_exceptions": {"path": "build/agents/T-007/runtime/remote_final5/t007_fast_exceptions.rpt", "bytes": 350798, "sha256": "ddcfb6ef1cd1a9fef6b057dd029ec9cd295850d946097d8ef830f825b1c65fd6"},
+    "slow_exceptions": {"path": "build/agents/T-007/runtime/remote_final5/t007_slow_exceptions.rpt", "bytes": 350798, "sha256": "b48dfe13a4faaa5a5199d60b81e4e3a47a708b5692b8b1460f73cabfd98e963c"},
+    "fast_reset_recovery": {"path": "build/agents/T-007/runtime/remote_final5/t007_fast_emif_reset_to_adapter_recovery.rpt", "bytes": 10419450, "sha256": "1060545681f92186c9406ae5c628c1b78c6d2e4a44a8f2d0cb0bd3bc329ac20e"},
+    "fast_reset_removal": {"path": "build/agents/T-007/runtime/remote_final5/t007_fast_emif_reset_to_adapter_removal.rpt", "bytes": 10421351, "sha256": "db06a4b59c70049211bfac5ff78562993b8d718d419e606ca519dc2465b7a6cc"},
+    "slow_reset_recovery": {"path": "build/agents/T-007/runtime/remote_final5/t007_slow_emif_reset_to_adapter_recovery.rpt", "bytes": 10419450, "sha256": "b467afea78f9aa87123b70f655dbd084fc5eca86174601d2b43be8e7ccfbd0f8"},
+    "slow_reset_removal": {"path": "build/agents/T-007/runtime/remote_final5/t007_slow_emif_reset_to_adapter_removal.rpt", "bytes": 10421351, "sha256": "5b9ea25a3cd1c13c7a7e9cc14aa136aa5fc6dea356e68c97220f00cebe4268b8"},
+    "quartus_stdout": {"path": "build/agents/T-007/runtime/remote_final5/t007_quartus_sta.stdout.log", "bytes": 16237, "sha256": "8b4cd233a750366cfd3d339977853b87651e0e172810b9ababdfe9e836e077fb"},
+    "quartus_stderr": {"path": "build/agents/T-007/runtime/remote_final5/t007_quartus_sta.stderr.log", "bytes": 104, "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"}
+  },
+  "audit_artifacts": {
+    "sta_tcl": {"path": "build/agents/T-007/runtime/t007_unconstrained_clock_audit.tcl", "sha256": "d015c9cb4af4698a1b7b76d7a3c55d3fe4802aa11ab510db2e8e9df2a4b2e485"},
+    "sta_wrapper": {"path": "build/agents/T-007/runtime/t007_run_quartus_sta.ps1", "sha256": "1f89d76a9333a82e8f9714ddbc179caf23032b628a8378fb961dab6f04b6b9d7"},
+    "parser": {"path": "build/agents/T-007/analysis/t007_parse_reports.py", "sha256": "6fdde275d35ab957b870e3650e23979c17ff1f8bc65dad2dffa44661c2fdb881"},
+    "static_ownership": {"path": "build/agents/T-007/analysis/t007_static_ownership.md", "sha256": "de1d50dce0ddb9bbc3bea5af4497b62c5ae4925bd1cb604c90694b54b76dc970"},
+    "db_inventory": {"path": "build/agents/T-007/preflight/db_inventory.stdout.log", "sha256": "38dc71ce6df5aabd714656beed08a110f4e70a679eb7a126179328f7a26e865d"},
+    "generated_sdc_inventory": {"path": "build/agents/T-007/preflight/qsys_sdc_inventory.stdout.log", "sha256": "b6041fda4f4119959295aba3bea20b9e62f2b1796a8a21f2d04ae6154370684c"},
+    "postflight": {"path": "build/agents/T-007/preflight/postflight.stdout.log", "sha256": "b738b274f3e4d3db864d2ab45d71c749eb39542a6d2b19de430cfdcee31cef84"}
+  },
+  "unconstrained": {
+    "setup_hold_equal": true,
+    "illegal_clocks": 0,
+    "clocks": 2,
+    "clock_names": ["altera_reserved_tck", "soc|emif_adapter|emif_rst_sync1_n"],
+    "clock_status": "both Base/Unconstrained; get_clocks collection count 0 for each",
+    "input_ports": 2,
+    "input_port_names": ["altera_reserved_tdi", "altera_reserved_tms"],
+    "input_port_paths": 63,
+    "input_path_breakdown": {"altera_reserved_tdi": 26, "altera_reserved_tms": 37},
+    "input_path_classes": {"tdi": {"jtag_uart_alt_jtag_atlantic": 7, "auto_fab_sld": 11, "emif_embedded_jtag": 7, "reserved_tdo": 1}, "tms": {"auto_fab_sld": 37}},
+    "output_ports": 1,
+    "output_port_names": ["altera_reserved_tdo"],
+    "output_port_paths": 4,
+    "output_sources": ["auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|jtagpins|atom_inst|atom~jtag_reg", "auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|jtagpins|atom_inst|atom~jtag_reg__nff", "auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|jtagpins|int_tdo_reg", "altera_reserved_tdi"]
+  },
+  "object_queries": {
+    "altera_reserved_tck": {
+      "node_count": 1,
+      "node_type": "port",
+      "fanout_edge_count": 1,
+      "fanout_edge_type": "synchronous",
+      "fanout_edge_destination": "altera_reserved_tck~input",
+      "clock_collection_count": 0,
+      "port_is_input": true,
+      "port_fanout_count": null,
+      "note": "get_node_info reports one port node; the port-level get_fanouts query was not requested for this internal clock target."
+    },
+    "soc|emif_adapter|emif_rst_sync1_n": {
+      "node_count": 1,
+      "node_type": "reg",
+      "fanout_edge_count": 1,
+      "fanout_edge_type": "asynchronous",
+      "fanout_edge_destination": "soc|emif_adapter|emif_rst_sync1_n|q",
+      "async_input_edge_count": 1,
+      "async_input_edge_source": "soc|emif_adapter|emif_rst_sync1_n|clrn",
+      "clock_collection_count": 0,
+      "source_register_count": 1,
+      "adapter_register_target_count": 5462,
+      "exact_pin_collection_count": 0
+    },
+    "reserved_ports": {
+      "altera_reserved_tdi": {"is_input": true, "is_output": false, "fanout_count": 26, "fanin_count": 0},
+      "altera_reserved_tms": {"is_input": true, "is_output": false, "fanout_count": 37, "fanin_count": 0},
+      "altera_reserved_tdo": {"is_input": false, "is_output": true, "fanout_count": 0, "fanin_count": 4}
+    }
+  },
+  "reset_timing": {
+    "query_from": "[get_registers {soc|emif_adapter|emif_rst_sync1_n}]",
+    "query_to": "[get_registers {soc|emif_adapter|*}]",
+    "generated_user_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+    "period_ns": 3.750,
+    "fast": {"recovery_paths": 627, "recovery_violated": 0, "recovery_worst_slack_ns": 1.202, "removal_paths": 627, "removal_violated": 0, "removal_worst_slack_ns": 0.191},
+    "slow": {"recovery_paths": 627, "recovery_violated": 0, "recovery_worst_slack_ns": 1.202, "removal_paths": 627, "removal_violated": 0, "removal_worst_slack_ns": 0.191},
+    "destination_classes": {"emif_req_q": 606, "emif_state_q": 5, "timeout_count_q_and_duplicates": 15, "calibration_gate_fail_emif_latched_q": 1},
+    "interpretation": "emif_rst_sync1_n 是同步释放的 active-low reset control；不是周期性真 clock。"
+  },
+  "ownership": {
+    "qsf": {"path": "fpga/catapult_a10/quartus/catapult_a10.qsf", "lines": "61,71-72", "role": "QIP_FILE sfl_sys.qip plus generated JTAG-UART Verilog wrappers"},
+    "jtag_generated_source": {"path": "fpga/catapult_a10/jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v", "lines": "556-574", "role": "read_comments_as_HDL and alt_jtag_atlantic instance ID 0"},
+    "top_wiring": {"path": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv", "lines": "101-107,148-162,174-185,199-217", "role": "Qsys EMIF clocks/reset, reset gate, JTAG-UART and SFL boundaries"},
+    "user_sdc": {"path": "fpga/catapult_a10/quartus/catapult_a10.sdc", "lines": "1-14", "role": "clk_u59 100 MHz, sys_clk_25 generated / 25 MHz, clk_y3 266.667 MHz and LED false path; no reserved JTAG clock or port delays"},
+    "reset_rtl": {"path": "rtl/lcvex_axi4_avalon_adapter.sv", "lines": "248-255,289-290,1029-1036", "role": "two-flop EMIF reset synchronizer, stage-2 emif_fsm_rst_n, local async assertion / synchronized deassertion"}
+  },
+  "classification": {
+    "altera_reserved_tck": {
+      "kind": "vendor_generated_JTAG_SLD_debug_clock",
+      "decision": "explicit_vendor_waiver",
+      "reason": "No named clock object; cable-driven TCK frequency is runtime-dependent. UCP paths terminate in alt_jtag_atlantic, auto_fab_0/alt_sld_fab_0 SLD fabric and EMIF embedded JTAG logic; no user functional clock path was found.",
+      "forbidden_fix": "Do not create_clock with an arbitrary cable frequency.",
+      "exact_waiver_region": ["altera_reserved_tck", "altera_reserved_tdi", "altera_reserved_tms", "altera_reserved_tdo", "jtag_uart_inst|jtag_uart|*alt_jtag_atlantic|*", "auto_fab_0|alt_sld_fab_0|*", "emif|emif_bot|*jtag_phy_embedded_in_jtag_master*"]
+    },
+    "soc|emif_adapter|emif_rst_sync1_n": {
+      "kind": "synchronized_active_low_reset_control",
+      "decision": "reset_control_waiver_backed_by_recovery_removal",
+      "reason": "Fitted node is reg with one asynchronous fanout and one async clrn input edge; RTL has two-flop EMIF-domain release and consumes stage two as async reset. 627 recovery and 627 removal paths are present in each model, all nonnegative.",
+      "rtl_fix": "none indicated",
+      "vendor_sdc_fix_if_waiver_unavailable": "Add a narrow reset classification exception for this exact synchronizer/adapter region; retain the same recovery/removal reports. Do not assign a period or create_clock.",
+      "exact_region": ["rtl/lcvex_axi4_avalon_adapter.sv:248-255", "rtl/lcvex_axi4_avalon_adapter.sv:289-290", "rtl/lcvex_axi4_avalon_adapter.sv:1029-1036", "soc|emif_adapter|emif_rst_sync1_n", "soc|emif_adapter|emif_state_q.*", "soc|emif_adapter|emif_req_q.*"]
+    }
+  },
+  "policy": {
+    "rtl_modified": false,
+    "qsf_modified": false,
+    "sdc_modified": false,
+    "qemu_modified": false,
+    "active_task_json_modified": false,
+    "tasks_status_docs_modified": false,
+    "source_head_unchanged": true,
+    "fitted_db_pre_post_equal": true,
+    "all_remote_writes_and_queries_under_gamepc_lock": true,
+    "quartus_sta_only": true,
+    "synthesis_run": false,
+    "fitter_run": false,
+    "assembler_run": false,
+    "bitstream_generated": false,
+    "quartus_pgm_run": false,
+    "jtag_connection": false,
+    "board_or_flash_action": false,
+    "unknown_process_killed": false,
+    "jtagserver": "observed-only PID 5688",
+    "postflight_eda_process_count": 0,
+    "postflight_forbidden_artifacts": 0,
+    "postflight_runtime_file_count": 47,
+    "postflight_project_output_file_count": 13
+  },
+  "transient_harness_events": [
+    {"at": "2026-09-09T10:38:00+08:00", "event": "initial inline PowerShell preflight was split by Windows SSH argument parsing", "quartus_started": false, "recovery": "switched to EncodedCommand"},
+    {"at": "2026-09-09T11:52:14.2693140+08:00", "event": "first STA Tcl used unsupported 21.4 model names fast_900mV_0C/slow_900mV_0C", "quartus_exit": 0, "reports_generated": false, "recovery": "corrected to fast/slow"},
+    {"at": "2026-09-09T12:04:17.2047444+08:00", "event": "second STA attempt exposed report_timing/get_timing_paths flag and report_ucp filtering API differences", "quartus_exit": 0, "recovery": "used -recovery/-removal/-setup/-hold, report_ucp full report, positional get_fanouts"},
+    {"at": "2026-09-09T12:19:54.6373928+08:00", "event": "vendor-SDC attempt hit Tcl global pins array name collision", "quartus_exit": 3, "db_changed": false, "recovery": "renamed task-local pin collection"},
+    {"at": "2026-09-09T12:22:06.4949013+08:00", "event": "final corrected vendor-SDC report-only run", "quartus_exit": 0, "errors": 0, "warnings": 4, "accepted": true}
+  ],
+  "validation_commands": [
+    "git rev-parse HEAD",
+    "resource-lock run gamepc ... ssh ... t007_preflight.ps1",
+    "resource-lock run gamepc ... scp + ssh ... t007_run_quartus_sta.ps1",
+    "python3 -m py_compile build/agents/T-007/analysis/t007_parse_reports.py",
+    "python3 build/agents/T-007/analysis/t007_parse_reports.py > build/agents/T-007/analysis/t007_parsed.json",
+    "resource-lock run gamepc ... ssh ... t007_postflight.ps1",
+    "resource-lock status all"
+  ],
+  "handoff": "docs/handoffs/T-20260909-007-b25-unconstrained-clock-audit.md"
+}

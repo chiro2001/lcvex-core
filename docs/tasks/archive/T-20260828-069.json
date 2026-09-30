@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-069",
+  "title": "P7-5 FP16 半精度、sqrt、min/max 与 round 垂直实现",
+  "kind": "p7-fp-neon-remaining",
+  "priority": "high",
+  "assigned_owner": "p7-5-fp16-sqrt-minmax-dsv",
+  "agent_type": "implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "model_scope": "在 P7 集成线实现协议明确延后的 FP16 半精度、sqrt、min/max 与 round 族：标量 H/S/D FADD/FSUB/FMUL/FDIV/FCMP/FMOV、FCVT H↔S/H↔D、FSQRT S/D、FMIN/FMAX/FMINNM/FMAXNM S/D/H、FRINTN/Z/P/M/A/I/X S/D/H；NEON 4H/8H add/sub/mul/compare 与 2S/4S/2D sqrt/min/max/round 选定子集；FPCR.FZ16/AHP、raw IEEE half 路径、FPSR sticky 与 commit 边界。不实现 estimate、FP exception-enable trap、SVE、结构化访存，不修改 QEMU fork。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "仅在 FP16 编码子集、half raw-bit 语义或 QEMU 差分边界出现歧义时补充审查；不替代定向测试。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "本任务以受限垂直切片为主，默认不阻塞；仅在写集、指令子集或验收证据发生实质变化时重审。"
+  },
+  "phase": "done",
+  "parent": "T-20260828-066",
+  "depends_on": [
+    "T-20260828-066"
+  ],
+  "input_note": "P7-4 已实现 FMA/转换并归档；协议分批表明确 FP16、sqrt、min/max、round 为延后项。本任务补齐这些族（estimate/FP exception-enable 继续后置），并保持 P7-1/2/3/4 与 P6 checkpoint/max 兼容。",
+  "writes": [
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/filelist.f",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/**",
+    "docs/P7-5_FP16_SQRT_MINMAX_ROUND.md",
+    "docs/handoffs/T-20260828-069-p7-5-fp16-sqrt-minmax.md",
+    "docs/tasks/evidence/T-20260828-069.json"
+  ],
+  "reads": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/ISA_SCOPE.md",
+    "docs/VERIFICATION.md",
+    "docs/tasks/archive/T-20260827-058.json",
+    "docs/tasks/archive/T-20260827-060.json",
+    "docs/tasks/archive/T-20260828-066.json",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_state.sv",
+    "tb/sv/lcvex_fp_scalar_tb.sv",
+    "tb/sv/lcvex_fp_scalar_p7_4_tb.sv",
+    "tb/sv/lcvex_neon_fp_tb.sv",
+    "tb/sv/lcvex_neon_fp_p7_4_tb.sv",
+    "sim/cocotb/test_p7_fp_scalar.py",
+    "sim/cocotb/test_p7_4_fma_convert.py",
+    "sim/cocotb/test_p7_3_neon_fp.py",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_p7_4.sh"
+  ],
+  "context_docs": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "base_sha": "b71a62066157e202f464990832180c1fea0a3b85",
+  "branch": "feature/T-20260828-069-p7-5-fp16-sqrt-minmax",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-069",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true,
+    "extend_when": "owner 按 Asia/Shanghai 报告 sent_at/received_at/reported_at、文件、验证、阻断和剩余工作，且正在稳定推进实现/回归时延长。"
+  },
+  "validation": {
+    "l0": [
+      "每个新增编码的定向 SV/Cocotb 单测（含 NaN、signed zero、rounding、overflow、inf、denormal、half subnormal）",
+      "make test / lint / 既有 FP/NEON Cocotb 无回归"
+    ],
+    "l1": [
+      "P7-1/P7-2/P7-3/P7-4 回归全绿；P6 scalar 40 回归全绿",
+      "SV testbench 与 Cocotb 可独立复现"
+    ],
+    "l2": [
+      "Cortex-A76 strict QEMU 锁步：每个新增编码成功/NaN/FPSR/trap 定向程序",
+      "checkpoint FP_INIT/FP_COMMIT 兼容；P6 checkpoint/max 兼容"
+    ],
+    "l3": [
+      "冻结 SHA 上完整 Gate D 由集成者串行复跑"
+    ],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "实现并验证协议选定的 FP16 半精度（H 格式标量算术/比较/FMOV/FCVT H↔S/H↔D 与 NEON 4H/8H selected）、FSQRT S/D、FMIN/FMAX/FMINNM/FMAXNM S/D/H 与 FRINTN/Z/P/M/A/I/X S/D/H，以及 NEON 2S/4S/2D 对应子集；结果和 NaN/FPSR/FPCR 按 raw bits 与 Cortex-A76 QEMU strict lockstep 一致；FPCR.FZ16/AHP、FPEN trap、commit backpressure、V forwarding 和 unsupported UDEF 有 SV/Cocotb/定向程序/handoff/evidence；P7-1/2/3/4 与 P6 回归全绿。不得宣称完整 ARMv8.2-A FP/NEON，不得实现 estimate/FP exception-enable/SVE，不得修改 QEMU fork。",
+  "created_at": "2026-08-28T04:18:00+08:00",
+  "updated_at": "2026-08-28T16:50:00+08:00",
+  "commits": [
+    "861f686",
+    "f238492",
+    "cd91a14",
+    "d674a0b"
+  ],
+  "evidence": "docs/tasks/evidence/T-20260828-069.json",
+  "handoff": "docs/handoffs/T-20260828-069-p7-5-fp16-sqrt-minmax.md",
+  "known_limits": [
+    "只支持选定的 FP16/sqrt/minmax/round 子集；estimate、FP exception-enable trap、未列 FP 族与 SVE 后置。",
+    "不修改 QEMU fork；QEMU A76 已支持目标编码，若发现差异只记录证据，不绕过差分。",
+    "结构化/lane/pair 访存不在本任务范围。"
+  ],
+  "next": "已合入 feature/p7-fp-neon（merge e36b7b1）；纳入下一冻结候选重跑完整 Gate D",
+  "dispatch": {
+    "sent_at": "2026-08-28T12:24:00+08:00",
+    "agent_name": "t069_p7_5_regression_c",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-069"
+  },
+  "pause": {
+    "paused_at": "2026-08-28T08:06:00+08:00",
+    "reason": "用户指示 T-069-fix 完成后暂停执行任务",
+    "fix_agent_completed": true,
+    "fix_head": "861f686",
+    "fix_summary": "H->S FCVT NaN mapping off-by-one fixed; edge 59 PASS; make compile PASS; full regression NOT completed before pause",
+    "next": "恢复时完成 P7-1/2/3/4 回归、P7-5 main/edge/rounding/sequence 全量、P6 scalar 40、DIFF_CKPT，再提交最终 handoff/evidence"
+  },
+  "status": "done",
+  "merged_sha": "e36b7b1",
+  "archived_at": "2026-08-28T16:50:00+08:00"
+}

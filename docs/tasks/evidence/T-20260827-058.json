@@ -1,0 +1,556 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-058",
+  "state": "done",
+  "base_sha": "bf3dab04ca2a0ca0a5993c72888a7d065548c6cb",
+  "source_sha": "0b67325a4aa364625d60720a8b15204f05bf1c53",
+  "implementation_head": "0b67325a4aa364625d60720a8b15204f05bf1c53",
+  "head_sha": "dbfbebfcbaab5f0f0cf55dcbc48d049f04a996f9",
+  "merge_sha": "f93735241682ba8ff543c52e8ccda87f35927877",
+  "branch": "feature/T-20260827-058-p7-1-fp-scalar",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058",
+  "scope": "P7-1 选定 FP32/FP64 标量 FMOV/FADD/FSUB/FMUL/FDIV/FCMP 与基础单寄存器 FP scalar 访存；复用 P7-0 FP state/FPEN、scalar commit/backpressure 和既有 required QEMU wire。",
+  "excluded": [
+    "FMA、sqrt、estimate、min/max、转换、FP16",
+    "NEON、SVE、结构化/lane/replicate/pair 访存",
+    "完整 FP exception enable trap",
+    "Cache、AXI4、EMIF、FPGA/上板接线",
+    "QEMU fork、任务索引文件和集成者热点文档"
+  ],
+  "owner_dispatch": {
+    "sent_at": "2026-08-27T12:23:16+08:00",
+    "received_at": "2026-08-27T12:24:02+08:00",
+    "reported_at": "2026-08-27T13:19:23+08:00",
+    "elapsed_seconds": 3367,
+    "timezone": "Asia/Shanghai",
+    "elapsed_basis": "reported_at - dispatch_sent_at"
+  },
+  "repair_continuation": {
+    "sent_at": "2026-08-27T13:31:02+08:00",
+    "received_at": "2026-08-27T13:32:46+08:00",
+    "reported_at": "2026-08-27T13:43:10+08:00",
+    "elapsed_seconds": 728,
+    "timezone": "Asia/Shanghai",
+    "budget_minutes": 30,
+    "accepted": true,
+    "elapsed_basis": "reported_at - continuation_sent_at"
+  },
+  "evidence_repair_continuation": {
+    "sent_at": "2026-08-27T14:00:56+08:00",
+    "received_at": "2026-08-27T14:02:25+08:00",
+    "reported_at": "2026-08-27T14:16:49+08:00",
+    "elapsed_seconds": 953,
+    "timezone": "Asia/Shanghai",
+    "budget_minutes": 30,
+    "accepted": true,
+    "elapsed_basis": "reported_at - evidence_repair_sent_at"
+  },
+  "owner_final_notification": {
+    "sent_at": "2026-08-27T14:00:56+08:00",
+    "received_at": "2026-08-27T14:02:25+08:00",
+    "reported_at": "2026-08-27T14:20:04+08:00",
+    "elapsed_seconds": 1148,
+    "source_sha": "0b67325a4aa364625d60720a8b15204f05bf1c53",
+    "head_sha": "dbfbebfcbaab5f0f0cf55dcbc48d049f04a996f9",
+    "state": "review",
+    "blockers": [],
+    "extension_request": "none"
+  },
+  "commits": [
+    {
+      "sha": "fecd4f86b6bccd7cfcacac41c9d4f9555389b61a",
+      "message": "fp: add P7-1 scalar raw-bit execution"
+    },
+    {
+      "sha": "93d8290ec8bcdd39f8a9ecae29e0a8bcba49c60f",
+      "message": "verify: add P7-1 scalar FP directed tests"
+    },
+    {
+      "sha": "b5243e5fc9fe9726c5789379acc9e93a431c0cc4",
+      "message": "docs: record P7-1 scalar FP handoff"
+    },
+    {
+      "sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "message": "fix: tighten P7-1 scalar FP boundaries"
+    },
+    {
+      "sha": "6d4faa1165f8971fc63dd947036e80de2fa19e44",
+      "message": "docs: record P7-1 boundary repair evidence"
+    },
+    {
+      "sha": "0b67325a4aa364625d60720a8b15204f05bf1c53",
+      "message": "verify: close P7-1 generator and type negatives"
+    },
+    {
+      "sha": "dbfbebfcbaab5f0f0cf55dcbc48d049f04a996f9",
+      "message": "docs: finalize P7-1 evidence closure"
+    }
+  ],
+  "files": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/filelist.f",
+    "tb/sv/lcvex_fp_scalar_tb.sv",
+    "sim/cocotb/Makefile.fp_scalar",
+    "sim/cocotb/Makefile",
+    "sim/cocotb/test_p7_fp_scalar.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/handoffs/T-20260827-058-p7-1-fp-scalar.md",
+    "docs/tasks/evidence/T-20260827-058.json"
+  ],
+  "toolchain": {
+    "verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "ninja": "1.13.0.git.kitware.jobserver-pipe-1",
+    "qemu_release": "11.1.0",
+    "qemu_profile": "cortex-a76,cntfrq=1000000000,has_el3=false,has_el2=false",
+    "qemu_icount": "shift=0,align=off,sleep=off",
+    "qemu_fork": "read-only; no source/build/patch changes made by T-058"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-python-syntax-001",
+      "level": "L0",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "PYTHONDONTWRITEBYTECODE=1 conda run --no-capture-output -n lcvex python3 -m py_compile sim/difftest/test_program.py sim/cocotb/test_p7_fp_scalar.py && bash -n sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "定向程序、Cocotb 和 required runner 语法检查通过。"
+    },
+    {
+      "run_id": "owner-l0-diff-check-002",
+      "level": "L0",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "git diff --check bf3dab04ca2a0ca0a5993c72888a7d065548c6cb e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "实现和验证提交无尾随空白及 patch 格式错误。"
+    },
+    {
+      "run_id": "owner-l1-core-lint-003",
+      "level": "L1",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "包含新 FP module、decode、core/filelist 的 Verilator -Wall lint 通过。"
+    },
+    {
+      "run_id": "owner-l1-sv-fp-004",
+      "level": "L1",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make sim-sv-fp-scalar",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "独立 SV raw-bit TB 通过：S/D FMOV、FADD/FSUB/FMUL/FDIV、NaN payload/quieting/DN、Inf/zero、FCMP、FZ/IDC。"
+    },
+    {
+      "run_id": "owner-l1-cocotb-fp-005",
+      "level": "L1",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make sim-cocotb-fp-scalar",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 5/5 PASS：真实 scalar pipeline/V forwarding、S/D scalar memory、FPEN trap、fault no-effect、commit backpressure、unsupported FCMPE UDEF。"
+    },
+    {
+      "run_id": "owner-l1-lockstep-build-006",
+      "level": "L1",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make lockstep-build && make -C qemu/plugins",
+      "exit_code": 0,
+      "result": "pass_with_existing_warning",
+      "summary": "Verilator coordinator 和本 worktree plugin 构建通过；plugin 保留既有 QEMU_PLUGIN_MEM_VALUE_U128 未处理 warning，不影响本任务。"
+    },
+    {
+      "run_id": "owner-l2-required-standard-007",
+      "level": "L2",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make p7-1-fp-scalar",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "A76 FP_NEON=required strict lockstep 28 条；覆盖 S/D 每个选定算术操作、FMOV register/immediate、FCMP register/#0、S/D scalar store-load。",
+      "artifact": "build/difftest/hard_fp_scalar.bin",
+      "artifact_sha256": "ff2d734a20ce9c12e4251835f262c73b67285ab75340332da06c82ab9b02d7ac"
+    },
+    {
+      "run_id": "owner-l2-required-edge-008",
+      "level": "L2",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make p7-1-fp-scalar-edge",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "A76 required strict lockstep 38 条；覆盖 qNaN/sNaN、Inf/0（S/D 且无错误 DZC）、zero、FZ=0 S/D min-subnormal、DN/FZ、FPSR IOC/DZC/IDC、S/D scalar memory。",
+      "artifact": "build/difftest/hard_fp_scalar_edge.bin",
+      "artifact_sha256": "9c474da1840c48920721cd321db22a62d0b388ab731a3c1878a4a407af01567a"
+    },
+    {
+      "run_id": "owner-l2-required-rounding-009",
+      "level": "L2",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make p7-1-fp-scalar-rounding",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "A76 required strict lockstep 18 条；同一 tie case 覆盖 RMode=nearest-even/+Inf/-Inf/zero。",
+      "artifact": "build/difftest/hard_fp_scalar_rounding.bin",
+      "artifact_sha256": "6de9a803f1fe04cc5d59bfafee0681f58802c0a3a78c66ab42def64da89f8a3e"
+    },
+    {
+      "run_id": "owner-l2-required-back-to-back-010",
+      "level": "L2",
+      "source_sha": "0b67325a4aa364625d60720a8b15204f05bf1c53",
+      "command": "FP_NEON=required MAX_INSNS=388 IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/hard_fp_scalar_sequence.bin COORD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/step.sock DUMP=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/monitor.sock bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "388 条背靠背 S/D raw 算术序列通过，覆盖 V forwarding 和连续 FP_COMMIT/FPSR sticky 行为。",
+      "artifact": "build/agents/T-20260827-058/hard_fp_scalar_random.bin",
+      "artifact_sha256": "e6b9ff49b3443b6378e8c8424cba3fcfe7f420b6fc0460508774de9d8fa8514f"
+    },
+    {
+      "run_id": "repair-l0-final-check-011",
+      "level": "L0",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "git diff --check bf3dab04ca2a0ca0a5993c72888a7d065548c6cb e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b && python3 -m json.tool docs/tasks/evidence/T-20260827-058.json >/dev/null && PYTHONDONTWRITEBYTECODE=1 conda run --no-capture-output -n lcvex python3 -m py_compile sim/difftest/test_program.py sim/cocotb/test_p7_fp_scalar.py && bash -n sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "repair commit、evidence JSON、定向程序/Cocotb/runner 语法和格式检查通过。"
+    },
+    {
+      "run_id": "repair-l1-sv-core-012",
+      "level": "L1",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make sim-sv && make sim-sv-fp-scalar",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "既有 scalar core 回归和独立 FP SV TB 均通过；后者覆盖 S/D min-subnormal FZ=0、Inf/0 DZC、0/0 IOC。"
+    },
+    {
+      "run_id": "repair-l1-cocotb-boundaries-013",
+      "level": "L1",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make sim-cocotb-fp-scalar",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 5/5 PASS；新增/确认 FP16、reserved type、B/H memory UDEF 以及 fault/backpressure 无副作用。"
+    },
+    {
+      "run_id": "repair-l2-required-standard-014",
+      "level": "L2",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "FP_NEON=required MAX_INSNS=28 IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/difftest/hard_fp_scalar.bin COORD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/difftest/repair-standard.sock DUMP=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/difftest/repair-standard.fail COORD_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/difftest/repair-standard.coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/difftest/repair-standard.qemu.log bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "repair 后 A76 required 标准 28 条 strict lockstep 通过。"
+    },
+    {
+      "run_id": "repair-l2-required-edge-015",
+      "level": "L2",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make p7-1-fp-scalar-edge",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "repair 后 A76 required edge 38 条通过，含 S/D min-subnormal FZ=0、S/D Inf/0 无 DZC、DN/FZ 和 scalar memory。",
+      "artifact": "build/difftest/hard_fp_scalar_edge.bin",
+      "artifact_sha256": "9c474da1840c48920721cd321db22a62d0b388ab731a3c1878a4a407af01567a"
+    },
+    {
+      "run_id": "repair-l2-required-rounding-016",
+      "level": "L2",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "make p7-1-fp-scalar-rounding",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "repair 后四种 FPCR.RMode 的 A76 required 18 条 strict lockstep 通过。"
+    },
+    {
+      "run_id": "repair-l2-required-sequence-017",
+      "level": "L2",
+      "source_sha": "e657e99b354e5a3d4f8baa0eaaae44987e0c7a0b",
+      "command": "FP_NEON=required MAX_INSNS=388 IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/hard_fp_scalar_random.bin COORD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/lockstep_random/repair.sock DUMP=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/lockstep_random/repair.fail COORD_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/lockstep_random/repair.coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/lockstep_random/repair.qemu.log bash sim/difftest/run_lockstep_step.sh",
+      "seed": 1,
+      "rounds": 32,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "repair 后 388 条背靠背 S/D raw sequence 通过。镜像由固定 seed=1、rounds=32 的无 host-float 生成命令产生。",
+      "artifact": "build/agents/T-20260827-058/hard_fp_scalar_random.bin",
+      "artifact_sha256": "e6b9ff49b3443b6378e8c8424cba3fcfe7f420b6fc0460508774de9d8fa8514f"
+    }
+  ],
+  "final_validation": {
+    "source_sha": "0b67325a4aa364625d60720a8b15204f05bf1c53",
+    "head_sha": "0b67325a4aa364625d60720a8b15204f05bf1c53",
+    "log_root": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final",
+    "standard": {
+      "generator_command": "conda run --no-capture-output -n lcvex python3 -c 'import sys; sys.path.insert(0,\"sim/difftest\"); import test_program; test_program.build_hard_fp_scalar_program(\"/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/hard_fp_scalar.bin\")'",
+      "lockstep_command": "FP_NEON=required MAX_INSNS=28 IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/hard_fp_scalar.bin COORD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/step.sock DUMP=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/monitor.sock bash sim/difftest/run_lockstep_step.sh > /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/run.log 2>&1",
+      "seed": null,
+      "rounds": null,
+      "exit_code": 0,
+      "result": "pass",
+      "artifact": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/standard/hard_fp_scalar.bin",
+      "artifact_sha256": "ff2d734a20ce9c12e4251835f262c73b67285ab75340332da06c82ab9b02d7ac",
+      "logs": [
+        {"path": "build/agents/T-20260827-058/final/standard/coord.log", "sha256": "9c44667013a0f35227bafd0691fc5ee734c0b94350d1b7b3554c90c9e729b9c6"},
+        {"path": "build/agents/T-20260827-058/final/standard/qemu.log", "sha256": "ea21a636edfc37186882626756d8829090fef8d7e7fccfac985ca4346c3e3f22"},
+        {"path": "build/agents/T-20260827-058/final/standard/run.log", "sha256": "f8a7343e33898b35cace420d5400ad66f97b8648b51bff682fa2fac8330648e5"}
+      ]
+    },
+    "edge": {
+      "generator_command": "conda run --no-capture-output -n lcvex python3 -c 'import sys; sys.path.insert(0,\"sim/difftest\"); import test_program; test_program.build_hard_fp_scalar_edge_program(\"/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/hard_fp_scalar_edge.bin\")'",
+      "lockstep_command": "FP_NEON=required MAX_INSNS=38 IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/hard_fp_scalar_edge.bin COORD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/step.sock DUMP=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/monitor.sock bash sim/difftest/run_lockstep_step.sh > /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/run.log 2>&1",
+      "seed": null,
+      "rounds": null,
+      "exit_code": 0,
+      "result": "pass",
+      "artifact": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/edge/hard_fp_scalar_edge.bin",
+      "artifact_sha256": "9c474da1840c48920721cd321db22a62d0b388ab731a3c1878a4a407af01567a",
+      "logs": [
+        {"path": "build/agents/T-20260827-058/final/edge/coord.log", "sha256": "b7cf7afa803559c0790d010e981e4b712df703f47a38cf6b11f06b7386a89558"},
+        {"path": "build/agents/T-20260827-058/final/edge/qemu.log", "sha256": "58c31b8b92e2b081eed094f65aeb769128cfe74c0bf2a1e64623378fa4f9aa00"},
+        {"path": "build/agents/T-20260827-058/final/edge/run.log", "sha256": "e819a7fda562933356b64cc525b569ea24c319646d8a70bc32aae69e68fe9957"}
+      ]
+    },
+    "rounding": {
+      "generator_command": "conda run --no-capture-output -n lcvex python3 -c 'import sys; sys.path.insert(0,\"sim/difftest\"); import test_program; test_program.build_hard_fp_scalar_rounding_program(\"/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/hard_fp_scalar_rounding.bin\")'",
+      "lockstep_command": "FP_NEON=required MAX_INSNS=18 IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/hard_fp_scalar_rounding.bin COORD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/step.sock DUMP=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/monitor.sock bash sim/difftest/run_lockstep_step.sh > /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/rounding/run.log 2>&1",
+      "seed": null,
+      "rounds": null,
+      "exit_code": 0,
+      "result": "pass",
+      "artifact": "build/agents/T-20260827-058/final/rounding/hard_fp_scalar_rounding.bin",
+      "artifact_sha256": "6de9a803f1fe04cc5d59bfafee0681f58802c0a3a78c66ab42def64da89f8a3e",
+      "logs": [
+        {"path": "build/agents/T-20260827-058/final/rounding/coord.log", "sha256": "d322dfac80f36687dee3e8be60be1012474e7dc64407f60e468550db83ddf9e4"},
+        {"path": "build/agents/T-20260827-058/final/rounding/qemu.log", "sha256": "035bb83562c497c74fc1601585b86dbf216857810bc23a460781ede5a5cfdb8b"},
+        {"path": "build/agents/T-20260827-058/final/rounding/run.log", "sha256": "0aa989f21d22f69f09c4867f2c32c1f6033b973b31f1e2ad2bbb02cbce10c89b"}
+      ]
+    },
+    "sequence": {
+      "generator_command": "conda run --no-capture-output -n lcvex python3 -c 'import sys; sys.path.insert(0,\"sim/difftest\"); import test_program; n=test_program.build_hard_fp_scalar_sequence_program(\"/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/hard_fp_scalar_sequence.bin\", seed=1, rounds=32); assert n == 388; print(f\"commits={n} seed=1 rounds=32\")'",
+      "make_target_command": "make p7-1-fp-scalar-sequence > /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/make.target.log 2>&1",
+      "lockstep_command": "FP_NEON=required MAX_INSNS=388 IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/hard_fp_scalar_sequence.bin COORD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/step.sock DUMP=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/monitor.sock bash sim/difftest/run_lockstep_step.sh > /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/sequence/run.log 2>&1",
+      "seed": 1,
+      "rounds": 32,
+      "commit_count": 388,
+      "exit_code": 0,
+      "result": "pass",
+      "artifact": "build/agents/T-20260827-058/final/sequence/hard_fp_scalar_sequence.bin",
+      "artifact_sha256": "e6b9ff49b3443b6378e8c8424cba3fcfe7f420b6fc0460508774de9d8fa8514f",
+      "logs": [
+        {"path": "build/agents/T-20260827-058/final/sequence/generator.log", "sha256": "137447ae74b06901fbbbfcfc2533826893b277fab13259274cf69115b02d4da3"},
+        {"path": "build/agents/T-20260827-058/final/sequence/make.target.log", "sha256": "794dad77d3216f31c3097d1749b40e904b2b2c86c088b4d381b02b2b065227af"},
+        {"path": "build/agents/T-20260827-058/final/sequence/coord.log", "sha256": "d6a27cb82a7ac8ffec597a606a3403be15c644482438588cbe3f288ab405747c"},
+        {"path": "build/agents/T-20260827-058/final/sequence/qemu.log", "sha256": "ada5ffba5f40c9029f19553bc80454ed6f0669b7463131802cbb603d300e0e30"},
+        {"path": "build/agents/T-20260827-058/final/sequence/run.log", "sha256": "9fc036195821fffe9f98526e69ca8fae0bc38081b63f65d24fcbd50bf3a35ebd"}
+      ]
+    },
+    "p6_scalar": {
+      "command": "bash -o pipefail -c 'set -o pipefail; QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 MAX_INSNS=40 make lockstep 2>&1 | tee /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/p6/make.lockstep.log'",
+      "exit_code": 0,
+      "result": "pass",
+      "commit_count": 40,
+      "plugin": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/qemu/plugins/lcvex_difftest.so",
+      "qemu_binary": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+      "logs": [
+        {"path": "build/agents/T-20260827-058/final/p6/make.lockstep.log", "sha256": "c39f5fc80c35292774064503553591c257cf3d29779347f8ef0421a518d47534"},
+        {"path": "build/difftest/lockstep_coord.log", "sha256": "9879f4a653fb616059a5e3bd0bb5b8ba0190be190ffa46fa7fc7a1fa7f5ae4be"},
+        {"path": "build/difftest/lockstep_qemu.log", "sha256": "be9449e5b98dada77206c9fd51898693dccabe9b1038cfe35e0953cb07d56c11"}
+      ]
+    },
+    "cocotb": {
+      "command": "bash -o pipefail -c 'set -o pipefail; conda run --no-capture-output -n lcvex make sim-cocotb-fp-scalar 2>&1 | tee /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/cocotb/cocotb.log'",
+      "exit_code": 0,
+      "result": "pass_5_of_5",
+      "seed": 1787810728,
+      "log": "build/agents/T-20260827-058/final/cocotb/cocotb.log",
+      "log_sha256": "d2d6747ccff38f46180f8449bbf702547e515464b403e6724c23b1308e5d6c88"
+    },
+    "sv_and_lint": {
+      "compile_command": "make compile > /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/build/compile.log 2>&1",
+      "sv_command": "make sim-sv-fp-scalar > /home/chiro/projects/mycpu/lcvex-wt-T-20260827-058/build/agents/T-20260827-058/final/build/sv-fp-scalar.log 2>&1",
+      "exit_code": 0,
+      "result": "pass",
+      "logs": [
+        {"path": "build/agents/T-20260827-058/final/build/build.log", "sha256": "726d38fc7222796dd0d61ac2fe2626b15f13eb896872525832b06be87ff1d699"},
+        {"path": "build/agents/T-20260827-058/final/build/compile.log", "sha256": "3d707c603bf68024334f16da8171b0f428287da3e6ae7dc6ff2ebe543df50701"},
+        {"path": "build/agents/T-20260827-058/final/build/sv-fp-scalar.log", "sha256": "881a2c3520d87ac805b05a7a20873afd485ca12dcd7352d8efd293ecca67e5c8"}
+      ]
+    }
+  },
+  "repair_fixes": [
+    "FP32/FP64 exponent=0 subnormal scale corrected to 1-bias-frac_bits: -149/-1074.",
+    "FP arithmetic/FMOV/FCMP type field restricted to S=00 and D=01; FP16=11/reserved=10 rejected.",
+    "FP scalar memory restricted to natural size S=10/D=11; B/H/reserved rejected as UDEF.",
+    "FDIV DZC restricted to finite nonzero numerator divided by zero; Inf/0 and 0/0 do not receive DZC."
+  ],
+  "resolved_failures": [
+    {
+      "run_id": "repair-l1-cocotb-negative-attempt",
+      "command": "make sim-cocotb-fp-scalar",
+      "exit_code": 2,
+      "result": "resolved",
+      "summary": "第一次在同一 Cocotb test 内连续负例 reset 时仍处于 ReadOnly phase；加入显式 Timer 后重跑为 repair-l1-cocotb-boundaries-013，5/5 通过。",
+      "artifact": null
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "integration_validation": {
+    "runner_role": "root-integrator",
+    "line": "feature/p7-fp-neon",
+    "source_sha": "f93735241682ba8ff543c52e8ccda87f35927877",
+    "merge_sha": "f93735241682ba8ff543c52e8ccda87f35927877",
+    "result": "pass_l0_l2",
+    "runs": [
+      {
+        "run_id": "integrator-json-diff-018",
+        "level": "L0",
+        "command": "python3 -m json.tool docs/tasks/evidence/T-20260827-058.json >/dev/null && python3 -m json.tool docs/tasks/active/T-20260827-058.json >/dev/null && git diff --check",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "合并线 task/evidence JSON 与差异检查通过"
+      },
+      {
+        "run_id": "integrator-compile-019",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make compile",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "当前 merge source 的 rtl/filelist.f Verilator lint 通过"
+      },
+      {
+        "run_id": "integrator-sv-core-020",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make sim-sv VERILATOR_JOBS=6",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "既有 scalar/P7-0 core SV smoke 通过"
+      },
+      {
+        "run_id": "integrator-sv-fp-021",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make sim-sv-fp-scalar VERILATOR_JOBS=6",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P7-1 独立 raw-bit SV TB 通过"
+      },
+      {
+        "run_id": "integrator-sv-backpressure-022",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make sim-sv-backpressure VERILATOR_JOBS=6",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "既有 scalar/system commit backpressure SV 通过"
+      },
+      {
+        "run_id": "integrator-cocotb-p7-023",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.fp_scalar SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_p7_fp_scalar SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator.3DvTYu/p7-cocotb/sim_build",
+        "exit_code": 0,
+        "result": "pass_5_of_5",
+        "log": "build/agents/T-20260827-058/integrator.3DvTYu/p7-cocotb/cocotb.log",
+        "log_sha256": "11a0911849e045980304021c2c81d8beed292b8b7a5c39bd82cec796f5756b69"
+      },
+      {
+        "run_id": "integrator-cocotb-backpressure-024",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_commit_backpressure SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator.3DvTYu/backpressure-cocotb/sim_build",
+        "exit_code": 0,
+        "result": "pass_2_of_2",
+        "log": "build/agents/T-20260827-058/integrator.3DvTYu/backpressure-cocotb/cocotb.log",
+        "log_sha256": "8a4747686a31339aa017c303df42d580985f73aafb5845071b05b45bf3899d72"
+      },
+      {
+        "run_id": "integrator-p7-standard-025",
+        "level": "L2",
+        "command": "FP_NEON=required IMAGE=/home/chiro/projects/mycpu/lcvex/build/difftest/hard_fp_scalar.bin MAX_INSNS=28 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/standard/step.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/standard/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/standard/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/standard/qemu.log bash sim/difftest/run_lockstep_step.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "A76 required standard 28 条 strict lockstep",
+        "logs": {
+          "coord": "build/agents/T-20260827-058/integrator-final.BB6xnZ/standard/coord.log",
+          "coord_sha256": "249d71540e972cfd0578cb9f8fd154c63521c632764ace2db3a1b63f0773c155",
+          "qemu_sha256": "31e722550249610f2acdd7b3f02f0d11be843011c9e3a4480d80903f290c5823",
+          "run_sha256": "134eed43db831fc622073fb9dc500b800be7d0b4c118f43fda4fd353de27ee4b"
+        }
+      },
+      {
+        "run_id": "integrator-p7-edge-026",
+        "level": "L2",
+        "command": "FP_NEON=required IMAGE=/home/chiro/projects/mycpu/lcvex/build/difftest/hard_fp_scalar_edge.bin MAX_INSNS=38 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/edge/step.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/edge/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/edge/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/edge/qemu.log bash sim/difftest/run_lockstep_step.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "A76 required edge 38 条 strict lockstep",
+        "logs": {
+          "coord_sha256": "eaa05a7301192736c8cfb362e26528aee253b77648d6ed428fb9e519eeb09c94",
+          "qemu_sha256": "dc1d871616309435fad18bff6825f61ad0deacf1152a335096d70674bdde250d",
+          "run_sha256": "16f304f3434b7a962b75ac1fa5c5a06aabd466a2604a5a6eb680d5c06fa77a3a"
+        }
+      },
+      {
+        "run_id": "integrator-p7-rounding-027",
+        "level": "L2",
+        "command": "FP_NEON=required IMAGE=/home/chiro/projects/mycpu/lcvex/build/difftest/hard_fp_scalar_rounding.bin MAX_INSNS=18 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/rounding/step.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/rounding/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/rounding/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/rounding/qemu.log bash sim/difftest/run_lockstep_step.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "A76 required RMode 18 条 strict lockstep",
+        "logs": {
+          "coord_sha256": "b22a099da3d5eb05f3061a1a813bce5b85c3174ed2a12238211ea3d894411558",
+          "qemu_sha256": "faf4828bd9417182cb001f837130afea9daea162e0890cb327d6392c29113a43",
+          "run_sha256": "c75f7f5c3ab0824710f15b0b8961c4a276b29ed6263603830345c58778ea16c4"
+        }
+      },
+      {
+        "run_id": "integrator-p7-sequence-028",
+        "level": "L2",
+        "command": "FP_NEON=required IMAGE=/home/chiro/projects/mycpu/lcvex/build/difftest/hard_fp_scalar_sequence.bin MAX_INSNS=388 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/sequence/step.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/sequence/fail.txt COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/sequence/coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/sequence/qemu.log bash sim/difftest/run_lockstep_step.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "seed=1/rounds=32 生成的 388 条背靠背 strict lockstep",
+        "seed": 1,
+        "rounds": 32,
+        "logs": {
+          "coord_sha256": "b97c9530f81c61bd88108876d9c6819fb5e5fe30b75ab4617cfb0f8ae0ea439f",
+          "qemu_sha256": "1e02c9ac144622f0bd8c6be697cedc5d1a19a8d75d342153399e37d3ed3a054d",
+          "run_sha256": "724e964c4d1d94108f4818669b55a111c1d4083a959f239948fc290f7095aa96"
+        }
+      },
+      {
+        "run_id": "integrator-p6-scalar-029",
+        "level": "L2",
+        "command": "MAX_INSNS=40 QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 bash sim/difftest/run_lockstep.sh > /home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-058/integrator-final.BB6xnZ/p6/run.log 2>&1",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P6 scalar 40 条 strict lockstep；默认 coordinator/plugin 路径均为当前合并线",
+        "logs": {
+          "coord_sha256": "af5551d3aa2c86381f552f7be34c5c34f00dbf5270c3ec21357be7244997ed5c",
+          "qemu_sha256": "a980e9d1446f498dd5c0269e3818a0527c4994c7f024b96be452e4a7f6c3c161",
+          "run_sha256": "7806b0f4b14a53b9e843c30e51b7ea66c7c03d6ec294456a83cd645595751bc3"
+        }
+      }
+    ],
+    "resolved_failures": [
+      {
+        "run_id": "integrator-cocotb-backpressure-missing-source-017",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make sim-cocotb-backpressure",
+        "exit_code": 2,
+        "result": "resolved",
+        "summary": "首次 merge source 缺少通用 Makefile 的 lcvex_fp_scalar.sv，MODMISSING；f937352 补入 source list 后由 integrator-cocotb-backpressure-024 通过。"
+      }
+    ]
+  },
+  "known_limits": [
+    "组合 256-bit 整数/除法路径尚未做 Quartus STA；可能成为 FPGA 时序瓶颈。",
+    "scalar FP memory 只实现自然宽度 unsigned-offset 单寄存器。",
+    "不宣称完整 ARMv8.2-A FP/NEON；FMA/sqrt/转换/FP16/NEON/SVE/FP exception enable 后置。",
+    "merge_sha f937352 已由集成者补齐；本证据不证明完整 Gate D、Gate F、Quartus STA 或上板验证。"
+  ],
+  "handoff": "docs/handoffs/T-20260827-058-final.md",
+  "next": "P7-1 已归档；下一步登记 P7-2 NEON 整数/单 Q 访存任务，同时保持 B 线独立。"
+}

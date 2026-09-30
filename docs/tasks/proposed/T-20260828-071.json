@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-071",
+  "title": "LCVEX 开源综合/面积/关键路径代理线（A 线）",
+  "kind": "parallel-line",
+  "priority": "high",
+  "phase": "done",
+  "assigned_owner": "root-integrator (proposed; child owners TBD)",
+  "base_sha": "95ee3e5b74152331b369ba1ee5e1fac4d4a32e75",
+  "functional_baseline_sha": "78771bf",
+  "plan": "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+  "branch": "feature/T-20260828-071-open-synth-proxy",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-071",
+  "children": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4"
+  ],
+  "scope": "用开源工具链独立评估 LCVEX 可综合 RTL 的面积/关键路径/资源趋势，作为 Quartus 阻塞期间的分析代理；不替代 A10 signoff，不修改通用 RTL 语义以迁就工具。",
+  "acceptance": "见 v2 计划 A0-A4 退出条件；最终输出分层资源/时序报告，明确非 Arria 10 signoff、不替代 Quartus、不解除 T-067。",
+  "known_limits": [
+    "Yosys/nextpnr/VTR 与 A10 架构不可直接换算",
+    "vendor Qsys/EMIF/EPCQ/JTAG IP 需 stub/blackbox",
+    "无法测量指标必须标 N/A，不伪造 Fmax"
+  ],
+  "dispatch_status": "not_dispatched"
+}

@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-092",
+  "state": "done",
+  "base_sha": "e3f217de9bef9f7e1ca17f56fc504d0e46ec00ab",
+  "head_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+  "merge_sha": "c18ba3c5983976e94bed5dc56129c83332e9254d",
+  "branch": "feature/T-20260829-092-c2-remainder2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-092",
+  "sent_at": "2026-08-29T11:00:00+0800",
+  "received_at": "2026-08-29T12:23:24+08:00",
+  "reported_at": "2026-08-29T16:42:23+08:00",
+  "owner": "T-20260829-092-c2-owner",
+  "model": "dsh-default",
+  "label": "C2-remainder",
+  "title": "C2 原子/屏障/维护/reset-fault 定向实现与验证",
+  "scope": "CAS/LDXR-STXR、DMB/DSB/ISB、DC CIVAC、IC IVAU+ISB、双核 reset/fault；保持 CORE_COUNT=1 不回归；默认 Verilator 优化。",
+  "files": [
+    "tb/sv/lcvex_c2_atomic_fail_tb.sv",
+    "tb/sv/lcvex_c2_atomic_ok_tb.sv",
+    "tb/sv/lcvex_c2_maint_barrier_tb.sv",
+    "tb/sv/lcvex_c2_reset_fault_tb.sv",
+    "docs/handoffs/T-20260829-092-c2-remainder.md",
+    "docs/tasks/evidence/T-20260829-092.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-c2-final-001",
+      "source_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_atomic_fail_tb",
+      "seed": null,
+      "wall_seconds": 412,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_ATOMIC_FAIL_TB PASS：STXR status=1，cell=0xde，两核推进，无 fault。"
+    },
+    {
+      "run_id": "owner-c2-final-002",
+      "source_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_atomic_ok_tb",
+      "seed": null,
+      "wall_seconds": 1379,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_ATOMIC_OK_TB PASS：STXR status=0，cell=0x55，无 fault。"
+    },
+    {
+      "run_id": "owner-c2-final-003",
+      "source_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_maint_barrier_tb",
+      "seed": null,
+      "wall_seconds": 356,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_MAINT_BARRIER_TB PASS：DMB/DSB/ISB、DC CIVAC、IC IVAU+ISB 双核定向，core0 观察到 coherent 0xA5。"
+    },
+    {
+      "run_id": "owner-c2-final-004",
+      "source_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_reset_fault_tb",
+      "seed": null,
+      "wall_seconds": 346,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_RESET_FAULT_TB PASS：core1 stop→reset，core0 持续运行，无 fault。"
+    },
+    {
+      "run_id": "owner-c2-final-005",
+      "source_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "LCVEX_C2_DUALCORE_TB regression",
+      "seed": null,
+      "wall_seconds": 0,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_DUALCORE_TB PASS (core_running gate fix preserved)."
+    },
+    {
+      "run_id": "owner-c2-final-006",
+      "source_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "LCVEX_C2_L1_MSI_TB regression",
+      "seed": null,
+      "wall_seconds": 0,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_L1_MSI_TB PASS (fast atomic/MSI cover preserved)."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "tb/sv/lcvex_c2_atomic_fail_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-092-c2-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_atomic_fail_tb.sv"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "tb/sv/lcvex_c2_atomic_ok_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-092-c2-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_atomic_ok_tb.sv"
+    },
+    {
+      "id": "artifact-003",
+      "uri": "tb/sv/lcvex_c2_maint_barrier_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-092-c2-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_maint_barrier_tb.sv"
+    },
+    {
+      "id": "artifact-004",
+      "uri": "tb/sv/lcvex_c2_reset_fault_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-092-c2-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_reset_fault_tb.sv"
+    }
+  ],
+  "known_limits": [
+    "CORE_COUNT=1 全量回归未在本轮执行；按低资源约束留给集成者。",
+    "full-core reset/restart 的 core SVA assert 在 running 中直接 reset/restart 场景会触发；当前 reset-fault TB 只验证 stop→reset→保持 stopped。",
+    "core_fault 仍为 wrapper 常 0 观测口；full-core fault 注入为负向检查，PoC fault/abort 由 lcvex_c2_cluster_tb 模块级覆盖。",
+    "未引入 ACE/CHI、SVE，未运行 Quartus，未触碰 T-067。"
+  ],
+  "next": "集成 review / C3 派发；如需要再补 CORE_COUNT=1 回归和 running-reset restart 强化。",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "received_at",
+        "old": "2026-08-29T12:25:00+0800",
+        "new": "2026-08-29T12:23:24+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "reported_at",
+        "old": "2026-08-29T16:45:00+0800",
+        "new": "2026-08-29T16:42:23+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "c18ba3c5983976e94bed5dc56129c83332e9254d",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "71c743f74a7edd314e67ab45871057e5d0baaaa0",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "handoff_sha": "71c743f74a7edd314e67ab45871057e5d0baaaa0",
+  "integrator_review": {
+    "received_at": "2026-08-29T16:45:26+08:00",
+    "status": "accepted",
+    "head_sha": "71c743f74a7edd314e67ab45871057e5d0baaaa0",
+    "notes": "Merged T-092 directed closure. Verified on branch: atomic_fail/atomic_ok/maint_barrier/reset_fault + DUALCORE_TB + L1_MSI_TB all PASS. make compile on main RC=0. Remaining known limits recorded: CORE_COUNT=1 full regression, running-reset-restart assert, full-core fault injection (core_fault=0).",
+    "merge_sha": "c18ba3c5983976e94bed5dc56129c83332e9254d",
+    "result_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4"
+  }
+}

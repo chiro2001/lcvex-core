@@ -1,0 +1,40 @@
+diff --git a/include/exec/lcvex-difftest.h b/include/exec/lcvex-difftest.h
+--- a/include/exec/lcvex-difftest.h
++++ b/include/exec/lcvex-difftest.h
+@@ -126,5 +126,8 @@ uint64_t qemu_lcvex_difftest_timer_offset(void);
+  * 恢复时由插件在第一条指令前读取 timer sidecar，设置一个仅限 difftest
+  * 的计数修正。普通运行该 offset 始终为 0。 */
+ uint64_t qemu_lcvex_difftest_timer_offset(void);
++
++/* incoming 恢复并校正计数偏移后，重新调度物理/虚拟 Generic Timer。 */
++void qemu_lcvex_difftest_recalc_timers(void *env);
+ 
+ #endif /* QEMU_LCVEX_DIFFTEST_H */
+diff --git a/target/arm/helper.c b/target/arm/helper.c
+--- a/target/arm/helper.c
++++ b/target/arm/helper.c
+@@ -1359,5 +1359,14 @@ uint64_t gt_get_countervalue(CPUARMState *env)
+     return qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL) / gt_cntfrq_period_ns(cpu) +
+            qemu_lcvex_difftest_timer_offset();
+ }
++
++void qemu_lcvex_difftest_recalc_timers(void *opaque)
++{
++    CPUARMState *env = opaque;
++    ARMCPU *cpu = env_archcpu(env);
++
++    gt_recalc_timer(cpu, GTIMER_PHYS);
++    gt_recalc_timer(cpu, GTIMER_VIRT);
++}
+ 
+ static void gt_update_gicv5_ppi(CPUARMState *env, int timeridx, bool level)
+diff --git a/target/arm/tcg/lcvex-difftest.c b/target/arm/tcg/lcvex-difftest.c
+--- a/target/arm/tcg/lcvex-difftest.c
++++ b/target/arm/tcg/lcvex-difftest.c
+@@ -159,5 +159,6 @@ int qemu_lcvex_difftest_restore_timer_state(const char *path)
+     raw = gt_get_countervalue(env);
+     lcvex_timer_offset = state.cntpct - raw;
+     lcvex_timer_offset_valid = true;
++    qemu_lcvex_difftest_recalc_timers(env);
+     return 0;
+ }

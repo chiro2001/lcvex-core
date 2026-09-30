@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-014",
+  "label": "P7-2-DUP-SQADD-DECODE",
+  "state": "done",
+  "partial": false,
+  "base_sha": "8aa10fe4c5aa37e23b9d75a695e137e018a9d473",
+  "head_sha": "374eb385b8556ee53fcfaa68a2718edbb09892f2",
+  "branch": "fix/T-20260902-014-p72-dup-sqadd-decode",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-014",
+  "scope": "修复 P7-2 DUP decode 与 SQADD 等 unsupported Advanced SIMD three-same 族的编码重叠：收紧 DUP 分支掩码 [23:21]==000，使 0x4E220C20 不再被误解码为 DUP scalar，而是按 UDEF 处理；不新增指令支持，不修改 NEON datapath/QEMU/测试期望。",
+  "root_cause": "DUP 分支掩码 0xff00fc00 未固定 [23:21]。DUP general/element 合法编码要求 [23:21]==000；SQADD_v/UQADD_v 等 three-same 族与 DUP_general 共享 [31:24]=0x4E、[15:10]=0x3，但 [23:21] 非零。0x4E220C20 的 [23:21]=0b001、[20:16]=2，被旧分支当作 DUP scalar 8H。",
+  "fix": "rtl/lcvex_decode.sv 中 DUP 分支掩码由 32'hff00_fc00 收紧为 32'hffe0_fc00，并同步更新内部 dup_base；使 [23:21] 固定为 000。合法 DUP 解码不变，SQADD 落入默认 UDEF。",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.4",
+    "os": "Linux",
+    "jobs": "VERILATOR_JOBS=1 for all local builds"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "RTL lint compile target passed after DUP mask tightening.",
+      "source_sha": "374eb385b8556ee53fcfaa68a2718edbb09892f2",
+      "log": "/tmp/t014_compile2.log"
+    },
+    {
+      "run_id": "owner-l1-sv-neon-int-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-2-neon",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-2 NEON integer raw-bit directed TB PASS.",
+      "source_sha": "374eb385b8556ee53fcfaa68a2718edbb09892f2",
+      "log": "/tmp/t014_sv.log"
+    },
+    {
+      "run_id": "owner-l1-cocotb-neon-int-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-2-neon",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TESTS=10 PASS=10 FAIL=0 SKIP=0. test_p7_2_unsupported_udef SQADD now UDEF; all existing DUP and P7-2 cases still pass.",
+      "source_sha": "374eb385b8556ee53fcfaa68a2718edbb09892f2",
+      "log": "/tmp/t014_cocotb2.log"
+    },
+    {
+      "run_id": "owner-l1-diff-check-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Whitespace/error check clean.",
+      "source_sha": "374eb385b8556ee53fcfaa68a2718edbb09892f2"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "owner": "T-20260902-014",
+      "uri": "docs/handoffs/T-20260902-014-p72-dup-sqadd-decode.md",
+      "reproduce": "cat docs/handoffs/T-20260902-014-p72-dup-sqadd-decode.md",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "evidence",
+      "owner": "T-20260902-014",
+      "uri": "docs/tasks/evidence/T-20260902-014.json",
+      "reproduce": "cat docs/tasks/evidence/T-20260902-014.json",
+      "retain_until": "task-close"
+    }
+  ],
+  "known_limits": [
+    "No QEMU, test expectation, NEON integer datapath, or instruction-matrix change.",
+    "No full Gate D, remote Quartus, fit/STA/SOF run; validation is the task-specified L0/L1 set.",
+    "DUP mask tightening is intentionally limited to already-supported Q=1 DUP forms; unsupported D-register forms remain UDEF as before."
+  ],
+  "next": "Integrator review/merge; FP-P0 baseline red item for DUP/SQADD decode overlap is closed by this task.",
+  "timestamps": {
+    "sent_at": "2026-09-03T00:53:00+08:00",
+    "received_at": "2026-09-03T00:54:00+08:00",
+    "reported_at": "2026-09-03T01:07:30+08:00"
+  },
+  "merge_sha": "347e509873bdb9507b984892e47e8890c2a465bb",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T01:09:00+08:00",
+    "merged_at": "2026-09-03T01:10:25+08:00",
+    "recorded_at": "2026-09-03T01:10:25+08:00",
+    "notes": "DUP/SQADD decode fix merged and accepted"
+  }
+}

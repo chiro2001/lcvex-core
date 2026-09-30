@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-001",
+  "title": "建立分层测试 registry 与查询入口",
+  "kind": "infra",
+  "priority": "high",
+  "assigned_owner": "root/integrator",
+  "phase": "done",
+  "parent": "",
+  "depends_on": [],
+  "writes": [
+    "scripts/test_registry.json",
+    "scripts/test_registry.py",
+    "scripts/test_registry_test.py",
+    "Makefile",
+    "docs/TEST_ENHANCEMENT_PLAN.md",
+    "docs/tasks/evidence/T-20260826-001.json",
+    "docs/handoffs/T-20260826-001-test-registry.md"
+  ],
+  "reads": [
+    "sim/difftest/run_gate_d.sh",
+    "sim/difftest/run_p5a_hardening.sh",
+    "scripts/run_lockstep_parallel.sh",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/TEST_ENHANCEMENT_PLAN.md"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/TEST_ENHANCEMENT_PLAN.md",
+    "docs/domains/README.md"
+  ],
+  "base_sha": "ee56278ca9acfe5f9cfbeda00e9a44b3e1fa5f30",
+  "branch": "infra/T-20260826-001-test-registry",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-001",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 512,
+    "disk_mb": 16,
+    "timeout_s": 600
+  },
+  "validation": {
+    "l0": [
+      "python3 scripts/test_registry.py --check",
+      "python3 scripts/test_registry_test.py"
+    ],
+    "l1": [
+      "python3 scripts/test_registry.py list --level L0",
+      "python3 scripts/test_registry.py list --tag p6"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "registry 可解析且每个测试 ID 唯一；可按名称、域、层级、标签筛选；查询结果可输出人读表和 JSON；至少覆盖当前 L0/L1/L2/L3/L4 入口；不改变现有测试默认行为。失败时保留命令、输入 registry 与 Python 版本。",
+  "created_at": "2026-08-26T02:20:45+08:00",
+  "updated_at": "2026-08-26T02:35:00+08:00",
+  "commits": [
+    "f2c750aadd28d7a2dacb82e11e95975cad774d9b",
+    "0a90e31"
+  ],
+  "handoff": "docs/handoffs/T-20260826-001-test-registry.md",
+  "evidence": "docs/tasks/evidence/T-20260826-001.json",
+  "known_limits": [
+    "第一版只提供 registry/query，不自动接管 Gate D 调度；既有 --only 入口保持原样。",
+    "资源字段是建议值，实际重型测试仍由集成者排队。"
+  ],
+  "next": "观察 A0 手工队列；只有成为瓶颈后才登记 registry-to-runner 接入任务。"
+}

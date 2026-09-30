@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-042",
+  "base_sha": "b929b9664ad60a7aa0afc609ba7a41d831e3fc67",
+  "head_sha": "cc4e292f9cbaa5bc042bbcd0c461a0280b1e18e0",
+  "merge_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+  "candidate_status": "pass-local",
+  "root_cause": {
+    "source_task": "T-20260826-041",
+    "local_seq": 2139121,
+    "pc": "0xffff8000800a2688",
+    "instruction": "MRS SCTLR_EL1",
+    "encoding": "0xd5381000",
+    "dut_value": "0xfcf4f91d",
+    "qemu_value": "0x34f4d91d",
+    "xor": "0xc8002000",
+    "bits": [31, 30, 27, 13],
+    "meaning": ["EnIA", "EnIB", "EnDA", "EnDB"],
+    "failure_dump": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-041/build/tmp/T-20260826-041/main-run/r.aMQltn/fail.txt",
+    "failure_dump_sha256": "513acfcaecd82c68ba4794d75c4ce44142ab0fb64b0b3a57e20e6e918b601694"
+  },
+  "change": {
+    "sctlr_write_mask": "0x0000000037ffdfff",
+    "cleared_bits": "0xc8002000",
+    "normal_msr": "SCTLR_EL1 的正常 MSR 提交使用统一写掩码",
+    "checkpoint_restore": "difftest_restore_sctlr_el1 使用同一写掩码",
+    "assertion": "SCTLR_EL1 高 32 位与未实现 PAuth enable 位始终为零",
+    "directed_test": "hard_sctlr_pauth 一次写入四个 PAuth enable 位并由后续 MRS 与 QEMU 比较"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "plugin_sha256": "eb0faa7f1bc69d46f9fe5bdc4c5c1468030c4972e479327951f5335e44a1c3e6"
+  },
+  "rtl": {
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "kernel_coordinator_sha256": "1850e8653ef4c0d4cbb8b6cc20b9e80be90cfbbb0532b04540189fa64286a150",
+    "directed_image_sha256": "ee10322dea3e849863206124859c1eabc2d32f6b062470e6e56117b12b28b490"
+  },
+  "resource": {
+    "cpuset": [0, 1],
+    "mapping": {"coordinator": 0, "qemu": 1},
+    "verilator_jobs": 2,
+    "allocation_ratio": 0.5,
+    "peak_design_note": "Linux 重放仅使用两个独立物理核；128 MiB 展开 RAM 位于本 worktree build/tmp，结束后已清理"
+  },
+  "validation": [
+    {
+      "run_id": "owner-l0-static-001",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/difftest/test_program.py sim/difftest/a64.py && conda run --no-capture-output -n lcvex verilator --lint-only -Wno-fatal -Wall --top-module lcvex_core -f rtl/filelist.f && git diff --check && bash -n sim/difftest/run_m2_4b.sh",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l2-hard-sctlr-001",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 bash sim/difftest/run_m2_4b.sh --only hard_sctlr_pauth",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "base/cache 各严格锁步 8 条；旧 RTL 曾在 seq=3 读回 0xc8c52838 而失败，修复后两配置均读回 QEMU 的 0x00c50838",
+      "log": "build/agents/T-20260826-042/hard-sctlr.log",
+      "log_sha256": "de2aea026fda1ad25d79548b72d09809f9cb37cf943cc40f834048672d83a284"
+    },
+    {
+      "run_id": "owner-l1-make-test-001",
+      "level": "L1",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make test",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SV、Cocotb、缓存/MMU/MMIO/CRC 单元测试与 86 条编码器检查全部通过",
+      "log": "build/agents/T-20260826-042/make-test.log",
+      "log_sha256": "c62918350e851977394c32e6c403d8775730a79e93960ed9daf3e244acec759e"
+    },
+    {
+      "run_id": "owner-l2-checkpoint-smoke-001",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-sys-smoke checkpoint-sys-v3-smoke checkpoint-dut-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVXSYS2 联合恢复 4 条、LCVXSYS3 联合恢复 5 条、DUT 架构恢复 10 条均通过",
+      "log": "build/agents/T-20260826-042/checkpoint-smoke.log",
+      "log_sha256": "fe55dce2947cf9bc61c7f81dda420fdadae4332c60d6e47eb1f0ff9571548eeb"
+    }
+  ],
+  "linux_replay": {
+    "run_id": "owner-l4-main-t039-replay-001",
+    "level": "L4",
+    "command": "CHAIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260826-039/build/tmp/T-20260826-039/main-early/chain RESUME_SEQ=4999999 IMAGE=/tmp/Image-t80000 DTB=/home/chiro/projects/mycpu/lcvex-wt-T-20260826-006/build/tmp/T-20260826-006/main/chain/qemu-fdt-raw.bin MAX_INSNS=2500000 CKPT_EVERY=0 LCVEX_TMP_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260826-042/build/tmp/t42m COORD_PIN=0 QEMU_PIN=1 PROGRESS_EVERY=100000 KEEP_RESTORE_WORK=0 bash sim/difftest/run_lockstep_resume.sh",
+    "exit_code": 0,
+    "result": "pass",
+    "parent_task": "T-20260826-039",
+    "parent_chain": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-039/build/tmp/T-20260826-039/main-early/chain",
+    "parent_manifest_sha256": "714347a67d6b456aa20a944ec33bb1a33d50ce1aa9b0c3f055b41daff7413b98",
+    "parent_local_seq": 4999999,
+    "commits": 2500000,
+    "local_range": "0..2499999",
+    "global_range": "21510000..24009999",
+    "crossed_old_failure_local_seq": 2139121,
+    "crossed_old_failure_global_seq": 23649121,
+    "run_dir": "build/tmp/t42m/r.TWQdwk",
+    "coord_log": "build/tmp/t42m/r.TWQdwk/coord.log",
+    "coord_log_sha256": "9d9c70557f4fd066d97943c9ac39b70cb5003761e6ce481648c923aa66732e10",
+    "qemu_log": "build/tmp/t42m/r.TWQdwk/qemu.log",
+    "qemu_log_sha256": "a7297556c65b45043bc58eeca661e3735452674a67a78e776ca7d2713d4b1e81",
+    "image_sha256": "5029ac9dd5b14a05ceaf1eb0645c5e0c4c01a000b5c68e37306b134e26bb5c68",
+    "dtb_sha256": "ce3ae0d2f76171d3eee59d3d096d75fcf1d024d68fce9975990eb01e660ac3c9",
+    "checkpoint_output": "disabled; T-041 pending child was not used and no replacement child was published"
+  },
+  "review": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "scope": "只读检查掩码、QEMU 语义、MSR/restore 一致性、reset/commit/SVA 和定向覆盖",
+    "result": "未发现阻断问题"
+  },
+  "integration_validation": {
+    "source_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+    "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make compile && taskset -c 0-1 env VERILATOR_JOBS=2 bash sim/difftest/run_m2_4b.sh --only hard_sctlr_pauth && taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-sys-smoke checkpoint-sys-v3-smoke checkpoint-dut-smoke",
+    "exit_code": 0,
+    "result": "pass",
+    "log": "build/agents/T-20260826-042/integration-rerun.log",
+    "log_sha256": "78fece0af1bb9c8fdef83c07fb8e888d0cc0896b5628bde9ea250cdf5a1a7cac"
+  },
+  "known_limits": [
+    "本任务不实现 ARMv8.3 Pointer Authentication 指令、密钥或签名语义；P6 标量目标继续使用 PAC HINT=Nop 与 key RAZ/WI shim。",
+    "hard_sctlr_pauth 永久定向用例直接覆盖正常 MSR/MRS；checkpoint restore 由同一掩码、SVA 与现有 sys v2/v3 联合 smoke 覆盖，尚未增加带脏 PAuth 位的旧 sidecar 永久 fixture。",
+    "2.5M main 重放用于验证首错修复且没有发布 child checkpoint；新的 Gate E 必须在合并后的冻结 SHA 重新运行。"
+  ]
+}

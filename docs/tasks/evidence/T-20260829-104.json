@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-104",
+  "state": "done",
+  "base_sha": "5f78319234a603f522af407e5378b7ef786fa1d1",
+  "head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+  "handoff_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+  "merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+  "branch": "feature/T-20260829-104-external-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "sent_at": "2026-08-29T21:06:00+0800",
+  "received_at": "2026-08-29T21:06:00+0800",
+  "reported_at": "2026-08-29T21:13:30+0800",
+  "owner": "external-audit-prep",
+  "model": "dsh-default",
+  "label": "external-audit",
+  "title": "外部审计材料准备与结果接收",
+  "scope": "为外部审计准备 9 方向材料包和结果接收区；只读整理，不修改 RTL/tb/sim/qemu，不启动 Quartus，不读取/复制 license 或敏感信息。",
+  "files": [
+    "docs/audit/README.md",
+    "docs/audit/01-governance.md",
+    "docs/audit/02-reproducibility.md",
+    "docs/audit/03-rtl-quality.md",
+    "docs/audit/04-isa-architecture.md",
+    "docs/audit/05-verification.md",
+    "docs/audit/06-multicore.md",
+    "docs/audit/07-fpga.md",
+    "docs/audit/08-security-boundary.md",
+    "docs/audit/09-risks.md",
+    "docs/audit/evidence-index.md",
+    "docs/audit/self-assessment.md",
+    "docs/audit/external-results/README.md",
+    "docs/audit/external-results/action-items.md",
+    "docs/handoffs/T-20260829-104-external-audit.md",
+    "docs/tasks/evidence/T-20260829-104.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "python": "3.12",
+    "qemu": "11.1.0"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches": "qemu/patches/0001..0012; combined SHA256 43095d343e8f80b0e145f0240f2f18663fb6be81e85222dd5add4cd0132c89af",
+    "patch_hash_correction": {
+      "old_claimed_combined_sha256": "43095d343e8f80b0e145f0240f2f18663fb6be81e85222dd5add4cd0132c89af",
+      "new_canonical_combined_sha256": "33abdb70e02fbfd40b6fa784302c6f5ff25410960c97958cc1804f6070615c94",
+      "canonical_command": "LC_ALL=C find qemu/patches -maxdepth 1 -type f -name '*.patch' -print0 | sort -z | xargs -0 cat | sha256sum",
+      "file_boundary": "no separator; raw file bytes as stored",
+      "content_boundary": "exact patch file bytes, including existing trailing newlines",
+      "resolved_by_task": "T-20260829-111",
+      "finding": "EXT-02-001",
+      "note": "old value had no defined canonical command; corrected while preserving old value."
+    }
+  },
+  "runs": [
+    {
+      "run_id": "t104-write-scope-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git status --short && git diff --name-only",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "最终工作区只含 docs/audit/**、docs/handoffs/T-20260829-104-external-audit.md、docs/tasks/evidence/T-20260829-104.json；未修改 RTL/tb/sim/qemu。"
+    },
+    {
+      "run_id": "t104-json-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-104.json",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON 合法。"
+    },
+    {
+      "run_id": "t104-diff-check-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无空白错误（对已跟踪 diff；untracked 文件在 git add 后复检）。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t104-audit-bundle",
+      "uri": "git:4214a5e09012b0c090e9252a59d9245c8d5bfafe:docs/audit/",
+      "owner": "T-20260829-104",
+      "retain_until": "repository-history",
+      "git_tree_sha": "3605d8b18d5f6160538aab69a8565cf0d59e1d76",
+      "sha256": "0b7f940ac863ff5926e2eab5d00ac6d2fd51a8c60e28b9fe2708dcdd5d45a6e0",
+      "bytes": null,
+      "reproduce": "git ls-tree -r --name-only 4214a5e docs/audit | sort | xargs -I{} sh -c 'git show 4214a5e:{}' | sha256sum; git rev-parse 4214a5e:docs/audit"
+    },
+    {
+      "id": "t104-all-deliverables",
+      "uri": "git:4214a5e09012b0c090e9252a59d9245c8d5bfafe:docs/audit/* + handoff + evidence",
+      "owner": "T-20260829-104",
+      "retain_until": "repository-history",
+      "sha256": "3995796efa30b6faadb38205103d81c00fd3688a64a8d7b628a21720afd24d27",
+      "bytes": null,
+      "reproduce": "see docs/tasks/evidence/T-20260829-113.json correction_record for exact file list and per-file hashes"
+    },
+    {
+      "id": "t104-handoff",
+      "uri": "git:4214a5e09012b0c090e9252a59d9245c8d5bfafe:docs/handoffs/T-20260829-104-external-audit.md",
+      "owner": "T-20260829-104",
+      "retain_until": "repository-history",
+      "sha256": "45c429d0d414bf510e4bc8dd5a2716f28e75b5644300e91b64695335405de72f",
+      "bytes": null,
+      "reproduce": "git show 4214a5e:docs/handoffs/T-20260829-104-external-audit.md | sha256sum"
+    }
+  ],
+  "integrator_review": {
+    "status": "accepted",
+    "result_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+    "merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+    "received_at": "2026-08-29T21:15:16+0800",
+    "notes": "T-104 finalized by T-20260830-025 using the immutable correction from T-20260829-113. Material head, merge SHA, artifact hashes and event timestamps are now unambiguous."
+  },
+  "correction_record": {
+    "source": "T-20260829-113 / T-20260830-025",
+    "old_values_preserved": true,
+    "old_state": "review",
+    "old_head_sha": "5f78319234a603f522af407e5378b7ef786fa1d1",
+    "old_merge_sha": "",
+    "old_reported_at": "2026-08-29T21:20:00+0800",
+    "old_artifact_sha256": "see git show after commit; package generated at head 5f78319",
+    "correct_state": "done",
+    "correct_head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+    "correct_merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+    "correct_reported_at": "2026-08-29T21:13:30+0800",
+    "correct_artifact_sha256": "0b7f940ac863ff5926e2eab5d00ac6d2fd51a8c60e28b9fe2708dcdd5d45a6e0",
+    "references": [
+      "docs/handoffs/T-20260829-113-aud-08.md",
+      "docs/tasks/evidence/T-20260829-113.json",
+      "docs/handoffs/T-20260830-025-ext-01-fix.md",
+      "docs/tasks/evidence/T-20260830-025.json"
+    ],
+    "notes": "Historical handoff T-20260829-104-external-audit.md is not rewritten; this evidence correction is the authoritative finalization."
+  },
+  "known_limits": [
+    "未重新运行重型 Verilator/Gate D/Quartus；所有结论基于仓库已有 evidence。",
+    "外部审计结果已进入 external-results/，但部分 action items 仍 open。",
+    "原始材料 head 与任务登记 base_sha 不一致：登记 base 为 022bcf5，材料从 5f78319 生成（含任务登记提交）。",
+    "本 evidence 已由 T-20260830-025 定稿；历史 handoff 保持不变，correction 见上。"
+  ],
+  "next": "外部审计 action items 按各自内部任务继续关闭；T-104 的 evidence 身份已固定。"
+}

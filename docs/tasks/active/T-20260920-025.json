@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-025",
+  "label": "B25-LOGIC-IMM-REPAIR-GATE-D",
+  "title": "Run complete release-mode Gate D on the frozen logical-immediate repair candidate",
+  "kind": "verification-gate",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "complete-release-mode-gate-d-pass",
+  "assigned_owner": "gate_t025",
+  "depends_on": ["T-20260920-022"],
+  "base_sha": "bbffd082c719ed431a8af85d30305acff9e148fb",
+  "candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+  "candidate_tree_sha": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+  "branch": null,
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-025-gate",
+  "detached": true,
+  "writes": [
+    "build/agents/T-20260920-025/** ignored Gate D logs/artifacts",
+    "all normal ignored Gate D build outputs inside the detached worktree",
+    "docs/tasks/evidence/T-20260920-025.json only by the integrator after receipt",
+    "docs/handoffs/T-20260920-025-b25-logic-imm-repair-gate-d.md only by the integrator after receipt"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-022.json",
+    "sim/difftest/run_gate_d.sh and its complete release-mode dependency graph",
+    "shared QEMU binary/plugin/header as read-only inputs"
+  ],
+  "scope": "Run the complete release-mode Gate D on the exact frozen candidate. Assertions, QEMU comparisons, coverage, all configured random seeds/lengths and baremetal remain enabled. The gate owner may not modify tracked source, tests, expected results, QEMU state or the candidate commit.",
+  "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-025 gate_t025 -- bash sim/difftest/run_gate_d.sh",
+  "acceptance": {
+    "identity": "Detached HEAD and tree remain exactly c31b3aea/7ea2ea1c; tracked status stays clean before and after.",
+    "gate": "Outer command exits 0 and every release-mode group is PASS; no skip, assertion disable, reduced seed/length or reference mutation is allowed.",
+    "coverage": "Record coverage instruction total/expected row count, all random seed commit counts, baremetal commit count and complete log hash.",
+    "resource": "Entire Gate D process tree is guarded by the local resource lock; record host/tool/QEMU hashes and final lock state.",
+    "evidence": "Return exact command, timestamps, elapsed time, source/tree/tool identities, group results, failure tail if any and content hashes to the integrator."
+  },
+  "resource": "One local heavy slot, event-driven monitoring with waits up to one hour, no frequent polling. No GamePC or external QEMU build is permitted.",
+  "forbidden_regions": [
+    "all tracked RTL, firmware, tests, expected results, QEMU and task files",
+    "skip flags, shorter random runs, assertion suppression or altered reference outputs",
+    "GamePC, Quartus, synthesis/fitter/STA/assembler, JTAG, board, Flash/reset/power",
+    "stopping unknown or pre-existing processes"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T14:55:53+08:00",
+    "agent_name": "gate_t025",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+    "candidate_tree_sha": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+    "outer_exit": 0,
+    "elapsed_seconds": 737,
+    "gate": "PASS; all release-mode groups, assertions, coverage, three 100k random seeds and baremetal",
+    "coverage": "8760 points; expected ISA coverage 62/62 across 300006 random commits",
+    "random": "seeds 1/2/3 each 100002 commits",
+    "baremetal": "PASS; 1104-byte image, 200 lockstep commits",
+    "evidence": "docs/tasks/evidence/T-20260920-025.json",
+    "handoff": "docs/handoffs/T-20260920-025-b25-logic-imm-repair-gate-d.md",
+    "next": "T-20260920-026 one-line no-FP board profile derivative"
+  },
+  "created_at": "2026-09-20T14:54:53+08:00",
+  "updated_at": "2026-09-20T15:12:48+08:00"
+}

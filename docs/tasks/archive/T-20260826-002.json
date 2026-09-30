@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-002",
+  "title": "核对压缩 trace/checkpoint manifest 与切片恢复 smoke",
+  "kind": "infra",
+  "priority": "normal",
+  "assigned_owner": "luna-implementation-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "完成审核批准的 trace manifest/切片垂直任务，可监控耗时 smoke；不运行 Linux 长跑，除非集成者另行排队",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "仅在 parent/seq/hash 跨域设计无法由现有文档确定时启用"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "仅查看 task JSON、指定 difftest 文档和目标 diff；只给方向性阻断风险，不给逐行实现方案"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "仅在后续 checkpoint/Linux 长跑需要时启用"
+  },
+  "phase": "done",
+  "parent": "",
+  "depends_on": [],
+  "writes": [
+    "scripts/trace_manifest.py",
+    "scripts/trace_slice.py",
+    "scripts/trace_manifest_smoke.py",
+    "Makefile",
+    "docs/DIFFTEST_QEMU_PLAN.md",
+    "docs/tasks/evidence/T-20260826-002.json",
+    "docs/handoffs/T-20260826-002-trace-checkpoint.md"
+  ],
+  "reads": [
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/checkpoint_manifest_smoke.py",
+    "scripts/trace_slice.py",
+    "sim/difftest/run_lockstep_resume.sh",
+    "docs/handoffs/044-plan-diff-checkpoint.md",
+    "docs/handoffs/055-checkpoint-manifest-hash.md"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/DIFFTEST_QEMU_PLAN.md",
+    "docs/PROJECT_STRUCTURE.md"
+  ],
+  "base_sha": "1b88804793cec69ea262098a34c6506d5eaa7614",
+  "branch": "infra/T-20260826-002-trace-checkpoint",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-002",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 1024,
+    "disk_mb": 256,
+    "timeout_s": 1200
+  },
+  "validation": {
+    "l0": [
+      "python3 -m py_compile scripts/trace_manifest.py scripts/trace_slice.py scripts/trace_manifest_smoke.py",
+      "python3 scripts/trace_manifest_smoke.py"
+    ],
+    "l1": [
+      "make trace-manifest-smoke trace-slice-help checkpoint-manifest-smoke",
+      "python3 scripts/trace_slice.py --help"
+    ],
+    "l2": [
+      "VERILATOR_JOBS=4 make checkpoint-dut-smoke"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "压缩 trace/checkpoint 均有版本化 manifest、输入与 artifact hash；切片入口不破坏完整负载的起始状态语义；小型 smoke 可验证篡改拒绝与恢复边界；不向 Git 或系统 /tmp 写入大产物。",
+  "created_at": "2026-08-26T02:20:45+08:00",
+  "updated_at": "2026-08-26T04:05:00+08:00",
+  "commits": [
+    "9afa97ed415f2f564fe2285156405ff6161580e3",
+    "92c6b71",
+    "4926d60",
+    "5e8e8284223bc7c322f043185c94737b748b52ec"
+  ],
+  "handoff": "docs/handoffs/T-20260826-002-trace-checkpoint.md",
+  "evidence": "docs/tasks/evidence/T-20260826-002.json",
+  "known_limits": [
+    "现有 checkpoint.py 的压缩 sidecar/manifest 保持不变，本任务只核对其兼容边界。",
+    "Linux 大链不作为本任务的本地 smoke 输入。"
+  ],
+  "next": "已完成并通过合并 SHA L0-L2；归档后另行登记 Gate runner/release 大小策略任务。"
+}
+

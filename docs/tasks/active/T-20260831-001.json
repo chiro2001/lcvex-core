@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-001",
+  "label": "FPGA-G6-PREFLIGHT",
+  "parent": "T-20260828-067",
+  "title": "A10 Quartus/full-flow/上板只读执行预检",
+  "kind": "fpga-execution-preflight",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-a10-preflight",
+  "agent_type": "remote-readonly-audit",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260830-038"
+  ],
+  "base_sha": "fbb5d71e2430dbae3ef43490c14c2b6f5c6cda92",
+  "branch": "infra/T-20260831-001-a10-execution-preflight",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-001",
+  "scope": "在用户已授权后，为 Quartus 综合/仿真/fit/STA/assembler/上板建立只读执行前检查。完整复盘 a10-linux-riscv@3db828e 的 Qsys、SFL/EPCQ、EMIF、PLL/时钟、reset/calibration、JTAG/board 工程结构及本项目 T-063/064/065/067/008/016/020/038 失败经验；只读盘点远端 Windows 当前 Quartus/EDA/用户进程、物理内存/pagefile、磁盘、工具版本、工程输入和 JTAG chain，形成可执行的分阶段资源门与禁止条件。本任务不启动任何 Quartus compile/simulation/programming，不停止/暂停/调整其它进程，不修改远端文件。",
+  "user_authorization": {
+    "authorized_at": "2026-08-31T00:41:15+08:00",
+    "scope": [
+      "Quartus synthesis",
+      "Quartus/EDA simulation",
+      "fitter and STA",
+      "assembler/SOF",
+      "board programming and board tests"
+    ],
+    "constraints": [
+      "参考 a10-linux-riscv 已有踩坑与锁定 source commit",
+      "关注并记录内存消耗和资源余量",
+      "不得停止、暂停、降优先级或抢占任何正在运行的其它进程",
+      "资源不足时等待或保持 blocked，不以清理他人进程换取空间"
+    ]
+  },
+  "planning_guidance": {
+    "reference_audit": [
+      "核对 fpga/catapult_a10/platform_manifest.json/source.lock 指向 a10-linux-riscv commit 3db828e74651fda377a33d84f2a2ca0e69901d72；对照源仓 hw/ip/sfl 与 hw/ip/ddr4_bot 的生成输入、QIP/Qsys/blackbox、pin/clock/reset/calibration 结构。",
+      "提炼已知坑：缺失 sfl_sys 输入、Qsys 生成路径、alt_sld_fab/debug fabric、顶层名/glue elaboration、EMIF calibration gate、PLL/SDC clock、相对路径、生成文件与输入文件混用、QDB partition 导入及 stale db/output 复用风险。",
+      "说明哪些 a10-linux-riscv 文件/约束可借鉴、哪些 RISC-V/VexRiscv 逻辑禁止带入。"
+    ],
+    "remote_probe": [
+      "SSH/pwsh 只读查询 OS boot time、总/可用物理内存、pagefile 总量/余量、磁盘余量、CPU/load，以及 quartus*/qsys*/vsim*/questa*/java 等相关进程 PID/启动时间/private working set/CPU；禁止 Stop-Process、taskkill、重启、SetPriority 或清理目录。",
+      "只读查询 Quartus 21.4 版本、工程/manifest/hash、现有 build/log/report 时间和状态；不得读取/复制 license 内容。",
+      "使用 jtagconfig 或等价只读枚举检查 cable/device chain；不得 quartus_pgm 编程、不得复位板卡、不得改变电源/配置状态。",
+      "若检测到任何正在运行的 compile/sim/programming 或资源不足，只记录并给等待条件，不启动第二个作业。"
+    ],
+    "resource_gate": [
+      "以 T-067 约 77060 MB private-memory OOM 为历史上界，给 synthesis、fit、STA、assembler、simulation 分阶段门；不把 NUM_PARALLEL_PROCESSORS=1 误写成内存硬上限。",
+      "建议先做 manifest/Qsys hash、quartus_map/analysis&synthesis 或 partitioned scope，再按实际峰值决定是否进入 fit；每阶段单作业、固定输出目录、开始/结束资源快照和峰值采样。",
+      "物理内存+pagefile 余量不能覆盖历史峰值并保留现有进程安全裕量时，full flow 保持 blocked；不得自动扩大 pagefile或改变系统配置。",
+      "上板前冻结 SOF/input/tool hash、JTAG chain、板卡电源/串口/DDR 测试恢复方案；任何可能覆盖 flash/EPCQ 的操作需另行精确任务与目标确认。"
+    ]
+  },
+  "writes": [
+    "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "docs/handoffs/T-20260831-001-a10-execution-preflight.md",
+    "docs/tasks/evidence/T-20260831-001.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/FPGA_PLAN.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/tasks/active/T-20260828-065.json",
+    "docs/tasks/active/T-20260828-067.json",
+    "docs/tasks/evidence/T-20260828-063.json",
+    "docs/tasks/evidence/T-20260828-064.json",
+    "docs/tasks/evidence/T-20260828-065.json",
+    "docs/tasks/evidence/T-20260828-067.json",
+    "docs/tasks/evidence/T-20260830-008.json",
+    "docs/tasks/evidence/T-20260830-016.json",
+    "docs/tasks/evidence/T-20260830-020.json",
+    "docs/tasks/evidence/T-20260830-038.json",
+    "fpga/catapult_a10/**",
+    "/home/chiro/projects/a10-linux-riscv/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+    "ssh://192.168.101.5/D:/Software/intelFPGA_pro/21.4"
+  ],
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "mode": "read-only",
+    "forbidden": "No Stop-Process/taskkill/reboot/priority change/file deletion/build launch/simulation/programming/license-content read"
+  },
+  "validation": {
+    "l0": [
+      "本地 manifest/source.lock/SHA256SUMS 与 a10-linux-riscv@3db828e 对照",
+      "远端只读资源、进程、版本、工程和 JTAG chain probe，记录 exact commands/exit codes/timestamps",
+      "JSON、git diff --check、三文件写集核对"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "形成可审计的 a10-linux-riscv 坑点矩阵、远端当前进程/内存/pagefile/磁盘/工具/工程/JTAG 只读快照，以及 synthesis→fit→STA→assembler→program→board-test 分阶段资源门。明确 GO/WAIT/BLOCKED 条件；全程未停止或改变其它进程、未启动 Quartus 作业、未修改远端文件或读取 license 内容。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.1
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 30,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-31T00:41:15+08:00",
+  "updated_at": "2026-08-31T01:21:16+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T00:42:34+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-038 且熟悉 A10/Quartus 的 gpt-5.6-luna(max) agent；当前只持有 T-20260831-001。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-001"
+  },
+  "handoff": "docs/handoffs/T-20260831-001-a10-execution-preflight.md",
+  "evidence": "docs/tasks/evidence/T-20260831-001.json",
+  "merge_sha": "f2cc92fef08dd02a4f0e4b882e36a53a86f53215",
+  "merged_at": "2026-08-31T01:21:10+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-31T01:21:16+08:00",
+    "status": "accepted_preflight_fullflow_blocked",
+    "owner_head_sha": "8f97d1a11c9c061c948b79b831da2060fad097a3",
+    "checks": [
+      "owner worktree clean and three-file docs/evidence write set matched",
+      "post-reboot read-only snapshot confirms EDA process count=0 and no agent process changes",
+      "physical free 42514.7 MB + pagefile free 12800 MB is below historical 75425-77060 MB synthesis peak plus safety reserve",
+      "target SHA256SUMS 48/50 independently reproduced with QSF/SDC drift",
+      "source.lock mismatch independently reproduced against clean a10-linux-riscv@3db828e raw blob"
+    ],
+    "notes": "预检验收；授权仍有效，但真实 B5 full synthesis 继续 blocked。先修 provenance，再只允许先验峰值 <=35GB 的 reduced/partition 单作业。"
+  },
+  "known_limits": [
+    "本任务只建立执行门，不代表已综合、仿真、生成 SOF 或上板。",
+    "T-067 历史峰值超过远端物理内存；除非资源门满足或设计范围降低，full flow 仍可能 blocked。"
+  ],
+  "next": "登记 manifest/source.lock/SHA256SUMS 重锁与 checker 加固任务；完成后登记独立远端 current-candidate 同步，再执行先验峰值 <=35GB 的 reduced/partition synthesis。full flow 继续 blocked。"
+}

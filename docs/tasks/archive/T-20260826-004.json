@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-004",
+  "title": "P6 Linux lite/main checkpoint 续跑与 Gate E 证据窗口",
+  "kind": "linux-long-run",
+  "priority": "high",
+  "assigned_owner": "luna-monitor-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "监控并执行受限 checkpoint 续跑，保存 evidence/handoff；不修改 RTL/QEMU，不把窗口结果直接标为 Gate E",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "仅在 checkpoint 输入/主线与 lite 线配置依赖不清时启用"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审运行配置、checkpoint manifest、Gate E 证据边界，不审逐行 RTL"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "绑定物理核监控 QEMU/Verilator RSS、进程回收和 checkpoint 磁盘占用"
+  },
+  "phase": "done",
+  "parent": "",
+  "depends_on": ["T-20260826-003"],
+  "writes": [
+    "docs/tasks/evidence/T-20260826-004.json",
+    "docs/handoffs/T-20260826-004-linux-resume.md"
+  ],
+  "reads": [
+    "sim/difftest/run_lockstep_resume.sh",
+    "sim/difftest/checkpoint.py",
+    "docs/handoffs/100-lite-scalar-init-milestone-20260825.md",
+    "docs/handoffs/099-qemu-nofp-scalar-line-20260825.md",
+    "docs/ROADMAP.md",
+    "docs/PROJECT_STATUS.md",
+    "build/tmp/linux-lite-6.6/lite-scalar2-20260825/chain/manifest.json",
+    "build/tmp/linux-main-pl061-20260825/main-scalar-20260825/chain/manifest.json"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/DIFFTEST.md",
+    "docs/DIFFTEST_QEMU_PLAN.md"
+  ],
+  "base_sha": "ce33dd2",
+  "branch": "verify/T-20260826-004-linux-resume",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-004",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 7200,
+    "cpus": [0, 1]
+  },
+  "validation": {
+    "l0": [
+      "python3 -c 'import sys; from pathlib import Path; sys.path.insert(0, \"sim/difftest\"); import checkpoint; checkpoint.read_manifest(Path(\"<chain>\"))'"
+    ],
+    "l1": [
+      "make lockstep-build-kernel-nofp",
+      "make lockstep-build-kernel",
+      "bash -n sim/difftest/run_lockstep_resume.sh"
+    ],
+    "l2": [
+      "lite checkpoint resume 10000 条（nofp，PIN=0）",
+      "main checkpoint resume 10000 条（FP-on，PIN=1）"
+    ],
+    "l3": [],
+    "l4": [
+      "资源允许时 lite/main 各 500000 条后台窗口；失败保留运行目录和最近 checkpoint"
+    ],
+    "seeds": []
+  },
+  "acceptance": "新合并 SHA 上 lite 能从当前 QEMU SHA 绑定的输入 manifest checkpoint 恢复并完成短/长窗口；main 若历史链 CPU vmstate 与当前配置不兼容，必须从同一 QEMU/配置新建 bootstrap manifest checkpoint，再恢复完成短窗口；QEMU/Verilator 单核进程绑定物理核、总资源默认不超过 50%（必要时 evidence 明确批准 75%）；无孤儿进程、无系统 /tmp 大文件；长窗口结果只作为 Gate E 候选证据，不直接宣称 Gate E 完成。",
+  "created_at": "2026-08-26T05:20:00+08:00",
+  "updated_at": "2026-08-26T06:45:00+08:00",
+  "commits": [
+    "3547d21",
+    "2612a5c",
+    "ce62d82",
+    "ff1ba69",
+    "0e55c29",
+    "c07c904",
+    "58b7bea"
+  ],
+  "handoff": "docs/handoffs/T-20260826-004-linux-resume.md",
+  "evidence": "docs/tasks/evidence/T-20260826-004.json",
+  "known_limits": [
+    "lite-rdinit-post8m 链没有 JSON manifest；本任务优先使用带当前 QEMU SHA 的 lite-scalar2 链，不得混用 Image/DTB/QEMU 输入。",
+    "Gate E 仍需冻结候选上的 Gate D、early boot 稳定性和用户空间定义，续跑窗口本身不是完整阶段门。",
+    "主线旧输入可能位于只读 /tmp/Image-t80000，仅按 manifest hash 校验，不写回；旧 main-scalar 链的 CPU vmstate 在当前 QEMU 配置下 0 条恢复失败，不能继续使用，已另建当前配置 bootstrap 链。"
+  ],
+  "next": "任务验收完成并归档；另行登记 resume checkpoint parent/global provenance 与自动 manifest 修复。"
+}
+

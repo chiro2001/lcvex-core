@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-052",
+  "state": "done",
+  "acceptance_status": "single-assembler-pass",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "branch": "verify/T-20260920-052-b25-coremark-uart-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-052",
+  "source_remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-051-b25-coremark-uart-fresh-physical",
+  "target_remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-052-b25-coremark-uart-volatile-sof",
+  "started_at": "2026-09-27T18:12:11+08:00",
+  "finished_at": "2026-09-27T18:42:40+08:00",
+  "accepted_source": {
+    "task_id": "T-20260920-051",
+    "stage_manifest_sha256": "432efd72ba627cdcbce98209b5fe1bb11b9d83c218b684779245631ed3722fc6",
+    "source_pre_manifest_sha256": "86ac31c6d40b4d2db41a2885cb32c50e481fa5c328d3352d0208da2ec608d865",
+    "source_post_manifest_sha256": "86ac31c6d40b4d2db41a2885cb32c50e481fa5c328d3352d0208da2ec608d865",
+    "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+    "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+    "stage_file_count": 190,
+    "qsf_reference_count": 50,
+    "boot_bin": {"bytes": 20448, "sha256": "241b0ce4dface8c4a9db782b63e4ada8674f5c8b51c00f228a795e98fc1aedab"},
+    "boot_mif": {"bytes": 204942, "sha256": "0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f"},
+    "decoded_64k_image_sha256": "aa43d0b7030d3bfc7d92b426c9d296b36428654b4cbf3e4c50300f3592ebf944",
+    "fit_report_sha256": "7ab784fc18d9c075f1605422df8d3d72176f84daba745da8edd96dd7d1135122",
+    "sta_report_sha256": "79887460d10a5b64f1e3fff4561b951dc8a3240eb322f81eb9eefa74f78b3178"
+  },
+  "assembler": {
+    "command": "quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10",
+    "invocation_count": 1,
+    "invocation_marker_sha256": "0d205710e7a7172ae54bc95e7c87704de293ca897230e0a3706c3ab07ca928c2",
+    "runner_sha256": "8f34f7f28e204707e1c2107e862b156dd76167b720e55080fbe84e83ece5d65e",
+    "started_at": "2026-09-27T18:41:08.5483091+08:00",
+    "finished_at": "2026-09-27T18:41:53.8006772+08:00",
+    "elapsed_seconds": 45.252,
+    "observed_start_process_exit_code": -1,
+    "stdout_success": true,
+    "report_success": true,
+    "command_exact": true,
+    "quartus_errors": 0,
+    "quartus_warnings": 0,
+    "rerun": false,
+    "stdout_sha256": "f46db45280c0c1d8ce43ba9cd5630402e404d98a87c73439442d84c02e355f5d",
+    "stderr_sha256": "29fa17e931c90fe8d26abdb1a356b7b48858b3f942876418c0c5900bb51abf1d",
+    "report_sha256": "8c4fe6cb4cea77924f48adb5c64fb594a00c5eebfef25ac6194e961aba76166b",
+    "flow_report_sha256": "8427a1fa56d3def6e9d43830df6a6518c806fc6c4628c1208a6ca06a2c2be8ac"
+  },
+  "source_and_database": {
+    "source_manifest_sha256_pre": "86ac31c6d40b4d2db41a2885cb32c50e481fa5c328d3352d0208da2ec608d865",
+    "source_manifest_sha256_post": "86ac31c6d40b4d2db41a2885cb32c50e481fa5c328d3352d0208da2ec608d865",
+    "source_pre_post_diff_count": 0,
+    "clone_vs_source_diff_count": 0,
+    "database_pre_count": 225,
+    "database_post_count": 228,
+    "added_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/catapult_a10.asm.qmsgdb"
+    ],
+    "changed_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/runlog.db"
+    ],
+    "removed_count": 0,
+    "physical_final_partitioned_synthesized_change_count": 0
+  },
+  "sof": {
+    "path": "build/agents/T-20260920-052/remote-evidence/catapult_a10.sof",
+    "bytes": 36842099,
+    "sha256": "39c2945466804036366a6306125323b585bef097aded7e8fff494d60a3ea2def",
+    "quartus_checksum": "0x31585D80",
+    "design_hash": "48917DD6FD70C4420BD5765A206DACBB",
+    "jtag_usercode": "0xFFFFFFFF"
+  },
+  "configuration_artifacts": {"sof": 1, "pof": 0, "jic": 0, "rbf": 0, "jbc": 0, "svf": 0, "jam": 0},
+  "resource": {
+    "lock": "gamepc",
+    "single_contiguous_lock_window_for_successful_assembler": true,
+    "initial_preflight_eda_count": 0,
+    "preserved_standard_jtagserver_pid": 5640,
+    "postflight_eda_count": 0,
+    "lock_after_run": "FREE"
+  },
+  "artifacts": {
+    "local_root": "build/agents/T-20260920-052/remote-evidence",
+    "result_json_sha256": "28b0ac7a85f9940c35a95db4132767fbe6ada21d2138de0445d08774704cbef6",
+    "sof_file_sha256": "39c2945466804036366a6306125323b585bef097aded7e8fff494d60a3ea2def",
+    "assembler_marker_sha256": "0d205710e7a7172ae54bc95e7c87704de293ca897230e0a3706c3ab07ca928c2",
+    "final_scan_log_sha256": "9c5a0c21a316bf14efaae65cee7f819c7a17f6fe5066d5b8fd48db4c368479cf",
+    "remote_runner_log_sha256": "2581c73dcc621d4a0f1ec73917ef63452c770b81c2071f1341f4f857bfa55795"
+  },
+  "commands": [
+    "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-052 root --meta stage=single_assembler_v2 --meta source=T-20260920-051 --meta candidate=5b33c451317442f385dd828ece8c3bf829289d14 --meta mif_sha256=0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f --meta invocation_budget=1 -- bash build/agents/T-20260920-052/continue_t052_v2.sh"
+  ],
+  "safety": {
+    "quartus_synthesis_fitter_sta": false,
+    "quartus_pgm": false,
+    "jtagconfig": false,
+    "nios2_terminal": false,
+    "board_configuration": false,
+    "persistent_flash_epcq": false,
+    "reset_power": false,
+    "standard_or_unknown_process_stopped": false,
+    "live_fpga_identity": "not touched; remains unproven from T-048"
+  },
+  "known_limits": [
+    "The initial local verifier-argument transport failed before any assembler invocation; the preserved task-owned remote root contained only the uploaded v1 scripts.",
+    "The first v1 assembler runner rejected the raw QSF hash before creating the clone/runtime or assembler marker; the T-051 stage-manifest hash and normalized QSF identity were correct. A separately named v2 runner pinned the accepted raw QSF hash and completed the one allowed invocation.",
+    "Start-Process reported ExitCode=-1. No rerun was made; exact stdout and catapult_a10.asm.rpt both recorded the requested command and Successful, 0 errors, 0 warnings.",
+    "SOF assembly does not prove live FPGA configuration or any board-level microbench/CoreMark result."
+  ],
+  "next": "T-20260920-053: read-only Blaster/golden preflight, then at most one corrected candidate t/v/c board transaction and exact-golden restoration; stop if the preflight gate is not exact.",
+  "handoff": "docs/handoffs/T-20260920-052-b25-coremark-uart-volatile-sof.md"
+}

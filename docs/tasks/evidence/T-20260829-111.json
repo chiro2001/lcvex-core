@@ -1,0 +1,151 @@
+{
+  "artifacts": [
+    {
+      "bytes": 4246,
+      "id": "aud06-hash-script",
+      "owner": "T-20260829-111",
+      "reproduce": "python3 scripts/qemu_patch_hash.py",
+      "retain_until": "task-close",
+      "sha256": "fdbae144191a79c6b4a7f55778039e0db388502294e27958ec0b8fca45d4c3c9",
+      "uri": "scripts/qemu_patch_hash.py"
+    },
+    {
+      "bytes": 8117,
+      "id": "aud06-reproducibility",
+      "owner": "T-20260829-111",
+      "reproduce": "git show HEAD:docs/audit/02-reproducibility.md | sha256sum",
+      "retain_until": "task-close",
+      "sha256": "32749ab700acbb8de8047a961f7a07c8bcc14138cc9b5d2db6db6bd8c2d0dd46",
+      "uri": "docs/audit/02-reproducibility.md"
+    }
+  ],
+  "base_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+  "branch": "feature/T-20260829-111-aud-06",
+  "files": [
+    "scripts/qemu_patch_hash.py",
+    "docs/audit/02-reproducibility.md",
+    "docs/tasks/evidence/T-20260829-104.json",
+    "docs/handoffs/T-20260829-111-aud-06.md",
+    "docs/tasks/evidence/T-20260829-111.json"
+  ],
+  "head_sha": "c2e80a20b0dcad8f4b9d36215578bfb25984f1af",
+  "known_limits": [
+    "未运行 QEMU fresh replay / CI；该项由 T-20260829-118 执行。",
+    "未运行 Verilator/Quartus/Gate D。",
+    "未修改 patch 内容或 RTL；只定义组合摘要并修正文档/evidence。"
+  ],
+  "label": "AUD-06",
+  "next": "T-20260829-118 使用 canonical hash 做干净 fresh replay；集成者据此关闭 EXT-02-001。",
+  "owner": "audit-action-dsv",
+  "qemu": {
+    "canonical_command": "LC_ALL=C find qemu/patches -maxdepth 1 -type f -name '*.patch' -print0 | sort -z | xargs -0 cat | sha256sum",
+    "canonical_definition": {
+      "combined": "SHA256 of concatenated raw bytes",
+      "content_boundary": "raw file bytes as stored in git worktree, including existing trailing newlines",
+      "file_boundary": "no separator, no filename, no NUL",
+      "scope": "qemu/patches/*.patch matching ^[0-9]{4}-.*\\.patch$",
+      "sort": "byte-order by filename (LC_ALL=C)"
+    },
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "new_canonical_combined_sha256": "33abdb70e02fbfd40b6fa784302c6f5ff25410960c97958cc1804f6070615c94",
+    "old_claimed_combined_sha256": "43095d343e8f80b0e145f0240f2f18663fb6be81e85222dd5add4cd0132c89af",
+    "patch_count": 12,
+    "release": "11.1.0"
+  },
+  "received_at": "2026-08-30T00:04:55+0800",
+  "reported_at": "2026-08-30T00:04:55+0800",
+  "runs": [
+    {
+      "command": "python3 -m py_compile scripts/qemu_patch_hash.py",
+      "exit_code": 0,
+      "level": "L0",
+      "result": "pass",
+      "run_id": "aud06-pycompile-001",
+      "runner_role": "owner",
+      "summary": "script syntax OK"
+    },
+    {
+      "command": "python3 scripts/qemu_patch_hash.py",
+      "exit_code": 0,
+      "level": "L0",
+      "result": "pass",
+      "run_id": "aud06-hash-001",
+      "runner_role": "owner",
+      "summary": "combined=33abdb70e02fbfd40b6fa784302c6f5ff25410960c97958cc1804f6070615c94; 12 files"
+    },
+    {
+      "command": "python3 scripts/qemu_patch_hash.py --check 33abdb70e02fbfd40b6fa784302c6f5ff25410960c97958cc1804f6070615c94",
+      "exit_code": 0,
+      "level": "L0",
+      "result": "pass",
+      "run_id": "aud06-check-001",
+      "runner_role": "owner",
+      "summary": "canonical combined hash matches"
+    },
+    {
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-104.json",
+      "exit_code": 0,
+      "level": "L0",
+      "result": "pass",
+      "run_id": "aud06-json-104-001",
+      "runner_role": "owner",
+      "summary": "T-104 evidence JSON valid after correction addition"
+    },
+    {
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-111.json",
+      "exit_code": 0,
+      "level": "L0",
+      "result": "pass",
+      "run_id": "aud06-json-111-001",
+      "runner_role": "owner",
+      "summary": "T-111 evidence JSON valid"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "level": "L0",
+      "result": "pass",
+      "run_id": "aud06-diffcheck-001",
+      "runner_role": "owner",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "定义 12 个 qemu/patches 的 canonical combined SHA256 命令；生成实际组合哈希；核对并修正 EXT-02-001。",
+  "sent_at": "2026-08-29T23:30:00+0800",
+  "state": "done",
+  "task_id": "T-20260829-111",
+  "title": "QEMU patch 组合哈希 canonical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-111",
+  "merge_sha": "6f866eb39ad863fbd540d30e87aba543373f26f6",
+  "integrator_review": {
+    "received_at": "2026-08-29T23:50:00+0800",
+    "status": "accepted",
+    "head_sha": "883516218205dcc16162da0edffa8f6ad2a94a47",
+    "notes": "AUD-06 canonical QEMU combined hash script/evidence merged. Combined hash 33abdb70..., old claimed 43095d... corrected. T-118 fresh replay still to confirm closure.",
+    "merge_sha": "6f866eb39ad863fbd540d30e87aba543373f26f6",
+    "result_sha": "c2e80a20b0dcad8f4b9d36215578bfb25984f1af"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "6f866eb39ad863fbd540d30e87aba543373f26f6",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "c2e80a20b0dcad8f4b9d36215578bfb25984f1af",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  }
+}

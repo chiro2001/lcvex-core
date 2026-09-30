@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-083",
+  "label": "A3",
+  "parent": "T-20260828-071",
+  "title": "A3 开源代理与 A10 基线相关性报告",
+  "kind": "opensynth-correlation-report",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "54d1ccf0c2c67e504d5b8528eac37a249bc45221",
+  "branch": "feature/T-20260829-083-a3-correlation-report",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-083",
+  "scope": "将 A1 真实模块 generic synth 统计、A2 SoC stub/boundary 清单，与 T-064/A10 真实资源/STA 作为方向参考比较；只比较模块占比、排序和趋势，禁止线性换算 ECP5/Yosys → A10；输出可审计报告、JSON、工具/SHA/限制与建议。",
+  "writes": [
+    "docs/handoffs/T-20260829-083-a3-correlation-report.md",
+    "docs/tasks/evidence/T-20260829-083.json",
+    "fpga/opensynth/a3_correlation_report.md",
+    "fpga/opensynth/a3_correlation_data.json"
+  ],
+  "reads": [
+    "fpga/opensynth/capability.json",
+    "fpga/opensynth/a1_generic_synth_stats.json",
+    "fpga/opensynth/a2_soc_stub_stats.json",
+    "fpga/opensynth/a2_soc_stub_manifest.md",
+    "docs/tasks/archive/T-20260828-064.json",
+    "docs/tasks/evidence/T-20260828-064.json",
+    "docs/handoffs/T-20260828-064*.md",
+    "docs/FPGA_PLAN.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "报告可重放；工具版本/输入 SHA/资源值/N/A 齐全"
+    ],
+    "l1": [
+      "相关性/趋势表，明确禁止外推 A10 Fmax"
+    ],
+    "l2": []
+  },
+  "acceptance": "报告含工具版本、输入 SHA、资源/关键路径或 N/A、限制、建议；明确非 A10 signoff、不替代 Quartus、不解除 T-067。",
+  "next": "A3 通过后 A 线可进入 A4 趋势回归（可选）。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "disk_mb": 2048,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 90,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T03:01:21+08:00",
+  "updated_at": "2026-08-29T03:07:09+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T03:01:21+08:00",
+    "agent_name": "a3_correlation_report",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-083"
+  },
+  "known_limits": [
+    "A1 只有通用 4-LUT 统计，不是 A10 资源；A2 是 0-cell boundary stub，不代表真实 SoC 面积。",
+    "禁止将 ECP5/Yosys/ABC 数字线性换算为 A10。",
+    "不替代 Quartus/T-067/Gate F-BOARD。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-083-a3-correlation-report.md",
+  "evidence": "docs/tasks/evidence/T-20260829-083.json",
+  "merge_sha": "dcf053f7bfd93def56d26c85fbf61774209bc5f4",
+  "merged_at": "2026-08-29T03:07:09+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T03:05:00+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "f6c00127c7b6995f2a2523d6b154259d0398127a",
+    "implementation_sha": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812",
+    "notes": "A3 只做方向性比较；A1/A2 非 A10 资源；报告明确不替代 Quartus/T-067。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T03:02:00+0800",
+        "new": "2026-08-29T03:01:21+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T03:08:00+0800",
+        "new": "2026-08-29T03:07:09+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T03:02:00+0800",
+        "new": "2026-08-29T03:01:21+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T03:08:00+0800",
+        "new": "2026-08-29T03:07:09+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-030",
+  "label": "R20-FINAL-PACK-CUT",
+  "title": "Register final round-pack output before slot_result_r",
+  "kind": "rtl-timing-integration-lane",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "integrated-fixed-and-validated",
+  "assigned_owner": "r20_final_pack",
+  "depends_on": ["T-20260906-027"],
+  "batch_parent": "T-20260906-028",
+  "base_sha": "59c8d78bbb13f834c801e4897ad7c23ac698e833",
+  "functional_base_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "branch": "timing/T-20260906-030-r20-final-pack",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-030",
+  "cone_id": "r19-pack-mid-to-slot-result",
+  "integration_lane": true,
+  "write_regions": [
+    "rtl/lcvex_fp_scalar.sv::private iter_state_t and pack-result register declarations",
+    "rtl/lcvex_fp_scalar.sv::reset/kill for new private pack result state",
+    "rtl/lcvex_fp_scalar.sv::g_iter.IT_PACK and new IT_PACK_RESULT only",
+    "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv",
+    "docs/tasks/evidence/T-20260906-030.json",
+    "docs/handoffs/T-20260906-030-r20-final-pack.md"
+  ],
+  "forbidden_regions": [
+    "IT_ARITH/ap_pre/pp_pre routing owned by T-029",
+    "round_pack_scan/pack_scan and earlier FP stages",
+    "public module interface, core/wrapper/QEMU/QSF/SDC",
+    "shared test registry and milestone documents"
+  ],
+  "scope": "Insert a private registered boundary for ordinary and iterative final round-pack result/flags/done before scalar output reaches slot_result_r, with a single coherent latency change and exact pause/kill/reset behavior.",
+  "validation": "Lane runs only diff-check and lightweight static/elaboration checks; merged candidate owns heavy simulation. Focused test must cover H/S/D normal/subnormal/overflow/rounding/flags, DIV/SQRT finish, pause, kill, valid drop and exactly-once done/result.",
+  "acceptance": "pack_mid no longer directly drives slot_result_r through the full round/output mux in one cycle; result and flags remain stable and commit exactly once; all affected latency changes are explicit for batch integration.",
+  "resource": "No local or GamePC heavy job in the lane; no production lock required until merged validation.",
+  "created_at": "2026-09-06T11:50:38+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-06T11:52:11+08:00",
+    "agent_name": "r20_final_pack",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true
+  },
+  "implementation_head": "f2c04ac1534b3b1feea6de0c59f03a5044482324",
+  "merge_commit": "bbc23007",
+  "integrator_fix_commit": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "batch_candidate_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "updated_at": "2026-09-06T13:05:11+08:00"
+}

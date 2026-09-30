@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-003",
+  "label": "GOLDEN-VEXRISCV-LIVE-JTAG-UART",
+  "title": "Current golden VexRiscv direct JTAG-UART interaction control",
+  "kind": "board-bringup-control",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "completed-direct-connect-current-shell-unavailable",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-002"],
+  "triggered_by": "User confirmed the current Flash image is the known-good a10-linux-riscv VexRiscv design and that direct nios2-terminal access is sufficient",
+  "base_sha": "f6f76158afa1a059fe87c77979726f218eebf7e6",
+  "branch": "verify/T-20260920-003-golden-vexriscv-live-uart",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-003",
+  "writes": [
+    "build/agents/T-20260920-003/** ignored console evidence",
+    "docs/tasks/evidence/T-20260920-003.json",
+    "docs/handoffs/T-20260920-003-golden-vexriscv-live-uart.md"
+  ],
+  "authorization": {
+    "user_statement": "目前Flash中存储的是成功启动的vexriscv（a10-linux-riscv），可以添加一个任务，看如何用当前的设备进行串口交互。直接使用这个命令行即可读取和交互。",
+    "command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "scope": "Attach directly to the currently running golden VexRiscv JTAG-UART, observe the live console, and perform one bounded read-only shell interaction when a prompt is available.",
+    "excluded": [
+      "quartus_pgm or any FPGA reconfiguration",
+      "JIC/EPCQ/Flash writes or erases",
+      "power cycle or board/SoC reset",
+      "starting a custom JTAG server",
+      "stopping PID 5640 or any unknown/pre-existing process"
+    ]
+  },
+  "acceptance": "The exact direct nios2-terminal command connects to device 1 instance 0; the transcript identifies the running golden VexRiscv/Linux console; after a recognizable shell prompt, a unique echo marker is transmitted and observed together with a subsequent prompt. Record command, timestamps, exit path, transcript hash, process ownership and final resource state.",
+  "failure_policy": "Do not program, reset or power-cycle to obtain a prompt. Preserve the direct-session transcript and classify whether failure is enumeration, target output, prompt availability or host-to-target interaction. Stop only the task-owned terminal if a bounded observation timeout expires.",
+  "resource": "Every GamePC/JTAG action acquires gamepc. Run at most one foreground task-owned nios2-terminal at a time; bounded retries are allowed only after read-only enumeration. Return 75 means wait. Preserve standard server PID 5640.",
+  "created_at": "2026-09-20T01:43:00+08:00",
+  "updated_at": "2026-09-20T02:04:23+08:00",
+  "result": {
+    "status": "blocked-current-golden-kernel-no-shell",
+    "partial": true,
+    "integration_commit": "755746da",
+    "direct_command": "PASS; connected to device 1 instance 0 after a read-only jtagconfig refresh",
+    "target_output": "PASS; VexRiscv Linux output observed from kernel command line through PLIC initialization",
+    "current_bidirectional_interaction": "FAIL; no /init, vex prompt, input echo or marker response during the bounded no-reset observation",
+    "historical_bidirectional_control": "PASS; console_tx.ps1/console_tx.txt show command echo, SIM_TTY_OK012345, vex prompt and exit 0",
+    "server_behavior": "After terminal exit, a delayed read-only jtagconfig -n rescan restores JTAG UART #0 without restarting PID 5640",
+    "final_state": "golden remains running; JTAG UART #0 visible; PID 5640 preserved; no residual terminal; gamepc FREE",
+    "evidence": "docs/tasks/evidence/T-20260920-003.json",
+    "handoff": "docs/handoffs/T-20260920-003-golden-vexriscv-live-uart.md",
+    "next": "Do not reset or power-cycle under the current goal. Continue T-20260920-001 vendor-timed full-SoC verification."
+  }
+}

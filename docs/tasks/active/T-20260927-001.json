@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "T-20260927-001",
+  "title": "Plan AArch64 Linux simulation, Flash packaging and board boot",
+  "kind": "documentation",
+  "phase": "done",
+  "assigned_owner": "root",
+  "base_sha": "ffa75333fc709cc0505d8eb7e77dce043a029834",
+  "branch": "docs/T-20260927-001-linux-board-plan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260927-001",
+  "depends_on": ["T-20260920-039"],
+  "writes": [
+    "docs/LINUX_BOARD_BOOT_PLAN.md",
+    "docs/LINUX_PLAN.md",
+    "docs/tasks/active/T-20260927-001.json",
+    "docs/tasks/evidence/T-20260927-001.json"
+  ],
+  "reads": [
+    "docs/PROJECT_STATUS.md",
+    "docs/BRINGUP_25MHZ_PLAN.md",
+    "docs/tasks/evidence/T-20260826-044.json",
+    "docs/tasks/evidence/T-20260920-053-attempt-02.json",
+    "rtl/lcvex_catapult_soc_top.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_gic.sv",
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+    "scripts/build-linux-lite.sh",
+    "../a10-linux-riscv/README.md",
+    "../a10-linux-riscv/docs/",
+    "../a10-linux-riscv/scripts/",
+    "../a10-linux-riscv/hw/quartus/vex_soc_ddr/output_file.cof"
+  ],
+  "validation": {
+    "level": "documentation-only",
+    "checks": ["git diff --check", "JSON syntax and new relative document links"],
+    "not_required": ["build", "simulation", "Gate D", "Quartus", "remote probe", "board programming", "independent review"]
+  },
+  "acceptance": "An actionable flexible plan grounded in existing RTL and historical Linux/RISC-V evidence; clear simulation, volatile board, Flash image and cold-boot stages; no implementation dispatched.",
+  "handoff": "docs/LINUX_BOARD_BOOT_PLAN.md",
+  "evidence": "docs/tasks/evidence/T-20260927-001.json",
+  "created_at": "2026-09-27T23:50:33+08:00",
+  "updated_at": "2026-09-27T23:55:57+08:00",
+  "result": "Planning documents complete; documentation checks passed; implementation not started."
+}

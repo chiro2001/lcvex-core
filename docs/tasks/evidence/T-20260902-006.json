@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-006",
+  "label": "F1A-DEFAULT-ON-GATED",
+  "state": "blocked",
+  "partial": false,
+  "acceptance_status": "gate_d_blocked_f1a_default_on",
+  "base_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+  "head_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+  "result_commit": "85101d2bfc009e933025251a075a9a7193904da3",
+  "branch": "verify/T-20260902-006-f1a-default-on-gated",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-006",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-02T13:05:00+08:00",
+    "received_at": "2026-09-02T13:05:35+08:00",
+    "reported_at": "2026-09-02T14:45:40+08:00"
+  },
+  "scope": "在 F1a 默认-on 合并 SHA 335d75a 上运行完整本地串行 Gate D，并补 CORE_COUNT=1/l2_cluster lint；确认默认-on 是否引入回归。",
+  "default_on_confirmation": [
+    "tb/sv/lcvex_soc_tb.sv: parameter int FETCH_FIFO_ENABLE = 1",
+    "rtl/lcvex_core_wrap.sv: parameter int FETCH_FIFO_ENABLE = 1",
+    "Makefile: PERF_FETCH_FIFO_ENABLE ?= 1",
+    "rtl/lcvex_cluster_top.sv defaults FETCH_FIFO_ENABLE=1 / DEPTH=2 / EPOCH_W=8",
+    "SoC/FPGA tops propagate same defaults"
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "make": "GNU Make 4.4.1",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "aarch64_objcopy": "GNU objcopy (GNU Binutils) 2.47"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648"
+  },
+  "rtl_filelist_sha256": "23e27cb9249c08be6e5d11fd8daa0d315d9859dc12b459473ed8f39dea92f46e",
+  "resource": {
+    "unit": "lcvex-t20260902-006-gate-d-serial.service",
+    "started_at": "2026-09-02T13:18:40+08:00",
+    "finished_at": "2026-09-02T14:41:13+08:00",
+    "wall_seconds": 4953.45,
+    "cpu_seconds_approx": 2475.737,
+    "memory_peak_bytes": 6633861120,
+    "memory_peak_mib": 6326.5,
+    "memory_max": "15G",
+    "memory_swap_max": "0",
+    "cpu_quota": "50%",
+    "makeflags": "-j1",
+    "verilator_jobs": 1,
+    "parallel": false,
+    "concurrent_heavy_jobs": 1
+  },
+  "runs": [
+    {
+      "run_id": "owner-gate-d-serial-001",
+      "source_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+      "runner_role": "owner",
+      "level": "L3",
+      "command": "systemd-run --user --unit=lcvex-t20260902-006-gate-d-serial -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 bash sim/difftest/run_gate_d.sh",
+      "seed": null,
+      "wall_seconds": 4953.45,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 6326.5,
+      "peak_rss_bytes": 6633861120,
+      "exit_code": 1,
+      "result": "fail",
+      "log": "build/logs/gate_d_serial.log",
+      "log_sha256": "2307ff581b21e3ae890b19907e21de3b6c63b649528086284b0029ad73971231",
+      "summary": "Full serial Gate D on default-on F1a. make test/coverage/P5a/GateC/P5a/P4b/random/coverage/baremetal OK; M2-4b 7 cases and delay2 2 cases FAIL."
+    },
+    {
+      "run_id": "owner-core1-cluster-lint-001",
+      "source_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_cluster_top -GCORE_COUNT=1 -f rtl/filelist.f rtl/lcvex_cluster_pkg.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv",
+      "seed": null,
+      "wall_seconds": 26.067,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/logs/core_count_1_cluster_lint.log",
+      "log_sha256": "e172ff641c66bf751a2a5472d02bee64d85c5ce04784828c1c81d60dfa8548f4",
+      "summary": "CORE_COUNT=1 lcvex_cluster_top lint/elaboration PASS with existing benign warnings."
+    },
+    {
+      "run_id": "owner-core1-l2-cluster-lint-001",
+      "source_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_l2_cluster -GCORE_COUNT=1 -GMEM_LINES=16 rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv",
+      "seed": null,
+      "wall_seconds": 0.793,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/logs/core_count_1_l2_cluster_lint.log",
+      "log_sha256": "96430175eff49cf3aee982bd2a9137f918f6bbc55312b830c67497c041c50af3",
+      "summary": "l2_cluster CORE_COUNT=1 lint/elaboration PASS with existing UNSIGNED warning."
+    },
+    {
+      "run_id": "owner-failure-capture-001",
+      "source_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "bash build/capture_failures.sh (9 lockstep reruns with per-case DUMP)",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "exit_code": 1,
+      "result": "fail_expected",
+      "log": "build/logs/fail_dumps/",
+      "log_sha256": null,
+      "summary": "All 9 Gate-D failing lockstep cases reproduced; dumps retained under build/logs/fail_dumps."
+    }
+  ],
+  "gate_d_results": {
+    "exit_code": 1,
+    "green_step_lines": 141,
+    "fail_step_lines": 10,
+    "outer_failing_steps": 3,
+    "final_line": "RED: Gate D 有 3 项失败",
+    "passing_steps": [
+      "make test",
+      "make coverage",
+      "lockstep-build-l1dl2-delay2",
+      "random smoke regen",
+      "delay2-cache (except hard_timer/hard_postpre)",
+      "P5a-Hardening",
+      "Gate C",
+      "P5a MMU",
+      "P4b",
+      "random seeds 1-3 x 100k",
+      "instruction coverage",
+      "baremetal-C toolchain",
+      "baremetal-C lockstep"
+    ],
+    "failing_steps": [
+      "M2-4b/4c 定向锁步（base + 全缓存）",
+      "delay2-cache-hard_timer",
+      "delay2-cache-hard_postpre"
+    ],
+    "failed_cases": [
+      {
+        "case": "base-hard_timer",
+        "coord": "build/verilator_lockstep/lockstep_coordinator",
+        "seq": 1,
+        "detail": "CNTVCT read at second instr: DUT x1=1, QEMU x1=2"
+      },
+      {
+        "case": "base-hard_adc_sbc",
+        "coord": "build/verilator_lockstep/lockstep_coordinator",
+        "seq": 8,
+        "detail": "ngc x4,xzr with C=1: DUT x4=-1, QEMU x4=0"
+      },
+      {
+        "case": "base-hard_sve_probe",
+        "coord": "build/verilator_lockstep/lockstep_coordinator",
+        "seq": 43,
+        "detail": "RNDR: DUT x20=0x2b, QEMU x20=0x2c"
+      },
+      {
+        "case": "cache-hard_timer",
+        "coord": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+        "seq": 1,
+        "detail": "same timer off-by-one"
+      },
+      {
+        "case": "cache-hard_postpre",
+        "coord": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+        "seq": 19,
+        "detail": "post-index ldrb data/address: DUT x4=0xbb, x20=0x44090010; QEMU x4=0, x20=0x44090011"
+      },
+      {
+        "case": "cache-hard_adc_sbc",
+        "coord": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+        "seq": 8,
+        "detail": "same ngc carry failure"
+      },
+      {
+        "case": "cache-hard_sve_probe",
+        "coord": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+        "seq": 43,
+        "detail": "same RNDR off-by-one"
+      },
+      {
+        "case": "delay2-cache-hard_timer",
+        "coord": "build/verilator_lockstep_l1dl2_d2/lockstep_coordinator",
+        "seq": 1,
+        "detail": "same timer off-by-one"
+      },
+      {
+        "case": "delay2-cache-hard_postpre",
+        "coord": "build/verilator_lockstep_l1dl2_d2/lockstep_coordinator",
+        "seq": 19,
+        "detail": "same post-index failure"
+      }
+    ]
+  },
+  "coverage": {
+    "random_seeds": [
+      1,
+      2,
+      3
+    ],
+    "commits_per_seed": 100002,
+    "total_commits": 300006,
+    "expected_families": "62/62",
+    "observed_families": 63,
+    "baremetal_c_lockstep": 200
+  },
+  "random_artifacts": {
+    "trace_sha256": {
+      "seed1": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e",
+      "seed2": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768",
+      "seed3": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"
+    },
+    "results_xml_sha256": {
+      "seed1": "8b55f13f099cbe771187adb7c3877c33dc99aa775a82a1f9fe4c815bedc570e3",
+      "seed2": "d33ad45962c0adb9fb2e974f6174f40fa90c48ac72af4104afb090be3a66b7b5",
+      "seed3": "fda347b3a5776545f8afc9a3a4d1ae766925c0c55bccd3cd1120d961d96ffff3"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "gate-d-log",
+      "uri": "build/logs/gate_d_serial.log",
+      "sha256": "2307ff581b21e3ae890b19907e21de3b6c63b649528086284b0029ad73971231",
+      "bytes": 392569,
+      "owner": "T-20260902-006-owner",
+      "retain_until": "regression fixed",
+      "reproduce": "rerun serial Gate D as in runs"
+    },
+    {
+      "id": "core1-cluster-lint-log",
+      "uri": "build/logs/core_count_1_cluster_lint.log",
+      "sha256": "e172ff641c66bf751a2a5472d02bee64d85c5ce04784828c1c81d60dfa8548f4",
+      "bytes": 8549,
+      "owner": "T-20260902-006-owner",
+      "retain_until": "review",
+      "reproduce": "run command in runs"
+    },
+    {
+      "id": "core1-l2-cluster-lint-log",
+      "uri": "build/logs/core_count_1_l2_cluster_lint.log",
+      "sha256": "96430175eff49cf3aee982bd2a9137f918f6bbc55312b830c67497c041c50af3",
+      "bytes": 803,
+      "owner": "T-20260902-006-owner",
+      "retain_until": "review",
+      "reproduce": "run command in runs"
+    },
+    {
+      "id": "fail-dumps",
+      "uri": "build/logs/fail_dumps/",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260902-006-owner",
+      "retain_until": "regression fixed",
+      "reproduce": "9 dumps captured from targeted lockstep reruns"
+    }
+  ],
+  "known_limits": [
+    "F1a default-on Gate D blocked by 9 directed lockstep failures; not a pass.",
+    "Did not modify RTL/tests; failure diagnosis only.",
+    "F0 Gate D baseline T-20260901-008 passed the same tests, indicating F1a-on regression.",
+    "Not run: Linux long-run, CI, Quartus/FPGA/board, full performance matrix.",
+    "CORE_COUNT/l2_cluster lints pass with existing non-fatal warnings."
+  ],
+  "next": [
+    "Create F1a regression fix task for timer/RNDR count, ADC/SBC/NGC carry forwarding, and post-index load/store writeback.",
+    "After fix, rerun full serial Gate D on same merged SHA before re-enabling default-on."
+  ],
+  "merge_sha": "1635369c0bc58af9a81822ee8d2269378e1fbbf6",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-02T14:45:40+08:00",
+    "merged_at": "2026-09-02T14:48:15+08:00",
+    "recorded_at": "2026-09-02T14:48:15+08:00",
+    "notes": "Blocked evidence merged; F1a default-on Gate D fails on 9 directed lockstep cases"
+  }
+}

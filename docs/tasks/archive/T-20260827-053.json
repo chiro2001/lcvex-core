@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-053",
+  "title": "B1-AXI4 标准接口、BFM 与协议断言",
+  "kind": "axi4-protocol-verification",
+  "priority": "high",
+  "assigned_owner": "b1-axi4-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现与平台无关的 AMBA AXI4 Full canonical package/master 骨架、BFM、随机 slave 和协议 SVA；不实现 Cache、L2/EMIF、Avalon、CPU 接线或 Quartus 工程",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "仅当 AXI4 channel/width/burst 语义出现跨域歧义时补充拆解；不扩大模块级写集"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审 task JSON、AXI4 canonical profile、目标 diff 和独立验证结果；检查五通道握手、WSTRB/burst/4KiB/reset/RESP/LAST 与无 Avalon 泄漏，不提供逐行实现"
+  },
+  "review_record": {
+    "agent_id": "01a03f63-81fe-7aa2-bd96-d3b5764f95e6",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "source_sha": "124fedbcd7fff80227e95dbe78cd302ddf6e6048",
+    "status": "go",
+    "recorded_at": "2026-08-27T02:46:00+08:00",
+    "blocking_before_acceptance": [
+      "必须实现 AXI4 Full AW/W/B/AR/R 五通道和 AW/W 独立握手，背压时 VALID 与 payload 保持稳定。",
+      "必须保留并验证 ID/LEN/SIZE/BURST/RESP/LAST，支持 128-bit、64B/4-beat INCR、WSTRB/窄访问、4KiB boundary、错误响应和 reset。",
+      "不得引入 Avalon、AXI4-Lite、CDC、Cache/L2、EMIF/B2 或 CPU/core 接线。"
+    ],
+    "boundary": "允许 owner 直接实现独立 B1/BFM/SVA L0-L1；全 Cache、QEMU 和 Gate F-MEM 后置。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "一次简明协议审核只报告阻断风险；仅在 canonical profile、写集或验收证据实质变化时重审",
+    "required_sequence": "一次 Sol 方向审查后允许 owner 实现；集成/对接前必须闭合阻断项"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "仅在资源允许时监控独立 SV/Cocotb BFM 和 SVA 回归；重型全 SoC/Quartus 验证由集成者排队"
+  },
+  "disabled_profiles": [
+    "deepseek-v4-flash[max]"
+  ],
+  "phase": "done",
+  "execution": {
+    "agent_id": "01a03f65-6800-78f0-86d0-e677742d29c3",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "started_at": "2026-08-27T02:47:00+08:00",
+    "budget_minutes": 30,
+    "budget_policy": {
+      "initial_minutes": 30,
+      "extension_increment_minutes": 15,
+      "max_minutes": 60,
+      "extend_when": "owner 在自然里程碑报告新增 channel/握手/断言/测试证据，且写集与 canonical profile 稳定",
+      "control": "由集成者根据 progress report 动态延长；不因等待窗口到期中断 owner",
+      "progress_report_fields": [
+        "sent_at",
+        "received_at",
+        "reported_at",
+        "elapsed_seconds",
+        "files",
+        "tests",
+        "blockers",
+        "remaining_minutes",
+        "extension_request"
+      ]
+    },
+    "clock": {
+      "dispatch_sent_at": "2026-08-27T02:47:00+08:00",
+      "timezone": "Asia/Shanghai",
+      "source": "scheduler dispatch record",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": null
+    }
+  },
+  "parent": "T-20260827-050",
+  "depends_on": [
+    "T-20260827-050"
+  ],
+  "writes": [
+    "rtl/lcvex_axi4_pkg.sv",
+    "rtl/lcvex_axi4_master.sv",
+    "rtl/lcvex_axi4_sva.sv",
+    "tb/sv/lcvex_axi4_bfm.sv",
+    "tb/sv/lcvex_axi4_tb.sv",
+    "sim/cocotb/Makefile.axi4",
+    "sim/cocotb/test_axi4.py",
+    "docs/AXI4_PROFILE.md",
+    "docs/handoffs/T-20260827-053-b1-axi4.md",
+    "docs/tasks/evidence/T-20260827-053.json"
+  ],
+  "reads": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/decisions/ADR-20260827-003-p7-fpga-parallel-axi4.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_mem.sv",
+    "rtl/lcvex_l2.sv",
+    "tb/sv/lcvex_mem_if_tb.sv",
+    "tb/sv/lcvex_l2_tb.sv"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/decisions/ADR-20260827-003-p7-fpga-parallel-axi4.md"
+  ],
+  "base_sha": "124fedbcd7fff80227e95dbe78cd302ddf6e6048",
+  "branch": "feature/T-20260827-053-b1-axi4",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-053",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "新增/修改 JSON 通过 python3 -m json.tool；git diff --check",
+      "AXI4 channel/width/burst profile 与源码静态检查，确认无 Avalon/AXI4-Lite 自定义泄漏",
+      "参数边界、4 KiB boundary 和 single-ID/single-outstanding canonical profile 静态检查"
+    ],
+    "l1": [
+      "独立 Verilator SV BFM/SVA：AW/W 独立握手、VALID 保持、B/R 唯一响应、RVALID/RLAST、WSTRB/窄写、RESP 错误、reset 和随机背压",
+      "独立 Cocotb BFM：128-bit 4-beat INCR 64B line、短 burst、非法 4KiB 跨界、ID/LEN/SIZE/BURST 和随机 slave 延迟"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": [
+      "记录每次随机 BFM seed，失败现场包含 channel 状态和最后事务"
+    ]
+  },
+  "acceptance": "建立平台无关的标准 AMBA AXI4 Full 五通道接口边界：ADDR_WIDTH/DATA_WIDTH/ID_WIDTH 参数化，Catapult profile 使用 128-bit data、64B line 的 4-beat INCR，首版 single-ID/single-outstanding 但保留 ID/LEN/SIZE/BURST/RESP/LAST 字段；验证 AW/W 独立握手、VALID 保持、WSTRB/窄访问、4KiB boundary、随机背压、错误响应、reset、中止和唯一 B/R 响应。独立 SV/Cocotb BFM、随机 slave 和 SVA 必须通过 L0-L1；不得接入 L2/Cache/CPU/EMIF、不得暴露 Avalon、不得修改 rtl/filelist.f、顶层 Makefile、soc_tb 或 P7/QEMU 文件。",
+  "created_at": "2026-08-27T02:41:29+08:00",
+  "updated_at": "2026-08-27T03:33:07+08:00",
+  "commits": [
+    "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+    "7f11b1da19cb51c720c034ae7448fd8364142559",
+    "3d1df58a642b01bbebb62b0b1cd93bafd41fd183"
+  ],
+  "owner_handoff": {
+    "state": "review",
+    "implementation_head": "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+    "evidence_commit": "7f11b1d",
+    "handoff_fix_commit": "3d1df58a642b01bbebb62b0b1cd93bafd41fd183",
+    "handoff": "docs/handoffs/T-20260827-053-b1-axi4.md",
+    "evidence": "docs/tasks/evidence/T-20260827-053.json",
+    "scope_accepted_for_integration": "platform-independent AXI4 Full package/master, independent randomized SV BFM/slave, protocol SVA and L0/L1 tests",
+    "scope_remaining": "clean FPGA-line integration, L2/EMIF adapter, Cache/L2/CPU connection and Gate F-MEM"
+  },
+  "progress_reports": [
+    {
+      "agent_id": "01a03f65-6800-78f0-86d0-e677742d29c3",
+      "dispatch_sent_at": "2026-08-27T02:47:00+08:00",
+      "received_at": "2026-08-27T03:25:04+08:00",
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 2284,
+      "actual_elapsed_seconds": null,
+      "measurement": "owner 通知未携带 reported_at；scheduler_elapsed 只表示调度时间差，不冒充实际执行时长",
+      "state": "review",
+      "head_sha": "3d1df58a642b01bbebb62b0b1cd93bafd41fd183",
+      "summary": "owner 报告 Verilator lint、SV、Cocotb 3/3 和 JSON/diff-check 通过；实际耗时未提供"
+    }
+  ],
+  "integration": {
+    "status": "pass_l0_l1",
+    "strategy": "从 feature/fpga-catapult-a10 的 c76cc28d 基线只 cherry-pick B0 与 B1 owner commits，复跑 B1 L0/L1；不把 P7 历史带入 FPGA 长命线",
+    "code_merge_sha": "60c4d1060842efc26f361472c71e05fae69e8020",
+    "evidence_merge_sha": "6200343f4f9610ebf5670f002f66b2eb5b65c298",
+    "merge_sha": "6200343f4f9610ebf5670f002f66b2eb5b65c298",
+    "validated_scope": "clean feature/fpga-catapult-a10 B0+B1 lineage and B1 L0/L1",
+    "remaining_scope": "B2 AXI4-to-Avalon/CDC、Cache/L2/CPU connection and Gate F-MEM"
+  },
+  "handoff": "docs/handoffs/T-20260827-053-b1-axi4.md",
+  "evidence": "docs/tasks/evidence/T-20260827-053.json",
+  "known_limits": [
+    "phase=done 表示平台无关 B1 AXI4 package/master/BFM/SVA 与 L0/L1 已在干净 FPGA 线验收；不表示 B2、Cache/L2 或 Gate F-MEM 完成。",
+    "不实现 AXI4 到 512-bit Avalon-MM 的 B2 适配、CDC、calibration、Cache/L2 对接或板级综合。",
+    "P7-0 持有 scripts/test_registry.json、core/pkg 等其它写集；B1 不得修改这些共享热点。",
+    "完整 Gate F-MEM、QEMU 锁步、Quartus、Linux 和板测属于后续集成队列。"
+  ],
+  "next": "T-053 已完成并归档；B1 写集已释放。后续可按 B0 工具阻断状态与资源队列登记 B2-EMIF，继续保持 FPGA 线独立。",
+  "archived_at": "2026-08-27T03:33:07+08:00"
+}
+

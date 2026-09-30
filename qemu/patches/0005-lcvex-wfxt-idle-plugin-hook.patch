@@ -1,0 +1,26 @@
+diff --git a/target/arm/tcg/op_helper.c b/target/arm/tcg/op_helper.c
+--- a/target/arm/tcg/op_helper.c
++++ b/target/arm/tcg/op_helper.c
+@@ -468,6 +468,12 @@ void HELPER(wfit)(CPUARMState *env, uint32_t rd)
+     env->halt_reason = HALT_WFI;
+     cs->exception_index = EXCP_HLT;
+     cs->halted = 1;
++    /* WFIT/WFET helpers also leave through cpu_loop_exit() directly.  Notify
++     * the LCVEX plugin so the pending wait instruction can retire before the
++     * vCPU sleeps; timeout wake-up itself is represented by the next PRE. */
++    if (qemu_lcvex_difftest_active()) {
++        qemu_plugin_vcpu_idle_cb(cs);
++    }
+     cpu_loop_exit(cs);
+ #endif
+ }
+@@ -731,6 +737,9 @@ void HELPER(wfet)(CPUARMState *env, uint32_t rd)
+     env->halt_reason = HALT_WFE;
+     cs->exception_index = EXCP_HLT;
+     cs->halted = 1;
++    if (qemu_lcvex_difftest_active()) {
++        qemu_plugin_vcpu_idle_cb(cs);
++    }
+     cpu_loop_exit(cs);
+ #endif
+ }

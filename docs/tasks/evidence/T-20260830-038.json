@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-038",
+  "state": "done",
+  "partial": false,
+  "base_sha": "fb41e24be449394615498c2ff72257954ddf28a8",
+  "head_sha": "62ae1bd99b26de26933ff6733689831dfc8dfe93",
+  "branch": "feature/T-20260830-038-fpga-cache-ram",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-038",
+  "sent_at": "2026-08-30T15:10:45+08:00",
+  "received_at": "2026-08-30T15:12:16+08:00",
+  "reported_at": "2026-08-30T16:12:27+08:00",
+  "content_sha": "08b359dae2e9dfc2230551fecb40862e20c805af",
+  "evidence_sha": "62ae1bd99b26de26933ff6733689831dfc8dfe93",
+  "merge_sha": "b3dd898a3faef5a7642cb6ebe33a0088251e2eb8",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "followup_received_at": "2026-08-30T16:14:59+08:00",
+  "followup_reported_at": "2026-08-30T16:16:25+08:00",
+  "scope": "L1D/L2 64B cache data arrays use a packed 512-bit line RAM wrapper; no full B5 flow.",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "local_cgroup": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0",
+    "local_serial": true,
+    "remote_host": "192.168.101.5",
+    "remote_hostname": "GamePC",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+    "remote_experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038",
+    "remote_original_project_modified": false,
+    "remote_license_read": false
+  },
+  "source_sha256": {
+    "rtl/lcvex_cache_data_ram.sv": "6ecd3c206a52a7cb270c3b58dd823f9e8d0d5bcc9df6b797766850f8b91fba19",
+    "rtl/lcvex_l1_d_wb.sv": "c618f77b9c0d44751175444bba84d79a4ad82a10f804e05d7bc3ed84fd2ea57f",
+    "rtl/lcvex_l2_wb.sv": "4f6eb2d7c448a6ad30fef25ef518987f27a51af24cfa19fb089a640523e85b83",
+    "tb/sv/lcvex_cache_data_ram_tb.sv": "644ca531c52998e9cd999b20fdaa406c098ee18a4e67d959df7945141990d397"
+  },
+  "runs": [
+    {
+      "run_id": "cache-data-ram-tb",
+      "kind": "verilator-sv-tb",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_cache_data_ram_tb -Mdir build/agents/T-20260830-038/final_ram_tb/obj rtl/lcvex_cache_data_ram.sv tb/sv/lcvex_cache_data_ram_tb.sv -o ram_tb && build/agents/T-20260830-038/final_ram_tb/obj/ram_tb",
+      "result": "pass",
+      "wall_s": 8.0,
+      "peak_allocated_mb": 27.6,
+      "summary": "PASS: lcvex_cache_data_ram_tb; full-line, sparse byte-enable, independent addresses, synchronous read and collision follow-up read."
+    },
+    {
+      "run_id": "l1d-sv-tb",
+      "kind": "verilator-sv-tb",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_l1_d_wb_tb -Mdir build/agents/T-20260830-038/final2_l1_tb/obj rtl/lcvex_pkg.sv rtl/lcvex_cache_data_ram.sv rtl/lcvex_l1_d_wb.sv tb/sv/lcvex_l1_d_wb_bfm.sv tb/sv/lcvex_l1_d_wb_tb.sv -o l1_tb && build/agents/T-20260830-038/final2_l1_tb/obj/l1_tb",
+      "result": "pass",
+      "wall_s": 14.8,
+      "peak_allocated_mb": 36.2,
+      "summary": "PASS: lcvex_l1_d_wb_tb operations=10 accepted=66; dirty victim, partial store, probe and checkpoint fault boundaries."
+    },
+    {
+      "run_id": "l2-sv-tb",
+      "kind": "verilator-sv-tb",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_l2_wb_tb -Mdir build/agents/T-20260830-038/final2_l2_tb/obj rtl/lcvex_pkg.sv rtl/lcvex_cache_data_ram.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l2_probe.sv tb/sv/lcvex_l2_wb_bfm.sv tb/sv/lcvex_l2_wb_tb.sv -o l2_tb && build/agents/T-20260830-038/final2_l2_tb/obj/l2_tb",
+      "result": "pass",
+      "wall_s": 18.3,
+      "peak_allocated_mb": 47.6,
+      "summary": "PASS: lcvex_l2_wb_tb seed=0x05512026 operations=93 accepted=903; refill/writeback fault retry, probe, maintenance, random and global invalidate."
+    },
+    {
+      "run_id": "l2-l1-probe-sv-tb",
+      "kind": "verilator-sv-tb",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_l2_l1_probe_tb -Mdir build/agents/T-20260830-038/final2_probe_tb/obj rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_cache_data_ram.sv rtl/lcvex_l1_d_wb.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l1_coherence.sv rtl/lcvex_l2_probe.sv tb/sv/lcvex_l1_d_wb_bfm.sv tb/sv/lcvex_l2_l1_probe_tb.sv -o probe_tb && build/agents/T-20260830-038/final2_probe_tb/obj/probe_tb",
+      "result": "pass",
+      "wall_s": 16.7,
+      "peak_allocated_mb": 44.7,
+      "summary": "PASS: lcvex_l2_l1_probe_tb operations=11 probes=3 drain=2; dirty probe hold/commit and checkpoint order."
+    },
+    {
+      "run_id": "l1d-cocotb",
+      "kind": "cocotb",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env PYTHONPATH=sim/cocotb COCOTB_TEST_MODULES=test_l1_d_wb SEED=0x0381 COMPILE_ARGS='--timing --assert -Wall -Wno-fatal -j 1' conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.l1_d_wb SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-038/build/agents/T-20260830-038/final2_cocotb_l1",
+      "result": "pass",
+      "wall_s": 19.8,
+      "peak_rss_mb": null,
+      "summary": "test_l1_d_wb_coherence PASS, simulation 9190 ns."
+    },
+    {
+      "run_id": "l2-cocotb",
+      "kind": "cocotb",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env PYTHONPATH=sim/cocotb COCOTB_TEST_MODULES=test_l2_wb COMPILE_ARGS='--timing --assert -Wall -Wno-fatal -j 1' conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.l2_wb SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-038/build/agents/T-20260830-038/final2_cocotb_l2",
+      "result": "pass",
+      "wall_s": 13.7,
+      "peak_rss_mb": null,
+      "summary": "test_l2_wb PASS, simulation 2490 ns."
+    },
+    {
+      "run_id": "ways1-lint",
+      "kind": "verilator-lint",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -GSETS=64 -GWAYS=1 -Mdir build/agents/T-20260830-038/lint/ways1b rtl/lcvex_pkg.sv rtl/lcvex_cache_data_ram.sv rtl/lcvex_l2_wb.sv --top-module lcvex_l2_wb",
+      "result": "pass",
+      "wall_s": 0.1,
+      "summary": "WAYS=1 parameter elaboration has no out-of-range warnings after loop-based hit/replacement selection."
+    },
+    {
+      "run_id": "soc-lint",
+      "kind": "verilator-lint",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env -u VERILATOR_BIN -u VERILATOR_RUNNING PATH=/home/chiro/miniforge3/envs/lcvex/bin:$PATH LCVEX_SOC_LINT_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-038/build/agents/T-20260830-038/final_soc_lint MAKEFLAGS=-j1 bash fpga/catapult_a10/tools/lint_soc.sh",
+      "result": "pass",
+      "wall_s": 30.0,
+      "peak_allocated_mb": 407.7,
+      "summary": "LCVEX_CATAPULT_A10_SOC_LINT_PASS."
+    },
+    {
+      "run_id": "soc-boot-smoke",
+      "kind": "verilator-sv-smoke",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env -u VERILATOR_BIN -u VERILATOR_RUNNING PATH=/home/chiro/miniforge3/envs/lcvex/bin:$PATH LCVEX_SOC_SMOKE_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-038/build/agents/T-20260830-038/final_soc_smoke MAKEFLAGS=-j1 bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "result": "pass",
+      "peak_allocated_mb": 750.0,
+      "summary": "SOC_SMOKE_ALL_PASS: positive JTAG marker + DDR jump and calibration-blocked no-DDR path."
+    },
+    {
+      "run_id": "git-diff-check",
+      "kind": "static",
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "remote_synthesis": [
+    {
+      "run_id": "l1d-actual-64x64b",
+      "project": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038\\l1d_actual",
+      "top": "lcvex_l1_d_wb",
+      "parameters": "SETS=64, LINE_BYTES=64",
+      "command": "quartus_sh --flow compile D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038\\l1d_actual\\l1d_actual -c l1d_actual -start synthesis -end synthesis",
+      "result": "pass",
+      "started_at": "2026-08-30T15:51:15+08:00",
+      "finished_at": "2026-08-30T15:51:39+08:00",
+      "wall_s": 24.3,
+      "peak_virtual_mb": 751,
+      "peak_rss_mb": null,
+      "warnings": 8,
+      "report": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038\\l1d_actual\\output_files\\l1d_actual.syn.rpt",
+      "report_sha256": "20138A03FF8ED43070A3D99CB92541FC1455D8A9864CC694B589CBE4B0648A83",
+      "resource": {
+        "numwords": 64,
+        "width": 512,
+        "width_byteena": 64,
+        "ram_block_type": "M20K",
+        "operation_mode": "SINGLE_PORT",
+        "block_memory_bits": 32768,
+        "mlab_memory_bits": 0,
+        "alm_estimate": 9665,
+        "dedicated_registers": 5368,
+        "ram_node": "u_data_ram|u_ram|auto_generated|altsyncram1|ALTSYNCRAM"
+      }
+    },
+    {
+      "run_id": "l2-actual-64x1x64b",
+      "project": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038\\l2s64w1_actual",
+      "top": "lcvex_l2_wb",
+      "parameters": "SETS=64, WAYS=1, LINE_BYTES=64",
+      "command": "quartus_sh --flow compile D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038\\l2s64w1_actual\\l2s64w1_actual -c l2s64w1_actual -start synthesis -end synthesis",
+      "result": "pass",
+      "started_at": "2026-08-30T16:04:30+08:00",
+      "finished_at": "2026-08-30T16:04:57+08:00",
+      "wall_s": 33.3,
+      "peak_virtual_mb": 819,
+      "peak_rss_mb": null,
+      "warnings": 87,
+      "report": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038\\l2s64w1_actual\\output_files\\l2s64w1_actual.syn.rpt",
+      "report_sha256": "2A8D74D0FDED5D2BD910C3680C22F0702EB5343AFD9ED4A502F57F3B3D335DAE",
+      "resource": {
+        "numwords": 64,
+        "width": 512,
+        "width_byteena": 64,
+        "ram_block_type": "M20K",
+        "operation_mode": "SINGLE_PORT",
+        "block_memory_bits": 32768,
+        "mlab_memory_bits": 0,
+        "alm_estimate": 9720,
+        "dedicated_registers": 5962,
+        "ram_node": "u_data_ram|u_ram|auto_generated|altsyncram1|ALTSYNCRAM"
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "implementation-commit",
+      "uri": "08b359dae2e9dfc2230551fecb40862e20c805af",
+      "summary": "cache: map L1D and L2 data lines to explicit M20K RAM"
+    },
+    {
+      "id": "wrapper",
+      "uri": "rtl/lcvex_cache_data_ram.sv",
+      "summary": "SYNTHESIS altera_syncram M20K line RAM; non-synthesis packed-line synchronous reference model."
+    },
+    {
+      "id": "wrapper-tb",
+      "uri": "tb/sv/lcvex_cache_data_ram_tb.sv",
+      "summary": "Line read/write and byte-enable directed test."
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-038-fpga-cache-ram.md"
+    }
+  ],
+  "known_limits": [
+    "Synthesis read/write collision is DONT_CARE in the single-port primitive; cache FSM serializes reads and writes, so no architectural path depends on collision data.",
+    "Data RAM contents are not reset; valid/tag/dirty metadata gates visibility.",
+    "Remote evidence is standalone synthesis only; no fitter, STA, assembler, SOF, board test, or full B5 flow was started.",
+    "Remote RSS was not available from Quartus logs; peak virtual memory is recorded.",
+    "Cocotb and Quartus source copies may have Windows line-ending hashes different from local SHA256; report paths and exact resource fields are recorded."
+  ],
+  "correction_record": {
+    "reported_at": {
+      "old": "2026-08-30T16:09:27+08:00",
+      "corrected": "2026-08-30T16:12:27+08:00",
+      "reason": "Original reported_at preceded the evidence commit; corrected to the actual FINAL report event."
+    },
+    "followup_received_at": "2026-08-30T16:14:59+08:00",
+    "followup_reported_at": "2026-08-30T16:16:25+08:00",
+    "content_sha": "08b359dae2e9dfc2230551fecb40862e20c805af",
+    "evidence_sha": "62ae1bd99b26de26933ff6733689831dfc8dfe93",
+    "correction_commit_message": "docs: correct T-038 report metadata",
+    "note": "Correction changes branch tip again; final branch tip is emitted only in the corrected FINAL head field."
+  },
+  "integration_review": {
+    "reviewed_at": "2026-08-30T16:25:11+08:00",
+    "result": "accepted",
+    "owner_head_sha": "12d638e96686b1935b6cee498d5cbfa22dc6aa68",
+    "merge_sha": "b3dd898a3faef5a7642cb6ebe33a0088251e2eb8",
+    "resource_policy": "all local Verilator/Cocotb/SoC runs serialized with systemd-run --user --scope MemoryMax=15G MemorySwapMax=0 and -j1/MAKEFLAGS=-j1",
+    "runs": [
+      {
+        "run_id": "integrator-cache-data-ram-tb",
+        "command": "verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_cache_data_ram_tb (15G cgroup), then run ram_tb",
+        "result": "pass",
+        "summary": "PASS: lcvex_cache_data_ram_tb"
+      },
+      {
+        "run_id": "integrator-l1d-sv-tb",
+        "command": "verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_l1_d_wb_tb (15G cgroup), then run l1_tb",
+        "result": "pass",
+        "summary": "operations=10 accepted=66"
+      },
+      {
+        "run_id": "integrator-l2-sv-tb",
+        "command": "verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_l2_wb_tb (15G cgroup), then run l2_tb",
+        "result": "pass",
+        "summary": "seed=0x05512026 operations=93 accepted=903"
+      },
+      {
+        "run_id": "integrator-l2-l1-probe-sv-tb",
+        "command": "verilator --binary --timing --assert -Wall -Wno-fatal -j 1 --top-module lcvex_l2_l1_probe_tb (15G cgroup), then run probe_tb",
+        "result": "pass",
+        "summary": "operations=11 probes=3 drain=2"
+      },
+      {
+        "run_id": "integrator-ways1-lint",
+        "command": "verilator --lint-only --timing --assert -Wall -Wno-fatal -GSETS=64 -GWAYS=1 --top-module lcvex_l2_wb (15G cgroup)",
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-l1d-cocotb",
+        "command": "make -C sim/cocotb -f Makefile.l1_d_wb with COMPILE_ARGS='--timing --assert -Wall -Wno-fatal -j 1' (15G cgroup)",
+        "result": "pass",
+        "summary": "1 test passed, 9190 ns"
+      },
+      {
+        "run_id": "integrator-l2-cocotb",
+        "command": "make -C sim/cocotb -f Makefile.l2_wb with COMPILE_ARGS='--timing --assert -Wall -Wno-fatal -j 1' (15G cgroup)",
+        "result": "pass",
+        "summary": "1 test passed, 2490 ns"
+      },
+      {
+        "run_id": "integrator-soc-lint",
+        "command": "MAKEFLAGS=-j1 bash fpga/catapult_a10/tools/lint_soc.sh (15G cgroup)",
+        "result": "pass",
+        "summary": "LCVEX_CATAPULT_A10_SOC_LINT_PASS"
+      },
+      {
+        "run_id": "integrator-soc-boot-smoke",
+        "command": "MAKEFLAGS=-j1 bash fpga/catapult_a10/tools/run_soc_smoke.sh (15G cgroup)",
+        "result": "pass",
+        "summary": "SOC_SMOKE_ALL_PASS; positive JTAG/DDR jump and calibration-blocked path"
+      },
+      {
+        "run_id": "integrator-remote-report-verify",
+        "command": "ssh BatchMode to 192.168.101.5; PowerShell Get-FileHash SHA256 and Select-String on the two isolated .syn.rpt files",
+        "result": "pass",
+        "summary": "hashes matched; both reports show M20K SINGLE_PORT NUMWORDS=64 WIDTH=512 WIDTH_BYTEENA=64 Block Memory Bits=32768 MLAB=0; ALM 9665/9720"
+      }
+    ],
+    "known_warnings": "Standalone L2 TB/Cocotb retain pre-existing missing optional probe/drain pin warnings; probe TB retains pre-existing blocking-assignment warnings; no new failure."
+  },
+  "next": "G5 is merged and accepted; schedule real SoC synthesis/fitter/STA/assembler only as a separate explicitly authorized G6 task."
+}

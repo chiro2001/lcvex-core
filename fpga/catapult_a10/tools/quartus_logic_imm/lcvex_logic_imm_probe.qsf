@@ -1,0 +1,11 @@
+# T-20260920-023: tiny synthesis-only project.  It intentionally does not
+# include the board QSF, Qsys, SDC, fitter, STA, assembler or configuration
+# assignments.  The top-level ports keep the logical-immediate cone alive.
+set_global_assignment -name TOP_LEVEL_ENTITY lcvex_logic_imm_quartus_probe_top
+set_global_assignment -name FAMILY "Arria 10"
+set_global_assignment -name DEVICE 10AX115N4F40E3SG
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name VERILOG_MACRO SYNTHESIS
+set_global_assignment -name SYSTEMVERILOG_FILE ../src/lcvex_pkg.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../src/lcvex_decode.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../src/lcvex_logic_imm_quartus_probe_top.sv

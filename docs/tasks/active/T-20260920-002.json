@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-002",
+  "label": "B25-FIRST-SESSION-FILE-INPUT",
+  "title": "Corrected B25 first-session ordinary-file JTAG-UART input control",
+  "kind": "board-bringup-control",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "completed-first-session-functional-failure",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260919-006"],
+  "triggered_by": "T-20260919-007 standard-server second-session ambiguity",
+  "base_sha": "2ed9a66c859a2421456f18fb6eb5d5d2b9f38c0a",
+  "branch": "verify/T-20260920-002-b25-first-session-file-input",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-002",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-002-b25-first-session-file-input",
+  "writes": [
+    "build/agents/T-20260920-002/** ignored programmer/console evidence",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-002-b25-first-session-file-input/** task-owned runtime",
+    "docs/tasks/evidence/T-20260920-002.json",
+    "docs/handoffs/T-20260920-002-b25-first-session-file-input.md"
+  ],
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "scope": "one bounded volatile configuration of the frozen T-006 SOF followed by JTAG-UART interaction",
+    "excluded": ["JIC/EPCQ/Flash", "power cycle", "board or SoC reset", "stopping unknown/pre-existing processes"]
+  },
+  "scope": "Resolve the only remaining host-method ambiguity: configure the exact T-006 SOF once, stop only the recorded task-owned 15 MHz server, then make the first and only standard nios2-terminal session use the historically successful Start-Process ordinary-file stdin mechanism. The six input bytes are '?\\np\\nZ\\n'; terminal exits naturally through --quit-after. Do not run a preliminary terminal probe.",
+  "candidate_sof": {
+    "task": "T-20260919-006",
+    "bytes": 36842110,
+    "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7",
+    "quartus_checksum": "0x31426358"
+  },
+  "acceptance": "Programmer exit 0 plus configuration/operation/checksum/JTAG-ID markers; the first terminal connects, observes BOOT/CAL/DDR/READY, returns a CLOCK25 status line and PONG, and echoes Z. Input/stdout/events and process ownership are hash-bound; no residual process or port listener remains.",
+  "failure_policy": "This is one non-repeating method-control attempt. Preserve failure evidence. If it fails, restore the content-addressed golden SOF through the same volatile path when the chain is available, without opening a second terminal or using reset/power/Flash. If it passes, leave the corrected candidate running.",
+  "resource": "Every remote/preflight/programmer/terminal action acquires gamepc. One foreground task-owned programming server, one programmer and one natural-timeout terminal; return 75 means wait.",
+  "forbidden_regions": [
+    "any SOF other than exact T-006 candidate or the recorded golden rollback",
+    "preliminary/second terminal session before the acceptance session",
+    "JIC/EPCQ/Flash, reset or power action",
+    "stopping PID 5640 or any unknown/pre-existing process",
+    "Quartus synthesis/fitter/STA/assembler"
+  ],
+  "created_at": "2026-09-20T01:32:00+08:00",
+  "updated_at": "2026-09-20T01:37:18+08:00",
+  "result": {
+    "status": "blocked-board-rx-confirmed",
+    "partial": true,
+    "integration_commit": "a797688c",
+    "candidate_programming": "PASS; exact T-006 SOF, checksum 0x31426358, JTAG ID 0x02E060DD, programmer exit 0",
+    "first_console": "PASS for connect and BOOT/CAL-WAIT/DDR-FAIL/READY; natural exit 0",
+    "host_input": "FAIL; ordinary-file ?/p/Z input produced no status/PONG/echo",
+    "method_control": "resolved; no preliminary terminal, no Python pipe, no later-session stale state",
+    "rollback": "PASS; exact golden checksum 0x31510BB6 and JTAG ID matched",
+    "final_board_state": "golden SOF running",
+    "evidence": "docs/tasks/evidence/T-20260920-002.json",
+    "handoff": "docs/handoffs/T-20260920-002-b25-first-session-file-input.md",
+    "next": "Continue T-20260920-001; do not repeat this method-control board attempt."
+  },
+  "next_after_acceptance": "On pass, close the active bring-up goal after evidence integration. On fail, continue T-20260920-001 vendor-timed full-SoC reproduction and leave the goal active."
+}

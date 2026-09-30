@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "task": "T-20260828-069",
+  "state": "verified",
+  "base_sha": "b71a62066157e202f464990832180c1fea0a3b85",
+  "head_sha": "cd91a14",
+  "branch": "feature/T-20260828-069-p7-5-fp16-sqrt-minmax",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-069",
+  "reported_at": "2026-08-28T15:53:30+08:00",
+  "verified_by": "root-integrator (subagent exec channel down; integrator ran full regression)",
+  "qemu": {
+    "qemu_version": "11.1.0",
+    "qemu_fork_sha": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_sha256": "f0accfb67c2b4b79e39e40768b3c522a5f960515424839d90654d514c31f3aca"
+  },
+  "tools": {
+    "verilator": "5.050",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "make": "GNU Make 4.4.1"
+  },
+  "passed": [
+    {
+      "cmd": "make compile",
+      "exit": 0
+    },
+    {
+      "cmd": "make test (P0 全量)",
+      "exit": 0,
+      "note": "toolcheck+lint+全部 SV/Cocotb P0 入口"
+    },
+    {
+      "cmd": "make sim-sv-fp-scalar",
+      "exit": 0
+    },
+    {
+      "cmd": "make sim-cocotb-fp-scalar",
+      "exit": 0,
+      "note": "修复 FADD.H unsupported 过时断言后 5/5"
+    },
+    {
+      "cmd": "make sim-sv-p7-3-neon-fp",
+      "exit": 0
+    },
+    {
+      "cmd": "make sim-sv-p7-4-fma-convert",
+      "exit": 0
+    },
+    {
+      "cmd": "make sim-cocotb-p7-2-neon",
+      "exit": 0,
+      "note": "8/8"
+    },
+    {
+      "cmd": "make sim-cocotb-p7-3-neon-fp",
+      "exit": 0,
+      "note": "4/4"
+    },
+    {
+      "cmd": "make sim-cocotb-p7-4-fma-convert",
+      "exit": 0,
+      "note": "5/5"
+    },
+    {
+      "cmd": "make p7-1-fp-scalar",
+      "exit": 0,
+      "insns": 28,
+      "mode": "A76 required strict lockstep"
+    },
+    {
+      "cmd": "make p7-1-fp-scalar-edge",
+      "exit": 0,
+      "insns": 38
+    },
+    {
+      "cmd": "make p7-1-fp-scalar-rounding",
+      "exit": 0,
+      "insns": 18
+    },
+    {
+      "cmd": "make p7-1-fp-scalar-sequence",
+      "exit": 0,
+      "insns": 388
+    },
+    {
+      "cmd": "make p7-2-neon-int",
+      "exit": 0,
+      "insns": 31
+    },
+    {
+      "cmd": "make p7-3-neon-fp",
+      "exit": 0,
+      "insns": 48
+    },
+    {
+      "cmd": "make p7-4-fma-convert",
+      "exit": 0,
+      "insns": 94
+    },
+    {
+      "cmd": "make p7-4-fma-convert-edge",
+      "exit": 0,
+      "insns": 54
+    },
+    {
+      "cmd": "make p7-4-fma-convert-rounding",
+      "exit": 0,
+      "insns": 27
+    },
+    {
+      "cmd": "make p7-4-fma-convert-sequence",
+      "exit": 0,
+      "insns": 142
+    },
+    {
+      "cmd": "make sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "exit": 0,
+      "note": "scalar 20 + neon 6 raw-bit vectors"
+    },
+    {
+      "cmd": "make sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "exit": 0,
+      "note": "7/7"
+    },
+    {
+      "cmd": "bash sim/difftest/run_p7_5.sh",
+      "exit": 0,
+      "insns": {
+        "main": 102,
+        "edge": 59,
+        "rounding": 40,
+        "sequence": 66
+      },
+      "mode": "A76 required strict lockstep"
+    },
+    {
+      "cmd": "MAX_INSNS=40 make lockstep",
+      "exit": 0,
+      "insns": 40,
+      "note": "P6 scalar 回归"
+    },
+    {
+      "cmd": "FP_NEON=required IMAGE=.../hard_p7_5_fp16_sqrt_minmax_round.bin MAX_INSNS=102 DIFF_CKPT=1 CKPT_EVERY=16 ... run_lockstep_step.sh",
+      "exit": 0,
+      "note": "DIFF_CKPT：6 checkpoints、48 artifacts、last_seq=95"
+    }
+  ],
+  "fixes": [
+    {
+      "sha": "861f686",
+      "file": "rtl/lcvex_fp_scalar.sv",
+      "summary": "H->S/H->D FCVT NaN mapping off-by-one: quiet bit 分别置 bit22/bit51 (hfrac<<13/<<42)",
+      "verified": "edge 59 PASS; SV NaN 用例 PASS; lockstep 全绿"
+    },
+    {
+      "sha": "f238492",
+      "file": "sim/cocotb/test_p7_fp_scalar.py",
+      "summary": "FADD.H 已由 P7-5 支持，从 P7-1 unsupported 列表移除（FCMPE/FP16-reserved/B/H 仍 UDEF）"
+    },
+    {
+      "sha": "cd91a14",
+      "file": "tb/sv/lcvex_fp_scalar_p7_5_tb.sv, tb/sv/lcvex_neon_fp_p7_5_tb.sv, sim/cocotb/Makefile.p7_5_fp16_sqrt_minmax_round, sim/cocotb/test_p7_5_fp16_sqrt_minmax_round.py",
+      "summary": "补建 P7-5 SV raw-bit testbench 与 Cocotb pipeline 测试（此前 Makefile 引用但文件缺失）"
+    }
+  ],
+  "blockers": [],
+  "known_limits": [
+    "只支持选定 FP16/sqrt/minmax/round 子集；estimate、FP exception-enable trap、SVE、FCMPE、FP16 FMA 后置。",
+    "不修改 QEMU fork；期望值全部来自 Cortex-A76 QEMU 实测 raw bits。",
+    "标量 H 访存（LDR/STR H）不在本切片；H 经 P7-2 单 Q 访存/FCVT/FMOV 送入 V。"
+  ],
+  "next": "集成者（root）将 P7-5 三点提交 cherry-pick 到 feature/p7-fp-neon，重跑合并 SHA 关键回归后归档，纳入下一冻结候选重跑完整 Gate D。"
+}

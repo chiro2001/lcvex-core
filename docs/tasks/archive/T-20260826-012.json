@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-012",
+  "title": "补齐 core SV testbench checkpoint restore pins",
+  "kind": "verification-hygiene",
+  "priority": "high",
+  "assigned_owner": "root-integrator",
+  "agent_type": "fast-implementation",
+  "model": "",
+  "model_selection": "当前会话直接实现；不启动重型仿真",
+  "reasoning_effort": "low",
+  "phase": "done",
+  "parent": "T-20260826-011",
+  "depends_on": [],
+  "writes": [
+    "tb/sv/lcvex_core_tb.sv",
+    "docs/tasks/evidence/T-20260826-012.json",
+    "docs/handoffs/T-20260826-012-tb-pins.md"
+  ],
+  "reads": ["tb/sv/lcvex_core_tb.sv", "tb/sv/lcvex_soc_tb.sv"],
+  "context_docs": ["docs/MULTI_AGENT_WORKFLOW.md", "docs/VERIFICATION.md"],
+  "base_sha": "8d294b5",
+  "branch": "fix/T-20260826-012-core-tb-pins",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-012",
+  "resource": {"cpu": 1, "memory_mb": 512, "disk_mb": 64, "timeout_s": 600},
+  "validation": {
+    "l0": ["make sim-sv / Verilator warning check"],
+    "l1": ["make test"],
+    "l2": ["T-011 candidate Gate D rerun"],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "在 lcvex_core_tb 实例连接 SSBS/UAO/TCO restore 输入为 0，Verilator -Wall 不再报告 PINMISSING，testbench 行为不变。",
+  "created_at": "2026-08-26T18:40:00+08:00",
+  "updated_at": "2026-08-26T19:10:00+08:00",
+  "commits": ["511cacf", "16732e0", "231e7e2", "d181a6d"],
+  "handoff": "docs/handoffs/T-20260826-012-tb-pins.md",
+  "evidence": "docs/tasks/evidence/T-20260826-012.json",
+  "known_limits": ["仅修复 testbench pin 连接，不改变 RTL/QEMU。"],
+  "next": "已完成并归档；T-011 candidate 需基于新 SHA 重新运行 Gate D。"
+}
+

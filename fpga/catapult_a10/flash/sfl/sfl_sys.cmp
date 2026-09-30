@@ -1,0 +1,22 @@
+	component sfl_sys is
+		port (
+			clk_in_clk_clk             : in  std_logic                     := 'X';             -- clk
+			epcq_avl_csr_read          : in  std_logic                     := 'X';             -- read
+			epcq_avl_csr_waitrequest   : out std_logic;                                        -- waitrequest
+			epcq_avl_csr_write         : in  std_logic                     := 'X';             -- write
+			epcq_avl_csr_address       : in  std_logic_vector(2 downto 0)  := (others => 'X'); -- address
+			epcq_avl_csr_writedata     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			epcq_avl_csr_readdata      : out std_logic_vector(31 downto 0);                    -- readdata
+			epcq_avl_csr_readdatavalid : out std_logic;                                        -- readdatavalid
+			epcq_avl_mem_write         : in  std_logic                     := 'X';             -- write
+			epcq_avl_mem_burstcount    : in  std_logic_vector(6 downto 0)  := (others => 'X'); -- burstcount
+			epcq_avl_mem_waitrequest   : out std_logic;                                        -- waitrequest
+			epcq_avl_mem_read          : in  std_logic                     := 'X';             -- read
+			epcq_avl_mem_address       : in  std_logic_vector(24 downto 0) := (others => 'X'); -- address
+			epcq_avl_mem_writedata     : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			epcq_avl_mem_readdata      : out std_logic_vector(31 downto 0);                    -- readdata
+			epcq_avl_mem_readdatavalid : out std_logic;                                        -- readdatavalid
+			epcq_avl_mem_byteenable    : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- byteenable
+			rst_in_reset_reset         : in  std_logic                     := 'X'              -- reset
+		);
+	end component sfl_sys;

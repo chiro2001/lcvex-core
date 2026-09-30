@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "report_id": "c4-dualcore-baseline-001",
+  "task_id": "T-20260829-103",
+  "source_sha": "2a697bb922e6e7af353d399b2f0e6f6bb26d150c",
+  "date": "2026-08-29T20:55:00+0800",
+  "core_count": 2,
+  "config": {
+    "CORE_ID_W": 4,
+    "SOURCE_ID_W": 4,
+    "TRANSACTION_ID_W": 8,
+    "SHARER_W": 2,
+    "OWNER_W": 2,
+    "DIR_ENTRIES": 1024,
+    "ARB_MODE": "FLAT_RR",
+    "REQ_QUEUE_DEPTH": 1,
+    "PER_BANK": false,
+    "USE_REAL_CORE": true,
+    "L1_SETS": 64,
+    "L2_SETS": 256,
+    "L2_WAYS": 2,
+    "LINE_BYTES": 64,
+    "COHERENCE_ENABLE": true
+  },
+  "environment": {
+    "tool": "verilator",
+    "tool_version": "5.050",
+    "os": "linux",
+    "cpu_count": 1,
+    "memory_mb": null,
+    "disk_mb": null,
+    "timeout_s": null,
+    "cgroup_memory_max": "16G",
+    "cgroup_swap_max": "0",
+    "command": "systemd-run --user --scope --quiet -p MemoryMax=16G -p MemorySwapMax=0 --"
+  },
+  "compile": {
+    "status": "pass",
+    "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_dualcore_tb",
+    "exit_code": 0,
+    "wall_seconds": 371.038,
+    "peak_rss_mb": 3364.0,
+    "generated_files": "116.202 MB",
+    "elaboration_error": null
+  },
+  "smoke": [
+    {
+      "status": "pass",
+      "command": "LCVEX_C2_L1_MSI_TB",
+      "exit_code": 0,
+      "wall_seconds": 0.018,
+      "peak_rss_mb": 15.6,
+      "note": "28 PASS checks"
+    },
+    {
+      "status": "pass",
+      "command": "LCVEX_C2_DUALCORE_TB",
+      "exit_code": 0,
+      "wall_seconds": 0.020,
+      "peak_rss_mb": 15.7,
+      "note": "51 commit events"
+    }
+  ],
+  "resource": {
+    "peak_rss_mb": 3364.0,
+    "build_time_s": 371.038,
+    "sim_time_s": 0.020,
+    "peak_disk_mb": null
+  },
+  "trend": {
+    "dir_bits": 2,
+    "dir_entry_estimate": null,
+    "arb_comb_depth": null,
+    "probe_max_serial_beats": null,
+    "refill_cycles": 8,
+    "writeback_cycles": 8,
+    "cluster_throughput_lines_per_cycle": null,
+    "poc_beat_width_bits": 64,
+    "poc_beats_per_line": 8
+  },
+  "known_limits": [
+    "CORE_COUNT=2 baseline only; not 4/8/16/32 functional completion.",
+    "No Quartus, no physical signoff.",
+    "No RTL/TB changes, no ACE/CHI/SVE."
+  ],
+  "verdict": "baseline"
+}

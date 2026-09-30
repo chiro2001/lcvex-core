@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-031",
+  "state": "done",
+  "partial": false,
+  "base_sha": "c8638a2c602fad99d947223f1c8dd9f7ddafb3ef",
+  "head_sha": null,
+  "branch": "feature/T-20260830-031-fpga-g2-int",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-031",
+  "scope": "Integrate G2/G3 explicit altera_syncram M20K BRAM wrapper into the main RTL while keeping a behavioral Verilator fallback; add directed BRAM TB and record unaligned/cross-word risk.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "started_at": "2026-08-30T11:05:00+08:00",
+    "documents_written_at": "2026-08-30T11:17:31+08:00"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cgroup_method": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p MemoryAccounting=yes",
+    "serial": true,
+    "heavy_builds_one_at_a_time": true
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "kind": "verilator-lint",
+      "command": "make compile",
+      "result": "pass",
+      "wall_s": 29.8,
+      "allocated_mb": 389.9,
+      "summary": "Default Verilator lint over rtl/filelist.f, top lcvex_core. PASS."
+    },
+    {
+      "run_id": "bram-direct-tb",
+      "kind": "verilator-sv-tb",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-DECLFILENAME --top-module lcvex_bram_boot_tb -Mdir build/bram_tb -o lcvex_bram_boot_tb rtl/lcvex_pkg.sv rtl/lcvex_bram_boot.sv tb/sv/lcvex_bram_boot_tb.sv && ./build/bram_tb/lcvex_bram_boot_tb",
+      "result": "pass",
+      "wall_s": 8.1,
+      "summary": "BRAM_BOOT_TB PASS. Covers prog loading, same-address write/read, partial byte enables, within-word unaligned access, debug read port, out-of-range fault."
+    },
+    {
+      "run_id": "soc-lint",
+      "kind": "verilator-lint",
+      "command": "bash fpga/catapult_a10/tools/lint_soc.sh",
+      "result": "pass",
+      "wall_s": 26.4,
+      "summary": "LCVEX_CATAPULT_A10_SOC_LINT_PASS with lcvex_catapult_soc_top."
+    },
+    {
+      "run_id": "soc-boot-smoke",
+      "kind": "verilator-sv-smoke",
+      "command": "bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "result": "pass",
+      "summary": "SOC_SMOKE_ALL_PASS: positive JTAG-UART marker + DDR jump, cal-blocked no DDR traffic. Boot image loaded through prog_we."
+    }
+  ],
+  "quartus": {
+    "new_run": false,
+    "full_flow_started": false,
+    "original_qsf_sdc_modified": false,
+    "license_read": false,
+    "m20k_evidence": "Inherited from T-20260830-029 (16KB-1MB standalone PASS, M20K True Dual Port, 0 MLAB) and T-20260830-030 (A10 blackbox+shim through fit/STA/SOF). The main RTL wrapper uses the same altera_syncram parameters."
+  },
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-031-fpga-g2-int.md",
+      "owner": "T-20260830-031",
+      "reproduce": "cat docs/handoffs/T-20260830-031-fpga-g2-int.md"
+    },
+    {
+      "id": "main-rtl-wrapper",
+      "uri": "rtl/lcvex_bram_boot.sv",
+      "owner": "T-20260830-031",
+      "reproduce": "SYNTHESIS-aware wrapper: explicit altera_syncram M20K for Quartus, behavioral byte-address fallback for Verilator."
+    },
+    {
+      "id": "standalone-altsyncram",
+      "uri": "rtl/lcvex_bram_boot_altsyncram.sv",
+      "owner": "T-20260830-031",
+      "reproduce": "Standalone explicit altera_syncram M20K wrapper, not in normal Verilator filelists."
+    },
+    {
+      "id": "compat-shim",
+      "uri": "rtl/lcvex_bram_boot_shim.sv",
+      "owner": "T-20260830-031",
+      "reproduce": "Distinct-name compatibility shim wrapping the main selector."
+    },
+    {
+      "id": "directed-tb",
+      "uri": "tb/sv/lcvex_bram_boot_tb.sv",
+      "owner": "T-20260830-031",
+      "reproduce": "Directed BRAM wrapper TB; BRAM_BOOT_TB PASS."
+    }
+  ],
+  "known_limits": [
+    "No new local/remote Quartus run in this task; M20K mapping is inherited from G2/G3 evidence.",
+    "Explicit M20K wrapper does not implement cross-8B-word accesses; such accesses return fault rather than being silently mis-written. Intra-word unaligned accesses are rotated.",
+    "Board M20K contents still require configuration stream/MIF or a future boot loader; explicit wrapper keeps prog_we as tie-off in synthesis.",
+    "No complete B5 full flow or actual board test performed."
+  ],
+  "status": "done"
+}

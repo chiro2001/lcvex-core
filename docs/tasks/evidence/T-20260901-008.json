@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260901-008",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "gate_d_pass",
+  "source_sha": "4cf213769262d1a565577ac22229bf39ee89f3c4",
+  "result_commit": "d4b629bb0acf2d574b5405328b3d8dc1d0c5ec94",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-008-gate",
+  "command": "bash sim/difftest/run_gate_d.sh",
+  "result": {
+    "exit_code": 0,
+    "green_step_lines": 151,
+    "fail_step_lines": 0,
+    "final_line": "PASS: Gate D 系统回归全部通过"
+  },
+  "resource": {
+    "unit": "lcvex-t20260901-008-gate-d-serial.scope",
+    "started_at": "2026-09-01T09:43:27+08:00",
+    "finished_at": "2026-09-01T11:03:10+08:00",
+    "wall_seconds": 4783.626,
+    "cpu_seconds": 2391.767,
+    "memory_peak": "6G",
+    "memory_max": "15G",
+    "memory_swap_max": "0",
+    "cpu_quota": "50%",
+    "makeflags": "-j1",
+    "verilator_jobs": 1
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "qemu": "11.1.0",
+    "qemu_fork_sha": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "aarch64_gcc": "16.1.0",
+    "aarch64_objcopy": "GNU Binutils 2.47"
+  },
+  "coverage": {
+    "random_seeds": [1, 2, 3],
+    "commits_per_seed": 100002,
+    "total_commits": 300006,
+    "expected_families": "62/62",
+    "observed_families": 63,
+    "baremetal_c_lockstep": 200
+  },
+  "random_artifacts": {
+    "trace_sha256": {
+      "seed1": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e",
+      "seed2": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768",
+      "seed3": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"
+    },
+    "results_xml_sha256": {
+      "seed1": "2cb22f2ff2218f153ffe2f104503d0ce45f650d74dbebba88dcb92254743b261",
+      "seed2": "82f6abebeecf00e32ff894e38450a0f34c6af04fe6a953f14356c0da5192cc78",
+      "seed3": "24284275695b5dbf7f40d20e1c3408b977c984895240954f34116115c1706c4f"
+    }
+  },
+  "log": {
+    "path": "/home/chiro/projects/mycpu/lcvex-artifacts/T-20260901-008/gate_d_serial.log",
+    "bytes": 341054,
+    "lines": 1973,
+    "sha256": "b4a418e2854afc6ff6b52893a893d50843a9f0e7ca2844c32f1d8a15ed09ec1a"
+  },
+  "boundaries": [
+    "standard Gate D uses default FETCH_FIFO_ENABLE=0",
+    "not F1a-on performance signoff",
+    "Linux/CI/Quartus/board tests not run"
+  ],
+  "next": "accept Gate D, supersede T-20260901-005 failure attempt, then run bounded F1a delay2 performance probe"
+}

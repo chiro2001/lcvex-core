@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-034",
+  "label": "R21-FMA-ALIGN-CUT",
+  "title": "Register the residual FMA alignment and add cone",
+  "kind": "rtl-timing-integration-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-and-validated",
+  "assigned_owner": "r21_fma_cut",
+  "depends_on": ["T-20260906-031"],
+  "batch_parent": "T-20260906-032",
+  "base_sha": "edaaca5bc3296aaf89f161a079ee09868b50b0b5",
+  "functional_base_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "branch": "timing/T-20260906-034-r21-fma-align",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-034",
+  "cone_id": "r20-ap-pre-to-pp-pre-fma",
+  "integration_lane": true,
+  "write_regions": [
+    "rtl/lcvex_fp_scalar.sv::private FMA alignment payload typedef/register declarations",
+    "rtl/lcvex_fp_scalar.sv::private iter_state_t FMA-only state addition",
+    "rtl/lcvex_fp_scalar.sv::reset/kill for the new private FMA payload",
+    "rtl/lcvex_fp_scalar.sv::function fma_pre_from_product and FMA-only helper(s)",
+    "rtl/lcvex_fp_scalar.sv::g_iter IT_MUL FMA branch and the new FMA-only state",
+    "tb/sv/lcvex_fp_scalar_r21_fma_cut_tb.sv",
+    "docs/tasks/evidence/T-20260906-034.json",
+    "docs/handoffs/T-20260906-034-r21-fma-cut.md"
+  ],
+  "forbidden_regions": [
+    "round_pack_iter_p1 owned by T-033",
+    "DIV/SQRT IT_FIN/IT_PACK path",
+    "public module interface and non-FMA state behavior",
+    "shared test registry, shared latency tables, QEMU/QSF/SDC"
+  ],
+  "scope": "Split the remaining FMA product-versus-addend alignment and wide add/sub work across one private register boundary, preserving all NaN/special/zero/sign semantics and delaying only FMA completion by one explicit cycle.",
+  "validation": "Run diff-check and lightweight focused SV/elaboration only. Cover four FMA sign variants, H/S/D, NaN/SNaN/DN, Inf-times-zero, exact cancellation, normal/subnormal, half dual-lane and reset/kill/pause/valid-drop; merged candidate owns heavy L0-L2 and shared latency updates.",
+  "acceptance": "The FMA ap_pre-to-pp_pre alignment/add cone crosses a real register boundary; only FMA latency changes by the documented amount; result, flags, pause/kill/reset and exactly-once response behavior remain intact.",
+  "resource": "No local or GamePC heavy job in the lane; no production lock until merged validation.",
+  "dispatch": {
+    "sent_at": "2026-09-06T19:09:21+08:00",
+    "agent_name": "r21_fma_cut",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true
+  },
+  "created_at": "2026-09-06T19:09:21+08:00",
+  "implementation_head": "52a969df38894b835a19cd5be5f9a1336c0d6279",
+  "merge_commit": "4bacc181",
+  "batch_candidate_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+  "updated_at": "2026-09-06T19:47:37+08:00"
+}

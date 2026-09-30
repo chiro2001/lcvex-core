@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260930-001",
+  "label": "MAIN-MERGE-GATE-D",
+  "state": "done",
+  "acceptance_status": "main-merged-and-gate-d-green-on-the-merged-sha",
+  "recorded_at": "2026-09-30T22:36:00+08:00",
+  "merge_sha": "8cdc5666e27d4b2db5c7f2dd1db9586825d7878d",
+  "merge_tree_sha": "cbd94bc8a0e21a6f7056445d6d5f361fc23fffc4",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-main-merge",
+  "branch": "main",
+  "base_sha": "930b4139",
+  "origin_main_before_push": "6922accb",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 conda-forge (env lcvex)",
+    "qemu": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+    "runner": "sim/difftest/run_gate_d.sh --parallel",
+    "baremetal_mode": "release (baremetal-C required, not skipped)"
+  },
+  "integration": {
+    "merge_1": {
+      "sha": "70afb15b",
+      "source_branch": "feature/p7-final",
+      "source_tip": "46b4209e",
+      "merge_base": "8d35b6d6",
+      "content": "cross-project resource-lock policy plus guardian hardening, with their task/handoff/evidence records and the AGENTS.md/MULTI_AGENT_WORKFLOW.md policy text"
+    },
+    "merge_2": {
+      "sha": "0a545b22",
+      "source_branch": "feature/T-20260928-002-linux-bringup",
+      "source_tip": "55ff4b4c",
+      "merge_base": "8d35b6d6",
+      "content": "Catapult A10 Linux bring-up: board timer/GIC/JTAG-UART wiring, line-crossing L1 split, EPCQ loader and payload format, Linux 6.6 lite software line, physical and board evidence"
+    },
+    "readme_commit": "8cdc5666",
+    "conflicts": "none",
+    "worktree_state": "clean before and after both merges"
+  },
+  "gate_d": {
+    "command": "bash sim/difftest/run_gate_d.sh --parallel",
+    "resource_lock": "local lcvex T-20260928-002 main-gate-d, held for the whole run",
+    "started_at": "2026-09-30T22:23:24+08:00",
+    "finished_at": "2026-09-30T22:35:12+08:00",
+    "wall_clock": "about 11m48s",
+    "green_steps": 152,
+    "failed_steps": 0,
+    "verdict_line": "PASS: Gate D 系统回归全部通过",
+    "group_steps": [
+      "make test（单元 + SVA）",
+      "make coverage（缓存/MMU TB 覆盖率）",
+      "M2-4b/4c 定向锁步（base + 全缓存）",
+      "delay2-cache-*（全缓存 + 0..4 周期随机下级延迟，定向 + 3000 条随机 smoke）",
+      "P5a-Hardening + M2 定向（13 组）",
+      "Gate C 异常/EL0-EL1（7 组）",
+      "P5a MMU 数据翻译（3 组）",
+      "P4b 异常/系统指令",
+      "随机回归（seed 1~3 × 100k）",
+      "指令覆盖记账（random 1~3 trace ↔ ISA_SCOPE）",
+      "baremetal-C 工具链/镜像",
+      "baremetal-C 锁步"
+    ],
+    "log": {
+      "path": "build/agents/T-20260930-001/gate-d.log",
+      "bytes": 436124,
+      "lines": 2985,
+      "sha256": "edf6a1df4d04cf5fd90e12158cc8e30684c417ac2fb0e57d8d5261adcce827fd",
+      "retention": "build-only; full logs do not enter Git"
+    }
+  },
+  "why_this_gate_matters_for_this_merge": [
+    "rtl/lcvex_l1_d_wb.sv now splits normal loads/stores that cross a 64-byte line and serves the adjacent segment through the same lookup/refill path; the delay2 lockstep batches, the L1D unit testbench and the MMU data-translation steps are the regressions that cover it.",
+    "rtl/lcvex_core.sv gained the optional real-clock generic timer; make test exercises CNTFRQ_EL0 in both modes and keeps the QEMU instruction-count mode as the lockstep default.",
+    "rtl/lcvex_gic.sv replaced the 96-entry serial priority scan with balanced tournament trees for functional equivalence; hard_gic and hard_irq are the lockstep steps that cover the arbiter, and the GIC SPI directed test was rerun separately during the board work."
+  ],
+  "offline_checks_on_the_merge_worktree": [
+    "python3 fpga/catapult_a10/tools/check_platform.py: PLATFORM_CHECK_PASS files=50 strict_source=OFF",
+    "python3 fpga/catapult_a10/tools/check_skeleton.py --require-boot-image: SKELETON_CHECK_PASS files=6 (after a fresh boot/build_linux_loader.sh, because the loader image is a generated build-only artifact)",
+    "bash fpga/catapult_a10/boot/build_linux_loader.sh: LINUX_LOADER_SIZE bytes=3121 capacity=61440, BIN d8c0b85e, MIF 43c1a21d"
+  ],
+  "process_note": "The two merges, the README refresh and the main push completed before Gate D finished, which is the reverse of the AGENTS.md ordering rule. The rerun was run as a confirmation gate on the already-pushed SHA; the plan on a red result was to fix forward on main or reset the remote main to 6922accb. It came back green. No gate step, assertion or reference result was disabled or skipped to obtain this result: the run used release mode (no --skip-baremetal) and the default test list.",
+  "followup_doc_only_merge": {
+    "merge_sha": "503e90d7b3f8c36a64058f80e65007958a3667cb",
+    "source_commit": "ecdc2ba9",
+    "sources": "feature/T-20260928-002-linux-bringup",
+    "content": "one extra note string in docs/tasks/evidence/T-20260928-002.json recording that the canonical-DTB simulation was stopped at 775M cycles to free the local lock for the Gate D rerun",
+    "gate_transfer_proof": "git diff --name-only 8cdc5666 503e90d7 lists only docs/ paths (the T-20260930-001 records and that one note); rtl, tb, sim, scripts, baremetal, configs, fpga and Makefile resolve to byte-identical tree objects between the Gate-D-verified commit 8cdc5666 and the new tip 503e90d7",
+    "conclusion": "the Gate D verdict obtained on 8cdc5666 applies unchanged to 503e90d7 because no tested input changed; no rerun was performed and none is claimed"
+  },
+  "resource_and_scope": {
+    "local_lock": "FREE after the run",
+    "gamepc_lock": "not used",
+    "board_actions": 0,
+    "rtl_modified_in_this_task": false,
+    "note": "this task merged existing lines and verified them; it did not change RTL or software"
+  },
+  "known_limits": [
+    "Gate D is the repository's local acceptance gate; it is not a substitute for the board evidence, which lives in docs/tasks/evidence/T-20260928-002.json and the cold-boot transcripts.",
+    "The canonical-DTB 128 MiB full-Linux simulation on the GIC-tree RTL was stopped at 775M cycles to free the local lock for this gate; its partial log and the reason are recorded in the T-20260928-002 evidence.",
+    "The merged main line is delivered on GitHub; CI has not been treated as trusted and no CI result is claimed here."
+  ],
+  "next": "Optional follow-ups: finish or re-run the canonical-DTB Linux behavioral simulation on a free local lock, add a second on-board command such as uptime to the /init demo, and continue the roadmap items (DDR/Cache stress, full-FP board sign-off, CI trust)."
+}

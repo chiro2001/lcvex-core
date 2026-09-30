@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-097",
+  "label": "CKPT-SIDECAR-V4",
+  "parent": "T-20260828-072",
+  "title": "B3 全局串行：CONTEXTIDR_EL1 checkpoint sidecar v4 与恢复",
+  "kind": "core-isa-checkpoint-sidecar-v4",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "scope": "将 CONTEXTIDR_EL1 纳入完整 checkpoint 恢复：sidecar 升级到 v4，改 sim/difftest/checkpoint.py、lockstep_coordinator.cc、QEMU plugin 序列化 CPUARMState；实现恢复后写回 core contextidr_el1 状态，且与现有 checkpoint smoke/manifest 兼容。",
+  "writes": [
+    "sim/difftest/**",
+    "docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md",
+    "docs/tasks/evidence/T-20260829-097.json"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260829-096-b3-contextidr-probe.md",
+    "sim/difftest/**",
+    "rtl/lcvex_core.sv"
+  ],
+  "validation": {
+    "l0": [
+      "checkpoint 恢复 CONTEXTIDR_EL1 定向测试通过"
+    ],
+    "l1": [
+      "既有 checkpoint smoke/lockstep 无回归"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "CONTEXTIDR_EL1 在 checkpoint restore 后保持写回值；sidecar v4 可审计且不破坏旧 manifest。",
+  "next": "由集成者串行安排；完成后 B3 剩余缺口仅剩后置项，可进入 B5 profile freeze。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T12:18:31+08:00",
+  "updated_at": "2026-08-29T12:18:31+08:00",
+  "known_limits": [
+    "QEMU/checkpoint 协议改动必须显式声明，且只能由全局串行任务执行。",
+    "不能与 B4/C2 并行修改同一 QEMU/checkpoint 写集。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md",
+  "evidence": "docs/tasks/evidence/T-20260829-097.json",
+  "base_sha": "f34f471c20de6ddca60b4925308257b780f3798b",
+  "branch": "feature/T-20260829-097-checkpoint-sidecar-v4",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-097",
+  "dispatch": {
+    "sent_at": "2026-08-29T12:48:25+08:00",
+    "agent_name": "checkpoint_sidecar_v4",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-097"
+  },
+  "merge_sha": "fba5144040e5d13686cf6375ccbe62edc4b43078",
+  "merged_at": "2026-08-29T13:05:18+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T13:05:18+08:00",
+    "status": "accepted",
+    "head_sha": "af1cdf302eecb055725bf2efb118f87c412a8da5",
+    "notes": "Checkpoint sidecar v4 merged. make compile PASS; v4 struct smoke and checkpoint manifest/resume smoke PASS. Full QEMU/DUT joint restore still not run; old v1/v2/v3 compatible."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T13:10:00+0800",
+        "new": "2026-08-29T12:18:31+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T13:10:00+0800",
+        "new": "2026-08-29T12:18:31+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T14:10:00+0800",
+        "new": "2026-08-29T12:48:25+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T14:30:00+0800",
+        "new": "2026-08-29T13:05:18+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T14:30:00+0800",
+        "new": "2026-08-29T13:05:18+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "eeb6a6a6520f5d17ae7052acc6e42c87af52c6ac",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "eeb6a6a6520f5d17ae7052acc6e42c87af52c6ac"
+}

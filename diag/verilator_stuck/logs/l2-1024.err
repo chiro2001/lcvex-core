@@ -1,0 +1,14 @@
+%Warning-IMPLICITSTATIC: rtl/lcvex_l2_cluster.sv:196:11: Variable's lifetime implicitly set to static (IEEE 1800-2023 6.21)
+                                                       : ... The initializer value will only be set once
+                                                       : ... Suggest use 'static' before variable declaration'
+  196 |       int aj = (int'(rr_ptr) + ai) % CORE_COUNT;
+      |           ^~
+                         ... For warning description see https://verilator.org/warn/IMPLICITSTATIC?v=5.050
+                         ... Use "/* verilator lint_off IMPLICITSTATIC */" and lint_on around source to disable this message.
+%Warning-UNSIGNED: rtl/lcvex_l2_cluster.sv:331:35: Comparison is constant due to unsigned arithmetic
+                                                 : ... note: In instance 'lcvex_l2_cluster'
+  331 |             if (req[arb_sel].addr < MEM_BASE ||
+      |                                   ^
+                   ... For warning description see https://verilator.org/warn/UNSIGNED?v=5.050
+                   ... Use "/* verilator lint_off UNSIGNED */" and lint_on around source to disable this message.
+%Error: Exiting due to 2 warning(s)

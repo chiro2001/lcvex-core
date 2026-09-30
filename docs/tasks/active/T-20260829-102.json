@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-102",
+  "label": "T067-module-synth",
+  "parent": "T-20260828-067",
+  "title": "T-067 第二阶段：逐模块 standalone synthesis、fp_scalar 可综合性修复与 FP/NEON 真 gate",
+  "kind": "fpga-synth-hotspot-narrowing",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "d9f65dc990c72a534b9399f7e427645def030a3c",
+  "branch": "feature/T-20260829-102-t067-module-synth",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-102",
+  "scope": "承接 T-101：逐模块 standalone Quartus synthesis 定位 B5 SoC 70GB OOM 热点；修复 fp_scalar >64-bit lpm_divide 可综合问题；在实验副本中真正 generate-gate FP/NEON；评估 partition/incremental compile。不重跑完整 B5 full flow，除非缩减设计稳定通过 Synthesis。",
+  "writes": [
+    "docs/handoffs/T-20260829-102-t067-module-synth.md",
+    "docs/tasks/evidence/T-20260829-102.json",
+    "fpga/quartus-synth-diag/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/build/T-20260829-102/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260829-101-t067-synth-opt.md",
+    "docs/tasks/evidence/T-20260829-101.json",
+    "fpga/catapult_a10/**",
+    "rtl/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex"
+  ],
+  "validation": {
+    "l0": [
+      "逐模块 synthesis 实验有日志/内存/LC/时间记录",
+      "热点模块表可机检"
+    ],
+    "l1": [
+      "fp_scalar 除法可综合性问题有修复方案或实验验证",
+      "FP/NEON generate 门控实验有结论（有效/无效）"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付模块级热点表、fp_scalar 修复/规避建议、FP/NEON 真 gate 实验结论、partition 可行性判断。",
+  "next": "根据结果决定是否值得恢复 B5 full flow 或继续缩小设计。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T18:30:00+0800",
+  "updated_at": "2026-08-29T18:30:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T18:30:00+0800",
+    "agent_name": "t067_module_synth",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-102"
+  },
+  "known_limits": [
+    "不自动重跑完整 B5 full flow。",
+    "不修改原始 catapult_a10 工程/qsf/sdc/qpf；共享 RTL 改动需显式最小 diff。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-102-t067-module-synth.md",
+  "evidence": "docs/tasks/evidence/T-20260829-102.json",
+  "merge_sha": "5e40de2059a15231a6e72dd724883aac9a4e4abb",
+  "merged_at": "2026-08-29T20:00:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-29T20:00:00+0800",
+    "status": "accepted_partial",
+    "head_sha": "9a9a4cdf5af066799c45bc9376a3396f142dd18d",
+    "notes": "T-102 partial accepted: hotspot table (l1_d_wb 182k LC/3.64GB; l2_wb >37min/qdb ~190MB strong hotspot; mmu/l1_i/decode light); fp_scalar naive 256-bit restoring divider not viable; A64_FP_SIMD still not gating. Remaining modules suite, L2 optimization, true FP/NEON generate gate, partition continue in T-103."
+  },
+  "head_sha": "d9f65dcb57ce2b02d6c360cef21bd112d8e3e0691",
+  "correction_record": {
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "d9f65dcb57ce2b02d6c360cef21bd112d8e3e0691",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  }
+}

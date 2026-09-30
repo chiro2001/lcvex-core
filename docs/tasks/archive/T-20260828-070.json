@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-070",
+  "title": "dsh 工作流试点：同步任务模板到当前模型路由",
+  "kind": "infra-workflow-pilot",
+  "priority": "normal",
+  "assigned_owner": "t070-dsh-pilot-dsv",
+  "agent_type": "fast-implementation",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]（dsh 默认通道）",
+  "reasoning_effort": "max",
+  "model_scope": "最小垂直任务：把 docs/tasks/TEMPLATE.json 的模型路由字段与 MULTI_AGENT_WORKFLOW.md 2.1 节现行路由表对齐；不改变路由规则本身，不做无关格式化。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "纯文档模板字段同步，无需方向评审；仅当改出歧义时补审"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "默认不阻塞；明显正确的字段对齐，集成者核对即可"
+  },
+  "phase": "done",
+  "parent": "",
+  "depends_on": [],
+  "input_note": "2026-08-28 模型路由已更新为省略 model = deepseek-v4-flash[max]（原默认 gpt-5.6-luna[max]），但 TEMPLATE.json 仍写 luna 默认且 disabled_profiles 禁用 deepseek，与现行规则矛盾。本任务是试点：验证 dsh 环境下「登记→worktree→派单→报告→合并→复跑→归档」流程是否走得通。",
+  "writes": [
+    "docs/tasks/TEMPLATE.json",
+    "docs/handoffs/T-20260828-070-dsh-workflow-pilot.md",
+    "docs/tasks/evidence/T-20260828-070.json"
+  ],
+  "reads": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/README.md",
+    "docs/PROJECT_STATUS.md"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/README.md",
+    "docs/tasks/active/T-20260828-067.json"
+  ],
+  "base_sha": "c9cdc5d9780fc2296275e4366a365073711e9032",
+  "branch": "infra/T-20260828-070-dsh-pilot-template-routing",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-070",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 1024,
+    "disk_mb": 1024,
+    "timeout_s": 900
+  },
+  "budget_policy": {
+    "initial_minutes": 15,
+    "extension_increment_minutes": 5,
+    "max_minutes": 30,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "validation": {
+    "l0": [
+      "python3 -m json.tool docs/tasks/TEMPLATE.json 通过",
+      "git diff --check 无空白错误",
+      "与 MULTI_AGENT_WORKFLOW.md 2.1 路由表一致：默认通道字段不再引用 luna，无 disabled_profiles 禁用当前默认通道"
+    ],
+    "l1": [
+      "grep 核验 docs/tasks/TEMPLATE.json 无遗留 'luna' 或与现行路由矛盾的字段"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "TEMPLATE.json 为合法 JSON，模型路由字段与现行规则完全一致（omit model = deepseek-v4-flash[max]），diff 仅限模型路由相关字段，无无关格式化/重命名；集成者在合并 SHA 复跑 L0 全绿后归档。",
+  "created_at": "2026-08-28T21:48:00+08:00",
+  "updated_at": "2026-08-28T21:48:00+08:00",
+  "commits": [],
+  "handoff": "docs/handoffs/T-20260828-070-dsh-workflow-pilot.md",
+  "evidence": "docs/tasks/evidence/T-20260828-070.json",
+  "known_limits": [
+    "本任务只同步模板字段，不改变模型路由策略本身；路由策略变更需 ADR。",
+    "试点规模最小化：单文件写集、无重型测试、不修改 QEMU fork 与集成热点。"
+  ],
+  "next": "归档后依据试点结论（哪些规则在 dsh 中可直接执行、哪些需要适配）决定是否登记多任务并行试点。",
+  "dispatch": {
+    "sent_at": "2026-08-28T21:50:00+08:00",
+    "agent_name": "t070_dsh_pilot",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-070"
+  },
+  "archived_at": "2026-08-28T22:50:42+08:00",
+  "integration": null
+}

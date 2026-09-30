@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-065",
+  "title": "B5-SoC/Boot：Catapult A10 可综合 SoC 顶层、BRAM 启动与板级门前置",
+  "kind": "fpga-soc-boot",
+  "priority": "high",
+  "assigned_owner": "b5-soc-boot-dsv",
+  "agent_type": "implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "model_scope": "在已含 B1-AXI4/B2-EMIF/B3-L2-WB/B4-L1-Coherence 与 T-062/T-064 平台包的 FPGA 线基线上，实现可综合 SoC 顶层/板卡 wrapper：LCVEX core 接 I/D L1→L2→AXI4→EMIF，BRAM 裸机启动、复位树/calibration gate、JTAG-UART/EPCQ 边界；本地 L0/L1（lint/SV/Cocotb/结构检查）与远端 Quartus full compile/STA 复验；DDR March、Linux 板测与实际上板明确后置或 blocked。不修改 P7 集成线、不修改 QEMU fork、不读取 license 内容、不删除未知用户文件。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "仅在 SoC 地址映射、core/cache/AXI4 接线边界或启动路径出现歧义时补充审查；不替代远端实际编译验证。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "本任务以接线/综合验证为主，默认不阻塞；仅在写集、工具版本或生成边界发生实质变化时重审。"
+  },
+  "phase": "blocked",
+  "parent": "T-20260828-064",
+  "depends_on": [
+    "T-20260828-064",
+    "T-20260827-056",
+    "T-20260827-062"
+  ],
+  "input_note": "FPGA 线 ebd0e8c 已包含 B1-B4 模块、T-062 骨架与 T-064 50-file 平台包/真实顶层，平台检查 50/50 通过；T-064 已在远端跑通 catapult_a10 full flow/STA。B5 在其上接入 SoC 顶层与启动路径。",
+  "writes": [
+    "docs/handoffs/T-20260828-065-b5-soc-boot.md",
+    "docs/tasks/evidence/T-20260828-065.json"
+  ],
+  "reads": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/AXI4_PROFILE.md",
+    "docs/AXI4_AVALON_ADAPTER.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/L2_WRITEBACK.md",
+    "docs/L1_COHERENCE.md",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_axi4_pkg.sv",
+    "rtl/lcvex_axi4_master.sv",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_l1_d_wb.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "fpga/catapult_a10/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+    "ssh://192.168.101.5/D:/Software/intelFPGA_pro/21.4"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "fpga/catapult_a10/README.md",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/skeleton_manifest.json",
+    "fpga/catapult_a10/quartus/catapult_a10.qsf",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc"
+  ],
+  "base_sha": "ebd0e8ca56b6818c840fc84dabf591407b0edd80",
+  "branch": "feature/T-20260828-065-b5-soc-boot",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-065",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true,
+    "extend_when": "owner 按 Asia/Shanghai 报告 sent_at/received_at/reported_at、文件、验证、阻断和剩余工作，且正在稳定推进 SoC 接线/综合时延长。"
+  },
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "write_rule": "只允许在 project_root 内创建/修改工程与构建产物；project_root 以外只读；不得删除或覆盖未知用户文件。"
+  },
+  "validation": {
+    "l0": [
+      "SoC 顶层/wrapper/BRAM boot 文件通过 Verilator lint 与结构检查",
+      "check_platform.py、check_skeleton.py、json.tool、git diff --check、sha256sum -c 全绿",
+      "BRAM boot 镜像生成脚本可重放，入口/链接脚本/复位向量明确"
+    ],
+    "l1": [
+      "SV/Cocotb：core→L1→L2→AXI4→Avalon 的最小系统 smoke（读 BRAM、写 JTAG-UART 寄存器、EMIF calibration gate 阻塞/释放）",
+      "复位树/calibration gate 定向测试：cal 未完成时 CPU 保持复位或请求阻塞"
+    ],
+    "l2": [
+      "可选的 QEMU 定向程序验证 SoC 地址映射与启动代码语义（只读复用 P7 线结果）"
+    ],
+    "l3": [],
+    "l4": [
+      "DDR March、Cache/MMU、Timer/GIC/JTAG-UART、Linux /init 与实际上板属 Gate F-BOARD，需要物理板；无板则如实记录 blocked/限制，不伪称完成"
+    ]
+  },
+  "acceptance": "建立可综合 SoC 顶层/板卡 wrapper：LCVEX core 经 I/D L1→L2→AXI4→Avalon/EMIF 接线，BRAM 裸机启动路径（AArch64 启动代码、链接脚本、镜像生成脚本），复位/calibration gate 行为正确；本地 L0/L1 全绿；远端 Quartus full compile/STA 复验 0 error 且正 slack（可基于 T-064 工程替换顶层）；SOF/JIC 与输入 manifest 绑定。DDR March/Linux/上板明确后置并给出最小可执行清单，不得伪称板测完成。",
+  "created_at": "2026-08-28T02:18:17+08:00",
+  "updated_at": "2026-08-31T02:23:14+08:00",
+  "user_authorization": {
+    "authorized_at": "2026-08-31T00:41:15+08:00",
+    "scope": "Quartus synthesis/simulation/fit/STA/assembler and board tests",
+    "constraints": "参考 a10-linux-riscv；监控内存；不得停止、暂停或抢占其它运行中进程；资源不足则等待"
+  },
+  "write_reservation_note": "B5 SoC/Boot 本地实现已合入且任务仅保留远端/full-flow blocker，释放 fpga/rtl/boot 源码占位写集；后续修复由精确 child task 承接。",
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260828-065.json",
+  "handoff": "docs/handoffs/T-20260828-065-b5-soc-boot.md",
+  "known_limits": [
+    "本任务不宣称 DDR March、Linux /init 或实际上板完成；无物理板时这些为 Gate F-BOARD 后置。",
+    "远端写操作严格限定在 D:\\Projects\\fpga-altra\\lcvex；不得删除未知用户文件。",
+    "不实现跨核 MESI、完整地址空间、ECC/RAS 或 P8 SVE。"
+  ],
+  "next": "T-20260831-002 provenance 已重锁；执行 T-20260831-003 将 current experiment candidate 同步到远端隔离目录。hash closure 后只运行 <=35GB reduced/partition 单作业；full synthesis 继续 BLOCKED。",
+  "dispatch": {
+    "sent_at": "2026-08-28T02:18:54+08:00",
+    "agent_name": "t065_b5_soc_boot",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-065"
+  },
+  "merge_sha": "23218fb9c94db449a5e2db9db8809694e1d2541b",
+  "integration": {
+    "status": "local_validated_remote_blocked",
+    "strategy": "cherry-pick 3b18a9d+ffe8006 to feature/fpga-catapult-a10",
+    "merge_sha": "23218fb",
+    "validated_scope": "SoC top/BRAM boot/address map implemented; local L0/L1 all green on merge SHA (smoke positive+cal-blocked, lint, platform 50, skeleton 6)",
+    "remaining_scope": "remote full flow/STA/SOF after host cleanup of orphaned quartus_syn; DDR March/Linux/board test (Gate F-BOARD)"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-28T02:20:00+08:00",
+        "new": "2026-08-28T02:18:17+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-28T04:05:00+08:00",
+        "new": "2026-08-28T04:04:09+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "merge_sha_expansion": [
+      {
+        "old": "23218fb",
+        "new": "23218fb9c94db449a5e2db9db8809694e1d2541b",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  }
+}

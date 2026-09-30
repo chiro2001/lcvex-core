@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-059",
+  "title": "P7-2 选定 NEON 128 位整数与单 Q 访存垂直实现",
+  "kind": "isa-rtl-difftest",
+  "priority": "high",
+  "assigned_owner": "p7-2-neon-int-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现 P7 协议已选定的 NEON/Advanced SIMD 128-bit 整数 move、bitwise、add/sub、compare、非饱和 shift 和单 Q load/store；复用 V0-V31 raw state、FPEN、commit effect 和 scalar memory 边界；不实现饱和/narrow/widen/permute/table/across-lane/crypto/structured/lane/replicate/pair、FP/P7-3、SVE、Cache/AXI/FPGA 或 QEMU fork。",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "P7-0/P7-1 已冻结状态、wire 和提交边界；本任务由集成者限定指令矩阵，协议疑点升级，不自行扩大范围。"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只做一次 one-pass-blocking 审查：检查 Q/S/D lane 语义、raw-bit V state、FPEN/trap、1V/2store 上限、memory fault/backpressure、unsupported 边界、A76 required lockstep 和写集；不提供逐行实现。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "仅在实现 diff/协议/验收证据完成后做一次必要审查；机械证据修复不重复方向审查，除非 RTL 发生实质变化。"
+  },
+  "side_review_records": [
+    {
+      "agent_id": "01a04235-bc19-7841-82ed-3bf6f35bc13a",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "high",
+      "sent_at": "2026-08-27T15:53:09+08:00",
+      "received_at": "2026-08-27T15:54:05+08:00",
+      "reported_at": "2026-08-27T16:02:35+08:00",
+      "elapsed_seconds": 566,
+      "source_sha": "23c364ecd39770c116747374652ec53b56f2c47c",
+      "status": "nonblocking_risk_findings",
+      "blocking_points": [],
+      "risks": [
+        "STR Q 对齐/范围 fault 的 ESR.WnR 必须为 1，当前路径可能固定为读异常。",
+        "已退休 STR Q 与下一条 IABT 合并时不能丢失第二个 8B store。",
+        "两段 Q store 的第二段 fault 不能留下未定义的第一段半笔副作用；需预检或明确语义。",
+        "需覆盖 scalar FP 与 NEON 的跨单元 V hazard，以及更多 Q=0/非法 immh/lane/structured/pair UDEF。"
+      ],
+      "action": "已在 2026-08-27T16:02:35+08:00 非中断提醒 Hooke，要求纳入实现/测试或明确剩余风险。"
+    },
+    {
+      "agent_id": "01a04241-e271-7e12-8a37-1fd247228397",
+      "model": "",
+      "reasoning_effort": "max",
+      "sent_at": "2026-08-27T16:04:47+08:00",
+      "received_at": "2026-08-27T16:07:10+08:00",
+      "reported_at": "2026-08-27T16:15:36+08:00",
+      "elapsed_seconds": 649,
+      "source_sha": "23c364ecd39770c116747374652ec53b56f2c47c",
+      "status": "nonblocking_risk_findings",
+      "blocking_points": [],
+      "risks": [
+        "第二段 Q store response fault 时普通 request-accept 写副作用无法自动回滚，需受限下游不再 fault 的契约并断言，或内部 prepare/commit/abort 事务。",
+        "aligned range fixture 应使用 16B 对齐的 SRAM_TOP，避免先触发 alignment；WnR/FSC/FAR 必须定向验证。",
+        "memwb_exc 必须优先于 fetch-fault merge，且 STR Q+IABT 保留两个 8B store、IABT WnR=0。",
+        "需覆盖 Q store+IABT、LDR Q→scalar FP/STR D、随机延迟/backpressure 和更多 UDEF。"
+      ],
+      "action": "已在 2026-08-27T16:15:36+08:00 非中断提醒 Hooke；不要求停工，待最终 diff 机械复核。"
+    }
+  ],
+  "owner_final_report": {
+    "agent_id": "01a0420f-915e-76b1-8859-ff1b76153c42",
+    "model": "",
+    "reasoning_effort": "max",
+    "sent_at": "2026-08-27T16:49:49+08:00",
+    "received_at": "2026-08-27T16:49:49+08:00",
+    "reported_at": "2026-08-27T17:05:34+08:00",
+    "elapsed_seconds": 6852,
+    "base_sha": "23c364ecd39770c116747374652ec53b56f2c47c",
+    "implementation_head": "ab3f90f",
+    "verification_head": "ee03c05",
+    "docs_head": "3010879",
+    "branch": "feature/T-20260827-059-p7-2-neon-int",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-059",
+    "state": "review",
+    "tests": "合规 Cocotb 8/8、MEM_DELAY_MODE=2 8/8、SV raw unit、NEON 31 条、fetch-fault 20 条、P7-1 28/38/18/388、P6 scalar 40 均通过；fault-BFM expected-reject 保留 assertion 非零现场",
+    "blockers": [],
+    "known_limit": "普通 mem_req 不支持任意第二段 fault rollback；仅在完整 preflight 后下游不得再 fault 的显式契约下闭合，未来 AXI/Cache 需 prepare/commit/abort 或等价事务。",
+    "next": "集成者在合并 SHA 复跑 L0-L2，补 merge_sha 后归档。"
+  },
+  "review_records": [
+    {
+      "agent_id": "01a04344-8c6d-76f1-a13c-aa32958e96df",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "high",
+      "sent_at": "2026-08-27T20:49:21+08:00",
+      "received_at": "2026-08-27T20:49:21+08:00",
+      "reported_at": "2026-08-27T20:54:17+08:00",
+      "elapsed_seconds": 296,
+      "source_sha": "6422a4582ab60a713b6b6c29ccf3d011d6d62957",
+      "status": "nonblocking_review_complete",
+      "blocking_points": [],
+      "conclusion": "owner worktree clean；提交链、handoff、evidence、artifact 哈希和 expected-reject fault-BFM 记录已核对；未重新运行重型测试，等待集成 SHA 复跑 L0-L2。",
+      "known_limit": "Q store 仅在完整 16B preflight 且下游随后不返回 fault 的契约下成立；普通 mem_req 不支持任意第二段 fault rollback。",
+      "next": "集成者串行合并后复跑任务要求的 L0-L2，并补 merge_sha。"
+    }
+  ],
+  "disabled_profiles": ["deepseek-v4-flash[max]"],
+  "phase": "done",
+  "execution": {
+    "dispatch_pending": false,
+    "agent_id": "01a0420f-915e-76b1-8859-ff1b76153c42",
+    "model": "",
+    "reasoning_effort": "max",
+    "model_resolution": "待 spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "budget_minutes": 30,
+    "budget_policy": {
+      "initial_minutes": 30,
+      "extension_increment_minutes": 15,
+      "max_minutes": null,
+      "soft_target_minutes": 60,
+      "hard_stop": false,
+      "extend_when": "60 分钟仅为软目标；owner 在自然里程碑提供 sent_at/received_at/reported_at、文件、测试、阻断和剩余工作时继续咨询/延长；只要有稳定产出不强制结束。"
+    },
+    "clock": {
+      "dispatch_sent_at": "2026-08-27T15:11:22+08:00",
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_scheduler_observation": {
+        "observed_at": "2026-08-27T17:04:11+08:00",
+        "elapsed_seconds": 6769,
+        "files": [
+          "Makefile",
+          "rtl/lcvex_pkg.sv",
+          "rtl/lcvex_decode.sv",
+          "rtl/lcvex_core.sv",
+          "rtl/lcvex_neon_int.sv",
+          "tb/sv/lcvex_neon_int_tb.sv",
+          "sim/cocotb/Makefile",
+          "sim/cocotb/Makefile.p7_2_neon",
+          "sim/cocotb/test_p7_2_neon.py",
+          "sim/difftest/test_program.py",
+          "docs/P7-2_NEON_INT.md"
+        ],
+        "tests": "SV raw unit、Cocotb 8/8、delay2、NEON 31 条、fetch-fault 20 条以及 P6/P7 回归日志已生成；fault-bfm-target 按非法下游契约触发 assertion failure",
+        "blockers": [
+          "fault-BFM expected-negative 的退出码/合规正向路径尚待 handoff/evidence 明确",
+          "需最终核对 STR Q WnR、fetch-fault merge、Q store+IABT、range fixture 和跨单元 hazard"
+        ],
+        "measurement": "scheduler observation；不替代 owner reported_at，不触发强制停止"
+      }
+    }
+  },
+  "integration": {
+    "runner_role": "root-integrator",
+    "line": "feature/p7-fp-neon",
+    "source_sha": "072cf12",
+    "merge_sha": "072cf12",
+    "status": "pass_l0_l2",
+    "validated_at": "2026-08-27T21:00:54+08:00",
+    "validated": "compile、SV NEON/raw、SV scalar/backpressure、Cocotb 8/8 普通与 MEM_DELAY_MODE=2 8/8、NEON lockstep 31、fetch-fault 20、P7-1 28/38/18/388、P6 scalar 40；fault-BFM expected-reject exit=2。",
+    "known_limit": "Q store 仅在完整 16B preflight 且下游随后不返回 fault 的契约下成立；普通 mem_req 不支持任意第二段 fault rollback。"
+  },
+  "parent": "T-20260827-058",
+  "depends_on": ["T-20260827-058", "T-20260827-050"],
+  "base_sha": "23c364ecd39770c116747374652ec53b56f2c47c",
+  "branch": "feature/T-20260827-059-p7-2-neon-int",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-059",
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/filelist.f",
+    "sim/cocotb/Makefile",
+    "tb/sv/lcvex_neon_int_tb.sv",
+    "sim/cocotb/Makefile.p7_2_neon",
+    "sim/cocotb/test_p7_2_neon.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "docs/P7-2_NEON_INT.md",
+    "docs/handoffs/T-20260827-059-p7-2-neon-int.md",
+    "docs/tasks/evidence/T-20260827-059.json"
+  ],
+  "reads": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/handoffs/T-20260827-058-final.md",
+    "docs/tasks/archive/T-20260827-058.json",
+    "docs/tasks/evidence/T-20260827-058.json",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/filelist.f",
+    "tb/sv/lcvex_soc_tb.sv",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_lockstep_step.sh",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_difftest.c"
+  ],
+  "context_docs": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/handoffs/T-20260827-058-final.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md"
+  ],
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "task/evidence/handoff JSON、Python generator 和 shell 通过 syntax/diff check",
+      "Q/S/D lane 编码矩阵与明确 unsupported negative cases",
+      "Verilator lint/elaboration，V/FPEN/commit effect 边界"
+    ],
+    "l1": [
+      "独立 SV/Cocotb 覆盖 128-bit Q move/bitwise/add-sub/compare/non-saturating shift、S/D lane 结果和 raw V",
+      "单 Q load/store 的 16B byte strobe、自然对齐、fault、1V/2store、load-use 和 commit backpressure",
+      "FPEN trap 无 V/FPSR 副作用，unsupported structured/lane/saturating/widen/narrow/FP encodings UDEF"
+    ],
+    "l2": [
+      "Cortex-A76 FP_NEON=required strict lockstep：每个支持 encoding 的 V/FPCR/FPSR/提交包一致",
+      "P7-1 scalar 28/38/18/388 与 P6 scalar 40 回归不回退；QEMU 0012/plugin 只读复用",
+      "不得修改 QEMU fork、Cache/AXI/FPGA；不得用 host SIMD/epsilon 替代 raw-bit oracle"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "实现并验证协议中选定的 NEON 128-bit 整数 move、bitwise、add/sub、compare、非饱和 shift 和单 Q load/store；V raw state、FPEN/trap、1V/2store、memory fault/backpressure 与 Cortex-A76 required raw-bit lockstep 一致，具备 SV/Cocotb/定向程序/handoff/evidence 和明确 UDEF 矩阵。不得宣称完整 Advanced SIMD/FP/NEON，不得实现饱和/narrow/widen/permute/table/across-lane/crypto/structured/lane/replicate/pair、P7-3、SVE、Cache/AXI/FPGA 或修改 QEMU fork。",
+  "created_at": "2026-08-27T15:05:12+08:00",
+  "updated_at": "2026-08-27T21:09:12+08:00",
+  "commits": [
+    "ab3f90f",
+    "ee03c05",
+    "3010879",
+    "6422a4582ab60a713b6b6c29ccf3d011d6d62957",
+    "072cf12"
+  ],
+  "handoff": "docs/handoffs/T-20260827-059-p7-2-neon-int.md",
+  "evidence": "docs/tasks/evidence/T-20260827-059.json",
+  "known_limits": [
+    "P7-2 复用现有单核 scalar memory/commit 边界，不接 B 线 L1/L2/AXI4/EMIF。",
+    "仅单 Q/1V/2store 初始 ABI；结构化、lane、pair 和跨 lane 后置。",
+    "P7-3 NEON 浮点、完整 FP exception enable、P8 SVE 和 FPGA 时序/上板后置。"
+  ],
+  "next": "任务已完成并归档；未来若下游允许第二段 fault，另开 prepare/commit/abort 事务任务。"
+}

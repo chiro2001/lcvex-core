@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-088",
+  "label": "B3",
+  "parent": "T-20260828-072",
+  "title": "B3：系统寄存器/维护/原子闭合（V82 已批准范围）",
+  "kind": "core-isa-system-maintenance-atomic",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+  "branch": "feature/T-20260829-088-b3-system-maint-atomic",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-088",
+  "scope": "按 V82-BASE+V82-SELECTED-EXT 已批准范围推进 B3：系统寄存器访问/重置/权限/提交时机、TLBI/DC/IC 维护、barrier 与 LSE/RCpc 原子语义。跨核语义留给 C，不引入 ACE/CHI、SVE/SME、PAuth/MTE/MOPS/Crypto。QEMU fork/patch 及 checkpoint 协议改动为全局串行，本任务不得修改共享 QEMU；若某族需要新 QEMU oracle，标记 blocked 并给出现有参考或负测方案。若全量超出单次交付，先产出可验收的 B3 切片清单并至少实现一个低风险切片（首选已有 QEMU/参考模型的系统寄存器或 barrier/LSE 族）。",
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_sysreg.sv",
+    "rtl/lcvex_l1.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_mmu.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-088-b3-system-maint-atomic.md",
+    "docs/tasks/evidence/T-20260829-088.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_SCOPE.md",
+    "docs/ISA_GAPS.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/P7-5_FP16_SQRT_MINMAX_ROUND.md",
+    "rtl/**",
+    "tb/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-078-b1-scalar-closure.md",
+    "docs/handoffs/T-20260829-082-b2a-fp-arithmetic.md",
+    "docs/handoffs/T-20260829-084-b2b-fp-convert-round.md"
+  ],
+  "validation": {
+    "l0": [
+      "encoder/decoder raw-bit、系统寄存器 reset/权限矩阵定向"
+    ],
+    "l1": [
+      "SV/Cocotb 定向 + 负测；barrier/LSE 语义定向",
+      "make compile、make test 及受影响 P6/P7 smoke"
+    ],
+    "l2": [
+      "集成者合并后在受影响的单核 QEMU/difftest 子集复跑"
+    ],
+    "l3": []
+  },
+  "acceptance": "至少一个低风险 B3 切片有可复现 L0/L1 证据和 handoff/evidence；若遇到 QEMU oracle 缺失，row 标 blocked 而非假装通过；不改变 CORE_COUNT=1 默认回归；不引入 SVE/POST-V82。",
+  "next": "B3 后续根据本任务切片结果继续；随后进入 B4 编译器/覆盖闭合。",
+  "resource": {
+    "cpu": 3,
+    "memory_mb": 12288,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T08:08:06+08:00",
+  "updated_at": "2026-08-29T08:08:06+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T08:08:06+08:00",
+    "agent_name": "b3_system_maint_atomic",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-088"
+  },
+  "known_limits": [
+    "禁止修改 QEMU fork、checkpoint 协议、顶层 filelist/Makefile 核心构建，除非在 handoff 中明确列出并等待集成者窗口。",
+    "不宣称完整 ARM 内存模型；跨核语义留给 C 线。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-088-b3-system-maint-atomic.md",
+  "evidence": "docs/tasks/evidence/T-20260829-088.json",
+  "merge_sha": "f1f021bf919d36b6175374e5e512cbd8ec00441e",
+  "merged_at": "2026-08-29T09:36:22+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T09:36:22+08:00",
+    "status": "accepted-three-slices",
+    "head_sha": "24675b8",
+    "notes": "B3 已合入三个低风险切片：(1) SB barrier 仅 CRm==0；(2) MRS OSLAR_EL1 write-only + 系统寄存器矩阵；(3) EL0 DC ZVA DZE 门控与 TLBI/DC/IC 维护矩阵。三个解码器级 TB 均由集成者复跑 PASS。剩余 B3（全量 reset/权限矩阵、DC CVADP、TLBI OS/RV/range、RCpc 等）后续另派。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T09:45:00+0800",
+        "new": "2026-08-29T09:36:22+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T09:45:00+0800",
+        "new": "2026-08-29T09:36:22+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "1a11472b1e325019fec854ff7a488a63ee25955d",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ],
+    "merge_sha_expansion": [
+      {
+        "old": "f1f021b",
+        "new": "f1f021bf919d36b6175374e5e512cbd8ec00441e",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  },
+  "head_sha": "1a11472b1e325019fec854ff7a488a63ee25955d"
+}

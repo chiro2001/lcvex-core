@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-023",
+  "label": "FP-P3T-ROUND2",
+  "title": "FP-P3T round 2：继续切分 fp_exec/scalar_unit 组合链",
+  "kind": "feature",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p3t2",
+  "agent_type": "rtl-pipeline-cut",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-022"
+  ],
+  "base_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+  "branch": "feature/T-20260902-023-fp-p3t-round2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-023",
+  "scope": "根据 T-20260902-022 STA top-N 路径，继续对 fp_exec/scalar_unit 组合链做更细寄存器切级；目标 sys_clk_50 setup 达到可接受值；保持 raw-bit/commit 语义并更新 latency 表。",
+  "reads": [
+    "docs/handoffs/T-20260902-022-fp-p5-rerun.md",
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "Makefile",
+    "sim/**",
+    "tb/**"
+  ],
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-023-fp-p3t-round2.md",
+    "docs/tasks/evidence/T-20260902-023.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "lcvex_fp_exec_tb PASS"
+    ],
+    "l1": [
+      "P7 SV/Cocotb 全绿"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "切级后本地全绿；latency 表更新；为下一轮 FP-P5 提供 RTL。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T08:52:00+08:00",
+  "updated_at": "2026-09-03T09:23:35+08:00",
+  "known_limits": [
+    "不运行 Quartus fit/STA；不改变指令矩阵/raw-bit 语义"
+  ],
+  "handoff": "docs/handoffs/T-20260902-023-fp-p3t-round2.md",
+  "evidence": "docs/tasks/evidence/T-20260902-023.json",
+  "next": "FP-P5 rerun",
+  "dispatch": {
+    "sent_at": "2026-09-03T08:53:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-023",
+    "branch": "feature/T-20260902-023-fp-p3t-round2"
+  },
+  "head_sha": "3c14a29380d65c159d4c2194945b8b25741dcb9e",
+  "merge_sha": "66a6024b8c5f3ca6648207a6556acd2e67557fd1",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T09:22:58+08:00",
+    "merged_at": "2026-09-03T09:23:35+08:00",
+    "recorded_at": "2026-09-03T09:23:35+08:00",
+    "notes": "FP-P3T round2 merged; compile passes. Next FP-P5 rerun with T-023+T-024."
+  }
+}

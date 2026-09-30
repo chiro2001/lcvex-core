@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-042",
+  "state": "done",
+  "partial": false,
+  "base_sha": "0900dba35cae17dd174ed53260ff26d855decb3d",
+  "head_sha": "4cbc6a7fd9093009a46f11f937d17cbabd65ea00",
+  "branch": "fix/T-20260902-042-fp-slotidx-slotres-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-042",
+  "scope": "FP-SLOTIDX-SLOTRES-CUT: break T-20260902-041 signoff setup top fp_exec slot_idx[2] -> slot_result_r[26] (49 levels, 25.478 ns, -5.200 ns) by adding an iterative FDIV/FSQRT final pre-round pipeline stage in scalar_unit; keep FP/NEON raw-bit, FPCR/FPSR, FCMP NZCV, FP->GPR, single-outstanding/order semantics and only add fixed pipeline latency.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv",
+      "docs/handoffs/T-20260902-042-fp-slotidx-slotres-cut.md",
+      "docs/tasks/evidence/T-20260902-042.json"
+    ],
+    "summary": "In release FP_ITER=1 g_iter, added IT_FIN pipeline state and div_pre/div_pre_lo/div_pre_hi/sqrt_pre/sqrt_pre_lo/sqrt_pre_hi fp_pre_t registers. The iterative FDIV/FSQRT completion path no longer computes the full div_finish/sqrt_finish_iter (unpack + special + round_pack) directly to scalar_result in one combinational cone. It now captures the unpacked/special decision plus quotient/root quotient in the completion cycle, then performs only finish_pre/round_pack in IT_FIN. This cuts the remaining slot operand mux -> iterative finish -> slot_result_r path while preserving all raw-bit semantics.",
+    "latency_table": {
+      "scalar_fdiv_s": {
+        "before": 259,
+        "after": 260
+      },
+      "scalar_fsqrt_s": {
+        "before": 67,
+        "after": 68
+      },
+      "scalar_fsqrt_d": {
+        "before": 67,
+        "after": 68
+      },
+      "scalar_fsqrt_h": {
+        "before": 68,
+        "after": 69
+      },
+      "scalar_fdiv_h": {
+        "before": 516,
+        "after": 517
+      },
+      "neon_fsqrt_2s": {
+        "before": 133,
+        "after": 135
+      },
+      "other_non_iterative": {
+        "before": "unchanged",
+        "after": "unchanged"
+      }
+    },
+    "semantics": {
+      "raw_bit": "unchanged; div_finish_pre/sqrt_finish_pre and finish_pre use the same unpack/FZ/special/round rules",
+      "commit_order": "unchanged; single outstanding fp_exec transaction and one held response",
+      "fpsr_fpcr": "unchanged; FPCR snapshot at acceptance and FPSR sticky OR preserved",
+      "fcmp_nzcv": "unchanged; CMP remains on existing pp_other path",
+      "fp_to_gpr": "unchanged; FCVTZS/FCVTZU int_result path unaffected",
+      "kill_reset": "new div_pre*/sqrt_pre* cleared on reset/kill with other pipeline registers; IT_FIN returns to IDLE when valid drops"
+    },
+    "notes": "Only iterative FDIV/FSQRT latencies increase. No DSP added; the new storage is a small set of fp_pre_t registers (six per scalar unit)."
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "notes": "Verilator lint-only top lcvex_core; 0 errors."
+    },
+    {
+      "run_id": "lcvex-fp-exec-tb",
+      "command": "verilator --binary --timing --assert --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir_fp_exec/lcvex_fp_exec_tb",
+      "result": "pass",
+      "notes": "PASS all directed transaction/latency/kill/reset vectors; measured FDIV.S=260, FSQRT.S=68, FSQRT.D=68, FSQRT.H=69, FDIV.H=517, NEON FSQRT.2S=135."
+    },
+    {
+      "run_id": "sim-sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "notes": "PASS: P7-1 FP scalar raw-bit directed vectors."
+    },
+    {
+      "run_id": "sim-sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "notes": "PASS: P7-3 NEON FP raw unit."
+    },
+    {
+      "run_id": "sim-sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "notes": "PASS: P7-4 FP scalar and NEON FMA/conversion raw-bit vectors."
+    },
+    {
+      "run_id": "sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "notes": "PASS: P7-5 FP scalar H/sqrt/minmax/frint/fcvt and NEON FP16/sqrt/minmax/frint raw-bit vectors."
+    },
+    {
+      "run_id": "cocotb-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "notes": "TESTS=5 PASS=5 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "notes": "TESTS=4 PASS=4 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "notes": "TESTS=5 PASS=5 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "notes": "TESTS=8 PASS=8 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/signoff STA (requires integrator on merged SHA with same QSF/SDC)",
+    "assembler/SOF",
+    "FPGA programming/JTAG/board"
+  ],
+  "merge_sha": "74c03076e063e5f7fe3223658b6c246fdc17775c",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T05:15:00+08:00",
+    "merged_at": "2026-09-04T05:16:10+08:00",
+    "recorded_at": "2026-09-04T05:16:10+08:00",
+    "notes": "FP iterative FDIV/FSQRT finish cut merged and accepted"
+  }
+}

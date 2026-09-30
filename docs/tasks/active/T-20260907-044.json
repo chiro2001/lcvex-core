@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-044",
+  "label": "B25-BOARD-INTERACTION",
+  "title": "Volatile-configure B25 and prove polling serial interaction",
+  "kind": "board-bringup-gate",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-by-corrected-successor-chain",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260907-041", "T-20260907-043"],
+  "resolved_by": ["T-20260919-001", "T-20260920-025", "T-20260920-027", "T-20260920-030", "T-20260920-037", "T-20260920-038"],
+  "base_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "branch": "verify/T-20260907-044-b25-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-044",
+  "writes": [
+    "build/agents/T-20260907-044/** ignored board logs/transcripts",
+    "remote task-local logs only",
+    "docs/tasks/evidence/T-20260907-044.json",
+    "docs/handoffs/T-20260907-044-b25-board-interaction.md"
+  ],
+  "scope": "After explicit user authorization, configure only FPGA volatile SRAM with the frozen B25 SOF, release the task-owned programming server, attach the separate JTAG-MPSSE console and prove the BRAM monitor boots and communicates bidirectionally.",
+  "expected_transcript": [
+    "LCVEX25 BOOT",
+    "CAL-OK|CAL-FAIL|CAL-WAIT",
+    "DDR-OK|DDR-FAIL",
+    "READY",
+    "host p -> target PONG",
+    "host printable byte -> target echo"
+  ],
+  "validation": "Freeze cable/device/SOF hashes, use 15 MHz programming server, stop only the recorded task PID, use JTAG-MPSSE device=1 instance=0 for console, capture exact input/output and retain a known-good volatile rollback path.",
+  "acceptance": "The same frozen SOF boots from PC=0 at 25 MHz and completes at least one deterministic PING/PONG plus echo session; failures are classified by clock/reset/BRAM/UART/calibration rather than hidden.",
+  "resource": "Acquire gamepc for all hardware interaction and treat the cable as exclusive. Never overlap Quartus or another JTAG user.",
+  "authorization_gate": "Satisfied and exercised for volatile SOF configuration plus JTAG-UART interaction; persistent Flash, power and reset actions remain outside scope.",
+  "user_authorization": {
+    "authorized_at": "2026-09-07T00:34:00+08:00",
+    "scope": "Use nios2-terminal on the already connected JTAG-MPSSE console for receive/transmit testing after dependencies are green.",
+    "command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe --cable=\"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" --device=1 --instance=0",
+    "constraints": "This authorizes console attachment and serial interaction only. It does not authorize assembler, quartus_pgm, FPGA reconfiguration, reset, power cycling, JIC/EPCQ/Flash write or erase."
+  },
+  "forbidden_regions": [
+    "JIC/EPCQ/Flash write or erase",
+    "unrecorded process termination or broad jtagserver kill",
+    "power cycle or persistent configuration unless separately authorized",
+    "Linux or interrupt-driven UART claims"
+  ],
+  "created_at": "2026-09-07T00:23:34+08:00",
+  "updated_at": "2026-09-20T20:39:54+08:00",
+  "sof_dependency": {
+    "task": "T-20260907-043",
+    "status": "PASS; dependency complete and its frozen SOF was configured twice under the later board authorization",
+    "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+    "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260907-043-b25-sof-package/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+    "bytes": 36842093,
+    "sha256": "032c82dd88f99c5e19b845d199e6ef6d205e4be6b62c8171a2f9370a0032920b",
+    "quartus_checksum": "0x33878BC3",
+    "evidence": "docs/tasks/evidence/T-20260907-043.json"
+  },
+  "board_authorization": {
+    "authorized_at": "2026-09-19T20:02:42+08:00",
+    "response": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "authorized_scope": "Use Quartus and JTAG to configure the frozen T-043 SOF into FPGA volatile SRAM, then use the already-authorized JTAG-MPSSE nios2-terminal path for boot, PING/PONG and printable-character echo testing.",
+    "interpretation": "In the existing T-044 context, 烧写 means volatile SOF configuration only, not persistent Flash programming.",
+    "excluded": [
+      "JIC/EPCQ/Flash write or erase",
+      "power cycle",
+      "board-level reset",
+      "unrecorded process termination or broad jtagserver kill",
+      "Linux or interrupt-driven UART claims"
+    ]
+  },
+  "result": {
+    "status": "done-resolved-by-corrected-successor-chain",
+    "partial": false,
+    "initial_attempt": {
+      "status": "FAIL and preserved without reinterpretation",
+      "integration_commit": "660aa860",
+      "programming": "PASS twice for the original frozen B25 SOF; checksum 0x33878BC3, JTAG ID 0x02E060DD, Configuration succeeded, 0 errors/0 warnings",
+      "console_transport": "PASS; JTAG-MPSSE device=1 instance=0 connected",
+      "functional_acceptance": "FAIL; no LCVEX25 BOOT, READY, status, PONG or printable echo",
+      "golden_control": "PASS for external path; same programmer/server/cables produced OpenSBI v1.9 and Linux 7.2.0 output",
+      "evidence": "docs/tasks/evidence/T-20260907-044.json",
+      "handoff": "docs/handoffs/T-20260907-044-b25-board-interaction.md"
+    },
+    "resolution": {
+      "root_cause_and_fix": "T-20260919-001 reproduced the synthesis-only stale M20K word and fixed lcvex_bram_boot synchronous read-response alignment; affected L0-L2 passed.",
+      "gate_d": "T-20260920-025 complete release-mode Gate D PASS on logical-immediate-repaired candidate c31b3aea754769304ab7c9a24ef2f78c8120bc2a.",
+      "fresh_physical": "T-20260920-027 synthesis/fitter/STA/custom PASS at 25 MHz with setup/hold/recovery/removal +7.481/+0.017/+13.549/+0.178 ns and zero timing violations.",
+      "assembler": "T-20260920-030 generated the only accepted volatile SOF, 36842105 bytes, SHA-256 bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264, checksum 0x315AC2B3.",
+      "functional_acceptance": "T-20260920-037 candidate session PASS: LCVEX25 BOOT, CAL-WAIT, DDR-FAIL, READY; ?->CLOCK25 CAL-OK DDR-FAIL, p->PONG, d->RXDBG event3/0x64 and Z->Z; RXPATH/RXCPU accepted.",
+      "golden_control": "T-20260920-038 independent golden-only programmer transaction and final chain enumeration PASS; exact live golden identity proven.",
+      "resolved_by": "T-20260920-038"
+    },
+    "final_board_state": "live golden SOF proven",
+    "remaining_boundary": "External DDR calibration remains DDR-FAIL; this task closes BRAM boot and polling JTAG-UART interaction, not DDR or Linux board acceptance.",
+    "safety": "Across the accepted closeout, JIC/EPCQ/Flash=0, power/reset=0 and standard/unknown process stop=0; only recorded task-owned servers were stopped.",
+    "next": "No further hardware action is required for T-20260907-044. Track external DDR/Linux and full-FP release signoff separately."
+  }
+}

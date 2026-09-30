@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-104",
+  "label": "external-audit",
+  "parent": "",
+  "title": "外部审计材料准备与结果接收（实现流程/RTL 质量/方法学等 9 方向）",
+  "kind": "external-audit-prep",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "022bcf507fcb9ac511234a1800734ea76840dbc5",
+  "head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+  "branch": "feature/T-20260829-104-external-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-104",
+  "scope": "为外部审计准备材料包并预留结果接收位。材料覆盖 9 方向：项目治理/流程、可复现构建、RTL 代码质量与可综合性、ISA/架构、验证方法学、多核一致性、FPGA/物理实现、安全与外部边界、风险遗留项。只读整理和文档化，不修改 RTL/功能代码，不启动 Quartus。后续外部审计材料/结果落入同一任务目录。",
+  "writes": [
+    "docs/audit/**",
+    "docs/handoffs/T-20260829-104-external-audit.md",
+    "docs/tasks/evidence/T-20260829-104.json"
+  ],
+  "reads": [
+    "docs/**",
+    "rtl/**",
+    "tb/**",
+    "sim/**",
+    "fpga/**",
+    "scripts/**",
+    "Makefile",
+    ".github/**"
+  ],
+  "validation": {
+    "l0": [
+      "材料包目录结构完整，README/index 可导航",
+      "9 方向均有证据索引和现状摘要",
+      "JSON 合法、git diff --check"
+    ],
+    "l1": [
+      "包含外部审计可用的仓库 SHA、任务 DAG、验证日志索引、风险清单",
+      "为外部审计结果预留接收模板/位置"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "生成 docs/audit/ 材料包：每个审计方向有现状、证据路径、已知风险、待外部确认问题；并预留结果接收区（如 findings.md / action-items.md / external-audit-results）。",
+  "next": "外部审计人员/用户提供结果后，在同一任务内接收、去重、转为 action items。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 2048,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T21:04:05+0800",
+  "updated_at": "2026-08-29T21:15:16+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T21:06:00+0800",
+    "agent_name": "external_audit_prep",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "high",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-104"
+  },
+  "known_limits": [
+    "不修改 RTL/tb/sim/qemu 功能代码；不启动 Quartus；不读取/复制 license。",
+    "不将内部密码/密钥/license/未授权远程信息放入材料包。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-104-external-audit.md",
+  "evidence": "docs/tasks/evidence/T-20260829-104.json",
+  "merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+  "merged_at": "2026-08-29T21:14:53+0800",
+  "integrator_review": {
+    "received_at": "2026-08-29T21:15:16+0800",
+    "status": "accepted",
+    "head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+    "result_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+    "notes": "External audit material package merged into feature/p7-final at 8e3bfb5 (merge commit 21:14:53); integrator review at 2edc757 (21:15:16). Corrected via T-20260830-025; old values preserved in evidence correction record."
+  },
+  "correction_record": {
+    "source": "T-20260829-113 / T-20260830-025",
+    "old_merge_sha": "5b2b0ba92904c60bdc3b006a63dfdf526899bc8e",
+    "old_created_at": "2026-08-29T21:30:00+0800",
+    "old_updated_at": "2026-08-29T21:30:00+0800",
+    "old_dispatch_sent_at": "2026-08-29T21:30:00+0800",
+    "old_merged_at": "2026-08-29T22:00:00+0800",
+    "old_integrator_review_received_at": "2026-08-29T22:00:00+0800",
+    "correct_merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+    "correct_head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+    "evidence": "docs/tasks/evidence/T-20260829-113.json; docs/handoffs/T-20260829-113-aud-08.md; docs/handoffs/T-20260830-025-ext-01-fix.md"
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-008",
+  "label": "B25-SYNTHESIS-MACRO-REVIEW",
+  "state": "blocked-candidate",
+  "acceptance_status": "approve-with-conditions-macro-contract-blocked",
+  "partial": true,
+  "base_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "dispatch_parent_sha": "005a8984be951479a878b1c55740c90fe37ca7b6",
+  "dispatch_head_sha": "7d87a943fb159512874f1d1cba726d7ef8ed763f",
+  "checked_head_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "branch": "verify/T-20260908-008-b25-synthesis-macro-review",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-008",
+  "owner": "b25_gate_d",
+  "timestamps": {
+    "sent_at": "2026-09-08T23:26:27+08:00",
+    "received_at": "2026-09-08T23:26:27+08:00",
+    "review_started_at": "2026-09-08T23:26:27+08:00",
+    "reported_at": "2026-09-08T23:41:41+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "registration": {
+    "task_file": "docs/tasks/active/T-20260908-008.json",
+    "registration_commit": "005a8984be951479a878b1c55740c90fe37ca7b6",
+    "dispatch_commit": "7d87a943fb159512874f1d1cba726d7ef8ed763f",
+    "checkout_registration_gap": true,
+    "checkout_gap_reason": "The checked base bdb764a5 predates the registration commit; the active task JSON is therefore absent from this task worktree. Registration and dispatch are recorded by the two commits above and were not modified here."
+  },
+  "objective": "Review the semantic impact of adding a Quartus VERILOG_MACRO SYNTHESIS assignment, enumerate every reachable conditional, check MIF and duplicate-module closure, and provide a bounded approve/block decision without implementing the fix or running Quartus.",
+  "source_identity": {
+    "source_tree_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+    "worktree_clean_before_review": true,
+    "tracked_changes_before_review": 0,
+    "key_input_sha256": {
+      "fpga/catapult_a10/quartus/catapult_a10.qpf": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+      "fpga/catapult_a10/quartus/catapult_a10.qsf": "c82f9a7d6e9473d37ea8adcde125e3f327b3ccb8714fde7d4507d65963c42ba8",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "512247879ae635ec764b8dfd545d28200628f608bbc3078c3e94d060730783ad",
+      "rtl/lcvex_bram_boot.sv": "7a3c4ae2328dbd81cd55ff5265e538db4ff312582ff9bfbee49bd9d3f837bf00",
+      "rtl/lcvex_cache_data_ram.sv": "6ecd3c206a52a7cb270c3b58dd823f9e8d0d5bcc9df6b797766850f8b91fba19",
+      "rtl/lcvex_fp_scalar.sv": "c30396fef6f3bc55fef912a9d1e6ee807efb8a85eb72870763d63df4487521e4",
+      "rtl/lcvex_catapult_soc_top.sv": "d12ff1080d3ac2d2344e7da27eea44111cb52127235570a372bd52c7d42b931c",
+      "rtl/lcvex_bram_boot_altsyncram.sv": "9f8ca5143bf0bb84d779163dcea6b1035b7d663799d1f94ef18830ecb3374eae",
+      "rtl/lcvex_bram_boot_shim.sv": "2d76062d161d426f560bd1045d5e7709126c889ed68070c2021f07bac67d6109",
+      "fpga/catapult_a10/tools/check_platform.py": "8427b6815c25d53f565888222cff8ac8211ccc43cb0af596fcda3663c2b16703",
+      "fpga/catapult_a10/tools/check_skeleton.py": "f3f09638a63a4960eb5829b9ee06b3332b70adf26c64a2cc3b294f2a1a706886",
+      "docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md": "56c42f3e9df6a3d2f8be1cde4ff71a9ad1dfaa47bea6455beea7ae6b4cfe7ed4",
+      "docs/tasks/evidence/T-20260908-006.json": "d07e94bad9a9321546285a46e4ff9b536ead81b5ab3fad04ceff401a8ae1f4a5"
+    },
+    "reference_qsf": {
+      "path": "/home/chiro/projects/mycpu/a10-linux-riscv/hw/quartus/vex_soc_ddr/vex_soc_ddr.qsf",
+      "sha256": "a3af2707ed1b12a3598ba2d9d8a313ad8889fae76d46bbc3af34ce3a2ee4855a",
+      "synthesis_assignment": "set_global_assignment -name VERILOG_MACRO SYNTHESIS",
+      "reference_other_macros_not_adopted": ["C_ALIAS_ENABLE", "FLASH_DIAG"]
+    }
+  },
+  "qsf_reachability": {
+    "qsf": "fpga/catapult_a10/quartus/catapult_a10.qsf",
+    "assignment_count": 49,
+    "source_assignment_count_excluding_mif": 48,
+    "mif_assignment_count": 1,
+    "direct_paths_existing_in_checkout": 19,
+    "direct_paths_missing_in_checkout": 30,
+    "missing_path_classes": {
+      "qsf_relative_root_rtl_aliases": 29,
+      "generated_boot_mif": 1
+    },
+    "canonical_hdl_sources_scanned": 42,
+    "canonical_hdl_source_mapping": "QSF ../../rtl/*.sv entries were mapped read-only to their canonical root rtl/*.sv contents; the physical candidate must materialize them as byte-identical fpga/rtl aliases as documented by docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md:37-43.",
+    "assignment_groups": {
+      "platform_hdl": [
+        {"line": 18, "name": "SYSTEMVERILOG_FILE", "path": "../rtl/lcvex_catapult_a10_top.sv", "canonical": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv"},
+        {"line": 19, "name": "SYSTEMVERILOG_FILE", "path": "../rtl/lcvex_catapult_a10_reset_gate.sv", "canonical": "fpga/catapult_a10/rtl/lcvex_catapult_a10_reset_gate.sv"}
+      ],
+      "core_hdl": [
+        "../../rtl/lcvex_pkg.sv",
+        "../../rtl/lcvex_fp_state.sv",
+        "../../rtl/lcvex_fp_scalar.sv",
+        "../../rtl/lcvex_neon_fp.sv",
+        "../../rtl/lcvex_neon_int.sv",
+        "../../rtl/lcvex_regfile.sv",
+        "../../rtl/lcvex_alu.sv",
+        "../../rtl/lcvex_muldiv.sv",
+        "../../rtl/lcvex_mem_arb.sv",
+        "../../rtl/lcvex_l1_i.sv",
+        "../../rtl/lcvex_cache_data_ram.sv",
+        "../../rtl/lcvex_l1_d_wb.sv",
+        "../../rtl/lcvex_l2_wb.sv",
+        "../../rtl/lcvex_l2_probe.sv",
+        "../../rtl/lcvex_decode.sv",
+        "../../rtl/lcvex_mmu.sv",
+        "../../rtl/lcvex_core.sv",
+        "../../rtl/lcvex_axi4_pkg.sv",
+        "../../rtl/lcvex_axi4_avalon_pkg.sv",
+        "../../rtl/lcvex_async_fifo.sv",
+        "../../rtl/lcvex_calibration_gate.sv",
+        "../../rtl/lcvex_axi4_master.sv",
+        "../../rtl/lcvex_axi4_avalon_adapter.sv",
+        "../../rtl/lcvex_mem_router.sv",
+        "../../rtl/lcvex_catapult_soc_pkg.sv",
+        "../../rtl/lcvex_bram_boot.sv",
+        "../../rtl/lcvex_catapult_soc_axi.sv",
+        "../../rtl/lcvex_catapult_soc_coh.sv",
+        "../../rtl/lcvex_catapult_soc_top.sv"
+      ],
+      "qsys_and_ip": [
+        "../qsys/ddr4_bot/Qsys.qsys",
+        "../qsys/ddr4_bot/ip/Qsys/Qsys_clk_100.ip",
+        "../qsys/ddr4_bot/ip/Qsys/Qsys_clk_266.ip",
+        "../qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot.ip",
+        "../qsys/ddr4_bot/ip/Qsys/Qsys_reset_controller_0.ip"
+      ],
+      "flash_hdl_and_qip": [
+        "../flash/sfl/sfl_sys.qip",
+        "../flash/sfl/ip/sfl_sys/clk/synth/clk.v",
+        "../flash/sfl/ip/sfl_sys/rst/synth/rst.v",
+        "../flash/sfl/ip/sfl_sys/epcq/synth/epcq.v",
+        "../flash/sfl/ip/sfl_sys/epcq/altera_asmi_parallel_1910/synth/epcq_altera_asmi_parallel_1910_rmd4qmi.v",
+        "../flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_asmi_parallel_epcq_epcq.v",
+        "../flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_epcq_controller_epcq_epcq.v",
+        "../flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/epcq_altera_epcq_controller_191_yfexvhi.sv",
+        "../flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_core_1910/synth/altera_epcq_controller_arb.sv",
+        "../flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_core_1910/synth/altera_epcq_controller.sv"
+      ],
+      "jtag_uart_hdl": [
+        "../jtag_uart/jtag_uart_std.v",
+        "../jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v"
+      ],
+      "mif": ["../boot/build/boot.mif"]
+    }
+  },
+  "conditional_review": [
+    {
+      "file": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+      "line": 58,
+      "guard": "ifdef SYNTHESIS",
+      "defined_branch": "LCVEX_CATAPULT_BOOT_INIT_IMAGE = \"../boot/build/boot.mif\"",
+      "undefined_branch": "LCVEX_CATAPULT_BOOT_INIT_IMAGE = \"fpga/catapult_a10/boot/build/boot.hex\"",
+      "effect": "Quartus gets the generated 64-bit MIF; simulation keeps the byte HEX path."
+    },
+    {
+      "file": "rtl/lcvex_bram_boot.sv",
+      "line": 57,
+      "guard": "ifdef SYNTHESIS",
+      "defined_branch": "lcvex_bram_boot_altsyncram",
+      "undefined_branch": "lcvex_bram_boot_behav",
+      "effect": "Selects explicit altera_syncram/M20K wrapper for Quartus and byte-accurate behavioral wrapper for Verilator."
+    },
+    {
+      "file": "rtl/lcvex_bram_boot.sv",
+      "line": 94,
+      "guard": "ifndef SYNTHESIS",
+      "defined_branch": "behavioral module excluded",
+      "undefined_branch": "lcvex_bram_boot_behav module, initial zeroing/$readmemh and prog_we logic included",
+      "effect": "The Error 19544 source at line 165 is outside the defined-SYNTHESIS compilation branch."
+    },
+    {
+      "file": "rtl/lcvex_bram_boot.sv",
+      "line": 214,
+      "guard": "ifdef SYNTHESIS",
+      "defined_branch": "lcvex_bram_boot_altsyncram with altera_syncram, BIDIR_DUAL_PORT, ram_block_type=M20K and INIT_FILE",
+      "undefined_branch": "synthesis-only module excluded",
+      "effect": "Provides the intended physical BRAM implementation and MIF-backed initialization."
+    },
+    {
+      "file": "rtl/lcvex_cache_data_ram.sv",
+      "line": 40,
+      "guard": "ifdef SYNTHESIS",
+      "defined_branch": "explicit altera_syncram SINGLE_PORT, ram_block_type=M20K",
+      "undefined_branch": "packed behavioral line memory",
+      "effect": "Quartus receives the intended M20K cache-line RAM; simulation retains the reference model."
+    },
+    {
+      "file": "rtl/lcvex_fp_scalar.sv",
+      "line": 5914,
+      "guard": "ifndef SYNTHESIS",
+      "defined_branch": "R20 route assertions excluded",
+      "undefined_branch": "six R20 route assertions included",
+      "effect": "Only simulation/formal-style assertions are removed; no FP functional datapath branch was found."
+    }
+  ],
+  "duplicate_module_check": {
+    "qsf_direct_canonical_hdl_modules": 52,
+    "qsf_direct_unique_module_names": 52,
+    "qsf_direct_duplicate_module_names": [],
+    "same_name_outside_qsf": [
+      {
+        "module": "lcvex_bram_boot_altsyncram",
+        "qsf_reachable_definition": "rtl/lcvex_bram_boot.sv:215 under SYNTHESIS",
+        "outside_qsf_definition": "rtl/lcvex_bram_boot_altsyncram.sv:23 under SYNTHESIS",
+        "risk": "Adding the standalone file to the Catapult QSF would create a duplicate definition; it is not currently referenced by the QSF or rtl/filelist.f."
+      }
+    ],
+    "shim_status": "rtl/lcvex_bram_boot_shim.sv defines the distinct lcvex_bram_boot_shim module and is not a duplicate lcvex_bram_boot definition."
+  },
+  "mif_review": {
+    "qsf_assignment": "fpga/catapult_a10/quartus/catapult_a10.qsf:12 set_global_assignment -name MIF_FILE \"../boot/build/boot.mif\"",
+    "synthesis_top_image": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv:59 defines the same ../boot/build/boot.mif path under SYNTHESIS",
+    "soc_parameter_flow": [
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv:241 passes the image macro as BOOT_HEX_FILE",
+      "rtl/lcvex_catapult_soc_top.sv:477 passes BOOT_HEX_FILE to lcvex_bram_boot",
+      "rtl/lcvex_bram_boot.sv:243-244 selects BOOT_MIF_FILE when nonempty, otherwise the compatibility BOOT_HEX_FILE path"
+    ],
+    "generator_contract": "fpga/catapult_a10/boot/build.sh:43-46 emits boot.mif from boot.bin; documented contract is WIDTH=64, DEPTH=8192, 8192 records with byte equality/padding checks.",
+    "checkout_status": "boot/build/boot.mif is generated and ignored, so it is absent in this clean checkout; T-006 evidence records the generated remote MIF as 204942 bytes, WIDTH=64, DEPTH=8192, records=8192, SHA-256 614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7.",
+    "consumption_status": "not_signed_off; T-006 synthesis failed before a valid netlist/fitter/STA and only recognized the MIF as a User-Specified Memory Initialization File."
+  },
+  "checker_review": {
+    "qsf_current_macro_assignment_count": 0,
+    "qsf_current_macro_probe": "QSF_SYNTHESIS_MACRO_ABSENT",
+    "platform_checker": {
+      "file": "fpga/catapult_a10/tools/check_platform.py",
+      "line": 481,
+      "current_policy": "The forbidden-text loop matches VERILOG_MACRO case-insensitively, so the intended exact SYNTHESIS assignment would currently fail the checker."
+    },
+    "skeleton_checker": {
+      "file": "fpga/catapult_a10/tools/check_skeleton.py",
+      "macro_policy": "absent",
+      "current_behavior": "It checks the MIF anchor and skeleton anchors but neither requires SYNTHESIS nor rejects extra macros."
+    },
+    "minimum_policy": "Permit exactly one active assignment `set_global_assignment -name VERILOG_MACRO SYNTHESIS`; reject any other macro name, duplicate SYNTHESIS assignment, sibling platform paths, C_ALIAS/C_ALIAS_ENABLE and SignalTap text. Update checker/manifests and hashes in the implementation task."
+  },
+  "semantic_risks": [
+    {
+      "finding": "The synthesis BRAM wrapper is intentionally not byte-for-byte equivalent for accesses crossing an 8-byte word boundary: it returns fault, while the behavioral model supports byte-accurate cross-word accesses.",
+      "evidence": "rtl/lcvex_bram_boot.sv:19-20, 211-212 and docs/handoffs/T-20260830-031-fpga-g2-int.md:53-66",
+      "classification": "bounded-known-risk",
+      "decision": "Not a selector-contract blocker for the documented B25 boot/cache path, which uses aligned refill/writeback and aligned instruction fetch; it blocks any claim of full non-cache unaligned BRAM equivalence until split-access or explicit-fault policy is tested and documented."
+    },
+    {
+      "finding": "The synthesis BRAM wrapper retains prog_we for interface compatibility but does not implement runtime loading.",
+      "evidence": "rtl/lcvex_bram_boot.sv:364-365 documents that the synthesis wrapper does not implement runtime prog_we, and fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv:226-229 ties off the board top prog port",
+      "classification": "bounded-known-risk",
+      "decision": "Safe for the current board contract because the top-level prog_we is tied to zero and boot data comes from MIF; behavioral tests must continue without SYNTHESIS."
+    }
+  ],
+  "decision": {
+    "macro_semantics": "approve_with_conditions",
+    "current_candidate": "BLOCK",
+    "blocking_findings": [
+      "check_platform.py currently rejects the required VERILOG_MACRO token, so the candidate cannot pass its existing platform contract after the selector is added.",
+      "QSF-relative fpga/rtl aliases and generated boot.mif are candidate-only closure inputs; they must be regenerated and hash-bound for the post-selector physical candidate.",
+      "T-006 Error 19544 was not physically re-run with SYNTHESIS defined; no Quartus synthesis, fitter, STA, M20K resource or MIF consumption signoff exists yet."
+    ],
+    "minimum_safe_fix_boundary": [
+      "T-007 adds exactly one SYNTHESIS macro assignment at QSF level and narrows checker policy to that exact token while rejecting all unrelated macros.",
+      "Rebuild/revalidate boot.mif and materialize the 29 byte-identical fpga/rtl aliases in a fresh candidate manifest; do not add rtl/lcvex_bram_boot_altsyncram.sv to the QSF.",
+      "Run the required platform/skeleton/hash and behavioral focused checks without SYNTHESIS, then run one fresh remote Quartus synthesis before fitter/STA decisions."
+    ],
+    "not_authorized_by_this_task": [
+      "No RTL, QSF, manifest, active-task, status-document or test changes",
+      "No local heavy build or Verilator test",
+      "No GamePC, Quartus, assembler, JTAG, board, Flash or license action"
+    ]
+  },
+  "validation": [
+    {
+      "run_id": "clean-tree",
+      "level": "L0_static",
+      "command": "git status --porcelain=v1 && git rev-parse HEAD",
+      "result": "pass",
+      "summary": "Clean worktree at bdb764a5 before evidence-only writes."
+    },
+    {
+      "run_id": "qsf-reachability-and-conditional-enumeration",
+      "level": "L0_static",
+      "command": "Read-only QSF assignment resolution plus canonical ../../rtl mapping, preprocessor scan and module-name scan",
+      "result": "pass",
+      "summary": "49 assignments; 48 source assignments plus one MIF; six reachable SYNTHESIS conditionals; 52 module declarations with 52 unique names; no duplicate in the QSF-reachable set."
+    },
+    {
+      "run_id": "macro-policy-probe",
+      "level": "L0_static",
+      "command": "rg -n 'set_global_assignment -name VERILOG_MACRO|\\bSYNTHESIS\\b' fpga/catapult_a10/quartus/catapult_a10.qsf; rg -n VERILOG_MACRO fpga/catapult_a10/tools/check_platform.py fpga/catapult_a10/tools/check_skeleton.py",
+      "result": "pass",
+      "summary": "Current QSF macro absent; platform checker forbids the token; skeleton checker has no macro policy."
+    },
+    {
+      "run_id": "source-and-reference-hash-capture",
+      "level": "L0_static",
+      "command": "sha256sum of current QSF/RTL/checkers/docs and external successful-reference QSF",
+      "result": "pass",
+      "summary": "Hashes are recorded under source_identity; no external file was modified."
+    }
+  ],
+  "tests": {
+    "run": [],
+    "not_run_by_policy": ["Quartus/IP generation/synthesis/fitter/STA", "Verilator/Cocotb/SV build", "GamePC/assembler/SOF/JTAG/board/Flash"],
+    "basis": "The active task explicitly requires read-only/light review only. T-006 physical evidence remains the prior synthesis-failure baseline."
+  },
+  "blockers": [
+    "Current checker policy conflicts with the required exact SYNTHESIS macro.",
+    "Fresh candidate closure must include 29 QSF-relative aliases and generated boot.mif; clean checkout alone does not prove those physical inputs.",
+    "No fresh synthesis result exists after selector enable; T-006 Error 19544 remains the last physical blocker and fitter/STA/M20K signoff is unavailable."
+  ],
+  "next": [
+    "T-007 implement the minimal QSF/checker contract fix and preserve the current simulation branch behavior.",
+    "T-009 independently report any additional high-confidence Quartus 21.4 preflight blockers.",
+    "Integration regenerates source/MIF closure and runs affected L0-L2 plus one fresh GamePC Quartus synthesis before fitter/STA/assembler decisions."
+  ],
+  "handoff": "docs/handoffs/T-20260908-008-b25-synthesis-macro-review.md"
+}

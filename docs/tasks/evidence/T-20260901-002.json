@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260901-002",
+  "label": "PE-F1D-TIMEOUT-AUDIT",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "audit_complete_dynamic_confirmation_required",
+  "base_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+  "measurement_source_sha": "291018d9a63efe549be589d1127e424e1118ed8a",
+  "head_sha": "aaa0d4b6618d2f5cf2690fb6f1364eb892115852",
+  "head_sha_note": "owner 最终 correction tip；避免 evidence 自引用。",
+  "merge_sha": "8d1252877964b15db34f8ff061947d5c3b63b6ab",
+  "branch": "review/T-20260901-002-f1a-timeout-equivalence",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-002",
+  "owner": "luna-f1a-timeout-equivalence-audit",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "sent_at": "2026-09-01T00:23:53+08:00",
+    "received_at": "2026-09-01T00:23:53+08:00",
+    "reported_at": "2026-09-01T00:43:46+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "scope": "只读审计 T-20260831-007 中涉及 timeout/status/retired 差异的 10 个 pair，核对固定 5,000,000 周期终止、workload marker、commit/memory digest 累计范围，提出不降低架构比较强度的动态验收方案。",
+  "source": {
+    "task": "T-20260831-007",
+    "csv": {
+      "path": "docs/evidence/artifacts/T-20260831-007/f1c_matrix.csv",
+      "bytes": 73816,
+      "sha256": "d8ab955ed67aab8ec6826621358153ac84481a972e69f2d2ac9e57965025e005"
+    },
+    "json": {
+      "path": "docs/evidence/artifacts/T-20260831-007/f1c_matrix.json",
+      "bytes": 1291199,
+      "sha256": "acd72c27741c121c5848fb0e45fe5ae80f13e0ae85cda7e939e1d93dd27c9274"
+    },
+    "matrix_schema": "lcvex-perf-matrix-f1c-v1",
+    "rows": 196,
+    "pairs": 98,
+    "configs": 14,
+    "workloads": 14,
+    "status_counts": {"pass": 177, "timeout": 19, "fail": 0, "error": 0},
+    "measurement_source_sha_unique": true,
+    "max_cycles": 5000000,
+    "current_audit_base_relevant_source_same_as_measurement": true
+  },
+  "recalculation": {
+    "artifact": "build/agents/T-20260901-002/timeout_recalc.json",
+    "artifact_bytes": 10480,
+    "artifact_sha256": "501b01ff59ab349a629e0aa4da2089f2186b49bcda6d5f3479d5b263426b873a",
+    "pair_key": "base_config/workload with exactly one f0 and one f1a row",
+    "strict_fields": ["status", "returncode", "retired_insn", "commit_digest", "memory_digest"],
+    "returncode_source": "CSV omits returncode; cross-checked JSON rows, pass=0 and timeout=1",
+    "all_strict_mismatch_pairs": 15,
+    "selected_timeout_status_retired_pairs": 10,
+    "excluded_commit_only_pairs": "5 pass/pass neon_vect pairs with commit_digest-only mismatch; separate diagnosis",
+    "pairs": [
+      {
+        "pair": "l1id_l2_d0/mem_random",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 398516, "commit_digest": "18174ac5155862e9", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 420876, "commit_digest": "fe72e94fa7ae284a", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      },
+      {
+        "pair": "nocache_d1/mem_seq",
+        "fields": ["retired_insn", "commit_digest", "memory_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 787714, "commit_digest": "21fa6f4867492b5d", "memory_digest": "891501d65678a0da", "committed_memory_effects": 111527},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 796232, "commit_digest": "4d4e958016fd784c", "memory_digest": "f457537fc364cd8c", "committed_memory_effects": 113231},
+        "classification": "fixed-cap progress-boundary candidate with memory-prefix delta; dynamic commit-level confirmation required"
+      },
+      {
+        "pair": "nocache_d1/mem_random",
+        "fields": ["status", "returncode", "retired_insn", "commit_digest", "memory_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 474797, "commit_digest": "8db34ca7282f37c4", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "f1a": {"status": "pass", "returncode": 0, "cycles": 4759843, "retired_insn": 475192, "commit_digest": "08c9181cf290ad35", "memory_digest": "4e707e98e0c89190", "committed_memory_effects": 8197},
+        "classification": "fixed-cap status/progress boundary; f1a saw completion marker while f0 did not; dynamic final-state/prefix confirmation required"
+      },
+      {
+        "pair": "nocache_d2/alu_latency",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 647073, "commit_digest": "02ea93e7af2acbd7", "memory_digest": "87946b26b0fbf38d", "committed_memory_effects": 2},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 602941, "commit_digest": "3f2cc6280d35122e", "memory_digest": "87946b26b0fbf38d", "committed_memory_effects": 2},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      },
+      {
+        "pair": "nocache_d2/alu_ilp",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 691402, "commit_digest": "831fa17369682b8c", "memory_digest": "87946b26b0fbf38d", "committed_memory_effects": 2},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 694470, "commit_digest": "d6ea0e226e068f90", "memory_digest": "87946b26b0fbf38d", "committed_memory_effects": 2},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      },
+      {
+        "pair": "nocache_d2/ctrl_branch",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 668403, "commit_digest": "be4d5838f31460fe", "memory_digest": "48a064bbacad1e70", "committed_memory_effects": 11},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 607808, "commit_digest": "92f25245d411ba21", "memory_digest": "48a064bbacad1e70", "committed_memory_effects": 11},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      },
+      {
+        "pair": "nocache_d2/mem_seq",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 562166, "commit_digest": "8c4a9bb520bfdd2f", "memory_digest": "9682bb25ab29f2f2", "committed_memory_effects": 81943},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 553599, "commit_digest": "6780d87b236bc2ff", "memory_digest": "9682bb25ab29f2f2", "committed_memory_effects": 81943},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      },
+      {
+        "pair": "nocache_d2/mem_random",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 407881, "commit_digest": "a9b36cc8cd729082", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 413351, "commit_digest": "4f208b0b91e06700", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      },
+      {
+        "pair": "fullcache_d1/mem_random",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 356074, "commit_digest": "afb153dda1664de8", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 374163, "commit_digest": "863cbfb03257b6f1", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      },
+      {
+        "pair": "fullcache_d2/mem_random",
+        "fields": ["retired_insn", "commit_digest"],
+        "f0": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 319908, "commit_digest": "5c7b458e951ecafe", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "f1a": {"status": "timeout", "returncode": 1, "cycles": 5000000, "retired_insn": 333415, "commit_digest": "315023745c7805b3", "memory_digest": "c109a4332b568b5b", "committed_memory_effects": 8195},
+        "classification": "fixed-cap progress-boundary candidate; both prefixes truncated; dynamic completion/common-prefix required"
+      }
+    ]
+  },
+  "workload_termination": {
+    "marker_address": "0x4400FE00",
+    "startup": "baremetal/startup_mb.s sets SP, calls main, stores main return value to MAGIC, then spins",
+    "runner_done": "commit_valid && commit_ready && commit_mem_we && commit_mem_addr == 0x4400FE00",
+    "pass_condition": "marker wdata/return code == 0",
+    "timeout_condition": "no marker before c < max_cycles loop ends",
+    "timeout_returncode": "runner/perf wrapper reports 1; this is not the workload's main return value",
+    "finite_workloads": {
+      "alu_latency": "five finite chains of 50,000 operations",
+      "alu_ilp": "2/4/8 independent chains of 40,000 operations",
+      "ctrl_branch": "five finite functions of 20,000 iterations",
+      "mem_seq": "four finite size/rep phases; 57,344 words across write/read/copy, about 172,032 word memory operations plus finite tail reads",
+      "mem_random": "8,192-entry initialization, 65,536 pointer-chase iterations, 32,768 random-read iterations"
+    }
+  },
+  "digest_semantics": {
+    "commit_digest": "initialized to FNV offset; on every accepted commit, hashes retired sequence number and complete packet fields (PC/insn/next PC, GPR/SP/NZCV, memory, exception, monitor, vector/FP effects); no cycles/wall time",
+    "memory_digest": "initialized to FNV offset; hashes only committed mem/mem2 address/data/byte strobe effects",
+    "memory_effect_count": "increments once per committed mem or mem2 effect",
+    "marker_order": "digest/effect accumulation occurs before MAGIC detection in the same tick, so a pass includes its terminal MAGIC store while a timeout generally does not",
+    "equivalence_implication": "different retired prefix lengths naturally produce different cumulative digests; memory_digest is not a final RAM snapshot"
+  },
+  "dynamic_acceptance": {
+    "recommended": "run both f0 and f1a of each selected pair to marker completion under identical image/config/source/tool provenance",
+    "minimum_closure_rows": 20,
+    "triage_rows": 10,
+    "triage_pairs": [
+      "nocache_d1/mem_random",
+      "nocache_d1/mem_seq",
+      "l1id_l2_d0/mem_random",
+      "nocache_d2/alu_latency",
+      "nocache_d2/ctrl_branch"
+    ],
+    "completion_requirements": [
+      "both status=pass and returncode=0",
+      "both marker return codes are zero",
+      "retired_insn, commit_digest, memory_digest and committed_memory_effects equal",
+      "if traces are enabled, every commit field and memory effect order equal through completion"
+    ],
+    "common_prefix_option": "Use runner --trace/perf_runner.py --trace; compare seq and every PC/insn/next PC, GPR/GPR2/GPR3/SP/NZCV, mem/mem2 address/data/strobe, exception, monitor and vector/FP field. Any first prefix mismatch is an architecture risk; equal prefix with one timeout remains unresolved until marker completion.",
+    "stop_conditions": [
+      "first common-prefix architectural field mismatch",
+      "fail/error/nonzero marker",
+      "new safety cap timeout",
+      "MemoryMax/swap/concurrency/resource violation"
+    ]
+  },
+  "runner_provenance_and_isolation": {
+    "t20260830_001": "FPGA-A standalone Quartus module runner; incompatible with F1C microbench equivalence",
+    "t20260826_001": "registry/query only; no compatible microbench runner",
+    "t20260901_001": "A10 preflight only; no F1C runner",
+    "compatible_artifacts": "T-007 runner/image hashes and manifests are provenance-only; T-007 worktree/build/failed-field access and binary reuse are forbidden",
+    "required_own_rebuild": {
+      "config_count": 10,
+      "configs": [
+        "l1id_l2_d0_f0", "l1id_l2_d0_f1a",
+        "nocache_d1_f0", "nocache_d1_f1a",
+        "nocache_d2_f0", "nocache_d2_f1a",
+        "fullcache_d1_f0", "fullcache_d1_f1a",
+        "fullcache_d2_f0", "fullcache_d2_f1a"
+      ],
+      "workload_image_count": 5,
+      "workload_images": ["mem_random", "mem_seq", "alu_latency", "alu_ilp", "ctrl_branch"],
+      "closure_rows": 20,
+      "worktree_rule": "rebuild in /home/chiro/projects/mycpu/lcvex-wt-<new-task-id>; T-007 build and failure field are read-prohibited"
+    },
+    "reuse_conditions": [
+      "none for T-007 binaries/images; only T-007 config/source/image/hash metadata may be consulted",
+      "all binaries/images used by the dynamic task must be rebuilt in its own sibling worktree and build staging",
+      "the rebuilt runner manifest must bind the frozen source, workload image, config, cache/delay/FIFO parameters and toolchain"
+    ],
+    "neon_sharing": "only the new task's own rebuilt per-config binaries may be shared serially with separate neon diagnosis; pair/workload results remain independent"
+  },
+  "resource_estimate": {
+    "historical_selected_20_rows_wall_seconds_at_5m_cap": 1262.721416,
+    "historical_selected_20_rows_wall_minutes_at_5m_cap": 21.05,
+    "historical_selected_max_single_row_wall_seconds": 68.6,
+    "completion_time": "unknown beyond fixed cap; reserve 60-120 minutes for selected dynamic closure, with mem_seq/mem_random prioritized",
+    "runner_rebuild": "T-007 binaries/builds may not be reused; own sibling worktree must rebuild 10 unique config runners and 5 workload images for the 20-row closure, with ~3-4 hours conservative serialized budget following T-007 experience",
+    "resource_policy": "MemoryMax=15G, MemorySwapMax=0, CPUQuota=50%, MAKEFLAGS=-j1, VERILATOR_JOBS=1; one heavy job at a time"
+  },
+  "threshold": {
+    "current_strict_equal_pairs": 83,
+    "total_pairs": 98,
+    "required": "98/98",
+    "decision": "do not lower or reinterpret the gate; even resolving these 10 leaves five neon commit-only mismatches from T-007",
+    "approval": "any threshold change requires explicit integrator/user approval"
+  },
+  "runs": [
+    {
+      "run_id": "independent-csv-json-recalc",
+      "level": "L0",
+      "result": "pass",
+      "command": "parse archived T-007 JSON/CSV; regroup 98 f0/f1a pairs; compare strict fields; select 10 timeout/status/retired mismatches",
+      "artifact": "build/agents/T-20260901-002/timeout_recalc.json",
+      "artifact_sha256": "501b01ff59ab349a629e0aa4da2089f2186b49bcda6d5f3479d5b263426b873a"
+    },
+    {
+      "run_id": "matrix-count-cross-check",
+      "level": "L0",
+      "result": "pass",
+      "command": "independent row/pair/status/provenance count and JSON returncode cross-check",
+      "summary": "196 rows; 98 pairs; f0=98/f1a=98; pass=177/timeout=19; strict equal=83"
+    },
+    {
+      "run_id": "relevant-source-diff-check",
+      "level": "L0",
+      "result": "pass",
+      "command": "git diff --quiet ee3cc52... 291018d... -- scripts/run_perf_matrix.py sim/microbench baremetal/perf baremetal/startup_mb.s baremetal/microbench_main.c baremetal/link.ld",
+      "summary": "runner/workload/digest source relevant to audit unchanged between audit base and measurement source"
+    }
+  ],
+  "non_actions": [
+    "未启动 Verilator、QEMU、Quartus、Gate 或 Linux",
+    "未修改 RTL、runner、workload、comparator、reference、T-007 artifacts 或 98/98 门槛",
+    "未生成动态 trace、未运行至完成、未产生新的 architectural result"
+  ],
+  "known_limits": [
+    "现有 10 对尚无动态共同退休前缀或完成状态证据",
+    "T-007 另有 5 个 neon_vect commit-only mismatch，不在本审计的 10 对内",
+    "timeout rows 的 cycles/retired/digest 不能直接外推 FPGA 性能或架构等价"
+  ],
+  "next": "集成者按 20-row minimum closure 登记动态任务；优先 10-row trace triage；保持 F1a 默认关闭，只有全部 98 对严格字段与逐提交架构字段通过后才可重新评估 F1a。"
+}

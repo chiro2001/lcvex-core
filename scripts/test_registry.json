@@ -1,0 +1,2218 @@
+{
+  "schema_version": 1,
+  "name": "lcvex-validation-registry",
+  "description": "LCVEX 分层验证入口清单；当前为 A0 手工维护的部分清单，只用于查询和验收规划，不自动调度命令，也不作为自动影响分析的唯一来源。",
+  "levels": [
+    "L0",
+    "L1",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "domains": [
+    "core-isa",
+    "mem-subsys",
+    "mmio-periph",
+    "difftest-infra",
+    "verify-suite",
+    "fpga-platform",
+    "multicore-cluster"
+  ],
+  "tests": [
+    {
+      "id": "l0.microbench",
+      "title": "裸机 C microbench 全量",
+      "domain": "core-isa",
+      "level": "L0",
+      "kind": "microbench",
+      "tags": [
+        "fast",
+        "scalar",
+        "verilator-only"
+      ],
+      "command": "make microbench",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 512,
+        "disk_mb": 16
+      }
+    },
+    {
+      "id": "l1.make-test",
+      "title": "基础 RTL/Cocotb/SV 回归",
+      "domain": "verify-suite",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fast",
+        "sv",
+        "cocotb",
+        "sva"
+      ],
+      "command": "make test",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 6,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      }
+    },
+    {
+      "id": "l1.cache-perf-elab",
+      "title": "可选 Cache 性能观测端口双配置 elaboration",
+      "domain": "mem-subsys",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "cache",
+        "performance",
+        "elaboration",
+        "verilator"
+      ],
+      "command": "make cache-perf-elab",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 256
+      },
+      "source": "tb/sv/lcvex_soc_tb.sv"
+    },
+    {
+      "id": "l1.cache-perf-smoke",
+      "title": "Cache 性能观测 off/on 资格化 smoke",
+      "domain": "mem-subsys",
+      "level": "L1",
+      "kind": "smoke",
+      "tags": [
+        "cache",
+        "performance",
+        "counter",
+        "verilator"
+      ],
+      "command": "make cache-perf-smoke",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 8192,
+        "disk_mb": 2048
+      },
+      "source": "sim/microbench/perf_runner.py"
+    },
+    {
+      "id": "l1.commit-digest",
+      "title": "Commit digest v2 active-payload helper fixture",
+      "domain": "difftest-infra",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fast",
+        "digest",
+        "provenance",
+        "verilator-only"
+      ],
+      "command": "make commit-digest-test",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 256,
+        "disk_mb": 16
+      },
+      "source": "sim/microbench/commit_digest_test.cc"
+    },
+    {
+      "id": "l1.f1a-d2-event-probe",
+      "title": "F1a nocache delay2 有界事件 probe 合约 smoke",
+      "domain": "verify-suite",
+      "level": "L1",
+      "kind": "smoke",
+      "tags": [
+        "f1a",
+        "performance",
+        "probe",
+        "delay",
+        "fifo",
+        "verilator"
+      ],
+      "command": "make f1a-d2-event-probe-selftest",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 8192
+      },
+      "source": "sim/microbench/perf_runner.py"
+    },
+    {
+      "id": "l1.f1a-control-flow-fence",
+      "title": "F1a 控制流取指 fence SV（cache-off/cache-on、delay2）",
+      "domain": "mem-subsys",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "f1a",
+        "performance",
+        "control-flow",
+        "fifo",
+        "cache",
+        "delay",
+        "verilator"
+      ],
+      "command": "make f1a-control-flow-fence-smoke",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 8192,
+        "disk_mb": 12288
+      },
+      "source": "tb/sv/lcvex_fetch_fifo_tb.sv"
+    },
+    {
+      "id": "l1.check-encoders",
+      "title": "A64 编码器对照",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fast",
+        "encoder",
+        "scalar"
+      ],
+      "command": "make check-encoders",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 256,
+        "disk_mb": 16
+      }
+    },
+    {
+      "id": "l1.coverage",
+      "title": "RTL 单元覆盖率",
+      "domain": "verify-suite",
+      "level": "L1",
+      "kind": "coverage",
+      "tags": [
+        "coverage",
+        "sv",
+        "cache",
+        "mmu"
+      ],
+      "command": "make coverage",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 6,
+        "memory_mb": 4096,
+        "disk_mb": 1024
+      }
+    },
+    {
+      "id": "l1.checkpoint-manifest",
+      "title": "Checkpoint manifest 完整性 smoke",
+      "domain": "difftest-infra",
+      "level": "L1",
+      "kind": "smoke",
+      "tags": [
+        "checkpoint",
+        "manifest",
+        "fast"
+      ],
+      "command": "make checkpoint-manifest-smoke",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 256,
+        "disk_mb": 32
+      }
+    },
+    {
+      "id": "l1.checkpoint-resume-manifest",
+      "title": "Resume checkpoint provenance smoke",
+      "domain": "difftest-infra",
+      "level": "L1",
+      "kind": "smoke",
+      "tags": [
+        "checkpoint",
+        "manifest",
+        "resume",
+        "provenance",
+        "fast"
+      ],
+      "command": "make checkpoint-resume-manifest-smoke",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 256,
+        "disk_mb": 32
+      }
+    },
+    {
+      "id": "l2.difftest",
+      "title": "P1/P2 批量 trace 差分",
+      "domain": "difftest-infra",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "trace",
+        "scalar"
+      ],
+      "command": "make difftest",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.hazard",
+      "title": "流水线 hazard 定向差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "hazard",
+        "pipeline"
+      ],
+      "command": "make difftest-hazard",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.gate-c",
+      "title": "同步异常与 EL0/EL1 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "exception",
+        "system"
+      ],
+      "command": "make p4c",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l1.muldiv-request-sv",
+      "title": "乘除请求捕获/launch raw-bit SV 定向测试",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "scalar",
+        "muldiv",
+        "request",
+        "capture",
+        "sv"
+      ],
+      "command": "make sim-sv-muldiv-req",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "tb/sv/lcvex_muldiv_req_tb.sv"
+    },
+    {
+      "id": "l1.muldiv-request-cocotb",
+      "title": "乘除请求捕获/launch Cocotb 定向测试",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "scalar",
+        "muldiv",
+        "request",
+        "capture",
+        "cocotb"
+      ],
+      "command": "make sim-cocotb-muldiv-req",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "sim/cocotb/test_muldiv_req.py"
+    },
+    {
+      "id": "l2.muldiv-request",
+      "title": "乘除 W/X/div0 严格锁步定向差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "scalar",
+        "muldiv",
+        "w-x",
+        "div0",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make difftest-muldiv-request",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "sim/difftest/test_program.py"
+    },
+    {
+      "id": "l2.mmu",
+      "title": "MMU/TLB 定向差分",
+      "domain": "mem-subsys",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "mmu",
+        "tlb"
+      ],
+      "command": "make p5a",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.hardening",
+      "title": "P5a 架构语义 hardening",
+      "domain": "mem-subsys",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "hardening",
+        "mmu",
+        "scalar"
+      ],
+      "command": "bash sim/difftest/run_p5a_hardening.sh",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.p6-lse",
+      "title": "P6 LSE 原子定向差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "p6",
+        "atomic"
+      ],
+      "command": "make p6-lse",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.p6-lse128",
+      "title": "P6 LSE128 三族原子定向差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "p6",
+        "atomic",
+        "lse128"
+      ],
+      "command": "make p6-lse128",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 512
+      }
+    },
+    {
+      "id": "l2.p6-wfi",
+      "title": "P6 WFI/WFE/Timer IRQ 差分",
+      "domain": "mmio-periph",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "p6",
+        "timer",
+        "irq",
+        "wfi"
+      ],
+      "command": "make p6-wfi",
+      "status": "available",
+      "default": true,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l1.p6-irq-young-squash",
+      "title": "ordinary IRQ 年轻流水级/事务清空定向",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "irq",
+        "pipeline",
+        "dmem",
+        "fp",
+        "verilator",
+        "sva"
+      ],
+      "command": "make sim-sv-irq-young-squash",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 15360,
+        "disk_mb": 8192
+      },
+      "source": "tb/sv/lcvex_irq_young_squash_tb.sv"
+    },
+    {
+      "id": "l1.p6-irq-atomic-overlap",
+      "title": "CASP/STXR/DC ZVA natural IRQ overlap",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "irq",
+        "atomic",
+        "lse",
+        "exclusive",
+        "maintenance",
+        "verilator",
+        "sva"
+      ],
+      "command": "make sim-sv-irq-atomic-overlap",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 15360,
+        "disk_mb": 8192
+      },
+      "source": "tb/sv/lcvex_irq_atomic_overlap_tb.sv"
+    },
+    {
+      "id": "l2.p6-irq-atomic-overlap",
+      "title": "CASP/STXR/DC ZVA Generic Timer IRQ 严格锁步",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "irq",
+        "atomic",
+        "lse",
+        "exclusive",
+        "maintenance"
+      ],
+      "command": "make p6-irq-atomic-overlap (runner: sim/difftest/run_p6_irq_atomic_overlap.sh)",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 15360,
+        "disk_mb": 8192
+      },
+      "source": "sim/difftest/run_p6_irq_atomic_overlap.sh"
+    },
+    {
+      "id": "l0.p6-stxr-irq-mon-we-fixture",
+      "title": "STXR IRQ monitor sidecar 协议 fixture",
+      "domain": "difftest-infra",
+      "level": "L0",
+      "kind": "unit",
+      "tags": [
+        "protocol",
+        "irq",
+        "exclusive",
+        "monitor"
+      ],
+      "command": "python3 sim/difftest/stxr_irq_mon_we_fixture.py",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 512,
+        "disk_mb": 64
+      },
+      "source": "sim/difftest/stxr_irq_mon_we_fixture.py"
+    },
+    {
+      "id": "l2.p6-stxr-irq-mon-we",
+      "title": "STXR same-COMMIT IRQ monitor sidecar 严格回归",
+      "domain": "difftest-infra",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "irq",
+        "exclusive",
+        "monitor",
+        "protocol"
+      ],
+      "command": "make p6-stxr-irq-mon-we (runner: sim/difftest/run_p6_stxr_irq_mon_we.sh; probe: sim/difftest/run_stxr_irq_mon_we_probe.sh)",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 8192,
+        "disk_mb": 4096
+      },
+      "source": "sim/difftest/run_p6_stxr_irq_mon_we.sh"
+    },
+    {
+      "id": "l2.p6-timer-el0",
+      "title": "P6 EL0 Generic Timer CNTKCTL 门控差分",
+      "domain": "mmio-periph",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "p6",
+        "timer",
+        "el0",
+        "exception"
+      ],
+      "command": "make p6-timer-el0",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.p6-maint-v82",
+      "title": "ARMv8.2 DC CVAP/AT maintenance 严格差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "qemu",
+        "p6",
+        "maintenance",
+        "mmu",
+        "pan"
+      ],
+      "command": "make p6-maint-v82",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.checkpoint-dut",
+      "title": "Verilator 架构状态 checkpoint 恢复",
+      "domain": "difftest-infra",
+      "level": "L2",
+      "kind": "checkpoint",
+      "tags": [
+        "checkpoint",
+        "restore",
+        "verilator"
+      ],
+      "command": "make checkpoint-dut-smoke",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      }
+    },
+    {
+      "id": "l2.checkpoint-devices",
+      "title": "Timer/GIC/C model checkpoint 联合恢复",
+      "domain": "mmio-periph",
+      "level": "L2",
+      "kind": "checkpoint",
+      "tags": [
+        "checkpoint",
+        "timer",
+        "gic",
+        "c-model"
+      ],
+      "command": "make checkpoint-timer-smoke checkpoint-gic-smoke checkpoint-mmio-smoke",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 512
+      }
+    },
+    {
+      "id": "l3.gate-d",
+      "title": "Gate D 冻结候选全量回归",
+      "domain": "verify-suite",
+      "level": "L3",
+      "kind": "gate",
+      "tags": [
+        "gate",
+        "cache",
+        "mmu",
+        "qemu",
+        "candidate"
+      ],
+      "command": "make gate-d",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 6,
+        "memory_mb": 8192,
+        "disk_mb": 4096
+      }
+    },
+    {
+      "id": "l3.coverage-accounting",
+      "title": "QEMU trace 指令覆盖记账",
+      "domain": "verify-suite",
+      "level": "L3",
+      "kind": "coverage",
+      "tags": [
+        "coverage",
+        "trace",
+        "isa"
+      ],
+      "command": "python3 scripts/insn_coverage.py --expect random build/difftest/random_1.trace build/difftest/random_2.trace build/difftest/random_3.trace",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 512,
+        "disk_mb": 128
+      }
+    },
+    {
+      "id": "l4.ci-nightly",
+      "title": "nightly 多 seed/延迟/QEMU patch 回归",
+      "domain": "verify-suite",
+      "level": "L4",
+      "kind": "nightly",
+      "tags": [
+        "nightly",
+        "random",
+        "qemu",
+        "patch-replay"
+      ],
+      "command": "bash scripts/ci-nightly.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 6,
+        "memory_mb": 8192,
+        "disk_mb": 8192
+      }
+    },
+    {
+      "id": "l4.linux-long-run",
+      "title": "Linux checkpoint 续跑与长窗口锁步",
+      "domain": "difftest-infra",
+      "level": "L4",
+      "kind": "linux",
+      "tags": [
+        "nightly",
+        "linux",
+        "checkpoint",
+        "lockstep"
+      ],
+      "command": "CHAIN=... RESUME_SEQ=... bash sim/difftest/run_lockstep_resume.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 16384
+      }
+    },
+    {
+      "id": "l1.p7-0-fp-state",
+      "title": "P7-0 FP state/CPACR/FPEN 独立 Cocotb",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "state",
+        "cpacr",
+        "p7",
+        "cocotb"
+      ],
+      "command": "make -C sim/cocotb -f Makefile.fp_state SIM=verilator TOPLEVEL=lcvex_fp_state_cocotb_tb COCOTB_TEST_MODULES=test_fp_state SIM_BUILD=sim_build_p7_0_fp_state",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "sim/cocotb/Makefile.fp_state"
+    },
+    {
+      "id": "l1.p7-0-fail-fp-smoke",
+      "title": "P7-0 fail-fp 现场重放 smoke",
+      "domain": "difftest-infra",
+      "level": "L1",
+      "kind": "smoke",
+      "tags": [
+        "fp",
+        "fail",
+        "p7",
+        "smoke",
+        "replay"
+      ],
+      "command": "make fail-fp-smoke",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-fp-exec-directed",
+      "title": "FP transaction/iterative round-pack 状态与延迟 SV 定向测试",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "neon",
+        "round-pack",
+        "pause",
+        "kill",
+        "sv"
+      ],
+      "command": "make sim-sv-fp-exec-directed",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "tb/sv/lcvex_fp_exec_tb.sv"
+    },
+    {
+      "id": "l1.r18-fp-prescan-sv",
+      "title": "R18 FP prescan/classify/normalize 边界 SV 定向测试",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "round-pack",
+        "timing",
+        "pause",
+        "kill",
+        "sv"
+      ],
+      "command": "make sim-sv-fp-scalar-r18",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "tb/sv/lcvex_fp_scalar_r18_tb.sv"
+    },
+    {
+      "id": "l1.r20-fp-arith-route-sv",
+      "title": "R20 FP non-half arithmetic route closure SV directed test",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "timing",
+        "route",
+        "pause",
+        "kill",
+        "sv"
+      ],
+      "command": "make sim-sv-fp-scalar-r20-route",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "tb/sv/lcvex_fp_scalar_r20_route_tb.sv"
+    },
+    {
+      "id": "l1.r20-fp-final-pack-sv",
+      "title": "R20 FP final pack-result boundary SV directed test",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "timing",
+        "round-pack",
+        "pause",
+        "kill",
+        "sv"
+      ],
+      "command": "make sim-sv-fp-scalar-r20-pack",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 256
+      },
+      "source": "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv"
+    },
+    {
+      "id": "l1.r18-core-syskill-sv",
+      "title": "R18 core system-commit/FP owner SV 定向测试",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "system",
+        "timing",
+        "backpressure",
+        "sv"
+      ],
+      "command": "make sim-sv-core-syskill",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "tb/sv/lcvex_core_tb.sv"
+    },
+    {
+      "id": "l1.r18-core-syskill-cocotb",
+      "title": "R18 core system-after-FP/RAW Cocotb 定向测试",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "system",
+        "timing",
+        "raw",
+        "cocotb"
+      ],
+      "command": "make sim-cocotb-core-syskill",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "sim/cocotb/test_core_syskill.py"
+    },
+    {
+      "id": "l1.p7-1-fp-scalar-sv",
+      "title": "P7-1 FP 标量 raw-bit SV TB",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "scalar",
+        "p7",
+        "sv"
+      ],
+      "command": "make sim-sv-fp-scalar",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-1-fp-scalar-cocotb",
+      "title": "P7-1 FP 标量 pipeline Cocotb",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "scalar",
+        "p7",
+        "cocotb"
+      ],
+      "command": "make sim-cocotb-fp-scalar",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-1-fp-scalar",
+      "title": "P7-1 FP 标量 A76 required 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "scalar",
+        "p7",
+        "qemu",
+        "lockstep",
+        "a76"
+      ],
+      "command": "make p7-1-fp-scalar",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-1-fp-scalar-edge",
+      "title": "P7-1 FP 标量 NaN/Inf/zero/subnormal 边界差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "scalar",
+        "p7",
+        "edge",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-1-fp-scalar-edge",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-1-fp-scalar-rounding",
+      "title": "P7-1 FP 标量四种 RMode 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "scalar",
+        "p7",
+        "rounding",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-1-fp-scalar-rounding",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-1-fp-scalar-sequence",
+      "title": "P7-1 FP 标量 forwarding/sticky 序列差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "scalar",
+        "p7",
+        "sequence",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-1-fp-scalar-sequence",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-2-neon-sv",
+      "title": "P7-2 NEON 整数/单 Q 访存 SV TB",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "neon",
+        "p7",
+        "sv",
+        "integer",
+        "q"
+      ],
+      "command": "make sim-sv-p7-2-neon",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-2-neon-cocotb",
+      "title": "P7-2 NEON 整数/单 Q 访存 Cocotb",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "neon",
+        "p7",
+        "cocotb",
+        "integer",
+        "q"
+      ],
+      "command": "make sim-cocotb-p7-2-neon",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-2-neon-int",
+      "title": "P7-2 NEON 整数 A76 required 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "neon",
+        "p7",
+        "integer",
+        "qemu",
+        "lockstep",
+        "a76"
+      ],
+      "command": "make p7-2-neon-int",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-2-neon-fetch-fault",
+      "title": "P7-2 NEON Q store + IABT 边界差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "neon",
+        "p7",
+        "fault",
+        "fetch",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-2-neon-fetch-fault",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-3-neon-fp-sv",
+      "title": "P7-3 NEON FP raw unit SV TB",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "neon",
+        "fp",
+        "p7",
+        "sv"
+      ],
+      "command": "make sim-sv-p7-3-neon-fp",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-3-neon-fp-cocotb",
+      "title": "P7-3 NEON FP pipeline Cocotb",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "neon",
+        "fp",
+        "p7",
+        "cocotb"
+      ],
+      "command": "make sim-cocotb-p7-3-neon-fp",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-3-neon-fp",
+      "title": "P7-3 NEON FP A76 required 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "neon",
+        "fp",
+        "p7",
+        "qemu",
+        "lockstep",
+        "a76"
+      ],
+      "command": "make p7-3-neon-fp",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-4-fma-convert-sv",
+      "title": "P7-4 FMA/转换 SV raw TB",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "fma",
+        "convert",
+        "p7",
+        "sv"
+      ],
+      "command": "make sim-sv-p7-4-fma-convert",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-4-fma-convert-cocotb",
+      "title": "P7-4 FMA/转换 pipeline Cocotb",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "fma",
+        "convert",
+        "p7",
+        "cocotb",
+        "operand-c-raw"
+      ],
+      "command": "make sim-cocotb-p7-4-fma-convert",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-4-fma-convert",
+      "title": "P7-4 FMA/转换 A76 required 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fma",
+        "convert",
+        "p7",
+        "qemu",
+        "lockstep",
+        "a76"
+      ],
+      "command": "make p7-4-fma-convert",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-4-fma-convert-edge",
+      "title": "P7-4 FMA/转换边界差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fma",
+        "convert",
+        "p7",
+        "edge",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-4-fma-convert-edge",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-4-fma-convert-rounding",
+      "title": "P7-4 FMA/转换 rounding 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fma",
+        "convert",
+        "p7",
+        "rounding",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-4-fma-convert-rounding",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-4-fma-convert-sequence",
+      "title": "P7-4 FMA/转换序列差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fma",
+        "convert",
+        "p7",
+        "sequence",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-4-fma-convert-sequence",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-5-fp16-sqrt-minmax-round-sv",
+      "title": "P7-5 FP16/sqrt/minmax/rint SV raw TB",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "fp16",
+        "sqrt",
+        "minmax",
+        "round",
+        "p7",
+        "sv"
+      ],
+      "command": "make sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.p7-5-fp16-sqrt-minmax-round-cocotb",
+      "title": "P7-5 FP16/sqrt/minmax/rint pipeline Cocotb",
+      "domain": "core-isa",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fp",
+        "fp16",
+        "sqrt",
+        "minmax",
+        "round",
+        "p7",
+        "cocotb"
+      ],
+      "command": "make sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-5-fp16-sqrt-minmax-round",
+      "title": "P7-5 FP16/sqrt/minmax/rint A76 required 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fp16",
+        "sqrt",
+        "minmax",
+        "round",
+        "p7",
+        "qemu",
+        "lockstep",
+        "a76"
+      ],
+      "command": "make p7-5-fp16-sqrt-minmax-round",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-5-fp16-sqrt-minmax-round-edge",
+      "title": "P7-5 FP16/sqrt/minmax/rint 边界差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fp16",
+        "sqrt",
+        "minmax",
+        "round",
+        "p7",
+        "edge",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-5-fp16-sqrt-minmax-round-edge",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-5-fp16-sqrt-minmax-round-rounding",
+      "title": "P7-5 FP16/sqrt/minmax/rint rounding 差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fp16",
+        "sqrt",
+        "minmax",
+        "round",
+        "p7",
+        "rounding",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-5-fp16-sqrt-minmax-round-rounding",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l2.p7-5-fp16-sqrt-minmax-round-sequence",
+      "title": "P7-5 FP16/sqrt/minmax/rint 序列差分",
+      "domain": "core-isa",
+      "level": "L2",
+      "kind": "difftest",
+      "tags": [
+        "fp",
+        "fp16",
+        "sqrt",
+        "minmax",
+        "round",
+        "p7",
+        "sequence",
+        "qemu",
+        "lockstep"
+      ],
+      "command": "make p7-5-fp16-sqrt-minmax-round-sequence",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "Makefile"
+    },
+    {
+      "id": "l1.mc-c1-shell-check",
+      "title": "C1 双核壳层 local lint/check",
+      "domain": "multicore-cluster",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "multicore",
+        "c1",
+        "cluster",
+        "lint",
+        "sv"
+      ],
+      "command": "bash scripts/mc_shell_check.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "scripts/mc_shell_check.sh"
+    },
+    {
+      "id": "l1.mc-c2-cluster-module",
+      "title": "C2 共享 L2 目录模块级定向 SV TB",
+      "domain": "multicore-cluster",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "multicore",
+        "c2",
+        "cluster",
+        "msi",
+        "coherence",
+        "sv"
+      ],
+      "command": "verilator --binary --timing --assert --top-module lcvex_c2_cluster_tb -Mdir obj_c2 -o lcvex_c2_cluster_tb rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv tb/sv/lcvex_c2_cluster_tb.sv -Wno-fatal -Wno-PROCASSINIT -Wno-MULTIDRIVEN -Wno-UNUSEDPARAM && ./obj_c2/lcvex_c2_cluster_tb",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "tb/sv/lcvex_c2_cluster_tb.sv"
+    },
+    {
+      "id": "l1.mc-c2-l1-msi",
+      "title": "C2 L1+共享 L2 MSI 系统边界 TB",
+      "domain": "multicore-cluster",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "multicore",
+        "c2",
+        "l1",
+        "msi",
+        "coherence",
+        "sv"
+      ],
+      "command": "verilator --binary --timing --assert --top-module lcvex_c2_l1_msi_tb -Mdir obj_c2_l1 -o lcvex_c2_l1_msi_tb rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_l1_coherence.sv tb/sv/lcvex_c2_l1_msi_tb.sv -Wno-fatal -Wno-PROCASSINIT -Wno-MULTIDRIVEN -Wno-UNUSEDPARAM && ./obj_c2_l1/lcvex_c2_l1_msi_tb",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 512
+      },
+      "source": "tb/sv/lcvex_c2_l1_msi_tb.sv"
+    },
+    {
+      "id": "l1.mc-c2-dualcore-message",
+      "title": "C2 真实双核共享内存 message-passing TB",
+      "domain": "multicore-cluster",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "multicore",
+        "c2",
+        "dualcore",
+        "message",
+        "coherence",
+        "sv"
+      ],
+      "command": "verilator --binary --timing --assert --top-module lcvex_c2_dualcore_tb -Mdir obj_c2_dual -o lcvex_c2_dualcore_tb rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_l1_coherence.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv tb/sv/lcvex_c2_dualcore_tb.sv -Wno-fatal -Wno-PROCASSINIT -Wno-MULTIDRIVEN -Wno-UNUSEDPARAM && ./obj_c2_dual/lcvex_c2_dualcore_tb",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 6,
+        "memory_mb": 8192,
+        "disk_mb": 2048
+      },
+      "source": "tb/sv/lcvex_c2_dualcore_tb.sv"
+    },
+    {
+      "id": "l1.fpga-platform-check",
+      "title": "Catapult A10 平台 manifest/source/hash 离线检查",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "smoke",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "manifest",
+        "hash",
+        "platform"
+      ],
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py && python3 fpga/catapult_a10/tools/check_skeleton.py && (cd fpga/catapult_a10 && sha256sum -c SHA256SUMS)",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 512,
+        "disk_mb": 64
+      },
+      "source": "fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "l1.fpga-platform-lint",
+      "title": "Catapult A10 平台 skeleton Verilator lint",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "lint",
+        "skeleton"
+      ],
+      "command": "bash fpga/catapult_a10/tools/lint_platform.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "fpga/catapult_a10/tools/lint_platform.sh"
+    },
+    {
+      "id": "l1.fpga-soc-lint",
+      "title": "Catapult A10 SoC 顶层 Verilator lint",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "soc",
+        "lint"
+      ],
+      "command": "bash fpga/catapult_a10/tools/lint_soc.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "fpga/catapult_a10/tools/lint_soc.sh"
+    },
+    {
+      "id": "l0.fpga-b25-microbench-port",
+      "title": "Catapult A10 B25 offline correctness microbench and CoreMark port",
+      "domain": "fpga-platform",
+      "level": "L0",
+      "kind": "microbench",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "microbench",
+        "coremark",
+        "bram",
+        "offline",
+        "parser"
+      ],
+      "command": "make b25-microbench-test",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 1024,
+        "disk_mb": 256
+      },
+      "source": "fpga/catapult_a10/tools/run_microbench_tests.sh"
+    },
+    {
+      "id": "l1.mem-l1d-wb",
+      "title": "L1D write-back cache including simultaneous probe/upstream arbitration",
+      "domain": "mem-subsys",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "cache",
+        "l1d",
+        "write-back",
+        "probe",
+        "ready-valid",
+        "coherence"
+      ],
+      "command": "make sim-sv-l1d-wb VERILATOR_JOBS=1",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 2048,
+        "disk_mb": 512
+      },
+      "source": "tb/sv/lcvex_l1_d_wb_tb.sv"
+    },
+    {
+      "id": "l1.fpga-b25-axi-bridge",
+      "title": "Catapult A10 B25 AXI line-fill bridge focused regression",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "axi4",
+        "line-fill",
+        "bridge"
+      ],
+      "command": "VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_axi_bridge_test.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 1024,
+        "disk_mb": 128
+      },
+      "source": "fpga/catapult_a10/tools/run_axi_bridge_test.sh"
+    },
+    {
+      "id": "l1.fpga-b25-bram-init",
+      "title": "Catapult A10 B25 ELF-derived BRAM initialization contract",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "bram",
+        "boot",
+        "mif",
+        "oracle",
+        "25mhz"
+      ],
+      "command": "make b25-bram-init-test",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 2048,
+        "disk_mb": 512
+      },
+      "source": "fpga/catapult_a10/tools/run_bram_init25_test.sh"
+    },
+    {
+      "id": "l1.fpga-b25-bram-m20k-timing",
+      "title": "Catapult A10 B25 synthesis M20K read-response timing",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "bram",
+        "boot",
+        "m20k",
+        "synchronous-ram",
+        "timing"
+      ],
+      "command": "VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_bram_m20k_timing_test.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 1024,
+        "disk_mb": 128
+      },
+      "source": "fpga/catapult_a10/tools/run_bram_m20k_timing_test.sh"
+    },
+    {
+      "id": "l1.fpga-b25-logic-imm-quartus",
+      "title": "Catapult A10 B25 logical-immediate behavioral and Quartus synthesis contract",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "decode",
+        "logical-immediate",
+        "quartus",
+        "synthesis-contract",
+        "exhaustive"
+      ],
+      "command": "VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh --behavioral",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 1024,
+        "disk_mb": 256
+      },
+      "source": "fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh"
+    },
+    {
+      "id": "l2.fpga-b25-jtag-uart-vendor-timing",
+      "title": "Catapult A10 B25 vendor-timed JTAG-UART RX closure",
+      "domain": "fpga-platform",
+      "level": "L2",
+      "kind": "smoke",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "jtag-uart",
+        "avalon",
+        "vendor-timing",
+        "rx",
+        "full-soc"
+      ],
+      "command": "VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 1024
+      },
+      "source": "fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh"
+    },
+    {
+      "id": "l2.fpga-b25-rx-response-trace",
+      "title": "Catapult A10 B25 JTAG-UART bridge-to-core response trace",
+      "domain": "fpga-platform",
+      "level": "L2",
+      "kind": "smoke",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "jtag-uart",
+        "vendor-timing",
+        "rx",
+        "response-trace",
+        "full-soc"
+      ],
+      "command": "VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_rx_response_trace.sh --verilator",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 1024
+      },
+      "source": "fpga/catapult_a10/tools/run_rx_response_trace.sh"
+    },
+    {
+      "id": "l2.fpga-b25-bringup",
+      "title": "Catapult A10 B25 BRAM monitor, CPU microbench and CoreMark self-check",
+      "domain": "fpga-platform",
+      "level": "L2",
+      "kind": "smoke",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "soc",
+        "boot",
+        "monitor",
+        "jtag-uart",
+        "25mhz",
+        "microbench",
+        "coremark",
+        "smoke"
+      ],
+      "command": "VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 4096,
+        "disk_mb": 1024
+      },
+      "source": "fpga/catapult_a10/tools/run_soc_smoke.sh"
+    },
+    {
+      "id": "l1.fpga-cdc-axi4-avalon-cocotb",
+      "title": "B2 AXI4→Avalon/EMIF CDC 压力 Cocotb",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "cdc",
+        "axi4",
+        "avalon",
+        "emif",
+        "cocotb",
+        "async-fifo"
+      ],
+      "command": "make -C sim/cocotb -f Makefile.axi4_avalon SIM=verilator TOPLEVEL=lcvex_axi4_avalon_cocotb_tb COCOTB_TEST_MODULES=test_axi4_avalon SIM_BUILD=build/agents/T-20260827-054/cocotb",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 256
+      },
+      "source": "sim/cocotb/Makefile.axi4_avalon"
+    },
+    {
+      "id": "l1.opensynth-a0",
+      "title": "OpenSynth A0 工具链能力矩阵轻量复跑",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "opensynth",
+        "a0",
+        "toolchain",
+        "verilator",
+        "yosys"
+      ],
+      "command": "bash fpga/opensynth/scripts/run_a0.sh",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 512
+      },
+      "source": "fpga/opensynth/scripts/run_a0.sh"
+    },
+    {
+      "id": "l1.opensynth-a1",
+      "title": "OpenSynth A1 通用 Yosys/ABC proxy",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "opensynth",
+        "a1",
+        "yosys",
+        "synthesis"
+      ],
+      "command": "python3 scripts/opensynth/run_opensynth_a1.py",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_mb": 512
+      },
+      "source": "scripts/opensynth/run_opensynth_a1.py"
+    },
+    {
+      "id": "l1.opensynth-a2",
+      "title": "OpenSynth A2 SoC stub/tie-off 开源 elaboration",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "opensynth",
+        "a2",
+        "soc",
+        "stub",
+        "elaboration"
+      ],
+      "command": "python3 scripts/opensynth/run_opensynth_a2.py",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 2,
+        "memory_mb": 4096,
+        "disk_mb": 1024
+      },
+      "source": "scripts/opensynth/run_opensynth_a2.py"
+    },
+    {
+      "id": "l1.opensynth-a4",
+      "title": "OpenSynth A4 趋势/阈值只读 diff",
+      "domain": "fpga-platform",
+      "level": "L1",
+      "kind": "smoke",
+      "tags": [
+        "fpga",
+        "opensynth",
+        "a4",
+        "trend",
+        "diff"
+      ],
+      "command": "python3 scripts/opensynth/trend_diff.py --baseline fpga/opensynth/a4_trend_thresholds.json --no-write",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 512,
+        "disk_mb": 64
+      },
+      "source": "scripts/opensynth/trend_diff.py"
+    },
+    {
+      "id": "l0.fpga-b25-board-runner",
+      "title": "Catapult A10 B25 tracked board runner contract",
+      "domain": "fpga-platform",
+      "level": "L0",
+      "kind": "unit",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "board",
+        "jtag",
+        "runner",
+        "no-hardware"
+      ],
+      "command": "make b25-board-runner-check",
+      "status": "available",
+      "default": false,
+      "resource": {
+        "cpu": 1,
+        "memory_mb": 512,
+        "disk_mb": 64
+      },
+      "source": "fpga/catapult_a10/tools/test_board_runner.py"
+    },
+    {
+      "id": "l3.fpga-quartus-full-flow",
+      "title": "Catapult A10 Quartus full flow + STA（外部工具，前端不启动）",
+      "domain": "fpga-platform",
+      "level": "L3",
+      "kind": "gate",
+      "tags": [
+        "fpga",
+        "catapult",
+        "a10",
+        "quartus",
+        "sta",
+        "cdc",
+        "external",
+        "blocked"
+      ],
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10",
+      "status": "disabled",
+      "default": false,
+      "resource": {
+        "cpu": 8,
+        "memory_mb": 16384,
+        "disk_mb": 8192
+      },
+      "source": "fpga/catapult_a10/quartus/catapult_a10.qpf"
+    }
+  ],
+  "completeness": "partial",
+  "completeness_note": "部分清单：只登记经现场/文档确认存在的稳定入口，不枚举所有 Makefile/脚本目标。新增或重命名稳定测试入口后必须同步 registry 并运行 make test-registry-check。",
+  "source_consistency": {
+      "make_targets": [
+      "sim-sv-core-syskill",
+      "sim-cocotb-core-syskill",
+      "sim-sv-fp-exec-directed",
+      "sim-sv-fp-scalar-r18",
+      "sim-sv-fp-scalar-r20-route",
+      "sim-sv-fp-scalar-r20-pack",
+      "sim-sv-muldiv-req",
+      "sim-cocotb-muldiv-req",
+      "difftest-muldiv-request",
+      "sim-sv-irq-young-squash",
+      "p6-irq-atomic-overlap",
+      "p6-stxr-irq-mon-we",
+      "sim-sv-fp-scalar",
+      "sim-cocotb-fp-scalar",
+      "fail-fp-smoke",
+      "p7-1-fp-scalar",
+      "p7-1-fp-scalar-edge",
+      "p7-1-fp-scalar-rounding",
+      "p7-1-fp-scalar-sequence",
+      "sim-sv-p7-2-neon",
+      "sim-cocotb-p7-2-neon",
+      "p7-2-neon-int",
+      "p7-2-neon-fetch-fault",
+      "sim-sv-p7-3-neon-fp",
+      "sim-cocotb-p7-3-neon-fp",
+      "p7-3-neon-fp",
+      "sim-sv-p7-4-fma-convert",
+      "sim-cocotb-p7-4-fma-convert",
+      "p7-4-fma-convert",
+      "p7-4-fma-convert-edge",
+      "p7-4-fma-convert-rounding",
+      "p7-4-fma-convert-sequence",
+      "sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "sim-sv-l1d-wb",
+      "b25-bram-init-test",
+      "b25-microbench-test",
+      "b25-board-runner-check",
+      "p7-5-fp16-sqrt-minmax-round",
+      "p7-5-fp16-sqrt-minmax-round-edge",
+      "p7-5-fp16-sqrt-minmax-round-rounding",
+      "p7-5-fp16-sqrt-minmax-round-sequence"
+    ],
+    "scripts": [
+      "sim/difftest/run_p6_irq_atomic_overlap.sh",
+      "sim/difftest/run_p6_stxr_irq_mon_we.sh",
+      "sim/difftest/run_stxr_irq_mon_we_probe.sh",
+      "sim/difftest/stxr_irq_mon_we_fixture.py",
+      "scripts/mc_shell_check.sh",
+      "fpga/catapult_a10/tools/check_platform.py",
+      "fpga/catapult_a10/tools/check_skeleton.py",
+      "fpga/catapult_a10/tools/lint_platform.sh",
+      "fpga/catapult_a10/tools/lint_soc.sh",
+      "fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh",
+      "fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh",
+      "fpga/catapult_a10/tools/run_rx_response_trace.sh",
+      "sim/cocotb/Makefile.fp_state",
+      "sim/cocotb/Makefile.axi4_avalon",
+      "fpga/opensynth/scripts/run_a0.sh",
+      "scripts/opensynth/run_opensynth_a1.py",
+      "scripts/opensynth/run_opensynth_a2.py",
+      "scripts/opensynth/trend_diff.py",
+      "tb/sv/lcvex_c2_cluster_tb.sv",
+      "tb/sv/lcvex_c2_l1_msi_tb.sv",
+      "tb/sv/lcvex_c2_dualcore_tb.sv"
+    ]
+  }
+}

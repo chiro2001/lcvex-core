@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-061",
+  "state": "done",
+  "base_sha": "d3dfe7aa94f2b629fa69c6152b45dedd77371709",
+  "merge_sha": "d3dfe7aa94f2b629fa69c6152b45dedd77371709",
+  "candidate": "detached gate worktree /home/chiro/projects/mycpu/lcvex-gate-T-20260827-061",
+  "runner_role": "root-integrator",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu_release": "11.1.0",
+    "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_source_changes": "none"
+  },
+  "run": {
+    "observed_at": "2026-08-27T23:36:48+08:00",
+    "reported_at": "2026-08-27T23:44:45+08:00",
+    "elapsed_seconds": 477,
+    "command": "bash sim/difftest/run_gate_d.sh --parallel",
+    "exit_code": 0,
+    "result": "pass",
+    "log": "build/agents/T-20260827-061/gate-d.log",
+    "log_sha256": "96797862c04a86f35b43ba6068115a96911fb929c8025b743faf7df903b75c8c"
+  },
+  "subresults": {
+    "make_test": "pass",
+    "coverage": {
+      "result": "pass",
+      "artifact": "build/coverage/merged.dat",
+      "artifact_sha256": "6e14afc91dc3d47bd3a5aa26d87a9d9d3750023f423d8f7652b2c7467eacfeab"
+    },
+    "m2_r1": "40/40 pass",
+    "delay2_cache": "32/32 pass",
+    "p5a_hardening": "26/26 pass",
+    "gate_c": "7/7 pass",
+    "p5a_mmu": "3/3 pass",
+    "p4b": "5/5 pass",
+    "random": {
+      "seed_1": "100002/100002 pass",
+      "seed_2": "100003/100003 pass",
+      "seed_3": "100002/100002 pass",
+      "coverage_expected_hit": "60/60",
+      "traces": {
+        "random_1.trace": "d2a8252fe49964478cba58f3d2d7cd97b9811006cafeb0416316b158715cf8ed",
+        "random_2.trace": "77901e1987d01d9945843939f94c10fbfed49f9a06ac6a5475637b51dc4308",
+        "random_3.trace": "790879cbb577620adb3a8eef10a02375ee5399d5a732f697fe4da9c3c833a5f9"
+      }
+    },
+    "baremetal_c": "200/200 pass"
+  },
+  "known_limits": [
+    "aarch64-none-elf-gcc 在 toolcheck 中缺失警告，但脚本实际使用可用 AArch64 工具链完成 baremetal-C 200 条锁步。",
+    "本任务证明完整 Gate D 和 P6/P7 仿真兼容，不证明 Gate-F-BOARD、CI 晋级、Linux/nightly 或最终发布 tag。"
+  ],
+  "next": "项目级继续完成 Gate-F-BOARD/CI/Linux 证据后，冻结最终发布候选。"
+}

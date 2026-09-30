@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-016",
+  "title": "补齐 CRC SV testbench ALU cin 连接",
+  "kind": "verification-hygiene",
+  "priority": "high",
+  "assigned_owner": "luna-implementation-agent",
+  "agent_type": "fast-implementation",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只修改 CRC SV testbench 的缺失输入连接并做定向验证；不改 RTL/QEMU/参考结果",
+  "phase": "done",
+  "parent": "T-20260826-015",
+  "depends_on": ["T-20260826-015"],
+  "writes": [
+    "tb/sv/lcvex_crc_tb.sv",
+    "docs/tasks/evidence/T-20260826-016.json",
+    "docs/handoffs/T-20260826-016-crc-cin-pin.md"
+  ],
+  "reads": ["tb/sv/lcvex_crc_tb.sv", "rtl/lcvex_alu.sv", "docs/VERIFICATION.md"],
+  "context_docs": ["docs/MULTI_AGENT_WORKFLOW.md", "docs/VERIFICATION.md"],
+  "base_sha": "a9514e8",
+  "branch": "fix/T-20260826-016-crc-cin-pin",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-016",
+  "resource": {"cpu": 1, "memory_mb": 512, "disk_mb": 128, "timeout_s": 900, "cpus": [0]},
+  "validation": {
+    "l0": ["taskset -c 0 env VERILATOR_JOBS=1 make sim-sv-crc"],
+    "l1": ["taskset -c 0 env VERILATOR_JOBS=1 make test"],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "CRC testbench 显式连接 lcvex_alu.cin=1'b0，消除 PINMISSING，CRC32/CRC32C 定向向量通过；不改变 RTL 语义。",
+  "created_at": "2026-08-26T20:20:00+08:00",
+  "updated_at": "2026-08-26T20:30:00+08:00",
+  "commits": ["cfac7e0", "5f2c0ce", "3f7589d", "a1158f7"],
+  "handoff": "docs/handoffs/T-20260826-016-crc-cin-pin.md",
+  "evidence": "docs/tasks/evidence/T-20260826-016.json",
+  "known_limits": ["Gate D 必须在包含本修复的新 candidate SHA 上重新执行。"],
+  "next": "已完成并归档；下一 Gate D candidate 必须包含该 testbench 修复。"
+}

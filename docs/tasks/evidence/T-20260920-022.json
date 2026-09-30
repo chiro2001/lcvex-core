@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-022",
+  "label": "B25-RXCPU-LOGIC-IMM-SYNTHESIS-REPAIR-BATCH",
+  "state": "done-pre-gate",
+  "acceptance_status": "old-negative-reproduced-fixed-warning-eliminated-exhaustive-and-affected-l0-l2-pass",
+  "base_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+  "candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+  "candidate_tree_sha": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+  "integration_branch": "batch/T-20260907-037-b25-bringup",
+  "reported_at": "2026-09-20T14:51:49+08:00",
+  "trigger": {
+    "task": "T-20260920-021",
+    "physical_observation": "RXPATH bridge/PoC/dmem all 0x0000A43F with one event and no fault, while RXCPU getc raw and dispatch byte were 0 after TBNZ took the RVALID path",
+    "historical_warning": "Quartus warning 16788: Net imm[63]_2 does not have a driver at lcvex_decode.sv logical-immediate automatic output temporary"
+  },
+  "lanes": {
+    "T-20260920-023": {
+      "topic_commits": [
+        "30981e9601b50f4e4f047c8092a3c5109e05efeb",
+        "93b5ad75ca6d6ecefaa27c76a9aaa1d46a811914"
+      ],
+      "integration_commits": [
+        "4d565961d7fdca0257584ff8dadf8651cff721f1",
+        "90feb2c4929de3450828aedb33a7ef58bb75b9be"
+      ],
+      "result": "PASS; fail-closed behavioral/Quartus regression and exhaustive tracked oracle"
+    },
+    "T-20260920-024": {
+      "implementation_commit": "92bd167b71ce675969bad8235142d59db2f66e20",
+      "evidence_commit": "4e340641ba0497649d5b593049b7cffbefc9a25a",
+      "integration_logic_commit": "a51d9972336ac85cb4e1ae587f9b2a67dba9980f",
+      "integration_evidence_commit": "276b2ffa23d77fab488d8cfbe1ef4b3a84208cee",
+      "result": "PASS; logical immediate decoder uses one fully assigned 65-bit packed return"
+    }
+  },
+  "tracked_identity": {
+    "rtl_decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+    "testbench_sha256": "7408a8aee4f386ca369e15b592e3a8a2ea3de29e674c50ccdd48c49ec6f541b9",
+    "runner_sha256": "5a36cb32413400aedb876b211f3a3e19e05d09fcdd1ea327e5b28eac2a257c14",
+    "test_registry_sha256": "748847aca49b65d43296944802c9907df1922a7a8af48721a27310beda061cde"
+  },
+  "old_negative": {
+    "source_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-023-b25-logic-imm-quartus-regression/old-negative",
+    "synthesis": "Successful, 0 errors",
+    "warning_16788_count": 2,
+    "report_sha256": "eda1b87b1b391513787a2f823b4e449b4c42e1adde8b328fd97137c22c93de3e",
+    "result": "PASS_NEGATIVE_CONTROL"
+  },
+  "fixed_synthesis": {
+    "source_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-022-b25-logic-imm-fixed-c31b/fixed",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "synthesis": "Successful, 0 errors, 2 unrelated pre-existing dup_size warnings",
+    "warning_16788_count": 0,
+    "report_sha256": "28666f1aadd045411a95073c8955c6ea041be72c631b126310441aa2468c8e7e",
+    "probe_result_sha256": "d70993e26f20017d3bdc93535143ed0f94b9f6d7cb08de10d949f1998826b382",
+    "remote_probe_log_sha256": "1b9c09a8a499ef3b90fb8f678472ffafb96de587d4cfa2220c1f006945525cd1",
+    "result": "PASS_FIXED_NO_WARNING_16788"
+  },
+  "behavioral_exhaustive": {
+    "result": "PASS",
+    "marker": "LOGIC_IMM_BEHAVIORAL_ORACLE_PASS exact=A43F/3F exhaustive=16384 legal=11328 reserved=5056",
+    "exact_cases": {
+      "0x12003C06": "W0=0xA43F -> W6=0xA43F",
+      "0x12001C00": "W0=0xA43F -> W0=0x3F"
+    },
+    "metadata_sha256": "cdbc0073bd13673df1bc1a3f12bfc3c0a9263e321446aae04a8ecbc22756df69",
+    "build_log_sha256": "250833a59b8186d1e6ed783ef55627fc1f8a7f84b8d3f19866a85f002fbdc605",
+    "run_log_sha256": "5508b5aa3d41b43886607e965ecde0b68c8946e331b8d11b3a80cd019c4a1f36"
+  },
+  "affected_l0_l2": {
+    "compile": "PASS; conda lcvex make compile",
+    "sim_sv": "PASS; scalar plus FPCR/FPSR smoke",
+    "microbench": "PASS; mb_all 2411 cycles, 8 targets, 3280-byte image",
+    "encoders": "PASS; 86 A64 encoder cross-checks",
+    "m20k_timing": {
+      "result": "BRAM_M20K_TIMING_TB PASS",
+      "build_log_sha256": "61cfa92c19b4d34c068000f3e8d1fcbd66b83f8efc18e6568a2efb6e3c7accf9",
+      "run_log_sha256": "4a46412af5830f1ae0be2f391d2c12311b80bb8a937e37418143354cb2253a8d"
+    },
+    "rx_response_trace": {
+      "result": "RX_RESPONSE_TRACE PASS checks=4 bridge=4 poc=4 dmem=4",
+      "build_log_sha256": "1a8194f8a325e428058d54da747231ec118c00f252a80f7fcb09c4726ac3dd41",
+      "run_log_sha256": "8b03328486ea9a97129070069ef676a64d0f50d821ecdbccb37ae95c85d82671"
+    },
+    "vendor_timing_full_soc": {
+      "result": "JTAG_UART_VENDOR_TIMING_TEST_PASS and SOC_B25_ALL_PASS",
+      "scenarios": ["CAL-OK", "CAL-WAIT", "CAL-FAIL"],
+      "cal_wait_empty_reads": 262144,
+      "cal_wait_commits": 2359306,
+      "smoke_log_sha256": "e650b26c2cd41b01032c5924fa8aa827f4d378285e0b81650b854896976fc6c5",
+      "wrapper_log_sha256": "f5b4795b96a56fc3c43c8514d16fbc53ae6e6ac9fdd7f664281224b6ac64aaed",
+      "focused_iverilog_sha256": "6aedcc11eed588e080ffb026fb50f887446e8bceb4272acf79a5bb965e4435be",
+      "focused_verilator_sha256": "fe72f28c7bb250e208a58de80bcf51b9f335d4147a45d5201f597b533a079eb4"
+    },
+    "boot_image": {
+      "bytes": 2011,
+      "bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+      "hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+      "mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff"
+    },
+    "registry": "PASS; 88 entries and runner consistency"
+  },
+  "known_limits": [
+    "quartus_eda generated a functional Verilog netlist, but no compatible simulator/twentynm primitive model was available; post-map semantic PASS is not claimed",
+    "scripts/test_registry_test.py has a pre-existing stale exact-L0-list assertion and fails identically on the base; authoritative make test-registry-check passes",
+    "Gate D, fresh full physical synthesis/fitter/STA, assembler and board interaction are intentionally separate downstream gates"
+  ],
+  "resource_and_safety": {
+    "local_heavy_locked": true,
+    "gamepc_quartus_locked": true,
+    "final_local": "FREE",
+    "final_gamepc": "FREE",
+    "fitter_sta_assembler": false,
+    "jtag_board_fpga_configuration": false,
+    "jic_epcq_flash": false,
+    "reset_power": false,
+    "unknown_process_stopped": false
+  },
+  "handoff": "docs/handoffs/T-20260920-022-b25-rxcpu-logic-imm-synthesis-repair-batch.md",
+  "next": "Run T-20260920-025 detached release-mode Gate D on exact candidate c31b3aea before deriving a fresh no-FP physical profile."
+}

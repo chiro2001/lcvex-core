@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-032",
+  "label": "R21-TIMING-BATCH",
+  "title": "Integrate iterative round-pack and FMA residual timing cuts",
+  "kind": "timing-batch-integration",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "local-and-physical-validation-complete-setup-open",
+  "assigned_owner": "codex-integrator",
+  "depends_on": ["T-20260906-031"],
+  "base_sha": "edaaca5bc3296aaf89f161a079ee09868b50b0b5",
+  "functional_base_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "branch": "batch/T-20260906-032-r21",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-032",
+  "member_tasks": ["T-20260906-033", "T-20260906-034"],
+  "integration_order": ["T-20260906-033", "T-20260906-034"],
+  "scope": "Implement two independently owned R20 negative-slack cones from the fresh T-031 top-N report, merge them into one candidate, reconcile shared latency/tests serially, and run the affected L0-L2 union before any new physical flow.",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv (parent ownership; member write_regions only)",
+    "shared latency expectations and test registry after lane merge",
+    "batch-only integration tests and evidence",
+    "docs/tasks/active/T-20260906-032..034.json",
+    "docs/tasks/evidence/T-20260906-032.json",
+    "docs/handoffs/T-20260906-032-r21-timing-batch.md"
+  ],
+  "validation": {
+    "merge": "member diffs must remain in their registered non-overlapping write_regions; integrator owns shared tests, latency tables and cross-lane fixes",
+    "local": "one merged candidate runs focused tests and the complete affected scalar/NEON/DIV/SQRT/FMA L0-L2 union while holding resource-lock local",
+    "physical": "only after local acceptance may a later task run one fresh serialized synthesis/fitter/STA flow while holding gamepc"
+  },
+  "acceptance": "The iterative round-pack and FMA cones are cut or simplified without architectural result changes; the merged candidate passes all affected L0-L2 tests and records exact latency/protocol deltas.",
+  "resource": "No member starts heavy validation. Integrator acquires local for merged L0-L2; no fixed 16 GiB cap, with actual admission, parallelism and peak resources recorded.",
+  "forbidden_regions": [
+    "QEMU/QSF/SDC changes",
+    "assembler or bitstream generation",
+    "quartus_pgm/JTAG/programming/power-on/board test"
+  ],
+  "created_at": "2026-09-06T19:09:21+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-06T19:09:21+08:00",
+    "agent_name": "codex-integrator"
+  },
+  "member_heads": {
+    "T-20260906-033": "25863a1fb1f8fe6de7d40d40857f26fb59be1a13",
+    "T-20260906-034": "52a969df38894b835a19cd5be5f9a1336c0d6279"
+  },
+  "merge_commits": {
+    "T-20260906-033": "8dde5a20",
+    "T-20260906-034": "4bacc181"
+  },
+  "candidate_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+  "evidence": "docs/tasks/evidence/T-20260906-032.json",
+  "handoff": "docs/handoffs/T-20260906-032-r21-timing-batch.md",
+  "followup_task": "T-20260906-035",
+  "physical_result": {
+    "task": "T-20260906-035",
+    "evidence": "docs/tasks/evidence/T-20260906-035.json",
+    "fmax_mhz": 48.57,
+    "setup_wns_ns": -0.588,
+    "setup_tns_ns": -67.238,
+    "setup_failing_endpoints": 550,
+    "status": "accepted baseline; 50 MHz setup remains open; B25 bring-up proceeds at 25 MHz"
+  },
+  "updated_at": "2026-09-07T03:06:06+08:00"
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-034",
+  "label": "B25-BOARD-RUNNER-TRANSPORT-SEAL",
+  "state": "blocked",
+  "acceptance_status": "blocked-bootstrap-parameter-set-before-root",
+  "partial": true,
+  "base_sha": "464026858d6f4061d14640ae065d7201a9e00691",
+  "head_sha": null,
+  "evidence_parent_sha": "3a42a152b00eb318cef4c315afc91ec6fa7953d5",
+  "branch": "infra/T-20260920-034-b25-board-runner-transport-seal",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-034",
+  "owner": "runner_t034",
+  "sent_at": "2026-09-20T18:52:11+08:00",
+  "received_at": "2026-09-20T18:52:11+08:00",
+  "artifact_sealed_at": "2026-09-20T19:14:00+08:00",
+  "reported_at": "2026-09-20T19:15:04+08:00",
+  "scope": {
+    "hardware_access": false,
+    "candidate_programmer_invocations": 0,
+    "golden_programmer_invocations": 0,
+    "terminal_sessions": 0,
+    "root_prepare_reached": false,
+    "bundle_upload_reached": false,
+    "remote_ast_reached": false,
+    "remote_seal_reached": false,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "standard_server_stopped": false,
+    "unknown_process_stopped": false
+  },
+  "resource_lock": {
+    "all_gamepc_actions_locked": true,
+    "primary_command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-034 runner_t034 -- bash -s",
+    "freshness_probe_exit": 0,
+    "bootstrap_upload_exit": 0,
+    "bootstrap_file_exit": 1,
+    "remote_root_state_after": "absent",
+    "remote_bootstrap_state_after": "present"
+  },
+  "local_bundle": {
+    "directory": "build/agents/T-20260920-034",
+    "manifest": "build/agents/T-20260920-034/script-manifest.json",
+    "manifest_sha256": "5f7d83702ccf745d1e16a29ec2eba10f40f0cd06c66cd7b28d02624fa9dc60a2",
+    "files": [
+      {"name": "prepare_task_root.ps1", "bytes": 1765, "sha256": "2d81bf5a529106f7660676f941e973c855139d5efb231550c42469359fccd104", "remote": true},
+      {"name": "validate_scripts.ps1", "bytes": 2496, "sha256": "91a7f57279f0f2b9cf62ae2350850a7314ac9c7aa401f45c165bacfe29dfc5d8", "remote": true},
+      {"name": "verify_seal.ps1", "bytes": 2909, "sha256": "cb9bb5e85b2e8675c2d700a3474848b7a1333730a2d9b81eb5cfc87662556ef9", "remote": true},
+      {"name": "preflight.ps1", "bytes": 4120, "sha256": "29f46fca907c56288ebb7cd0a99a57750f3e0c7e452b940f76e36f1ace5aad31", "remote": true},
+      {"name": "program_once.ps1", "bytes": 16007, "sha256": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e", "remote": true},
+      {"name": "postflight.ps1", "bytes": 4558, "sha256": "3bad7a13a6e3765982b16247602a814dac45d9dc6b34ddc9ca605d8941f540f8", "remote": true},
+      {"name": "direct_terminal.py", "bytes": 16101, "sha256": "059bb54fa1f1d3c01209ead636ca5cfcc536d2e4b4a2d41819a3d18f9a4a2e66", "remote": true},
+      {"name": "run_board_once.sh", "bytes": 9698, "sha256": "ba02ae69ca1e350c32d0f2729e646e98d4c793276d7e13be0821a7a358a61a51", "remote": true},
+      {"name": "seal_manifest.py", "bytes": 1886, "sha256": "e95f87a2e91b73202edca05b9b441ad6def328c9c061e86cb111dd5ebf7c2cde", "remote": true}
+    ]
+  },
+  "local_validation": {
+    "bash_n": {"status": 0, "command": "bash -n build/agents/T-20260920-034/tools/run_board_once.sh"},
+    "python_py_compile": {"status": 0, "command": "python3 -m py_compile build/agents/T-20260920-034/tools/direct_terminal.py build/agents/T-20260920-034/tools/seal_manifest.py"},
+    "manifest_jq": {"status": 0, "predicate": "task_id=T-20260920-034, files=9, all remote=true, bytes>0, SHA256=64 lowercase hex"},
+    "consumer_id_root_audit": {"status": 0, "scope": "reusable tools", "result": "no T-034/T-035 consumer ID or consumer root"},
+    "powershell_transport_audit": {"status": 0, "result": "no -Command, ParseInput, ReadToEnd, Invoke-Expression or stdin PowerShell"},
+    "git_diff_check": {"status": 0}
+  },
+  "remote_bootstrap": {
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-034-b25-board-runner-transport-seal",
+    "bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-034-prepare.ps1",
+    "initial_freshness": {"status": 0, "meaning": "both paths absent"},
+    "uploaded_bootstrap_sha256": "a83101c92a4afe9a67266f3afdd94b00bd9b900697e642294d7ed6d5a7db08e9",
+    "uploaded_bootstrap_bytes": 1765,
+    "final_local_corrected_prepare_sha256": "2d81bf5a529106f7660676f941e973c855139d5efb231550c42469359fccd104",
+    "hash_boundary": "The final corrected local prepare script and the failed remote bootstrap are different sealed artifacts and must not be mixed.",
+    "bootstrap_log": {
+      "path": "build/agents/T-20260920-034/preflight/bootstrap.log",
+      "sha256": "68c27b17a7fffa3297107f4f7766671691e3cdfa74f30dbfc245acb60022ea42",
+      "exit": 1
+    },
+    "failure": "PowerShell parameter-set resolution failed after TASK_ROOT_EXISTS=False at the original Split-Path -LiteralPath $root -Parent line 29.",
+    "root_after_failure": "absent",
+    "bootstrap_after_failure": "present-and-not-overwritten",
+    "final_local_fix": "prepare_task_root.ps1 now uses Split-Path -Path $root -Parent; corrected file was not uploaded because the remote bootstrap path is immutable for this task.",
+    "remote_retry": false,
+    "hardware_action": false
+  },
+  "remote_validation": {
+    "bundle_upload": "not attempted after bootstrap failure",
+    "validate_scripts": "not attempted",
+    "verify_seal": "not attempted",
+    "ast_result": null,
+    "seal_result": null,
+    "hardware_invocation": 0
+  },
+  "artifacts": {
+    "local_seal_log": {"path": "build/agents/T-20260920-034/preflight/local-seal-final.log", "sha256": "5f7d83702ccf745d1e16a29ec2eba10f40f0cd06c66cd7b28d02624fa9dc60a2"},
+    "remote_bootstrap_copy": {"path": "build/agents/T-20260920-034/preflight/remote-bootstrap.ps1", "sha256": "a83101c92a4afe9a67266f3afdd94b00bd9b900697e642294d7ed6d5a7db08e9"},
+    "bootstrap_failure_log": {"path": "build/agents/T-20260920-034/preflight/bootstrap.log", "sha256": "68c27b17a7fffa3297107f4f7766671691e3cdfa74f30dbfc245acb60022ea42"}
+  },
+  "blocker": {
+    "class": "bootstrap-script-parameter-set-failure",
+    "message": "The first immutable bootstrap uploaded to the required path used Split-Path -LiteralPath with -Parent, a parameter-set combination unsupported by PowerShell. The exact remote root was not created. Replacing or deleting the bootstrap would violate the freshness/seal boundary, so remote AST/hash validation cannot continue in this task.",
+    "no_hardware": true,
+    "no_replacement_upload": true
+  },
+  "integration_review": {
+    "reviewed_at": "2026-09-20T19:17:57+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "evidence_merge_sha": "a01dbd17609c7ea46536af5b656b98709f466881",
+    "evidence_merge_tree": "e6a0cf2403aa569e2b2682b31766bb7f80b52aff",
+    "topic_evidence_head": "b938007d40e73c5b9607bb1e22dda284b0f98800",
+    "boundary": "remote root absent; failed bootstrap preserved; corrected local bootstrap is a distinct artifact; hardware invocations zero",
+    "result": "BLOCKED_BEFORE_REMOTE_ROOT"
+  },
+  "next": "Open a new task or explicitly reseed the fresh remote bootstrap/root. Reuse the corrected local prepare_task_root.ps1 and rerun only the no-hardware AST/seal sequence before any board window."
+}

@@ -1,0 +1,81 @@
+diff --git a/include/plugins/qemu-plugin.h b/include/plugins/qemu-plugin.h
+--- a/include/plugins/qemu-plugin.h	2026-08-30 06:47:46.504841180 +0800
++++ b/include/plugins/qemu-plugin.h	2026-08-30 06:48:18.505898330 +0800
+@@ -339,6 +339,21 @@
+ QEMU_PLUGIN_API
+ uint64_t qemu_lcvex_difftest_get_cntvct(unsigned int vcpu_index);
+
++/* P7 FP/NEON 单次状态快照。v[n] 是 Vn/Zn 的低端 little-endian 128 位，
++ * vector_bytes 是当前架构向量长度；upper_nonzero 表示未返回的高段存在
++ * 非零数据，调用方不得将其静默当作完整向量状态。 */
++#define QEMU_LCVEX_FP_STATE_DEFINED 1
++struct qemu_lcvex_fp_state {
++    uint32_t fpcr;
++    uint32_t fpsr;
++    uint32_t vector_bytes;
++    uint32_t upper_nonzero;
++    uint8_t v[32][16];
++};
++
++QEMU_PLUGIN_API
++int qemu_lcvex_difftest_read_fp_state(struct qemu_lcvex_fp_state *state);
++
+ /** struct qemu_plugin_tb - Opaque handle for a translation block */
+ struct qemu_plugin_tb;
+ /** struct qemu_plugin_insn - Opaque handle for a translated instruction */
+diff --git a/target/arm/tcg/lcvex-difftest.c b/target/arm/tcg/lcvex-difftest.c
+--- a/target/arm/tcg/lcvex-difftest.c	2026-08-30 06:47:46.511716300 +0800
++++ b/target/arm/tcg/lcvex-difftest.c	2026-08-30 06:48:32.709790737 +0800
+@@ -133,6 +133,52 @@
+            gt_direct_access_timer_offset(env, GTIMER_VIRT);
+ }
+
++int qemu_lcvex_difftest_read_fp_state(struct qemu_lcvex_fp_state *state)
++{
++    CPUState *cs = current_cpu;
++    ARMCPU *cpu;
++    CPUARMState *env;
++    unsigned vq = 1;
++
++    if (state == NULL || cs == NULL || cs != qemu_get_cpu(0)) {
++        return -1;
++    }
++    cpu = ARM_CPU(cs);
++    env = &cpu->env;
++    if (!is_a64(env)) {
++        return -1;
++    }
++
++    memset(state, 0, sizeof(*state));
++    state->fpcr = vfp_get_fpcr(env);
++    state->fpsr = vfp_get_fpsr(env);
++
++    /* Without SVE the architectural register is exactly a 128-bit V/Q
++     * register. With SVE report the active VL, while the caller still only
++     * receives the low 128 bits and must reject non-zero high lanes. */
++    if (cpu_isar_feature(aa64_sve, cpu)) {
++        int active_vq = sve_vq(env);
++        if (active_vq < 1 || active_vq > arm_max_vq(cpu)) {
++            return -1;
++        }
++        vq = (unsigned)active_vq;
++    }
++    state->vector_bytes = vq * 16;
++
++    for (unsigned i = 0; i < 32; ++i) {
++        uint64_t *q = aa64_vfp_qreg(env, i);
++        stq_le_p(&state->v[i][0], q[0]);
++        stq_le_p(&state->v[i][8], q[1]);
++        for (unsigned lane = 1; lane < vq; ++lane) {
++            if (env->vfp.zregs[i].d[2 * lane] != 0 ||
++                env->vfp.zregs[i].d[2 * lane + 1] != 0) {
++                state->upper_nonzero = 1;
++            }
++        }
++    }
++    return 0;
++}
++
+ int qemu_lcvex_difftest_restore_timer_state(const char *path)
+ {
+     struct lcvex_timer_state state = {};

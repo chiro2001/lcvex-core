@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-043",
+  "label": "FP-P5-RERUN-ROUND10",
+  "title": "FP-P5 rerun round10：T-042 后 full-FP synthesis/fit/STA",
+  "kind": "verify-fpga-physical",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p5-rerun10",
+  "agent_type": "remote-quartus-full-flow",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-042"
+  ],
+  "base_sha": "2b4d99dd189372c656b869bdbd6c02c9df7a4f31",
+  "branch": "verify/T-20260902-043-fp-p5-rerun-round10",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-043",
+  "scope": "在包含 T-042（FP iterative FDIV/FSQRT finish cut）的合并 SHA 上重跑 full-FP synthesis→fitter→signoff STA；若 setup/hold/recovery/removal/min-pulse 全非负且 DDR 通过则进入 assembler/SOF。",
+  "reads": [
+    "docs/handoffs/T-20260902-041-fp-p5-rerun-round9.md",
+    "docs/handoffs/T-20260902-042-fp-slotidx-slotres-cut.md",
+    "fpga/catapult_a10/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-043-fp-p5-rerun-round10.md",
+    "docs/tasks/evidence/T-20260902-043.json",
+    "build/agents/T-20260902-043/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-043-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "远端只读预检；SHA/QSF/SDC/IP 绑定"
+    ],
+    "l1": [
+      "synthesis/fit/STA 结果完整"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "full-FP synthesis/fitter/STA 同 SHA 报告完整；若时序全绿则 assembler/SOF；若仍红记录 top-N 与下一轮修复方向。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 43200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 180,
+    "extension_increment_minutes": 60,
+    "max_minutes": 720,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T05:17:00+08:00",
+  "updated_at": "2026-09-04T06:32:50+08:00",
+  "known_limits": [
+    "不编程/上板；不读取 license；不删除文件；不停止非 EDA 进程"
+  ],
+  "handoff": "docs/handoffs/T-20260902-043-fp-p5-rerun-round10.md",
+  "evidence": "docs/tasks/evidence/T-20260902-043.json",
+  "next": "若通过进入 Gate F-BOARD/发布候选；若失败继续 top-N 切级",
+  "dispatch": {
+    "sent_at": "2026-09-04T05:18:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "93be0ffd-1859-4f27-a813-e3744e96de72",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-043",
+    "branch": "verify/T-20260902-043-fp-p5-rerun-round10"
+  },
+  "head_sha": "11e93492444928aa99f0e1990c016b35aaf35b2c",
+  "merge_sha": "5a75b0f483420c8c36c7f5fffe0dcc48a73685af",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-04T06:29:42+08:00",
+    "merged_at": "2026-09-04T06:32:50+08:00",
+    "recorded_at": "2026-09-04T06:32:50+08:00",
+    "notes": "FP-P5 rerun round10 still blocked: sys_clk_50 setup -5.047ns top div_pre.sig -> slot_result_r 54L. T-042 old slot_idx path left top-10. Next FP div_pre->slot_result further cut."
+  }
+}

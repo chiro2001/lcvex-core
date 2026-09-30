@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-026",
+  "label": "EXT-03-FIX",
+  "parent": "T-20260828-067",
+  "title": "异步 FIFO CDC/公共复位约束闭合",
+  "kind": "rtl-cdc-reset-fix",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "ec917da06c64416ca3b998ad32e1c60c0b599b46",
+  "branch": "feature/T-20260830-026-ext-03-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-026",
+  "scope": "处理 EXT-03-001：审计 rtl/lcvex_axi4_avalon_adapter.sv、rtl/lcvex_async_fifo.sv 与 SDC；补 CDC/reset 设计说明、约束和静态验证方案；不启动 Quartus，不伪称实际 TimeQuest。",
+  "writes": [
+    "fpga/catapult_a10/quartus/*.sdc",
+    "docs/audit/03-rtl-quality.md",
+    "docs/handoffs/T-20260830-026-ext-03-fix.md",
+    "docs/tasks/evidence/T-20260830-026.json",
+    "rtl/**"
+  ],
+  "reads": [
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "rtl/lcvex_async_fifo.sv",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "docs/audit/03-rtl-quality.md"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "结果/证据记录"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可审阅修复/证据；不伪报外部阻塞项。",
+  "next": "由集成者合入。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 2048,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 90,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T07:19:53+08:00",
+  "updated_at": "2026-08-30T07:19:53+08:00",
+  "known_limits": [
+    "不启动 Quartus；不改 RTL 功能除非明确。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-026-ext-03-fix.md",
+  "evidence": "docs/tasks/evidence/T-20260830-026.json",
+  "merge_sha": "0b022ad084a247f21770dcf25c0777f725c9a168",
+  "merged_at": "2026-08-30T07:31:27+08:00",
+  "integrator_review": {
+    "status": "accepted_partial",
+    "received_at": "2026-08-30T07:31:27+08:00",
+    "head_sha": "bf4cb07",
+    "notes": "EXT-03 static CDC/reset fix merged. B2 AXI SV regression and make compile pass. EXT-03-001 remains open pending Quartus/TimeQuest."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T16:00:00+0800",
+        "new": "2026-08-30T07:19:53+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T16:00:00+0800",
+        "new": "2026-08-30T07:19:53+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T16:30:00+0800",
+        "new": "2026-08-30T07:31:27+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T16:30:00+0800",
+        "new": "2026-08-30T07:31:27+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "0b022ad084a247f21770dcf25c0777f725c9a168",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "0b022ad084a247f21770dcf25c0777f725c9a168"
+}

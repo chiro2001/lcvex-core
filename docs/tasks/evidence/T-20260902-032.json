@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-032",
+  "state": "done",
+  "partial": false,
+  "base_sha": "5523201b025b45a16afb477de113b71bccad85c8",
+  "head_sha": "729805eda0c7dc897b516fa0535c9bdacd132b78",
+  "branch": "fix/T-20260902-032-l1i-core-operand-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-032",
+  "scope": "L1I-CORE-OPERAND-CUT: break sys_clk_50 setup long chain from core idex_d.operand_a through ALU/forwarding/decode/fetch-control to I-L1 rsp_data_r enable; keep fetch/I-cache/coherence semantics.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_core.sv"
+    ],
+    "summary": "Removed ID/EX ordinary GPR ALU writeback combinational forwarding from gprv. Added ex_id_gpr_hazard to stall an IF/ID instruction that depends on an ID/EX non-load non-STXR GPR write; the result is provided one cycle later from the EX/MEM registered forwarding path. Added the same hazard to fetch_fifo_pop so the F1a FIFO does not pop a head while IF/ID is stalled. flush_id also suppresses branch/system redirects until the registered EX/MEM operand is available. No SDC false path, no cache/coherence/async-reset change.",
+    "semantics": {
+      "architecture_state": "unchanged; only pipeline timing of ordinary GPR RAW dependencies changes",
+      "commit_order": "unchanged; p2 and hazard difftest match QEMU",
+      "fetch_icache_coherence": "unchanged; no L1/coherence RTL modification",
+      "speculation": "no new speculative execution; existing control-flow fence/flush still determines redirects",
+      "reset": "unchanged"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator lint-only on lcvex_core with release filelist; cgroup MemoryMax=16G."
+    },
+    {
+      "run_id": "sim-sv",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "lcvex_core_tb scalar + FPCR/FPSR wiring smoke PASS"
+    },
+    {
+      "run_id": "sim-sv-l1i",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-l1i",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "I-L1 unit test unaffected"
+    },
+    {
+      "run_id": "sim-sv-fetch-fifo",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-fetch-fifo",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "F1a FIFO/epoch/quarantine/backpressure skeleton PASS after fetch_fifo_pop gating"
+    },
+    {
+      "run_id": "difftest-rtl-p2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 difftest-rtl",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "33/33 QEMU trace + Cocotb core matches",
+      "notes": "P2 program; also covers direct sim-cocotb-core requirement with QEMU_TRACE set"
+    },
+    {
+      "run_id": "difftest-hazard",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 difftest-hazard",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "34/34 QEMU trace + Cocotb core matches",
+      "notes": "Directed forwarding/load-use/branch/muldiv hazard program"
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/STA (next FP-P5 rerun)",
+    "FPGA assembler/SOF"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-032-l1i-core-operand-cut.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-032.json"
+    }
+  ],
+  "known_limits": [
+    "Physical timing not measured locally; actual Fmax/slack must be confirmed by FP-P5 rerun.",
+    "Only ordinary GPR ID/EX combinational forwarding was cut; SP/NZCV ID/EX combinational forwarding still exists and may become next top.",
+    "Performance cost: one-cycle stall for back-to-back ordinary GPR RAW dependencies.",
+    "Direct make sim-cocotb-core without QEMU_TRACE is not self-contained; difftest-rtl/hazard used instead."
+  ],
+  "next": "FP-P5 rerun with same source/QSF/SDC; if top remains core->L1, consider SP/NZCV forwarding or EX-stage result register cut.",
+  "timestamps": {
+    "sent_at": "2026-09-03T20:41:00+08:00",
+    "received_at": "2026-09-03T20:41:30+08:00",
+    "reported_at": "2026-09-03T20:55:30+08:00"
+  },
+  "merge_sha": "abd784e65a6c20f76af30044cbfab46115786513",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T20:56:50+08:00",
+    "merged_at": "2026-09-03T20:57:10+08:00",
+    "recorded_at": "2026-09-03T20:57:10+08:00",
+    "notes": "L1I/core operand path cut via ID/EX GPR forwarding removal merged and accepted"
+  }
+}

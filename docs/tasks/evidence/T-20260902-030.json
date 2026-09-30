@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-030",
+  "state": "done",
+  "partial": false,
+  "base_sha": "896fc46fb4c18d85c0a91c3844c27cd7c0298cbd",
+  "head_sha": "000c5424a3ed8b2cbed4cdcb39958f2913ce7802",
+  "branch": "fix/T-20260902-030-emif-async-fifo-gray-cdc2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-030",
+  "scope": "Close EMIF async FIFO gray-pointer CDC setup/hold round2: harden source-domain Gray launch registers as independent Gray counters, prevent synchronizer retime/merge with synthesis attributes, and add all four first-stage SDC cuts.",
+  "changes": [
+    {
+      "path": "rtl/lcvex_axi4_avalon_adapter.sv",
+      "type": "rtl_hardening",
+      "summary": "Change lcvex_async_fifo_cdc Gray pointers to independent source-domain Gray counters (gray_inc from Gray, not from binary), removing bin->gray->first-sync combinational alias; add keep/preserve/dont_retime/dont_merge/noprune to all pointer and synchronizer registers."
+    },
+    {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "type": "constraint",
+      "summary": "Add missing request_fifo wr_ptr_gray_q->wr_ptr_gray_rd1_q and response_fifo rd_ptr_gray_q->rd_ptr_gray_wr1_q first-stage false paths; add the same two max_delay bounds so all four gray-pointer crossing directions are covered."
+    }
+  ],
+  "source_evidence": {
+    "task": "T-20260902-027",
+    "handoff": "docs/handoffs/T-20260902-027-emif-fifo-reset-cdc-deep.md",
+    "task_028": "docs/handoffs/T-20260902-028-fp-p5-rerun-round3.md",
+    "root_cause": "T-028 signoff STA still shows sys->EMIF gray first-stage setup -6.949 ns on two missing SDC cuts, and EMIF->sys hold -5.767 ns from rd_ptr_bin_q to rd_ptr_gray_wr1_q, indicating the source Gray register was optimized/merged into the first synchronizer stage."
+  },
+  "modified_file_hashes": {
+    "rtl/lcvex_axi4_avalon_adapter.sv": "9108a1c5fb8d99b4f42200669f71918418179ff6d99fb2cd44d720a3cd55265d",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile",
+      "source_sha": "896fc46fb4c18d85c0a91c3844c27cd7c0298cbd",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make compile",
+      "seed": null,
+      "wall_seconds": 5,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-lint-soc",
+      "source_sha": "896fc46fb4c18d85c0a91c3844c27cd7c0298cbd",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash fpga/catapult_a10/tools/lint_soc.sh",
+      "seed": null,
+      "wall_seconds": 5,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "output": "LCVEX_CATAPULT_A10_SOC_LINT_PASS"
+    },
+    {
+      "run_id": "owner-l0-lint-platform",
+      "source_sha": "896fc46fb4c18d85c0a91c3844c27cd7c0298cbd",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash fpga/catapult_a10/tools/lint_platform.sh",
+      "seed": null,
+      "wall_seconds": 5,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "output": "LCVEX_CATAPULT_A10_SKELETON_LINT_PASS"
+    },
+    {
+      "run_id": "owner-l1-b2-sv-regression",
+      "source_sha": "896fc46fb4c18d85c0a91c3844c27cd7c0298cbd",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_axi4_avalon_tb -Mdir obj_dir_b2 -o lcvex_axi4_avalon_tb -f rtl/filelist.f tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv; ./obj_dir_b2/lcvex_axi4_avalon_tb",
+      "seed": "b2_054",
+      "wall_seconds": 20,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "output": "PASS: B2 AXI4/Avalon SV regression writes=0 reads=0"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-030-emif-async-fifo-gray-cdc2.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-030.json"
+    }
+  ],
+  "known_limits": [
+    "No Quartus/Qsys synthesis, fitter, signoff STA, TimeQuest Report CDC, assembler/SOF, or FP-P5 physical rerun was executed.",
+    "The hardened Gray counter remains inside the writable adapter source; future netlist inspection should confirm the source Gray register is no longer optimized into the first synchronizer stage.",
+    "If post-fit STA still shows binary-pointer-to-first-sync paths, a dedicated submodule-level physical isolation may be required."
+  ],
+  "next": "Integrator merges, then rerun FP-P5 synthesis/fitter/signoff STA to confirm EMIF core_usr_clk setup and sys_clk_50 hold gray-pointer paths are non-negative; then continue core/MMU setup work from T-028.",
+  "timestamps": {
+    "sent_at": "2026-09-03T19:20:30+08:00",
+    "received_at": "2026-09-03T19:21:00+08:00",
+    "reported_at": "2026-09-03T19:26:00+08:00"
+  },
+  "merge_sha": "c9a2de0d0ce2fa2d4c405dd5953cfd543a525d8f",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T19:27:33+08:00",
+    "merged_at": "2026-09-03T19:27:50+08:00",
+    "recorded_at": "2026-09-03T19:27:50+08:00",
+    "notes": "EMIF async FIFO gray CDC round2 merged and accepted"
+  }
+}

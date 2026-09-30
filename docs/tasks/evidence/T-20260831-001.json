@@ -1,0 +1,472 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260831-001",
+  "state": "review",
+  "partial": false,
+  "base_sha": "fbb5d71e2430dbae3ef43490c14c2b6f5c6cda92",
+  "head_sha": "55dbd0cf7bf609e76dcfb7341c48af971b44df73",
+  "branch": "infra/T-20260831-001-a10-execution-preflight",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-001",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "sent_at": "2026-08-31T00:42:34+08:00",
+  "received_at": "2026-08-31T00:43:39+08:00",
+  "reported_at": "2026-08-31T01:19:13+08:00",
+  "post_reboot_notice_sent_at": "2026-08-31T01:05:13+08:00",
+  "post_reboot_notice_received_at": "2026-08-31T01:05:24+08:00",
+  "post_reboot_ssh_restored_at": "2026-08-31T01:10:56+08:00",
+  "post_reboot_snapshot_started_at": "2026-08-31T01:13:28+08:00",
+  "post_reboot_snapshot_finished_at": "2026-08-31T01:14:54+08:00",
+  "scope": "只读 A10 Quartus/full-flow/上板执行预检；禁止启动、停止或修改任何外部作业/文件。",
+  "local_reference": {
+    "repo": "/home/chiro/projects/a10-linux-riscv",
+    "commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "status": "clean; HEAD matches locked commit",
+    "platform_manifest": {
+      "schema": 1,
+      "task_id": "T-20260827-052",
+      "source_commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+      "family": "Arria 10",
+      "device": "10AX115N4F40E3SG",
+      "quartus": "Quartus Prime Pro 21.4 Build 67",
+      "speed_grade_status": "inconsistent (Qsys/clock/reset=2; EMIF/EPCQ/device E3)",
+      "manifest_sha256": "c08553af9f15b4c2e1a20933aa901a2408bee9ac296c272e5cfd1a4e7165e453"
+    },
+    "source_lock": {
+      "rows": 50,
+      "raw_blob_match": 27,
+      "raw_blob_mismatch": 23,
+      "mismatch_paths": [
+        "hw/ip/sfl/ip/sfl_sys/clk.ip",
+        "hw/ip/sfl/ip/sfl_sys/clk/clk.cmp",
+        "hw/ip/sfl/ip/sfl_sys/clk/clk_bb.v",
+        "hw/ip/sfl/ip/sfl_sys/clk/clk_inst.v",
+        "hw/ip/sfl/ip/sfl_sys/clk/clk_inst.vhd",
+        "hw/ip/sfl/ip/sfl_sys/clk/synth/clk.v",
+        "hw/ip/sfl/ip/sfl_sys/epcq/altera_asmi_parallel_1910/synth/epcq_altera_asmi_parallel_1910_rmd4qmi.v",
+        "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_asmi_parallel_epcq_epcq.v",
+        "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_epcq_controller_epcq_epcq.v",
+        "hw/ip/sfl/ip/sfl_sys/epcq/epcq.cmp",
+        "hw/ip/sfl/ip/sfl_sys/epcq/epcq_bb.v",
+        "hw/ip/sfl/ip/sfl_sys/epcq/epcq_inst.v",
+        "hw/ip/sfl/ip/sfl_sys/epcq/epcq_inst.vhd",
+        "hw/ip/sfl/ip/sfl_sys/epcq/synth/epcq.v",
+        "hw/ip/sfl/ip/sfl_sys/rst.ip",
+        "hw/ip/sfl/ip/sfl_sys/rst/rst.cmp",
+        "hw/ip/sfl/ip/sfl_sys/rst/rst_bb.v",
+        "hw/ip/sfl/ip/sfl_sys/rst/rst_inst.v",
+        "hw/ip/sfl/ip/sfl_sys/rst/rst_inst.vhd",
+        "hw/ip/sfl/ip/sfl_sys/rst/synth/rst.v",
+        "hw/ip/sfl/sfl_sys.cmp",
+        "hw/ip/sfl/sfl_sys_inst.vhd",
+        "hw/ip/sfl/synth/sfl_sys.v"
+      ],
+      "interpretation": "23 source hashes differ from the locked values and are not explained by LF normalization; source snapshot/generation provenance must be re-validated before execution."
+    },
+    "target_sha256sums": {
+      "command": "(cd fpga/catapult_a10 && sha256sum -c SHA256SUMS)",
+      "started_at": "2026-08-31T00:56:54+08:00",
+      "finished_at": "2026-08-31T00:56:54+08:00",
+      "exit_code": 1,
+      "pass_count": 48,
+      "fail_count": 2,
+      "failures": {
+        "quartus/catapult_a10.qsf": {
+          "expected": "89ed1babd5fdde957497bb1d822cdd980cd8b16ba74ac825f061df1a8576c0fe",
+          "actual": "78032dc5634dc08bf15e916fb70e9f2f6ddefd6b2dd5d59600b3c4c3a236f19d"
+        },
+        "quartus/catapult_a10.sdc": {
+          "expected": "9072d02a79580f9344563b69a8eb36fd204834d73e73b3427b306e668a6aba87",
+          "actual": "caf847755a8c42f2e88ea09e434888938ad4382193400593ddcc986f26154a8c"
+        }
+      },
+      "qpf_actual": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+      "qsys_actual": "3da27e815b3f89dd89129a856794ad1da8f4cfe4d5b7b8aee7d525ab4bc79ca6",
+      "qsys_bb_actual": "91076193c924b44691a78fa34c47442e234a9b6a206a34f2a1bd74aad029ae50",
+      "sfl_epcq_actual": "63e8f8b0e160cd085fd5bfa9a3af1acac064ac342fc128149f36db2a213c8364",
+      "sfl_synth_actual": "904f53f0fcbb940d91d41179768411983a47ebfd8d0c511e59804b04cd015e21"
+    },
+    "historical_resources": {
+      "T-20260828-067": {
+        "quartus_syn_private_peak_mb": [75425, 76291, 77060],
+        "approx_wall": "38-40 minutes",
+        "result": "synthesis OOM/hang; no fit/STA/SOF"
+      },
+      "T-20260830-008": {
+        "l1d_sets64_wall_s": 254,
+        "l1d_peak_private_mb": 3767.1,
+        "l2_sets64_ways1_wall_s": 305,
+        "l2_peak_private_mb": 4305.6,
+        "soc_coh_peak_private_mb": 8443.6,
+        "bottomup": "blackbox synth -> quartus_cdb import_partition -> fitter-only; signature/path must match"
+      },
+      "T-20260830-016": {
+        "b5_top_alt_sld_fab_peak_private_mb": 21378,
+        "soc_top_blackbox_peak_private_mb": 31314,
+        "result": "blocked before fit/STA/SOF"
+      },
+      "T-20260830-020": {
+        "alt_sld_fab_peak_private_mb": 21000,
+        "result": "blocked; copied original DB cannot be loaded by another project"
+      },
+      "T-20260830-038": {
+        "l1d_l2_m20k": "SETS=64 and SETS=64/WAYS=1, width=512, byteena=64, block bits=32768, MLAB=0",
+        "result": "standalone cache-data synthesis evidence only; no SoC SOF"
+      },
+      "T-20260828-064": {
+        "old_compile6": "0 errors/68 warnings; fit 4468 ALM, 8641 regs, 27 RAM, 3 PLL; STA setup +0.220 ns, hold +0.017 ns; old platform SOF",
+        "reuse": "historical only; not current AArch64/cache candidate"
+      }
+    },
+    "commands": [
+      {
+        "run_id": "local-json-001",
+        "command": "jq -e . task JSON, platform_manifest.json, skeleton_manifest.json and all requested historical evidence JSON",
+        "started_at": "2026-08-31T00:56:25+08:00",
+        "finished_at": "2026-08-31T00:56:25+08:00",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "local-source-lock-002",
+        "command": "git -C /home/chiro/projects/a10-linux-riscv show 3db828e...:<source_path> | sha256sum for every source.lock row",
+        "started_at": "2026-08-31T00:56:54+08:00",
+        "finished_at": "2026-08-31T00:56:54+08:00",
+        "exit_code": 0,
+        "result": "pass_with_findings"
+      },
+      {
+        "run_id": "local-diff-003",
+        "command": "git diff --check",
+        "started_at": "2026-08-31T00:56:25+08:00",
+        "finished_at": "2026-08-31T00:56:25+08:00",
+        "exit_code": 0,
+        "result": "pass"
+      }
+    ]
+  },
+  "remote_snapshot": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand <UTF-16LE base64>",
+    "all_remote_probes_read_only": true,
+    "user_initiated_reboot": true,
+    "agent_stopped_processes": false,
+    "agent_changed_processes": false,
+    "probe_commands": [
+      {
+        "run_id": "remote-memory-001",
+        "command": "ssh ... pwsh -EncodedCommand <Get-CimInstance Win32_OperatingSystem/Win32_ComputerSystem/Win32_PageFileUsage; Get-PSDrive D>",
+        "started_at": "2026-08-31T00:52:01+08:00",
+        "finished_at": "2026-08-31T00:52:02+08:00",
+        "exit_code": 0
+      },
+      {
+        "run_id": "remote-cpu-002",
+        "command": "ssh ... pwsh -EncodedCommand <Get-CimInstance Win32_Processor>",
+        "started_at": "2026-08-31T00:52:49+08:00",
+        "finished_at": "2026-08-31T00:52:50+08:00",
+        "exit_code": 0
+      },
+      {
+        "run_id": "remote-process-003",
+        "command": "ssh ... pwsh -EncodedCommand <Get-Process EDA patterns and top WorkingSet processes>",
+        "started_at": "2026-08-31T00:52:37+08:00",
+        "finished_at": "2026-08-31T00:52:38+08:00",
+        "exit_code": 0
+      },
+      {
+        "run_id": "remote-tools-project-004",
+        "command": "ssh ... pwsh -EncodedCommand <Get-Item/Get-FileHash key inputs; quartus_sh --version; jtagconfig>",
+        "started_at": "2026-08-31T00:53:18+08:00",
+        "finished_at": "2026-08-31T00:53:25+08:00",
+        "exit_code": 0
+      },
+      {
+        "run_id": "remote-artifacts-005",
+        "command": "ssh ... pwsh -EncodedCommand <Get-ChildItem build -Recurse *.log/*.rpt/*.summary/*.sof; Get-FileHash>",
+        "started_at": "2026-08-31T00:54:32+08:00",
+        "finished_at": "2026-08-31T00:54:34+08:00",
+        "exit_code": 0
+      },
+      {
+        "run_id": "remote-qsys-tools-006",
+        "command": "ssh ... pwsh -EncodedCommand <qsys\\bin\\qsys-generate.exe --version; ip-generate.exe --version>",
+        "started_at": "2026-08-31T00:55:49+08:00",
+        "finished_at": "2026-08-31T00:55:53+08:00",
+        "exit_code": 0,
+        "inner_exit_codes": {
+          "qsys-generate_version": 1,
+          "ip-generate_version": 3
+        }
+      }
+    ],
+    "os_boot": "2026-08-28T19:18:29.5000000+08:00",
+    "post_reboot": {
+      "ssh_restored_at": "2026-08-31T01:10:56+08:00",
+      "os_boot": "2026-08-31T01:08:13.5000000+08:00",
+      "cpu_load_percent": 57,
+      "physical_total_mb": 63092.3,
+      "physical_free_mb": 42514.7,
+      "pagefile_allocated_mb": 12800,
+      "pagefile_current_mb": 0,
+      "pagefile_peak_mb": 0,
+      "pagefile_available_mb": 12800,
+      "disk_D_free_gb": 104.2,
+      "eda_process_count": 0,
+      "high_memory_top": [
+        {"name": "VRChat", "pid": 5340, "working_set_mb": 3348.6, "private_mb": 8375.3},
+        {"name": "steamwebhelper", "pid": 27408, "working_set_mb": 753.9, "private_mb": 762.9},
+        {"name": "OVR Toolkit", "pid": 39400, "working_set_mb": 682.3, "private_mb": 1186.0}
+      ],
+      "quartus_version_rc": 0,
+      "qsys_generate_exists": true,
+      "ip_generate_exists": true,
+      "jtagconfig_rc": 0,
+      "project_exists": true,
+      "skeleton_manifest_exists": false,
+      "artifact_counts": {"T-20260828-067": {"all": 13, "artifacts": 12, "sof": 0}, "T-20260830-038": {"all": 188, "artifacts": 12, "sof": 0}},
+      "serv_req_info_sha256": "418C93BBA83AC8FDBCDA3C9BD79D937D3B59C82FF51DC35AAA6D4588E43168F0",
+      "key_hashes_unchanged_from_pre_reboot": true,
+      "jtag_chain_unchanged_from_pre_reboot": true
+    },
+    "cpu": {
+      "model": "AMD Ryzen 9 9900X 12-Core Processor",
+      "cores": 12,
+      "logical_processors": 24,
+      "load_percent_sample": 71
+    },
+    "memory": {
+      "total_mb": 63092.3,
+      "free_mb": 43121.0,
+      "pagefiles": [
+        {
+          "name": "C:\\pagefile.sys",
+          "allocated_mb": 9216,
+          "current_usage_mb": 792,
+          "peak_usage_mb": 7197,
+          "available_mb": 8424
+        }
+      ],
+      "theoretical_commit_headroom_mb": 51545,
+      "safety_reserve_assumption_mb": 8192
+    },
+    "disk": {
+      "drive": "D:",
+      "size_gb": 675.26,
+      "free_gb": 102.68,
+      "used_gb": 572.58
+    },
+    "processes": {
+      "eda_process_count": 0,
+      "eda_processes": [],
+      "high_memory_process_count": 20,
+      "high_memory_top": [
+        {"name": "vmmemWSL", "pid": 45176, "working_set_mb": 2917.3, "private_mb": 2923.4, "cpu_s": 134.7, "start": "2026-08-31T00:47:48.8966910+08:00"},
+        {"name": "Memory Compression", "pid": 3080, "working_set_mb": 529.3, "private_mb": 5.8, "cpu_s": 467.8, "start": "2026-08-28T19:18:42.5278030+08:00"},
+        {"name": "QQ", "pid": 45060, "working_set_mb": 481.1, "private_mb": 492.3, "cpu_s": 1649.6, "start": "2026-08-29T20:22:42.5378945+08:00"},
+        {"name": "steamwebhelper", "pid": 36644, "working_set_mb": 430.0, "private_mb": 745.8, "cpu_s": 105.3, "start": "2026-08-29T03:21:42.9960233+08:00"},
+        {"name": "explorer", "pid": 12820, "working_set_mb": 382.3, "private_mb": 422.6, "cpu_s": 1795.6, "start": "2026-08-28T19:18:46.0335619+08:00"}
+      ],
+      "no_process_changed": true
+    },
+    "tools": {
+      "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+      "quartus_sh": {"path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe", "exists": true, "version_rc": 0, "version": "Quartus Prime Shell Version 21.4.0 Build 67 12/06/2021 SC Pro Edition"},
+      "quartus_syn": {"exists": true},
+      "quartus_fit": {"exists": true},
+      "quartus_sta": {"exists": true},
+      "quartus_asm": {"exists": true},
+      "quartus_ipgenerate": {"exists": true},
+      "qsys_generate": {"path": "D:\\Software\\intelFPGA_pro\\21.4\\qsys\\bin\\qsys-generate.exe", "exists": true, "version_rc": 1},
+      "ip_generate": {"path": "D:\\Software\\intelFPGA_pro\\21.4\\qsys\\bin\\ip-generate.exe", "exists": true, "version_rc": 3, "finding": "Pro tool restricted to acdstest resource"},
+      "jtagconfig": {"exists": true},
+      "quartus_pgm": {"exists": true, "invoked": false}
+    },
+    "project": {
+      "root": "D:\\Projects\\fpga-altra\\lcvex",
+      "exists": true,
+      "license_path_exists_only": true,
+      "license_content_read": false,
+      "skeleton_manifest_exists": false,
+      "key_hashes": {
+        "platform_manifest.json": "F1680E3FB3660B9BBB76CD063FBF3EF8C9D0E12AFD9A19AAF2E5E44F510E8049",
+        "source.lock": "0815DEB9FBFF904A7BFD8D87B6D4A1F900937F9CCB3E942C1A826889BD611C4E",
+        "SHA256SUMS": "1C50E94F1E99A988AF5864CD884B7F40F0E80A904CE86A36456B9F0231F3A2E4",
+        "quartus/catapult_a10.qpf": "38AC01AC2DFC0DBF28FC5BB2BE22E2323606C18716B46EC6C5D048E5FE4EC1DD",
+        "quartus/catapult_a10.qsf": "89ED1BABD5FDDE957497BB1D822CDD980CD8B16BA74AC825F061DF1A8576C0FE",
+        "quartus/catapult_a10.sdc": "9072D02A79580F9344563B69A8EB36FD204834D73E73B3427B306E668A6ABA87",
+        "qsys/ddr4_bot/Qsys.qsys": "3DA27E815B3F89DD89129A856794AD1DA8F4CFE4D5B7B8AEE7D525AB4BC79CA6",
+        "qsys/ddr4_bot/Qsys/Qsys_bb.v": "083B56D54ACCAA99F66F1013F2A9D7E98721F35E7CDD5A19E88EC265A1A8F616",
+        "qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot.ip": "89D3B8E1CAED52D713E1530CB2576B4406F1577599EF4F0A7BEE34880620E667",
+        "flash/sfl/sfl_sys.qip": "55ABE239AF3E109AF7D1C1B916FB73F0E4A5525C34630345BD866D9850ABDA79",
+        "flash/sfl/ip/sfl_sys/epcq.ip": "EFA072247360387810AED2FA36307DF643B759E76512AA1DD9F4A42B576E1D7C",
+        "flash/sfl/synth/sfl_sys.v": "240749E1D0C8FDC594DC8BBFFBB9D9695FBF57DD92A740EEB417AF1DF22CFAE4"
+      }
+    },
+    "build_snapshot": {
+      "total_report_log_files": 536,
+      "task_dirs": {
+        "T-20260828-063": {"all_files": 289, "report_log_files": 23, "sof": 1},
+        "T-20260828-064": {"all_files": 209, "report_log_files": 57, "sof": 2},
+        "T-20260828-067": {"all_files": 13, "report_log_files": 12, "sof": 0},
+        "T-20260830-008": {"all_files": 818, "report_log_files": 69, "sof": 0},
+        "T-20260830-016": {"all_files": 271, "report_log_files": 16, "sof": 0},
+        "T-20260830-020": {"all_files": 754, "report_log_files": 43, "sof": 1},
+        "T-20260830-029": {"all_files": 640, "report_log_files": 42, "sof": 0},
+        "T-20260830-030": {"all_files": 607, "report_log_files": 35, "sof": 1},
+        "T-20260830-032": {"all_files": 286, "report_log_files": 13, "sof": 0},
+        "T-20260830-038": {"all_files": 188, "report_log_files": 12, "sof": 0}
+      },
+      "serv_req_info": {"exists": true, "bytes": 2197, "lastwrite_utc": "2026-08-29T07:55:18.9711861Z", "sha256": "418C93BBA83AC8FDBCDA3C9BD79D937D3B59C82FF51DC35AAA6D4588E43168F0"},
+      "T-20260830-038_reports": {
+        "l1d_syn_rpt": {"bytes": 68117, "sha256": "20138A03FF8ED43070A3D99CB92541FC1455D8A9864CC694B589CBE4B0648A83"},
+        "l2_syn_rpt": {"bytes": 74027, "sha256": "2A8D74D0FDED5D2BD910C3680C22F0702EB5343AFD9ED4A502F57F3B3D335DAE"},
+        "sof": "none"
+      },
+      "T-20260828-064_compile6_sof": {"bytes": 36842109, "sha256": "04130F9D0CF8B42AFE1FE56A428D6A6AF0BDC9B510BF72FD00ECCABE60896028", "historical_only": true}
+    },
+    "jtag": {
+      "command": "jtagconfig",
+      "exit_code": 0,
+      "cables": [
+        "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+        "Microsoft Catapult (64) [USB-0]"
+      ],
+      "devices": ["02E060DD 10AT115S(1|2)", "02E060DD 10AT115S(1|2)"],
+      "qsf_device": "10AX115N4F40E3SG",
+      "identity_status": "unresolved; programming WAIT"
+    }
+  },
+  "staged_gates": [
+    {
+      "stage": "manifest_qsys_sfl",
+      "status": "WAIT",
+      "go": "source/target/remote hashes closed; unique QIP/QSYS selection; no stale root",
+      "wait": "any source/hash unresolved",
+      "block": "cannot prove locked source provenance",
+      "output_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\<task-id>\\manifest_qsys_sfl"
+    },
+    {
+      "stage": "reduced_analysis_synthesis",
+      "status": "GO only if bounded",
+      "go": "independent output root; prior private peak <=35GB; free physical >=40GB; pagefile available >=8GB; no EDA process",
+      "wait": "peak unknown or resource snapshot below threshold",
+      "block": "scope expected near T-067 full-flow 75-77GB peak",
+      "sampling": "15s"
+    },
+    {
+      "stage": "partition_qdb_import",
+      "status": "GO only reduced",
+      "go": "same device/tool/source/module signature; blackbox synth then quartus_cdb import_partition then fitter-only",
+      "wait": "partition/path/signature unresolved",
+      "block": "direct stale DB copy or child re-synthesis",
+      "sampling": "15s"
+    },
+    {
+      "stage": "full_analysis_synthesis",
+      "status": "BLOCKED",
+      "go": "commit headroom covers historical peak plus >=8GB safety reserve",
+      "wait": "only theoretical headroom or provenance open",
+      "block": "current approx 51.5GB theoretical headroom <75-77GB historical peak",
+      "sampling": "15s"
+    },
+    {
+      "stage": "fitter",
+      "status": "WAIT",
+      "go": "current synthesis DB/hash fresh and forecast peak fits commit headroom",
+      "wait": "synthesis partial or output stale",
+      "block": "using fitter to bypass unresolved synthesis/elaboration",
+      "sampling": "15s"
+    },
+    {
+      "stage": "sta_timequest",
+      "status": "WAIT",
+      "go": "fit complete; generated clocks/hierarchy resolve; setup/hold/recovery/removal positive",
+      "wait": "guarded SDC not post-fit checked",
+      "block": "negative slack or unresolved CDC/reset paths",
+      "sampling": "30s"
+    },
+    {
+      "stage": "assembler_sof",
+      "status": "WAIT",
+      "go": "fit+STA green; QSF/device/input hashes frozen",
+      "wait": "warnings/provenance unresolved",
+      "block": "reusing historical SOF",
+      "sampling": "30s"
+    },
+    {
+      "stage": "simulation",
+      "status": "WAIT",
+      "go": "generated HDL/Qsys/SFL hashes closed; isolated sim root; no vsim/questa process",
+      "wait": "model/version/output unresolved",
+      "block": "stale sim DB or license dependency",
+      "sampling": "30s"
+    },
+    {
+      "stage": "program",
+      "status": "WAIT",
+      "go": "SOF/JIC hash and cable/device identity match; explicit programming task",
+      "wait": "10AT115S vs 10AX115N4F40E3SG unresolved",
+      "block": "target identity or recovery path unclear",
+      "sampling": "5s"
+    },
+    {
+      "stage": "board_test",
+      "status": "WAIT",
+      "go": "program success; reset/power/serial/DDR recovery frozen; SRAM->DDR->Cache/MMU sequence",
+      "wait": "board observation condition absent",
+      "block": "EPCQ/Flash write without separate precise authorization",
+      "sampling": "5s"
+    }
+  ],
+  "non_actions": {
+    "reboot_initiated_by_user": true,
+    "reboot_initiated_by_agent": false,
+    "quartus_compile_started": false,
+    "quartus_simulation_started": false,
+    "quartus_programming_started": false,
+    "remote_files_modified": false,
+    "processes_stopped_or_paused": false,
+    "process_priority_changed": false,
+    "pagefile_or_system_config_changed": false,
+    "license_content_read": false
+  },
+  "artifacts": [
+    {
+      "id": "preflight-doc",
+      "uri": "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+      "commit": "55dbd0cf7bf609e76dcfb7341c48af971b44df73"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260831-001-a10-execution-preflight.md"
+    },
+    {
+      "id": "remote-readonly-snapshot",
+      "uri": "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+      "role": "read-only existence/time/hash/process/memory/pagefile/disk/JTAG probe; no copied files"
+    }
+  ],
+  "known_limits": [
+    "No Quartus compile/simulation/fitter/STA/assembler/programming was run by this task.",
+    "Current local manifest/SHA256SUMS QSF/SDC drift and 23 source.lock SFL hash mismatches require owner correction before execution.",
+    "Current host commit headroom cannot cover T-067 full synthesis peak; do not call full-flow GO without a new resource snapshot or reduced scope.",
+    "JTAG chain device identity differs textually from QSF DEVICE and requires manual confirmation.",
+    "Remote build contains stale historical outputs; no historical SOF is current candidate evidence."
+  ],
+  "integrator_review": {
+    "received_at": "2026-08-31T01:21:16+08:00",
+    "merge_sha": "f2cc92fef08dd02a4f0e4b882e36a53a86f53215",
+    "status": "accepted_preflight_fullflow_blocked",
+    "checks": {
+      "non_interference": "用户发起重启；agent 未启动 EDA、未停止/调整进程、未修改远端文件或系统配置",
+      "resource_gate": "post-reboot physical free=42514.7MB、pagefile free=12800MB、EDA=0；仍不足覆盖 75-77GB historical synthesis peak + 8GB reserve",
+      "target_provenance": "sha256sum -c independently reproduced 48/50；QSF/SDC current hashes differ from stale list",
+      "source_provenance": "clean a10-linux-riscv@3db828e raw blob independently disproves stale source.lock entry（sfl_sys.v actual=904f53..., lock=240749...）",
+      "jtag": "two read-only chains report 10AT115S(1|2)；programming remains WAIT until identity is confirmed"
+    },
+    "decision": "接受执行前资源/坑点矩阵；full synthesis BLOCKED。先重锁 provenance，再以单作业 reduced/partition scope 获取 <=35GB 新峰值证据。"
+  },
+  "next": "Integrator registers provenance-sync/relock task, then a bounded <=35GB reduced/partition synthesis task; only after fresh reports and resources pass may fitter/STA/assembler/program/board tasks be scheduled."
+}

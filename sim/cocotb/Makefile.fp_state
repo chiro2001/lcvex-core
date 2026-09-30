@@ -1,0 +1,16 @@
+# P7-0 独立 Cocotb 入口。
+# 不修改仓库现有 sim/cocotb/Makefile；本入口只编译 FP state wrapper。
+
+SIM ?= verilator
+TOPLEVEL_LANG ?= verilog
+TOPLEVEL ?= lcvex_fp_state_cocotb_tb
+COCOTB_TEST_MODULES ?= test_fp_state
+SIM_BUILD ?= sim_build_p7_0_fp_state
+
+VERILOG_SOURCES = $(abspath ../../rtl/lcvex_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_fp_state.sv) \
+                  $(abspath ../../tb/sv/lcvex_fp_state_cocotb_tb.sv)
+
+EXTRA_ARGS += --timing --assert
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

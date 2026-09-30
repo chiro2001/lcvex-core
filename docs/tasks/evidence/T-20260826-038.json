@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-038",
+  "base_sha": "34a822e",
+  "head_sha": "f0f0cda",
+  "candidate_status": "pass-local",
+  "run": {
+    "run_id": "owner-l3-gate-d-runner-fixed-001",
+    "command": "taskset -c 0-5 env VERILATOR_JOBS=5 bash sim/difftest/run_gate_d.sh --parallel",
+    "cpuset": "0-5",
+    "exit_code": 0,
+    "log": "build/agents/T-20260826-038/gate-d.log",
+    "log_sha256": "9d1ab44168af52643ee45dd0e0cae0ece4665e00becd3fb2a8854e7b12d9f358"
+  },
+  "results": {
+    "make_test": "pass",
+    "coverage": {"covered_points": 8611, "result": "pass"},
+    "m2_r1": {"base": 39, "cache": 39, "result": "pass"},
+    "delay2_cache": {"tests": 32, "result": "pass"},
+    "p5a_hardening": {"tests": 26, "result": "pass"},
+    "gate_c": {"groups": 7, "result": "pass"},
+    "p5a": {"groups": 3, "result": "pass"},
+    "p4b": {"groups": 5, "result": "pass"},
+    "random": {"seeds": [1, 2, 3], "length": 100000, "result": "pass"},
+    "baremetal_c": {"commits": 200, "result": "pass"},
+    "orphan_process_check": {"qemu_coordinator_count": 0, "result": "pass"}
+  },
+  "known_limits": [
+    "这是当前 SHA 的本地 Gate D；CI/QEMU patch replay 仍是异步证据。",
+    "Gate D 通过不自动等价于 Gate E；Linux main 线和统一 Gate E 审计仍需完成。"
+  ]
+}

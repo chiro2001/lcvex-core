@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-002",
+  "label": "A10-JTAG-BURN-REVIEW",
+  "title": "Catapult A10 JTAG 烧写经验调研与 SOP（参考 a10-linux-riscv 自建 jtag server）",
+  "kind": "review-doc",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-a10-jtag-burn-review",
+  "agent_type": "readonly-review-and-docs",
+  "model": "deepseek-v4-flash",
+  "model_selection": "用户指定 deepseek-v4-flash(max)；本次对话后续默认",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260831-001"
+  ],
+  "base_sha": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+  "branch": "docs/T-20260902-002-a10-jtag-burn-review",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-002",
+  "scope": "详细读取 /home/chiro/projects/a10-linux-riscv（HEAD 3db828e74651fda377a33d84f2a2ca0e69901d72，clean）与本地 fpga 文档中的真机烧写成功经验，特别是自建 jtag server（jtag-30mhz / MBFTDI-Blaster）路径，产出 LCVEX Catapult A10 的 JTAG 烧写 SOP。只读参考仓，不运行烧写/编程/上板。",
+  "planning_guidance": {
+    "provenance": [
+      "已知线索：a10-linux-riscv AGENTS.md 记录 JTAG ID 0x02E060DD、SOF 290AB3...、JIC 86EE77...、禁止按进程名杀 jtagserver/system-console；docs/04-交接... §8.2 记录真机验收：jtag-30mhz 15MHz jtagserver（端口 1310）+ quartus_pgm -c 'MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310' -m JTAG -o 'p;<sof>' 烧录 44s 0 errors，随后 nios2-terminal -c JTAG-MPSSE-Blaster -i 0 读控制台。",
+      "本地相关：fpga/catapult_a10/flash/sfl（sfl_sys）、jtag_uart、EPCQ CSR 0x09001000、JTAG-UART 0x09000000、boot.S/ddr.S；docs/FPGA_A10_EXECUTION_PREFLIGHT.md 记录 JTAG chain/device identity 文本不一致、programming 保持 WAIT。"
+    ],
+    "execution": [
+      "梳理清楚：1) jtag-30mhz / MBFTDI-Blaster 是什么、来自哪里、如何在 Windows 启动自建 jtag server（参数/端口/校验）；2) JTAG 链确认命令（quartus_pgm -l / jtagconfig）与 JTAG ID 核对方法；3) SOF 直接 JTAG 配置 vs EPCQ Flash 烧写（JIC/RBF）流程与 a10-linux-riscv 实际使用路径；4) JIC 生成（output_file.cof / convert_to_hex）方法；5) JTAG-UART 控制台连接；6) 上电/复位/超时/验证风险。",
+      "可 SSH 到远端做只读工具路径与版本检查（Test-Path/Get-Command），不得启动 jtag server、quartus_pgm 或任何烧写动作，不得读取 license 内容。",
+      "产出 docs/FPGA_A10_JTAG_BURN_SOP.md：含命令、工具路径、JTAG identity 确认步骤、自建 server 启动/停止步骤、SOF/JIC 烧写与验证、风险与回滚。区分【已由参考项目验证】与【待 LCVEX 实测确认】。"
+    ],
+    "acceptance_checks": [
+      "SOP 中每个烧写命令都有参考出处（文件+行号或 commit），未验证步骤明确标注。",
+      "明确 LCVEX 上板前必须完成的 JTAG identity 确认项与人工/宿主配合点。",
+      "证据落 docs/tasks/evidence/T-20260902-002.json + handoff。不声称已完成烧写或上板。"
+    ]
+  },
+  "writes": [
+    "docs/FPGA_A10_JTAG_BURN_SOP.md",
+    "docs/handoffs/T-20260902-002-a10-jtag-burn-review.md",
+    "docs/tasks/evidence/T-20260902-002.json"
+  ],
+  "reads": [
+    "/home/chiro/projects/a10-linux-riscv/AGENTS.md",
+    "/home/chiro/projects/a10-linux-riscv/README.md",
+    "/home/chiro/projects/a10-linux-riscv/docs/01-独立工程迁移与干净复现计划-20260826.md",
+    "/home/chiro/projects/a10-linux-riscv/docs/02-Bootstrap迁移记录-20260826.md",
+    "/home/chiro/projects/a10-linux-riscv/docs/03-交接-项目内软件重建与QEMU待定位-20260826.md",
+    "/home/chiro/projects/a10-linux-riscv/docs/04-交接-软件链QEMU门全绿与cleanroom软件复现-20260826.md",
+    "/home/chiro/projects/a10-linux-riscv/scripts/**",
+    "/home/chiro/projects/a10-linux-riscv/hw/quartus/vex_soc_ddr/**",
+    "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "docs/FPGA_PLAN.md",
+    "fpga/catapult_a10/**",
+    "AGENTS.md"
+  ],
+  "validation": {
+    "l0": [
+      "参考出处可核对；SOP 中已验证/待验证状态标注清晰"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "JTAG 烧写 SOP 完整、命令可追溯、明确 LCVEX 待确认项；不声称已完成烧写/上板。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 4096,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.1
+  },
+  "created_at": "2026-09-02T00:00:00+08:00",
+  "updated_at": "2026-09-02T01:43:20+08:00",
+  "known_limits": [
+    "只读参考仓与本地文档；不运行烧写/编程/上板/JTAG server。",
+    "不读取 license 内容；不修改 a10-linux-riscv。"
+  ],
+  "next": "JTAG identity 确认后由集成者授权实际烧写实验",
+  "dispatch": {
+    "sent_at": "2026-09-02T01:29:20+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-002",
+    "branch": "docs/T-20260902-002-a10-jtag-burn-review"
+  },
+  "head_sha": "8a7c654cbe115d44f26d6d4dfaf61392abef19a4",
+  "merge_sha": "18befa10c2a312c050d9e80fb1afa2d369f7e119",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T01:41:10+08:00",
+    "merged_at": "2026-09-02T01:43:20+08:00",
+    "recorded_at": "2026-09-02T01:43:20+08:00",
+    "notes": "JTAG SOP 已合入；只读调研、命令可追溯、已验证/待验证标注清晰；JTAG identity 与 SOF 冻结列为上板前人工/现场事项"
+  }
+}

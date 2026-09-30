@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-026",
+  "label": "RESOURCE-LOCK-GUARDIAN-HARDENING",
+  "title": "Keep resource ownership after the visible supervisor is SIGKILLed",
+  "kind": "infrastructure-regression",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-by-integrator",
+  "assigned_owner": "codex-integrator",
+  "depends_on": ["T-20260906-025"],
+  "base_sha": "bc2afb02",
+  "branch": "infra/T-20260906-026-resource-lock-guardian",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-026",
+  "scope": "Close the fail-open case where SIGKILL of the visible resource-lock Bash releases guard ownership while its child continues after closing inherited guard descriptors.",
+  "writes": [
+    "/home/chiro/projects/.resource-locks/README.md",
+    "/home/chiro/projects/.resource-locks/resource-lock",
+    "/home/chiro/projects/.resource-locks/resource-lock-guardian",
+    "/home/chiro/projects/.resource-locks/test-resource-lock",
+    "docs/decisions/ADR-20260906-007-cross-project-resource-lock.md",
+    "docs/tasks/active/T-20260906-026.json",
+    "docs/tasks/evidence/T-20260906-026.json",
+    "docs/handoffs/T-20260906-026-resource-lock-guardian.md"
+  ],
+  "reads": ["Linux pidfd_open(2), flock(2), waitpid(2) behavior"],
+  "validation": {
+    "syntax": "bash parse and Python compile without bytecode output",
+    "regression": "isolated SIGKILL of outer wrapper while a no-guard-FD task remains alive must keep status BUSY and block acquisition until task exit",
+    "existing": "all T-025 isolated lock tests remain green"
+  },
+  "acceptance": "No task starts before the pidfd lease keeper readiness handshake; SIGKILL of the visible Bash or primary guardian alone cannot release the lock while the real task root is alive; normal exit code and cleanup remain correct.",
+  "resource": "Isolated lightweight self-test only; never fault-inject against production lock owners.",
+  "created_at": "2026-09-06T08:01:58+08:00",
+  "implementation_head": "8f0d06540e8a381fe40c23484ee47b7f2269169e",
+  "evidence": "docs/tasks/evidence/T-20260906-026.json",
+  "handoff": "docs/handoffs/T-20260906-026-resource-lock-guardian.md",
+  "updated_at": "2026-09-06T08:05:39+08:00"
+}

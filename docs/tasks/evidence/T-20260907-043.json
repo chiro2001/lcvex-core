@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-043",
+  "label": "B25-SOF-PACKAGE",
+  "state": "done",
+  "acceptance_status": "quartus-assembler-success-and-volatile-sof-frozen",
+  "partial": false,
+  "base_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "candidate_tree_sha": "b6b576ada19381d958375d5088d8dc468b99e5d4",
+  "branch": "verify/T-20260907-043-b25-sof-package",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-043",
+  "owner": "root",
+  "authorization": {
+    "user_response": "y",
+    "authorized_at": "2026-09-10T11:07:32+08:00",
+    "authorized_scope": "Run the T-043 Quartus assembler once against an isolated clone of the frozen T-013 fitted database and freeze the resulting volatile SOF.",
+    "excluded": [
+      "quartus_pgm or FPGA configuration",
+      "nios2-terminal or console traffic",
+      "reset or power operations",
+      "JIC/EPCQ/Flash/RBF/POF/JBC/SVF/JAM generation or write"
+    ]
+  },
+  "physical_dependency": {
+    "task": "T-20260909-013",
+    "state": "done",
+    "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+    "candidate_tree_sha": "b6b576ada19381d958375d5088d8dc468b99e5d4",
+    "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260909-013-b25-final-fresh-physical",
+    "timing": {
+      "sys_clk_25_setup_ns": 8.085,
+      "sys_clk_25_hold_ns": 0.019,
+      "global_violations": 0
+    },
+    "acceptance": "fresh synthesis/fitter/STA and normalized UCP invariant signoff PASS"
+  },
+  "timestamps": {
+    "first_guard_attempt_at": "2026-09-10T11:22:34.9965089+08:00",
+    "second_guard_attempt_at": "2026-09-10T11:25:35.5560191+08:00",
+    "run_started_at": "2026-09-10T11:28:57.8786529+08:00",
+    "copy_started_at": "2026-09-10T11:29:00.3867398+08:00",
+    "copy_finished_at": "2026-09-10T11:29:00.8632483+08:00",
+    "assembler_started_at": "2026-09-10T11:29:03+08:00",
+    "assembler_finished_at": "2026-09-10T11:29:50+08:00",
+    "postflight_at": "2026-09-10T11:35:02.8365797+08:00",
+    "reported_at": "2026-09-10T11:38:50+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "source": "D:/Projects/fpga-altra/lcvex/build/T-20260909-013-b25-final-fresh-physical/fpga/catapult_a10",
+    "target": "D:/Projects/fpga-altra/lcvex/build/T-20260907-043-b25-sof-package/fpga/catapult_a10",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "pre_eda_process_count": 0,
+    "post_eda_process_count": 0,
+    "pre_free_physical_mib": 47308.0,
+    "pre_disk_d_free_bytes": 84327866368,
+    "source_total_bytes": 805381198,
+    "assembler_peak_virtual_mib": 7759,
+    "processors_detected": 24,
+    "processors_allowed": 16
+  },
+  "resource_lock": {
+    "resource": "gamepc",
+    "all_remote_access_locked": true,
+    "project": "lcvex",
+    "task": "T-20260907-043",
+    "agent": "root",
+    "final_status": "local FREE; gamepc FREE"
+  },
+  "input_identity": {
+    "qpf": {
+      "bytes": 34,
+      "sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd"
+    },
+    "qsf_remote_raw": {
+      "bytes": 13972,
+      "sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46"
+    },
+    "qsf_lf_normalized": {
+      "bytes": 13761,
+      "sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+      "content_equal": true,
+      "note": "The frozen GamePC copy uses CRLF; normalization reproduces the candidate QSF exactly."
+    },
+    "sdc": {
+      "bytes": 14384,
+      "sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5"
+    },
+    "fit_report": {
+      "bytes": 2320805,
+      "sha256": "fbb59400ce1b12bdef5a001ed4740776b8d87c9fc1a1400a22a4833cc3e246ad"
+    },
+    "sta_report": {
+      "bytes": 18079322,
+      "sha256": "c164360a4cf5dc9f46921f42155a7e7b8dadd5b40ce7bddc01e15c6041c39a67"
+    },
+    "t013_post_sta_project_manifest": {
+      "entries": 297,
+      "bytes": 43077,
+      "sha256": "038e2ea675703c542bd3d9ea527136ce80bf9e398f27661ee04540e3fadb8b5d",
+      "current_missing": 0,
+      "current_unexpected": 0
+    }
+  },
+  "clone_provenance": {
+    "source_files": 539,
+    "source_bytes": 805381198,
+    "source_pre_manifest": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/source.pre.tsv",
+      "bytes": 80111,
+      "sha256": "1d7d1b15dd57cd739a964b82d1ea4816a7d0797d8261ee1058718abeb0d92305"
+    },
+    "clone_pre_manifest": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/clone.pre.tsv",
+      "bytes": 80111,
+      "sha256": "1d7d1b15dd57cd739a964b82d1ea4816a7d0797d8261ee1058718abeb0d92305"
+    },
+    "copy_diff_count": 0,
+    "source_post_manifest": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/source.post.tsv",
+      "bytes": 80111,
+      "sha256": "1d7d1b15dd57cd739a964b82d1ea4816a7d0797d8261ee1058718abeb0d92305"
+    },
+    "source_immutability_diff_count": 0,
+    "source_preexisting_config_count": 0,
+    "source_post_config_count": 0
+  },
+  "assembler_run": {
+    "invocation_count": 1,
+    "executable": "D:/Software/intelFPGA_pro/21.4/quartus/bin64/quartus_asm.exe",
+    "command": "quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10",
+    "working_directory": "D:/Projects/fpga-altra/lcvex/build/T-20260907-043-b25-sof-package/fpga/catapult_a10/quartus",
+    "pid": 24604,
+    "wall_seconds_reported": 47,
+    "tool_result": "Successful",
+    "tool_exit_code": 0,
+    "tool_exit_code_basis": "Quartus stdout and authoritative assembler report both record Successful, processing ended normally, 0 errors and 0 warnings; this is recorded as the Quartus tool result in the same manner as earlier physical evidence.",
+    "monitor_process_exit_code": null,
+    "monitor_exit_note": "The first PowerShell Start-Process runner returned a null ExitCode field. It is preserved as null rather than fabricated. Windows Security 4689/process logs did not retain the historical process status, and assembler was not rerun.",
+    "stdout": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/quartus_asm.stdout.log",
+      "bytes": 1858,
+      "sha256": "be6af80be41834f57a54409c0b4d03b13162d1df5a060c8823b74d7f119d878e"
+    },
+    "stderr": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/quartus_asm.stderr.log",
+      "bytes": 104,
+      "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52",
+      "content": "TBBmalloc ucrtbase.dll allocation-replacement warning only"
+    },
+    "errors": 0,
+    "warnings": 0,
+    "loaded_database": "final snapshots for root_partition and auto_fab_0",
+    "success_markers": {
+      "stdout": true,
+      "assembler_report": true,
+      "processing_end": true,
+      "command_exact": true
+    }
+  },
+  "database_postflight": {
+    "pre_manifest": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/clone.database.pre.tsv",
+      "entries": 225,
+      "bytes": 34641,
+      "sha256": "83ca7a5a2faf2eb77bf33793db08d040c646f651e9f08856a985dbc4eda4e730"
+    },
+    "post_manifest": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/clone.database.post.tsv",
+      "entries": 228,
+      "bytes": 35053,
+      "sha256": "89767958b0000a3a4ee0d659aaac601becf865285e5024be0694539497889f52"
+    },
+    "added_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/catapult_a10.asm.qmsgdb"
+    ],
+    "changed_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/runlog.db"
+    ],
+    "removed_paths": [],
+    "added_allowlist_diff_count": 0,
+    "changed_allowlist_diff_count": 0,
+    "physical_database_change_count": 0,
+    "postflight_interpretation": "Quartus necessarily added assembler report metadata and updated compile-report/runlog metadata. No file under final, partitioned or synthesized fitted payload changed; the planned broad all-QDB byte-identity check was therefore refined to the task's authoritative only-assembler/report/SOF-delta contract."
+  },
+  "artifacts": {
+    "sof": {
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260907-043-b25-sof-package/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "local_path": "build/agents/T-20260907-043/sof/catapult_a10.sof",
+      "bytes": 36842093,
+      "sha256": "032c82dd88f99c5e19b845d199e6ef6d205e4be6b62c8171a2f9370a0032920b",
+      "quartus_checksum": "0x33878BC3",
+      "design_hash": "D0A92611070EB56A44CBE4BF1B8F9C4B",
+      "jtag_usercode": "0xFFFFFFFF"
+    },
+    "assembler_report": {
+      "path": "build/agents/T-20260907-043/sof/catapult_a10.asm.rpt",
+      "bytes": 10073,
+      "sha256": "6c6fbf5c6c461c53faae67602092929399d02fe77a5056a0843cdf111125dca9"
+    },
+    "flow_report": {
+      "path": "build/agents/T-20260907-043/sof/catapult_a10.flow.rpt",
+      "bytes": 17933,
+      "sha256": "b7f2146bb96379b1705423cee2ccac3f8d80570fa9f7530200c6029a8c438d08"
+    },
+    "postflight_result": {
+      "path": "build/agents/T-20260907-043/remote-evidence/runtime/postflight-result.json",
+      "bytes": 3756,
+      "sha256": "ed9c792702835cd25d9fc51e9758cb85b1b406e7c8c7f44f611eca365d37f6db"
+    },
+    "remote_run_log": {
+      "path": "build/agents/T-20260907-043/remote-run.lock.log",
+      "bytes": 4252,
+      "sha256": "d2b7f23b763fc41c84bfc3c6bd6a7f164221ab56946517f9b0b72f93e2228bbb"
+    },
+    "postflight_log": {
+      "path": "build/agents/T-20260907-043/postflight.lock.log",
+      "bytes": 2537,
+      "sha256": "31f4c30da69f2034391b2068a24e727bcee32e61e331325f160e3470cb584bbb"
+    }
+  },
+  "artifact_cardinality": {
+    "sof_count": 1,
+    "pof_count": 0,
+    "jic_count": 0,
+    "rbf_count": 0,
+    "jbc_count": 0,
+    "svf_count": 0,
+    "jam_count": 0,
+    "assembler_generated_files_reported": [
+      "catapult_a10.sof"
+    ]
+  },
+  "guard_attempts": [
+    {
+      "at": "2026-09-10T11:22:34.9965089+08:00",
+      "result": "failed-before-target-create",
+      "reason": "The guard initially compared the GamePC CRLF QSF raw hash against the repository LF hash. Existing T-006/T-007/T-013 evidence proved normalized content equality; no assembler or target clone was started."
+    },
+    {
+      "at": "2026-09-10T11:25:35.5560191+08:00",
+      "result": "failed-before-target-create",
+      "reason": "The guard compared an order-sensitive regenerated project-manifest hash against the T-013 manifest. A set comparison then proved 297/297 exact rows, with 0 missing and 0 unexpected; no assembler or target clone was started."
+    },
+    {
+      "at": "2026-09-10T11:28:57.8786529+08:00",
+      "result": "assembler-success-postcheck-recovered",
+      "reason": "The sole authorized assembler invocation succeeded. The initial over-broad all-QDB byte-identity postcheck rejected Quartus's own assembler/report metadata. A no-assembler recovery postflight proved the exact six-path metadata delta and zero physical fitted-payload changes."
+    }
+  ],
+  "safety_and_scope": {
+    "programmer_process_started": false,
+    "jtag_command_run": false,
+    "nios2_terminal_started": false,
+    "fpga_configured": false,
+    "reset_or_power_touched": false,
+    "flash_or_persistent_format_generated": false,
+    "source_probe_modified": false,
+    "unknown_process_stopped": false
+  },
+  "not_run": [
+    "quartus_pgm",
+    "jtagconfig or any JTAG server start/stop",
+    "nios2-terminal",
+    "FPGA configuration",
+    "board reset or power cycle",
+    "JIC/EPCQ/Flash/RBF/POF/JBC/SVF/JAM generation or write"
+  ],
+  "known_limitations": [
+    "The wrapper-level System.Diagnostics.Process ExitCode is null and remains explicitly null; Quartus's own successful/0-error/0-warning status is the accepted tool result, matching prior project evidence practice.",
+    "The SOF is only a frozen volatile configuration artifact. No board behavior, DDR calibration, console output or software execution is claimed."
+  ],
+  "integration": {
+    "owner_commit": "2c443711f0e790cc8d1b99d4f80a83e2cfa0655e",
+    "merge_commit": "32d615ba8b033761cb44e96d26ed50d8b80ba040",
+    "reviewed_at": "2026-09-10T11:46:08+08:00",
+    "status": "accepted",
+    "checks": [
+      "owner commit contains only the T-043 handoff and evidence JSON",
+      "evidence JSON parses and its SOF bytes/SHA-256 match the fetched artifact",
+      "source and clone pre-manifests are identical and source pre/post manifests are identical",
+      "database delta is exactly three added assembler metadata paths plus three changed report/runlog paths, with zero final/partitioned/synthesized payload changes",
+      "assembler report records Successful, 0 errors, 0 warnings and exactly one generated SOF",
+      "postflight confirms no persistent format, programmer, JTAG, terminal, reset or power action"
+    ]
+  },
+  "handoff": "docs/handoffs/T-20260907-043-b25-sof-package.md",
+  "next": "Stop at the T-044 permission gate. Ask the user separately before any quartus_pgm/volatile FPGA configuration action; JIC/EPCQ/Flash remains forbidden."
+}

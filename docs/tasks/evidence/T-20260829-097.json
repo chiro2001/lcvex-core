@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-097",
+  "state": "done",
+  "base_sha": "f34f471c20de6ddca60b4925308257b780f3798b",
+  "head_sha": "eeb6a6a6520f5d17ae7052acc6e42c87af52c6ac",
+  "merge_sha": "fba5144040e5d13686cf6375ccbe62edc4b43078",
+  "branch": "feature/T-20260829-097-checkpoint-sidecar-v4",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-088",
+  "sent_at": "2026-08-29T13:02:52+08:00",
+  "received_at": "2026-08-29T13:02:52+08:00",
+  "reported_at": "2026-08-29T13:02:52+08:00",
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "modified_files": [
+      "qemu/include/exec/lcvex-difftest.h",
+      "qemu/target/arm/tcg/lcvex-difftest.c",
+      "qemu/include/plugins/qemu-plugin.h"
+    ],
+    "qemu_sidecar_header_sha256": "3ab9d8b9f3b362d4e6ffa0d27cc926000d28354ace713813f4e76320f2c78af5",
+    "qemu_sidecar_c_sha256": "5e9fce5d243550bb50a30b025ad21f1ae743d0dd6a71d627032d66594e250277",
+    "qemu_plugin_h_sha256": "8c5b3a6decf6e53f7760c13f79572f47f6a8cef598ee4ed093fdcc345596c321"
+  },
+  "rtl_filelist_sha256": null,
+  "tools": {
+    "python": "3.12.10",
+    "verilator": "5.050",
+    "qemu": "11.1.0"
+  },
+  "artifacts": [
+    {
+      "id": "artifact-t097-checkpoint-py",
+      "owner": "T-20260829-097",
+      "uri": "sim/difftest/checkpoint.py",
+      "reproduce": "python3 -m py_compile sim/difftest/checkpoint.py",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "bbfd5b07e393f9a6b096df852972592522abb4796bf4ad710d545a3639b0c491"
+    },
+    {
+      "id": "artifact-t097-coordinator",
+      "owner": "T-20260829-097",
+      "uri": "sim/difftest/lockstep_coordinator.cc",
+      "reproduce": "git diff sim/difftest/lockstep_coordinator.cc",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "ad15f48c008ebb53be0dd8364d347f90bd2cc8d010a4c655002269a30daac08f"
+    },
+    {
+      "id": "artifact-t097-v4-smoke",
+      "owner": "T-20260829-097",
+      "uri": "sim/difftest/checkpoint_v4_struct_smoke.py",
+      "reproduce": "python3 sim/difftest/checkpoint_v4_struct_smoke.py",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "152cff85060e383f9d6a84355ad268cc00797cedf567f430f3f84f880946a023"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-t097-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 120 make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "RTL core lint pass after adding difftest_restore_contextidr_el1",
+      "source_sha": "f34f471c20de6ddca60b4925308257b780f3798b",
+      "seed": null,
+      "wall_seconds": 27,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 387,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-t097-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make -C /home/chiro/projects/mycpu/qemu/build -j2 qemu-system-aarch64",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "QEMU fork rebuilt; fixed pre-existing duplicate declarations in qemu-plugin.h and lcvex-difftest.c",
+      "source_sha": "f34f471c20de6ddca60b4925308257b780f3798b",
+      "seed": null,
+      "wall_seconds": 60,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-t097-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 sim/difftest/checkpoint_v4_struct_smoke.py",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "LCVXSYS4 magic/version/size and contextidr_el1 roundtrip; v3 legacy 540 bytes still parse",
+      "source_sha": "f34f471c20de6ddca60b4925308257b780f3798b",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-t097-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make checkpoint-manifest-smoke && make checkpoint-resume-manifest-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "existing checkpoint manifest/resume smoke passed",
+      "source_sha": "f34f471c20de6ddca60b4925308257b780f3798b",
+      "seed": null,
+      "wall_seconds": 10,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-t097-005",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 - <<'PY' ... build_hard_checkpoint_sys_v4_program ...",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "v4 CONTEXTIDR checkpoint test program generated",
+      "source_sha": "f34f471c20de6ddca60b4925308257b780f3798b",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "known_limits": [
+    "Full checkpoint_sys_v4 QEMU/DUT joint restore was not run because the worktree lacks build/verilator_lockstep/lockstep_coordinator; requires make lockstep-build.",
+    "QEMU -incoming VMState preservation of CONTEXTIDR has not been explicitly verified; sidecar is used for DUT restore.",
+    "No Gate D or full Linux checkpoint run in this slice.",
+    "The QEMU fork also required pre-existing duplicate declaration cleanups to allow rebuild; those changes are included in the QEMU-side write set."
+  ],
+  "next": "Integrator review; run full lockstep-build and checkpoint_sys_v4 joint smoke; then consider checkpoint v4 archive/back-compat tests.",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "sent_at",
+        "old": "2026-08-29T14:00:00+0800",
+        "new": "2026-08-29T13:02:52+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "received_at",
+        "old": "2026-08-29T14:05:00+0800",
+        "new": "2026-08-29T13:02:52+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "reported_at",
+        "old": "2026-08-29T14:15:00+0800",
+        "new": "2026-08-29T13:02:52+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "fba5144040e5d13686cf6375ccbe62edc4b43078",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "eeb6a6a6520f5d17ae7052acc6e42c87af52c6ac",
+        "reason": "resolve handoff commit from active/proposed handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "eeb6a6a6520f5d17ae7052acc6e42c87af52c6ac",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "handoff_sha": "eeb6a6a6520f5d17ae7052acc6e42c87af52c6ac",
+  "integrator_review": {
+    "received_at": "2026-08-29T13:05:18+08:00",
+    "status": "accepted",
+    "head_sha": "af1cdf302eecb055725bf2efb118f87c412a8da5",
+    "notes": "Checkpoint sidecar v4 merged. make compile PASS; v4 struct smoke and checkpoint manifest/resume smoke PASS. Full QEMU/DUT joint restore still not run; old v1/v2/v3 compatible.",
+    "merge_sha": "fba5144040e5d13686cf6375ccbe62edc4b43078",
+    "result_sha": "eeb6a6a6520f5d17ae7052acc6e42c87af52c6ac"
+  }
+}

@@ -1,0 +1,535 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-052",
+  "scope": "Catapult v3 / Arria 10 frozen 50-file vendor provenance with current Linux boot target overlays",
+  "platform": {
+    "board": "Microsoft Catapult v3 / Mg Catapult",
+    "family": "Arria 10",
+    "device": "10AX115N4F40E3SG",
+    "quartus": "Quartus Prime Pro 21.4 Build 67",
+    "clocks_hz": {
+      "board_input": 100000000,
+      "logic_domain": 25000000,
+      "ddr_reference": 266666667
+    },
+    "ddr4": {
+      "dq_bits": 72,
+      "dqs_bits": 9,
+      "emif_user_data_bits": 512,
+      "emif_user_clock_hz": 266666750
+    },
+    "flash": {
+      "device": "EPCQL1024",
+      "configuration": "Active Serial x4",
+      "qsf_assignment": "quartus/catapult_a10.qsf",
+      "ip_input": "flash/sfl/ip/sfl_sys/epcq.ip"
+    },
+    "console": {
+      "kind": "Altera Avalon JTAG-UART",
+      "qsf_assignments": [
+        "jtag_uart/jtag_uart_std.v",
+        "jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v"
+      ]
+    },
+    "initial_ram_window": {
+      "base": "0x40000000",
+      "size_bytes": 134217728,
+      "basis": "LCVEX platform plan; not a claim of full DDR stability"
+    }
+  },
+  "provenance": {
+    "source_project": "a10-linux-riscv",
+    "source_repo_path": "/home/chiro/projects/a10-linux-riscv",
+    "source_commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "imported_at": "2026-08-27",
+    "source_hash_policy": "source.lock records upstream source hashes; target hashes are recomputed after import and explicit local platform patches",
+    "golden_reuse": false
+  },
+  "speed_grade": {
+    "qsys_system": 2,
+    "qsys_clock_reset_ip": 2,
+    "emif_ip": 3,
+    "epcq_ip": 3,
+    "device_suffix": "E3",
+    "status": "inconsistent",
+    "action": "regenerate with exact Quartus 21.4/device, then close with STA"
+  },
+  "regeneration": {
+    "status": "blocked_tool_missing",
+    "entrypoint": "fpga/catapult_a10/tools/regenerate_qsys.sh",
+    "required_tools": [
+      "ip-generate",
+      "qsys-generate"
+    ],
+    "output_dir": "build/agents/T-20260827-052/qsys-ip-regenerate",
+    "generated_hash_policy": "sha256sum of fresh output; never reuse external golden.sha256",
+    "interface_diff": "diff generated Qsys_bb.v against qsys/ddr4_bot/Qsys/Qsys_bb.v",
+    "last_attempt": "fresh-clone entrypoint attempted 2026-08-27; ip-generate missing (command -v exit 1), regenerate exit 127; no generated hash or diff"
+  },
+  "files": [
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk.ip",
+      "role": "sfl-component-ip-input",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk.ip",
+      "source_sha256": "4bb51763d35749943d0003b27c075a6c03908aefe01edd85ddd5c028956b9cb1",
+      "source_bytes": 15766,
+      "sha256": "68bed58ea6cb123d065f8cebb92c4d7ac54de8bb00817914368a86c31b06a7f2",
+      "bytes": 15759
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk/clk.cmp",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk/clk.cmp",
+      "source_sha256": "7dcc65b58af231de441039373de11dc6aaf7e823d1f9ca1a616b103f727e22f6",
+      "source_bytes": 137,
+      "sha256": "ac14b3ea5ee198eb5ea5f34be34e57651f46001bb8b3ab06e5bcc2580861ff30",
+      "bytes": 136
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk/clk.qip",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk/clk.qip",
+      "source_sha256": "83b4a4843c3fb3c36e0edb7129537d3a41f198257ea7bb2a944eb8ded65f9aca",
+      "source_bytes": 2859,
+      "sha256": "779cd8651e24a0c4f9d1f07fe8c5d82d7122a1fafa4d4cc6559c4f8c22bedd21",
+      "bytes": 2858
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk/clk.sopcinfo",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk/clk.sopcinfo",
+      "source_sha256": "3c3416031139979c4c4d886cb2f22994ad8f893849e8d091e2e7377abcd2ff9d",
+      "source_bytes": 8834,
+      "sha256": "3c3416031139979c4c4d886cb2f22994ad8f893849e8d091e2e7377abcd2ff9d",
+      "bytes": 8834
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk/clk_bb.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk/clk_bb.v",
+      "source_sha256": "66ef94b457470ffa465113d62c2c0dd17af3ad31b79c31889feb1be850f6c9af",
+      "source_bytes": 106,
+      "sha256": "278f1e71038510909a2cee4336abc146ffea456daa7f93a2d00213618411900b",
+      "bytes": 105
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk/clk_inst.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk/clk_inst.v",
+      "source_sha256": "4c66e70434829da9c236f5856be58cb25229a1d97aef44f7dd08c2deefbec430",
+      "source_bytes": 161,
+      "sha256": "21c608846536960a5dfa8b698e3e2dbeb62752140f538646b7522fb32be7a642",
+      "bytes": 160
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk/clk_inst.vhd",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk/clk_inst.vhd",
+      "source_sha256": "aabe74fabb44bfdcaeb01e01876d6e8aee32e2b6302c47056c7d37ba88dfe0a8",
+      "source_bytes": 278,
+      "sha256": "e954f471666ed595420fa320d8d394696f25a9cefa41f7cb4d430bb3c42d7649",
+      "bytes": 277
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/clk/synth/clk.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/clk/synth/clk.v",
+      "source_sha256": "624277c58d9bb37c296347c9f6fb83add13a5f9e8c1ad8e4e4d674575efc7f4e",
+      "source_bytes": 207,
+      "sha256": "624277c58d9bb37c296347c9f6fb83add13a5f9e8c1ad8e4e4d674575efc7f4e",
+      "bytes": 207
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq.ip",
+      "role": "epcq-ip-input",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq.ip",
+      "source_sha256": "69eb3aa35d9a209f029ca98c01fdae95c8e33e98616240905a279b24a6db7a1d",
+      "source_bytes": 112180,
+      "sha256": "63e8f8b0e160cd085fd5bfa9a3af1acac064ac342fc128149f36db2a213c8364",
+      "bytes": 112173
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/altera_asmi_parallel_1910/synth/epcq_altera_asmi_parallel_1910_rmd4qmi.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/altera_asmi_parallel_1910/synth/epcq_altera_asmi_parallel_1910_rmd4qmi.v",
+      "source_sha256": "e3741a3124273bc738e398288f07ce4c5dee26181c605d00c9685619061cccf4",
+      "source_bytes": 125879,
+      "sha256": "2f414cd674787afc5f5c8c6fe868be2dcbc3577b73f783230411e2054b08bf3e",
+      "bytes": 125797
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_asmi_parallel_epcq_epcq.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_asmi_parallel_epcq_epcq.v",
+      "source_sha256": "12c99e5483b0dbec309ab5a4aae6ff3b8eb3a06815430db3401b38270cee4e94",
+      "source_bytes": 3667,
+      "sha256": "12c99e5483b0dbec309ab5a4aae6ff3b8eb3a06815430db3401b38270cee4e94",
+      "bytes": 3667
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_epcq_controller_epcq_epcq.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_epcq_controller_epcq_epcq.v",
+      "source_sha256": "47ec7367d5dca5d2e49404d8407362d12e9237db67eeb7fe80c017f0950e4dbd",
+      "source_bytes": 14140,
+      "sha256": "47ec7367d5dca5d2e49404d8407362d12e9237db67eeb7fe80c017f0950e4dbd",
+      "bytes": 14140
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/epcq_altera_epcq_controller_191_yfexvhi.sv",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/epcq_altera_epcq_controller_191_yfexvhi.sv",
+      "source_sha256": "13c87c298a82674350b327f1240398d09921151bdc8a838bd739304d3621ed64",
+      "source_bytes": 7365,
+      "sha256": "70127717b2f678208e8bd38f0d17123abcf24a2acc9415b33aab9e6894ff1164",
+      "bytes": 7219
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_core_1910/synth/altera_epcq_controller.sv",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_core_1910/synth/altera_epcq_controller.sv",
+      "source_sha256": "6d44ff381d98624308bed24e06777d4f9a0fa6f2123612ff97327e3657bd9d97",
+      "source_bytes": 21829,
+      "sha256": "6fb03eb3f57e100fea2c077a97b19b644a8718a45b5b03bdab1dc49041c2c9a8",
+      "bytes": 21589
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/altera_epcq_controller_core_1910/synth/altera_epcq_controller_arb.sv",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_core_1910/synth/altera_epcq_controller_arb.sv",
+      "source_sha256": "aaa9b5e65adb9b2cdd1fa94254c0edec8d3f9d4b72bc938e8da80bb8fb5d3488",
+      "source_bytes": 9903,
+      "sha256": "f8b71e3f0d5c41431c03bb1599d7af7760a617a9e7dfb532d92317fb600a0741",
+      "bytes": 9274
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/epcq.cmp",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/epcq.cmp",
+      "source_sha256": "efd521e694e971f7a18925f5de09009631e417c42bc1da76829174c589619fb3",
+      "source_bytes": 1798,
+      "sha256": "457caec56a3c19764fe62e80eac9b72ef70f154340bce791cc892cc84567ef8d",
+      "bytes": 1797
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/epcq.qip",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/epcq.qip",
+      "source_sha256": "c2a5ef69335c87ba6291f41a194c4ef9cc95aaf155e04dd338fa2c16eec41e6d",
+      "source_bytes": 49684,
+      "sha256": "68d91a242c818bb22ba86296e186f972fdd43998323c2acc7aab589a7f5a8b8b",
+      "bytes": 49683
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/epcq.regmap",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/epcq.regmap",
+      "source_sha256": "661ddd79fae475ba7eec5cb83a83e9780a06cb7f1fd95c76a87cc0e43eafdb02",
+      "source_bytes": 9705,
+      "sha256": "661ddd79fae475ba7eec5cb83a83e9780a06cb7f1fd95c76a87cc0e43eafdb02",
+      "bytes": 9705
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/epcq.sopcinfo",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/epcq.sopcinfo",
+      "source_sha256": "e5c1cefcd7350f76dc9e649b3dc8306cb9a005bea28979965d4396b52030bd9a",
+      "source_bytes": 47961,
+      "sha256": "e5c1cefcd7350f76dc9e649b3dc8306cb9a005bea28979965d4396b52030bd9a",
+      "bytes": 47961
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/epcq_bb.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/epcq_bb.v",
+      "source_sha256": "c4874257cfc56ba3e5037cea6e76b442bf33302ac92fc7bc040247523bbf4815",
+      "source_bytes": 1392,
+      "sha256": "34e850d633074fb724e41aa1c6510cdd0e316e68946214a5ddfa9f36b50feec1",
+      "bytes": 1391
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/epcq_inst.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/epcq_inst.v",
+      "source_sha256": "a5a47136d40206d910af0dc153f8fde1cf9b25d5f05d7df1ab43ff67b22952f5",
+      "source_bytes": 2177,
+      "sha256": "032c517d1f9d0f4e0e2c69d0d084f9ebf388a766d78c99ad758eb33c798bad9f",
+      "bytes": 2176
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/epcq_inst.vhd",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/epcq_inst.vhd",
+      "source_sha256": "be834979e99a9e5268c4fb9914548b6a004cd24955031adb54a1049b03599101",
+      "source_bytes": 3562,
+      "sha256": "d80cf4655452f23e3108c3cc281d7a1c01b7e360abb45cb5305eee89ffd07546",
+      "bytes": 3561
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/epcq/synth/epcq.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/epcq/synth/epcq.v",
+      "source_sha256": "94cea2e7ec73f0b7da390f0ca0fb033c7f586428dfc5e9f5f4a46239541589ea",
+      "source_bytes": 3594,
+      "sha256": "94cea2e7ec73f0b7da390f0ca0fb033c7f586428dfc5e9f5f4a46239541589ea",
+      "bytes": 3594
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst.ip",
+      "role": "sfl-component-ip-input",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst.ip",
+      "source_sha256": "91bdf09e90e87b00fec026971257e27d39073681bb048fb5386215bc175267ae",
+      "source_bytes": 18824,
+      "sha256": "0ce46d7ee61cbf165b45cb6ca4771e18c57183cc19d0fba276c5fca225ecb89b",
+      "bytes": 18817
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst/rst.cmp",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst/rst.cmp",
+      "source_sha256": "dfe6eb6e772172f671f1e6d077c85bf5e2b310a0529f900ab7b1d11cf3020d8c",
+      "source_bytes": 189,
+      "sha256": "e1df6ebd55c71324a6fb65f58960e0010f76efd36ec7c39f159c6a7724c21745",
+      "bytes": 188
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst/rst.qip",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst/rst.qip",
+      "source_sha256": "4689f50e9e1ca2818237d689ef8243e54cd2fefc58d8e2f797ea9b46aa745bc1",
+      "source_bytes": 2847,
+      "sha256": "4a482ce1a94670317bdec4211e89a82c96fc84f06702422d319ec8f409ad5220",
+      "bytes": 2846
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst/rst.sopcinfo",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst/rst.sopcinfo",
+      "source_sha256": "2f6e90b610e5c1efc15d9a9e0a2273d0aff28169c3ae5a8b7976b5010e3b5c33",
+      "source_bytes": 10887,
+      "sha256": "2f6e90b610e5c1efc15d9a9e0a2273d0aff28169c3ae5a8b7976b5010e3b5c33",
+      "bytes": 10887
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst/rst_bb.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst/rst_bb.v",
+      "source_sha256": "5e86612e98d6d3de955b269cb4c372860e29d0ffd4886ff91bf4e137c6ba851a",
+      "source_bytes": 161,
+      "sha256": "581b88dbf30adf00302b403828c35037d16c743597965454b664bd74bd0172fa",
+      "bytes": 160
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst/rst_inst.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst/rst_inst.v",
+      "source_sha256": "65bde6d8710fb1fb1d6085ca67f9f75bd354e9cdf81dd727912adc2f695104ef",
+      "source_bytes": 256,
+      "sha256": "d71c80c65be92fc56877b812cacb93dec3a234c14e22a526139b8d2994330b98",
+      "bytes": 255
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst/rst_inst.vhd",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst/rst_inst.vhd",
+      "source_sha256": "1cb8eed2c72122ebe1c2204ee705ca3be747127dde7e27f72ed3b04c9bb29ce8",
+      "source_bytes": 403,
+      "sha256": "fa81a5a2ad9995e15440a014305777d97dc0c34548a2c84f380f6c14c5b219eb",
+      "bytes": 402
+    },
+    {
+      "path": "flash/sfl/ip/sfl_sys/rst/synth/rst.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/ip/sfl_sys/rst/synth/rst.v",
+      "source_sha256": "d1d0c08c84fd26f16eb98d4b9b0ec4e1c1ab8d22ea2cb43816c9a0f94d1e1ad7",
+      "source_bytes": 266,
+      "sha256": "d1d0c08c84fd26f16eb98d4b9b0ec4e1c1ab8d22ea2cb43816c9a0f94d1e1ad7",
+      "bytes": 266
+    },
+    {
+      "path": "flash/sfl/sfl_sys.cmp",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/sfl_sys.cmp",
+      "source_sha256": "519aa9562f7a8c69b15159de46e5a3c64eb1f9a553443e2a9c675b7e2a197e17",
+      "source_bytes": 1823,
+      "sha256": "2bd37308e99cf5c6000d43a8b82a1af4b2de6cb8c2975ddf5be42585c4719f04",
+      "bytes": 1822
+    },
+    {
+      "path": "flash/sfl/sfl_sys.qip",
+      "role": "sfl-generated-qip",
+      "source_path": "hw/ip/sfl/sfl_sys.qip",
+      "source_sha256": "55abe239af3e109af7d1c1b916fb73f0e4a5525c34630345bd866d9850abda79",
+      "source_bytes": 145262,
+      "sha256": "920c8241d89c620d441d8c74792a7124b54f44efeb348071165d32db7f835708",
+      "bytes": 145261
+    },
+    {
+      "path": "flash/sfl/sfl_sys.regmap",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/sfl_sys.regmap",
+      "source_sha256": "8051b952104844e4a94f338e7417e7fce0cd418fbee6f3ee0bb5c1ab85983005",
+      "source_bytes": 9719,
+      "sha256": "8051b952104844e4a94f338e7417e7fce0cd418fbee6f3ee0bb5c1ab85983005",
+      "bytes": 9719
+    },
+    {
+      "path": "flash/sfl/sfl_sys.sopcinfo",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/sfl_sys.sopcinfo",
+      "source_sha256": "dadd1bc05785b0388e4f823787e5283bbd0b2d96c96dd9b5a9f9b6ea2c88a504",
+      "source_bytes": 162321,
+      "sha256": "dadd1bc05785b0388e4f823787e5283bbd0b2d96c96dd9b5a9f9b6ea2c88a504",
+      "bytes": 162321
+    },
+    {
+      "path": "flash/sfl/sfl_sys_bb.v",
+      "role": "sfl-generated-interface",
+      "source_path": "hw/ip/sfl/sfl_sys_bb.v",
+      "source_sha256": "7105e6fa9550e9625c4c97115203f98bffe99fbfac2d5527e3f0383b16099839",
+      "source_bytes": 1362,
+      "sha256": "7947931e932500140e69f37be5371a7acf03da722ac0df64b91f4fb39d779e60",
+      "bytes": 1361
+    },
+    {
+      "path": "flash/sfl/sfl_sys_inst.v",
+      "role": "sfl-generated-interface",
+      "source_path": "hw/ip/sfl/sfl_sys_inst.v",
+      "source_sha256": "ea7da996d20019c4cb32b1834924d03b0e8033dd8e779f144585a88a62755ceb",
+      "source_bytes": 2213,
+      "sha256": "c9c0baa5bf99fecb88be118d5540a5dafcc099937b8af334d4c3e0a59a1d04a1",
+      "bytes": 2212
+    },
+    {
+      "path": "flash/sfl/sfl_sys_inst.vhd",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/sfl_sys_inst.vhd",
+      "source_sha256": "1b185f4f6ff1f785e0b0c3e73d9de6415bcbcb343a22d3ac64b4edf3274dc3ec",
+      "source_bytes": 3646,
+      "sha256": "37e96608ef3f5c21ab8d498ea0a8c4e3c0d5e971ddafea7dbe0f6e91cdbb9af8",
+      "bytes": 3645
+    },
+    {
+      "path": "flash/sfl/synth/sfl_sys.v",
+      "role": "sfl-generated-source",
+      "source_path": "hw/ip/sfl/synth/sfl_sys.v",
+      "source_sha256": "904f53f0fcbb940d91d41179768411983a47ebfd8d0c511e59804b04cd015e21",
+      "source_bytes": 3970,
+      "sha256": "904f53f0fcbb940d91d41179768411983a47ebfd8d0c511e59804b04cd015e21",
+      "bytes": 3970
+    },
+    {
+      "path": "jtag_uart/jtag_uart_std.v",
+      "role": "jtag-uart-wrapper",
+      "source_path": "hw/ip/jtag_uart/jtag_uart_std.v",
+      "source_sha256": "d400e066f110145a8b6829ba5d1872474d41d09834475b44f48a7b1079be3fe1",
+      "source_bytes": 1756,
+      "sha256": "d400e066f110145a8b6829ba5d1872474d41d09834475b44f48a7b1079be3fe1",
+      "bytes": 1756
+    },
+    {
+      "path": "jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v",
+      "role": "jtag-uart-generated-local-interactive-rxirq-patch",
+      "source_path": "hw/ip/jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v",
+      "source_sha256": "d5a5e85ea46e4c3b74bef40c8de91e2ce461d632aa02184c077c4ca9c9ed9d95",
+      "source_bytes": 20073,
+      "sha256": "262b18b4c6b3534170948de9985241dd5058a0a03d07ddbbbfd8ea88ed50c37e",
+      "bytes": 20274,
+      "local_patch": {
+        "purpose": "Wake Linux's blocking ttyJ0 read after the first input byte",
+        "upstream_behavior": "fifo_AF asserted with at most 8 of 64 RX FIFO entries free (at least 56 bytes queued)",
+        "local_behavior": "fifo_AF asserted with at most 63 of 64 entries free (at least 1 byte queued)",
+        "exact_generated_hdl_change": "fifo_AF threshold <= 8 changed to <= 63",
+        "reapply_after_ip_regeneration": true,
+        "direct_rtl_test": "tb/sv/lcvex_jtag_uart_generated_irq_tb.sv"
+      }
+    },
+    {
+      "path": "qsys/ddr4_bot/Qsys.qsys",
+      "role": "qsys-input",
+      "source_path": "hw/ip/ddr4_bot/Qsys.qsys",
+      "source_sha256": "cf43109e2265a97e5ac05764f53b89cc7c51858a92709058c190e6f85e627b7b",
+      "source_bytes": 163020,
+      "sha256": "3da27e815b3f89dd89129a856794ad1da8f4cfe4d5b7b8aee7d525ab4bc79ca6",
+      "bytes": 163013
+    },
+    {
+      "path": "qsys/ddr4_bot/Qsys/Qsys_bb.v",
+      "role": "qsys-generated-interface",
+      "source_path": "hw/ip/ddr4_bot/Qsys/Qsys_bb.v",
+      "source_sha256": "882faf09538fd4c8bb9d2f5d45254729fac5f4851cfb548b462d91ac1fb7e1b5",
+      "source_bytes": 3162,
+      "sha256": "91076193c924b44691a78fa34c47442e234a9b6a206a34f2a1bd74aad029ae50",
+      "bytes": 3161
+    },
+    {
+      "path": "qsys/ddr4_bot/ip/Qsys/Qsys_clk_100.ip",
+      "role": "ip-input",
+      "source_path": "hw/ip/ddr4_bot/ip/Qsys/Qsys_clk_100.ip",
+      "source_sha256": "082b23b5ebbce12ae082ad1be19c50ed38fcfe2afbcf82f0a831c397d723d1ac",
+      "source_bytes": 24891,
+      "sha256": "e6e6fd4fab1316d04912b47ff10de9f7db2d673bf3553c0bb92f007172d89000",
+      "bytes": 24884
+    },
+    {
+      "path": "qsys/ddr4_bot/ip/Qsys/Qsys_clk_266.ip",
+      "role": "ip-input",
+      "source_path": "hw/ip/ddr4_bot/ip/Qsys/Qsys_clk_266.ip",
+      "source_sha256": "efe79588ff362219e8c33ebb738806df66face7ed6c930822676d698a92e78e3",
+      "source_bytes": 24891,
+      "sha256": "2a7b0a68a95db76fa38517b93e0ef31946c26786433c83520b70e32c3b91454d",
+      "bytes": 24884
+    },
+    {
+      "path": "qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot.ip",
+      "role": "emif-ip-input",
+      "source_path": "hw/ip/ddr4_bot/ip/Qsys/Qsys_emif_bot.ip",
+      "source_sha256": "5049889b5a32843731eb9ff89b4c68e25494fd18bb5a7ccb044e87088106f655",
+      "source_bytes": 570001,
+      "sha256": "89d3b8e1caed52d713e1530cb2576b4406f1577599ef4f0a7bee34880620e667",
+      "bytes": 569994
+    },
+    {
+      "path": "qsys/ddr4_bot/ip/Qsys/Qsys_reset_controller_0.ip",
+      "role": "ip-input",
+      "source_path": "hw/ip/ddr4_bot/ip/Qsys/Qsys_reset_controller_0.ip",
+      "source_sha256": "e5780b9c2ea193beb402d8d28c0a7ffc5a3c72c1444d1e8e5e53b78f7ce3ebab",
+      "source_bytes": 24527,
+      "sha256": "d637c58b09fa886e328d122373cca884cc427c1b961a430501c7d9d69cd007b2",
+      "bytes": 24520
+    },
+    {
+      "path": "quartus/catapult_a10.qpf",
+      "role": "quartus-project-config",
+      "source_path": "hw/quartus/vex_soc_ddr/vex_soc_ddr.qpf",
+      "source_sha256": "bde7a8423d82523cce29ca52f77b174d32c142e716c1e9da3bb73f84409bbce9",
+      "source_bytes": 33,
+      "sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+      "bytes": 34
+    },
+    {
+      "path": "quartus/catapult_a10.qsf",
+      "role": "quartus-constraint-fragment",
+      "source_path": "hw/quartus/vex_soc_ddr/vex_soc_ddr.qsf",
+      "source_sha256": "a3af2707ed1b12a3598ba2d9d8a313ad8889fae76d46bbc3af34ce3a2ee4855a",
+      "source_bytes": 11898,
+      "sha256": "3fc0ff9585b6fadfc1bf9633a0cac17026027ba5fd422df63a8504cf67eb08ae",
+      "bytes": 13854
+    },
+    {
+      "path": "quartus/catapult_a10.sdc",
+      "role": "quartus-timing-constraint",
+      "source_path": "hw/quartus/vex_soc_ddr/vex_soc_ddr.sdc",
+      "source_sha256": "00cf85789667f3643983a84cdf5d6fd3e61c0fbc9d522bb9807462937be20656",
+      "source_bytes": 1290,
+      "sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+      "bytes": 14384
+    }
+  ],
+  "not_imported": [
+    "PoC CPU/core and RISC-V software",
+    "PoC SoC top-level and 32-to-512 bridge",
+    "AXI4, Cache, Linux, OpenSBI, CLINT, PLIC, C alias",
+    "Quartus database, SOF/JIC, Flash payload and board logs"
+  ]
+}

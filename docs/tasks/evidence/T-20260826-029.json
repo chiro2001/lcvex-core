@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-029",
+  "base_sha": "679bd8c",
+  "head_sha": "679bd8c",
+  "merge_sha": null,
+  "runs": [
+    {"run_id": "owner-l0-yaml-001", "level": "L0", "command": "python3 yaml.safe_load(.github/workflows/ci.yml)", "exit_code": 0, "result": "pass"},
+    {"run_id": "ci-pr-difftest-32928780443", "level": "L3", "command": "GitHub Actions PR-difftest on b701aee", "exit_code": 1, "result": "infra-fail", "summary": "QEMU build/patch preparation passed; coordinator link failed because runner lacked zlib development library: ld cannot find -lz. PR-fast 同 run success.", "url": "https://github.com/chiro2001/lcvex/actions/runs/32928780443", "job_id": 98056844911},
+    {"run_id": "owner-l0-workflow-fix-001", "level": "L0", "command": "workflow YAML static check after adding zlib1g-dev and workflow_dispatch", "exit_code": 0, "result": "pass"}
+    ,{"run_id": "owner-l0-qemu-replay-001", "level": "L0", "command": "bash qemu/scripts/apply-patches.sh（已有全补丁/后续上下文变更的 fork）", "exit_code": 0, "result": "pass", "summary": "0001..0011 均正确识别/应用；第二次运行 11 个 patch 全部跳过，未再报 conflict。"},
+    {"run_id": "owner-l0-nightly-inputs-001", "level": "L0", "command": "bash -n scripts/ci-nightly.sh + generate five delay2 images in fresh worktree", "exit_code": 0, "result": "pass", "summary": "hard_ap_matrix/hard_af/hard_uxn_pxn/hard_ttbr_gap/p5a2_fetch 均生成。", "log": "build/agents/T-20260826-029/nightly-input-smoke.log", "log_sha256": "3ce1f5eb4a49e8223615e0830338c792b78fca230fac9243662bd858841abeda"}
+  ],
+  "fix": {"apt_packages": ["libglib2.0-dev", "zlib1g-dev"], "conda_packages": ["zlib"], "library_path": "$CONDA_PREFIX/lib", "manual_trigger": true},
+  "known_limits": ["修复需推送后由新的 GitHub run 验证；当前 b7be4c1 的 CI run 仍在进行，nightly/PR-difftest 尚未最终通过。"]
+}

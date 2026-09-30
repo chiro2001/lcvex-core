@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-006",
+  "label": "B25-PHYSICAL-RERUN",
+  "state": "blocked-synthesis",
+  "acceptance_status": "first-honest-quartus-semantic-blocker-recorded",
+  "partial": true,
+  "base_sha": "ff88f6985f632de19896e17763182d1f44bd9703",
+  "dispatch_head_sha": "2743ecb8aec7d949eec259e743e76dfb48682677",
+  "candidate_sha": "ff88f6985f632de19896e17763182d1f44bd9703",
+  "checkout_head_sha": "2743ecb8aec7d949eec259e743e76dfb48682677",
+  "branch": "verify/T-20260908-006-b25-physical-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-006",
+  "owner": "b25_physical",
+  "timestamps": {
+    "sent_at": "2026-09-08T23:04:55+08:00",
+    "received_at": "2026-09-08T23:04:55+08:00",
+    "remote_preflight_at": "2026-09-08T23:08:30.1466693+08:00",
+    "probe_created_at": "2026-09-08T23:11:35.7540200+08:00",
+    "source_verify_at": "2026-09-08T23:11:59.7652804+08:00",
+    "quartus_version_probe_at": "2026-09-08T23:12:15.3714511+08:00",
+    "synthesis_started_at": "2026-09-08T23:12:37.9790879+08:00",
+    "synthesis_finished_at": "2026-09-08T23:14:47.2375935+08:00",
+    "postflight_at": "2026-09-08T23:15:28.9788432+08:00",
+    "reported_at": "2026-09-08T23:20:00+08:00"
+  },
+  "source_identity": {
+    "candidate_tree_sha": "3b26c947cba184c5abbab6d9b96d562b3c4c7efc",
+    "dispatch_head_non_docs_diff_count": 0,
+    "physical_inputs_match_candidate": true,
+    "formal_root_rtl_count": 47,
+    "platform_rtl_count": 2,
+    "project_file_count": 3,
+    "canonical_manifest_count": 53,
+    "qsf_relative_alias_count": 47,
+    "platform_payload_count": 75,
+    "key_hashes": {
+      "rtl/lcvex_bram_boot.sv": "7a3c4ae2328dbd81cd55ff5265e538db4ff312582ff9bfbee49bd9d3f837bf00",
+      "rtl/lcvex_core.sv": "f635b30ca57ff286339adc1a5003579e73c2f7032b211cb29b41ef0dfa3c4031",
+      "rtl/lcvex_fp_scalar.sv": "c30396fef6f3bc55fef912a9d1e6ee807efb8a85eb72870763d63df4487521e4",
+      "rtl/lcvex_neon_fp.sv": "32a6d6948135240482274ac2a8111337cfbfc8ee9063dd2e37ff3d253963abee",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "512247879ae635ec764b8dfd545d28200628f608bbc3078c3e94d060730783ad",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_reset_gate.sv": "0d7b5732231bb919bd3e1011d21348f107b0843b35df6e48439fb21e294c7c33",
+      "fpga/catapult_a10/quartus/catapult_a10.qpf": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+      "fpga/catapult_a10/quartus/catapult_a10.qsf": "c82f9a7d6e9473d37ea8adcde125e3f327b3ccb8714fde7d4507d65963c42ba8",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f"
+    },
+    "candidate_manifest": {
+      "path": "build/agents/T-20260908-006/sync/candidate_manifest.json",
+      "bytes": 43409,
+      "sha256": "5a62233eb257150ac8335c2cfaebe5e74b1fbfbd69eed171c4b25c478986cd28",
+      "canonical_sha256": "b01a1954b679c354b447ae9ff723241f14cca605e8c066631349a9b9f74b0de3"
+    },
+    "platform_payload_manifest": {
+      "path": "build/agents/T-20260908-006/sync/platform_payload_manifest.json",
+      "bytes": 32488,
+      "sha256": "f3f94bbdd5b5bf7ac2a85b5bb532dbc69a5625f33fd7204cc6635860ed156555"
+    }
+  },
+  "boot_artifacts": {
+    "generator": {
+      "fpga/catapult_a10/boot/build.sh": {"bytes": 2707, "sha256": "3410974f09765982b8566fa143ea4f64732a6d7d14a4328120d6ea96e78bdc2d"},
+      "fpga/catapult_a10/boot/bin_to_mif.py": {"bytes": 6890, "sha256": "2ebbf3968c495e96e3fcc51a02d51dafc2ea47b5ac9c76898d9d4681387bd67f"}
+    },
+    "elf": {"path": "fpga/catapult_a10/boot/build/boot.elf", "bytes": 68832, "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"},
+    "bin": {"path": "fpga/catapult_a10/boot/build/boot.bin", "bytes": 957, "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"},
+    "hex": {"path": "fpga/catapult_a10/boot/build/boot.hex", "bytes": 2871, "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"},
+    "mif": {
+      "path": "fpga/catapult_a10/boot/build/boot.mif",
+      "bytes": 204942,
+      "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+      "width": 64,
+      "depth": 8192,
+      "records": 8192,
+      "tracked": false,
+      "generated": true,
+      "remote_post_copy_sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+      "qsf_assignment": "set_global_assignment -name MIF_FILE \"../boot/build/boot.mif\""
+    },
+    "build_log": {"path": "build/agents/T-20260908-006/prep/boot-build.log", "sha256": "330cb08c0e1cdcc6255427e7d564a020953c5553cb8e9bfd60aea16dc9ae058f"}
+  },
+  "preparation": {
+    "local_checks": {
+      "check_platform": "pass files=50",
+      "check_skeleton_require_boot_image": "pass files=6; local Quartus tools absent only",
+      "sha256sums": "pass 50/50",
+      "manifest_json": "pass",
+      "log": "build/agents/T-20260908-006/prep/static-closure.log",
+      "log_sha256": "a80868e800513eda7e093894d5c32f71af49ea37aae9230e10e3320a1291dad1"
+    },
+    "remote_preflight": {
+      "host": "192.168.101.5",
+      "hostname": "GAMEPC",
+      "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+      "device": "10AX115N4F40E3SG",
+      "probe": "D:/Projects/fpga-altra/lcvex/build/T-20260908-006-b25-physical",
+      "probe_exists_before": false,
+      "eda_process_count": 0,
+      "jtagserver_observed_only": "PID 5688",
+      "physical_free_mib": 48702.6,
+      "disk_d_free_bytes": 91497054208,
+      "preflight_log": "build/agents/T-20260908-006/prep/remote-preflight.lock.log",
+      "preflight_log_sha256": "0fead1bcf22be1312f39340d9849322f74a28623149bc51c173534cec83a3066"
+    },
+    "remote_source_verify": {
+      "candidate_entries": 53,
+      "alias_entries": 47,
+      "platform_entries": 75,
+      "hash_bad_count": 0,
+      "qsf_mif_assignment": true,
+      "qsf_mif_resolved": "D:/Projects/fpga-altra/lcvex/build/T-20260908-006-b25-physical/fpga/catapult_a10/boot/build/boot.mif",
+      "mif_contract": "WIDTH=64 DEPTH=8192 records=8192",
+      "preexisting_forbidden_artifacts": 0,
+      "preexisting_quartus_databases": 0,
+      "log": "build/agents/T-20260908-006/prep/remote-source-verify.lock.log",
+      "log_sha256": "e02ea20d8bab4063a73d3a1152c7a1668789f12ca14baaf0d0997abd1a0687d4"
+    },
+    "quartus_version_log": {
+      "path": "build/agents/T-20260908-006/prep/quartus-version.lock.log",
+      "sha256": "3715aabfa93bcceae90556cf4de5c93ed61547be84b51c9bb9bd32c14e5e454f"
+    }
+  },
+  "physical_runs": [
+    {
+      "stage": "synthesis",
+      "result": "fail",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis",
+      "lock_command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260908-006 b25_physical --meta stage=synthesis --meta source_sha=ff88f6985f632de19896e17763182d1f44bd9703 -- ssh ... run_stage.ps1 -Stage synthesis",
+      "started_at": "2026-09-08T23:12:37.9790879+08:00",
+      "finished_at": "2026-09-08T23:14:47.2375935+08:00",
+      "wall_s": 129.2585,
+      "exit_code": 3,
+      "quartus_pid": 29328,
+      "pre_eda_count": 0,
+      "post_eda_count": 0,
+      "pre_free_physical_mib": 48698.5,
+      "min_free_physical_mib": 43735.7,
+      "post_free_physical_mib": 48922.0,
+      "runtime_samples": 25,
+      "safety_stopped": false,
+      "ip_generation": {"result": "pass", "errors": 0, "warnings": 6, "peak_virtual_mib": 309},
+      "quartus_syn": {"result": "fail", "errors": 3, "warnings": 26, "peak_virtual_mib": 2940, "pid": 14036},
+      "full_flow_summary": {"errors": 5, "warnings": 32},
+      "first_errors": [
+        "Error 19544 lcvex_bram_boot.sv:165 if-condition does not match any sensitivity list edge",
+        "Error 16186 Can't elaborate top-level user hierarchy"
+      ],
+      "warning_codes": {"16749": 19, "13469": 2, "16746": 1, "19651": 1, "16750": 1, "17074": 1, "16788": 1},
+      "wrapper_log": {"path": "build/agents/T-20260908-006/quartus/synthesis.lock.log", "sha256": "121f5b2c51f04096d4c953fc26b1bde1acbd7da254ada551f4b3dd329a657155"},
+      "remote_stdout": {"path": "build/agents/T-20260908-006/quartus/synthesis-remote/quartus_synthesis.stdout.log", "sha256": "c4fb40f55aac17398daa52c93cfb2995e5dd042a595fd0cde2b595d683f575f9"},
+      "remote_stderr": {"path": "build/agents/T-20260908-006/quartus/synthesis-remote/quartus_synthesis.stderr.log", "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"},
+      "flow_report": {"path": "build/agents/T-20260908-006/quartus/synthesis-remote/output_files/catapult_a10.flow.rpt", "sha256": "03d75f8c66fba3ab1de82aed9cbbb64ac7d1e485eaa9f77f92d54f57c40f1e10"},
+      "syn_report": {"path": "build/agents/T-20260908-006/quartus/synthesis-remote/output_files/catapult_a10.syn.rpt", "sha256": "334c8af8d2b351a56adbee1b4e4387fc4ac6566c0ca566e820e91bc44f692449"},
+      "syn_summary": {"path": "build/agents/T-20260908-006/quartus/synthesis-remote/output_files/catapult_a10.syn.summary", "sha256": "88dacec181726c6a537941c2a0982295911ac2b842736d67b577865be4415908"},
+      "syn_smsg": {"path": "build/agents/T-20260908-006/quartus/synthesis-remote/output_files/catapult_a10.syn.smsg", "sha256": "c81e65ef1e6d7600f483b48cef3ced3c8d0415a1b2588134ecf7517cb63cba84"}
+    },
+    {"stage": "fitter", "result": "not_run", "reason": "first synthesis failure; no bypass or retry"},
+    {"stage": "sta_signoff", "result": "not_run", "reason": "fitter not run"},
+    {"stage": "custom_clock_bram_cdc_mif_reports", "result": "not_run", "reason": "no valid post-synthesis timing database"}
+  ],
+  "timing_consumption": {
+    "sys_clk_25_expected_period_ns": 40.0,
+    "sys_clk_25_status": "not_measured_sta_not_reached",
+    "qsys_clk_100_clk_y3_status": "not_measured_sta_not_reached",
+    "setup_hold_recovery_removal_min_pulse": "not_measured_sta_not_reached",
+    "fmax": "not_available",
+    "resources_and_m20k": "not_available_fitter_not_run",
+    "mif_input": {
+      "status": "recognized_in_syn_report_as_User-Specified_Memory_Initialization_File",
+      "actual_consumption": "not_signed_off_synthesis_failed"
+    },
+    "t045_sdc_filters": {
+      "emif_reset_cpu_meta_q": "not_resolved_sta_not_reached",
+      "emif_poisoned_cpu_meta_q": "not_resolved_sta_not_reached",
+      "cpu_rst_emif_meta_q": "not_resolved_sta_not_reached"
+    }
+  },
+  "postflight": {
+    "eda_process_count": 0,
+    "forbidden_artifact_count": 0,
+    "database_dirs_created_by_failed_fresh_run": 1,
+    "database_dir": "D:/Projects/fpga-altra/lcvex/build/T-20260908-006-b25-physical/fpga/catapult_a10/quartus/output_files",
+    "remote_qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "remote_qsf_sha256": "c82f9a7d6e9473d37ea8adcde125e3f327b3ccb8714fde7d4507d65963c42ba8",
+    "remote_sdc_sha256": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f",
+    "remote_mif_sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+    "log": "build/agents/T-20260908-006/quartus/synthesis-postflight.lock.log",
+    "log_sha256": "59632ba89f0a3d8d9e9fa10374b7d7efae8845c3f23a18ac287885bfcf0dfd1c"
+  },
+  "policy": {
+    "source_rtl_modified": false,
+    "qsf_sdc_modified": false,
+    "qemu_modified": false,
+    "active_task_json_modified": false,
+    "task_snapshots_modified": false,
+    "stage_failure_retried": false,
+    "fitter_sta_custom_run": false,
+    "assembler_or_bitstream": false,
+    "quartus_pgm_jtag_board_flash": false,
+    "license_content_read": false,
+    "unknown_process_killed": false,
+    "jtagserver": "observed-only PID 5688",
+    "final_resource_status": "local FREE; gamepc FREE"
+  },
+  "blockers": [
+    "Quartus 21.4 rejects the candidate BRAM boot always_ff structure at rtl/lcvex_bram_boot.sv:165 (Error 19544); Error 16186 then prevents top-level elaboration.",
+    "Fitter/signoff STA/custom timing and resource acceptance are unavailable; no physical pass or assembler handoff is authorized by this run."
+  ],
+  "handoff": "docs/handoffs/T-20260908-006-b25-physical-rerun.md"
+}

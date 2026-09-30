@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-009",
+  "base_sha": "8f5895ceb2813e21e25d130504d322b8ba798485",
+  "candidate_sha": "73f0d51ab40d1a42bce9e17f846d2de4726afb1e",
+  "head_sha": "73f0d51ab40d1a42bce9e17f846d2de4726afb1e",
+  "merge_sha": "",
+  "toolchain": {
+    "python": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "make": "GNU Make 4.4.1",
+    "cpu_binding": "0-5",
+    "memory_limit_mb": 8192
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_path": "../qemu/build/qemu-system-aarch64",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_path": "qemu/VERSION",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_path": "../lcvex-wt-T-20260826-006/qemu/plugins/lcvex_difftest.so",
+    "plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97",
+    "note": "QEMU/plugin 仅只读使用；未修改外部 fork。"
+  },
+  "rtl": {
+    "filelist_path": "rtl/filelist.f",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-toolcheck-001",
+      "source_sha": "73f0d51",
+      "runner_role": "luna-monitor-agent",
+      "level": "L0",
+      "command": "taskset -c 0-5 bash scripts/toolcheck.sh",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 3.1,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/T-20260826-009/logs/toolcheck.log",
+      "log_sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9"
+    },
+    {
+      "run_id": "owner-l1-make-test-001",
+      "source_sha": "73f0d51",
+      "runner_role": "luna-monitor-agent",
+      "level": "L1",
+      "command": "VERILATOR_JOBS=6 taskset -c 0-5 make test",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 4.1,
+      "exit_code": 2,
+      "result": "fail",
+      "first_failure": {
+        "stage": "compile",
+        "tool": "verilator --lint-only -Wall",
+        "message": "UNUSEDSIGNAL: rtl/lcvex_alu.sv:243/244: addc32w[33], subc32w[33], addc64w[65], subc64w[65]；Exiting due to 4 warning(s)",
+        "reference_not_modified": true
+      },
+      "log": "build/T-20260826-009/logs/make-test.log",
+      "log_sha256": "691841caa5b430f58ddebb6b255329aedb877acfcd6ba6731515c8d54c590511"
+    },
+    {
+      "run_id": "owner-l1-coverage-001",
+      "level": "L1",
+      "command": "make coverage",
+      "result": "not_run",
+      "reason": "按首个 L1 compile 失败立即停止，避免将非候选绿项混入 Gate D 证据。"
+    },
+    {
+      "run_id": "owner-l2-difftest-001",
+      "level": "L2",
+      "command": "make difftest difftest-hazard p4c p5a p6-lse p6-wfi",
+      "result": "not_run",
+      "reason": "前置 make test 首错后停止。"
+    },
+    {
+      "run_id": "owner-l3-gate-d-001",
+      "level": "L3",
+      "command": "bash sim/difftest/run_gate_d.sh",
+      "result": "not_run",
+      "reason": "前置 make test 首错后停止。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "toolcheck-log",
+      "path": "build/T-20260826-009/logs/toolcheck.log",
+      "sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9",
+      "bytes": 291,
+      "status": "pass"
+    },
+    {
+      "id": "make-test-first-failure-log",
+      "path": "build/T-20260826-009/logs/make-test.log",
+      "sha256": "691841caa5b430f58ddebb6b255329aedb877acfcd6ba6731515c8d54c590511",
+      "bytes": 1895,
+      "status": "preserved"
+    }
+  ],
+  "known_limits": [
+    "candidate 未通过 Gate D：首个失败发生在 make test/compile 的 Verilator warning-as-error；没有关闭断言、抑制 warning 或修改参考结果。",
+    "按失败立即停止边界未运行 coverage、L2 定向差分或 run_gate_d；本 evidence 不能宣称 Gate D 通过。",
+    "未启动 Linux 长跑、其他重型 QEMU 作业，也未修改 RTL/QEMU/active/TASKS/PROJECT_STATUS/ROADMAP。"
+  ]
+}

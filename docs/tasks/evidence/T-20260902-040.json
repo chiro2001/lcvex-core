@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-040",
+  "state": "done",
+  "partial": false,
+  "base_sha": "5315bbb61a7614406b2f8e1b72b72edcbf087dfa",
+  "head_sha": "f280d048943ad0bff8764106ea9f276500825c10",
+  "branch": "fix/T-20260902-040-fp-mac-ppprehi-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-040",
+  "scope": "FP-MAC-PPPREHI-CUT: break the FP scalar DSP MAC output -> g_iter.pp_pre_hi pre-round combinational cone reported by T-20260902-039 by adding a multiplier-product pipeline stage in scalar_unit for MUL/FMA (including half-lane pp_pre_lo/hi); keep raw-bit/FPCR/FPSR/order semantics and only add fixed pipeline latency.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv",
+      "docs/handoffs/T-20260902-040-fp-mac-ppprehi-cut.md",
+      "docs/tasks/evidence/T-20260902-040.json"
+    ],
+    "summary": "In release FP_ITER=1 g_iter, added IT_MUL pipeline stage and pm_pre/pm_pre_lo/pm_pre_hi registers. Stage 1 (IT_IDLE) still captures unpacked/FZ-flushed operands to ap_pre*; stage 2 (IT_ARITH) for MUL/FMA now only captures the DSP multiplier product/sign/exponent into pm_pre*; stage 3 (IT_MUL) performs FMA alignment/add or MUL final pre-round pack and writes pp_pre*; stage 4 (IT_PREP) finishes with round_pack. This splits the T-039 mult_1~mac_11~reg0 -> pp_pre_hi.sig path (62 levels / 27.811 ns / -7.685 ns). ADD/SUB/SCVTF/UCVTF remain on the original IT_ARITH -> IT_PREP path.",
+    "latency_table": {
+      "scalar_fmul": {
+        "before": 5,
+        "after": 6
+      },
+      "scalar_fma_family": {
+        "before": 5,
+        "after": 6
+      },
+      "neon_fmul_2s": {
+        "before": 10,
+        "after": 11
+      },
+      "neon_fmla_fmls": {
+        "before": "per-slot +1",
+        "after": "per-slot +1"
+      },
+      "scalar_add_sub_scvtf_ucvtf": {
+        "before": 5,
+        "after": 5
+      },
+      "neon_fadd_2s": {
+        "before": 9,
+        "after": 9
+      },
+      "scalar_cmp_minmax_frint_fp_to_int": {
+        "before": "4/5/5/5",
+        "after": "4/5/5/5"
+      },
+      "scalar_fdiv_s": {
+        "before": 259,
+        "after": 259
+      },
+      "scalar_fsqrt_s_d": {
+        "before": 67,
+        "after": 67
+      },
+      "scalar_fdiv_h": {
+        "before": 516,
+        "after": 516
+      },
+      "neon_fsqrt_2s": {
+        "before": 133,
+        "after": 133
+      }
+    },
+    "semantics": {
+      "raw_bit": "unchanged; same unpack/FZ/round/pack helpers and finish_pre path",
+      "commit_order": "unchanged; single outstanding fp_exec transaction and one held response",
+      "fpsr_fpcr": "unchanged; FPCR snapshot at acceptance, FPSR OR behavior preserved",
+      "fcmp_nzcv": "unchanged; CMP uses existing pp_other two-stage finish",
+      "fp_to_gpr": "unchanged; FCVTZS/FCVTZU int_result path unaffected",
+      "kill_reset": "pm_pre* registers cleared on reset/kill with other pipeline registers"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator lint-only on lcvex_core with release filelist"
+    },
+    {
+      "run_id": "lcvex_fp_exec_tb",
+      "command": "conda run -n lcvex verilator --binary --timing --assert -j 1 --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir_fp_exec_t040/Vlcvex_fp_exec_tb",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Added FMUL.S=6, FMADD.S=6, NEON FMUL.2S=11 latency assertions; includes single issue, held response, kill/reset, FDIV/FSQRT latency probes"
+    },
+    {
+      "run_id": "sim-sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-cocotb-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=5 PASS=5 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "sim-cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=4 PASS=4 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "sim-cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=5 PASS=5 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "TESTS=8 PASS=8 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/signoff STA (next FP-P5 rerun required)",
+    "A76 required L2 lockstep sub-suite (not affected by this FP unit cut)"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-040-fp-mac-ppprehi-cut.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-040.json"
+    }
+  ],
+  "known_limits": [
+    "No physical timing run in this task; actual Fmax/slack must be confirmed by FP-P5 rerun.",
+    "MUL/FMA and corresponding NEON/half-lane slots gained one pipeline cycle.",
+    "If STA still shows pm_pre -> pp_pre (FMA align/add) as the new top, a further product_ext/c_ext or adder split may be needed.",
+    "ADD/SUB/SCVTF/UCVTF were not further split in this round to limit area/latency impact."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-04T03:06:00+08:00",
+    "received_at": "2026-09-04T03:07:00+08:00",
+    "reported_at": "2026-09-04T03:24:16+08:00"
+  },
+  "merge_sha": "4a21b97bb46533ac69e940a181d0592aad260ce9",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T03:24:16+08:00",
+    "merged_at": "2026-09-04T03:24:50+08:00",
+    "recorded_at": "2026-09-04T03:24:50+08:00",
+    "notes": "FP MAC->pp_pre_hi product register cut merged and accepted"
+  }
+}

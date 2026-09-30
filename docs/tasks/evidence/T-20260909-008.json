@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-008",
+  "label": "B25-FIFO-PAYLOAD-SDC-CLOSURE",
+  "state": "implementation-complete",
+  "acceptance_status": "exact-3b-sdc-and-local-adapter-validation-pass; post-fit-closure-pending",
+  "partial": true,
+  "batch": "T-20260909-011",
+  "base_sha": "fcb61cb9ebff2f389f43b0f0a3973d9314176779",
+  "head_sha": "3361c0f44e309184d0cb4e732ba5f85b95db4347",
+  "source_head_before_docs": "fcb61cb9ebff2f389f43b0f0a3973d9314176779",
+  "branch": "fix/T-20260909-008-b25-fifo-payload-sdc",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-008",
+  "owner": "b25_fifo_payload_sdc",
+  "timestamps": {
+    "sent_at": "2026-09-09T12:48:32+08:00",
+    "received_at": "2026-09-09T12:48:32+08:00",
+    "sdc_edit_mtime": "2026-09-09T12:51:59+08:00",
+    "checker_edit_mtime": "2026-09-09T12:57:37+08:00",
+    "checker_validation_mtime": "2026-09-09T13:02:06+08:00",
+    "sv_fresh_compile_log_mtime": "2026-09-09T13:05:05+08:00",
+    "sv_fresh_runtime_log_mtime": "2026-09-09T13:05:26+08:00",
+    "cocotb_log_mtime": "2026-09-09T13:01:47+08:00",
+    "evidence_authored_at": "2026-09-09T13:05:51+08:00",
+    "reported_at": "2026-09-09T13:05:51+08:00",
+    "timezone": "Asia/Shanghai",
+    "timestamp_basis": "source/artifact stat mtimes are recorded to the second; dispatch time is from the parent handoff"
+  },
+  "objective": "在正式 SDC 的 3b FIFO memory payload 区域补齐 response memory 到 txn_local_q/read_len_q/read_beat_q 三个精确 sink，并以 hermetic checker 锁定六个 endpoint family 各一次；不改变 RTL 或其它 SDC 区段。",
+  "implementation": {
+    "sdc": {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "section": "3b",
+      "added_exact_commands": [
+        {
+          "from": "*response_fifo|mem*",
+          "to": "soc|emif_adapter|txn_local_q*"
+        },
+        {
+          "from": "*response_fifo|mem*",
+          "to": "soc|emif_adapter|read_len_q*"
+        },
+        {
+          "from": "*response_fifo|mem*",
+          "to": "soc|emif_adapter|read_beat_q*"
+        }
+      ],
+      "before_sha256": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f",
+      "after_sha256": "3a5bf655c3d5467912834999c8221815f6630f597757254e8d91d7ceb365a207",
+      "after_bytes": 14374
+    },
+    "checker": {
+      "path": "fpga/catapult_a10/tools/check_fifo_payload_sdc.py",
+      "sha256": "e559fe6cdd2417f4488a742dca73e86c68f1e24a611a7e12612b955d62fad53c",
+      "lines": 485,
+      "hermetic_contract": [
+        "reads one SDC path and Python standard library only",
+        "does not invoke Quartus, Git, network, fitted database or environment-dependent input",
+        "scopes parsing to section 3b",
+        "requires six direct set_false_path commands with exact -from/-to/get_registers -nowarn spelling",
+        "fails on missing, duplicate, broad, unknown or wrong-direction pairs"
+      ],
+      "default_command": "python3 fpga/catapult_a10/tools/check_fifo_payload_sdc.py --sdc fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "self_test_command": "python3 fpga/catapult_a10/tools/check_fifo_payload_sdc.py --self-test",
+      "positive_status": "PASS",
+      "observed_families": [
+        {"name": "request_mem_to_emif_req", "from": "*request_fifo|mem*", "to": "soc|emif_adapter|emif_req_q*", "count": 1, "line": 97},
+        {"name": "response_mem_to_txn_local", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|txn_local_q*", "count": 1, "line": 103},
+        {"name": "response_mem_to_read_len", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_len_q*", "count": 1, "line": 105},
+        {"name": "response_mem_to_read_beat", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_beat_q*", "count": 1, "line": 107},
+        {"name": "response_mem_to_read_line", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_line_q*", "count": 1, "line": 99},
+        {"name": "response_mem_to_response_code", "from": "*response_fifo|mem*", "to": "soc|emif_adapter|response_code_q*", "count": 1, "line": 101}
+      ],
+      "positive_log": {
+        "path": "build/agents/T-20260909-008/checker/positive.log",
+        "sha256": "23f57d89a1149eae903ce80806bff8d265f0ffbd99b71e174957ab644816a057",
+        "exit_code": 0
+      },
+      "self_test_log": {
+        "path": "build/agents/T-20260909-008/checker/self-test.log",
+        "sha256": "d7a42eb7415654adba8a6357cd68e6b0aaaa9e7020051c96796688d6ce37205f",
+        "exit_code": 0,
+        "faults_passed": 6,
+        "faults_total": 6
+      }
+    }
+  },
+  "fault_matrix": {
+    "scope": "checker --self-test in-memory fixtures, executed from this task worktree; output retained under build/agents/T-20260909-008",
+    "all_expected_failures": true,
+    "cases": [
+      {
+        "name": "missing_request_family",
+        "mutation": "remove request_mem_to_emif_req",
+        "expected": "FAIL",
+        "observed": "FAIL",
+        "detection": "active command count 5 and missing exact endpoint family"
+      },
+      {
+        "name": "duplicate_response_txn_local",
+        "mutation": "duplicate response_mem_to_txn_local",
+        "expected": "FAIL",
+        "observed": "FAIL",
+        "detection": "active command count 7 and duplicate exact endpoint family"
+      },
+      {
+        "name": "broad_response_target",
+        "mutation": "replace txn_local_q* with adapter wildcard *",
+        "expected": "FAIL",
+        "observed": "FAIL",
+        "detection": "broad FIFO payload endpoint pair and missing exact family"
+      },
+      {
+        "name": "broad_response_source",
+        "mutation": "replace response_fifo|mem* with response_fifo|*",
+        "expected": "FAIL",
+        "observed": "FAIL",
+        "detection": "broad FIFO payload endpoint pair and missing exact family"
+      },
+      {
+        "name": "wrong_direction",
+        "mutation": "swap response source and txn_local_q destination",
+        "expected": "FAIL",
+        "observed": "FAIL",
+        "detection": "wrong direction adapter sink -> FIFO memory and missing exact family"
+      },
+      {
+        "name": "wrong_request_response_direction",
+        "mutation": "use response_fifo memory for request emif_req_q sink",
+        "expected": "FAIL",
+        "observed": "FAIL",
+        "detection": "wrong request/response domain direction and missing exact family"
+      }
+    ]
+  },
+  "validation": [
+    {
+      "run_id": "python-syntax-and-diff",
+      "level": "L0_static",
+      "commands": [
+        "python3 -m py_compile fpga/catapult_a10/tools/check_fifo_payload_sdc.py",
+        "git diff --check"
+      ],
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "adapter-sv-sva-fresh-compile",
+      "level": "L1_SV_SVA",
+      "command": "resource-lock run local lcvex T-20260909-008 b25_fifo_payload_sdc --min-local-available-mib 4096 --meta stage=adapter_sv_sva_compile_fresh --meta source_sha=fcb61cb9ebff2f389f43b0f0a3973d9314176779 --meta verilator_jobs=1 --meta tmpdir=task_local -- systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env TMPDIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260909-008/build/agents/T-20260909-008/sv/tmp VERILATOR_JOBS=1 conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal --top-module lcvex_axi4_avalon_tb -j 1 -Mdir build/agents/T-20260909-008/sv/obj_dir -o lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv",
+      "exit_code": 0,
+      "result": "pass; fresh task-local obj_dir and TMPDIR",
+      "summary": "Verilator 5.050 built 12 modules with --assert; child_maxrss_kib=370864",
+      "log": {
+        "path": "build/agents/T-20260909-008/sv/compile-fresh.log",
+        "sha256": "3f2685f782cf84dbe74824feb2973ed5b174797d8124c06cb728f8c59a2354de"
+      }
+    },
+    {
+      "run_id": "adapter-sv-sva-runtime",
+      "level": "L1_SV_SVA",
+      "command": "resource-lock run local lcvex T-20260909-008 b25_fifo_payload_sdc --min-local-available-mib 4096 --meta stage=adapter_sv_sva_runtime_fresh --meta source_sha=fcb61cb9ebff2f389f43b0f0a3973d9314176779 --meta verilator_jobs=1 --meta tmpdir=task_local -- systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env TMPDIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260909-008/build/agents/T-20260909-008/sv/tmp /home/chiro/projects/mycpu/lcvex-wt-T-20260909-008/build/agents/T-20260909-008/sv/obj_dir/lcvex_axi4_avalon_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PASS: B2 AXI4/Avalon SV regression writes=0 reads=0; Verilator finished at 3us; child_maxrss_kib=14088",
+      "log": {
+        "path": "build/agents/T-20260909-008/sv/run-fresh.log",
+        "sha256": "182df5bf7418e657663b4af294dce2c6ec2d822d0d3cbe1a5915d0ebc51f6259"
+      }
+    },
+    {
+      "run_id": "adapter-cocotb-regression",
+      "level": "L1_Cocotb_SVA",
+      "command": "resource-lock run local lcvex T-20260909-008 b25_fifo_payload_sdc --min-local-available-mib 4096 --meta stage=adapter_cocotb_regression --meta source_sha=fcb61cb9ebff2f389f43b0f0a3973d9314176779 --meta verilator_jobs=1 --meta seed=0x00b2054 --meta tmpdir=task_local -- systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env TMPDIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260909-008/build/agents/T-20260909-008/cocotb/tmp VERILATOR_JOBS=1 conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.axi4_avalon SIM=verilator TOPLEVEL=lcvex_axi4_avalon_cocotb_tb COCOTB_TEST_MODULES=test_axi4_avalon SIM_BUILD=build/agents/T-20260909-008/cocotb SEED=0x00b2054",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TESTS=7 PASS=7 FAIL=0; simulation finished at 4616.01 ns; child_maxrss_kib=371520",
+      "log": {
+        "path": "build/agents/T-20260909-008/cocotb/final.log",
+        "sha256": "301b32629a04659ab598f34953c8cc1d5d145fe2b777af8e02a4dda8138127f8"
+      }
+    }
+  ],
+  "resource_lock": {
+    "resource": "local",
+    "project": "lcvex",
+    "task": "T-20260909-008",
+    "agent": "b25_fifo_payload_sdc",
+    "all_heavy_runs_locked": true,
+    "min_local_available_mib": 4096,
+    "memory_max": "16G",
+    "memory_swap_max": "0",
+    "verilator_jobs": 1,
+    "task_local_tmpdirs": [
+      "build/agents/T-20260909-008/sv/tmp",
+      "build/agents/T-20260909-008/cocotb/tmp"
+    ],
+    "busy_return_75_observed": true,
+    "busy_return_75_event": "initial adapter SV compile attempt returned exit 75 before Verilator; status was then checked and local reported FREE",
+    "transient_harness_events": [
+      {
+        "stage": "initial_sv_lock_attempt",
+        "exit_code": 75,
+        "accepted": false,
+        "reason": "local resource busy; no Verilator started"
+      },
+      {
+        "stage": "sv_retry_wrapper",
+        "exit_code": 1,
+        "accepted": false,
+        "reason": "wrapper requested unavailable /usr/bin/time; no RTL/test result accepted"
+      },
+      {
+        "stage": "sv_retry_with_tmpdir",
+        "exit_code": 0,
+        "accepted": false,
+        "reason": "reused an obj_dir created by the prior harness and log showed fallback to /tmp; discarded"
+      },
+      {
+        "stage": "sv_fresh_task_local_compile",
+        "exit_code": 0,
+        "accepted": true,
+        "reason": "empty obj_dir, pre-created task-local TMPDIR and no /tmp fallback in log"
+      }
+    ],
+    "final_status": "local FREE; gamepc FREE"
+  },
+  "write_region_diff": {
+    "tracked_modified": [
+      "fpga/catapult_a10/quartus/catapult_a10.sdc"
+    ],
+    "tracked_added": [
+      "fpga/catapult_a10/tools/check_fifo_payload_sdc.py",
+      "docs/tasks/evidence/T-20260909-008.json",
+      "docs/handoffs/T-20260909-008-b25-fifo-payload-sdc.md"
+    ],
+    "ignored_generated": "build/agents/T-20260909-008/**",
+    "sdc_diff": "+6 lines / -0 lines; exactly three set_false_path commands in section 3b",
+    "forbidden_delta": [],
+    "rtl_delta": 0,
+    "qsf_delta": 0,
+    "manifest_sha_registry_delta": 0,
+    "active_task_status_docs_delta": 0,
+    "diff_check": "PASS",
+    "head_before_commit": "fcb61cb9ebff2f389f43b0f0a3973d9314176779"
+  },
+  "policy": {
+    "only_registered_write_regions": true,
+    "rtl_modified": false,
+    "qsf_modified": false,
+    "sdc_other_sections_modified": false,
+    "manifest_modified": false,
+    "sha_registry_modified": false,
+    "active_task_json_modified": false,
+    "tasks_status_files_modified": false,
+    "project_status_modified": false,
+    "roadmap_modified": false,
+    "qemu_modified": false,
+    "reference_or_expectations_modified": false,
+    "quartus_or_timequest_run": false,
+    "remote_overlay_run": false,
+    "synthesis_run": false,
+    "fitter_run": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "board_or_flash_action": false,
+    "system_tmp_used_by_accepted_runs": false,
+    "assertions_disabled": false
+  },
+  "known_limits_and_risks": [
+    "本 lane 未运行 Quartus/TimeQuest 或 remote overlay；post-fit 验证必须由集成者在合并 SHA 的 isolated fitted clone 中执行。",
+    "现有 T-007 unconstrained vendor/JTAG/reset-clock 分类仍是独立物理门；本 lane 不用 FIFO exception 掩盖它们。",
+    "三条 exception 仅覆盖 response_fifo memory 到 txn_local_q/read_len_q/read_beat_q；禁止扩大到 soc|emif_adapter|*、response_fifo|* 或其它同步器。",
+    "SV/Cocotb 验证使用无 RTL delta 的现有 adapter/SVA 入口，因此证明协议回归未退化，不替代 post-fit endpoint/exception/recovery/removal/min-pulse 报告。"
+  ],
+  "correction_record": {
+    "type": "metadata-only",
+    "scope": "将 handoff 文件从未登记的 *-sdc-closure.md 重命名为登记的 *-sdc.md，并同步 evidence 路径；不修改 SDC/checker/测试结果，不重跑验证。",
+    "pre_correction_tip": "3361c0f44e309184d0cb4e732ba5f85b95db4347",
+    "requested_at": "2026-09-09T13:11:11+08:00",
+    "applied_at": "2026-09-09T13:12:59+08:00",
+    "tests_rerun": false,
+    "original_result_timestamps_preserved": true,
+    "head_semantics": "原实现提交保持为 pre_correction_tip；本 correction 提交只包含 handoff/evidence 元数据，不改变实现或测试结论。"
+  },
+  "handoff": "docs/handoffs/T-20260909-008-b25-fifo-payload-sdc.md"
+}

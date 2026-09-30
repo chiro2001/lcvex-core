@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-001",
+  "state": "done",
+  "partial": false,
+  "base_sha": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+  "head_sha": "0e158b7579ac902c119f1d0909248e42cbe51bf3",
+  "branch": "verify/T-20260902-001-a10-resource-gate-reeval",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-001",
+  "scope": "Catapult A10 分阶段综合资源探针与门限重评估；只到 synthesis，不运行 fit/STA/SOF/编程。",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "candidate_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-002\\candidate",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-001-probe",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "license_read": false,
+    "original_candidate_modified": false
+  },
+  "preflight": {
+    "timestamp": "2026-09-02T01:30:30.8020446+08:00",
+    "candidate_exists": true,
+    "candidate_child_count": 4,
+    "physical_total_mb": 63092.3,
+    "physical_free_mb": 34050.0,
+    "pagefile_allocated_mb": 12800,
+    "pagefile_current_mb": 232,
+    "pagefile_available_mb": 12568,
+    "disk_d_free_gb": 88.9,
+    "eda_compile_processes": [],
+    "non_eda_java_present": true
+  },
+  "runs": [
+    {
+      "run_id": "phase-a-decode-only",
+      "stage": "A",
+      "project": "decode_only",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off decode_only -c decode_only",
+      "result": "pass",
+      "started_at": "2026-09-02T01:34:48.0328390+08:00",
+      "finished_at": "2026-09-02T01:35:44.8161167+08:00",
+      "wall_s": 56.783,
+      "exit_code": 0,
+      "peak_private_mb": 717.5,
+      "peak_working_set_mb": 791.6,
+      "peak_virtual_mb": 5786.5,
+      "peak_quartus_vm_mb": 725,
+      "errors": 0,
+      "warnings": 96,
+      "resource": {
+        "alms": 13554,
+        "combinational_aluts": 16833,
+        "dedicated_logic_registers": 0,
+        "io_pins": 10029,
+        "dsp_blocks": 3,
+        "block_memory_bits": null
+      },
+      "reports": [
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-001-probe\\decode_only\\output_files\\decode_only.syn.rpt"
+      ]
+    },
+    {
+      "run_id": "phase-b-l1d-M20K",
+      "stage": "B",
+      "project": "l1d_actual",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off l1d_actual -c l1d_actual",
+      "result": "pass",
+      "started_at": "2026-09-02T01:35:49.5278540+08:00",
+      "finished_at": "2026-09-02T01:36:14.7478207+08:00",
+      "wall_s": 25.22,
+      "exit_code": 0,
+      "peak_private_mb": 750.8,
+      "peak_working_set_mb": 799.4,
+      "peak_virtual_mb": 5699.0,
+      "peak_quartus_vm_mb": 750,
+      "errors": 0,
+      "warnings": 8,
+      "parameters": "SETS=64, LINE_BYTES=64",
+      "resource": {
+        "alms": 9665,
+        "combinational_aluts": 10932,
+        "dedicated_logic_registers": 5368,
+        "io_pins": 1101,
+        "block_memory_bits": 32768,
+        "dsp_blocks": 0,
+        "m20k": "soc|coh|d_l1|u_data_ram 64x512 single-port"
+      },
+      "reports": [
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-001-probe\\l1d_actual\\output_files\\l1d_actual.syn.rpt"
+      ]
+    },
+    {
+      "run_id": "phase-b-l2-reduced-M20K",
+      "stage": "B",
+      "project": "l2_reduced",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off l2_reduced -c l2_reduced",
+      "result": "pass",
+      "started_at": "2026-09-02T01:36:31.4288997+08:00",
+      "finished_at": "2026-09-02T01:37:07.7659651+08:00",
+      "wall_s": 36.337,
+      "exit_code": 0,
+      "peak_private_mb": 817.5,
+      "peak_working_set_mb": 864.3,
+      "peak_virtual_mb": 5885.9,
+      "peak_quartus_vm_mb": 819,
+      "errors": 0,
+      "warnings": 87,
+      "parameters": "SETS=64, WAYS=1, LINE_BYTES=64 (isolated copy of lcvex_l2_wb.sv with defaults changed)",
+      "resource": {
+        "alms": 9720,
+        "combinational_aluts": 10701,
+        "dedicated_logic_registers": 5962,
+        "io_pins": 1828,
+        "block_memory_bits": 32768,
+        "dsp_blocks": 0,
+        "m20k": "l2 data 64x512 single-port"
+      },
+      "reports": [
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-001-probe\\l2_reduced\\output_files\\l2_reduced.syn.rpt"
+      ]
+    },
+    {
+      "run_id": "phase-b-l2-default-M20K",
+      "stage": "B",
+      "project": "l2_default2",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off l2_default2 -c l2_default2",
+      "result": "pass",
+      "started_at": "2026-09-02T01:38:50.7976545+08:00",
+      "finished_at": "2026-09-02T01:40:38.3778464+08:00",
+      "wall_s": 107.58,
+      "exit_code": 0,
+      "peak_private_mb": 1367.2,
+      "peak_working_set_mb": 1348.8,
+      "peak_virtual_mb": 6382.4,
+      "peak_quartus_vm_mb": 1441,
+      "errors": 0,
+      "warnings": 87,
+      "parameters": "SETS=256, WAYS=2, LINE_BYTES=64 (candidate defaults)",
+      "resource": {
+        "alms": 39158,
+        "combinational_aluts": 38762,
+        "dedicated_logic_registers": 29390,
+        "io_pins": 1828,
+        "block_memory_bits": 262144,
+        "dsp_blocks": 0,
+        "m20k": "l2 data arrays as M20K in default geometry"
+      },
+      "reports": [
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-001-probe\\l2_default2\\output_files\\l2_default2.syn.rpt"
+      ]
+    },
+    {
+      "run_id": "phase-c-real-default-attempt",
+      "stage": "C",
+      "project": "real_a10",
+      "command": "quartus_sh --flow compile real_a10 -c real_a10 -start ipgenerate -end synthesis",
+      "result": "fail_elaboration",
+      "started_at": "2026-09-02T01:41:38.7751156+08:00",
+      "finished_at": "2026-09-02T01:42:50.6729588+08:00",
+      "wall_s": 71.898,
+      "exit_code": 3,
+      "peak_private_mb": 2053.1,
+      "peak_working_set_mb": 2052.6,
+      "peak_virtual_mb": 6816.8,
+      "peak_quartus_vm_mb": null,
+      "errors": "lcvex_fp_scalar.sv(353): non-constant loop count limit 250 exceeded; lcvex_neon_int.sv(80): index 128 out of range; lcvex_neon_fp.sv(86): index 128 out of range",
+      "warnings": "many pre-existing",
+      "resource_available": false,
+      "note": "Candidate as-is still has Quartus 21.4 elaboration compatibility errors; failure is not resource OOM."
+    },
+    {
+      "run_id": "phase-c-real-nofp-pass",
+      "stage": "C",
+      "project": "real_a10_nofp",
+      "command": "quartus_sh --flow compile real_a10_nofp -c real_a10_nofp -start ipgenerate -end synthesis",
+      "result": "pass",
+      "started_at": "2026-09-02T01:45:51.4803992+08:00",
+      "finished_at": "2026-09-02T01:51:53.4745968+08:00",
+      "wall_s": 361.994,
+      "exit_code": 0,
+      "peak_private_mb": 2570.8,
+      "peak_working_set_mb": 2562.9,
+      "peak_virtual_mb": 7575.6,
+      "peak_quartus_vm_mb": 2595,
+      "errors": 0,
+      "warnings": 37,
+      "parameters": "A64_FP_SIMD=0, L1_SETS=64, L2_SETS=256, L2_WAYS=2 (only isolated change vs candidate default is disabling FP/NEON)",
+      "resource": {
+        "alms": 81552,
+        "combinational_aluts": 90956,
+        "dedicated_logic_registers": 78917,
+        "io_pins": 144,
+        "mlab_bits": 0,
+        "block_memory_bits": 247276,
+        "dsp_blocks": 21,
+        "plls": 1,
+        "m20k": {
+          "bram": "soc|bram 8192x64 true-dual = 524288 bits",
+          "l1d": "soc|coh|d_l1|u_data_ram 64x512 single = 32768 bits",
+          "l2": "soc|coh|l2|u_data_ram 64x512 single = 32768 bits"
+        }
+      },
+      "reports": [
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-001-probe\\real_a10_nofp\\output_files\\real_a10_nofp.syn.rpt"
+      ]
+    },
+    {
+      "run_id": "phase-c-real-full-patched",
+      "stage": "C",
+      "project": "real_a10_patched",
+      "command": "quartus_sh --flow compile real_a10_patched -c real_a10_patched -start ipgenerate -end synthesis",
+      "result": "interrupted_manual_stop",
+      "started_at": "2026-09-02T02:06:16.7064817+08:00",
+      "wall_s": 3254.724,
+      "exit_code": -1,
+      "peak_private_mb": 13238.3,
+      "peak_working_set_mb": 12285.4,
+      "peak_virtual_mb": 18735.3,
+      "errors": "manual stop before synthesis completion; no final resource summary",
+      "warnings": null,
+      "parameters": "isolated compatibility patches for lcvex_fp_scalar/lcvex_neon_int/lcvex_neon_fp; A64_FP_SIMD=1",
+      "note": "Isolated FP/NEON compatibility patches allowed elaboration to proceed. Synthesis ran 54.2 min with peak private memory 13.2 GB, still below safety, but did not finish; stopped manually to close task. No fit/STA/SOF.",
+      "samples": 3198,
+      "finished_at": "2026-09-02T03:00:31.4306001+08:00"
+    }
+  ],
+  "gate_model": {
+    "safe_commit_mb": 36800,
+    "formula": "(physical_free + pagefile_available) * 0.8",
+    "current_host_safe_window_mb": 36800,
+    "synthesis_peak_no_fp_mb": 2570.8,
+    "synthesis_peak_full_fp_pending": true,
+    "fit_sta_asm_window": "G4 historical fitter PM 15434 MB is inside current safe window; STA/ASM not yet measured; require single-job staged execution.",
+    "external_resource_needed": "Only if full-FP synthesis or fitter exceeds ~36 GB commit window; not triggered by A/B/nofp data.",
+    "synthesis_peak_full_fp_mb": 13238.3,
+    "synthesis_peak_full_fp_completed": false,
+    "note": "full-FP patched synthesis interrupted at 54.2 min, peak PM 13.2GB; no final resource summary."
+  },
+  "known_limits": [
+    "Candidate as-is real SoC synthesis fails in Quartus elaboration before resource synthesis; a no-FP isolated probe passes.",
+    "Isolated full-FP patched probe progressed through elaboration but was manually stopped after 54.2 min; peak PM 13.2GB, no final resource summary.",
+    "No fit/STA/assembler/SOF/JIC/programming run.",
+    "Probe modifications are isolated under remote T-20260902-001-probe, not part of candidate source.",
+    "Physical free fluctuates with user processes; sampled values are not guarantees."
+  ],
+  "next": "Integrator may either (a) accept no-FP resource data as conservative lower bound, and request RTL compatibility fixes before full-FP/fit/STA/SOF; or (b) let full-FP patched probe continue in a separate long-running task to get final resource estimate.",
+  "timestamps": {
+    "received_at": "2026-09-02T01:30:00+08:00",
+    "reported_at": "2026-09-02T03:01:45+08:00"
+  },
+  "merge_sha": "9bde1d250c598310ff8d9b4026ae1031e8e1be1f",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T03:02:31+08:00",
+    "merged_at": "2026-09-02T03:03:00+08:00",
+    "recorded_at": "2026-09-02T03:03:00+08:00",
+    "notes": "Staged resource probe and threshold model accepted; real full-FP synthesis blocked by RTL Quartus elaboration compatibility, not memory"
+  }
+}

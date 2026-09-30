@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-109",
+  "state": "done",
+  "base_sha": "ceb8af4",
+  "head_sha": "ceb8af4b5d77d1a42e9d7f608a9f119ecb7eeb15",
+  "merge_sha": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+  "branch": "feature/T-20260829-109-aud-04-cdc-reset",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-067",
+  "scope": "AUD-04: 修复/记录 lcvex_axi4_avalon_adapter + lcvex_async_fifo 的跨 cpu_clk/emif_clk CDC 与公共异步复位释放约束",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-29T20:30:00+08:00",
+    "static_edits_at": "2026-08-29T21:00:00+08:00",
+    "documents_written_at": "2026-08-29T21:05:00+08:00"
+  },
+  "files_changed": [
+    "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "rtl/lcvex_async_fifo.sv",
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "docs/handoffs/T-20260829-109-aud-04.md",
+    "docs/tasks/evidence/T-20260829-109.json"
+  ],
+  "static_changes": {
+    "sdc": {
+      "summary": "增加 guarded static CDC 约束块：set_clock_groups -asynchronous（sys_clk_50 vs emif_bot_emif_usr_clk_clk）、request/response FIFO source->first-sync false_path、2ns max_delay stand-in、公共异步复位注释。EMIF 时钟可能不在 user SDC 阶段可见，因此命令带 get_clocks/get_registers 长度保护；不宣称 TimeQuest 通过。",
+      "runnable_in_quartus": false,
+      "reason": "需要 post-fit TimeQuest 中确认 EMIF user clock 名称与寄存器层次，并消除 Quartus 332174/332054 后才可视为已验证。"
+    },
+    "async_fifo": {
+      "summary": "补充 AUD-04 reset/CDC contract 注释：common async-assert/sync-deassert、两域清空、复位 epoch、TimeQuest 验证点。"
+    },
+    "adapter": {
+      "summary": "补充 link_rst_n = cpu_rst_n & emif_rst_n & !cal_fail 的公共异步复位设计注释；发现当前 link_rst_n 直接使用源域 cal_fail，缺少显式 per-domain reset synchronizer，需动态验证或后续改进。"
+    }
+  },
+  "findings": [
+    "lcvex_async_fifo 已有 gray pointer 与 two-stage synchronizer，方向正确。",
+    "request_fifo 与 response_fifo 使用同一个 link_rst_n 作为公共异步复位；任一域复位/cal_fail 会清空两侧指针/同步器，形成事务 epoch 边界。",
+    "当前 SDC 缺少异步时钟组和 FIFO 同步器约束；已加入 guarded 静态块，但 EMIF user clock 在 user SDC 读取阶段可能不可解析。",
+    "当前 link_rst_n 的 deassert 没有逐域 reset synchronizer：cpu_rst_n/emif_rst_n/cal_fail 合并后直接作为两个时钟域的异步复位，严格来说不满足标准 async-assert/sync-deassert，需要动态验证或在后续实验副本中增加每域复位同步链。",
+    "未运行 TimeQuest，未伪造时序结果。"
+  ],
+  "dynamic_verification_required": [
+    "在 post-fit TimeQuest 中确认 emif_bot_emif_usr_clk_clk 时钟名并运行 set_clock_groups -asynchronous，确认无 332174/332054 被忽略警告。",
+    "报告 request_fifo/response_fifo 的 source gray q -> first sync flop 路径确实被 false_path/max_delay 覆盖；确认没有 setup/hold 违规。",
+    "验证两域公共复位 release 时序：断言时两域指针/同步器异步清零；deassert 后两个域分别在自己的时钟边沿恢复，且复位释放不产生亚稳态。",
+    "验证 cal_fail 作为异步复位源时，deassert 不会让旧 FIFO 数据跨 epoch 被读取；建议用仿真/formal 覆盖：复位期间写读、复位后连续读、cal_fail 脉冲在源域/目的域边界。",
+    "若保留当前 link_rst_n 设计，需提供 reset synchronizer 或改用已同步的 cal_failed_cpu/cal_ready 形成每域复位，并重新跑 CDC 检查。",
+    "运行完整 Quartus full flow + TimeQuest 前，不应将本静态 SDC 块当作最终 signoff。"
+  ],
+  "known_limits": [
+    "未启动完整 B5 full flow；未读取 license；未修改 T-067 远端工程。",
+    "SDC 是静态/占位块，EMIF 时钟名和寄存器路径尚未在真实 TimeQuest 中验证。",
+    "未修复 link_rst_n 的 per-domain reset synchronizer，仅记录问题和后续方案。"
+  ],
+  "integrator_review": {
+    "received_at": "2026-08-29T23:40:00+0800",
+    "status": "accepted",
+    "head_sha": "0f77c024c3cf4f0af40867266e8a8044a3345072",
+    "notes": "AUD-04 static CDC/reset constraints merged; TimeQuest dynamic validation remains as follow-up.",
+    "merge_sha": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+    "result_sha": "ceb8af4b5d77d1a42e9d7f608a9f119ecb7eeb15"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "ceb8af4b5d77d1a42e9d7f608a9f119ecb7eeb15",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  }
+}

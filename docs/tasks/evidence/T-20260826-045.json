@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-045",
+  "base_sha": "2b930ec06f4c2353b627cb952e2171421c1d4e9d",
+  "head_sha": "5c509b07224f01aaf68aed74fb30c8cf08485001",
+  "merge_sha": "80fc0824dc5ab1421229c665d8d4fe431270bbe7",
+  "candidate_status": "pass-local",
+  "change": {
+    "implementation_commit": "5c509b07224f01aaf68aed74fb30c8cf08485001",
+    "implementation": "finalize_manifest 构造候选完成态，先调用现有完整 metadata/provenance 校验，成功后才原子发布",
+    "regression_fixture": "严格 root parent 绑定 plugin A、strict resume child 绑定 plugin B；sidecar/TSV 合法；失败后 manifest 字节和 pending 状态保持不变",
+    "error_assertion": "输入 plugin 与 parent 摘要不匹配",
+    "source_file_sha256": {
+      "sim/difftest/checkpoint.py": "d4ed3bacf6fcaa861c9300c680079ffeacae15e9916a87e5b8670de255f3fff4",
+      "sim/difftest/checkpoint_resume_manifest_smoke.py": "d98fa96241ad6bccdb81b5d9950c7c1cacefe4cdb4e9ee36132b598eb1baea35"
+    }
+  },
+  "regression": {
+    "old_code": {
+      "source_sha": "2b930ec06f4c2353b627cb952e2171421c1d4e9d",
+      "command": "python3 sim/difftest/checkpoint_resume_manifest_smoke.py",
+      "exit_code": 1,
+      "result": "expected-red",
+      "failure": "旧 finalize 先写 complete/finalized，随后 parent/plugin 校验抛 ValueError；fixture 的 manifest 原始字节断言失败"
+    },
+    "fixed_code": {
+      "source_sha": "5c509b07224f01aaf68aed74fb30c8cf08485001",
+      "command": "taskset -c 0 python3 -m py_compile sim/difftest/checkpoint.py sim/difftest/checkpoint_manifest_smoke.py sim/difftest/checkpoint_resume_manifest_smoke.py scripts/trace_manifest_smoke.py && taskset -c 0 make checkpoint-manifest-smoke checkpoint-resume-manifest-smoke trace-manifest-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "assertions": [
+        "ValueError 包含输入 plugin 与 parent 摘要不匹配",
+        "manifest.json 原始字节不变",
+        "status/state/lifecycle/finalized/complete 均保持 pending 值",
+        "失败后 read_manifest 仍拒绝 pending 链"
+      ]
+    }
+  },
+  "toolchain": {
+    "host_python": "Python 3.12.10",
+    "lcvex_python": "Python 3.12.14",
+    "qemu": "未涉及"
+  },
+  "qemu": {},
+  "rtl_filelist_sha256": "",
+  "resource": {
+    "cpuset": [0],
+    "cpu_count": 1,
+    "memory_limit_mb": 4096,
+    "allocation_ratio": 0.08,
+    "heavy_tests": false
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-pycompile-001",
+      "source_sha": "5c509b07224f01aaf68aed74fb30c8cf08485001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "taskset -c 0 python3 -m py_compile sim/difftest/checkpoint.py sim/difftest/checkpoint_manifest_smoke.py sim/difftest/checkpoint_resume_manifest_smoke.py scripts/trace_manifest_smoke.py",
+      "seed": null,
+      "wall_seconds": 0.1,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-checkpoint-manifest-001",
+      "source_sha": "5c509b07224f01aaf68aed74fb30c8cf08485001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "taskset -c 0 make checkpoint-manifest-smoke checkpoint-resume-manifest-smoke",
+      "seed": null,
+      "wall_seconds": 0.6,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "legacy/strict root/resume 正常 finalize、artifact/parent hash、plugin provenance 原子失败和 pending 拒绝均通过"
+    },
+    {
+      "run_id": "owner-l0-trace-manifest-001",
+      "source_sha": "5c509b07224f01aaf68aed74fb30c8cf08485001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "taskset -c 0 make trace-manifest-smoke",
+      "seed": null,
+      "wall_seconds": 0.5,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-legacy-v2-probe-001",
+      "source_sha": "5c509b07224f01aaf68aed74fb30c8cf08485001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "taskset -c 0 python3 - <<'PY' legacy v2 init/finalize/read fixture PY",
+      "seed": null,
+      "wall_seconds": 0.1,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 lifecycle/provenance 的 legacy v2 metadata 成功 finalize 并 read_manifest"
+    }
+  ],
+  "integration_validation": {
+    "source_sha": "80fc0824dc5ab1421229c665d8d4fe431270bbe7",
+    "command": "set -euo pipefail; taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-manifest-smoke checkpoint-resume-manifest-smoke trace-manifest-smoke checkpoint-dut-smoke checkpoint-timer-smoke checkpoint-gic-smoke checkpoint-sys-smoke checkpoint-sys-v3-smoke checkpoint-mmio-smoke",
+    "exit_code": 0,
+    "result": "pass",
+    "log": "build/agents/T-20260826-045/integration-rerun.log",
+    "log_sha256": "ee78860cf747444ad08b9fb2fad52adf3f830f89e9acdf7abae589bb7f879afa",
+    "summary": "manifest/trace、DUT、Timer、GIC、sys v2/v3 与 C++ MMIO 联合恢复全部通过",
+    "first_attempt": {
+      "result": "transient-fail",
+      "failure": "checkpoint-timer-smoke 首次返回 1；立即单独复现通过，完整套件重跑也通过",
+      "log": "build/agents/T-20260826-045/integration.log",
+      "log_sha256": "4882fb8458589eb6c27bad0a61045c47b7c7b0d48889e2f802c1f72d3fdfd398"
+    }
+  },
+  "review": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "result": "未发现阻断问题",
+    "summary": "确认失败发生在原子发布前、浅复制仅对会修改的 context 另行复制、strict/legacy/重复 finalize 兼容；并发 TOCTOU 与掉电 fsync 不在单写者契约范围"
+  },
+  "artifacts": [
+    {
+      "id": "implementation-commit",
+      "uri": "git:5c509b07224f01aaf68aed74fb30c8cf08485001",
+      "sha256": "",
+      "bytes": 0,
+      "owner": "checkpoint-finalize-atomic",
+      "retain_until": "merge",
+      "reproduce": "git show 5c509b07224f01aaf68aed74fb30c8cf08485001"
+    }
+  ],
+  "known_limits": [
+    "未运行 Gate/Linux；集成 SHA 已覆盖 manifest/trace 与全部现有 checkpoint 联合 smoke。",
+    "验证到原子 rename 之间仍依赖 finalized 输入不可变和单写者约束；没有提供并发修改锁或掉电级 fsync。"
+  ]
+}

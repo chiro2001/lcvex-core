@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-083",
+  "title": "A3 开源代理与 A10 基线相关性报告",
+  "state": "review",
+  "base_sha": "54d1ccf0c2c67e504d5b8528eac37a249bc45221",
+  "head_sha": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812",
+  "branch": "feature/T-20260829-083-a3-correlation-report",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-083",
+  "metadata": {
+    "sent_at": "2026-08-29T03:04:00+0800",
+    "received_at": "2026-08-29T03:04:00+0800",
+    "reported_at": "2026-08-29T03:04:00+0800",
+    "timezone": "Asia/Shanghai",
+    "state": "review"
+  },
+  "method": "只读汇总 A1/A2 既有开源代理 artifact，并以 T-064 的真实 Quartus A10 full-flow/STA 作为方向参考。A3 不运行 Yosys/nextpnr/Quartus，不做任何线性换算，不新增 A10 Fmax 声明。",
+  "toolchain": {
+    "a1_yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1)",
+    "a1_abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+    "a2_yosys_oss": "Yosys 0.68+136 (git sha1 c30457480-dirty, Release, Clang 21.1.8)",
+    "a2_verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "a2_nextpnr_ecp5": "nextpnr-0.11.1-18-gdec04b3b (oss-cad-suite 20260828)",
+    "a10_quartus": "Quartus Prime Shell/Pro 21.4.0 Build 67 12/06/2021",
+    "python": "Python 3.12.10"
+  },
+  "inputs": {
+    "capability_json": {
+      "path": "fpga/opensynth/capability.json",
+      "sha256": "3ff9ce1512f979233307e0b89f4fdc6f6ca42553a72c4e2a680eb5519b0e7195"
+    },
+    "a1_stats_json": {
+      "path": "fpga/opensynth/a1_generic_synth_stats.json",
+      "sha256": "a5c27ff87bc78a55a940326abf91155762538d645e4529b7e155cb25ad4da300"
+    },
+    "a2_stats_json": {
+      "path": "fpga/opensynth/a2_soc_stub_stats.json",
+      "sha256": "d8c66aac65b0fbdeba99e4c22a3922b59a5b0aaa042a920ca0a670e4c059db6f"
+    },
+    "a2_manifest_md": {
+      "path": "fpga/opensynth/a2_soc_stub_manifest.md",
+      "sha256": "d9cb3daa6ba9fb830ffe3e2b0411f3ee2ed4d02647be2f821b64a850735e1072"
+    },
+    "t064_task_json": {
+      "path": "docs/tasks/archive/T-20260828-064.json",
+      "sha256": "a91823adda033edeb3d36a58c0042ba2f92f67d2d410dd66cad03cb868ff9069"
+    },
+    "t064_evidence_json": {
+      "path": "docs/tasks/evidence/T-20260828-064.json",
+      "sha256": "29c18485dc2d94941c8a778601abc3380f7f23b346a2bb5aa6a7a7c29259a4e6"
+    },
+    "t064_handoff_md": {
+      "path": "docs/handoffs/T-20260828-064-catapult-fullflow.md",
+      "sha256": "eb262d71c97f4d671f6df12fa8332d91da050c1454778b68ed54a9968177fc27"
+    }
+  },
+  "proxy_summary": {
+    "a1_generic_synth": {
+      "note": "Generic 4-LUT proxy; not an FPGA vendor resource report.",
+      "modules": {
+        "lcvex_axi4_master": {
+          "config": {"ADDR_WIDTH": 64, "DATA_WIDTH": 128, "ID_WIDTH": 4, "MAX_BURST_LEN": 16},
+          "lut4": 1870,
+          "dff": 2406,
+          "ram_bits": 0,
+          "dsp": "N/A",
+          "area": "N/A",
+          "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+          "stable_across_two_runs": true
+        },
+        "lcvex_mem_delay": {
+          "config": {"DELAY_MODE": 1, "RAND_MAX": 4, "SEED": "8'hA5"},
+          "lut4": 63,
+          "dff": 241,
+          "ram_bits": 0,
+          "dsp": "N/A",
+          "area": "N/A",
+          "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+          "stable_across_two_runs": true
+        },
+        "lcvex_mem_arb": {
+          "config": {"PORTS": 3},
+          "lut4": 20,
+          "dff": 3,
+          "ram_bits": 0,
+          "dsp": "N/A",
+          "area": "N/A",
+          "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+          "stable_across_two_runs": true
+        }
+      }
+    },
+    "a2_soc_stub": {
+      "note": "Boundary stub only; no real core/cache/SoC logic.",
+      "module": "lcvex_catapult_soc_stub_top",
+      "num_cells": 0,
+      "num_ports": 109,
+      "num_port_bits": 2627,
+      "num_wires": 109,
+      "netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+      "stable_across_two_runs": true,
+      "verilator_real_soc_elaboration": {
+        "status": "pass",
+        "exit_code": 0,
+        "note": "Real lcvex_catapult_soc_top through tie-off wrapper elaborates in Verilator; warnings disabled as fatal for this lint harness."
+      },
+      "ecp5_nextpnr": {
+        "status": "fail",
+        "exit_code": 125,
+        "reason": "2627 port bits exceed LFE5U-85F IO capacity (365 TRELLIS_IO cells).",
+        "fmax": "N/A"
+      }
+    },
+    "a10_t064_reference": {
+      "note": "External T-064 full-flow/STA evidence, cited as directional reference only.",
+      "device": "10AX115N4F40E3SG",
+      "flow": "quartus_sh --flow compile catapult_a10 -c catapult_a10, exit 0, 0 errors / 68 warnings",
+      "fit": {
+        "alms": 4468,
+        "registers": 8641,
+        "pins": 141,
+        "ram_blocks": 27,
+        "dsp_blocks": 0,
+        "plls": 3
+      },
+      "sta": {
+        "tool_errors": 0,
+        "worst_setup_slack_ns": 0.22,
+        "worst_setup_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+        "worst_setup_corner": "Slow 900mV 100C",
+        "worst_hold_slack_ns": 0.017,
+        "worst_hold_clock": "sys_clk_50",
+        "worst_hold_corner": "Fast 900mV 0C",
+        "worst_recovery_slack_ns": 0.53,
+        "worst_removal_slack_ns": 0.112,
+        "worst_min_pulse_slack_ns": 0.12,
+        "fmax_mhz": {
+          "sys_clk_50": 213.49,
+          "clk_y3": 499.25,
+          "emif_core_user_clk": 283.29,
+          "emif_core_cal_master_clk": 266.88
+        },
+        "ddr_report_requirements_met": true
+      }
+    }
+  },
+  "correlation": {
+    "scope": "Only module proportions within the A1 proxy, ranking, and qualitative trends are compared. No ECP5/Yosys-to-A10 linear conversion or derived A10 percentage is performed.",
+    "a1_module_ranking": {
+      "by_lut4": ["lcvex_axi4_master", "lcvex_mem_delay", "lcvex_mem_arb"],
+      "by_dff": ["lcvex_axi4_master", "lcvex_mem_delay", "lcvex_mem_arb"]
+    },
+    "a1_proxy_share": {
+      "lut4": {
+        "lcvex_axi4_master": 0.9575,
+        "lcvex_mem_delay": 0.0323,
+        "lcvex_mem_arb": 0.0102
+      },
+      "dff": {
+        "lcvex_axi4_master": 0.9079,
+        "lcvex_mem_delay": 0.0909,
+        "lcvex_mem_arb": 0.0011
+      }
+    },
+    "observations": [
+      {
+        "id": "rank-consistency",
+        "text": "Within A1's synthesizable proxy set, lcvex_axi4_master is the dominant LUT/FF consumer, followed by lcvex_mem_delay and lcvex_mem_arb. This is an internal open-source proxy ranking; it is not asserted to be the A10 module ranking because T-064 does not include per-module fit breakdown."
+      },
+      {
+        "id": "register-heavy-trend",
+        "text": "A1 proxy modules are register-heavy (AXI4 master 2406 FF vs 1870 LUT; mem_delay 241 FF vs 63 LUT). A10 real fit also shows more registers (8641) than ALMs (4468). This is only a qualitative trend; ALM and generic 4-LUT are different architectural units and cannot be linearly converted."
+      },
+      {
+        "id": "no-dsp-trend",
+        "text": "A1 reports DSP N/A because no device DSP mapping was performed; A10 T-064 fit reports 0 DSP blocks. There is no contradiction, but no proxy-to-A10 DSP proportion can be derived."
+      },
+      {
+        "id": "ram-not-mappable",
+        "text": "A1 RAM bits are 0 because generic synthesis did not map memory to device RAM; A10 T-064 uses 27 RAM blocks (including Qsys/EMIF/boot). The two metrics are not comparable."
+      },
+      {
+        "id": "boundary-vs-pins",
+        "text": "A2's boundary stub has 109 ports / 2627 port bits, while T-064 A10 fit reports 141 package pins. The huge difference is expected: A2 counts wide internal SoC buses (EMIF/Avalon/JTAG/EPCQ etc.) as boundary ports, whereas A10 implements most of those interfaces as Qsys/internal IP and only package pins reach the board. This must not be read as an area or pin-count prediction."
+      },
+      {
+        "id": "stub-zero-cells",
+        "text": "A2's generic stub is 0-cell by design; it is a port/boundary manifest, not a logic resource proxy. It cannot be compared to A10 ALM/register counts."
+      },
+      {
+        "id": "toolchain-elaboration-trend",
+        "text": "The A-line toolchain trend is: real SoC top can be elaborated by Verilator through tie-off, direct Yosys synthesis is blocked by SystemVerilog package/import/unpacked-array ports, and ECP5 nextpnr is blocked by I/O capacity for the boundary stub. This supports treating A1/A2 as logic/boundary proxies, not as A10 QoR predictors."
+      }
+    ],
+    "not_comparable": [
+      "Generic 4-LUT counts to A10 ALMs.",
+      "A1 FF counts to A10 registers.",
+      "A1 0 RAM bits to A10 27 RAM blocks.",
+      "A2 0-cell stub to A10 resource counts.",
+      "A2 109 ports/2627 port bits to A10 141 package pins.",
+      "A2 ECP5 failure to A10 timing.",
+      "ABC delay (not present in A1) to A10 Fmax."
+    ]
+  },
+  "timing": {
+    "a1": "N/A - no timing claim; ABC delay was not used as Fmax in A1.",
+    "a2_ecp5": "N/A - nextpnr-ecp5 could not place all TRELLIS_IO cells; no Fmax claimed.",
+    "a10_t064_reference": "Recorded in T-064 evidence: worst setup +0.220 ns, worst hold +0.017 ns; Fmax values as listed above. A3 cites these only as external reference and makes no new A10 Fmax claim.",
+    "a3_claim": "A3 does not generate, derive, or assert any A10 Fmax."
+  },
+  "known_limits": [
+    "A1 did not synthesize lcvex_core or lcvex_l2; therefore there is no complete core/cache/SoC open-source resource proxy.",
+    "A1 generic 4-LUT/FF counts are not Arria 10 or ECP5 vendor resource counts.",
+    "A2 boundary stub has no logic and is not a real SoC area proxy.",
+    "A2 nextpnr-ecp5 failed at IO packing; no ECP5 route/Fmax is available.",
+    "T-064 A10 fit/STA is remote Quartus evidence from a different worktree/task; it is used only as a directional reference.",
+    "T-064 does not include per-module or hierarchical A10 fit resource breakdown, so module-level A10 ranking cannot be verified.",
+    "No Quartus, Yosys, nextpnr, or synthesis tool was run in A3."
+  ],
+  "recommendations": [
+    "Use A1/A2 reports only for identifying which open-source-synthesizable modules dominate within the proxy set and to maintain the boundary/IP stub list.",
+    "Do not set A10 resource/Fmax thresholds from these numbers; keep T-067/Quartus as the only source of A10 signoff.",
+    "If A-line continues, the most useful next step is either a hierarchical Quartus report (not open-source) or a more complete core/L2 memory-blackbox proxy; neither replaces A10 signoff.",
+    "For A4 trend regression, limit thresholds to proxy-internal invariants (deterministic Yosys netlist/stat hash, stub port list stability), not to A10-derived limits."
+  ],
+  "disclaimers": [
+    "This is not an Arria 10 signoff report.",
+    "This does not replace Quartus synthesis/STA.",
+    "This does not unblock or replace T-067.",
+    "No ECP5/Yosys/ABC number was linearly converted to an A10 resource, percentage, or Fmax."
+  ],
+  "verification": {
+    "commands": [
+      "python3 -m json.tool fpga/opensynth/a3_correlation_data.json",
+      "git diff --check"
+    ],
+    "result": "pass",
+    "note": "A3 is an analytical report; no synthesis/compile was executed."
+  }
+}

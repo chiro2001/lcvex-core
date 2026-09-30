@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-041",
+  "label": "B25-JTAG-PREFLIGHT",
+  "title": "Freeze Catapult JTAG identity, cables and volatile rollback path",
+  "kind": "read-only-board-preflight",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "read-only-preflight-complete",
+  "assigned_owner": "codex-integrator",
+  "depends_on": ["T-20260906-035", "T-20260907-036"],
+  "base_sha": "689959472faf59844fb486834fad27f8fedb2ca6",
+  "branch": "verify/T-20260907-041-b25-jtag-preflight",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-041",
+  "writes": [
+    "build/agents/T-20260907-041/** ignored logs",
+    "docs/tasks/evidence/T-20260907-041.json",
+    "docs/handoffs/T-20260907-041-b25-jtag-preflight.md"
+  ],
+  "scope": "Read-only enumerate the exact board, JTAG ID 0x02E060DD, device text, programming and console cables, reference successful logs and known-good volatile recovery SOF hashes after T-035 releases GamePC.",
+  "validation": "Cross-check GamePC b2ffcc9 evidence, jtagconfig/cable output, Quartus device setting and user-confirmed physical board identity; no cable owner is stopped or changed.",
+  "acceptance": "An unambiguous target/cable/instance/rollback manifest exists for T-044, or the task remains WAIT with the exact human confirmation needed.",
+  "resource": "Acquire gamepc because hardware/JTAG enumeration must not overlap Quartus or another cable user. Return 75 means wait.",
+  "forbidden_regions": [
+    "remote file or process changes",
+    "starting/stopping jtagserver",
+    "quartus_pgm, SOF/JIC/EPCQ programming, terminal input, power or reset"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-07T03:09:38+08:00",
+    "agent_name": "codex-integrator"
+  },
+  "result": {
+    "jtag_id": "0x02E060DD",
+    "console_cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "console_device": 1,
+    "console_instance": 0,
+    "known_good_sof_sha256": "290AB3CFB18CFD6EE47E5A2BC9324E63882DE51D0AE5AC6C2688D7D6A2385F92",
+    "evidence": "docs/tasks/evidence/T-20260907-041.json",
+    "handoff": "docs/handoffs/T-20260907-041-b25-jtag-preflight.md"
+  },
+  "created_at": "2026-09-07T00:23:34+08:00",
+  "updated_at": "2026-09-07T03:14:43+08:00"
+}

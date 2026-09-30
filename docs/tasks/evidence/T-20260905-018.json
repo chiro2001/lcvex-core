@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-018",
+  "label": "R18-FP-ACC-KILL-CUT",
+  "state": "review",
+  "partial": false,
+  "acceptance_status": "owner_static_review_candidate_validation_pending",
+  "base_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "source_head_sha": "b212520cff8ecf896023a525047d088c189c015b",
+  "test_head_sha": "b212520cff8ecf896023a525047d088c189c015b",
+  "merge_sha": null,
+  "branch": "timing/T-20260905-018-r18-fp-acc-kill-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-018",
+  "batch_parent": "T-20260905-013",
+  "depends_on": [
+    "T-20260905-013",
+    "T-20260905-014"
+  ],
+  "cone_id": "R18-CORE-KILL-FP-ACC",
+  "timing_input": {
+    "source_task": "T-20260905-014",
+    "source_evidence_head_sha": "65843ee38751ce1077048d86d0d6034bdd9eabaa",
+    "reports_root": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-014/build/agents/T-20260905-014/runtime/downloaded",
+    "directional_reports": [
+      {
+        "label": "exmem_valid_to_acc",
+        "file": "t014_direction_exmem_valid_to_acc.rpt",
+        "sha256": "0dafc64ffae95f18651f73db275938c937831a72149262e365a2887b3ab1415d",
+        "paths": 50,
+        "worst_slack_ns": -0.410,
+        "logic_levels": 26
+      },
+      {
+        "label": "exmem_valid_to_acc_flags",
+        "file": "t014_direction_exmem_valid_to_acc_flags.rpt",
+        "sha256": "1411d0d3e4627381c4df9e9932f23506c81818e440b0d169d3a890e679d41f50",
+        "paths": 50,
+        "worst_slack_ns": -0.259,
+        "logic_levels": 26
+      },
+      {
+        "label": "exmem_wb_rd_to_acc",
+        "file": "t014_direction_exmem_wb_rd_to_acc.rpt",
+        "sha256": "15707f31ea0e748958492e298d5375e84c563b5e26f62e03738b7d9b2d6b91d2",
+        "paths": 50,
+        "worst_slack_ns": -0.054,
+        "logic_levels": 26
+      },
+      {
+        "label": "exmem_wb_rd_to_acc_flags",
+        "file": "t014_direction_exmem_wb_rd_to_acc_flags.rpt",
+        "sha256": "0b839a084a4dc09ac9461ecdf073b408b6e4c48757d73472fdfc17a2d2b08a37",
+        "paths": 50,
+        "worst_slack_ns": 0.097,
+        "logic_levels": 26
+      },
+      {
+        "label": "memwb_wb_rd_to_acc",
+        "file": "t014_direction_memwb_wb_rd_to_acc.rpt",
+        "sha256": "61a0aec73fd077cb7894f449457a6180806c6a36aba6fc6a921262b1fe1ee536",
+        "paths": 50,
+        "worst_slack_ns": 0.093,
+        "logic_levels": 24
+      },
+      {
+        "label": "memwb_wb_rd_to_acc_flags",
+        "file": "t014_direction_memwb_wb_rd_to_acc_flags.rpt",
+        "sha256": "1de75c9b12df87f9cb16ee978ba65d6f846dca6cde0b655e77278909167ffd6a",
+        "paths": 50,
+        "worst_slack_ns": 0.244,
+        "logic_levels": 24
+      },
+      {
+        "label": "slot_result_to_acc",
+        "file": "t014_direction_slot_result_to_acc.rpt",
+        "sha256": "a2d27d433177a36f019d3c598024fcd9b83986f8d73332e0d6afa8ade7bf1b2e",
+        "paths": 50,
+        "worst_slack_ns": 12.571,
+        "logic_levels": 3
+      }
+    ],
+    "old_control_chain": "exmem_valid|exmem_wb_rd|memwb_wb_rd -> core control -> fp_rsp_ready -> fp_exec.acc[*].ena",
+    "physical_claim": "none; next fresh STA only"
+  },
+  "implementation": {
+    "commit": "b212520cff8ecf896023a525047d088c189c015b",
+    "files": [
+      "rtl/lcvex_neon_fp.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv"
+    ],
+    "summary": "Kill clears wrapper ownership, response and slot capture but retains non-architectural acc/acc_flags; reset and next accepted request still initialize them.",
+    "semantic_invariants": {
+      "reset": "state TX_IDLE, rsp_r, acc, acc_flags and slot capture cleared",
+      "kill": "state TX_IDLE, req_r/rsp_r/slot capture cleared; acc and acc_flags retain dead payload",
+      "next_request": "req_valid && req_ready in TX_IDLE clears acc/acc_flags before TX_RUN",
+      "response": "rsp/rsp_valid and TX_DONE kill semantics unchanged",
+      "public_interface_modified": false,
+      "core_modified": false,
+      "scalar_datapath_modified": false,
+      "false_path_added": false,
+      "assertions_disabled": false
+    },
+    "source_sha256": "0c524fd8a6fa4f5ccc2ac740d5c3ea321a3b2428b9fdfc59398a58544d32bcb2",
+    "test_sha256": "1ab6d2730aabb1b9f4f7b675d66d9bbd809c3993ba5bd400879229dabe413ba5"
+  },
+  "test_update": {
+    "function": "kill_reissue_acc_state_probe",
+    "coverage": [
+      "TX_RUN slot_idx=1 kill after non-zero partial acc/acc_flags",
+      "TX_SLOT slot_idx=1 with slot_result_valid kill",
+      "TX_DONE held response kill",
+      "kill clears ownership/response and retains dead accumulator payload",
+      "accepted replacement request clears accumulator/flags before first slot",
+      "replacement four-slot FADD response is bit-exact and consumed once"
+    ],
+    "vectors": {
+      "operation": "NEON FADD.4S",
+      "operand_a": "3f800000 repeated four lanes",
+      "operand_b": "33800000 repeated four lanes",
+      "fpcr": "00400000",
+      "response": "3f800001 repeated four lanes",
+      "fpsr_flags": "00000010"
+    },
+    "sva": [
+      "kill in TX_RUN/TX_SLOT/TX_DONE |=> TX_IDLE, no rsp/slot capture, stable acc/acc_flags",
+      "accepted request |=> TX_RUN with acc=0 and acc_flags=0"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "owner-git-diff-check",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b212520cff8ecf896023a525047d088c189c015b",
+      "command": "git diff --check 586e8e9..b212520cff8ecf896023a525047d088c189c015b",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "owner-write-scope-review",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b212520cff8ecf896023a525047d088c189c015b",
+      "command": "git diff --name-only 586e8e9..b212520cff8ecf896023a525047d088c189c015b",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Only rtl/lcvex_neon_fp.sv and tb/sv/lcvex_fp_exec_tb.sv changed; forbidden core/scalar/QEMU/SDC/board regions untouched."
+    },
+    {
+      "run_id": "owner-static-safety-review",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "b212520cff8ecf896023a525047d088c189c015b",
+      "command": "manual RTL/test review against T-014 residual reports and T-018 acceptance",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Reset remains zero; kill releases ownership/response; next request initializes acc/acc_flags before TX_RUN; slot_result_r->acc path unchanged."
+    }
+  ],
+  "not_run": [
+    "Verilator and all SV directed binaries",
+    "Cocotb P7-1/P7-3/P7-4/P7-5",
+    "QEMU build, strict lockstep and L2",
+    "Quartus synthesis/fitter/signoff STA and new top-N",
+    "assembler, bitstream, JTAG, programming, power-on and board test"
+  ],
+  "known_limits": [
+    "Owner evidence is static only; integrator must run TX_RUN/TX_SLOT/TX_DONE probes on merged batch SHA.",
+    "No physical zero-path or timing improvement is claimed until fresh post-fit directional STA.",
+    "No board action is authorized."
+  ],
+  "policy": {
+    "active_json_modified": false,
+    "core_modified": false,
+    "fp_scalar_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "heavy_validation_run": false,
+    "generated_artifacts_created": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false,
+    "unknown_files_deleted": false
+  },
+  "handoff": "docs/handoffs/T-20260905-018-r18-fp-acc-kill-cut.md",
+  "next": "Integrator cherry-picks b212520c, merges the registered R18 lanes into one candidate, runs the affected L0-L2 union, then fresh physical synthesis/fitter/STA."
+}

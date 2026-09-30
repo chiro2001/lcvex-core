@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-030",
+  "base_sha": "acd08bc2d9198830bbc3b9376af90b19fbc6642d",
+  "head_sha": "acd08bc2d9198830bbc3b9376af90b19fbc6642d",
+  "merge_sha": "ec68bf7",
+  "candidate_status": "pass-local",
+  "qemu": {"release": "11.1.0", "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6", "parent_plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97"},
+  "rtl": {"source_sha": "acd08bc2d9198830bbc3b9376af90b19fbc6642d", "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb", "coordinator_kernel_sha256": "f948a6ab7a4a57ff95cda9d005f91e621e384711f3f30667067b2b9ff42f4946", "coordinator_kernel_nofp_sha256": "6919c670ea9db0221ed501d33bc7deac40e301f007ecac40c9798f8207ec8505"},
+  "resource": {"cpus": [2, 3, 4, 5], "mapping": {"lite_coord": 2, "lite_qemu": 3, "main_coord": 4, "main_qemu": 5}, "ratio_cap": 0.75, "memory_policy": "4 个单线程进程独占物理核"},
+  "runs": [
+    {"run_id": "owner-l4-lite-23m-001", "level": "L4", "command": "COORD_PIN=2 QEMU_PIN=3 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 lite resume", "cpuset": "2,3", "exit_code": 0, "result": "pass", "summary": "5M 全部 OK；child finalized；QEMU log 明确记录 Run /init as init process 与 LCVEX linux-lite /init ready。", "manifest_sha256": "52f97509fc35606943df686cf995c405d49489a085cb403f496351edff357152", "manifest_tsv_sha256": "cb7db3aef54d27bca3daa0948e2091999e208045dd78516b6f64ab4b98c4478a", "chain": "build/tmp/T-20260826-030/lite-23m/chain", "log": "build/agents/T-20260826-030/lite.log"},
+    {"run_id": "owner-l4-main-23m-001", "level": "L4", "command": "COORD_PIN=4 QEMU_PIN=5 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 main resume", "cpuset": "4,5", "exit_code": 0, "result": "pass", "summary": "5M 全部 OK；child finalized。", "manifest_sha256": "0092c80b476d101c3409d4b0bf6f329d2d50924b0b5a36c7c6f931c705eb269a", "manifest_tsv_sha256": "eb574a66c2085719c50054a1bb2c39c313acfd9c631529c3acdb7be9db0301fc", "chain": "build/tmp/T-20260826-030/main-23m/chain", "log": "build/agents/T-20260826-030/main.log"}
+  ],
+  "known_limits": ["这是最新 candidate 的本地 Gate E evidence，不等价于 Gate E 完成；CI run 仍需最终成功，且 main 用户态/EL0 稳定性仍需按口径审核。"]
+}

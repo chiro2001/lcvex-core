@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-042",
+  "label": "B25-QUARTUS-PHYSICAL",
+  "state": "blocked-synthesis",
+  "acceptance_status": "blocked-by-quartus-21.4-sv-port-default-errors",
+  "partial": true,
+  "task_base_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+  "dispatch_head_sha": "b0749a63c164a210239366738c43fa03b7e91e36",
+  "candidate_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+  "branch": "verify/T-20260907-042-b25-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-042",
+  "owner": "b25_physical",
+  "timestamps": {
+    "sent_at": "2026-09-07T09:28:00+08:00",
+    "received_at": "2026-09-07T09:28:00+08:00",
+    "remote_preflight_at": "2026-09-07T09:37:11.1609479+08:00",
+    "remote_probe_created_at": "2026-09-07T09:37:52.1479797+08:00",
+    "source_verify_at": "2026-09-07T09:43:30.1924404+08:00",
+    "synthesis_started_at": "2026-09-07T09:45:44.2552284+08:00",
+    "synthesis_finished_at": "2026-09-07T09:47:44.1189606+08:00",
+    "postflight_at": "2026-09-07T09:49:09.5595595+08:00",
+    "reported_at": "2026-09-07T09:55:30+08:00"
+  },
+  "source_identity": {
+    "candidate_tree_sha": "0c1404a8d25f163bd7d3d868d6587dd99649ffe5",
+    "dispatch_head_tree_sha": "8ce4912d922e532e38d518ff5905dd967526a40b",
+    "non_docs_diff_count": 0,
+    "physical_inputs_match_candidate": true,
+    "formal_rtl_count": 47,
+    "platform_rtl_count": 2,
+    "project_file_count": 3,
+    "canonical_manifest_count": 53,
+    "qsf_relative_alias_count": 47,
+    "candidate_manifest": {
+      "path": "build/agents/T-20260907-042/remote-sync/candidate_manifest.json",
+      "sha256": "d76a6d25df00391ab9544f2d03c2ca5542feb7f06ce3ab01f80a1a020ed1fb01",
+      "canonical_sha256": "0976333dfdc8c7d0923db8a5b40be13c83bd0aed983e15c5bb06195a3f38f24b"
+    },
+    "platform_payload_manifest": {
+      "path": "build/agents/T-20260907-042/remote-sync/platform_payload_manifest.json",
+      "sha256": "c253a950e7ab8925369807612e09c6950aca0b3cfea43e3ee4846c192e6ab03d",
+      "file_count": 75
+    },
+    "key_source_hashes": {
+      "rtl/lcvex_fp_scalar.sv": "0b4507aff958594214736ddcd92c3c18ebe2c6016ce5cfc857b0f22a87f355d5",
+      "rtl/lcvex_core.sv": "f27a5e6570171ccb0028d8945659fa92624d950810b030ef19cc1b9f45075434",
+      "rtl/lcvex_axi4_avalon_adapter.sv": "cf42b896828fe4b769b2b808e2ff5823981de7bd68b0ef6add1e93f0b39acaf4",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "512247879ae635ec764b8dfd545d28200628f608bbc3078c3e94d060730783ad",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_reset_gate.sv": "0d7b5732231bb919bd3e1011d21348f107b0843b35df6e48439fb21e294c7c33",
+      "fpga/catapult_a10/quartus/catapult_a10.qpf": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+      "fpga/catapult_a10/quartus/catapult_a10.qsf": "c82f9a7d6e9473d37ea8adcde125e3f327b3ccb8714fde7d4507d65963c42ba8",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f"
+    }
+  },
+  "boot_artifacts": {
+    "generator": {
+      "fpga/catapult_a10/boot/build.sh": {
+        "bytes": 2707,
+        "sha256": "3410974f09765982b8566fa143ea4f64732a6d7d14a4328120d6ea96e78bdc2d"
+      },
+      "fpga/catapult_a10/boot/bin_to_mif.py": {
+        "bytes": 6890,
+        "sha256": "2ebbf3968c495e96e3fcc51a02d51dafc2ea47b5ac9c76898d9d4681387bd67f"
+      }
+    },
+    "elf": {
+      "path": "fpga/catapult_a10/boot/build/boot.elf",
+      "bytes": 68832,
+      "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"
+    },
+    "bin": {
+      "path": "fpga/catapult_a10/boot/build/boot.bin",
+      "bytes": 957,
+      "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"
+    },
+    "hex": {
+      "path": "fpga/catapult_a10/boot/build/boot.hex",
+      "bytes": 2871,
+      "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"
+    },
+    "mif": {
+      "path": "fpga/catapult_a10/boot/build/boot.mif",
+      "bytes": 204942,
+      "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+      "width": 64,
+      "depth": 8192,
+      "records": 8192,
+      "tracked": false,
+      "generated": true,
+      "qsf_assignment": "set_global_assignment -name MIF_FILE \"../boot/build/boot.mif\"",
+      "remote_post_copy_sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7"
+    },
+    "build_log": {
+      "path": "build/agents/T-20260907-042/prep/boot-build.log",
+      "sha256": "8916210863f65db74f550be0438dd7eaf201d0c5409a456a9274a1268881f9a6"
+    }
+  },
+  "preparation": {
+    "static_checks": {
+      "check_platform": "pass files=50",
+      "check_skeleton_require_boot_image": "pass files=6; toolchain_missing_local_only",
+      "sha256sums": "pass 50/50",
+      "log": "build/agents/T-20260907-042/prep/static-closure.log",
+      "log_sha256": "aa58dc7784ff9238359bf993c41c7021e0133300d4908cd655ee36cf6bba185f"
+    },
+    "remote": {
+      "host": "192.168.101.5",
+      "hostname": "GAMEPC",
+      "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+      "device": "10AX115N4F40E3SG",
+      "probe": "D:/Projects/fpga-altra/lcvex/build/T-20260907-042-b25-physical",
+      "initial_probe_exists": false,
+      "initial_eda_count": 0,
+      "jtagserver_observed_only": "PID 5476",
+      "initial_free_physical_mib": 42428.0,
+      "initial_disk_d_free_bytes": 75438145536,
+      "preflight_log": "build/agents/T-20260907-042/prep/remote-preflight.lock.log",
+      "preflight_log_sha256": "d2e224a9e7b1742b18373cdd7000e0001982949c0367042e2463a92462833ea5"
+    },
+    "remote_source_verify": {
+      "candidate_entries": 53,
+      "qsf_alias_entries": 47,
+      "platform_entries": 75,
+      "hash_bad_count": 0,
+      "qsf_mif_assignment": true,
+      "qsf_mif_resolved": "D:/Projects/fpga-altra/lcvex/build/T-20260907-042-b25-physical/fpga/catapult_a10/boot/build/boot.mif",
+      "mif_contract": "WIDTH=64 DEPTH=8192 records=8192",
+      "preexisting_forbidden_artifacts": 0,
+      "preexisting_quartus_databases": 0,
+      "log": "build/agents/T-20260907-042/prep/remote-source-verify-script.lock.log",
+      "log_sha256": "670482568ba10036baefecb9629f2e131282ea5d6541c064614110a662794384"
+    }
+  },
+  "physical_runs": [
+    {
+      "stage": "synthesis",
+      "result": "fail",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis",
+      "lock_command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260907-042 b25_physical --meta stage=synthesis --meta source_sha=259188ac33322a74a8911c9c37edc6302f6d6169 -- ssh ... run_stage.ps1 -Stage synthesis",
+      "started_at": "2026-09-07T09:45:44.2552284+08:00",
+      "finished_at": "2026-09-07T09:47:44.1189606+08:00",
+      "wall_s": 119.863,
+      "exit_code": 3,
+      "quartus_pid": 13156,
+      "runtime_samples": 23,
+      "min_free_physical_mib": 34873.1,
+      "safety_stopped": false,
+      "pre_eda_count": 0,
+      "post_eda_count": 0,
+      "pre_free_physical_mib": 42364.0,
+      "post_free_physical_mib": 42320.4,
+      "ip_generation": {
+        "result": "pass",
+        "errors": 0,
+        "warnings": 6,
+        "warning_classification": "two passes each of Qsys clk_100, clk_266 and reset_controller Project Setting information does not match IP Variant file"
+      },
+      "synthesis": {
+        "result": "fail",
+        "errors": 8,
+        "warnings": 24,
+        "first_errors": [
+          "Error 17324 lcvex_fp_scalar.sv:48 invalid initialization in declaration (iter_kill)",
+          "Error 17324 lcvex_fp_scalar.sv:49 invalid initialization in declaration (iter_pause)",
+          "Error 17324 lcvex_fp_scalar.sv:6122 invalid initialization in declaration (kill)",
+          "Error 17324 lcvex_fp_scalar.sv:6123 invalid initialization in declaration (pause)",
+          "Error 13363 lcvex_fp_scalar.sv:6111 module lcvex_fp_scalar ignored due to previous errors",
+          "Error 13363 lcvex_fp_scalar.sv:6182 module lcvex_fp_divider ignored due to previous errors",
+          "Error 13363 lcvex_fp_scalar.sv:6254 module lcvex_fp_iter_sqrt ignored due to previous errors"
+        ],
+        "warning_classification": {
+          "16934": 4,
+          "16746": 1,
+          "16749": 19
+        },
+        "quartus_syn_peak_virtual_mib": 389
+      },
+      "wrapper_log": "build/agents/T-20260907-042/quartus/synthesis.lock.log",
+      "wrapper_log_sha256": "6074b7813cf94aec48f2f5a634533235190d9b3836175ed5b6f29c72ac236842",
+      "remote_stdout": "build/agents/T-20260907-042/quartus/synthesis-remote/quartus_synthesis.stdout.log",
+      "remote_stdout_sha256": "00d1f75bba167b6ae3676f386e95f2316c77601424e7fa862c5f80d5da9274aa",
+      "remote_stderr": "build/agents/T-20260907-042/quartus/synthesis-remote/quartus_synthesis.stderr.log",
+      "remote_stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52",
+      "flow_report": {
+        "path": "build/agents/T-20260907-042/quartus/synthesis-remote/output_files/catapult_a10.flow.rpt",
+        "sha256": "68db3bd9887f7ea8d4e183d6de64d46f0a27a3c38cedb1b85e1a84ca748d9014"
+      },
+      "syn_report": {
+        "path": "build/agents/T-20260907-042/quartus/synthesis-remote/output_files/catapult_a10.syn.rpt",
+        "sha256": "c2ebc7855cb2f98316ae2d38bf41f16276c7e8e5cfe08d921df6dde840e788b9"
+      },
+      "syn_summary": {
+        "path": "build/agents/T-20260907-042/quartus/synthesis-remote/output_files/catapult_a10.syn.summary",
+        "sha256": "3c5fc0cfbf5e45976cfe7a907bc03891ddbcc1e68e4560bf0972d533f3dedb2d"
+      }
+    },
+    {
+      "stage": "fitter",
+      "result": "not_run",
+      "reason": "first synthesis stage failed; task forbids retry or bypass"
+    },
+    {
+      "stage": "sta_signoff",
+      "result": "not_run",
+      "reason": "fitter was not run"
+    },
+    {
+      "stage": "custom_clock_bram_cdc_mif_reports",
+      "result": "not_run",
+      "reason": "no valid post-synthesis netlist/timing database"
+    }
+  ],
+  "timing_and_consumption": {
+    "sys_clk_25": {
+      "expected_period_ns": 40.0,
+      "status": "not_measured_sta_not_reached"
+    },
+    "qsys_clk_100_and_clk_y3": "not_measured_sta_not_reached",
+    "setup_hold_recovery_removal_min_pulse": "not_measured_sta_not_reached",
+    "fmax_mhz": "not_available",
+    "resources": "not_available_fitter_not_run",
+    "m20k_consumption": "not_available_fitter_not_run",
+    "mif_input": {
+      "status": "recognized_as_user_specified_memory_initialization_file",
+      "evidence": "catapult_a10.syn.rpt input file table includes ../boot/build/boot.mif",
+      "actual_consumption": "not_signed_off_synthesis_failed"
+    },
+    "t045_sdc_filters": {
+      "emif_reset_cpu_meta_q": "not_resolved_sta_not_reached",
+      "emif_poisoned_cpu_meta_q": "not_resolved_sta_not_reached",
+      "cpu_rst_emif_meta_q": "not_resolved_sta_not_reached"
+    }
+  },
+  "postflight": {
+    "remote_post_eda_count": 0,
+    "remote_forbidden_artifact_count": 0,
+    "remote_quartus_database_dirs_created_by_failed_run": 1,
+    "remote_quartus_database_dir": "D:/Projects/fpga-altra/lcvex/build/T-20260907-042-b25-physical/fpga/catapult_a10/quartus/output_files",
+    "remote_qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "remote_qsf_sha256": "c82f9a7d6e9473d37ea8adcde125e3f327b3ccb8714fde7d4507d65963c42ba8",
+    "remote_sdc_sha256": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f",
+    "remote_mif_sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+    "log": "build/agents/T-20260907-042/quartus/synthesis-postflight.lock.log",
+    "log_sha256": "209dbee367c4d8ef730450872f3e282310b6d24a077f4b4e795e51cef66219d3"
+  },
+  "corrections": [
+    {
+      "event": "remote_probe_create_syntax",
+      "result": "New-Item -LiteralPath unsupported on host; exit 1 before creation",
+      "correction": "used New-Item -Path under gamepc lock; fresh probe then created",
+      "physical_stage_started": false
+    },
+    {
+      "event": "platform_manifest_first_sync",
+      "result": "one metadata-only SCP was issued outside gamepc lock; no tool or Quartus action",
+      "correction": "same manifest recopied under gamepc lock; authoritative source verification used locked copy",
+      "physical_stage_started": false
+    },
+    {
+      "event": "read_only_source_diagnostics",
+      "result": "one direct SSH read-only debug query occurred outside gamepc lock; no write/tool/JTAG action",
+      "correction": "authoritative verifier transfer and execution were run under gamepc lock",
+      "physical_stage_started": false
+    },
+    {
+      "event": "source_verifier_compact_command",
+      "result": "initial encoded verifier command returned host-encoding/PowerShell parse output without changing probe",
+      "correction": "replaced by transferred verify_source.ps1; locked run passed with zero mismatches",
+      "physical_stage_started": false
+    }
+  ],
+  "policy": {
+    "rtl_modified": false,
+    "qemu_modified": false,
+    "qsf_or_sdc_modified": false,
+    "quartus_compatibility_patch_applied": false,
+    "stage_failure_retried": false,
+    "completed_stage_retried": false,
+    "fitter_or_sta_run": false,
+    "custom_reports_run": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_action": false,
+    "flash_or_persistent_write": false,
+    "unrelated_process_terminated": false,
+    "jtagserver": "observed-only PID 5476",
+    "final_resource_status": "local FREE; gamepc FREE"
+  },
+  "blockers": [
+    "Quartus Prime Pro 21.4 rejects SystemVerilog default values on input ports in the exact candidate rtl/lcvex_fp_scalar.sv; synthesis stopped with 8 errors.",
+    "A future run needs an explicitly authorized source/tool compatibility decision; this task did not patch the exact candidate and did not retry.",
+    "No fitter, signoff STA or custom reports exist, so B25 physical acceptance and T-043 handoff are not authorized by this evidence."
+  ],
+  "handoff": "docs/handoffs/T-20260907-042-b25-quartus-physical.md"
+}

@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-105",
+  "state": "done",
+  "base_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+  "head_sha": "dd4add4a80890c6084a45258fe7f8df5970668bc",
+  "handoff_sha": "66ce5a4fe95544d374e3f78ebce6bb6c22dc70d4",
+  "merge_sha": "72e026d15bc6e3c27d748dec11963f7385bf7307",
+  "branch": "verify/T-20260829-105-external-audit-run",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-105",
+  "sent_at": "2026-08-29T22:49:29+0800",
+  "received_at": "2026-08-29T22:49:29+0800",
+  "reported_at": "2026-08-29T23:14:51+0800",
+  "owner": "primary-external-auditor",
+  "model": "current-session",
+  "label": "external-audit-run",
+  "title": "按外部审计材料包执行独立静态审计",
+  "scope": "以 2edc757 为基线完成 01-09 静态审计；结果写入 docs/audit/external-results。用户调整口径后不再主动运行动态回归，动态项移交原开发 Agent。",
+  "finding_counts": {
+    "high": 1,
+    "medium": 6,
+    "low": 2,
+    "info": 0,
+    "total": 9
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "make": "4.4.1",
+    "qemu": "11.1.0",
+    "aarch64_linux_gnu_gcc": "16.1.0",
+    "aarch64_linux_gnu_objcopy": "GNU Binutils 2.47",
+    "aarch64_none_elf_gcc": "missing"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "claimed_patch_content_concat_sha256": "43095d343e8f80b0e145f0240f2f18663fb6be81e85222dd5add4cd0132c89af",
+    "observed_sorted_patch_content_concat_sha256": "33abdb70e02fbfd40b6fa784302c6f5ff25410960c97958cc1804f6070615c94",
+    "individual_patch_hashes": "all 12 values match docs/audit/02-reproducibility.md"
+  },
+  "rtl_filelist_sha256": "404108df9586747b6993e490fdda9d223112c0513041926f59d65cda499154c8",
+  "runs": [
+    {
+      "run_id": "t105-static-baseline-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "git rev-parse HEAD && git log/show/diff against T-104 material head, merge and T-099 Gate SHA",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "审计基线固定；T-104 actual head=4214a5e, merge=8e3bfb5；T-099 后有 core_wrap/l2_cluster 多核改动。"
+    },
+    {
+      "run_id": "t105-static-json-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "for f in $(rg --files docs/tasks | rg '\\.json$'); do jq -e . \"$f\" >/dev/null || exit 1; done",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "任务 JSON 语法均可解析；语义/时间线问题另见 EXT-01-001/002。"
+    },
+    {
+      "run_id": "t105-static-profile-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "python3 scripts/v82_profile_check.py --validate-manifest --summary",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "117 rows; implemented=94, blocked=1, deferred=13, shim=8, udef=1；摘要 ROR 文本陈旧见 EXT-04-001。"
+    },
+    {
+      "run_id": "t105-static-registry-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "make test-registry-check",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "22 项 schema 校验通过；清单完整性缺口见 EXT-05-004。"
+    },
+    {
+      "run_id": "t105-static-toolcheck-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "make toolcheck",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass-with-warning",
+      "summary": "固定工具版本和 QEMU base 匹配；警告缺 aarch64-none-elf-gcc，但实际 baremetal 使用 aarch64-linux-gnu 前缀，见 EXT-05-003。"
+    },
+    {
+      "run_id": "t105-static-platform-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PLATFORM_CHECK_PASS files=50。"
+    },
+    {
+      "run_id": "t105-static-skeleton-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "python3 fpga/catapult_a10/tools/check_skeleton.py",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass-with-known-limit",
+      "summary": "SKELETON_CHECK_PASS files=6；本机缺 quartus_sh/ip-generate/qsys-generate，与材料边界一致。"
+    },
+    {
+      "run_id": "t105-static-patch-hash-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "find qemu/patches -maxdepth 1 -type f -name '*.patch' -print0 | sort -z | xargs -0 cat | sha256sum",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "finding",
+      "summary": "observed=33abdb70...，不等于材料 claimed=43095d34...；见 EXT-02-001。"
+    },
+    {
+      "run_id": "t105-static-security-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "git grep -Il <redacted-secret-patterns>; git ls-tree -rl HEAD | check tracked files >= 5 MiB",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "未发现 private-key header、常见 token 形态或 >=5 MiB tracked 文件；扫描只输出文件名。"
+    },
+    {
+      "run_id": "t105-pre-scope-wrapper-001",
+      "runner_role": "auditor",
+      "level": "pre-scope-dynamic",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=600% /bin/bash -c '/usr/bin/time -v make compile'",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": 127,
+      "result": "infra-wrapper-fail",
+      "summary": "系统无 /usr/bin/time；Verilator 未启动，随后使用 shell 内建计时重跑。"
+    },
+    {
+      "run_id": "t105-pre-scope-compile-001",
+      "runner_role": "auditor",
+      "level": "pre-scope-dynamic",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=600% bash -o pipefail -c 'time make compile | tee build/audit-T-20260829-105/make-compile.log'",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "wall_seconds": 26.638,
+      "cpu_count": 6,
+      "cpuset": "CPUQuota=600%",
+      "peak_rss_mb": null,
+      "memory_limit_mb": 15360,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator lint PASS；reported allocated=386.906 MB。该运行发生在用户调整为静态优先之前。"
+    },
+    {
+      "run_id": "t105-pre-scope-test-001",
+      "runner_role": "auditor",
+      "level": "pre-scope-dynamic",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=600% bash -o pipefail -c 'time make VERILATOR_JOBS=6 test | tee build/audit-T-20260829-105/make-test.log'",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "cpu_count": 6,
+      "cpuset": "CPUQuota=600%",
+      "peak_rss_mb": null,
+      "memory_limit_mb": 15360,
+      "exit_code": 130,
+      "result": "aborted-on-scope-change",
+      "summary": "core smoke PASS 后在 backpressure build 开始时按用户新口径 Ctrl-C；无总体 PASS/FAIL，不得复用为回归证据。"
+    },
+    {
+      "run_id": "t105-pre-scope-platform-lint-001",
+      "runner_role": "auditor",
+      "level": "pre-scope-dynamic",
+      "command": "bash fpga/catapult_a10/tools/lint_platform.sh",
+      "source_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+      "exit_code": null,
+      "result": "inconclusive",
+      "summary": "生成 Verilator final report，但外层 30s 会话未取得脚本最终退出码；不用于审计结论。"
+    },
+    {
+      "run_id": "t105-result-docs-001",
+      "runner_role": "auditor",
+      "level": "static",
+      "command": "git diff --check; count findings/action rows; verify result write set; commit dd4add4",
+      "source_sha": "dd4add4a80890c6084a45258fe7f8df5970668bc",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "9 findings and 9 action rows；result commit only changes docs/audit/external-results/*.md。"
+    },
+    {
+      "run_id": "t105-integrator-static-001",
+      "runner_role": "integrator",
+      "level": "static",
+      "command": "python3 -m json.tool docs/tasks/{active,evidence}/T-20260829-105.json; git diff --check; verify 9 findings/action rows, artifact hashes and docs-only topic diff",
+      "source_sha": "72e026d15bc6e3c27d748dec11963f7385bf7307",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "结果分支 66ce5a4 已合入；功能目录无改动；未运行动态回归。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t105-findings",
+      "uri": "git:dd4add4a80890c6084a45258fe7f8df5970668bc:docs/audit/external-results/findings.md",
+      "sha256": "f7edaa7b114262da124d67791fee7245ba41799360405298d7b78068dca8806e",
+      "bytes": 15306,
+      "owner": "T-20260829-105",
+      "retain_until": "repository-history",
+      "reproduce": "git show dd4add4:docs/audit/external-results/findings.md | sha256sum"
+    },
+    {
+      "id": "t105-action-items",
+      "uri": "git:dd4add4a80890c6084a45258fe7f8df5970668bc:docs/audit/external-results/action-items.md",
+      "sha256": "d7e25029e58ec0d6c09a2ab1f045af2b0ae95a9ebf576d1a4b05a9e2fdff93e2",
+      "bytes": 4381,
+      "owner": "T-20260829-105",
+      "retain_until": "repository-history",
+      "reproduce": "git show dd4add4:docs/audit/external-results/action-items.md | sha256sum"
+    },
+    {
+      "id": "t105-results-readme",
+      "uri": "git:dd4add4a80890c6084a45258fe7f8df5970668bc:docs/audit/external-results/README.md",
+      "sha256": "95c2467c77b91c49537af2aa347af357f522abd7a583096a826fc99ec2e05b73",
+      "bytes": 2425,
+      "owner": "T-20260829-105",
+      "retain_until": "repository-history",
+      "reproduce": "git show dd4add4:docs/audit/external-results/README.md | sha256sum"
+    },
+    {
+      "id": "t105-compile-log",
+      "uri": "build/audit-T-20260829-105/make-compile.log",
+      "sha256": "8bbc7dfadbd1946d00212703a58c6270390e89ae231f3274ec786dee5f08a407",
+      "bytes": 469,
+      "owner": "T-20260829-105",
+      "retain_until": "task-integration",
+      "reproduce": "see run t105-pre-scope-compile-001"
+    },
+    {
+      "id": "t105-aborted-test-log",
+      "uri": "build/audit-T-20260829-105/make-test.log",
+      "sha256": "1073bbcd5379d7a0cd8bda29e098a02127a5ff5fbe2c4ee673e5f99992ec0d10",
+      "bytes": 23620,
+      "owner": "T-20260829-105",
+      "retain_until": "task-integration",
+      "reproduce": "do not reproduce as audit requirement; run was intentionally aborted and is not a regression result"
+    }
+  ],
+  "known_limits": [
+    "本轮最终口径为静态审计；没有以动态运行发现或确认 RTL bug。",
+    "make test 在用户调整口径后中止，exit 130，无总体结论。",
+    "未运行 Gate D、Quartus、远端实验、长 Linux、多核锁步、checkpoint v4 联合恢复或板测。",
+    "CDC finding 基于仓库 RTL/SDC；远端生成后 Quartus 约束与 Report CDC 未取得，需原 FPGA Agent 动态确认。",
+    "所有动态可选项列在 findings.md 第 6 节，必须另立任务并由原领域 Agent 执行。"
+  ],
+  "integrated_at": "2026-08-29T23:18:39+0800",
+  "integrator_review": {
+    "status": "accepted",
+    "result_sha": "dd4add4a80890c6084a45258fe7f8df5970668bc",
+    "handoff_sha": "66ce5a4fe95544d374e3f78ebce6bb6c22dc70d4",
+    "merge_sha": "72e026d15bc6e3c27d748dec11963f7385bf7307",
+    "dynamic_regression": "not run by integrator per user static-first instruction"
+  },
+  "next": "登记 EXT-05-003 优先修复及其余 action items；把 DYN-01..08 派回原开发 Agent。"
+}

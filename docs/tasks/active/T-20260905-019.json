@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-019",
+  "label": "R18-TIMING-BATCH",
+  "title": "Integrate and validate three R18 timing cuts",
+  "kind": "timing-batch-integration",
+  "priority": "critical",
+  "phase": "local-validation-done",
+  "dispatch_status": "ready-for-fresh-physical",
+  "assigned_owner": "codex-integrator",
+  "agent_type": "batch-integration",
+  "depends_on": ["T-20260905-016", "T-20260905-017", "T-20260905-018"],
+  "base_sha": "8d35b6d61669a7b61c8b2fb49e3665bf0e585db4",
+  "candidate_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "physical_source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "branch": "batch/T-20260905-019-r18",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-019",
+  "members": [
+    {"task": "T-20260905-016", "write_set": ["rtl/lcvex_core.sv", "tb/sv/lcvex_core_tb.sv", "sim/cocotb/test_core_syskill.py"], "goal": "remove sys_commit feedback into FP TX_DONE"},
+    {"task": "T-20260905-017", "write_set": ["rtl/lcvex_fp_scalar.sv", "tb/sv/lcvex_fp_scalar_r18_tb.sv"], "goal": "split pp_pre leading-one scan before pack_pre"},
+    {"task": "T-20260905-018", "write_set": ["rtl/lcvex_neon_fp.sv", "tb/sv/lcvex_fp_exec_tb.sv"], "goal": "remove kill clear enable from dead acc/acc_flags payload"}
+  ],
+  "timing_source": {
+    "task": "T-20260905-014",
+    "sys_clk_50": {"fmax_mhz": 43.0, "setup_slack_ns": -3.256, "tns_ns": -21736.217, "failing_endpoints": 18309},
+    "targets": [
+      {"cone": "idex_valid -> fp_exec.state.TX_DONE", "worst_slack_ns": -3.256, "paths": 50, "levels": 26},
+      {"cone": "pp_pre -> pack_pre", "worst_slack_ns": -2.103, "paths": 50, "levels": 59},
+      {"cone": "exmem_valid -> acc/acc_flags", "worst_slack_ns": -0.410, "paths": 50, "levels": 26}
+    ]
+  },
+  "scope": "Cherry-pick the three disjoint R18 RTL/test lanes, resolve only integration test assumptions, then run focused T-016/T-017/T-018 tests and the complete affected L0-L2 union on one exact candidate SHA. Only after functional acceptance create a fresh remote physical probe and measure top-N/directional results.",
+  "writes": [
+    "docs/tasks/active/T-20260905-019.json",
+    "docs/tasks/evidence/T-20260905-019.json",
+    "docs/handoffs/T-20260905-019-r18-timing-batch.md",
+    "integration-only test/registry changes required to run member tests"
+  ],
+  "forbidden_regions": [
+    "QEMU fork/plugin/reference results",
+    "QSF/SDC timing exceptions",
+    "assertion disable or expected-result weakening",
+    "assembler/bitstream/JTAG/programming/power-on/board test"
+  ],
+  "validation": {
+    "focused": "T-016 core +T016_SYSKILL and Cocotb; T-017 scalar R18 SV; T-018 FP wrapper kill/reissue",
+    "l0_l1": "registry/lint/core/backpressure/FIFO/MMU/IRQ/maintenance/FP direct/P7-1..5/muldiv plus corrected fetch-fault semantic selftest and expected-fail BFM",
+    "l2": "R17 A-F union including branch-fence base/cache/FIFO-off, semantic EC21+mem2, and full P7 strict matrices",
+    "physical": "fresh synthesis/fitter/signoff STA/top-N after exact-SHA L0-L2 green"
+  },
+  "acceptance": "All three focused lanes and the complete registered union pass on one exact SHA. New physical evidence must report whether each old cone is zero/moved and identify replacement top-N; no timing improvement is claimed from RTL structure alone.",
+  "resource": "One heavy local queue at CPU<=50%, MemoryMax=16G, MemorySwapMax=0, VERILATOR_JOBS=1. One remote Quartus job only after local release.",
+  "created_at": "2026-09-05T20:11:17+08:00",
+  "updated_at": "2026-09-05T22:24:39+08:00",
+  "local_validation": {
+    "result": "pass",
+    "focused": "R18 prescan + FP wrapper + T016 SV/Cocotb all pass",
+    "l0_l1": "registered union pass; T012 natural FP/data-MMU overlap blocked_cycles=3 consume=1 fp_commits=1 load_commits=1",
+    "expected_fail": "outer=2/program=1 at rtl/lcvex_core.sv:4765",
+    "l2": "A-F pass; 3400 strict commits plus protocol/semantic guards"
+  },
+  "evidence": "docs/tasks/evidence/T-20260905-019.json",
+  "handoff": "docs/handoffs/T-20260905-019-r18-timing-batch.md",
+  "board_policy": "No Quartus assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on or board test without explicit user permission."
+}

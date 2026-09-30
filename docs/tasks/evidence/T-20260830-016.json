@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-016",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "89fc19df46c8712eb0950706e55cf49c510f8a1c",
+  "head_sha": "bed62673957681454a53fea2d9576ffb63655a7b",
+  "branch": "feature/T-20260830-016-fpga-f3",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-016",
+  "scope": "FPGA-F3: attempt real B5 top bottom-up fit/STA/SOF using blackbox stubs + QDB import; blocked by A10 Qsys/IP generation and Soc-top glue elaboration memory.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-30T04:01:37+08:00",
+    "qdb_export": "2026-08-30T03:24:29+08:00",
+    "b5_top_synth_start": "2026-08-30T03:26:23+08:00",
+    "b5_top_synth_stop": "2026-08-30T03:57:07+08:00",
+    "soc_top_synth_start": "2026-08-30T03:58:14+08:00",
+    "soc_top_synth_stop": "2026-08-30T03:59:39+08:00",
+    "documents_written_at": "2026-08-30T04:00:00+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-016",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "original_modified": false,
+    "license_read": false,
+    "full_flow_started": false
+  },
+  "toolchain": {
+    "quartus_syn": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+    "quartus_cdb": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_cdb.exe",
+    "quartus_sh": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe",
+    "monitor_script": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-016\\run_quartus_monitor.ps1"
+  },
+  "qdb_assets": [
+    {
+      "file": "core_nofp.qdb",
+      "bytes": 11711328,
+      "source": "build/T-20260830-008/core_nofp"
+    },
+    {
+      "file": "l1_d_wb.qdb",
+      "bytes": 30808645,
+      "source": "build/T-20260830-008/l1_d_wb"
+    },
+    {
+      "file": "l2_wb_reduced.qdb",
+      "bytes": 34968602,
+      "source": "build/T-20260830-008/l2_wb_reduced"
+    },
+    {
+      "file": "soc_coh_reduced.qdb",
+      "bytes": 73156371,
+      "source": "build/T-20260830-008/soc_coh_reduced"
+    },
+    {
+      "file": "axi4_master.qdb",
+      "bytes": 442397,
+      "source": "build/T-20260830-008/axi4_master"
+    },
+    {
+      "file": "axi4_avalon_adapter.qdb",
+      "bytes": 5371161,
+      "source": "build/T-20260830-008/axi4_avalon_adapter"
+    },
+    {
+      "file": "soc_axi.qdb",
+      "bytes": 330730,
+      "source": "build/T-20260830-008/soc_axi"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-qdb-export-001",
+      "result": "pass",
+      "command": "quartus_cdb <module> -c <module> --export_partition root_partition --snapshot synthesized --file build/T-20260830-016/qdb/<module>.qdb",
+      "summary": "Exported 7 real module QDBs to T-20260830-016/qdb."
+    },
+    {
+      "run_id": "owner-root-qdb-import-map-002",
+      "result": "pass",
+      "command": "rqdb_src root_partition export; rqdb_imp blackbox synth; import rootchild.qdb as partition child",
+      "summary": "Confirmed root_partition QDB can be imported into a differently named partition."
+    },
+    {
+      "run_id": "owner-b5top-synth-003",
+      "result": "blocked_ip_generation",
+      "command": "quartus_syn b5_top (A10 top with blackbox stubs)",
+      "wall_s": 1223,
+      "peak_pm_mb": 21378,
+      "summary": "Ran >20 min; log stuck at Qsys-generate alt_sld_fab_0; no synthesis completion; manually killed."
+    },
+    {
+      "run_id": "owner-soctop-synth-004",
+      "result": "blocked_memory",
+      "command": "quartus_syn soc_top_bu (SoC top with blackbox stubs, no platform IP)",
+      "wall_s": 85,
+      "peak_pm_mb": 31314,
+      "summary": "Hit 30GB monitor kill; SoC top glue elaboration still consumes >30GB even with heavy children stubbed."
+    }
+  ],
+  "blocker": {
+    "b5_top": "A10 top project stalled in Qsys/SLD IP generation for >20 minutes, peak 21.4GB; did not reach fit/import/STA.",
+    "soc_top": "SoC-only blackbox stubs still caused >30GB memory in 85 seconds; killed before completion.",
+    "status": "no_fit_no_sta_no_sof"
+  },
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-016-fpga-f3.md",
+      "sha256": "10a707b07a63f938f3971aff74a5ded071b8b155419b8876c337dc96291572fc",
+      "bytes": null,
+      "owner": "T-20260830-016",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-016-fpga-f3.md"
+    },
+    {
+      "id": "b5-top-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-016\\b5_top",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-016",
+      "retain_until": "task-close",
+      "reproduce": "A10 blackbox stub QSFP and logs"
+    },
+    {
+      "id": "soc-top-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-016\\soc_top_bu",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-016",
+      "retain_until": "task-close",
+      "reproduce": "SoC-only blackbox stub project and memory samples"
+    },
+    {
+      "id": "qdb-dir",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-016\\qdb",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-016",
+      "retain_until": "task-close",
+      "reproduce": "All exported module QDBs"
+    }
+  ],
+  "known_limits": [
+    "No fit/STA/SOF produced.",
+    "T-067 remains blocked.",
+    "Real B5 top glue elaboration still too heavy; Qsys/IP generation also blocked on fresh A10 project.",
+    "No original QSF/SDC/RTL modified; no license read; no traditional full-flow synthesis started."
+  ],
+  "status": "blocked",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.received_at",
+        "old": "2026-08-30T09:00:00+08:00",
+        "new": "2026-08-30T04:01:37+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-016-fpga-f3.md",
+        "sha256": "10a707b07a63f938f3971aff74a5ded071b8b155419b8876c337dc96291572fc",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

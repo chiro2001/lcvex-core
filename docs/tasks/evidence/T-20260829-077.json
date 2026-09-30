@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-077",
+  "state": "done",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "head_sha": "5ed0c555a870d0e3f0180126c925319738481b1b",
+  "branch": "feature/T-20260829-077-d0-mc-diff-feasibility",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-077",
+  "sent_at": "2026-08-29T01:47:44+0800",
+  "received_at": "2026-08-29T01:52:00+0800",
+  "reported_at": "2026-08-29T01:52:00+0800",
+  "task_line": "D0 (LCVX-DIFF-MC-v2 feasibility)",
+  "scope": "Multi-core differential protocol feasibility; v2 envelope; v1 compatibility; QEMU 11.1.0 multi-vCPU plugin callback capability; two-core minimal sequence or fallback; checkpoint minimal extension.",
+  "d0_verdict": {
+    "v1_compatible": true,
+    "can_distinguish_cores": true,
+    "has_official_per_core_after_retirement_callback": false,
+    "per_core_commit_derivable": "partial",
+    "stock_single_thread_token_scheduler": "not possible with stock plugin",
+    "mttcg_token_scheduler_feasible": "in principle",
+    "recommended_path": "reference-model + litmus fallback for first version"
+  },
+  "qemu_probe": {
+    "method": "read-only source audit; no shared QEMU execution, no socket/checkpoint writes",
+    "qemu_version": "11.1.0",
+    "qemu_release_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_fork_branch": "lcvex-step-hook",
+    "qemu_fork_commit": "ccd819d",
+    "audited_paths": [
+      "include/plugins/qemu-plugin.h",
+      "plugins/api.c",
+      "plugins/core.c",
+      "plugins/system.c",
+      "accel/tcg/plugin-gen.c",
+      "accel/tcg/tcg-accel-ops-rr.c",
+      "accel/tcg/tcg-all.c",
+      "target/arm/tcg/lcvex-difftest.c",
+      "include/exec/lcvex-difftest.h",
+      "qemu/plugins/lcvex_difftest.c",
+      "qemu/plugins/lcvex_protocol.h"
+    ],
+    "findings": [
+      "All vCPU plugin callbacks pass vcpu_index; qemu_info_t exposes smp_vcpus/max_vcpus.",
+      "qemu_plugin_register_vcpu_insn_exec_cb is before-instruction (PLUGIN_GEN_FROM_INSN); no public after-instruction retirement callback.",
+      "Memory callbacks report successful accesses after the access; faulting accesses are absent.",
+      "Single-thread RR uses one shared host thread for all vCPUs; a plugin blocking in a callback blocks all vCPUs and cannot be used as a per-vCPU token scheduler.",
+      "MTTCG thread=multi gives per-vCPU host threads, enabling in-principle token scheduling, but is incompatible with -icount.",
+      "Current lcvex_difftest.c is hardcoded to single-vCPU global pending/store state and needs per-core state for v2."
+    ]
+  },
+  "v2_design": {
+    "envelope_fields": [
+      "version",
+      "core_id",
+      "global_seq",
+      "vcpu_seq",
+      "event_kind",
+      "flags",
+      "commit"
+    ],
+    "new_message_types": "32..42 (MC_INIT/MC_PRE/MC_GO/MC_COMMIT/MC_ACK/MC_ASYNC/MC_WAIT/MC_WAIT_RESUME/MC_STOP/MC_DISCON/MC_EXIT)",
+    "v1_compatibility_rule": "v1 header/message/trace/checkpoint formats unchanged; v2 uses new payload envelope, does not reinterpret v1 fields.",
+    "event_boundaries": [
+      "PRE is execution-before and must never be called after-retirement.",
+      "COMMIT is derived from next same-core before callback or async/idle boundary, not an official after-retirement event.",
+      "ASYNC covers IRQ/FIQ and WFI wake synthesis.",
+      "STOP is termination only."
+    ],
+    "two_core_sequence": "Provided as canonical v2 sequence; not claimed as already executed under stock QEMU."
+  },
+  "checkpoint_min_extension": [
+    "per-core GPR/PSTATE/system/timer",
+    "per-core L1 metadata/data",
+    "shared L2/directory state and dirty owner",
+    "pending probes/transactions",
+    "per-core GICC + shared GICD/IPI/event",
+    "global scheduling token",
+    "per-core protocol pending and vcpu_seq watermark",
+    "separate v2 manifest to preserve legacy manifest readability"
+  ],
+  "files": [
+    "docs/LCVX_DIFF_MC_V2.md",
+    "docs/handoffs/T-20260829-077-d0-mc-diff-feasibility.md",
+    "docs/tasks/evidence/T-20260829-077.json"
+  ],
+  "tests": [
+    {
+      "cmd": "git diff --check",
+      "exit": 0,
+      "result": "pass",
+      "summary": "No whitespace errors in staged/unstaged changes."
+    },
+    {
+      "cmd": "python3 -m json.tool docs/tasks/evidence/T-20260829-077.json",
+      "exit": 0,
+      "result": "pass",
+      "summary": "Evidence JSON is valid."
+    },
+    {
+      "cmd": "read-only QEMU source audit",
+      "exit": 0,
+      "result": "pass",
+      "summary": "Static probe of QEMU 11.1.0 plugin API and TCG scheduler; no QEMU executed, no shared artifacts modified."
+    }
+  ],
+  "blockers": [
+    "Official QEMU TCG plugin API has no generic per-vCPU after-retirement callback.",
+    "Stock single-thread RR + plugin cannot force per-vCPU token scheduling; no public vCPU yield API.",
+    "MTTCG token path is feasible only with significant plugin/coordinator rework and cannot coexist with -icount.",
+    "Multi-core checkpoint sidecars and v2 manifest are designed but not implemented.",
+    "Shared-memory model/linearization and litmus outcome set are not frozen."
+  ],
+  "known_limits": [
+    "No claim that multi-core RTL is implemented.",
+    "No claim that QEMU multi-vCPU per-core retirement is supported.",
+    "No claim that Linux SMP or full ARM memory model is verified.",
+    "Two-core sequence is canonical/normative, not an executed end-to-end result."
+  ],
+  "next": "Integrator review; if accepted, C1 can proceed with reference-model/litmus fallback; later serial QEMU fork task if strict lockstep is required.",
+  "report_head_sha": "0c48cc28d458a2efe8d65bffa6557326e794233a",
+  "merge_sha": "9e528232f0d760e15f78731842fd266b848f637f",
+  "integrator_review": {
+    "received_at": "2026-08-29T01:57:30+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "b8c99f69914fa304b3d48cd79ed2a047cd2d6cf8",
+    "implementation_sha": "5ed0c555a870d0e3f0180126c925319738481b1b",
+    "notes": "D0 可行性结论清晰：v1 兼容、可区分核、无官方 after-retirement、推荐 reference-model/litmus fallback。C1 可按 fallback 推进；后续如需 strict lockstep 另立串行 QEMU fork 任务。",
+    "merge_sha": "9e528232f0d760e15f78731842fd266b848f637f",
+    "result_sha": "5ed0c555a870d0e3f0180126c925319738481b1b"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "9e528232f0d760e15f78731842fd266b848f637f",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "5ed0c555a870d0e3f0180126c925319738481b1b",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

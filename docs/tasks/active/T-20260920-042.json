@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-042",
+  "parent": "T-20260920-039",
+  "label": "B25-BRAM-CORE-MICROBENCH-COREMARK",
+  "title": "Implement the BRAM-resident CPU correctness microbench and CoreMark port",
+  "kind": "feature-verification",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-038"],
+  "base_sha": "5b9833ead9ad5027d1c98fd6a0f69a0d0d2b1784",
+  "branch": "feature/T-20260920-042-b25-bram-coremark",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-042",
+  "writes": [
+    "fpga/catapult_a10/boot/**",
+    "fpga/catapult_a10/coremark/**",
+    "rtl/lcvex_catapult_soc_pkg.sv and exact PLAT_STATUS cycle-counter region only if required",
+    "rtl/lcvex_catapult_soc_top.sv exact cycle-counter/status wiring region only if required",
+    "rtl/lcvex_l1_d_wb.sv exact simultaneous probe/upstream ready arbitration region",
+    "tb/sv exact status/cycle-counter and B25 SoC microbench regions",
+    "tb/sv/lcvex_l1_d_wb_tb.sv exact simultaneous probe/upstream acceptance test",
+    "fpga/catapult_a10/tools microbench build/check runners",
+    "scripts/test_registry.json and Makefile task-specific entries",
+    "docs/handoffs/T-20260920-042-b25-bram-coremark.md",
+    "docs/tasks/evidence/T-20260920-042.json"
+  ],
+  "reads": [
+    "sim/microbench/** existing host/simulation workloads",
+    "docs/B25_POST_BRINGUP_MICROBENCH_PLAN.md",
+    "docs/tasks/evidence/T-20260920-037.json",
+    "official pinned EEMBC CoreMark release"
+  ],
+  "scope": "Add t/v/c monitor commands, deterministic signatures, an offline-vendored official CoreMark port and a trustworthy 25 MHz cycle measurement. Preserve p/?/m/d/echo and the 64 KiB image/stack contract.",
+  "validation": {
+    "L0": ["official CoreMark seed/CRC and license/provenance checks", "ELF section/range and BIN/HEX/MIF equality", "disassembly and parser fixtures"],
+    "L1": ["directed microbench result/signature tests", "cycle counter reset/read-only/monotonic tests if added", "negative validity and timeout tests"],
+    "L2": ["full B25 SoC from PC=0 executes t and v from the same image and returns to monitor"],
+    "L3": [],
+    "L4": []
+  },
+  "acceptance": "Correctness suite and CoreMark short validation pass from one 64 KiB image; standard c mode computes score only from a monotonic 25 MHz cycle source and enforces official CRC/seed plus >=10 seconds; affected L0-L2 and existing monitor commands pass.",
+  "forbidden_regions": [
+    "DDR dependency for t/v/c working data",
+    "host wall time as CoreMark timer",
+    "network download during normal build",
+    "claiming a valid score from short self-check",
+    "disabling assertions or changing expected CRC"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T22:26:56+08:00",
+    "agent_name": "root",
+    "model": "main-agent current session",
+    "monitoring": "direct local implementation; no GamePC or hardware access"
+  },
+  "completion": {
+    "topic_head": "2ae61df49195046b5c726900d0ae336bcffb66d7",
+    "implementation_head": "84bebb3f66a80900940dffaf3bcd30b70a7c3a91",
+    "merged_code_sha": "06565f0484d204da7cedb31b70f17b24868b26e7",
+    "merged_l0": "PASS reproducible build, host oracle, parser negatives and port audit",
+    "merged_l1": "PASS lcvex_l1_d_wb_tb operations=11 accepted=66",
+    "merged_l2": "PASS full B25 SoC t/v and transcript parsers",
+    "completed_at": "2026-09-20T23:33:02+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260920-042-b25-bram-coremark.md",
+  "evidence": "docs/tasks/evidence/T-20260920-042.json",
+  "created_at": "2026-09-20T21:35:43+08:00",
+  "updated_at": "2026-09-20T23:33:02+08:00"
+}

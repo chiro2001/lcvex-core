@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-003",
+  "label": "GOLDEN-VEXRISCV-LIVE-JTAG-UART",
+  "state": "blocked-current-golden-kernel-no-shell",
+  "acceptance_status": "direct-connect-and-target-output-pass-current-shell-interaction-not-reached",
+  "partial": true,
+  "source_sha": "40e3594d68fc08a29a0e965845b06c9bb93d7bc3",
+  "branch": "verify/T-20260920-003-golden-vexriscv-live-uart",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-003",
+  "owner": "root",
+  "authorization": {
+    "user_statement": "目前Flash中存储的是成功启动的vexriscv（a10-linux-riscv），可以添加一个任务，看如何用当前的设备进行串口交互。直接使用这个命令行即可读取和交互。",
+    "direct_command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "excluded": [
+      "quartus_pgm or FPGA reconfiguration",
+      "JIC/EPCQ/Flash write or erase",
+      "power cycle or board/SoC reset",
+      "starting or stopping a JTAG server",
+      "stopping unknown or pre-existing processes"
+    ]
+  },
+  "current_device": {
+    "cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "device_index": 1,
+    "device_id": "0x02E060DD",
+    "device_name": "10AT115S(1|2)",
+    "design_hash": "193DE4BC8A30F3ED5F1F",
+    "nodes": [
+      "00406E00 Virtual JTAG #0",
+      "30006E00 Signal Tap #0",
+      "0C006E00 JTAG UART #0",
+      "0C206E00 JTAG PHY #0"
+    ]
+  },
+  "live_observation": {
+    "first_direct_attempt": {
+      "started_at": "2026-09-20T01:44:53+08:00",
+      "finished_at": "2026-09-20T01:44:54+08:00",
+      "result": "No matching JTAG UART was initially enumerated; terminal exited naturally."
+    },
+    "enumeration_refresh": {
+      "finished_at": "2026-09-20T01:46:42+08:00",
+      "result": "Read-only jtagconfig -n exposed JTAG UART #0 without restarting jtagserver or reconfiguring the FPGA."
+    },
+    "connected_session": {
+      "started_at": "2026-09-20T01:46:53+08:00",
+      "finished_at": "2026-09-20T01:59:24+08:00",
+      "connected": true,
+      "terminal_identity_match": true,
+      "target_output": "PASS; received the running VexRiscv Linux log from kernel command line through riscv-plic initialization",
+      "observed_kernel_command_line": "earlycon=sbi console=ttyJ0 rdinit=/init unaligned_scalar_speed=slow keep_bootcon",
+      "observed_clock": "riscv_clocksource 50 MHz",
+      "observed_memory": "252112K/258048K available",
+      "last_line": "riscv-plic: plic@c000000: mapped 32 interrupts with 1 handlers for 1 contexts.",
+      "input": "A newline and echo T20260920_003_GOLDEN_RX_OK were transmitted once after the log remained quiet.",
+      "input_result": "No input echo, marker output, /init line or shell prompt arrived before the bounded observation ended.",
+      "exit": "Ctrl-C stopped only the task-owned nios2-terminal; remote command exit 0."
+    },
+    "short_reconnect": {
+      "started_at": "2026-09-20T02:00:25+08:00",
+      "finished_at": "2026-09-20T02:01:41+08:00",
+      "result": "Connected to the same device/instance, but no target output or response to T20260920_003_GOLDEN_RX_RECONNECT_OK was observed; task-owned terminal was stopped with Ctrl-C."
+    },
+    "classification": "The direct command and target-to-host JTAG-UART path work. The currently running golden CPU did not reach an interactive shell during this bounded no-reset observation, so this run cannot establish current host-to-target shell input."
+  },
+  "historical_success_control": {
+    "source_script": "D:/Projects/fpga-altra/a10-linux-riscv/build/console_tx.ps1",
+    "source_transcript": "D:/Projects/fpga-altra/a10-linux-riscv/build/console_tx.txt",
+    "method": "Start-Process nios2-terminal with the same cable/device/instance, ordinary-file RedirectStandardInput and --quit-after=20",
+    "input": "echo SIM_TTY_OK012345 followed by LF",
+    "observed": [
+      "command echo: echo SIM_TTY_OK012345",
+      "command output: SIM_TTY_OK012345",
+      "subsequent prompt: vex #",
+      "nios2-terminal user timeout and exit 0"
+    ],
+    "conclusion": "The exact host tool path has a recorded successful bidirectional interaction when the golden Linux instance has reached its shell."
+  },
+  "operational_finding": {
+    "symptom": "After a nios2-terminal exits, the next direct attempt or first jtagconfig scan can temporarily show no JTAG UART even though FPGA device 0x02E060DD remains visible.",
+    "non_destructive_recovery_observed": "Allow the existing standard server to rescan with read-only jtagconfig -n; after a short delay a subsequent scan exposed JTAG UART #0, without restarting PID 5640.",
+    "final_node_state": "At 2026-09-20T02:02:37+08:00 JTAG UART #0 was visible, standard jtagserver PID 5640 remained alive and no nios2-terminal process remained."
+  },
+  "artifacts": {
+    "root": "build/agents/T-20260920-003/direct-session",
+    "initial_direct": {"path": "console.typescript", "bytes": 901, "sha256": "e98bec61cdae799671022b492d390ed00098d483e377d9e1500ddb7ea38ee31b"},
+    "node_enumeration": {"path": "jtag-enumeration.typescript", "bytes": 1137, "sha256": "50f9745c032b0961c7b2bddf4ac95da9ff9a6ff78801c427a0e3cf38e70c5ef2"},
+    "connected_console": {"path": "console-after-refresh.typescript", "bytes": 2859, "sha256": "13cd14e0c04bf44606fc3e3210133b70a7a3ced04d6ef56ac0a9f8b9f15ff988"},
+    "short_reconnect": {"path": "console-reconnect.typescript", "bytes": 1064, "sha256": "90c7c029b496f89e190a4a487ad211e863acf7fb984b770079d4803acf353166"},
+    "historical_control": {"path": "historical-console.typescript", "bytes": 2036, "sha256": "8a67ba948a89cbf219c87e4b204669632677b3af07725adf2b6154c133935c58"},
+    "final_node_state": {"path": "final-node-state.typescript", "bytes": 1164, "sha256": "99e2f3d9f804f2a5161a006531b336ccd11a06cbe48653c9c4458db6de9ac01a"}
+  },
+  "safety_and_resources": {
+    "all_gamepc_actions_held_resource_lock": true,
+    "quartus_programmer_or_configuration": false,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "custom_server_started": false,
+    "standard_server_pid": 5640,
+    "standard_server_preserved": true,
+    "unknown_or_preexisting_process_stopped": false,
+    "task_owned_terminals_stopped": true,
+    "residual_terminal": false,
+    "final_resource_status": "gamepc FREE"
+  },
+  "blocker": "The current golden VexRiscv Linux instance emitted kernel output but did not advance past the observed PLIC initialization to /init or vex # during the bounded no-reset session.",
+  "handoff": "docs/handoffs/T-20260920-003-golden-vexriscv-live-uart.md",
+  "next": "Keep the current board untouched. Continue T-20260920-001 locally. A fresh golden boot with terminal attached from the start would require separate reset/power-cycle authorization outside this goal's safety boundary."
+}

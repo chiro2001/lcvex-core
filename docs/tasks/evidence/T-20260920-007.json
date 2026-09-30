@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-007",
+  "label": "B25-RX-OBSERVABILITY-FRESH-PHYSICAL",
+  "state": "done",
+  "acceptance_status": "fresh-synthesis-fitter-sta-and-custom-physical-pass",
+  "partial": false,
+  "candidate_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+  "candidate_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+  "gate_d_parent_sha": "85992f53c850091a466836e7fd4424dde6000484",
+  "branch": "verify/T-20260920-007-b25-rx-observability-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-007",
+  "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260920-007-b25-rx-observability-fresh-physical",
+  "owner": "root",
+  "timestamps": {
+    "preflight_at": "2026-09-20T04:29:58+08:00",
+    "synthesis_started_at": "2026-09-20T04:33:00+08:00",
+    "synthesis_finished_at": "2026-09-20T04:42:18+08:00",
+    "fitter_started_at": "2026-09-20T04:43:03+08:00",
+    "fitter_finished_at": "2026-09-20T05:00:15+08:00",
+    "sta_started_at": "2026-09-20T05:00:51+08:00",
+    "sta_finished_at": "2026-09-20T05:01:25+08:00",
+    "custom_acceptance_started_at": "2026-09-20T05:02:27+08:00",
+    "custom_acceptance_finished_at": "2026-09-20T05:05:35+08:00",
+    "ucp_contract_finished_at": "2026-09-20T05:15:24+08:00",
+    "final_audit_at": "2026-09-20T05:22:51+08:00",
+    "reported_at": "2026-09-20T05:23:11+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "profile_boundary": {
+    "a64_fp_simd": 0,
+    "profile_task": "T-20260920-008",
+    "profile_implementation_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+    "purpose": "Fast board feedback for the instrumented PC=0 -> polling JTAG-UART -> DDR diagnostic path.",
+    "limit": "This proves the scalar no-FP bring-up profile only and does not replace full-FP/P7 release closure."
+  },
+  "source_identity": {
+    "files": 174,
+    "qsf_references": 50,
+    "stage_manifest": {
+      "path": "build/agents/T-20260920-007/sync/stage-manifest.json",
+      "bytes": 41031,
+      "sha256": "75865515873a507be875c04eb8535243ad849374faca290f469608d720e2a3b5"
+    },
+    "stage_archive": {
+      "path": "build/agents/T-20260920-007/sync/stage-v2.tar.gz",
+      "bytes": 770772,
+      "sha256": "351fada3e030510e48366a83996445438aae2e9a296e2718be1ddca9cf010a28"
+    },
+    "board_top_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+    "m20k_rtl_sha256": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+    "soc_pkg_sha256": "0842fa8a60abde25b3f6a5aebb7045d182ffe37197a1dcb288713841aa46e972",
+    "soc_top_sha256": "736b0f76128c1a6c04f67c342df45371a330a5a4921c7c7ce3988fed5bc13b03",
+    "boot_source_sha256": "4fb0ef46f4ecc69e9bf439fcba1279b0e18dd6598123696d6fd33bc8cd1f35a1",
+    "input_verification": "Pre-synthesis, post-synthesis, post-fitter, post-STA, post-acceptance and final checks all PASS 174/174 with input_bad_count=0. QSF and Qsys_bb differ only by accepted LF normalization.",
+    "freshness": "The remote root did not exist before T-007 and contained no synthesis/fitter database or forbidden configuration artifact before source extraction."
+  },
+  "boot_image": {
+    "elf": {
+      "bytes": 69392,
+      "sha256": "3df5c4fb5bb0aa74cca815fb3b3a0707ca49b0310e3e56a00d4a79199e3be6b2"
+    },
+    "bin": {
+      "bytes": 1204,
+      "sha256": "7d8cf878785aebf699cbb3d332df2d3c7e03f1b5045a2a1080771cc0310322d4"
+    },
+    "hex": {
+      "bytes": 3612,
+      "sha256": "e24afca92f89312598f6627b928c0869b8361b2704608ccd7d792392e4598e3c"
+    },
+    "mif": {
+      "bytes": 204942,
+      "sha256": "491f30c491f034f52b5222c7b8831f9b234b1d8bc7a84cf6180697bf78655c90",
+      "width": 64,
+      "depth": 8192,
+      "records": 8192
+    }
+  },
+  "stage_runs": [
+    {
+      "stage": "synthesis",
+      "status": "PASS",
+      "quartus_elapsed": "00:07:01",
+      "wrapper_elapsed": "00:09:18",
+      "errors": 0,
+      "warnings": 235,
+      "peak_virtual_memory_mib": 3806,
+      "estimated_alms": 79606,
+      "registers": 79269,
+      "block_memory_bits": 247316,
+      "dsp_blocks": 21,
+      "report": {
+        "path": "build/agents/T-20260920-007/reports/synthesis/catapult_a10.syn.rpt",
+        "bytes": 2735904,
+        "sha256": "9f635de045042cdfaf16eef90b139ea1aba63f10749a7343a9f2bdb477e3cbc5"
+      },
+      "summary_sha256": "21f7843447a1c132076358b58d2a9d83f188518da11de0736692164d0328d18c",
+      "audit": "SYNTHESIS_AUDIT_PASS"
+    },
+    {
+      "stage": "fitter",
+      "status": "PASS",
+      "quartus_elapsed": "00:16:57",
+      "wrapper_elapsed": "00:17:12",
+      "errors": 0,
+      "warnings": 12,
+      "peak_virtual_memory_mib": 11139,
+      "resources": {
+        "alms": "74,583 / 427,200 (17%)",
+        "registers": 80544,
+        "pins": "141 / 826 (17%)",
+        "ram_blocks": "121 / 2,713 (4%)",
+        "block_memory_bits": 245652,
+        "dsp_blocks": "21 / 1,518 (1%)",
+        "plls": "3 / 112 (3%)"
+      },
+      "report": {
+        "path": "build/agents/T-20260920-007/reports/fitter/catapult_a10.fit.rpt",
+        "bytes": 2239767,
+        "sha256": "74c01b43069217c61a0280594195fc95bea06ce9e5a2b9cf772ab682f76403e2"
+      },
+      "summary_sha256": "8256ddcb757300bc1f81189d5cfefe52a31e9d1b793e2134390a51d46499a76f",
+      "audit": "FITTER_AUDIT_PASS"
+    },
+    {
+      "stage": "sta_signoff",
+      "status": "PASS",
+      "quartus_elapsed": "00:00:23",
+      "wrapper_elapsed": "00:00:33",
+      "errors": 0,
+      "warnings": 2,
+      "peak_virtual_memory_mib": 4694,
+      "report": {
+        "path": "build/agents/T-20260920-007/reports/sta/catapult_a10.sta.rpt",
+        "bytes": 17799085,
+        "sha256": "1db466e143b06579fc7d4cae6bd39c24b15069eb11ff81d9c365b31c3d4b91f9"
+      },
+      "summary_sha256": "101b17a5d5c2e8c2552bbaa75e3512ae1a05af5a0859bfed5f8d3e32e68fadef",
+      "flow_report_sha256": "2a915ece2cf4a6dbe0221b2ae79905ff345e05cb4348044bd1d93320be887061",
+      "audit": "STA_SIGNOFF_AUDIT_PASS"
+    }
+  ],
+  "bram_inventory": {
+    "instance": "soc|bram|u_impl|u_ram|auto_generated|altsyncram1|ALTSYNCRAM",
+    "mode": "True Dual Port",
+    "clock_mode": "Single Clock",
+    "depth": 8192,
+    "width": 64,
+    "logical_bits": 524288,
+    "m20k_blocks": 32,
+    "mif": "../boot/build/boot.mif"
+  },
+  "timing": {
+    "sys_clk_25": {
+      "period_ns": 40.0,
+      "frequency_mhz": 25.0,
+      "fmax_mhz": 32.98,
+      "setup_wns_ns": 9.147,
+      "hold_wns_ns": 0.018,
+      "recovery_wns_ns": 13.603,
+      "removal_wns_ns": 0.183,
+      "tns_ns": 0.0
+    },
+    "global": {
+      "setup_wns_ns": 0.207,
+      "hold_wns_ns": 0.001,
+      "recovery_wns_ns": 0.734,
+      "removal_wns_ns": 0.154,
+      "min_pulse_wns_ns": 0.120,
+      "all_tns_ns": 0.0,
+      "violations": 0
+    },
+    "ddr": {
+      "status": "Pass",
+      "read_capture_ns": 0.014,
+      "write_ns": 0.031,
+      "address_command_ns": 0.184,
+      "dqs_gating_ns": 0.588,
+      "write_levelling_ns": 0.11
+    },
+    "metastability": {
+      "status": "Pass",
+      "corners": 4,
+      "synchronizer_chains": 27,
+      "shortest_chain_registers": 2,
+      "timing_violation_chains": 0,
+      "excluded_chains": 23,
+      "worst_case_mtbf_years": "1e+09",
+      "settling_ns": {
+        "slow_900mv_100c": 3.525,
+        "slow_900mv_0c": 3.733,
+        "fast_900mv_100c": 4.941,
+        "fast_900mv_0c": 5.369
+      }
+    }
+  },
+  "custom_acceptance": {
+    "remote_result": "T007_ACCEPTANCE_PASS",
+    "source_pre_manifest_sha256": "c184798f4e9fa9bd59380ab581a98817174fe018ad7db231548f4e887d7b24c0",
+    "source_post_manifest_sha256": "c184798f4e9fa9bd59380ab581a98817174fe018ad7db231548f4e887d7b24c0",
+    "source_query_diff_rows": 0,
+    "clone_baseline_manifest_sha256": "c184798f4e9fa9bd59380ab581a98817174fe018ad7db231548f4e887d7b24c0",
+    "clone_post_manifest_sha256": "22155cc198f3efe753a1d2b0bf1f919feddebc7b6d1cf63cd9c3b1ad6205a476",
+    "clone_query_diff_objects": 22,
+    "overall": {
+      "sys_setup_ns": 9.147,
+      "sys_hold_ns": 0.018,
+      "sys_recovery_ns": 13.603,
+      "sys_removal_ns": 0.183,
+      "min_pulse_ns": 0.120,
+      "cross_clock_queries": "Both directions completed and were empty; no positive margin was claimed."
+    },
+    "fifo_payload": {
+      "families": 6,
+      "models": 2,
+      "reports": 24,
+      "nothing_to_report": 24,
+      "complete_exception_rows_per_model": 6,
+      "ignored_exception_rows": 0,
+      "result": "PASS"
+    },
+    "cdc_data_delay": {
+      "corners": 4,
+      "routes": 5,
+      "groups": 20,
+      "path_cardinality": "3/3/3/3/1",
+      "violations": 0,
+      "worst_slack_ns": 0.781,
+      "datapath_only_ns": 2.0,
+      "complete_false_path_rows_per_corner": 5,
+      "ignored_target_rows": 0,
+      "result": "PASS"
+    },
+    "local_fail_closed_analysis": {
+      "path": "build/agents/T-20260920-007/runtime/custom-acceptance-analysis.log",
+      "bytes": 20350,
+      "sha256": "043692b0792c85b1b349b73dfe50c3768bd3d8f81214f6d6baa890ca761bca21",
+      "result": "T007_ACCEPTANCE_ANALYSIS_PASS"
+    }
+  },
+  "ucp_invariant": {
+    "task": "T-20260920-009",
+    "implementation_sha": "bb00f80a89ec15a3fe8e87d22a420540293ce20b",
+    "evidence_sha": "2e9a5b2b98cf87ea436319cd6d3f3adb9d9255dd",
+    "result": "PASS",
+    "normalized_ucp_input_paths": 60,
+    "normalized_reset_paths": 624,
+    "raw_reset_paths_each": 627,
+    "raw_reset_duplicates_each": 3,
+    "families": "606/4/13/1",
+    "violations": 0,
+    "worst_recovery_slack_ns": 0.903,
+    "worst_removal_slack_ns": 0.202,
+    "fixture": "2/2 positive PASS; 27/27 negative rejected",
+    "historical_replay": "T-20260909-011, T-20260909-013 and T-20260919-004 PASS"
+  },
+  "harness_attempts": [
+    {
+      "stage": "initial-profile-preflight",
+      "classification": "candidate-boundary-caught-before-remote-create",
+      "detail": "The first staging gate rejected full-FP default 85992f53 as not being the registered no-FP profile. T-008 created exact one-line derivative 05ea2488 before any remote root or Quartus run."
+    },
+    {
+      "stage": "long-PowerShell-encoded-runner",
+      "classification": "Windows-command-line-length-only",
+      "detail": "Long UTF-16/Base64 scripts exceeded cmd.exe command length. Scripts were uploaded as ordinary files and executed with powershell -File; source/archive hashes were unchanged."
+    },
+    {
+      "stage": "synthesis-and-STA-wrappers",
+      "classification": "redirected-stream-or-ExitCode-read-race",
+      "detail": "PowerShell returned blank Process.ExitCode or observed stdout before its redirected reader drained. Independent report/summary audits proved Successful and 0 errors without rerunning synthesis, fitter or STA."
+    },
+    {
+      "stage": "fitter-local-tee",
+      "classification": "local-evidence-path-only",
+      "detail": "The local tee directory was created just after fitter started, so that wrapper copy exited nonzero while the locked SSH/fitter continued normally. Remote stdout/report and the independent audit are preserved."
+    },
+    {
+      "stage": "UCP-producer-lineage",
+      "classification": "fail-closed-contract-header-correction",
+      "detail": "The exporter rejected two mechanically rewritten producer/contract-source headers. The original T-20260909-007/702bd8ee contract header was restored, current candidate remained bound through separate provenance, and only the report-only UCP query was replayed."
+    }
+  ],
+  "resource_and_safety": {
+    "all_remote_actions_under_gamepc_lock": true,
+    "processor_limit": "Quartus fitter and STA reported 16 of 24 processors; no-FP synthesis completed in 7m01s.",
+    "memory_policy": "Exclusive gamepc lock, no arbitrary 16 GiB cap, 8 GiB runtime safety floor.",
+    "initial_free_physical_mib": 31722.5,
+    "maximum_tool_peak_virtual_memory_mib": 11139,
+    "source_rtl_qsf_sdc_modified_remotely": false,
+    "assembler": false,
+    "sof_or_persistent_format_generated": false,
+    "quartus_pgm_or_jtag": false,
+    "board_reset_or_power": false,
+    "unknown_process_stopped": false,
+    "final_eda_process_count": 0,
+    "final_forbidden_artifact_count": 0,
+    "final_gamepc_lock": "FREE"
+  },
+  "local_artifact_bundle": {
+    "manifest": {
+      "path": "build/agents/T-20260920-007/runtime/final-artifact-manifest.tsv",
+      "files": 145,
+      "bytes": 74306660,
+      "sha256": "302b3ea5082722e74826a4cd78acea9592160f5c7584ee11c6e0ade8bcc55eff"
+    },
+    "cleanup": "Removed only the downloaded task-owned fitted clone (450 MiB) and two rejected UCP report copies (42 MiB each) after preserving final reports, logs, generated SDC and final UCP bundle; remote fitted DB remains intact."
+  },
+  "handoff": "docs/handoffs/T-20260920-007-b25-rx-observability-fresh-physical.md",
+  "next": "Register a one-shot assembler task that clones this exact accepted remote fitted project and generates only catapult_a10.sof, then run the already authorized volatile JTAG/UART board interaction with RXDBG."
+}

@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-082",
+  "state": "done",
+  "base_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+  "head_sha": "5a2662aab5c4381eaa5c439d822c23ad5447ad24",
+  "branch": "feature/T-20260829-082-b2a-fp-arithmetic",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-082",
+  "sent_at": "2026-08-29T02:52:00+0800",
+  "received_at": "2026-08-29T03:00:00+0800",
+  "reported_at": "2026-08-29T03:45:50+08:00",
+  "artifacts": [
+    {
+      "id": "artifact-b2a-fp-scalar-h-fma",
+      "owner": "T-20260829-082",
+      "uri": "rtl/lcvex_fp_scalar.sv",
+      "reproduce": "git diff rtl/lcvex_fp_scalar.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "d90e6b9ae63a7adbb88bfdbfb4bb0f5bfa54cd66ba3c47ed70f7b22c5a556f98"
+    },
+    {
+      "id": "artifact-b2a-decode-h-fma",
+      "owner": "T-20260829-082",
+      "uri": "rtl/lcvex_decode.sv",
+      "reproduce": "git diff rtl/lcvex_decode.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "0452de7beb703927438f8ccb1d7f3862c56176c0ca22ca5575362f544e830981"
+    },
+    {
+      "id": "artifact-b2a-neon-h-fma",
+      "owner": "T-20260829-082",
+      "uri": "tb/sv/lcvex_neon_fp_p7_5_tb.sv",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 6 --top-module lcvex_neon_fp_p7_5_tb -Mdir obj_dir_neon_p7_5 -o lcvex_neon_fp_p7_5_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_neon_fp_p7_5_tb.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "66d3fd2b449a8749da29c4988954e66065a8e2d097ed522df38a0483f7a42444"
+    },
+    {
+      "id": "artifact-b2a-cocotb-pipeline-test",
+      "owner": "T-20260829-082",
+      "uri": "sim/cocotb/test_p7_5_fp16_sqrt_minmax_round.py",
+      "reproduce": "python3 -m py_compile sim/cocotb/test_p7_5_fp16_sqrt_minmax_round.py",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "28d7973a521f3628dd44b24891aadb2eeaf61b85cdc484a2aaa73e4bfebbd3d3"
+    },
+    {
+      "id": "artifact-b2a-decode-tb",
+      "owner": "T-20260829-082",
+      "uri": "tb/sv/lcvex_b1_decode_tb.sv",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 6 --top-module lcvex_b1_decode_tb rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b1_decode_tb.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "d020168ab9bd1332edc107e395eedb1a298c11c000a1df04a4d0ecdb06227100"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-b2a-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/cocotb/test_p7_5_fp16_sqrt_minmax_round.py",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "新增 pipeline 测试语法有效；编码 helper 与 aarch64-linux-gnu-as 及 QEMU 实测一致",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2a-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 6 --top-module lcvex_fp_scalar_p7_5_tb -Mdir obj_dir_fp_p7_5 -o lcvex_fp_scalar_p7_5_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_p7_5_tb.sv && ./obj_dir_fp_p7_5/lcvex_fp_scalar_p7_5_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "P7-5 FP scalar raw-unit PASS；新增 FMADD/FMSUB/FNMADD/FNMSUB.H、SNaN + IOC、0*Inf default NaN、signed zero 全部通过",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2a-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "无空白/补丁格式错误",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2a-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 6 --top-module lcvex_b1_decode_tb -Mdir obj_dir_b1_decode -o lcvex_b1_decode_tb rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b1_decode_tb.sv && ./obj_dir_b1_decode/lcvex_b1_decode_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "decode TB PASS; scalar H FMADD/FMSUB/FNMADD/FNMSUB and 4H FMLA/FMLS decode assertions",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2a-005",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 6 --top-module lcvex_fp_scalar_p7_4_tb -Mdir obj_dir_fp_p7_4 -o lcvex_fp_scalar_p7_4_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_p7_4_tb.sv && ./obj_dir_fp_p7_4/lcvex_fp_scalar_p7_4_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "P7-4 scalar FMA/conversion raw-unit regression PASS after fma_op fmt generalization",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "tools": {
+    "python": "3.12.10 / lcvex conda",
+    "verilator": "5.050",
+    "cocotb": "2.0.1",
+    "qemu_aarch64": "QEMU user-mode used for raw-bit reference generation"
+  },
+  "known_limits": [
+    "向量 H FMLA/FMLS 的 lcvex_neon_fp_p7_5_tb Verilator 构建在本次 owner 环境因 15 分钟超时未完成；对应 raw unit 用例已写入，待资源充分环境复跑。",
+    "sim/cocotb/test_b2a_h_fma 已加入但完整 lcvex_soc_tb 构建未在本轮运行。",
+    "未执行 QEMU strict lockstep（L2）或 Gate D（L3）。",
+    "未修改 docs/V82_PROFILE_MANIFEST.md 或 rtl/lcvex_core.sv/rtl/lcvex_pkg.sv；FP16 FMA 行状态由集成者补记。"
+  ],
+  "next": "集成者复跑 NEON raw unit 与 cocotb pipeline；若可行补 A76 required 锁步并更新 profile 行。",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "reported_at",
+        "old": "2026-08-29T03:50:00+0800",
+        "new": "2026-08-29T03:45:50+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "ed1fffa5d696df33b0d780b614c95f18fc3555f9",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "479b81c34e5cbd78b4f818486ea27b7457758d2e",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "5a2662aab5c4381eaa5c439d822c23ad5447ad24",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-b2a-fp-scalar-h-fma",
+        "uri": "rtl/lcvex_fp_scalar.sv",
+        "sha256": "d90e6b9ae63a7adbb88bfdbfb4bb0f5bfa54cd66ba3c47ed70f7b22c5a556f98",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b2a-decode-h-fma",
+        "uri": "rtl/lcvex_decode.sv",
+        "sha256": "0452de7beb703927438f8ccb1d7f3862c56176c0ca22ca5575362f544e830981",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b2a-neon-h-fma",
+        "uri": "tb/sv/lcvex_neon_fp_p7_5_tb.sv",
+        "sha256": "66d3fd2b449a8749da29c4988954e66065a8e2d097ed522df38a0483f7a42444",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b2a-cocotb-pipeline-test",
+        "uri": "sim/cocotb/test_p7_5_fp16_sqrt_minmax_round.py",
+        "sha256": "28d7973a521f3628dd44b24891aadb2eeaf61b85cdc484a2aaa73e4bfebbd3d3",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b2a-decode-tb",
+        "uri": "tb/sv/lcvex_b1_decode_tb.sv",
+        "sha256": "d020168ab9bd1332edc107e395eedb1a298c11c000a1df04a4d0ecdb06227100",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  },
+  "merge_sha": "ed1fffa5d696df33b0d780b614c95f18fc3555f9",
+  "handoff_sha": "479b81c34e5cbd78b4f818486ea27b7457758d2e",
+  "integrator_review": {
+    "received_at": "2026-08-29T03:47:00+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "479b81c34e5cbd78b4f818486ea27b7457758d2e",
+    "implementation_sha": "5a2662aab5c4381eaa5c439d822c23ad5447ad24",
+    "notes": "B2a 实现标量 H FMA 四族与 NEON 4H/8H FMLA/FMLS；标量 raw-unit、decoder、P7-4 回归通过；向量 raw-unit 与完整 cocotb/L2 待资源窗口复跑。manifest 已更新 EXT-FP-007/EXT-NEON-FP-002 编码/负测。",
+    "merge_sha": "ed1fffa5d696df33b0d780b614c95f18fc3555f9",
+    "result_sha": "5a2662aab5c4381eaa5c439d822c23ad5447ad24"
+  }
+}

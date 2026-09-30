@@ -1,0 +1,6 @@
+# A1 generic synth script for lcvex_mem_arb. Run from fpga/opensynth/:
+#   yosys -s lcvex_mem_arb.ys
+read_verilog -sv generated/lcvex_mem_arb_flat.v
+synth -top lcvex_mem_arb -lut 4
+write_verilog -noattr -noexpr netlist.v
+stat -json

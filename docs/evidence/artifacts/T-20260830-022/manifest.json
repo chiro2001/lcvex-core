@@ -1,0 +1,164 @@
+{
+  "task_id": "T-20260830-022",
+  "head_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+  "branch": "feature/T-20260830-022-final-gated",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-022",
+  "summary": "make test PASS; Gate D full --parallel PASS; CORE_COUNT=1 cluster lint PASS; l2_cluster CORE_COUNT=1 lint PASS; optional C3/C4 module-level TB PASS.",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "make": "GNU Make 4.4.1",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "aarch64_objcopy": "GNU objcopy (GNU Binutils) 2.47"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e"
+  },
+  "resource": {
+    "cgroup_method": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p MemoryAccounting=yes",
+    "memory_max_bytes": 16106127360,
+    "memory_swap_max_bytes": 0,
+    "verilator_jobs": 1,
+    "makeflags": "-j1",
+    "gate_d_parallel": true,
+    "note": "One heavy Verilator build/run at a time in the same worktree; parallel lockstep uses planner after builds."
+  },
+  "runs": [
+    {
+      "run_id": "owner-make-test-001",
+      "level": "L0",
+      "command": "make -j1 VERILATOR_JOBS=1 test (systemd-run MemoryMax=15G MemorySwapMax=0)",
+      "wall_seconds": 867.749,
+      "peak_rss_bytes": 3499208704,
+      "peak_rss_mb": 3337.5,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/make_test_T022.log.txt",
+      "summary": "P0 make test full pass; all unit/SV/cocotb/encoders green."
+    },
+    {
+      "run_id": "owner-gate-d-001",
+      "level": "L3",
+      "command": "env VERILATOR_JOBS=1 MAKEFLAGS=-j1 bash sim/difftest/run_gate_d.sh --parallel (systemd-run MemoryMax=15G MemorySwapMax=0)",
+      "wall_seconds": 1717.841,
+      "peak_rss_bytes": 5852987392,
+      "peak_rss_mb": 5581.7,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/gate_d_T022.log.txt",
+      "summary": "Gate D full parallel run PASS; 0 failures; includes make test, coverage, M2-4b, delay2, P5a, Gate C, P5a MMU, P4b, random 1-3, coverage accounting, baremetal-C lockstep."
+    },
+    {
+      "run_id": "owner-core1-cluster-lint-001",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing --top-module lcvex_cluster_top -GCORE_COUNT=1 [cluster source list]",
+      "wall_seconds": 25.751,
+      "peak_rss_bytes": 422805504,
+      "peak_rss_mb": 403.2,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/core_count_1_cluster_lint_T022.log.txt",
+      "summary": "CORE_COUNT=1 cluster top lint/elaboration PASS."
+    },
+    {
+      "run_id": "owner-core1-l2-cluster-lint-001",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing --top-module lcvex_l2_cluster -GCORE_COUNT=1 -GMEM_LINES=16 rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv",
+      "wall_seconds": 0.887,
+      "peak_rss_bytes": 68149248,
+      "peak_rss_mb": 65.0,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/core_count_1_l2_cluster_lint_T022.log.txt",
+      "summary": "l2_cluster CORE_COUNT=1 lint/elaboration PASS (only known UNSIGNED warning)."
+    },
+    {
+      "run_id": "owner-c3-cluster4-multi-001",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -j1 --top-module lcvex_c3_cluster4_multi_tb ... && run",
+      "wall_seconds": 23.814,
+      "peak_rss_bytes": 602206208,
+      "peak_rss_mb": 574.3,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/c3_cluster4_multi_T022.log.txt",
+      "summary": "Optional C3 four-core multi-sharer/ReadUnique module-level TB PASS."
+    },
+    {
+      "run_id": "owner-c4-cluster8-001",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -j1 --top-module lcvex_c4_cluster8_tb ... && run",
+      "wall_seconds": 28.282,
+      "peak_rss_bytes": 667934720,
+      "peak_rss_mb": 636.9,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/c4_cluster8_T022.log.txt",
+      "summary": "Optional C4 8-core module-level synthetic smoke PASS."
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "make_test_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/make_test_T022.log.txt",
+      "sha256": "379c66b4069502f22cdfb0b78885c22e93c115f28dd1dcd92efc362588a84f80",
+      "bytes": 151635,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "see run commands in evidence JSON"
+    },
+    {
+      "name": "gate_d_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/gate_d_T022.log.txt",
+      "sha256": "e94c6d618a817fab7beb8baeec901d2cad3addf926c42b240f811680f5b13a2a",
+      "bytes": 176341,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "see run commands in evidence JSON"
+    },
+    {
+      "name": "core_count_1_cluster_lint_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/core_count_1_cluster_lint_T022.log.txt",
+      "sha256": "a33d6e6d7fe23df46592ca168742b06a0e923ee5e6681313d39ebcee2dab9149",
+      "bytes": 704,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "see run commands in evidence JSON"
+    },
+    {
+      "name": "core_count_1_l2_cluster_lint_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/core_count_1_l2_cluster_lint_T022.log.txt",
+      "sha256": "52f85a24644d41268ae980cdd1a0b5b33169eb691be5466eac19ab38b00b1136",
+      "bytes": 1187,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "see run commands in evidence JSON"
+    },
+    {
+      "name": "c3_cluster4_multi_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/c3_cluster4_multi_T022.log.txt",
+      "sha256": "e5aa58a2a13cb7b36dab2d717a193e32819475013c1e1e171b376ecb2d27d3e7",
+      "bytes": 13560,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "see run commands in evidence JSON"
+    },
+    {
+      "name": "c4_cluster8_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/c4_cluster8_T022.log.txt",
+      "sha256": "8fde9c8af37780d39bcf7928876b4db4532ac27d1129584e2098652b61aebd45",
+      "bytes": 14826,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "see run commands in evidence JSON"
+    }
+  ],
+  "known_limits": [
+    "未启动 Quartus；无 FPGA/上板/CI。",
+    "完整 fourcore 系统级 TB 未单独运行；本轮可选 C3/C4 覆盖了 cluster4_multi(4核)和 cluster8(8核)模块级 TB。",
+    "l2_cluster lint 保留既有 UNSIGNED warning（非 fatal），不影响 PASS。"
+  ]
+}

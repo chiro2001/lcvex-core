@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-004",
+  "label": "R16-CORE-ISSUE-FANOUT-CUT",
+  "title": "Decouple idex_valid fanout to muldiv launch and paired-memory payload",
+  "kind": "rtl-timing-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-and-joint-validated",
+  "assigned_owner": "codex-r16-core-issue-cut",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "batch_parent": "T-20260905-002",
+  "depends_on": [
+    "T-20260902-058"
+  ],
+  "dependency_override": "Consumes accepted_blocked T-058 timing evidence.",
+  "base_sha": "1ccbb3baed633c9c64e7a078df4cad4ece69a2a5",
+  "branch": "timing/T-20260905-004-r16-core-issue-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-004",
+  "cone_id": "R16-CORE-IDEX-ISSUE-FANOUT",
+  "timing_paths": {
+    "muldiv": {"count_top50": 4, "slack_range_ns": [-2.656, -2.638], "logic_levels": 27},
+    "mem_paddr2": {"count_top50": 14, "slack_range_ns": [-2.643, -2.635], "logic_levels": 27},
+    "shared_root": "idex_valid / issue-hold-enable cone"
+  },
+  "scope": "作为单一共享 core-control lane，切断 idex_valid/issue-hold 到 muldiv DSP launch enable 和 idex_d.mem_paddr2 enable 的扇出：优先在 lcvex_muldiv 内增加 request accept/launch 寄存边界，并把 PA2 从活跃 ID/EX next-state 移到已寄存 PA1 的 EX/MEM/request 侧推导。保持单发射顺序执行、不可回滚 muldiv、pair/atomic 单请求、MMU fault和commit语义。",
+  "writes": [
+    "rtl/lcvex_muldiv.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_muldiv_req_tb.sv",
+    "sim/cocotb/test_muldiv_req.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/handoffs/T-20260905-004-r16-core-issue-cut.md",
+    "docs/tasks/evidence/T-20260905-004.json"
+  ],
+  "write_regions": [
+    "rtl/lcvex_muldiv.sv::request_capture/launch_control/locked_result_controls/reset",
+    "rtl/lcvex_core.sv::muldiv request/kill/done wiring only",
+    "rtl/lcvex_core.sv::ID/EX memory payload capture and mem_paddr2 field",
+    "rtl/lcvex_core.sv::EX/MEM memory payload capture and dmem pair-address selection",
+    "rtl/lcvex_core.sv::PA2 reset/kill/assertions",
+    "new dedicated muldiv direct tests and registry entries"
+  ],
+  "forbidden_regions": [
+    "rtl/lcvex_core.sv::g_fp_simd_enabled",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv public types unless integrator explicitly approves",
+    "QEMU plugin/fork/QSF/SDC",
+    "hazard/flush/sys_commit root rewrite outside listed wiring"
+  ],
+  "latency_budget": {"muldiv_request": 1, "pair_atomic_memory": 0, "commit_order": 0},
+  "pre_batch_validation": [
+    "git diff --check",
+    "manual compile-structure review only; do not run heavy Verilator/QEMU before batch merge"
+  ],
+  "batch_acceptance_tests": [
+    "make compile; dedicated muldiv all-op W/X/zero/reset/kill/done-hold SV+Cocotb",
+    "core sim-sv/backpressure/fetch-fifo/MMU/IRQ-young/IRQ-atomic suites",
+    "difftest-rtl and difftest-hazard",
+    "pair/LSE/LSE128/maint-v82/IRQ-atomic/STXR-IRQ/NEON-int/fetch-fault strict lockstep",
+    "P7 scalar/NEON sequences affected by shared core issue/enable"
+  ],
+  "acceptance": "muldiv accepts exactly one captured request, busy covers pending+active, live op/a/b cannot leak after capture, reset/approved kill leaves no result; do not kill an older irreversible muldiv on ordinary flush. PA2 derives from the matching registered PA1 only for currently supported aligned pair/128-bit operations, never creates a second request or bypasses translation/fault checks. W zero-extension、XZR/SP、store byte enables、mem2 and commit remain exact. Owner stops at review after static checks; task becomes done only after batch candidate full joint validation.",
+  "created_at": "2026-09-05T02:33:51+08:00",
+  "updated_at": "2026-09-05T03:44:32+08:00",
+  "handoff": "docs/handoffs/T-20260905-004-r16-core-issue-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260905-004.json",
+  "head_sha": "688941b22cac13cfe2ce0a38ef2d24d709147b7e",
+  "implementation_head": "169f75cb5690141ad33f1a785ec8590a340189ee",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "next": "consume the Round16 physical report and re-rank paths",
+  "review_result": {
+    "status": "accepted_for_batch",
+    "reported_at": "2026-09-05T03:40:04+08:00",
+    "notes": "muldiv request capture/age-qualified kill, PA1-derived PA2, dead token removal, MUL W vectors and executable targets are closed; functional validation remains pending on batch candidate"
+  },
+  "dispatch": {
+    "sent_at": "2026-09-05T02:38:19+08:00",
+    "agent_name": "/root/r16_core_issue_cut",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-004",
+    "branch": "timing/T-20260905-004-r16-core-issue-cut"
+  }
+}

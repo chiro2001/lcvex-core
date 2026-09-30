@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-090",
+  "label": "V-DIAG",
+  "parent": "T-20260828-073",
+  "title": "Verilator 卡顿诊断：定位导致 LCVEX 双核/SoC elaboration 极慢或挂起的模块",
+  "kind": "toolchain-verilator-stuck-diagnosis",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "86186e2",
+  "branch": "feature/T-20260829-090-verilator-stuck-diagnose",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-090",
+  "scope": "诊断当前 LCVEX RTL 在 Verilator 5.050 下出现的极慢/疑似挂起问题：主现象为 C2 真实双核 lcvex_c2_dualcore_tb 完整 Verilator build 运行 40+ 分钟无产物；B2c 的 lcvex_soc_tb SoC 级 elaboration 也超过 20 分钟未生成 Vtop.mk。目标是通过系统化简化、分层构建和最小复现，找出具体模块/构造/配置导致 Verilator elaboration 卡住或极其缓慢，并给出可操作的修复/规避建议。",
+  "writes": [
+    "diag/verilator_stuck/**",
+    "docs/handoffs/T-20260829-090-verilator-stuck-diagnose.md",
+    "docs/tasks/evidence/T-20260829-090.json",
+    "tmp/**"
+  ],
+  "reads": [
+    "rtl/**",
+    "tb/**",
+    "sim/cocotb/**",
+    "Makefile",
+    "rtl/filelist.f",
+    "docs/handoffs/T-20260829-086-c2-dualcore-msi.md",
+    "docs/handoffs/T-20260829-085-b2c-vector-memory.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "可复现命令、超时/资源记录、分层构建结果"
+    ],
+    "l1": [
+      "最小复现：至少能证明哪个模块或哪个构造导致 Verilator 长时间不产出"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付诊断报告：完整复现步骤、分层构建时间表、疑似热点模块/构造、最小化实验证据；若暂时无法完全归因，也要给出排除列表和下一步候选。禁止把无法验证的猜测写成结论。",
+  "next": "依据诊断结果决定 C2/B2c 构建策略、是否拆分模块、调整 Verilator 参数或修 RTL。",
+  "resource": {
+    "cpu": 3,
+    "memory_mb": 12288,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T08:55:00+0800",
+  "updated_at": "2026-08-29T09:27:29+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T08:55:00+0800",
+    "agent_name": "verilator_stuck_diagnose",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-090"
+  },
+  "known_limits": [
+    "不得修改其它 worktree、主仓库、QEMU 或运行中的 C2 构建。",
+    "可以修改本诊断 worktree 内的临时文件/RTL 副本做实验，但不得把未经同意的功能改动声明为合入。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-090-verilator-stuck-diagnose.md",
+  "evidence": "docs/tasks/evidence/T-20260829-090.json",
+  "merge_sha": "cb593722e3df3993a31e104b1002b62aea9969bd",
+  "merged_at": "2026-08-29T09:27:29+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T09:27:29+08:00",
+    "status": "accepted",
+    "head_sha": "19d84c6",
+    "notes": "诊断结论已接受：根因为 lcvex_fp_scalar.sv 的 256-bit 宽位组合展开；-O0 可作为构建规避；已立 FP-OPT 任务处理长期修复。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T09:30:00+0800",
+        "new": "2026-08-29T09:27:29+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T09:30:00+0800",
+        "new": "2026-08-29T09:27:29+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T09:30:00+0800",
+        "new": "2026-08-29T09:27:29+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "6fb1d5f0d19b543e26f6ce2d86a490c4e000b67f",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ],
+    "merge_sha_expansion": [
+      {
+        "old": "cb59372",
+        "new": "cb593722e3df3993a31e104b1002b62aea9969bd",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  },
+  "head_sha": "6fb1d5f0d19b543e26f6ce2d86a490c4e000b67f"
+}

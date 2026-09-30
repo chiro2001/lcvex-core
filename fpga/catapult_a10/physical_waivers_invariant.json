@@ -1,0 +1,376 @@
+{
+  "schema_version": 2,
+  "policy_id": "B25-PHYSICAL-UCP-INVARIANT-WAIVER",
+  "contract_lineage": {
+    "task_id": "T-20260909-007",
+    "source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+    "evidence": "docs/tasks/evidence/T-20260909-007.json"
+  },
+  "inventory_schema": {
+    "kind": "lcvex-physical-ucp-recovery-removal-invariant-v2",
+    "required_top_level": [
+      "schema_version",
+      "inventory_kind",
+      "provenance",
+      "reports",
+      "ucp",
+      "recovery_removal",
+      "clock_constraints",
+      "exceptions"
+    ],
+    "exceptions_exact": []
+  },
+  "normalization": {
+    "duplicate_suffix": "~DUPLICATE",
+    "canonical_digest": "sha256(canonical-json-sorted-members-v1)",
+    "ucp_duplicate_row": "remove one terminal suffix from the internal endpoint only; require an otherwise identical unmarked base row",
+    "timing_duplicate_row": "remove one terminal suffix from the destination only; require an unmarked base with the same reset source and launch/latch clocks while independently validating every physical timing row"
+  },
+  "ucp": {
+    "summary": {
+      "clock_count": 2,
+      "input_port_count": 2,
+      "input_path_count": 60,
+      "output_port_count": 1,
+      "output_path_count": 4
+    },
+    "clocks": [
+      {
+        "name": "altera_reserved_tck",
+        "status": "unconstrained",
+        "kind": "vendor_generated_jtag_clock",
+        "type": "Base",
+        "clock_field": ""
+      },
+      {
+        "name": "soc|emif_adapter|emif_rst_sync1_n",
+        "status": "unconstrained",
+        "kind": "synchronized_reset_control",
+        "type": "Base",
+        "clock_field": ""
+      }
+    ],
+    "ports": [
+      {
+        "name": "altera_reserved_tdi",
+        "direction": "input",
+        "normalized_path_count": 25,
+        "path_groups": {
+          "jtag_uart_alt_jtag_atlantic": 7,
+          "auto_fab_sld": 10,
+          "emif_embedded_jtag": 7,
+          "reserved_jtag_port": 1
+        },
+        "endpoint_digest": "fb9f5c0375f8098a5cc19d745e9ad02fb7f24685fb04eff674ea3b44247fac28"
+      },
+      {
+        "name": "altera_reserved_tms",
+        "direction": "input",
+        "normalized_path_count": 35,
+        "path_groups": {
+          "auto_fab_sld": 35
+        },
+        "endpoint_digest": "c0d76e9d19fef125943068a108c2d3697c98a0362bdf7811f84993067ba91006"
+      },
+      {
+        "name": "altera_reserved_tdo",
+        "direction": "output",
+        "normalized_path_count": 4,
+        "path_groups": {
+          "auto_fab_sld": 3,
+          "reserved_jtag_port": 1
+        },
+        "endpoint_digest": "9d5f27730dc9ec2754c7fb79b41bb4cc4e492152001c1e22e5f3acab92210c99"
+      }
+    ]
+  },
+  "jtag_hierarchy": {
+    "allowed_classes": [
+      {
+        "class": "jtag_uart_alt_jtag_atlantic",
+        "pattern": "jtag_uart_inst|jtag_uart|*alt_jtag_atlantic|*",
+        "required": true
+      },
+      {
+        "class": "auto_fab_sld",
+        "pattern": "auto_fab_0|alt_sld_fab_0|*",
+        "required": true
+      },
+      {
+        "class": "emif_embedded_jtag",
+        "pattern": "emif|emif_bot|*jtag_phy_embedded_in_jtag_master*",
+        "required": true
+      },
+      {
+        "class": "reserved_jtag_port",
+        "pattern": "reserved_jtag_port|altera_reserved_tdo",
+        "required": false
+      }
+    ],
+    "reserved_port_pair": {
+      "from": "altera_reserved_tdi",
+      "to": "altera_reserved_tdo",
+      "class": "reserved_jtag_port"
+    },
+    "forbid_arbitrary_tck_period": true,
+    "forbid_jtag_create_clock": true
+  },
+  "reset_control": {
+    "name": "soc|emif_adapter|emif_rst_sync1_n",
+    "kind": "synchronized_active_low_reset_control",
+    "clock": "emif|emif_bot|emif_bot_core_usr_clk",
+    "allowed_corners": [
+      "Slow 900mV 100C Model",
+      "Slow 900mV 0C Model",
+      "Fast 900mV 100C Model",
+      "Fast 900mV 0C Model"
+    ],
+    "corners": [
+      "fast",
+      "slow"
+    ],
+    "checks": {
+      "recovery": {
+        "normalized_path_count": 624,
+        "violated": 0,
+        "require_worst_slack_positive": true
+      },
+      "removal": {
+        "normalized_path_count": 624,
+        "violated": 0,
+        "require_worst_slack_positive": true
+      }
+    },
+    "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+    "families": [
+      {
+        "name": "emif_req_q",
+        "pattern": "^soc\\|emif_adapter\\|emif_req_q\\..+$",
+        "normalized_path_count": 606,
+        "endpoint_digest": "26a6fae7195d8c78775fee194cba9855932d62eff1a813cadfa785a602945bb1"
+      },
+      {
+        "name": "emif_state_q",
+        "pattern": "^soc\\|emif_adapter\\|emif_state_q\\..+$",
+        "normalized_path_count": 4,
+        "endpoint_digest": "11e90ee5d4b4514d52de187ca5d615f25842f480bf81efd7f477c9f703049bb7"
+      },
+      {
+        "name": "timeout_count_q",
+        "pattern": "^soc\\|emif_adapter\\|timeout_count_q\\[[0-9]+\\]$",
+        "normalized_path_count": 13,
+        "endpoint_digest": "acdecab7afaf51bb970fb09aab139b8b99187767fac5c63a752ea7a375c1190a"
+      },
+      {
+        "name": "calibration_gate",
+        "pattern": "^soc\\|emif_adapter\\|calibration_gate\\|fail_emif_latched_q$",
+        "normalized_path_count": 1,
+        "endpoint_digest": "bb42ad13106d3738b7aa9bb9ccac29fd95d2699108c82d6fb97002d787d734d6"
+      }
+    ],
+    "forbid_false_path_fields": true
+  },
+  "provenance": {
+    "required_candidate_keys": [
+      "branch",
+      "candidate_manifest",
+      "candidate_sha",
+      "candidate_tree_sha",
+      "device",
+      "generated_sdc_sha256",
+      "quartus",
+      "report_only",
+      "source_post_manifest_sha256",
+      "source_pre_manifest_sha256",
+      "task_id",
+      "user_sdc_sha256",
+      "worktree"
+    ],
+    "accepted_profiles": {
+      "T-20260909-011": {
+        "candidate_sha": "4618c17f85a3a84f28824a9d5964d8600c3d966d",
+        "candidate_tree_sha": null,
+        "branch": "batch/T-20260907-037-b25-bringup",
+        "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037",
+        "candidate_manifest": null,
+        "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+        "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+        "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+        "device": "10AX115N4F40E3SG",
+        "report_only": true,
+        "source_pre_manifest_sha256": "3d54e392aa3e7dd0620b6b7a45824b69f2baa6dcd135880fa019afdca09595d2",
+        "source_post_manifest_sha256": "3d54e392aa3e7dd0620b6b7a45824b69f2baa6dcd135880fa019afdca09595d2"
+      },
+      "T-20260909-013": {
+        "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+        "candidate_tree_sha": "b6b576ada19381d958375d5088d8dc468b99e5d4",
+        "branch": "verify/T-20260909-013-b25-final-fresh-physical",
+        "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-013",
+        "candidate_manifest": {
+          "canonical_entries": 53,
+          "qsf_relative_aliases": 47,
+          "canonical_sha256": "77872c4e94f28c9790246b3357a1e20b0b6b234d03edc62159f83fc39ad3ca95",
+          "manifest_sha256": "ace0f026a55731dcac01576204f64c18bf82253c89d310b1a45a149728eadf69",
+          "sidecar_sha256": "6996a4e70d900b112b4afbae3efe3d0cfec37c75d9534dcb31b4fcda9762e10c",
+          "platform_manifest_sha256": "b4bb4acc210d28ab22b20ee9d69682d14b25aa208691511dcbe9012950062dbe",
+          "platform_sha256sums_sha256": "23263db51fb4892ec0cf66f2e03bffdfbd8ddb8f90ef984b8942f1a6bfbf4fc9",
+          "platform_payload_manifest_sha256": "5ecfb41015374afa8aa09f72b53dbac36ce2b856cbc4adc62991e88965927013",
+          "platform_payload_sidecar_sha256": "3f2acdcdeeaae709dc13f807dfd4a3a706583b462cd24bd4b576f928a4943934"
+        },
+        "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+        "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+        "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+        "device": "10AX115N4F40E3SG",
+        "report_only": true,
+        "source_pre_manifest_sha256": "20b93fa7b9cadc9ad0ea58ca6d1ad31d80820e265955bbeccb54e3edb39f3737",
+        "source_post_manifest_sha256": "20b93fa7b9cadc9ad0ea58ca6d1ad31d80820e265955bbeccb54e3edb39f3737"
+      },
+      "T-20260919-004": {
+        "candidate_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+        "candidate_tree_sha": "d5baa6b05f5f8824236c816980ab6e6d48578594",
+        "branch": "verify/T-20260919-004-b25-nofp-fresh-physical",
+        "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-004",
+        "candidate_manifest": null,
+        "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+        "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+        "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+        "device": "10AX115N4F40E3SG",
+        "report_only": true,
+        "source_pre_manifest_sha256": "e87c4dd5ec9548fa20bd0071b7305306c8dd2a2619cf106454526c7c9eaf62e6",
+        "source_post_manifest_sha256": "e87c4dd5ec9548fa20bd0071b7305306c8dd2a2619cf106454526c7c9eaf62e6"
+      },
+      "T-20260920-007": {
+        "candidate_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+        "candidate_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+        "branch": "verify/T-20260920-007-b25-rx-observability-fresh-physical",
+        "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-007",
+        "candidate_manifest": null,
+        "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+        "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+        "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+        "device": "10AX115N4F40E3SG",
+        "report_only": true,
+        "source_pre_manifest_sha256": "c184798f4e9fa9bd59380ab581a98817174fe018ad7db231548f4e887d7b24c0",
+        "source_post_manifest_sha256": "c184798f4e9fa9bd59380ab581a98817174fe018ad7db231548f4e887d7b24c0"
+      },
+      "T-20260920-017": {
+        "candidate_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+        "candidate_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+        "branch": "verify/T-20260920-017-b25-rx-cpu-observability-fresh-physical",
+        "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017",
+        "candidate_manifest": {
+          "canonical_entries": 53,
+          "qsf_relative_aliases": 47,
+          "canonical_sha256": "2d9c2d744d85af6db5a047c166822e8baad1eb56e68b987a17598d2a3fa3ac4b",
+          "manifest_sha256": "1cab668b2231695a48eb91ec8f48ff758f9eb2afa0a65ca13b4ad68d0e4322c9",
+          "stage_manifest_sha256": "4a40486090a3711b7a15f7f5238e00efc497b0684801d41b84312b4c7fb3ae0d",
+          "stage_archive_sha256": "43a67a1b0b7f0f3d50a9ea7be8df11249e6e1d0f6e3c59a53b17d61a947e87ef",
+          "stage_file_count": 174,
+          "stage_qsf_reference_count": 50
+        },
+        "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+        "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+        "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+        "device": "10AX115N4F40E3SG",
+        "report_only": true,
+        "source_pre_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+        "source_post_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19"
+      },
+      "T-20260920-027": {
+        "candidate_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+        "candidate_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+        "branch": "verify/T-20260920-027-b25-logic-imm-repair-fresh-physical",
+        "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027",
+        "candidate_manifest": {
+          "canonical_entries": 53,
+          "canonical_sha256": "99747827eb371fb6766c284a109baf118dd06d26c7a08f84a91b8334e1c3c9bf",
+          "manifest_sha256": "ce9da04bb4edb22014f7d9506bcb54ddfadc3961071fc0a46446f88a3356314f",
+          "qsf_relative_aliases": 47,
+          "stage_archive_sha256": "ccf37034cdeb6f5085406b67d285902a43ec99d59d819bcbbbb79d715b9bd8d2",
+          "stage_file_count": 174,
+          "stage_manifest_sha256": "ad7643fdb7b66816776e5cffa8a2982e43979947da7de1711e411087f3dd1e4f",
+          "stage_qsf_reference_count": 50
+        },
+        "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+        "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+        "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+        "device": "10AX115N4F40E3SG",
+        "report_only": true,
+        "source_pre_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06",
+        "source_post_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06"
+      }
+    },
+    "report_profiles": {
+      "T-20260909-011": {
+        "fast_recovery": "c1f319fc7027e785dd1339af3bbb886cd16d3bdacb2fedeba6d82d3be8b266d5",
+        "fast_removal": "aad2210cecfac8f144f8b6589d9b3a8a7e7c2afb6001561e831a563d0cb5b84f",
+        "slow_recovery": "148a4244413ae5da57d93513ebaa6d637c8b74be8c78e26d5221ec68d586c88c",
+        "slow_removal": "d3ac4da2eae82b174e4750a4214ee34b0410c2a917ad20226c14f016703b82e9",
+        "summary": "9462aef4168b595ca2cb24566168b9df5d36e205868e3924c00c9480dea21b6b",
+        "ucp_fast": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906",
+        "ucp_slow": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906"
+      },
+      "T-20260909-013": {
+        "fast_recovery": "85cca7f4f49eba61cafdd7cf28a9e2abf2935165cd841d03f1b3667d6774afb0",
+        "fast_removal": "8fbdcf2c1d75d6867e96537dfab9f5e1c7e928f6b6fafce2be750e355030fb1c",
+        "slow_recovery": "780885afba7d03ea58e0c8fcd683cab8e53168b0d896bee350e65c96527745d4",
+        "slow_removal": "50884ed531d6e36d2f5ce3934cfd660eddf3b22dead17716751c6cd23da76f8d",
+        "summary": "4f2b9d5758e143bf584e09abdd744709504fd319ce8cc532beafc117e83e3c98",
+        "ucp_fast": "f9ae60f2c1b2ba32bd21f49f5b7942934e3c4d42991454a21fd4c94723516d08",
+        "ucp_slow": "f9ae60f2c1b2ba32bd21f49f5b7942934e3c4d42991454a21fd4c94723516d08"
+      },
+      "T-20260919-004": {
+        "fast_recovery": "ed9fd6b48cb4a56d596503b65d09584d3e34ed009ba30bc3a17488eb57b75d37",
+        "fast_removal": "7add9b4b5968c8af245db81bb0c555eba9a498893bea3a03cbc5fbc41759fb86",
+        "slow_recovery": "1709cb457b7127512748e2e7c986be2629edc8e3669a54145b76f7223039f05e",
+        "slow_removal": "3756d6f3811e9dc41fef8b58c6343019d6a76cf826d640f980eb67040b424c42",
+        "summary": "af7b79136aeddabc64ffc97a35cc970ff7f94a31060bebec2e2807f34848c808",
+        "ucp_fast": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662",
+        "ucp_slow": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662"
+      },
+      "T-20260920-007": {
+        "fast_recovery": "ed52645dd25ce3682dc721ac1fe6224a8c16ed0eb18c3bedfb1720ad55fe5c4b",
+        "fast_removal": "f8e0e7941088b5b91e989f8871a07df3a706fdd06080c84e84d93107bedd9404",
+        "slow_recovery": "2a2d5c971e8bcb21736e5d13f42acf3e8ec47d97efa8471570b2a3f583c7caf1",
+        "slow_removal": "af4330756e22015cdfcda3c7206934e0fd4798a8443ad40892fc6a0ee7d34f2b",
+        "summary": "98cb1216c27a0a4a525f241f5729f9a8c047448ff59bda464880c8c571d50fe9",
+        "ucp_fast": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662",
+        "ucp_slow": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662"
+      },
+      "T-20260920-017": {
+        "fast_recovery": "97a9e43116dff722f87180f35cc2bf49883624b36678c1d2a157c8ed01a7a16a",
+        "fast_removal": "6da2eb3a5788079a438e94fc6481e68823a453b182ba78739985577245d0dd80",
+        "slow_recovery": "f1afe063a3ca4da1a2b9e2def76c25a9b8eda187bac3d45e076e687113b4c599",
+        "slow_removal": "9071c2b0cab4f4ae052c7ded7864d0638f3142ee119f85fa2395f569071478ff",
+        "summary": "0b371bc2ae7f6c59c43099ba238a3d87eb0244e30f8156e4f79cb643dfc38f56",
+        "ucp_fast": "58bd8cca68c1e5e82fde8513b4d4f2bc8724f0a68c204ff2be177ed4f9cefb51",
+        "ucp_slow": "58bd8cca68c1e5e82fde8513b4d4f2bc8724f0a68c204ff2be177ed4f9cefb51"
+      },
+      "T-20260920-027": {
+        "fast_recovery": "bde3cf0a3e46c8739952cedc4ac579ea491cde2b4e265f0dc7c870a2ca119533",
+        "fast_removal": "2fd40574d423c456778d7a4e6c8451572119397b36be04b842664659ace846d8",
+        "slow_recovery": "7b88c265b6024aa399a60b5208f1032a4ec150c203eca241fb56c48657adeab4",
+        "slow_removal": "b89bf5f648d2205fd9824c1d9ce83c54e20f234c3a37a9ac02cdce25564ba289",
+        "summary": "6e9162d7c6672258c22ff7e49f35c29e1066fdf8e7847df162a783a9f1dfe938",
+        "ucp_fast": "84f5fe6dc8c93f8fc2620b9ae5c6f25ba67c79d17fcdd0dfc405602142e5cccf",
+        "ucp_slow": "84f5fe6dc8c93f8fc2620b9ae5c6f25ba67c79d17fcdd0dfc405602142e5cccf"
+      }
+    }
+  },
+  "forbidden": {
+    "reset_false_path_fields": [
+      "false_path",
+      "false_paths",
+      "reset_false_path",
+      "reset_false_paths",
+      "set_false_path",
+      "set_false_paths"
+    ],
+    "jtag_clock_period_fields": [
+      "period",
+      "period_ns",
+      "clock_period",
+      "clock_period_ns"
+    ]
+  }
+}

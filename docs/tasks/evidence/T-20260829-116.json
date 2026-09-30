@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-116",
+  "state": "done",
+  "base_sha": "ceb8af4",
+  "head_sha": "55488a0e51a1d54f368809c64831dfc557547a58",
+  "merge_sha": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+  "branch": "feature/T-20260829-116-aud-11-ror-docs",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-088",
+  "sent_at": "2026-08-29T15:00:00+0800",
+  "received_at": "2026-08-29T15:05:00+0800",
+  "reported_at": "2026-08-29T15:10:00+0800",
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648"
+  },
+  "tools": {
+    "python": "3.12.10"
+  },
+  "artifacts": [
+    {
+      "id": "artifact-aud11-checker",
+      "owner": "T-20260829-116",
+      "uri": "scripts/v82_profile_check.py",
+      "reproduce": "python3 scripts/v82_profile_check.py --emit-manifest docs/V82_PROFILE_MANIFEST.md && python3 scripts/v82_profile_check.py --validate-manifest",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "72ec8b5ab5d9c759238b86a77ac58fd157381190d4a47ad1f529a041336e7620"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-aud11-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 scripts/v82_profile_check.py --emit-manifest docs/V82_PROFILE_MANIFEST.md && python3 scripts/v82_profile_check.py --validate-manifest && python3 scripts/v82_profile_check.py --summary",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "manifest regenerated; 117 rows validated; summary unchanged (implemented=94 blocked=1)",
+      "source_sha": "ceb8af4",
+      "seed": null,
+      "wall_seconds": 2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-aud11-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 -m py_compile scripts/v82_profile_check.py && git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "py_compile and diff check passed",
+      "source_sha": "ceb8af4",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "known_limits": [
+    "No RTL/behavior change; only documentation and machine-source wording.",
+    "Profile statistics intentionally unchanged."
+  ],
+  "next": "Integrator review; EXT-04-001 can be closed after this branch merges.",
+  "correction_record": {
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-aud11-checker",
+        "uri": "scripts/v82_profile_check.py",
+        "sha256": "72ec8b5ab5d9c759238b86a77ac58fd157381190d4a47ad1f529a041336e7620",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ],
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "55488a0e51a1d54f368809c64831dfc557547a58",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "integrator_review": {
+    "received_at": "2026-08-29T23:40:00+0800",
+    "status": "accepted",
+    "head_sha": "50f16cda2b484b10a356181aa07a537c59563404",
+    "notes": "AUD-11 ROR doc/profile correction merged.",
+    "merge_sha": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+    "result_sha": "55488a0e51a1d54f368809c64831dfc557547a58"
+  }
+}

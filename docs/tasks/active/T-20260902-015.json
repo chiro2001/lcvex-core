@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-015",
+  "label": "FP-P1-TRANSACTION-WRAPPER",
+  "title": "FP/NEON FP-P1：单在途 transaction wrapper 与 core 握手",
+  "kind": "feature",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p1",
+  "agent_type": "rtl-transaction-interface",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-013",
+    "T-20260902-014"
+  ],
+  "base_sha": "fb53b80bfd42a9b52bce46e61bf5b4cd753b0e79",
+  "branch": "feature/T-20260902-015-fp-p1-transaction-wrapper",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-015",
+  "scope": "按 docs/FP_NEON_PIPELINE_PLAN.md FP-P1 实现：在不改变算术 raw-bit 结果的前提下，把现有组合 scalar/NEON FP 结果与 scalar FDIV 完成转换为一次 request / 一次 held response；core 增加 owner/issued 状态，将 ex_busy 泛化为 FP transaction wait。验证单次 issue、ID/EX 保持、EX/MEM backpressure、response hold、reset、kill 点、FPCR snapshot、FPEN trap 不启动、FCMP NZCV、FP→GPR 写回。",
+  "reads": [
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/FP_NEON_PIPELINE_BASELINE.md",
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-3_NEON_FP.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "Makefile",
+    "sim/**",
+    "tb/**"
+  ],
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-015-fp-p1-transaction-wrapper.md",
+    "docs/tasks/evidence/T-20260902-015.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "新增 transaction 握手 SV/Cocotb 定向 PASS"
+    ],
+    "l1": [
+      "P7-1/3/4/5 L0-L1 PASS",
+      "commit backpressure PASS"
+    ],
+    "l2": [
+      "现有 P7 lockstep 或等价 L2 子集 PASS",
+      "legacy 与 transaction active-payload digest 一致"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "FP transaction 单在途接口可用；单次 issue、response hold、reset/kill、FPCR snapshot、FCMP NZCV、FP→GPR 写回均验证；资源可暂不改善，功能/提交序列不变。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T01:14:00+08:00",
+  "updated_at": "2026-09-03T02:46:45+08:00",
+  "known_limits": [
+    "不改 raw-bit 算术语义；不引入多 transaction 在途；不引入年轻指令绕过；不运行 fit/STA/SOF"
+  ],
+  "handoff": "docs/handoffs/T-20260902-015-fp-p1-transaction-wrapper.md",
+  "evidence": "docs/tasks/evidence/T-20260902-015.json",
+  "next": "FP-P2 单 lane 共享与 NEON slot 分时",
+  "dispatch": {
+    "sent_at": "2026-09-03T01:14:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-015",
+    "branch": "feature/T-20260902-015-fp-p1-transaction-wrapper"
+  },
+  "head_sha": "cb280046f65e1ada6808d555dfc9928941352e4c",
+  "merge_sha": "3fa3a879f2da1c200844627db4a231d4aac3bee8",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T02:45:03+08:00",
+    "merged_at": "2026-09-03T02:46:45+08:00",
+    "recorded_at": "2026-09-03T02:46:45+08:00",
+    "notes": "FP-P1 transaction wrapper merged; integrator reran make compile and sim-sv-fp-scalar on merge SHA; Cocotb P7-3/4/5 and L2 remain for FP-P2 gate."
+  }
+}

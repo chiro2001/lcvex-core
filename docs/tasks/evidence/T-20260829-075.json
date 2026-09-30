@@ -1,0 +1,150 @@
+{
+  "artifacts": [
+    {
+      "bytes": 80230,
+      "id": "artifact-b0-manifest",
+      "owner": "T-20260829-075",
+      "reproduce": "python3 scripts/v82_profile_check.py --emit-manifest docs/V82_PROFILE_MANIFEST.md",
+      "retain_until": null,
+      "sha256": "0caddf24f9c6628215304c4b2c7a9167efa78a7c7b1cdda453b84ec99a3e8fbf",
+      "uri": "docs/V82_PROFILE_MANIFEST.md"
+    },
+    {
+      "bytes": 63005,
+      "id": "artifact-b0-checker",
+      "owner": "T-20260829-075",
+      "reproduce": "python3 scripts/v82_profile_check.py --validate-manifest",
+      "retain_until": null,
+      "sha256": "4065ad024a9305abfe340f5e8ebc7c3cf3db1c66792438b38bb70a9a631360d3",
+      "uri": "scripts/v82_profile_check.py"
+    }
+  ],
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "branch": "feature/T-20260829-075-b0-profile-audit",
+  "head_sha": "a4050c002087582fd74bfc82cb904cb44eefffcb",
+  "known_limits": [
+    "未新增任何指令/RTL/QEMU/顶层 Makefile 修改；profile 为审计文档。",
+    "QEMU 系统寄存器全量 JSON 未在本任务重新生成；现有 qemu_sysreg_inventory.py 可作为 B3 输入。",
+    "集成员尚未正式批准 profile；本 evidence 状态为 review。"
+  ],
+  "qemu": {
+    "qemu_fork_sha": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_sha256": "f0accfb67c2b4b79e39e40768b3c522a5f960515424839d90654d514c31f3aca",
+    "qemu_version": "11.1.0"
+  },
+  "received_at": "2026-08-29T01:52:29+0800",
+  "reported_at": "2026-08-29T01:52:29+0800",
+  "rtl_filelist_sha256": "a28a62a38dcaba3f3752b01f9ba8cbb7b6d7ec81170aaac304bb5a6844fbb63c",
+  "runs": [
+    {
+      "command": "python3 -m py_compile scripts/v82_profile_check.py",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "L1",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-b0-001",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+      "wall_seconds": null
+    },
+    {
+      "command": "python3 scripts/v82_profile_check.py --emit-manifest docs/V82_PROFILE_MANIFEST.md",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "L1",
+      "note": "generated 117-row manifest with embedded JSON",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-b0-002",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+      "wall_seconds": null
+    },
+    {
+      "command": "python3 scripts/v82_profile_check.py --validate-manifest",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "L1",
+      "note": "117 rows validated; manifest JSON matches built-in ROWS",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-b0-003",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+      "wall_seconds": null
+    },
+    {
+      "command": "python3 scripts/v82_profile_check.py --summary",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "L1",
+      "note": "implemented=93 shim=8 udef=1 blocked=2 deferred=13; total=117",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-b0-004",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+      "wall_seconds": null
+    }
+  ],
+  "schema_version": 1,
+  "sent_at": "2026-08-29T01:47:44+0800",
+  "state": "done",
+  "task": "T-20260829-075",
+  "tools": {
+    "python": "3.12.10"
+  },
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-075",
+  "merge_sha": "739bd94ba25e88e909801fcff90d382d352136ee",
+  "integrator_review": {
+    "received_at": "2026-08-29T02:01:30+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "dec2bd5390deda56af0e0368ce14ce52470e1e1a",
+    "implementation_sha": "a4050c002087582fd74bfc82cb904cb44eefffcb",
+    "notes": "B0 manifest 117 行，校验器通过；V82-BASE 68、SELECTED-EXT 28、SVE-EXCLUDED 5、DEFERRED 16；2 blocked（BASE-DP-018、EXT-FP-012）。可进入 G1 profile 批准；B1 应优先处理 BASE-DP-018，EXT-FP-012 由 B2 决策。",
+    "merge_sha": "739bd94ba25e88e909801fcff90d382d352136ee",
+    "result_sha": "a4050c002087582fd74bfc82cb904cb44eefffcb"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "739bd94ba25e88e909801fcff90d382d352136ee",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "a4050c002087582fd74bfc82cb904cb44eefffcb",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

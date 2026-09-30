@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-035",
+  "parent": "T-20260920-034",
+  "label": "B25-BOARD-RUNNER-REMOTE-SEAL",
+  "title": "Correct, AST-validate and hash-seal the reusable board runner bundle on GamePC",
+  "kind": "board-runner-infrastructure",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "blocked-remote-ast-compatibility",
+  "assigned_owner": "runner_t035",
+  "depends_on": ["T-20260920-032"],
+  "triggered_by": "T-034 preserved an incompatible first bootstrap before root creation; its corrected local bundle also needs a fail-closed preflight gate before remote seal.",
+  "base_sha": "5609f1518a22a7ceae5ebcc3fc314931410ab82f",
+  "branch": "infra/T-20260920-035-b25-board-runner-remote-seal",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-035",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-035-b25-board-runner-remote-seal",
+  "remote_bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-035-prepare.ps1",
+  "writes": [
+    "build/agents/T-20260920-035/** ignored corrected bundle/logs",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-035-b25-board-runner-remote-seal/** task-owned no-hardware validation root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-035-prepare.ps1 task-owned bootstrap",
+    "docs/tasks/evidence/T-20260920-035.json",
+    "docs/handoffs/T-20260920-035-b25-board-runner-remote-seal.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-034.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-034/build/agents/T-20260920-034/tools/** exact source bundle",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-034/build/agents/T-20260920-034/script-manifest.json"
+  ],
+  "source_contract": {
+    "manifest_sha256": "5f7d83702ccf745d1e16a29ec2eba10f40f0cd06c66cd7b28d02624fa9dc60a2",
+    "corrected_prepare_sha256": "2d81bf5a529106f7660676f941e973c855139d5efb231550c42469359fccd104",
+    "failed_remote_bootstrap_sha256_forbidden": "a83101c92a4afe9a67266f3afdd94b00bd9b900697e642294d7ed6d5a7db08e9"
+  },
+  "scope": "Copy the exact corrected T-034 local bundle into a T-035 task-owned ignored root, make only the reviewed compatibility and preflight fail-closed corrections, generate a new content-addressed manifest, then validate the exact resulting bytes in a fresh GamePC root using only file-based PowerShell AST/hash tools. No hardware or process query is permitted.",
+  "required_corrections": {
+    "bootstrap": "Use a PowerShell-version-compatible parent derivation (`[System.IO.Path]::GetDirectoryName($root)` preferred, or the already corrected supported -Path parameter set). Never copy the failed remote bootstrap artifact.",
+    "preflight_gate": "In run_board_once.sh, if preflight.ps1 returns nonzero, record BLOCKED_PREFLIGHT_NO_HARDWARE and exit before candidate label, marker, owned server, programmer, terminal or golden path. Static control-flow evidence is required.",
+    "no_other_semantic_delta": "All other reusable bundle behavior remains identical unless a concrete audit finding is documented and separately diff-reviewed in evidence."
+  },
+  "acceptance": {
+    "copy_provenance": "Every source file hash is checked against T-034 evidence before copy; record the exact two reviewed diffs and final per-file hashes.",
+    "local": "bash -n, Python py_compile, manifest JSON, no-hardcoded-consumer audit, no-inline-PowerShell audit and single candidate/golden/terminal control-flow audit pass.",
+    "freshness": "New remote root/bootstrap absent; no deletion or overwrite. Upload the corrected bootstrap once and invoke only with pwsh -File.",
+    "remote_ast": "Upload the sealed bundle once. `pwsh -File validate_scripts.ps1` reports zero parse errors for all PowerShell files.",
+    "remote_seal": "`pwsh -File verify_seal.ps1` reports all bundle bytes/SHA equal to the T-035 manifest; fetched AST/seal outputs are hash-bound.",
+    "boundary": "Remote actions are only filesystem, AST parse and SHA. jtagconfig/quartus_pgm/nios2-terminal/jtagserver/process enumeration and every FPGA/JTAG/reset/power/Flash action remain zero.",
+    "consumer": "Handoff gives the exact bundle directory/manifest/hash to copy byte-for-byte into the next board task. No script may be edited after this seal."
+  },
+  "resource": "All GamePC filesystem/parser actions hold resource-lock gamepc in one validation window; no EDA heavy job.",
+  "forbidden_regions": [
+    "tracked RTL/firmware/QSF/SDC/IP/policy/test/expected modifications",
+    "hardware/JTAG/process enumeration, quartus_pgm, nios2-terminal, server start/stop, FPGA configuration",
+    "JIC/EPCQ/Flash, reset, power or process termination",
+    "reuse/overwrite of T-034 remote paths",
+    "inline PowerShell -Command/stdin, remote replacement after first upload or validation retry",
+    "hardcoded consumer task/root or any programmer path reachable after failed preflight"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T19:21:18+08:00",
+    "agent_name": "runner_t035",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "blocked",
+    "partial": true,
+    "topic_evidence_head": "d203dba2d51ebd3ca9e6e78df244e2db8db98f10",
+    "integration_evidence_sha": "177465eaf6381405f3140f1c90c4dcce4cd8e0a7",
+    "bundle_manifest_sha256": "40b9c0b4bad3c2979d36694e547c4831411886299d350511ee2a6bdd3a988e48",
+    "passed": "fresh remote root/bootstrap, compatible root creation, one bundle upload, local syntax/static/control-flow checks",
+    "blocker": "remote validate_scripts.ps1 returned Argument types do not match before producing parse results; verify_seal was not run",
+    "hardware_counts": "JTAG=0 programmer=0 terminal=0 process-query=0 configuration=0",
+    "evidence": "docs/tasks/evidence/T-20260920-035.json",
+    "handoff": "docs/handoffs/T-20260920-035-b25-board-runner-remote-seal.md",
+    "next": "new fresh no-hardware task with typed parser refs and ordinary PowerShell arrays"
+  },
+  "created_at": "2026-09-20T19:20:05+08:00",
+  "updated_at": "2026-09-20T19:32:57+08:00"
+}

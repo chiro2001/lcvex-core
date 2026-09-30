@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-001",
+  "label": "B25-JTAG-RX-VENDOR-TIMING",
+  "title": "Reproduce and close the corrected B25 JTAG-UART RX gap with vendor-faithful full-SoC timing",
+  "kind": "rtl-verification-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-no-production-defect-reproduced",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260919-006"],
+  "triggered_by": "T-20260919-007 blocked-board-rx evidence",
+  "base_sha": "1d36868fa57a3b48a40f7a4a3aab4b7075e19eb8",
+  "branch": "fix/T-20260920-001-b25-jtag-rx-vendor-timing",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-001",
+  "writes": [
+    "rtl/lcvex_catapult_soc_top.sv::module lcvex_catapult_soc_jtag_uart only when a pre-fix reproducer proves a defect",
+    "tb/sv/lcvex_jtag_uart_model.sv",
+    "tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+    "tb/sv/lcvex_jtag_uart_vendor_model.sv",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv::JTAG model and delayed-RX scenarios",
+    "fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh",
+    "fpga/catapult_a10/tools/run_soc_smoke.sh only if a path override is required",
+    "scripts/test_registry.json",
+    "build/agents/T-20260920-001/** ignored validation artifacts",
+    "docs/tasks/evidence/T-20260920-001.json",
+    "docs/handoffs/T-20260920-001-b25-jtag-rx-vendor-timing.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260919-007.json",
+    "docs/handoffs/T-20260919-007-b25-nofp-board-interaction.md",
+    "fpga/catapult_a10/jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/hw/rtl/vex_soc_ddr_top.v::registered JTAG-UART read-response precedent",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/build/console_tx.ps1 and console_tx.txt"
+  ],
+  "scope": "Replace the optimistic combinational behavioral assumption with a vendor-faithful JTAG-UART model that preserves the generated IP's registered waitrequest/read_0/RVALID and showahead-OFF RX FIFO timing. Exercise both the isolated bridge and the complete PC=0 resident monitor after a long empty-poll interval. A production RTL change is permitted only when the current source fails a deterministic pre-fix test that corresponds to the hardware symptom.",
+  "acceptance": {
+    "reproduction_gate": "A deterministic current-source failure identifies the first incorrect boundary among host injection, Avalon side effect, bridge capture, M1-B response and monitor-visible DATA.RVALID/byte. If current RTL passes, record that result and continue narrowing without speculative RTL edits.",
+    "focused": "Icarus and Verilator pass exact DATA/CONTROL mapping, registered vendor waitrequest/read selector timing, showahead-OFF RX data, empty polls, delayed injection, repeated bytes, backpressure, reset and exactly-once pop/response.",
+    "full_soc": "The no-FP CAL-WAIT monitor reaches READY, performs a bounded long sequence of empty DATA polls, then consumes p/?/Z exactly once and returns PONG/status/echo using the vendor-faithful model.",
+    "implementation": "If a pre-fix failure exists, the minimal fix must state reset values and request/capture/response timing and make the same test pass without modifying generated vendor HDL or weakening assertions.",
+    "regression": "Affected L0-L2, behavioral SoC smoke and synthesis selector/registry checks pass; evidence records pre/post commands, source SHA, tool versions and hashes."
+  },
+  "resource": "Focused Icarus/static analysis is light. Verilator full-SoC work acquires local through /home/chiro/projects/.resource-locks/resource-lock; return 75 means wait. This task does not use GamePC, Quartus, assembler or JTAG. A proven RTL change triggers separate Gate D, fresh physical, assembler and board tasks.",
+  "forbidden_regions": [
+    "vendor-generated JTAG-UART production HDL",
+    "address[13] or RISC-V/VexRiscv workaround",
+    "QEMU fork, ISA/core behavior outside the reproduced RX path",
+    "assertion disable, expected-output relaxation or fabricated host injection",
+    "Quartus/JTAG/board/Flash/reset/power actions"
+  ],
+  "created_at": "2026-09-20T01:16:00+08:00",
+  "updated_at": "2026-09-20T02:23:26+08:00",
+  "result": {
+    "status": "done-no-production-defect-reproduced",
+    "partial": false,
+    "implementation_commit": "07e8148b55dfb92336f5c846a140de227f15d3fe",
+    "integration_evidence_commit": "1ebd6c65",
+    "production_rtl_changed": false,
+    "focused": "Icarus and Verilator PASS; reads/writes=8/8, RX pops=3, TX pushes=6",
+    "full_soc": "PASS for CAL-OK/CAL-WAIT/CAL-FAIL; 65,536 empty DATA reads and 458,755 commits before p/Z/? exactly-once interaction",
+    "behavioral_regression": "PASS for all three calibration scenarios",
+    "testbench_correction": "Vendor FIFO event precedes bridge acceptance pulse by one registered waitrequest phase; observer now compares after one-cycle alignment without weakening count checks",
+    "conclusion": "No deterministic failure at the modeled vendor Avalon/bridge/monitor boundary; production RTL edits remain forbidden",
+    "evidence": "docs/tasks/evidence/T-20260920-001.json",
+    "handoff": "docs/handoffs/T-20260920-001-b25-jtag-rx-vendor-timing.md",
+    "next": "Run T-20260920-004 delayed read-only standard-server rescan control before adding physical observability."
+  },
+  "next_after_acceptance": "If RTL changes, integrate and run affected union plus Gate D, then create one fresh no-FP physical/assembler/volatile-board retest chain. If no RTL defect reproduces, design the next observability experiment without claiming a fix."
+}

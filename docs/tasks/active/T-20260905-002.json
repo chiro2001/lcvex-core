@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-002",
+  "label": "TIMING-BATCH-R16",
+  "title": "Round16 batch for FP pack and core issue fanout cones",
+  "kind": "timing-batch-parent",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "joint-l0-l2-passed",
+  "assigned_owner": "codex-integrator",
+  "agent_type": "batch-integration",
+  "depends_on": [
+    "T-20260902-058"
+  ],
+  "dependency_override": "T-20260902-058 is accepted_blocked physical evidence and is intentionally consumed as the timing input.",
+  "base_sha": "1ccbb3baed633c9c64e7a078df4cad4ece69a2a5",
+  "branch": "batch/T-20260905-002-r16",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-002",
+  "timing_input": {
+    "task": "T-20260902-058",
+    "physical_source_sha": "e2ba6136537e1f8f45ca82af1de7caaad0088ba3",
+    "batch_base_sha": "1ccbb3baed633c9c64e7a078df4cad4ece69a2a5",
+    "physical_input_diff": "git diff --quiet T-058..batch-base -- rtl fpga/catapult_a10 = clean",
+    "setup_slack_ns": -2.675,
+    "tns_ns": -13566.924,
+    "failing_endpoints": 14244,
+    "top50_report_sha256": "43807d6a18cd08aaaad62f885d1f472338e6998f4adaacfa1194163d7e2a0b96",
+    "top50_parsed_sha256": "9adb68810058175b975655f457eecbad727641ca6ee73209dc911bec2c7b26ac"
+  },
+  "member_tasks": [
+    "T-20260905-003",
+    "T-20260905-004",
+    "T-20260905-005",
+    "T-20260905-006"
+  ],
+  "integration_order": [
+    "T-20260905-003",
+    "T-20260905-004",
+    "integration-latency-and-test-entry-fixups"
+  ],
+  "integration_fixups": [
+    "register an executable sim-sv-fp-exec-directed Makefile/test-registry entry before joint validation",
+    "use only the existing p7-3-neon-fp base L2 target; do not claim nonexistent edge/rounding/sequence variants",
+    "add difftest-muldiv-request to the mandatory L2 union"
+  ],
+  "reserved_files": [
+    "rtl/lcvex_fp_scalar.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "rtl/lcvex_muldiv.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_muldiv_req_tb.sv",
+    "sim/cocotb/test_muldiv_req.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "scripts/test_registry.json"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260905-002-timing-batch-r16.md",
+    "docs/tasks/evidence/T-20260905-002.json",
+    "build/agents/T-20260905-002/**"
+  ],
+  "joint_validation": {
+    "l0_l1": [
+      "make VERILATOR_JOBS=1 compile",
+      "sim-sv-fp-exec-directed including IT_PACK latency/reset/kill/valid-drop/pause-hold",
+      "P7-1/P7-3/P7-4/P7-5 complete SV and Cocotb suites",
+      "muldiv request/kill/done-hold SV+Cocotb",
+      "core backpressure/fetch-fifo/MMU/IRQ-young/IRQ-atomic SV suites"
+    ],
+    "l2": [
+      "P7-1 base/edge/rounding/sequence, P7-3 p7-3-neon-fp base only, and P7-4/P7-5 base/edge/rounding/sequence sets declared by lane 003",
+      "difftest-muldiv-request plus difftest-rtl, difftest-hazard, pair/LSE/LSE128/maint-v82/IRQ atomic/STXR-IRQ/NEON integer+fetch-fault sets declared by lane 004"
+    ],
+    "resource": "single local heavy slot; systemd MemoryMax=16G MemorySwapMax=0; VERILATOR_JOBS=1"
+  },
+  "acceptance": "两个 member lane 都通过写集与只读审查后，按登记顺序合入独立 batch candidate；在精确 candidate SHA 上运行全部 member acceptance L0-L2 并集。失败按原子 lane commit revert/bisect。全绿后 feature/p7-final 仅以 ff-only 晋级到精确 candidate SHA；若不能 fast-forward则在新 base 重建并重跑。随后只派一次 round16 Quartus physical。禁止 JTAG、烧写、上电和上板测试。",
+  "created_at": "2026-09-05T02:33:51+08:00",
+  "updated_at": "2026-09-05T03:44:32+08:00",
+  "known_limits": [
+    "T-058 top-50 has only two independent root cones after mem_paddr2 is grouped with core issue/muldiv",
+    "idex_valid->sys_reg and idex_valid->fp_operand_c are residual endpoints and this batch does not claim to cut the entire global ID/EX enable cone",
+    "GPR LDP/STP/LDXP/STXP cross-page second translation/all-or-nothing behavior is a pre-existing limitation outside this timing batch; aligned 128-bit atomic/NEON operations cannot legally start above page offset 0xff0",
+    "feature branch integration is frozen for RTL changes until this batch candidate is validated",
+    "assembler/SOF remains gated by all timing/DDR/Metastability; board actions remain prohibited without user permission"
+  ],
+  "validated_candidate_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "evidence": "docs/tasks/evidence/T-20260905-002.json",
+  "handoff": "docs/handoffs/T-20260905-002-timing-batch-r16.md",
+  "next": "ff-only promote the documentation tip with an identical RTL/test source tree, then dispatch one Round16 Quartus physical run",
+  "review_dispatch": {
+    "sent_at": "2026-09-05T02:38:19+08:00",
+    "agent_name": "/root/r16_batch_plan_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-plan-review",
+    "initial_review": {
+      "reported_at": "2026-09-05T03:05:04+08:00",
+      "status": "blocked_pending_actual_heads",
+      "blockers": ["B1 fallback/pack boundary", "B2 captured muldiv controls", "B3 PA2 token correctness", "B4 executable acceptance targets"]
+    },
+    "actual_head_review": {
+      "sent_at": "2026-09-05T03:08:04+08:00",
+      "received_at": "2026-09-05T03:08:04+08:00",
+      "reported_at": "2026-09-05T03:21:32+08:00",
+      "status": "rework",
+      "closed": ["FP fallback scan", "muldiv captured live controls and age-qualified kill"],
+      "remaining": ["FP IT_PACK pause probe", "remove dead PA2 cross-page token", "fix MUL W vector", "make L2 union executable and exact"]
+    },
+    "final_incremental_review": {
+      "sent_at": "2026-09-05T03:35:00+08:00",
+      "received_at": "2026-09-05T03:35:00+08:00",
+      "reported_at": "2026-09-05T03:40:04+08:00",
+      "status": "accepted_after_metadata_corrections",
+      "closed": ["FP IT_PACK pause contract", "dead PA2 token removal", "MUL W vectors", "exact executable union"]
+    }
+  }
+}

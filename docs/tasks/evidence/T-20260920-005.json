@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-005",
+  "label": "B25-RX-PHYSICAL-OBSERVABILITY",
+  "state": "done-local-observability-pass",
+  "acceptance_status": "implementation-and-affected-l0-l2-pass",
+  "partial": false,
+  "source_sha": "8f25c8e1bca0e082dd4281ae2822b566316b644a",
+  "branch": "fix/T-20260920-005-b25-rx-physical-observability",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-005",
+  "owner": "root",
+  "trigger": {
+    "vendor_timed_simulation": "PASS after 65,536 empty reads in T-20260920-001",
+    "board_rescan_control": "FAIL for status/PONG/Z despite two explicit JTAG UART #0 rescans in T-20260920-004",
+    "need": "Distinguish CPU polling, no physical DATA.RVALID, and a byte observed by the bridge without depending on host-to-target commands."
+  },
+  "implementation": {
+    "registers": {
+      "0x09003000": "Existing calibration/version status, unchanged",
+      "0x09003008": "32-bit naturally wrapping completed JTAG DATA-read count",
+      "0x09003010": "bits31:16 naturally wrapping RVALID count, bit8 RX-seen sticky, bits7:0 last received byte; all other bits zero"
+    },
+    "reset_values": {
+      "data_read_count": 0,
+      "rvalid_count": 0,
+      "rx_seen": 0,
+      "last_byte": 0
+    },
+    "update_timing": "Counters update only when lcvex_catapult_soc_jtag_uart completes an accepted DATA read in S_RD with waitrequest low. RVALID count/sticky/last-byte update only when the captured readdata bit 15 is one.",
+    "status_semantics": "Read-only +0/+8/+0x10 decode; writes have no side effects; each selected value is captured on req_accept and held stable until rsp_ready.",
+    "monitor": {
+      "startup": "Immediately after READY: RXDBG 00000000 00000000",
+      "periodic": "Automatically after every 0x40000 empty DATA polls; no RX command required",
+      "diagnostic_command": "d emits one immediate RXDBG snapshot",
+      "format": "RXDBG <eight uppercase hex DATA-read digits> <eight uppercase hex event digits> CRLF",
+      "unchanged_commands": ["p/PONG", "?/status", "m/DDR retest", "printable echo"]
+    },
+    "boundaries": {
+      "vendor_generated_hdl_changed": false,
+      "jtag_address_mapping_changed": false,
+      "public_soc_top_ports_changed": false,
+      "host_or_server_flow_changed": false
+    },
+    "commits": [
+      "3e49e102fe692a547c96dc023df166e6de4d7f5a",
+      "8f25c8e1bca0e082dd4281ae2822b566316b644a"
+    ],
+    "source_hashes": {
+      "soc_top": "736b0f76128c1a6c04f67c342df45371a330a5a4921c7c7ce3988fed5bc13b03",
+      "soc_pkg": "0842fa8a60abde25b3f6a5aebb7045d182ffe37197a1dcb288713841aa46e972",
+      "boot_source": "4fb0ef46f4ecc69e9bf439fcba1279b0e18dd6598123696d6fd33bc8cd1f35a1",
+      "bridge_tb": "1616d655976e62b9d681e3a39614886a01a67675d534870cddd0653f970c8e70",
+      "status_tb": "ad2c05d3b93518a0717d380e8e859aec9bcc8c5378b1e238f3a96f975004220a",
+      "soc_tb": "c292054c8dd265f090032c6913cdcab9f1d0607667e1216f5808cb8cb565007e",
+      "vendor_runner": "2aa0bf984b6e8e13fbe0515b48a191e56f66e3a903689d96b23eac491de30ecb"
+    }
+  },
+  "verification": {
+    "focused": {
+      "vendor_iverilog": {
+        "result": "PASS; reads/writes=8/8, RX pops=3, TX pushes=6",
+        "log_sha256": "6aedcc11eed588e080ffb026fb50f887446e8bceb4272acf79a5bb965e4435be"
+      },
+      "vendor_verilator": {
+        "result": "PASS; reads/writes=8/8, RX pops=3, TX pushes=6",
+        "log_sha256": "d36a8c890200f8a1d34739c251475be7af38a95893adf71533f3d54433639c37"
+      },
+      "behavioral_iverilog": "PASS; reads/writes=7/7, RX pops=3, TX pushes=6",
+      "behavioral_verilator": {
+        "result": "PASS; reads/writes=7/7, RX pops=3, TX pushes=6",
+        "run_log_sha256": "2255a54cf5afb74aa1e6d7871200035bdfa6dcd32aa55f43df961de0cbe98065",
+        "build_log_sha256": "3ce91e2bebfe4e520b9816b56ac772e91d8050d29ece4df13a0977629b00f369"
+      },
+      "status_iverilog": {
+        "result": "PASS",
+        "log_sha256": "56c5216d52d7db96071bad422b297ad39614290ca8336a1331cc47d28471a075"
+      },
+      "status_verilator": {
+        "result": "PASS",
+        "log_sha256": "3b6691ea993e7d7a85b95dd6f623367ec4e511787339db9a370c70d025ed9d5b"
+      }
+    },
+    "vendor_full_soc": {
+      "result": "PASS for CAL-OK/CAL-WAIT/CAL-FAIL",
+      "empty_data_reads": 262144,
+      "commits_during_empty_poll": 2359302,
+      "cycles_during_empty_poll": 12058670,
+      "coverage": "Startup zero RXDBG, periodic 0x40000 snapshot, dynamic d snapshot, PONG/status/echo and exactly-once RX",
+      "smoke_log_sha256": "acd4b1d713595c92e36a4176d8855796f77234aab8788d67fa4d07d2955dda6e",
+      "wrapper_log_sha256": "43c18eb8aa4374a211bb621ac689fcfb283fd91550a3dc36e2d88d6c82ffec75"
+    },
+    "behavioral_full_soc": {
+      "result": "PASS for CAL-OK/CAL-WAIT/CAL-FAIL with startup and dynamic RXDBG",
+      "smoke_log_sha256": "1202016e28f2f852f17db9ad6fc0c16fc35d76218d4b749378fe64b4ea43face"
+    },
+    "bram_image": {
+      "result": "PASS; independent ELF-derived image contract plus 13/13 negative faults and Verilator BRAM test",
+      "boot_bytes": 1204,
+      "boot_elf_sha256": "3df5c4fb5bb0aa74cca815fb3b3a0707ca49b0310e3e56a00d4a79199e3be6b2",
+      "boot_bin_sha256": "7d8cf878785aebf699cbb3d332df2d3c7e03f1b5045a2a1080771cc0310322d4",
+      "boot_hex_sha256": "e24afca92f89312598f6627b928c0869b8361b2704608ccd7d792392e4598e3c",
+      "boot_mif_sha256": "491f30c491f034f52b5222c7b8831f9b234b1d8bc7a84cf6180697bf78655c90",
+      "expected_image_sha256": "4adc73573da1097450255f9f28bdbcd6064137458f930bc661344ef02b569f60",
+      "manifest_sha256": "140d5ac04a05ed436aec68729dec5afee4a41301600cfd7859e7b7b7b8b35e5e",
+      "contract_check_log_sha256": "82cb593acfd8c67cdc449bb03d22401af6e9e10258b56261eade5987e09ac4e9",
+      "heavy_build_log_sha256": "5bfe8fb670d7266ae0d3b05ade2aa96a73f46dbaec581c6c5e684365d8e69351",
+      "heavy_run_log_sha256": "011443f24cec1c6aaa3f18434d09407e026b75a3ae52b779a68e1c42f4ed79f9",
+      "authoritative_heavy_run": "heavy-final-v2 with a pre-created task-owned TMPDIR",
+      "discarded_probe": "The first heavy probe functionally passed but Make fell back to system /tmp because the requested directory did not exist; it is not authoritative."
+    },
+    "static": {
+      "skeleton": "PASS; local Quartus toolchain absence reported nonfatally",
+      "synthesis_selector": "PASS",
+      "test_registry": "PASS; 86 entries and runner consistency",
+      "boot_disassembly": "PASS; RXDBG routines, 0x09003008/0x09003010 and 0x40000 literal present"
+    }
+  },
+  "resources_and_safety": {
+    "all_verilator_runs_held_local_lock": true,
+    "verilator_jobs": 1,
+    "authoritative_tmp_paths_task_owned": true,
+    "gamepc_or_quartus_used": false,
+    "assembler_or_board_action": false,
+    "flash_reset_or_power_action": false,
+    "final_resource_status": "local FREE; gamepc FREE"
+  },
+  "handoff": "docs/handoffs/T-20260920-005-b25-rx-physical-observability.md",
+  "next": "Integrate 8f25c8e1, run complete Gate D on the merged SHA, then create one fresh no-FP Quartus synthesis/fitter/STA/UCP and assembler chain before an instrumented volatile board test."
+}

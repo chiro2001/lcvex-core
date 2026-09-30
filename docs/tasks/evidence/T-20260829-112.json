@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-112",
+  "state": "done",
+  "base_sha": "c76b3ec37e12b1f9f79b20b31dafeace6a31af73",
+  "head_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+  "merge_sha": "6341539f725301f70ad206523d6f24ad0107d689",
+  "branch": "feature/T-20260829-112-aud-07-ci-failfast",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-112",
+  "owner": "audit-action-dsv",
+  "label": "AUD-07",
+  "title": "CI difftest/nightly 前置失败 fail-fast",
+  "scope": "修复 scripts/ci-difftest.sh 与 scripts/ci-nightly.sh 中 QEMU apply/build、plugin、lockstep/delay2 build、镜像生成等前置步骤失败未计入总结果的问题；清理/隔离陈旧产物；补充 shell 级负向测试。",
+  "files": [
+    "scripts/ci-difftest.sh",
+    "scripts/ci-nightly.sh",
+    "scripts/test_ci_failfast.sh",
+    "docs/handoffs/T-20260829-112-aud-07.md",
+    "docs/tasks/evidence/T-20260829-112.json"
+  ],
+  "runs": [
+    {
+      "run_id": "aud07-bash-n-difftest-001",
+      "source_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash -n scripts/ci-difftest.sh",
+      "seed": null,
+      "wall_seconds": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "ci-difftest.sh syntax OK"
+    },
+    {
+      "run_id": "aud07-bash-n-nightly-001",
+      "source_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash -n scripts/ci-nightly.sh",
+      "seed": null,
+      "wall_seconds": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "ci-nightly.sh syntax OK"
+    },
+    {
+      "run_id": "aud07-bash-n-test-001",
+      "source_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash -n scripts/test_ci_failfast.sh",
+      "seed": null,
+      "wall_seconds": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "negative test script syntax OK"
+    },
+    {
+      "run_id": "aud07-negative-001",
+      "source_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash scripts/test_ci_failfast.sh",
+      "seed": null,
+      "wall_seconds": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "9 injected preflight failures all returned non-zero (difftest qemu-apply/qemu-build/plugin-build; nightly qemu-apply/qemu-build/plugin/lockstep/delay2-build/image-gen)"
+    },
+    {
+      "run_id": "aud07-diffcheck-001",
+      "source_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "no whitespace/error"
+    },
+    {
+      "run_id": "aud07-json-001",
+      "source_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-112.json",
+      "seed": null,
+      "wall_seconds": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON valid"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "aud07-ci-difftest",
+      "uri": "scripts/ci-difftest.sh",
+      "sha256": "5c568a572c5568174a98050ff2950a4090bba0e1f350e26d60bc264db095f736",
+      "bytes": 2496,
+      "owner": "T-20260829-112",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:scripts/ci-difftest.sh | sha256sum"
+    },
+    {
+      "id": "aud07-ci-nightly",
+      "uri": "scripts/ci-nightly.sh",
+      "sha256": "7bb025f3247871e37aa4a00aed9d0978710f61be6a0827e5713e8e8b27cfcec4",
+      "bytes": 3657,
+      "owner": "T-20260829-112",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:scripts/ci-nightly.sh | sha256sum"
+    },
+    {
+      "id": "aud07-negative-test",
+      "uri": "scripts/test_ci_failfast.sh",
+      "sha256": "3e743fc36868dee651c29d1c9a7b33aec0fb8b13d91702ebbe599ef3422d005c",
+      "bytes": 2748,
+      "owner": "T-20260829-112",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:scripts/test_ci_failfast.sh | sha256sum"
+    }
+  ],
+  "known_limits": [
+    "未运行真实 QEMU build、Verilator 锁步 build、difftest 或 nightly 长回归。",
+    "未启动 Quartus。",
+    "负向测试为 shell sandbox 注入，不覆盖真实 toolchain/资源失败。",
+    "重型 Verilator 如实际运行必须在外层 cgroup <16GiB 下执行；本任务设置 VERILATOR_JOBS=1。"
+  ],
+  "next": "集成者复核并合并到 feature/p7-final；可在真实 CI/本地入口复跑负向测试确认前置失败即非零退出。",
+  "integrator_review": {
+    "received_at": "2026-08-30T00:14:35+08:00",
+    "status": "accepted",
+    "head_sha": "1f996f58fa6375a9df5a86e7c036123a98035576",
+    "notes": "AUD-07 merged. ci-difftest/ci-nightly preflights fail-fast, stale artifacts cleaned, VERILATOR_JOBS=1, 9 injected negative scenarios PASS.",
+    "merge_sha": "6341539f725301f70ad206523d6f24ad0107d689",
+    "result_sha": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "6341539f725301f70ad206523d6f24ad0107d689",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "920a8f52c6a5a2163b0dcf682fdec3d641cc9dd7",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  }
+}

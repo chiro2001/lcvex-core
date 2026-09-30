@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-001",
+  "label": "FPGA-A",
+  "parent": "T-20260828-067",
+  "title": "T-067 剩余模块 standalone Quartus 综合补齐",
+  "kind": "fpga-line-split",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "bd93bf6d56eadf674fa9040162271b453687aea3",
+  "branch": "feature/T-20260830-001-fpga-a",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-001",
+  "scope": "继续 T-102 未测模块：l2_probe/alu/regfile/muldiv/fp_scalar/neon_fp/mem_router/axi4_master/axi4_avalon_adapter/soc_axi/soc_coh；逐个 quartus_syn 记录 LC/VM/时间；不跑 full flow。",
+  "writes": [
+    "docs/handoffs/T-20260830-001-fpga-a.md",
+    "docs/tasks/evidence/T-20260830-001.json",
+    "fpga/**",
+    "rtl/**",
+    "tb/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260828-067-b5-fullflow-rerun.md",
+    "docs/handoffs/T-20260829-101-t067-synth-opt.md",
+    "docs/handoffs/T-20260829-102-t067-module-synth.md",
+    "rtl/**",
+    "fpga/**"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "handoff/evidence recorded"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T00:46:42+08:00",
+  "updated_at": "2026-08-30T00:46:42+08:00",
+  "known_limits": [
+    "不启动完整 B5 full flow（除非 FPGA-F）。",
+    "不读 license；不删除未知文件。",
+    "本地重型 Verilator 需 cgroup <16GiB。"
+  ],
+  "handoff": "docs/handoffs/fpga-a.md",
+  "evidence": "docs/tasks/evidence/T-20260830-001.json",
+  "merge_sha": "83fb62c31f4f3b6df144edbf3cb1f73cfbc01a2b",
+  "merged_at": "2026-08-30T01:04:11+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T01:04:11+08:00",
+    "status": "accepted_partial",
+    "head_sha": "8301872f5d54e6f39708a5d6bbd23fe5f9b012b0",
+    "notes": "FPGA-A partial merged: 11 modules measured; l2_probe/alu/regfile/muldiv/mem_router/axi4_master/axi4_avalon_adapter/soc_axi pass; fp_scalar/neon_fp fail lpm_divide; soc_coh timeout. Continue in FPGA-B/C/E."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T01:00:00+0800",
+        "new": "2026-08-30T00:46:42+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T01:00:00+0800",
+        "new": "2026-08-30T00:46:42+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T01:40:00+0800",
+        "new": "2026-08-30T01:04:11+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T01:40:00+0800",
+        "new": "2026-08-30T01:04:11+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "69a71e1e2c7b4e6f5e5e07dc95a419d2e3fa8ff3",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "69a71e1e2c7b4e6f5e5e07dc95a419d2e3fa8ff3"
+}

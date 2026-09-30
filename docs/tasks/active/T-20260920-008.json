@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-008",
+  "label": "B25-RX-OBSERVABILITY-NOFP-PROFILE",
+  "title": "Rebase the scalar no-FP board profile onto the RX observability candidate",
+  "kind": "board-profile",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "content-addressed-profile-and-affected-l0-l2-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260919-003", "T-20260920-005", "T-20260920-006"],
+  "base_sha": "85992f53c850091a466836e7fd4424dde6000484",
+  "base_tree_sha": "dd41ba4d9a1a97d819f9356697f28aa89326d64f",
+  "branch": "fpga/T-20260920-008-b25-rx-observability-nofp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-008",
+  "writes": [
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv::A64_FP_SIMD board-top default parameter only",
+    "build/agents/T-20260920-008/** ignored logs/artifacts",
+    "docs/tasks/evidence/T-20260920-008.json",
+    "docs/handoffs/T-20260920-008-b25-rx-observability-nofp-profile.md"
+  ],
+  "scope": "Apply the already accepted one-line A64_FP_SIMD default 1-to-0 diagnostic profile to exact RX observability candidate 85992f53. Preserve every RXDBG, M20K, UART, cache, QSF and SDC byte and freeze a new derivative SHA before physical execution.",
+  "validation": {
+    "scope": "The only non-ledger source delta from 85992f53 is the board-top A64_FP_SIMD default 1'b1 to 1'b0.",
+    "static": "No-FP parameter propagation, core/SoC/board elaboration and synthesis selector remain green.",
+    "focused": "Current 1204-byte RXDBG monitor image contract, corrected M20K timing and vendor JTAG-UART bridge tests remain green.",
+    "soc": "A combined no-FP full-SoC smoke reaches READY and validates periodic/dynamic RXDBG, status, PONG and echo in CAL-OK/WAIT/FAIL scenarios."
+  },
+  "acceptance": "A content-addressed derivative profile is committed with exactly one functional source-line change and all affected L0-L2 checks pass; it remains explicitly non-release and becomes T-007's physical input.",
+  "resource": "Static/focused checks may run unlocked when light. The combined no-FP full-SoC smoke must acquire local; return 75 means wait without bypassing the lock.",
+  "forbidden_regions": [
+    "core FP/NEON RTL, RX observability RTL, monitor semantics, M20K RTL, QSF or SDC changes",
+    "QEMU/reference/result changes or assertion/test relaxation",
+    "Quartus/GamePC/assembler/JTAG/board/JIC/EPCQ/Flash/reset/power",
+    "claiming full-FP or final release equivalence"
+  ],
+  "created_at": "2026-09-20T04:10:55+08:00",
+  "profile_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+  "profile_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+  "evidence_head_sha": "8e1a4d620b08f4f19d1a1ab33d0e8e0c0308762c",
+  "evidence": "docs/tasks/evidence/T-20260920-008.json",
+  "handoff": "docs/handoffs/T-20260920-008-b25-rx-observability-nofp-profile.md",
+  "updated_at": "2026-09-20T04:28:47+08:00"
+}

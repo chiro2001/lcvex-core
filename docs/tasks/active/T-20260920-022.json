@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-022",
+  "label": "B25-RXCPU-LOGIC-IMM-SYNTHESIS-REPAIR-BATCH",
+  "title": "Prove and repair the Quartus-visible logical-immediate divergence exposed by T-021",
+  "kind": "functional-repair-batch",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-candidate-l0-l2-and-fixed-synthesis-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-021"],
+  "base_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+  "integration_branch": "batch/T-20260907-037-b25-bringup",
+  "members": ["T-20260920-023", "T-20260920-024"],
+  "writes": [
+    "docs/tasks/active/T-20260920-022.json",
+    "docs/tasks/evidence/T-20260920-022.json",
+    "docs/handoffs/T-20260920-022-b25-rxcpu-logic-imm-synthesis-repair-batch.md"
+  ],
+  "trigger": "T-021 proved dmem response 0x0000A43F at bridge/PoC/core taps while uart_getc took TBNZ bit15 but both following logical-immediate masks behaved as zero; T-017 Quartus synthesis reported warning 16788 for lcvex_decode.sv logical-immediate temporary imm[63].",
+  "hypothesis": "Quartus 21.4 mis-synthesizes the output-argument form of logic_imm_valid or leaves part of its local imm value undriven. This must be proven against the exact two firmware opcodes before changing unrelated dmem/writeback logic.",
+  "batch_contract": {
+    "test_lane": "T-023 owns only new synthesis-equivalence test/project files and must capture an old-SHA negative control.",
+    "rtl_lane": "T-024 owns only rtl/lcvex_decode.sv and rewrites the logical-immediate valid/mask expression without changing ISA semantics.",
+    "integration": "The integrator serially merges both lanes into one candidate, registers any common test entry, then reruns the directed old/new contract and affected L0-L2 on the merged SHA.",
+    "physical_boundary": "No fresh Quartus full physical flow, assembler or board action begins until the merged candidate proves the two opcodes and removes the synthesis warning without regressions."
+  },
+  "acceptance": [
+    "Old base 1ce74e9c has a reproducible Quartus-visible negative control tied to warning 16788 and/or wrong post-map behavior, not merely a speculative code smell.",
+    "Opcode 0x12003C06 with W0=0xA43F yields W6=0xA43F; opcode 0x12001C00 yields W0=0x3F in behavioral and Quartus-produced logic.",
+    "The new implementation has no output-argument/local undriven logical-immediate temporary and fresh synthesis emits no warning 16788 for this cone.",
+    "All valid 32/64-bit logical-immediate encodings retain reference mask semantics; reserved encodings remain UDEF.",
+    "Affected L0-L2, boot image identity and full behavioral SoC RXCPU expectations pass on one frozen merged SHA."
+  ],
+  "resource": "Local generated tests use the local heavy lock when applicable; GamePC Quartus probes use gamepc. The two resource slots may overlap only with isolated inputs/outputs. Monitoring is event-driven with waits up to one hour.",
+  "forbidden_regions": [
+    "guessing a dmem/writeback fix before the logical-immediate hypothesis is falsified",
+    "waiving or filtering Quartus warning 16788 instead of eliminating its cause",
+    "changing expected architectural results, disabling assertions or skipping negative encodings",
+    "assembler, JTAG, FPGA configuration, JIC/EPCQ/Flash, reset or power actions"
+  ],
+  "created_at": "2026-09-20T14:00:39+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-20T14:03:44+08:00",
+    "lanes": ["logicimm_test", "logicimm_rtl"],
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+    "candidate_tree_sha": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+    "root_cause": "Quartus 21.4 warning 16788 on the logical-immediate output-argument temporary is eliminated by a pure fully-assigned packed return; this matches the T-021 physical A43F/TBNZ/zero-mask symptom.",
+    "old_negative": "PASS; fresh old RTL synthesis reproduced warning 16788",
+    "fixed_synthesis": "PASS; fresh candidate synthesis Successful/0 errors and warning 16788 count 0",
+    "exhaustive": "PASS; 16384 encodings, 11328 legal and 5056 reserved, exact A43F/3F cases",
+    "affected_l0_l2": "PASS; compile, SV smoke, microbench, encoders, M20K timing, RX response trace and vendor full-SoC CAL-OK/WAIT/FAIL",
+    "postmap_limit": "EDA netlist generated, but no compatible simulator/vendor primitive model was available; no post-map semantic PASS is claimed",
+    "evidence": "docs/tasks/evidence/T-20260920-022.json",
+    "handoff": "docs/handoffs/T-20260920-022-b25-rxcpu-logic-imm-synthesis-repair-batch.md",
+    "next": "T-20260920-025 detached Gate D on exact candidate c31b3aea"
+  },
+  "updated_at": "2026-09-20T14:51:49+08:00"
+}

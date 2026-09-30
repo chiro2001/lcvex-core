@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "T-20260919-005",
+  "label": "B25-NOFP-UCP-INVARIANT-PROFILE",
+  "title": "Review and bind the fresh no-FP UCP/reset measurement profile",
+  "kind": "physical-waiver-profile",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "fresh-t004-normalized-invariant-profile-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260919-001"],
+  "staged_dependency": {
+    "task": "T-20260919-004",
+    "required_state": "fresh fitter and STA successful; report-only clone raw UCP/recovery/removal bundle captured with immutable source pre/post manifests",
+    "reason": "T-004 final physical acceptance consumes this profile, so depending on T-004 done would create a cycle. Only its immutable raw measurement stage is consumed."
+  },
+  "base_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+  "base_tree_sha": "d5baa6b05f5f8824236c816980ab6e6d48578594",
+  "branch": "infra/T-20260919-005-b25-nofp-ucp-invariant-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-005",
+  "reads": [
+    "build/agents/T-20260919-004/acceptance/** immutable downloaded raw reports and source manifests",
+    "fpga/catapult_a10/physical_waivers_invariant.json",
+    "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py",
+    "fpga/catapult_a10/tools/check_physical_waiver_invariants.py",
+    "fpga/catapult_a10/tools/run_physical_waiver_invariant_fixture.py"
+  ],
+  "writes": [
+    "fpga/catapult_a10/physical_waivers_invariant.json::provenance.accepted_profiles.T-20260919-004 and report_profiles.T-20260919-004 only",
+    "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py::PRODUCTION_POLICY_DIGEST only",
+    "build/agents/T-20260919-005/** ignored review/inventory/replay artifacts",
+    "build/agents/T-20260910-001/invariant-fixture-t005/** ignored compatibility output required by the fixture's fail-closed historical root",
+    "docs/tasks/evidence/T-20260919-005.json",
+    "docs/handoffs/T-20260919-005-b25-nofp-ucp-invariant-profile.md"
+  ],
+  "scope": "Review the complete T-004 raw report set, prove that duplicate-normalized UCP and reset endpoint membership is exactly the existing v2 contract, then append one content-addressed measurement profile and update the fail-closed production policy digest. This records a new measured implementation; it must not change the invariant contract.",
+  "validation": {
+    "review": "All fast/slow UCP and recovery/removal rows parse; normalized TDI/TMS/TDO/reset membership, hierarchy classes, endpoint/family digests and cross-corner sets exactly match v2; every detailed reset slack is positive and violations are zero.",
+    "provenance": "Candidate SHA/tree, branch/worktree, staged manifest, user/generated SDC, Quartus/device, immutable source pre/post manifests and every raw report hash are bound to T-004.",
+    "regression": "Updated exporter and checker accept T-004; T-011 and T-013 reviewed profiles replay unchanged; invariant fixture remains 2/2 positive and 27/27 negative; py_compile and diff-check pass."
+  },
+  "acceptance": "Only a new T-004 measurement profile and the resulting canonical policy digest change. The normalized contract, duplicate lifting rule, old profile entries, RTL/QSF/SDC and reference results remain byte-identical; exporter+checker accepts the fresh T-004 inventory fail-closed.",
+  "resource": "Local light parsing only; no local/gamepc heavy lock, Quartus, network or board access.",
+  "forbidden_regions": [
+    "ucp/reset normalized counts, members, hierarchy classes, endpoint/family digests or duplicate normalization rules",
+    "T-20260909-011 or T-20260909-013 accepted/report profile entries",
+    "RTL, QSF, SDC, boot image, QEMU, test expectations or assertions",
+    "Quartus synthesis/fitter/STA/assembler, JTAG, SOF programming, Flash/reset/power"
+  ],
+  "created_at": "2026-09-19T23:17:31+08:00",
+  "updated_at": "2026-09-19T23:53:21+08:00",
+  "implementation_head": "4ef63a70acef32dcf140c377eb6059ff3cd5c9cd",
+  "evidence": "docs/tasks/evidence/T-20260919-005.json",
+  "handoff": "docs/handoffs/T-20260919-005-b25-nofp-ucp-invariant-profile.md",
+  "next_after_acceptance": "T-20260919-004 can close normalized UCP signoff; assembler remains gated by T-002 and the rest of T-004 physical acceptance."
+}

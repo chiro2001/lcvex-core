@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-040",
+  "label": "FP-MAC-PPPREHI-CUT",
+  "title": "FP scalar mult_1 MAC -> pp_pre_hi setup cut (62L/27.8ns)",
+  "kind": "rtl-timing-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-mac-ppprehi-cut",
+  "agent_type": "local-rtl-sim",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-039"
+  ],
+  "base_sha": "5315bbb61a7614406b2f8e1b72b72edcbf087dfa",
+  "branch": "fix/T-20260902-040-fp-mac-ppprehi-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-040",
+  "scope": "打断 sys_clk_50 setup top-1: scalar_unit mult_1~mac_11~reg0 -> g_iter.pp_pre_hi.sig[*]（62 逻辑级 / 27.811ns / -7.685ns），保持 FP/NEON raw-bit 语义与 DSP/PPA 平衡。",
+  "reads": [
+    "docs/handoffs/T-20260902-039-fp-p5-rerun-round8.md",
+    "docs/handoffs/T-20260902-034-fp-pre-iter-cut.md",
+    "docs/handoffs/T-20260902-038-fp-ppother-slotres-cut.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/**",
+    "sim/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-040-fp-mac-ppprehi-cut.md",
+    "docs/tasks/evidence/T-20260902-040.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS"
+    ],
+    "l1": [
+      "lcvex_fp_exec_tb PASS",
+      "sim-sv-fp-scalar/sim-sv-p7-3/4/5 PASS",
+      "cocotb P7-1/3/4/5 尽量 PASS"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "本地 FP/NEON 功能/回归全绿；latency 更新；后续 FP-P5 rerun 观察 mult_1 MAC->pp_pre_hi 离开 top。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T03:05:00+08:00",
+  "updated_at": "2026-09-04T03:24:50+08:00",
+  "known_limits": [
+    "不改变 FPCR/FPSR/FCMP/raw-bit 语义；不引入猜测执行；不改 FP 单在途/顺序提交；不做 false_path；避免不必要新增 DSP"
+  ],
+  "handoff": "docs/handoffs/T-20260902-040-fp-mac-ppprehi-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260902-040.json",
+  "next": "合并后重跑 FP-P5；若 setup 闭合则 assembler/SOF 门",
+  "dispatch": {
+    "sent_at": "2026-09-04T03:06:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "98e15225-38f6-448a-add0-50c58cada160",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-040",
+    "branch": "fix/T-20260902-040-fp-mac-ppprehi-cut"
+  },
+  "head_sha": "22812d05e056a1fe13577ed3b753f16f19ca8920",
+  "merge_sha": "4a21b97bb46533ac69e940a181d0592aad260ce9",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T03:24:16+08:00",
+    "merged_at": "2026-09-04T03:24:50+08:00",
+    "recorded_at": "2026-09-04T03:24:50+08:00",
+    "notes": "FP MAC->pp_pre_hi product register cut merged; compile passes. Next FP-P5 rerun with T-040."
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-038",
+  "label": "B25-GOLDEN-ONLY-VOLATILE-RECOVERY",
+  "state": "done",
+  "acceptance_status": "pass-live-golden-proven",
+  "partial": false,
+  "base_sha": "2e18aa0224ad01388bf624c9476e4a2bf11c95fa",
+  "head_sha": null,
+  "evidence_parent_sha": "c8a7d8d80aad3d8d8b5e5742fb5a2fa0e0288762",
+  "head_sha_note": "Self-referential evidence; final commit SHA is reported in the handoff and agent response.",
+  "branch": "verify/T-20260920-038-b25-golden-only-volatile-recovery",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-038",
+  "owner": "golden_t038",
+  "sent_at": "2026-09-20T20:18:31+08:00",
+  "received_at": "2026-09-20T20:18:31+08:00",
+  "remote_window_started_at": "2026-09-20T20:25:32+08:00",
+  "program_started_at": "2026-09-20T20:25:37.4167335+08:00",
+  "program_finished_at": "2026-09-20T20:26:25.4886538+08:00",
+  "reported_at": "2026-09-20T20:31:25+08:00",
+  "scope": {
+    "hardware_access": true,
+    "programmer_invocations": 1,
+    "candidate_programmer_invocations": 0,
+    "candidate_programmer_success": false,
+    "golden_programmer_attempted": 1,
+    "golden_programmer_success": true,
+    "terminal_sessions": 0,
+    "jtagconfig_invocations": 1,
+    "fpga_configuration": 1,
+    "flash_actions": 0,
+    "jic_epcq_flash_actions": 0,
+    "reset_or_power_actions": 0,
+    "unknown_process_stopped": 0,
+    "standard_server_stopped": 0,
+    "task_owned_server_stops": 1
+  },
+  "source_contract": {
+    "source_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036",
+    "source_tools": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036/build/agents/T-20260920-036/tools",
+    "source_manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "remote_host": "192.168.101.5",
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-038-b25-golden-only-volatile-recovery",
+    "remote_bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-038-prepare.ps1",
+    "golden": {
+      "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F"
+    },
+    "candidate_identity_checked_but_not_programmed": {
+      "path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842105,
+      "sha256": "bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264",
+      "checksum": "0x315AC2B3",
+      "design_hash": "0CC907F3DD48A9C78864E3C5BD66B9AF"
+    },
+    "jtag": {
+      "id": "0x02E060DD",
+      "cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+      "uart": "JTAG UART #0",
+      "phy": "JTAG PHY #0"
+    }
+  },
+  "copy_provenance": {
+    "destination_tools": "build/agents/T-20260920-038/tools",
+    "source_hashes_checked_before_copy": true,
+    "byte_for_byte_cmp_all_nine": true,
+    "content_hashes_unchanged_after_runner": true,
+    "manifest_generated_by": "build/agents/T-20260920-038/tools/seal_manifest.py",
+    "manifest_sha256": "40ed4f8fbff7b8ec0a97f4367edee8c2d9ea3073e68132b69ffd387d6b2fdee8",
+    "files": [
+      {"name": "prepare_task_root.ps1", "bytes": 1866, "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d", "remote": true},
+      {"name": "validate_scripts.ps1", "bytes": 2491, "sha256": "73632da1b96e445df0302be273ee777e11da218e71f43183e7c33aebe1646592", "remote": true},
+      {"name": "verify_seal.ps1", "bytes": 2871, "sha256": "7fd26eac819fa141dbf9b7a2255bc8854cc5f6175c6ec42179e2edca30eeac85", "remote": true},
+      {"name": "preflight.ps1", "bytes": 4120, "sha256": "29f46fca907c56288ebb7cd0a99a57750f3e0c7e452b940f76e36f1ace5aad31", "remote": true},
+      {"name": "program_once.ps1", "bytes": 16007, "sha256": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e", "remote": true},
+      {"name": "postflight.ps1", "bytes": 4558, "sha256": "3bad7a13a6e3765982b16247602a814dac45d9dc6b34ddc9ca605d8941f540f8", "remote": true},
+      {"name": "direct_terminal.py", "bytes": 16101, "sha256": "059bb54fa1f1d3c01209ead636ca5cfcc536d2e4b4a2d41819a3d18f9a4a2e66", "remote": true},
+      {"name": "run_board_once.sh", "bytes": 9819, "sha256": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018", "remote": true},
+      {"name": "seal_manifest.py", "bytes": 1886, "sha256": "e95f87a2e91b73202edca05b9b441ad6def328c9c061e86cb111dd5ebf7c2cde", "remote": true}
+    ]
+  },
+  "local_bundle": {
+    "manifest": {"path": "build/agents/T-20260920-038/script-manifest.json", "bytes": 1639, "sha256": "40ed4f8fbff7b8ec0a97f4367edee8c2d9ea3073e68132b69ffd387d6b2fdee8"},
+    "wrapper": {"path": "build/agents/T-20260920-038/run_golden_recovery_once.sh", "bytes": 13550, "sha256": "0d9ee6f4e0a2f8fc85d3256850967827fbceff5bdf116b21ee302cf229b694c2"},
+    "bundle_is_non_reusable": true
+  },
+  "local_validation": {
+    "bash_n": {"status": 0, "command": "bash -n build/agents/T-20260920-038/run_golden_recovery_once.sh"},
+    "manifest_jq": {"status": 0, "predicate": "task_id=T-20260920-038, files=9, every remote=true, bytes numeric, SHA256 lowercase hex"},
+    "tool_cmp_and_hash": {"status": 0, "result": "all nine source/destination cmp and expected SHA-256 checks passed"},
+    "git_diff_check": {"status": 0}
+  },
+  "remote": {
+    "resource_lock": {
+      "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-038 golden_t038 -- bash build/agents/T-20260920-038/run_golden_recovery_once.sh",
+      "all_gamepc_actions_locked": true,
+      "window_exit": 1,
+      "remote_retry": false,
+      "remote_access_after_window": false
+    },
+    "freshness": {"status": 0, "root_absent": true, "bootstrap_absent": true},
+    "bootstrap_upload": {"status": 0, "count": 1, "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d"},
+    "bootstrap_prepare": {"status": 0, "result": "PREPARE_ROOT_RESULT=PASS"},
+    "bundle_upload": {"status": 0, "count": 1, "manifest_sha256": "40ed4f8fbff7b8ec0a97f4367edee8c2d9ea3073e68132b69ffd387d6b2fdee8"},
+    "remote_ast": {"status": 0, "result": "PASS", "files": 6, "parse_failure_count": 0},
+    "remote_seal": {"status": 0, "result": "PASS", "checked_count": 9, "all_bytes_match": true, "all_sha256_match": true},
+    "root_state_after": "created-and-preserved",
+    "bootstrap_state_after": "uploaded-once-and-preserved"
+  },
+  "golden_program": {
+    "command": "pwsh.exe -File D:/Projects/fpga-altra/lcvex/build/T-20260920-038-b25-golden-only-volatile-recovery/incoming/program_once.ps1 -TaskId T-20260920-038 -TaskRoot D:/Projects/fpga-altra/lcvex/build/T-20260920-038-b25-golden-only-volatile-recovery -Mode golden -RunLabel recovery",
+    "ssh_exit": 0,
+    "result": "PASS",
+    "volatile_program_pass": true,
+    "marker_count": 1,
+    "marker": {"path": "build/agents/T-20260920-038/run/recovery/golden-quartus-pgm.once", "bytes": 65, "sha256": "6151f378b727025955ff4f5ca380979eaca8820e7e3d1ed9f081d62760a502b8", "value": "T-20260920-038|golden|recovery"},
+    "program_result": {"path": "build/agents/T-20260920-038/run/recovery/program-golden-recovery/runtime/program-result.json", "bytes": 8680, "sha256": "e0b7aabd5e5ad1d33d1d22de17d4d8e991ef61e9e3fd9bae6a2a063bbc5f9391", "golden_quartus_pgm_invocation_count": 1, "candidate_quartus_pgm_invocation_count": 0},
+    "programmer": {
+      "pid": 18828,
+      "exit_code": 0,
+      "tool_success": true,
+      "configuration_success": true,
+      "operation_success": true,
+      "checksum_match": true,
+      "jtag_id_match": true,
+      "stdout": {"path": "build/agents/T-20260920-038/run/recovery/program-golden-recovery/runtime/quartus_pgm.stdout.log", "bytes": 2268, "sha256": "90e52cf3e33aee517be2e01817cea9640490309bb3230ccae717bb23b1b0b947"},
+      "stderr": {"path": "build/agents/T-20260920-038/run/recovery/program-golden-recovery/runtime/quartus_pgm.stderr.log", "bytes": 104, "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"}
+    },
+    "owned_server": {"pid": 56352, "stopped": true, "standard_server_preserved": true, "standard_server_pid": 5640, "post_busy_count": 0, "post_port1310_count": 0},
+    "identity": {"bytes": 36844906, "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92", "checksum": "0x31510BB6", "design_hash": "193DE4BC8A30F3ED5F1F", "jtag_id": "0x02E060DD"}
+  },
+  "final_enumeration": {
+    "command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\jtagconfig.exe -n",
+    "invocations": 1,
+    "ssh_exit": 0,
+    "required_cable": true,
+    "required_jtag_id": true,
+    "required_design_hash": true,
+    "required_uart": true,
+    "required_phy": true,
+    "output": {"path": "build/agents/T-20260920-038/run/final-jtagconfig.log", "bytes": 576, "sha256": "0174d434496c709c6e0399d3fb511810b69c6eb81cbbf44772d9600a79db2ac4"}
+  },
+  "boundary": {
+    "candidate_programmer": 0,
+    "terminal": 0,
+    "jic_epcq_flash": 0,
+    "reset_power": 0,
+    "standard_unknown_process_stop": 0,
+    "standard_server_stopped": 0,
+    "live_identity_proof": "successful golden programmer transaction plus one final standard-server jtagconfig enumeration"
+  },
+  "artifacts": {
+    "summary": {"path": "build/agents/T-20260920-038/run/summary.txt", "bytes": 2812, "sha256": "eb53f02177689b8105fec492c7f69deb9dcb8d2d263a85b93bf68c5344145835"},
+    "remote_freshness_log": {"path": "build/agents/T-20260920-038/run/remote-freshness.log", "bytes": 222, "sha256": "048e2ba89ae430962e02f5341cf60c694fb7e131cb417790075a56b32ca09992"},
+    "bootstrap_log": {"path": "build/agents/T-20260920-038/run/bootstrap.log", "bytes": 863, "sha256": "10eaece6e63685fb73bb65fd3e8de9d1343c65ede25ad9c455e40f29aa5e372c"},
+    "remote_ast_log": {"path": "build/agents/T-20260920-038/run/remote-ast.log", "bytes": 2016, "sha256": "376e636fbc403a8f9d836de67d2170cd01f7518a0b1932b8a0efca3dad831f5b"},
+    "remote_seal_log": {"path": "build/agents/T-20260920-038/run/remote-seal.log", "bytes": 4805, "sha256": "3d5bd2686d3d2641df11c397fb1c3bbc8b2e57d6a91044cab59e126ce2310ae9"},
+    "program_stdout_capture": {"path": "build/agents/T-20260920-038/run/program-golden-recovery.log", "bytes": 938, "sha256": "aac8ac7d8ec7df58313b3da79f1ccfc712de42fee77e9672f755c59c2f65c28c"},
+    "fetch_log": {"path": "build/agents/T-20260920-038/run/fetch-artifacts.log", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "resource_status_held": {"path": "build/agents/T-20260920-038/run/resource-status-held.log", "bytes": 126, "sha256": "25fe4e372e9a3c1eba5c22097b9c967ce6f061f5813ec7266de90918db21a884", "value": "gamepc BUSY while wrapper held lock"},
+    "resource_status_after": "gamepc FREE",
+    "server_manifest": {"path": "build/agents/T-20260920-038/run/recovery/program-golden-recovery/runtime/server-manifest.json", "bytes": 5338, "sha256": "af6fa91faf036b0d17e6f1d846af9ac852e59747cffad15db6366cca35029489"},
+    "server_shim_log": {"path": "build/agents/T-20260920-038/run/recovery/program-golden-recovery/server/ftd2xx_shim.log", "bytes": 101137264, "sha256": "6d9bd9458b89f287cab14bded0bd509fdd820e417dedd7bbbaf80246a32b3b94"}
+  },
+  "runner_note": {
+    "wrapper_exit": 1,
+    "reason": "Wrapper counted PROGRAMMER_PID lines in SSH stdout; PowerShell program_once captures those function outputs into program-result instead of emitting them. The sealed program-result contains programmer PID 18828 and golden_quartus_pgm_invocation_count=1.",
+    "acceptance_basis": "program-result.json and quartus_pgm stdout/result are authoritative; no hardware retry or post-window remote access occurred."
+  },
+  "integration_review": {
+    "reviewed_at": "2026-09-20T20:39:54+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "review_base_sha": "99764a05ec9287f4d158d6d6a011cde31fe485fb",
+    "review_base_tree": "4c39ad5719e4e6a7e894fb328c8f14e5e2f5d8b1",
+    "evidence_import_sha": "e48a303a",
+    "evidence_hash_correction_sha": "99764a05",
+    "topic_evidence_head": "bb3404fd16f777f5802f83d99146279ad6149698",
+    "artifact_hash_recheck": "PASS; all 17 locally retained path/SHA256 pairs match. The two Windows SOF identities are bound by the sealed programmer result and final chain evidence and were not re-read after the resource-lock window.",
+    "golden_programmer_acceptance": "PASS",
+    "final_chain_acceptance": "PASS",
+    "live_final_state": "exact frozen golden SOF proven",
+    "safety_boundary_recheck": "PASS; candidate/terminal/Flash/reset/power/standard-or-unknown-stop counts remain zero",
+    "result": "PASS"
+  },
+  "next": "Closed. Do not rerun program_once, candidate, terminal, reset, power, Flash, or access GamePC for this task."
+}

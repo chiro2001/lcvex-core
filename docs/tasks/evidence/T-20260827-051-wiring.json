@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-051-wiring",
+  "parent_task": "T-20260827-051",
+  "state": "done",
+  "base_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+  "source_sha": "90efd1555246ee3887ab095890dced0181a76c3d",
+  "branch": "feature/T-20260827-051-p7-wiring",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring",
+  "reported_at": "2026-08-27T09:39:14+08:00",
+  "owner_dispatch": {
+    "sent_at": "2026-08-27T08:49:45+08:00",
+    "received_at": "2026-08-27T09:39:14+08:00",
+    "reported_at": "2026-08-27T09:39:14+08:00",
+    "elapsed_seconds": 2969
+  },
+  "timezone": "Asia/Shanghai",
+  "implementation": [
+    "rtl/filelist.f 在 package 后加入 lcvex_fp_state.sv。",
+    "decoder/core 接入 FPCR/FPSR MRS/MSR、FPEN access trap、ID commit effect、CPACR 唯一状态及 FP sidecar restore。",
+    "SoC 暴露 split V restore/effect/raw-state 端口；普通 SV/Cocotb 入口将 restore 输入固定为零。",
+    "coordinator 采样 DUT raw FPCR/FPSR/V state，比较 FP_COMMIT 后状态并把 sidecar 与 system restore 同沿注入。",
+    "新增 SoC wiring SV/Cocotb 覆盖；未实现 FP/NEON 算术、访存或 P7-1~P7-3。"
+  ],
+  "environment": {
+    "verilator": "5.050",
+    "python": "3.12.4",
+    "cocotb": "2.0.1",
+    "qemu_release": "11.1.0",
+    "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "profile": "cortex-a76,has_el3=false,has_el2=false",
+    "icount": "shift=0,align=off,sleep=off"
+  },
+  "tests": [
+    {
+      "run_id": "wiring-l1-compile-final",
+      "level": "L1",
+      "command": "make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/make-compile-final.log"
+    },
+    {
+      "run_id": "wiring-l1-lockstep-build",
+      "level": "L1",
+      "command": "make lockstep-build",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-lockstep/lockstep-build-final.log"
+    },
+    {
+      "run_id": "wiring-l1-sv-p7",
+      "level": "L1",
+      "command": "make sim-sv",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "scalar + FPCR/FPSR MRS/MSR、CPACR.FPEN、masked effect/state",
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/sim-sv-p7-final.log"
+    },
+    {
+      "run_id": "wiring-l1-sv-backpressure",
+      "level": "L1",
+      "command": "make sim-sv-backpressure",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/sim-sv-backpressure.log"
+    },
+    {
+      "run_id": "wiring-l1-cocotb-p7",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_p7_wiring SIM_BUILD=build/agents/T-20260827-051/wiring-tests/cocotb-p7",
+      "exit_code": 0,
+      "result": "pass",
+      "seed": 1787793878,
+      "summary": "SoC FPCR/FPSR wiring、FPEN=00 trap、restore 同沿、scalar boundary",
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/cocotb-p7-4.log"
+    },
+    {
+      "run_id": "wiring-l1-cocotb-backpressure",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_commit_backpressure SIM_BUILD=build/agents/T-20260827-051/wiring-tests/cocotb-backpressure",
+      "exit_code": 0,
+      "result": "pass",
+      "seed": 1787793401,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/cocotb-backpressure-2.log"
+    },
+    {
+      "run_id": "wiring-l2-a76-zero-fp",
+      "level": "L2",
+      "command": "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=14 COORD=build/verilator_lockstep/lockstep_coordinator PLUGIN=qemu/plugins/lcvex_difftest.so IMAGE=build/difftest/q6_svc.bin bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "14 条 required scalar/exception smoke",
+      "coord_log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-required/a76_coord.log",
+      "qemu_log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-required/a76_qemu.log"
+    },
+    {
+      "run_id": "wiring-l2-a76-real-fp-state",
+      "level": "L2",
+      "command": "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=10 COORD=build/verilator_lockstep/lockstep_coordinator PLUGIN=qemu/plugins/lcvex_difftest.so IMAGE=build/agents/T-20260827-051/wiring-required/fp_sysreg.bin bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "真实 FPCR/FPSR MRS/MSR 的 FP_INIT/FP_COMMIT、DUT effect/raw state",
+      "coord_log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-required/fp_sysreg_coord.log",
+      "qemu_log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-required/fp_sysreg_qemu.log"
+    },
+    {
+      "run_id": "prior-p7-independent-state",
+      "level": "L1",
+      "command": "见既有 docs/tasks/evidence/T-20260827-051.json continuation-l1-sv-011/continuation-l1-cocotb-012",
+      "exit_code": 0,
+      "result": "prior_pass_reused",
+      "summary": "独立 lcvex_fp_state SV/Cocotb 已通过，本切片未重做。"
+    }
+  ],
+  "failures_resolved": [
+    {
+      "run_id": "wiring-l1-compile-warnings",
+      "source_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "command": "make compile",
+      "exit_code": 2,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-lint/make-compile.log",
+      "root_cause": "新增端口初次接线产生 PINCONNECTEMPTY/UNUSEDSIGNAL；通过 CPACR read 视图、P7 边界断言和完整端口连接闭合。"
+    },
+    {
+      "run_id": "wiring-l1-compile-warnings-2",
+      "source_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "command": "make compile",
+      "exit_code": 2,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-lint/make-compile-2.log",
+      "root_cause": "剩余 FP trap code/esr 未被 core 使用；通过 core P7 trap syndrome 断言闭合。"
+    },
+    {
+      "run_id": "wiring-l1-cocotb-env",
+      "source_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "command": "make -C sim/cocotb -f Makefile SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_commit_backpressure",
+      "exit_code": 2,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/cocotb-backpressure.log",
+      "root_cause": "未在 conda lcvex 环境中调用，找不到 cocotb-config；重跑使用 conda run 后通过。"
+    },
+    {
+      "run_id": "wiring-l1-sv-expected-mask",
+      "source_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "command": "make sim-sv",
+      "exit_code": 1,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/sim-sv-p7-debug.log",
+      "root_cause": "定向程序写入 0xffff 未覆盖 FPCR 高 mask 位，测试误期望 full mask；修正程序为 0x07c8<<16。"
+    },
+    {
+      "run_id": "wiring-l1-cocotb-readonly",
+      "source_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb ... COCOTB_TEST_MODULES=test_p7_wiring",
+      "exit_code": 2,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/cocotb-p7.log",
+      "seed": 1787793781,
+      "root_cause": "Cocotb 在 ReadOnly phase 清除 restore valid；加入下一时隙后驱动。"
+    },
+    {
+      "run_id": "wiring-l1-cocotb-fpsr-expected-mask",
+      "source_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb ... COCOTB_TEST_MODULES=test_p7_wiring",
+      "exit_code": 2,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/cocotb-p7-2.log",
+      "seed": 1787793804,
+      "root_cause": "0xffff 只命中 FPSR 低 8 位；测试期望 full mask 与输入不符，修正为 0x9f。"
+    },
+    {
+      "run_id": "wiring-l1-cocotb-readonly-2",
+      "source_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb ... COCOTB_TEST_MODULES=test_p7_wiring",
+      "exit_code": 2,
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-tests/cocotb-p7-3.log",
+      "seed": 1787793852,
+      "root_cause": "第一处 ReadOnly 修正后，第二阶段 reset 仍在同一 ReadOnly phase 驱动；增加时隙后通过。"
+    }
+  ],
+  "known_limits": [
+    "FP/NEON 算术、向量访存和 P7-1~P7-3 未实现；当前真实 required lockstep 只覆盖 FPCR/FPSR 状态访问。",
+    "run_lockstep_resume.sh 仍是前序 P6 入口，P7 13 列 manifest 的 runner 参数化由后续集成任务处理；coordinator 本身已接受 --restore-fp 并同沿注入。",
+    "完整 LCVXFP01 发布/恢复、Gate D/F、Linux 长跑不在本 wiring 窗口宣称通过。"
+  ],
+  "artifacts": {
+    "implementation_commit": "90efd1555246ee3887ab095890dced0181a76c3d",
+    "logs_root": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051",
+    "fp_directed_image": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-required/fp_sysreg.bin"
+  }
+}

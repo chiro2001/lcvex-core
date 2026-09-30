@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-040",
+  "label": "PE-F3-PRE",
+  "state": "done",
+  "partial": false,
+  "base_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+  "head_sha": "d3d6d46e3d9fca7be07f0bb80f1acb2188351ea6",
+  "content_sha": "d3d6d46e3d9fca7be07f0bb80f1acb2188351ea6",
+  "merge_sha": "46cd024f0b9fcfc9732335560c1850f92a1fc8c8",
+  "branch": "feature/T-20260830-040-pe-f3-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-040",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "scope": "docs-only：冻结 F3 transaction ID/epoch/kill、精确异常/顺序、MSHR/store-buffer 后置门和 F3a-d child DAG；不修改 RTL/TB/sim，不运行生成器、构建、仿真、QEMU、Quartus。",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-08-30T15:30:28+08:00",
+    "received_at": "2026-08-30T15:32:46+08:00",
+    "reported_at": "2026-08-30T16:05:21+08:00",
+    "created_at": "2026-08-30T16:05:21+08:00",
+    "followup_sent_at": "2026-08-30T16:04:14+08:00",
+    "followup_received_at": "2026-08-30T16:04:45+08:00",
+    "followup_reported_at": "2026-08-30T16:05:21+08:00"
+  },
+  "correction_record": {
+    "old_head_sha": "786d96ff6fcd7c2992aa87a090d8dd0fdd3ba705",
+    "old_reported_at": "2026-08-30T16:02:18+08:00",
+    "content_sha": "d3d6d46e3d9fca7be07f0bb80f1acb2188351ea6",
+    "corrected_reported_at": "2026-08-30T16:05:21+08:00",
+    "reason": "持久证据初版 head/reported_at 早于最终技术内容提交 committer 时间；保留旧值并同步 follow-up 纠正。",
+    "head_semantics": "head_sha/content_sha 指向已提交的技术内容树；承载本次 correction 的新 commit SHA 无法在自身内容中预写，最终 branch tip 以 follow-up FINAL 的 head 为准。"
+  },
+  "read_only_commands": [
+    {
+      "command": "date --iso-8601=seconds; git status --short --branch; git rev-parse HEAD; git branch --show-current",
+      "result": "2026-08-30T15:32:46+08:00；clean；HEAD=e3d9fa5e9f5bad4d01cb75433046926e5daac4e7；branch 正确",
+      "read_only": true
+    },
+    {
+      "command": "wc -l < required docs/RTL/tests; rg --files; rg -n relevant lifecycle/fault/reset/checkpoint/response symbols",
+      "result": "完成文件清单和行号索引；确认 docs/CHECKPOINT_PROTOCOL.md 在工作树和 HEAD 中不存在",
+      "read_only": true
+    },
+    {
+      "command": "sed -n ... AGENTS.md docs/MULTI_AGENT_WORKFLOW.md docs/tasks/active/T-20260830-040.json performance/protocol docs rtl and relevant tb/sv sim/cocotb sim/difftest files",
+      "result": "完成指定规范、性能计划、commit/probe、core/cache/memory/MMU/PTW、fault/atomic/maintenance/reset/checkpoint/response-hold 路径审阅；未写入输入文件",
+      "read_only": true
+    },
+    {
+      "command": "sed -n ... /home/chiro/projects/mycpu/lcvex/docs/tasks/active/T-20260830-038.json",
+      "result": "仅读取 G5 任务记录的同步读、单口或简单双口、valid metadata 边界；未读取 T-038 worktree",
+      "read_only": true
+    },
+    {
+      "command": "sed -n '1,280p' docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md",
+      "result": "补读 checkpoint sidecar v4 的临时权威 handoff；用于解释 restore/reset/sidecar 边界，未修改该文件",
+      "read_only": true
+    },
+    {
+      "command": "git diff --check",
+      "result": "通过；仅检查文档变更，未运行测试/构建",
+      "read_only": true
+    }
+  ],
+  "files_read": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/active/T-20260830-040.json",
+    "docs/tasks/active/T-20260830-038.json",
+    "docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_mem_arb.sv",
+    "rtl/lcvex_mem_router.sv",
+    "rtl/lcvex_mem_delay.sv",
+    "rtl/lcvex_mem_ram.sv",
+    "rtl/lcvex_l1_d.sv",
+    "rtl/lcvex_l1_d_wb.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_axi4_master.sv",
+    "rtl/lcvex_mmu.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_l2_cluster.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "rtl/lcvex_cluster_pkg.sv",
+    "tb/sv/lcvex_mem_if_tb.sv",
+    "tb/sv/lcvex_l1_d_tb.sv",
+    "tb/sv/lcvex_l2_tb.sv",
+    "tb/sv/lcvex_l1_d_wb_tb.sv",
+    "tb/sv/lcvex_l2_wb_tb.sv",
+    "tb/sv/lcvex_l2_l1_probe_tb.sv",
+    "tb/sv/lcvex_mmu_tb.sv",
+    "tb/sv/lcvex_c2_cluster_tb.sv",
+    "tb/sv/lcvex_c2_l1_msi_tb.sv",
+    "tb/sv/lcvex_c2_atomic_ok_tb.sv",
+    "tb/sv/lcvex_c2_atomic_fail_tb.sv",
+    "tb/sv/lcvex_c2_maint_barrier_tb.sv",
+    "tb/sv/lcvex_c2_reset_fault_tb.sv",
+    "tb/sv/lcvex_core_tb.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_commit_backpressure_tb.sv",
+    "sim/cocotb/test_l1_d_wb.py",
+    "sim/cocotb/test_l2_wb.py",
+    "sim/cocotb/test_lcvex_core.py",
+    "sim/cocotb/test_commit_backpressure.py",
+    "sim/cocotb/test_axi4.py",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/checkpoint_manifest_smoke.py",
+    "sim/difftest/checkpoint_resume_manifest_smoke.py",
+    "sim/difftest/checkpoint_v4_struct_smoke.py",
+    "sim/difftest/checkpoint_sys_smoke.sh",
+    "sim/difftest/checkpoint_sys_v3_smoke.sh",
+    "sim/difftest/checkpoint_timer_smoke.sh",
+    "sim/difftest/checkpoint_gic_smoke.sh",
+    "sim/difftest/checkpoint_mmio_smoke.sh",
+    "sim/difftest/checkpoint_sctlr_mask_smoke.sh",
+    "sim/difftest/lockstep_coordinator.cc"
+  ],
+  "files_written": [
+    "docs/PERFORMANCE_F3_PREWORK.md",
+    "docs/handoffs/T-20260830-040-pe-f3-prework.md",
+    "docs/tasks/evidence/T-20260830-040.json"
+  ],
+  "validation": {
+    "tests_run": [],
+    "build_run": false,
+    "simulation_run": false,
+    "qemu_run": false,
+    "quartus_run": false,
+    "generators_run": false,
+    "git_diff_check": "pass"
+  },
+  "conclusion": "已形成可直接登记 F3a 单深度 ID/epoch 实现任务的冻结契约；F3b 2-entry MSHR、F3c 1-entry store buffer、F3d F0 同口径复测均明确后置依赖、验证门和 rollback。",
+  "blockers": [
+    "缺失 docs/CHECKPOINT_PROTOCOL.md 不阻断本次 docs-only prework 接受，但阻断 F3a 实现启动；临时权威读取集为 docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md、sim/difftest/checkpoint.py、sim/difftest/lockstep_coordinator.cc 和 docs/L1_L2_PROBE_CONTRACT.md。"
+  ],
+  "risks": [
+    "基础 mem_req_t/mem_rsp_t、arb/router/delay/RAM/cache 均无端到端 transaction identity，当前单 outstanding 依赖隐含状态。",
+    "C2 cluster_top 将 line source/transaction ID 全 tie 为 0，且 coherent line request 类型无身份字段。",
+    "G5 同步 RAM 端口/读写冲突语义尚未在当前基线落地，不能假设仅改 core 即产生两个真实 miss。",
+    "当前 store request accepted 可能先产生下游副作用；store fault all-or-nothing 尚无跨层证明，F3c 默认必须关闭。"
+  ],
+  "integration": {
+    "reviewed_at": "2026-08-30T16:09:34+08:00",
+    "result": "accepted",
+    "owner_head_sha": "2806f5c884ceb8cc7223d0e6f6b034438e3f42df",
+    "merge_sha": "46cd024f0b9fcfc9732335560c1850f92a1fc8c8",
+    "checks": [
+      "clean owner worktree",
+      "declared three-file write set only",
+      "git diff --check",
+      "JSON parse",
+      "artifact hashes"
+    ],
+    "tests": "docs-only task; no build or simulation required or claimed",
+    "checkpoint_gate": "F3a implementation may not start until docs/CHECKPOINT_PROTOCOL.md exists or the recorded temporary authority set is explicitly approved in the child task."
+  },
+  "next": "登记 F3a-PKG -> F3a-CORE/TRANSPORT -> F3a-CACHE-M1 -> F3a-CACHE-WB-COH -> F3a-VERIFY；F1 与 F3 的 core RTL 串行合入；F3a pairing/reset/checkpoint/precise-exception 门通过后再评估 F3b/F3c。",
+  "artifacts": []
+}

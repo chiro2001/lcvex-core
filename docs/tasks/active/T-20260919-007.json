@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "T-20260919-007",
+  "label": "B25-NOFP-BOARD-INTERACTION",
+  "title": "Volatile configuration and JTAG-UART interaction for the corrected no-FP profile",
+  "kind": "board-bringup",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "completed-board-rx-functional-failure",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260919-006"],
+  "registration_sha": "0a65f9d2f5a73fe2b0483b5ad3f6d5c3de94c61a",
+  "branch": "verify/T-20260919-007-b25-nofp-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-007",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260919-007-b25-nofp-board-interaction",
+  "writes": [
+    "build/agents/T-20260919-007/** ignored console/programmer evidence",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260919-007-b25-nofp-board-interaction/** task-owned runtime",
+    "docs/tasks/evidence/T-20260919-007.json",
+    "docs/handoffs/T-20260919-007-b25-nofp-board-interaction.md"
+  ],
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "scope": "Quartus/JTAG volatile FPGA configuration and JTAG-UART device testing",
+    "excluded": ["JIC/EPCQ/Flash write or erase", "power cycle", "board-level reset", "stopping unknown processes"]
+  },
+  "scope": "Using the proven historical task-owned 15 MHz programmer server and the preserved standard JTAG-UART console path, configure the exact T-006 SOF into volatile SRAM, attach device 1 instance 0 immediately, and exercise boot/status/PING/echo. Preserve all pre-existing servers; stop only task-owned recorded PIDs.",
+  "interface": {
+    "program_server_source": "D:/Projects/fpga-altra/jtag-30mhz",
+    "program_frequency_hz": 15000000,
+    "program_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310",
+    "console_command": "D:/Software/intelFPGA_pro/21.4/quartus/bin64/nios2-terminal.exe --cable=JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)] --device=1 --instance=0"
+  },
+  "sof": {"task": "T-20260919-006", "bytes": 36842110, "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7", "quartus_checksum": "0x31426358"},
+  "acceptance": "Quartus reports volatile configuration success, expected SOF checksum and JTAG ID; console connects and observes LCVEX25 BOOT, CAL state, DDR state and READY; '?' returns status, 'p' returns PONG and printable 'Z' is echoed. No persistent format, reset/power action, unknown-process stop or residual task process.",
+  "failure_policy": "Preserve all candidate evidence. If the corrected candidate fails functionally after a proven configuration, restore the content-addressed golden SOF through the same volatile path when safe, without reset/power/Flash, and report the exact first missing marker. Do not retry the same candidate indefinitely.",
+  "resource": "All preflight, programming, console and optional golden rollback actions hold gamepc. Programmer and terminal are foreground/owned and bounded; return 75 means wait.",
+  "forbidden_regions": [
+    "JIC/EPCQ/Flash or any persistent configuration",
+    "power cycle or board-level reset",
+    "global jtagserver kill or stopping any pre-existing/unknown process",
+    "using an SOF whose bytes/hash differ from T-006 evidence",
+    "claiming Linux or full-FP release validation"
+  ],
+  "created_at": "2026-09-19T23:54:41+08:00",
+  "updated_at": "2026-09-20T01:09:42+08:00",
+  "result": {
+    "status": "blocked-board-rx",
+    "partial": true,
+    "integration_commit": "1d36868f",
+    "programming": "PASS for the exact T-006 SOF; checksum 0x31426358, JTAG ID 0x02E060DD, Configuration succeeded, operation succeeded and programmer exit 0",
+    "hardware_boot": "PASS; LCVEX25 BOOT, CAL-WAIT, DDR-FAIL and READY observed",
+    "functional_acceptance": "FAIL; connected raw, line-buffered, PTY and reference ordinary-file input attempts produced no status/PONG/echo",
+    "golden_control": "PASS for volatile programming and target-to-host output; current no-reset run reached OpenSBI/Linux but not a shell, so current host-input control is inconclusive",
+    "final_board_state": "known-good golden SOF running",
+    "safety": "No JIC/EPCQ/Flash, power or reset action; only task-owned server/terminal PIDs stopped; preexisting standard server PID 5640 preserved",
+    "evidence": "docs/tasks/evidence/T-20260919-007.json",
+    "handoff": "docs/handoffs/T-20260919-007-b25-nofp-board-interaction.md",
+    "next": "T-20260920-001 must reproduce the RX gap with vendor-faithful full-SoC timing before any RTL change."
+  },
+  "next_after_acceptance": "Superseded by the T-20260920-001 RX reproduction/fix task; final board acceptance remains part of the active parent goal."
+}

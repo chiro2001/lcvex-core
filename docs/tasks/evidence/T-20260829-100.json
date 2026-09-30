@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-100",
+  "state": "done",
+  "base_sha": "df3c8ba5fcb75632c31fd6f780a1861a2566eac4",
+  "head_sha": "d5c1cd8db7194a0c541038ab4e01e34cc38df1b3",
+  "merge_sha": "937750183321f35cfe5a256cf7d4f91868e22c2b",
+  "branch": "feature/T-20260829-100-c4-scale-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-100",
+  "sent_at": "2026-08-29T16:39:49+0800",
+  "received_at": "2026-08-29T16:39:49+0800",
+  "reported_at": "2026-08-29T16:39:49+0800",
+  "owner": "T-20260829-100-c4-pre-owner",
+  "model": "dsh-default",
+  "label": "C4-pre",
+  "title": "C4 8/16/32 核规模前置设计与测量契约",
+  "scope": "只读 C4 前置设计：定义 CORE_COUNT 参数化扩展（topology、目录位图、仲裁树/队列、MMIO/中断路由、共享 L2 带宽模型），8/16/32 核验收口径（compile/elaboration、有限 smoke、资源/延迟趋势），C4/C3/C5/C6 依赖边界，R-C4/R-C5 风险，以及可机检测量报告模板。不实现/不改 RTL，不启动 Quartus，不宣称 8/16/32 核功能完成。",
+  "files": [
+    "docs/C4_SCALE_PREWORK.md",
+    "docs/handoffs/T-20260829-100-c4-scale-prework.md",
+    "docs/tasks/evidence/T-20260829-100.json"
+  ],
+  "toolchain": {
+    "git": "git",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "df3c8ba5fcb75632c31fd6f780a1861a2566eac4",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 whitespace 错误。"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "df3c8ba5fcb75632c31fd6f780a1861a2566eac4",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-100.json",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON 合法。"
+    },
+    {
+      "run_id": "owner-l0-003",
+      "source_sha": "df3c8ba5fcb75632c31fd6f780a1861a2566eac4",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git status --short && git diff --name-only",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "仅 3 个允许文档文件修改；rtl/tb/sim/QEMU 无改动。"
+    },
+    {
+      "run_id": "owner-l0-004",
+      "source_sha": "df3c8ba5fcb75632c31fd6f780a1861a2566eac4",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "read-only audit of docs/C3_FOURCORE_PREWORK.md, docs/MULTICORE_CLUSTER_CONTRACT.md, docs/LCVX_DIFF_MC_V2.md, rtl/lcvex_l2_cluster.sv, rtl/lcvex_cluster_top.sv, rtl/lcvex_gic.sv",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "确认 C3-pre 已并入主线；C2 仍有 2 核硬编码与系统级缺陷；C4 需要先等 C3 泛化，当前只做设计契约。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "docs/C4_SCALE_PREWORK.md",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-100-c4-pre-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:docs/C4_SCALE_PREWORK.md"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "docs/handoffs/T-20260829-100-c4-scale-prework.md",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-100-c4-pre-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:docs/handoffs/T-20260829-100-c4-scale-prework.md"
+    }
+  ],
+  "known_limits": [
+    "纯设计/测量契约任务，未运行任何 8/16/32 核 RTL 仿真或规模测量。",
+    "C2 未完全关闭：C2 remainder 仍有同 line 可见性/原子类 blocker。",
+    "C3 四核功能尚未实现，因此 C4 实际规模测量不能在当前执行。",
+    "未启动 Quartus，不做板级/物理签核。",
+    "32 核仅是参数化/资源/延迟趋势目标，不代表功能完成或 Linux SMP 支持。",
+    "测量模板中的字段用于后续可机检报告，当前无真实数值填充。"
+  ],
+  "next": "集成者 review；继续关闭 C2，完成 C3-A/B/C/D；C3 稳定后按本模板执行 8/16/32 核 compile/elaboration、有限 smoke 与资源/延迟趋势报告。",
+  "report_head_sha": "d5c1cd8db7194a0c541038ab4e01e34cc38df1b3",
+  "handoff_sha": "0ec8df63907b5b945840b41112f1926fa2eac50e",
+  "integrator_review": {
+    "received_at": "2026-08-29T16:41:54+08:00",
+    "status": "accepted",
+    "head_sha": "0ec8df63907b5b945840b41112f1926fa2eac50e",
+    "notes": "C4-pre docs-only accepted: C4_SCALE_PREWORK.md + handoff/evidence. No RTL/tb/sim/QEMU changes. Defines CORE_COUNT scaling, 8/16/32 acceptance, measurement template, R-C4/R-C5 risks.",
+    "merge_sha": "937750183321f35cfe5a256cf7d4f91868e22c2b",
+    "result_sha": "d5c1cd8db7194a0c541038ab4e01e34cc38df1b3"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "937750183321f35cfe5a256cf7d4f91868e22c2b",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "0ec8df63907b5b945840b41112f1926fa2eac50e",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "d5c1cd8db7194a0c541038ab4e01e34cc38df1b3",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

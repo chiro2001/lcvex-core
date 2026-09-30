@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-008",
+  "label": "FPGA-G6-POSTFIX-SYNC",
+  "parent": "T-20260828-067",
+  "title": "A10 final-core resource candidate 隔离同步与 hash closure",
+  "kind": "fpga-remote-candidate-sync",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-a10-postfix-sync",
+  "agent_type": "remote-infrastructure",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260831-003", "T-20260831-006"],
+  "base_sha": "291018d9a63efe549be589d1127e424e1118ed8a",
+  "branch": "infra/T-20260831-008-a10-postfix-sync",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-008",
+  "scope": "将包含 T-046/H-04/T-006 的稳定候选 291018d 的 rtl/** 与 fpga/catapult_a10/** source closure 同步到远程全新隔离目录 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260831-008\\candidate。重建 machine-readable manifest/sidecar 和 QSF 相对路径所需的 candidate-only fpga/rtl aliases，在 Windows 逐项回读集合/bytes/SHA256/QSF refs。不覆盖 T-003 或旧工程，不运行 Quartus/Qsys/仿真/编程，不读 license。",
+  "planning_guidance": {
+    "closure": [
+      "source SHA 固定 291018d9a63efe549be589d1127e424e1118ed8a，worktree clean；先运行 platform offline/strict-source/50-hash/skeleton checks。",
+      "tracked closure 仅 rtl/** 和 fpga/catapult_a10/**；排除 .git/build/obj/log/SOF/JIC/RBF/license/QEMU/cache。",
+      "从当前 QSF 重新计算 ../../rtl refs，alias 必须与根 RTL 逐字节一致；不复用 T-003 的旧 manifest hash。",
+      "manifest 记录 source commit、path、bytes、SHA256、tracked/alias count、total bytes、QPF/QSF/SDC；远程回读集合必须精确一致。"
+    ],
+    "remote_safety": [
+      "传输前只读采集 EDA/high-memory、physical/pagefile/disk；已有 EDA 作业则 WAIT，不启动或停止任何进程。",
+      "目标目录存在且非空则 blocked；不删除/覆盖旧 build、DB、log 或 T-003 candidate。",
+      "禁止 Stop-Process/taskkill/reboot/priority/pagefile change；禁止 quartus_sh/quartus_syn/quartus_fit/quartus_sta/quartus_asm/qsys/vsim/questa/quartus_pgm。",
+      "同步后再采集资源/EDA 快照；仅给后续 reduced probe 提供 candidate，不宣称 synthesis/release 通过。"
+    ]
+  },
+  "writes": [
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/build/T-20260831-008/candidate/**",
+    "docs/FPGA_A10_POSTFIX_CANDIDATE_SYNC.md",
+    "docs/handoffs/T-20260831-008-a10-postfix-sync.md",
+    "docs/tasks/evidence/T-20260831-008.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md", "docs/tasks/evidence/T-20260831-003.json",
+    "docs/tasks/evidence/T-20260831-006.json", "rtl/**", "fpga/catapult_a10/**",
+    "/home/chiro/projects/a10-linux-riscv/**", "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex"
+  ],
+  "validation": {
+    "l0": ["local provenance/checkers", "new-root collision and pre/post resource/EDA snapshots", "local/remote exact manifest set/hash/bytes closure", "QSF refs and aliases exact", "JSON/diff/write-set"],
+    "l1": [], "l2": [], "l3": [], "l4": []
+  },
+  "acceptance": "远程全新 candidate 精确绑定 291018d，file-set/bytes/SHA256 与本地 closure 完全一致，QSF 引用和 aliases 全部存在/相等；全程未改动旧工程、进程、系统配置或 license，未启动 EDA。",
+  "resource": {"cpu": 1, "memory_mb": 2048, "disk_mb": 2048, "timeout_s": 1800, "allocation_ratio": 0.1},
+  "budget_policy": {"initial_minutes": 30, "extension_increment_minutes": 30, "max_minutes": 60, "max_is_hard_stop": false, "background_after_max": true},
+  "created_at": "2026-08-31T20:22:26+08:00",
+  "updated_at": "2026-08-31T20:55:05+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T20:26:25+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-003 与 A10 资源审计的 gpt-5.6-luna(max) agent；当前只持有 T-008。",
+    "model": "gpt-5.6-luna", "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-008"
+  },
+  "handoff": "docs/handoffs/T-20260831-008-a10-postfix-sync.md",
+  "evidence": "docs/tasks/evidence/T-20260831-008.json",
+  "merge_sha": "5ccde17a0a78ae72f43b19109bf604cdb426a8b4",
+  "merged_at": "2026-08-31T20:49:55+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-31T20:50:15+08:00",
+    "accepted_at": "2026-08-31T20:55:05+08:00",
+    "status": "accepted_postfix_candidate_sync",
+    "owner_report_tip": "3afef6841e3e3f50affd8a77efd0c03771d3bf6a",
+    "checks": [
+      "本地 manifest sidecar、150 条 bytes/SHA、121 tracked set 和 29/29 aliases 独立核对通过",
+      "所有记录的 local/remote snapshot/closure/key-hash artifacts SHA256 匹配",
+      "2026-08-31T20:54:27+08:00 独立远程回读：150/150，missing/extra/hash mismatch=0，manifest/sidecar match，EDA=0",
+      "物理空闲 42384.4MB、pagefile 可用 12541MB、D 盘 95.59GB；未停止/暂停/降优先级任何进程"
+    ],
+    "notes": "第一次独立回读因 PowerShell 路径正则归一化错误产生 actual_files=0，已作废并使用字符 Replace + ErrorActionPreference=Stop 重跑通过。T-007 未释放重型槽，因此未启动 Quartus。"
+  },
+  "known_limits": ["candidate 仅供 resource/reduced 实验；未运行 synthesis/fit/STA/assembler/program/board test。", "JTAG identity 未闭合，programming 继续 WAIT。"],
+  "next": "同步验收且 T-007 释放重型槽后，重新过资源门并登记 <=35GB reduced/partition probe。"
+}

@@ -1,0 +1,56 @@
+# LCVEX Catapult A10 Linux 6.6 lite profile.
+# Kconfig resolves dependencies; this fragment is the board-specific input.
+CONFIG_64BIT=y
+CONFIG_ARM64=y
+CONFIG_MMU=y
+CONFIG_ARM64_PAGE_SHIFT=12
+# arm64 requires SMP support in Linux; the board DT exposes CPU0 only.
+CONFIG_SMP=y
+CONFIG_NR_CPUS=2
+CONFIG_OF=y
+CONFIG_OF_FLATTREE=y
+CONFIG_ARM_GIC=y
+CONFIG_ARM_ARCH_TIMER=y
+CONFIG_SERIAL_CORE=y
+CONFIG_SERIAL_CORE_CONSOLE=y
+CONFIG_SERIAL_ALTERA_JTAGUART=y
+CONFIG_SERIAL_ALTERA_JTAGUART_CONSOLE=y
+CONFIG_SERIAL_EARLYCON=y
+CONFIG_TTY=y
+CONFIG_PRINTK=y
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_BINFMT_ELF=y
+CONFIG_DEVTMPFS=y
+CONFIG_DEVTMPFS_MOUNT=y
+CONFIG_TMPFS=y
+CONFIG_PROC_FS=y
+CONFIG_SYSFS=y
+CONFIG_FUTEX=y
+CONFIG_POSIX_TIMERS=y
+CONFIG_HIGH_RES_TIMERS=y
+CONFIG_ARM64_LSE_ATOMICS=y
+CONFIG_ARM64_USE_LSE_ATOMICS=y
+CONFIG_INITRAMFS_COMPRESSION_GZIP=y
+
+# Bring-up hardening decision: KPTI (unmap kernel at EL0) stays off.  The
+# Catapult bring-up Image has not validated the EL0 trampoline/vector switch
+# path, and the verified 128 MiB board-candidate Image was built with KPTI
+# disabled.  Kconfig only exposes UNMAP_KERNEL_AT_EL0 as an EXPERT choice, so
+# both lines are needed to reproduce the shipped Image from tracked inputs.
+CONFIG_EXPERT=y
+# CONFIG_UNMAP_KERNEL_AT_EL0 is not set
+
+# No networking, external storage, modules, or optional vector/FP facilities.
+# CONFIG_MODULES is not set
+# CONFIG_NET is not set
+# CONFIG_PCI is not set
+# CONFIG_VIRTIO is not set
+# CONFIG_EFI is not set
+# CONFIG_ACPI is not set
+# CONFIG_KVM is not set
+# CONFIG_ARM64_SVE is not set
+# CONFIG_ARM64_SME is not set
+# CONFIG_ARM64_PTR_AUTH is not set
+# CONFIG_ARM64_MTE is not set
+# CONFIG_RANDOMIZE_BASE is not set
+# CONFIG_DEBUG_INFO is not set

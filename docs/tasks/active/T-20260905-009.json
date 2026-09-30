@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-009",
+  "label": "P5A2-IABT-INTEGRATION",
+  "title": "Integrate and jointly validate the branch-target IABT fence",
+  "kind": "correctness-integration-candidate",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-via-t013",
+  "assigned_owner": "codex-integrator",
+  "agent_type": "batch-integration",
+  "depends_on": [
+    "T-20260905-007"
+  ],
+  "dependency_override": "T-007 is accepted_for_candidate by independent review and becomes done only after this candidate passes.",
+  "functional_base_sha": "ba33ac897de4823a9df9525dff18c08b71f097e2",
+  "branch": "batch/T-20260905-009-p5a2-iabt-integration",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-009",
+  "member_source": {
+    "task": "T-20260905-007",
+    "implementation_head": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+    "test_head": "9befb7f3b31b7f76fcf3154b6da0adc02ebf1c01",
+    "review": "accepted_for_candidate"
+  },
+  "scope": "Integrate the next-PC fetch outcome fence and durable maintenance response owner into a disposable candidate. Rebuild coordinators and rerun p5a plus the broad Round16 L0-L2 union because stall_wb and fetch ownership are global core control.",
+  "joint_validation": {
+    "l0_l1": "registry, compile, core/backpressure/FIFO base+cache/MMU/IRQ, maintenance-owner probe, FP/P7/muldiv SV+Cocotb union",
+    "l2": "p5a; muldiv/rtl/hazard; pair/LSE/LSE128/maintenance/IRQ/STXR; NEON fetch fault; P7-1/3/4/5 matrices",
+    "negative": "P7-2 fault BFM must fail at the registered assertion",
+    "resource": "single local heavy queue, MemoryMax=16G, MemorySwapMax=0, CPU<=50%, VERILATOR_JOBS=1"
+  },
+  "acceptance": "All registered joint tests pass on one exact candidate source SHA. Then feature/p7-final advances by ff-only. T-008 remains the pure Round16 physical report; a post-T007 physical rerun is required before choosing the next timing lane because the new settled comparators may affect sys_clk_50.",
+  "created_at": "2026-09-05T09:08:00+08:00",
+  "updated_at": "2026-09-05T19:48:39+08:00",
+  "validated_candidate_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "integration_evidence": "docs/tasks/evidence/T-20260905-013.json",
+  "review": {
+    "status": "accepted",
+    "summary": "Branch-IABT and maintenance owner corrections passed the exact T-013 L0-L2 union and fresh physical source binding."
+  },
+  "board_policy": "No assembler, JTAG programming, bitstream download, power-on, or board test without explicit user permission."
+}

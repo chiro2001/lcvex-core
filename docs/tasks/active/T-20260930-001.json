@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260930-001",
+  "label": "MAIN-MERGE-GATE-D",
+  "title": "Integrate the AArch64 Linux bring-up line into main and re-run Gate D",
+  "kind": "integration-verification",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "complete",
+  "assigned_owner": "root",
+  "depends_on": [
+    "T-20260928-002",
+    "T-20260930-000"
+  ],
+  "base_sha": "930b4139",
+  "branch": "main",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-main-merge",
+  "scope": "Merge feature/p7-final and feature/T-20260928-002-linux-bringup into main, refresh the README, and record the Gate D rerun that backs the merged SHA. No RTL or software change beyond what those two lines already carried.",
+  "writes": [
+    "README.md",
+    "docs/tasks/active/T-20260930-001.json",
+    "docs/tasks/evidence/T-20260930-001.json",
+    "docs/handoffs/T-20260930-001-main-merge-gate-d.md"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/GIT_WORKFLOW.md",
+    "docs/tasks/evidence/T-20260920-050.json",
+    "docs/handoffs/T-20260928-002-a10-linux-boot.md"
+  ],
+  "validation": {
+    "merge": "Two --no-ff merges onto local main: feature/p7-final then feature/T-20260928-002-linux-bringup.",
+    "gate": "bash sim/difftest/run_gate_d.sh --parallel under one local resource lock on the merged SHA, release mode (baremetal-C required).",
+    "offline": "python3 fpga/catapult_a10/tools/check_platform.py, check_skeleton.py --require-boot-image, and a fresh build_linux_loader.sh on the merge worktree."
+  },
+  "acceptance": "Gate D reports all steps green on the merged main SHA, the README describes the current board milestone, and every branch carrying unique commits is on origin.",
+  "handoff": "docs/handoffs/T-20260930-001-main-merge-gate-d.md",
+  "evidence": "docs/tasks/evidence/T-20260930-001.json",
+  "created_at": "2026-09-30T22:23:00+08:00",
+  "updated_at": "2026-09-30T22:36:00+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-30T22:23:24+08:00",
+    "agent_name": "root",
+    "model": "current session; integration owner"
+  },
+  "integration": {
+    "merge_commits": [
+      {
+        "sha": "70afb15b",
+        "subject": "merge: bring the cross-project resource-lock policy into main",
+        "source_branch": "feature/p7-final",
+        "merge_base": "8d35b6d6",
+        "source_tip": "46b4209e"
+      },
+      {
+        "sha": "0a545b22",
+        "subject": "merge: bring the AArch64 Linux bring-up line into main",
+        "source_branch": "feature/T-20260928-002-linux-bringup",
+        "merge_base": "8d35b6d6",
+        "source_tip": "55ff4b4c"
+      }
+    ],
+    "readme_commit": "8cdc5666",
+    "main_tip_after_merge": "8cdc5666e27d4b2db5c7f2dd1db9586825d7878d",
+    "main_tree": "cbd94bc8a0e21a6f7056445d6d5f361fc23fffc4",
+    "origin_before": "6922accb",
+    "conflicts": "none; both merges applied cleanly and the worktree was clean before and after"
+  },
+  "process_note": "The README refresh and the main push happened before the Gate D rerun finished, which is the reverse of the AGENTS.md ordering rule. The rerun was therefore executed as a confirmation gate on the already-pushed SHA; a red result would have been fixed forward on main or reverted to 6922accb. It came back green, and this record states the ordering explicitly instead of implying the gate preceded the push."
+}

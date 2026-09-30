@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-008",
+  "label": "B25-SYNTHESIS-MACRO-REVIEW",
+  "title": "Review the semantic impact of enabling SYNTHESIS in the Quartus project",
+  "kind": "one-pass-blocking-review",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-approve-with-conditions",
+  "assigned_owner": "b25_gate_d",
+  "depends_on": [],
+  "follows_from": "T-20260908-006",
+  "base_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "branch": "verify/T-20260908-008-b25-synthesis-macro-review",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-008",
+  "scope": "Perform a one-pass blocking review of using the Quartus VERILOG_MACRO SYNTHESIS assignment. Enumerate every active conditional, confirm intended simulation-versus-synthesis behavior, catch duplicate-module/filelist or MIF-selection risks, and issue approve/block guidance for T-007 without implementing the fix.",
+  "writes": [
+    "docs/tasks/evidence/T-20260908-008.json",
+    "docs/handoffs/T-20260908-008-b25-synthesis-macro-review.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260908-006.json",
+    "all repository SYNTHESIS conditionals reachable from the Catapult QSF",
+    "Catapult QSF/platform manifests",
+    "local successful a10-linux-riscv QSF reference"
+  ],
+  "validation": [
+    "List every conditional affected by SYNTHESIS and its intended selected branch.",
+    "Check whether lcvex_bram_boot_altsyncram is defined exactly once under the actual QSF filelist.",
+    "Check MIF parameter/assignment consistency and whether any simulation-only assertion or loader behavior leaks into synthesis.",
+    "Report only blocking findings and a minimum safe fix boundary; no build or remote action."
+  ],
+  "acceptance": "Evidence-backed approve/block decision covers all reachable SYNTHESIS branches and names any required pre-merge correction without modifying source.",
+  "resource": "Read-only/light only; do not acquire gamepc or start Quartus.",
+  "forbidden_regions": [
+    "all RTL/QSF/manifest/test source modifications",
+    "heavy build, GamePC/Quartus/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T23:24:08+08:00",
+  "updated_at": "2026-09-08T23:47:21+08:00",
+  "result_head": "8906444cefd834714145759f2e6f495958746128",
+  "result_evidence": "docs/tasks/evidence/T-20260908-008.json",
+  "integrated_head": "a800e6d2",
+  "dispatch": {
+    "sent_at": "2026-09-08T23:26:27+08:00",
+    "agent_name": "b25_gate_d",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "005a8984be951479a878b1c55740c90fe37ca7b6"
+  }
+}

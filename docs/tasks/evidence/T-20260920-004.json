@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-004",
+  "label": "B25-STANDARD-SERVER-RESCAN-CONTROL",
+  "state": "blocked-board-rx-rescan-excluded",
+  "acceptance_status": "configuration-rescan-and-first-console-pass-host-input-functional-fail",
+  "partial": true,
+  "source_sha": "f21ba3f37df6c852d0ed068f6605ed0212d7fe9b",
+  "branch": "verify/T-20260920-004-b25-standard-server-rescan-control",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-004",
+  "owner": "root",
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "scope": "One corrected-candidate volatile configuration, delayed read-only standard-server rescans, one ordinary-file terminal session, and safe golden volatile rollback on failure.",
+    "excluded": [
+      "JIC/EPCQ/Flash write or erase",
+      "power cycle or board/SoC reset",
+      "standard-server restart or stop",
+      "unknown or pre-existing process stop"
+    ]
+  },
+  "candidate": {
+    "sof": {
+      "bytes": 36842110,
+      "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7",
+      "quartus_checksum": "0x31426358"
+    },
+    "programming": {
+      "result": "PASS",
+      "configuration_success": true,
+      "operation_success": true,
+      "jtag_id_match": true,
+      "programmer_stdout_sha256": "dc80599f78e88a86ceb4358043c4eea95b46e1b1bd9f5d3cdd3907301ab5564f"
+    },
+    "standard_server_rescan": {
+      "standard_server_pid": 5640,
+      "restart_or_stop": false,
+      "attempts": 2,
+      "delay_seconds": 2,
+      "both_attempts_saw_device": "0x02E060DD",
+      "both_attempts_saw_jtag_uart_0": true,
+      "observed_design_hash": "193DE4BC8A30F3ED5F1F",
+      "per_attempt_log_sha256": "bdd00057883df77316656210c323569bc8b9984996ff62bf02797b22af801eeb"
+    },
+    "first_and_only_console": {
+      "method": "Start-Process with ordinary-file RedirectStandardInput after the delayed read-only rescans; no preliminary terminal",
+      "terminal_pid": 59764,
+      "terminal_exit_code": 0,
+      "natural_timeout_exit": true,
+      "input_hex": "3f0a700a5a0a",
+      "input_sha256": "97988febf896c6066ca994f07cc7d349f0f5a7b25b2813982889431e8a11fced",
+      "connected": true,
+      "boot_ok": true,
+      "cal_state": "CAL-WAIT",
+      "ddr_state": "DDR-FAIL",
+      "ready_ok": true,
+      "status_ok": false,
+      "pong_ok": false,
+      "echo_ok": false,
+      "stdout_sha256": "6b3116e8eb4741df62f67306d2aa99555f7319315f26d6c993050bd7bea99e23",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "functional_result": "FAIL; explicit delayed read-only rescans exposed JTAG UART #0 before the clean first terminal, but no status, PONG, or Z echo was returned."
+  },
+  "rollback": {
+    "attempted": true,
+    "result": "PASS",
+    "golden_sof_bytes": 36844906,
+    "golden_sof_sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "quartus_checksum": "0x31510BB6",
+    "configuration_success": true,
+    "operation_success": true,
+    "jtag_id_match": true,
+    "programmer_stdout_sha256": "1af887a02cf2521f68e9b45fa213b9f7f4ba032c46beb07d08b935405ca11092"
+  },
+  "postflight": {
+    "golden_design_hash": "193DE4BC8A30F3ED5F1F",
+    "jtag_uart_0": true,
+    "standard_server_pid": 5640,
+    "standard_server_preserved": true,
+    "residual_terminal_or_programmer": false,
+    "port_1310_released": true,
+    "typescript_sha256": "a6466d05375a9ea5a644e55e09979be9ebec9256a095ca13153eb8b5b743af3a"
+  },
+  "evidence_recovery": {
+    "wrapper_issue": "After rollback and cleanup, PowerShell StrictMode rejected stdout_path while serializing the result because Write-Output log strings were mixed into function return values.",
+    "impact": "Evidence packaging only; candidate programming, two rescans, terminal, golden rollback and cleanup had already completed and are independently hash-bound by their files and postflight.",
+    "programmer_pid_limitation": "The task-owned programmer PIDs were not recoverable after exit; process ownership is established by the task script's Start-Process calls and the zero-residual postflight.",
+    "recovered_result": {
+      "path": "build/agents/T-20260920-004/remote-evidence-attempt-v1/recovered-result.json",
+      "bytes": 4655,
+      "sha256": "0d8b185bca423d364001cf257364c47dcb2e911cdeb6a6ee2d7393d13489c909"
+    },
+    "remote_script_sha256": "fbc28f3371ed3459f0dabe156a477fed11d5b6e699d611886a77b80d9b547d14",
+    "remote_script_parse": "PASS; 3340 PowerShell tokens and matching SHA-256 before execution"
+  },
+  "safety_and_resources": {
+    "all_gamepc_actions_held_resource_lock": true,
+    "candidate_volatile_configurations": 1,
+    "golden_volatile_configurations": 1,
+    "persistent_flash_action": false,
+    "jic_or_epcq_action": false,
+    "reset_or_power_action": false,
+    "standard_server_restart_or_stop": false,
+    "unknown_or_preexisting_process_stopped": false,
+    "task_owned_servers_stopped": true,
+    "final_board_state": "golden SOF running",
+    "final_resource_status": "gamepc FREE"
+  },
+  "conclusion": {
+    "standard_server_node_staleness_excluded": true,
+    "statement": "A connected first terminal still cannot drive the corrected candidate after JTAG UART #0 is explicitly present in two delayed standard-server scans. The next experiment needs physical RX observability rather than another host-method retry."
+  },
+  "blocker": "The corrected candidate reaches READY but exposes no status, PONG, or printable echo even after explicit delayed standard-server rescans.",
+  "handoff": "docs/handoffs/T-20260920-004-b25-standard-server-rescan-control.md",
+  "next": "Do not repeat host-method controls. Register a physical observability task that counts DATA reads, RVALID observations and the last received byte, then rebuild through the required verification and physical gates."
+}

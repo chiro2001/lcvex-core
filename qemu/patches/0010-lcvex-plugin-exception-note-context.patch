@@ -1,0 +1,15 @@
+diff --git a/target/arm/tcg/lcvex-difftest.c b/target/arm/tcg/lcvex-difftest.c
+index 0aefba8..9d3c91f 100644
+--- a/target/arm/tcg/lcvex-difftest.c
++++ b/target/arm/tcg/lcvex-difftest.c
+@@ -93,9 +93,7 @@ void qemu_lcvex_difftest_note_exception(CPUState *cs)
+ int qemu_lcvex_difftest_take_exception(unsigned int vcpu_index, uint32_t *ec,
+                                        uint32_t *esr, uint64_t *far)
+ {
+-    CPUState *cs = qemu_get_cpu(vcpu_index);
+-
+     if (!qemu_lcvex_difftest_active() || !lcvex_exc_note.pending ||
+-        cs != current_cpu) {
++        qemu_get_cpu(vcpu_index) == NULL) {
+         return 0;
+     }

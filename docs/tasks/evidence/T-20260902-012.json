@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-012",
+  "state": "done",
+  "partial": false,
+  "base_sha": "d892ba7820cd6db39a1144d8d4b3236a43a11891",
+  "head_sha": "035d1eeb0d00585678d6db507301fd7b99411bd3",
+  "merge_sha": "6c2e56a10dad470b4e43487cec397a721aa570d9",
+  "branch": "docs/T-20260902-012-fp-neon-pipeline-plan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-012",
+  "scope": "审核并完善 docs/FP_NEON_PIPELINE_PLAN.md；校准当前 RTL、P7 协议、性能路线和 A10 full-FP 综合事实，收敛首选微架构、阶段 DAG、量化门、验证矩阵、风险与回退。",
+  "result": {
+    "status": "pass",
+    "document": "docs/FP_NEON_PIPELINE_PLAN.md",
+    "document_lines": 463,
+    "document_bytes": 27724,
+    "document_sha256": "a4c04a2416f2f0f11b6986ddd65a480fddf76da68cf68177884b093b2d36ef94",
+    "implementation_commit": "ecf62a194b002e951287bec33a728841b0ed18d7",
+    "preferred_architecture": "single-outstanding blocking transaction with one shared 64-bit lane engine; optional two-lane/in-order throughput work only after one-lane fit/STA",
+    "plan_phases": [
+      "FP-P0 baseline and resource decomposition",
+      "FP-P1 transaction wrapper and core single-owner handshake",
+      "FP-P2 shared one-lane NEON slot sequencing",
+      "FP-P3 iterative sqrt/div and common path consolidation",
+      "FP-P4 functional/performance and controlled PPA sweep",
+      "FP-P5 full-FP synthesis/fitter/STA",
+      "FP-P6 conditional throughput/two-lane optimization"
+    ]
+  },
+  "audit_findings": [
+    {
+      "severity": "blocking-for-current-full-fp-fit",
+      "finding": "T-20260902-010 synthesis estimates 482334 ALMs for a 427200-ALM device; full-FP fitter/STA were not run.",
+      "resolution": "Treat synthesis as reproducibility evidence only; require shared-engine resource gate before fitter."
+    },
+    {
+      "severity": "high",
+      "finding": "Current lcvex_neon_fp elaborates four complete lcvex_fp_scalar instances while core elaborates another scalar instance.",
+      "resolution": "Make one shared lane engine the preferred first implementation and prove sharing in Quartus hierarchy reports."
+    },
+    {
+      "severity": "high",
+      "finding": "Current scalar interface has valid/div_busy/div_done, not a request/response ready-valid contract; FSQRT remains a 64-round combinational restoring loop.",
+      "resolution": "Add a clocked one-owner transaction wrapper before structural/iterative migration."
+    },
+    {
+      "severity": "architecture-boundary",
+      "finding": "An FP-only scoreboard cannot preserve global in-order retirement if younger integer/memory operations bypass a variable-latency FP instruction.",
+      "resolution": "Keep the first version globally blocking and non-OoO; require a separate architecture review for any general retirement structure."
+    },
+    {
+      "severity": "baseline-blocker",
+      "finding": "T-20260902-010 records an unrelated P7-2 Cocotb DUP/SQADD decode-overlap failure.",
+      "resolution": "Reproduce and close it as an independent task before FP-P0 declares a green baseline; do not whitelist it."
+    }
+  ],
+  "source_facts": {
+    "audit_source_sha": "d892ba7820cd6db39a1144d8d4b3236a43a11891",
+    "full_fp_synthesis_source_sha": "87777425e0a23c65763b847d39a2074f9bc77962",
+    "full_fp_synthesis_evidence": "docs/tasks/evidence/T-20260902-010.json",
+    "full_fp_estimate_alms": 482334,
+    "device_alms": 427200,
+    "estimate_percent_of_device": 112.91,
+    "estimate_over_device_alms": 55134,
+    "fitter_run": false,
+    "sta_run": false
+  },
+  "runs": [
+    {
+      "id": "relative-link-check",
+      "level": "L0-doc",
+      "started_at": "2026-09-03T00:16:23+08:00",
+      "finished_at": "2026-09-03T00:16:23+08:00",
+      "command": "extract Markdown relative links from docs/FP_NEON_PIPELINE_PLAN.md and test each path under docs/",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "9 relative links resolved"
+    },
+    {
+      "id": "make-target-check",
+      "level": "L0-doc",
+      "started_at": "2026-09-03T00:16:23+08:00",
+      "finished_at": "2026-09-03T00:16:23+08:00",
+      "command": "verify all 12 Make targets listed in the plan exist in Makefile",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "12/12 targets found"
+    },
+    {
+      "id": "diff-check",
+      "level": "L0-doc",
+      "started_at": "2026-09-03T00:16:23+08:00",
+      "finished_at": "2026-09-03T00:16:23+08:00",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "id": "live-timestamp-check",
+      "level": "L0-doc",
+      "started_at": "2026-09-03T00:22:40+08:00",
+      "finished_at": "2026-09-03T00:22:50+08:00",
+      "command": "python3 scripts/check_task_timestamps.py --scope live --exit-code",
+      "exit_code": 1,
+      "result": "pre-existing-repository-failure",
+      "summary": "24 errors and 20 warnings in historical live records; none identify T-20260902-012"
+    },
+    {
+      "id": "task-timestamp-filter",
+      "level": "L0-doc",
+      "started_at": "2026-09-03T00:23:55+08:00",
+      "finished_at": "2026-09-03T00:24:04+08:00",
+      "command": "python3 scripts/check_task_timestamps.py --scope live --json | jq '[.[] | select(.file | contains(\"T-20260902-012\"))]'",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "[]; no finding for T-20260902-012"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "plan",
+      "uri": "docs/FP_NEON_PIPELINE_PLAN.md",
+      "sha256": "a4c04a2416f2f0f11b6986ddd65a480fddf76da68cf68177884b093b2d36ef94"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-012-fp-neon-pipeline-plan.md"
+    }
+  ],
+  "known_limits": [
+    "Documentation review only; no RTL/test/QEMU implementation changes.",
+    "No Verilator build, QEMU lockstep, Quartus run, Gate D, Linux, or board test was executed.",
+    "The repository-wide live timestamp checker remains red with 24 historical errors and 20 warnings; its JSON output contains no finding for T-20260902-012.",
+    "Planned 90% hard and 80% optimization ALM thresholds are acceptance policy, not measured pass results.",
+    "One-lane/two-lane latency, utilization, Fmax, and performance must be measured by future same-SHA tasks."
+  ],
+  "next": "Register FP-P0 and independently reproduce/close the P7-2 baseline blocker before optimization implementation starts.",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T00:16:23+08:00",
+    "merged_at": "2026-09-03T00:19:08+08:00",
+    "recorded_at": "2026-09-03T00:19:16+08:00",
+    "checks": [
+      "9/9 Markdown relative links resolve",
+      "12/12 listed Make targets exist",
+      "task/evidence JSON parses",
+      "git diff --check passes",
+      "timestamp checker JSON contains no T-20260902-012 finding; repository-wide historical red is preserved and reported",
+      "synthesis/fit/STA claims remain separated from planned acceptance thresholds"
+    ]
+  },
+  "timestamps": {
+    "sent_at": "2026-09-02T23:55:07+08:00",
+    "received_at": "2026-09-02T23:55:07+08:00",
+    "reported_at": "2026-09-03T00:16:23+08:00"
+  }
+}

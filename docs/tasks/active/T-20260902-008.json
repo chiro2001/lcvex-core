@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-008",
+  "label": "NEON-LANE-CLAMP",
+  "title": "补全 lcvex_neon_int set_lane/lane_unsigned 全 lane-width Quartus 钳位",
+  "kind": "fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-neon-lane-clamp",
+  "agent_type": "rtl-fix-and-lint",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-007"
+  ],
+  "base_sha": "20639c8defd66407af87292844fd902b6bf00f6a",
+  "branch": "fix/T-20260902-008-neon-lane-clamp",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-008",
+  "scope": "将 rtl/lcvex_neon_int.sv 中 set_lane/lane_unsigned 的 lane-width 钳位补全到所有宽度（8-bit index<16、16-bit index<8、32-bit index<4、64-bit index<2），消除 Quartus 21.4 对 32-bit index*32 的静态越界；保持功能语义不变。",
+  "reads": [
+    "rtl/lcvex_neon_int.sv",
+    "docs/handoffs/T-20260902-007-a10-full-fp-synth-rerun.md",
+    "docs/tasks/evidence/T-20260902-007.json",
+    "Makefile"
+  ],
+  "writes": [
+    "rtl/lcvex_neon_int.sv",
+    "docs/handoffs/T-20260902-008-neon-lane-clamp.md",
+    "docs/tasks/evidence/T-20260902-008.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "sim-sv-p7-2-neon / sim-cocotb-p7-2-neon 相关测试 PASS（除已知无关 decode 失败需说明）"
+    ],
+    "l1": [
+      "git diff --check",
+      "静态检查所有 lane 切片均有合法上限保护"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "仓库 RTL 不再有 32-bit/64-bit lane 静态越界；本地 lint/NEON 回归通过；产出 handoff/evidence。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T18:11:00+08:00",
+  "updated_at": "2026-09-02T18:26:20+08:00",
+  "known_limits": [
+    "不运行远端 Quartus；不修改 decode；P7-2 已知无关失败需单独说明"
+  ],
+  "handoff": "docs/handoffs/T-20260902-008-neon-lane-clamp.md",
+  "evidence": "docs/tasks/evidence/T-20260902-008.json",
+  "next": "合入后在 merge SHA 重跑真实 full-FP synthesis",
+  "dispatch": {
+    "sent_at": "2026-09-02T18:12:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-008",
+    "branch": "fix/T-20260902-008-neon-lane-clamp"
+  },
+  "head_sha": "5c712bacaec974d3f76489d06a17dd01a151c391",
+  "merge_sha": "c4e79047b980ac6819f25af4a860d8e5f8b78f20",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T18:25:00+08:00",
+    "merged_at": "2026-09-02T18:26:20+08:00",
+    "recorded_at": "2026-09-02T18:26:20+08:00",
+    "notes": "NEON lane clamp merged; repo RTL should now pass Quartus elaboration for neon_int; next rerun full-FP synthesis on merge SHA"
+  }
+}

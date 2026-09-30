@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-009",
+  "label": "B25-RX-OBSERVABILITY-UCP-INVARIANT-PROFILE",
+  "title": "Bind the fresh RX observability fitted UCP/reset reports to the normalized invariant policy",
+  "kind": "physical-waiver-profile",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "fresh-t007-normalized-invariant-profile-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-007"],
+  "base_sha": "c2f23cc339fc7cc38f3db8858d82d9a64ce490df",
+  "base_tree_sha": "9b45b7c8d05e5bdb6dc64bfbeff47aa9796ff86f",
+  "branch": "infra/T-20260920-009-b25-rx-observability-ucp-invariant-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-009",
+  "writes": [
+    "fpga/catapult_a10/physical_waivers_invariant.json::append accepted/report profile T-20260920-007 only",
+    "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py::production policy digest only",
+    "build/agents/T-20260920-009/** ignored analysis artifacts",
+    "docs/tasks/evidence/T-20260920-009.json",
+    "docs/handoffs/T-20260920-009-b25-rx-observability-ucp-invariant-profile.md"
+  ],
+  "reads": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-007/build/agents/T-20260920-007/acceptance/remote-v2/ucp/**",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-007/build/agents/T-20260920-007/acceptance/remote-v2/control/source-*-acceptance.full.tsv",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc"
+  ],
+  "scope": "Append one content-addressed T-20260920-007 measurement/report profile for exact candidate 05ea2488/tree 23e4c515 and its seven raw UCP/reset reports, update only the fail-closed canonical policy digest, then export and validate the complete normalized inventory.",
+  "validation": {
+    "scope": "Deleting provenance from the policy leaves the normalized contract byte-identical; all existing T-011/T-013/T-004 profiles remain byte-identical.",
+    "actual": "Fresh T-007 UCP/reset raw reports export and check against exact normalized members, family counts, digests, positive slack and empty exception/clock-constraint sets.",
+    "replay": "T-011, T-013 and T-004 actual profiles still export/check under the extended policy.",
+    "fixture": "Existing 2 positive and 27 negative invariant fixtures retain their expected outcomes."
+  },
+  "acceptance": "Only the T-007 provenance/report whitelist and canonical digest change; the fresh inventory passes exact member-level validation and all historical/negative controls remain green.",
+  "resource": "Local read-only parsing only; no heavy resource lock, Quartus, GamePC or board action is required.",
+  "forbidden_regions": [
+    "normalized UCP/reset members, counts, digests, families, exception or clock constraints",
+    "historical profile values or report hashes",
+    "RTL/QSF/SDC/boot/QEMU/test expected results",
+    "assembler, JTAG, Flash, reset or power action"
+  ],
+  "created_at": "2026-09-20T05:07:41+08:00",
+  "implementation_sha": "bb00f80a89ec15a3fe8e87d22a420540293ce20b",
+  "implementation_tree_sha": "f3fba375d99234829b3ffc0ec7be938b47e22272",
+  "evidence_head_sha": "2e9a5b2b98cf87ea436319cd6d3f3adb9d9255dd",
+  "evidence": "docs/tasks/evidence/T-20260920-009.json",
+  "handoff": "docs/handoffs/T-20260920-009-b25-rx-observability-ucp-invariant-profile.md",
+  "updated_at": "2026-09-20T05:25:33+08:00"
+}

@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-036",
+  "state": "done",
+  "partial": false,
+  "base_sha": "39e0f8a5c9e87492dec3fc910f822e49b7da8671",
+  "head_sha": "18f5ab2850d76de8ea530a8ec16d2de4b098486a",
+  "branch": "fix/T-20260902-036-core-nextpc-atomic-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-036",
+  "scope": "CORE-NEXTPC-ATOMIC-CUT: break the sys_clk_50 setup cone from idex_d.operand_b -> idex_d.next_pc/atomic_cmp2 by removing the remaining ID/EX->ID combinational SP/NZCV/wb3 forwarding and adding precise decode-consumption hazards; preserve branch/atomic/commit/exception architecture semantics and keep T-032/T-034/EMIF closures.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_core.sv",
+      "rtl/lcvex_decode.sv",
+      "rtl/lcvex_pkg.sv",
+      "docs/handoffs/T-20260902-036-core-nextpc-atomic-cut.md",
+      "docs/tasks/evidence/T-20260902-036.json"
+    ],
+    "summary": "Removed the three remaining ID/EX->ID combinational forwarding terms: gprv idex_d.wb3_extra, spv idex_d.sp_we/ex_sp_wdata, and nzcvv idex_d.set_flags/ex_nzcv. Added decoded_insn_t uses_sp/uses_nzcv markers and ex_id_gpr_hazard (now covering wb3 reads), ex_id_sp_hazard, ex_id_flags_hazard. All hazards are folded into stall_id, flush_id, and fetch_fifo_pop so dependent IF/ID instructions wait one cycle and then use the EX/MEM registered forwarding. This breaks the single-cycle operand_b Q -> decode next_pc/atomic_cmp2 D chain and does not alter commit ABI, branch targets, atomic compare values, exception PC, or reset behavior.",
+    "semantics": {
+      "gpr_sp_nzcv_forwarding": "ID/EX combinational forwarding removed; EX/MEM and MEM/WB registered forwarding unchanged",
+      "branch_resolution": "B.cond/CSEL/CCMP/MRS NZCV wait for EX/MEM NZCV when a set-flags instruction is in ID/EX; branch target and condition values match QEMU",
+      "atomic_compare": "atomic_cmp/atomic_cmp2 are decoded from the same forwarded GPR view; any in-flight writer now stalls until EX/MEM before the compare value is captured",
+      "pre_post_base": "wb3 updates no longer forwarded from ID/EX; dependent younger instructions stall one cycle and use EX/MEM wb3_extra",
+      "commit_order": "unchanged; single in-order retirement and commit packet fields unchanged",
+      "exceptions": "unchanged; exception priority/ELR/FAR/vector semantics not touched",
+      "async_reset": "unchanged; no new reset values",
+      "no_false_path": "no SDC exception or false_path added"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator lint-only on lcvex_core with rtl/filelist.f"
+    },
+    {
+      "run_id": "sim-sv",
+      "command": "make VERILATOR_JOBS=1 sim-sv",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "core smoke scalar + FPCR/FPSR wiring"
+    },
+    {
+      "run_id": "sim-sv-backpressure",
+      "command": "make VERILATOR_JOBS=1 sim-sv-backpressure",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "commit valid/ready backpressure and system MSR atomicity"
+    },
+    {
+      "run_id": "sim-sv-fetch-fifo",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fetch-fifo",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "F1a FIFO bounds/flush/epoch/delayed-response/backpressure"
+    },
+    {
+      "run_id": "lcvex_b1_decode_tb",
+      "command": "conda run -n lcvex verilator --binary --timing --assert -j 1 --top-module lcvex_b1_decode_tb rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b1_decode_tb.sv && ./obj_dir_b1/lcvex_b1_decode_tb",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "decode scalar matrix after adding uses_sp/uses_nzcv fields"
+    },
+    {
+      "run_id": "lcvex_b3_atomic_barrier_tb",
+      "command": "conda run -n lcvex verilator --binary --timing --assert -j 1 --top-module lcvex_b3_atomic_barrier_tb rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_atomic_barrier_tb.sv && ./obj_dir_b3_atomic/lcvex_b3_atomic_barrier_tb",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "LSE/CAS/exclusive/barrier decode scalar matrix"
+    },
+    {
+      "run_id": "difftest-rtl",
+      "command": "make VERILATOR_JOBS=1 difftest-rtl",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "P2 RTL difftest 33/33 QEMU instructions matched"
+    },
+    {
+      "run_id": "difftest-hazard",
+      "command": "make VERILATOR_JOBS=2 difftest-hazard",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "hazard difftest 34/34 QEMU instructions matched; covers ALU RAW, load-use, branch/flush, flags/B.cond, MOVK, muldiv, BL/RET"
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/signoff STA (must be rerun after merge to confirm actual slack/Fmax)",
+    "Assembler/SOF/programming (not allowed while signoff setup is not confirmed closed)",
+    "A76 required L2 lockstep sub-suite (not targeted by this core-forwarding cut)"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-036-core-nextpc-atomic-cut.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-036.json"
+    }
+  ],
+  "known_limits": [
+    "No physical timing run in this task; actual impact on sys_clk_50 must be confirmed by the next FP-P5 rerun.",
+    "Performance cost: one extra bubble for RAW GPR/pre-post/SP/decode-NZCV dependencies, same pattern as T-032.",
+    "uses_sp may false-positive on a few non-base instructions whose low immediate bits equal 31; only adds a possible bubble, no architectural effect.",
+    "FP/NEON registered fp_rsp forwarding and internal FP pipeline are untouched."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-03T23:35:00+08:00",
+    "received_at": "2026-09-03T23:35:30+08:00",
+    "reported_at": "2026-09-04T00:01:00+08:00"
+  },
+  "merge_sha": "98abdfc377fd700db04f72836ed9b59feeb00581",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T00:00:09+08:00",
+    "merged_at": "2026-09-04T00:00:30+08:00",
+    "recorded_at": "2026-09-04T00:00:30+08:00",
+    "notes": "Core next_pc/atomic forwarding cut merged and accepted"
+  }
+}

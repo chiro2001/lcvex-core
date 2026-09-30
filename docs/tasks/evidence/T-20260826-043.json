@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-043",
+  "base_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+  "head_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+  "merge_sha": "14c970a7b6f4f21767a0431c48584ec8ec326309",
+  "candidate_status": "pass-local",
+  "agent": {
+    "role": "gate-runner",
+    "model": "gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-043",
+    "branch": "verify/T-20260826-043-gate-d-sctlr"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "plugin_sha256": "651ebda9306b28801fcc2685f86988f02a4023c2f91b43eef21389498375157f",
+    "version_file": "qemu/VERSION",
+    "binary": {
+      "path": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+      "sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6"
+    },
+    "plugin": {
+      "path": "qemu/plugins/lcvex_difftest.so",
+      "sha256": "651ebda9306b28801fcc2685f86988f02a4023c2f91b43eef21389498375157f"
+    }
+  },
+  "rtl_filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+  "rtl": {
+    "source_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+    "filelist": {
+      "path": "rtl/filelist.f",
+      "sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb"
+    },
+    "coordinators": {
+      "base": {
+        "path": "build/verilator_lockstep/lockstep_coordinator",
+        "sha256": "57162e233f5c98f6d9f29fc0e7aa73401c03255bc730943be448ee4ff705589b"
+      },
+      "l1dl2": {
+        "path": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+        "sha256": "4232adf6140dc1bf0e7c00470565436717088745fab97df04c99f2b5c40727f4"
+      },
+      "l1dl2_delay2": {
+        "path": "build/verilator_lockstep_l1dl2_d2/lockstep_coordinator",
+        "sha256": "b1d9c0d9867b7d6adc61a1c3818a98d9f7ebe218cde160d24260f46993f77c8b"
+      }
+    }
+  },
+  "resource": {
+    "requested_cpuset": [0, 1, 2, 3, 4],
+    "successful_cpuset": [0, 1, 2, 3, 4, 9],
+    "verilator_jobs": 3,
+    "memory_limit_mb": 10240,
+    "allocation_ratio": 0.75,
+    "planner_mode": "local",
+    "planner_ratio": 0.5,
+    "planner_parallel": 1,
+    "planner_binding": [0],
+    "preflight": {
+      "initial_loadavg_1m": 0.29,
+      "initial_mem_available_mb": 22304,
+      "rerun_loadavg_1m": 1.33,
+      "rerun_mem_available_mb": 21943,
+      "rerun_planner_mem_budget_mb": 10971
+    },
+    "note": "首轮按任务登记使用 0-4；首轮 P5a planner 600 秒资源超时后，集成者为复跑登记空闲物理核 9。复跑期间核 5/6 属于并行 lite 长跑，未进入本任务 cpuset。"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l3-gate-d-timeout-001",
+      "source_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+      "runner_role": "owner",
+      "level": "L3",
+      "command": "taskset -c 0-4 env VERILATOR_JOBS=3 bash sim/difftest/run_gate_d.sh --parallel",
+      "seed": [1, 2, 3],
+      "started_at": "2026-08-26T19:24:12+08:00",
+      "finished_at": "2026-08-26T19:46:26+08:00",
+      "wall_seconds": 1334,
+      "cpu_count": 5,
+      "cpuset": [0, 1, 2, 3, 4],
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 1,
+      "result": "resource-timeout",
+      "log": "build/agents/T-20260826-043/gate-d.log",
+      "log_sha256": "b387b002e99c58ce82bba9958de451b1af1cc7497520751bd9d6c03b7cb2052c",
+      "failure": "P5a-Hardening 内部 planner 在 600 秒后以 exit 75 返回 parallel=0；该轮其余已执行阶段通过，未发现架构 mismatch。"
+    },
+    {
+      "run_id": "owner-l3-gate-d-rerun-001",
+      "source_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+      "runner_role": "owner",
+      "level": "L3",
+      "command": "taskset -c 0-4,9 env VERILATOR_JOBS=3 bash sim/difftest/run_gate_d.sh --parallel",
+      "seed": [1, 2, 3],
+      "started_at": "2026-08-26T19:51:11+08:00",
+      "finished_at": "2026-08-26T19:59:41+08:00",
+      "wall_seconds": 510,
+      "cpu_count": 6,
+      "cpuset": [0, 1, 2, 3, 4, 9],
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260826-043/gate-d-rerun.log",
+      "log_sha256": "221d986a61eda4ca9a498ebeb797ce67ef2617c4437a5b61af25919af4f9c615"
+    }
+  ],
+  "results": {
+    "make_test": "pass",
+    "coverage": {
+      "covered_points": 8611,
+      "merged_dat": "build/coverage/merged.dat",
+      "merged_dat_sha256": "6e14afc91dc3d47bd3a5aa26d87a9d9d3750023f423d8f7652b2c7467eacfeab",
+      "result": "pass"
+    },
+    "m2_r1": {
+      "base": 40,
+      "cache": 40,
+      "result": "pass"
+    },
+    "delay2_cache": {
+      "tests": 32,
+      "result": "pass"
+    },
+    "p5a_hardening": {
+      "tests": 26,
+      "result": "pass"
+    },
+    "gate_c": {
+      "groups": 7,
+      "result": "pass"
+    },
+    "p5a": {
+      "groups": 3,
+      "result": "pass"
+    },
+    "p4b": {
+      "groups": 5,
+      "result": "pass"
+    },
+    "random": {
+      "seeds": [1, 2, 3],
+      "length": 100000,
+      "result": "pass"
+    },
+    "instruction_coverage": {
+      "families": "61/60",
+      "commits": 298188,
+      "result": "pass"
+    },
+    "baremetal_c": {
+      "commits": 200,
+      "result": "pass"
+    },
+    "parallel_result_files": {
+      "count": 50,
+      "status_counts": {"rc=0": 50},
+      "common_result_sha256": "93ff7811a209e2a8479230bbb9b6bc19f7f311d3af383ec350c1db2a7e7d5494",
+      "result": "pass"
+    },
+    "orphan_process_check": {
+      "command": "ps -eo pid,comm,args | filter worktree tag for qemu-system-aarch64/lockstep_coordinator",
+      "worktree_processes": 0,
+      "result": "pass"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "gate-d-log-first-resource-timeout",
+      "uri": "build/agents/T-20260826-043/gate-d.log",
+      "sha256": "b387b002e99c58ce82bba9958de451b1af1cc7497520751bd9d6c03b7cb2052c",
+      "bytes": 294310,
+      "owner": "gate-d-t043",
+      "retain_until": "task review complete",
+      "reproduce": "taskset -c 0-4 env VERILATOR_JOBS=3 bash sim/difftest/run_gate_d.sh --parallel"
+    },
+    {
+      "id": "gate-d-log-rerun-pass",
+      "uri": "build/agents/T-20260826-043/gate-d-rerun.log",
+      "sha256": "221d986a61eda4ca9a498ebeb797ce67ef2617c4437a5b61af25919af4f9c615",
+      "bytes": 68164,
+      "owner": "gate-d-t043",
+      "retain_until": "task review complete",
+      "reproduce": "taskset -c 0-4,9 env VERILATOR_JOBS=3 bash sim/difftest/run_gate_d.sh --parallel"
+    },
+    {
+      "id": "random-traces",
+      "uri": "build/difftest/random_{1,2,3}.trace",
+      "sha256": [
+        "d2a8252fe49964478cba58f3d2d7cd97b9811006cafeb0416316b158715cf8ed",
+        "77901e1987d01d9945843939f94c10fbfed49f9a06fdac6a5475637b51dc4308",
+        "790879cbb577620adb3a8eef10a02375ee5399d5a732f697fe4da9c3c833a5f9"
+      ],
+      "owner": "gate-d-t043",
+      "retain_until": "task review complete",
+      "reproduce": "make difftest-random-multi"
+    },
+    {
+      "id": "coverage-merged",
+      "uri": "build/coverage/merged.dat",
+      "sha256": "6e14afc91dc3d47bd3a5aa26d87a9d9d3750023f423d8f7652b2c7467eacfeab",
+      "bytes": 3157568,
+      "owner": "gate-d-t043",
+      "retain_until": "task review complete",
+      "reproduce": "make coverage"
+    }
+  ],
+  "known_limits": [
+    "这是冻结候选 b2568a5 的本地 Gate D；不等待 CI，也不替代 Gate E。",
+    "首轮失败仅为 P5a planner 资源超时，完整复跑在同一 source SHA 上退出 0；两轮日志均保留。",
+    "复跑按集成者资源协调临时加入物理核 9；Verilator_JOBS=3，内部 planner 实际以 parallel=1 绑定核 0。",
+    "完整日志、trace、波形和 RAM 仅留在本 worktree build 目录，不进入 Git。"
+  ]
+}

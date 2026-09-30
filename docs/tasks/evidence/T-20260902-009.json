@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-009",
+  "label": "F1A-LOCKSTEP-FIX",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "f1a_on_failed_cases_passed_f0_ok",
+  "base_sha": "20639c8defd66407af87292844fd902b6bf00f6a",
+  "head_sha": "692936c3dd21e20890f96bbd448f87c16bb82737",
+  "result_commit": "692936c3dd21e20890f96bbd448f87c16bb82737",
+  "branch": "fix/T-20260902-009-f1a-lockstep-fixes",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-009",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-02T18:12:00+08:00",
+    "received_at": "2026-09-02T18:12:30+08:00",
+    "reported_at": "2026-09-02T18:54:30+08:00"
+  },
+  "scope": "诊断并修复 F1a 默认-on 下 9 个 Gate D 锁步失败：timer/RNDR off-by-one、ADC/SBC/NGC 进位前递、post-index load/store 基址与数据语义。",
+  "root_causes": [
+    {
+      "name": "timer_rndr_off_by_one",
+      "symptom": "CNTVCT/RNDR DUT 比 QEMU 小 1",
+      "root": "MRS 读值仅用已提交 cntpct_r+1，遗漏 EX/MEM/MEM/WB 中尚未提交的更老指令",
+      "fix": "EX 级 timer_ex_count 计入在途更老指令；timer/RNDR MRS 全部改用该计数"
+    },
+    {
+      "name": "adc_sbc_ngc_carry",
+      "symptom": "ngc x4,xzr 在 C=1 时 DUT=-1，QEMU=0",
+      "root": "ALU cin 只接已提交 nzcv，未前递 EX/MEM/MEM/WB 的 set-flags 结果",
+      "fix": "新增 nzcv_alu 从 exmem/memwb 前递进位，排除当前 set_flags 自环"
+    },
+    {
+      "name": "post_index_wb3",
+      "symptom": "ldrb w4,[x20],#-1 DUT 读 0xbb/基址 0x44090010，QEMU 读 0/基址 0x44090011",
+      "root": "gprv 未前递 ID/EX 的 wb3 基址写回，紧邻 post-index 读到旧基址",
+      "fix": "gprv 增加 idex_d.wb3_we/wb3_rd/wb3_extra 前递"
+    }
+  ],
+  "rtl_changes": [
+    "rtl/lcvex_core.sv"
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "make": "GNU Make 4.4.1",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "qemu": "../qemu/build/qemu-system-aarch64 (11.1.0 local build)"
+  },
+  "resource": {
+    "memory_max": "15G",
+    "cpu_quota": "50%",
+    "verilator_jobs": 1,
+    "makeflags": "-j1",
+    "concurrent_heavy_jobs": 1
+  },
+  "runs": [
+    {
+      "run_id": "compile-001",
+      "level": "L1",
+      "command": "make compile",
+      "result": "pass"
+    },
+    {
+      "run_id": "f1a-base-001",
+      "level": "L2",
+      "coordinator": "build/verilator_lockstep_f1a/lockstep_coordinator",
+      "cases": [
+        {
+          "name": "hard_timer",
+          "max_insns": 40,
+          "result": "pass"
+        },
+        {
+          "name": "hard_adc_sbc",
+          "max_insns": 30,
+          "result": "pass"
+        },
+        {
+          "name": "hard_sve_probe",
+          "max_insns": 60,
+          "result": "pass"
+        },
+        {
+          "name": "hard_postpre",
+          "max_insns": 70,
+          "result": "pass"
+        }
+      ],
+      "result": "pass"
+    },
+    {
+      "run_id": "f1a-cache-001",
+      "level": "L2",
+      "coordinator": "build/verilator_lockstep_f1a_cache/lockstep_coordinator",
+      "cases": [
+        {
+          "name": "hard_timer",
+          "max_insns": 40,
+          "result": "pass"
+        },
+        {
+          "name": "hard_adc_sbc",
+          "max_insns": 30,
+          "result": "pass"
+        },
+        {
+          "name": "hard_sve_probe",
+          "max_insns": 60,
+          "result": "pass"
+        },
+        {
+          "name": "hard_postpre",
+          "max_insns": 70,
+          "result": "pass"
+        }
+      ],
+      "result": "pass"
+    },
+    {
+      "run_id": "f1a-delay2-001",
+      "level": "L2",
+      "coordinator": "build/verilator_lockstep_f1a_delay2/lockstep_coordinator",
+      "cases": [
+        {
+          "name": "hard_timer",
+          "max_insns": 40,
+          "result": "pass"
+        },
+        {
+          "name": "hard_adc_sbc",
+          "max_insns": 30,
+          "result": "pass"
+        },
+        {
+          "name": "hard_sve_probe",
+          "max_insns": 60,
+          "result": "pass"
+        },
+        {
+          "name": "hard_postpre",
+          "max_insns": 70,
+          "result": "pass"
+        }
+      ],
+      "result": "pass"
+    },
+    {
+      "run_id": "f0-baseline-001",
+      "level": "L2",
+      "coordinator": "build/verilator_lockstep_f0/lockstep_coordinator",
+      "command": "explicit verilator -GFETCH_FIFO_ENABLE=0",
+      "cases": [
+        {
+          "name": "hard_timer",
+          "max_insns": 40,
+          "result": "pass"
+        },
+        {
+          "name": "hard_adc_sbc",
+          "max_insns": 30,
+          "result": "pass"
+        },
+        {
+          "name": "hard_sve_probe",
+          "max_insns": 60,
+          "result": "pass"
+        },
+        {
+          "name": "hard_postpre",
+          "max_insns": 70,
+          "result": "pass"
+        }
+      ],
+      "result": "pass"
+    }
+  ],
+  "not_run": [
+    "full Gate D",
+    "full random 100k x3",
+    "Linux/Quartus/FPGA"
+  ],
+  "next": "集成者在合并 SHA 上复跑 F1a-on 完整 Gate D；若全绿再评估 FETCH_FIFO_ENABLE 默认-on。",
+  "merge_sha": "386f62f2786202aa74fc3ded656937ac046f4b8d",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T18:54:30+08:00",
+    "merged_at": "2026-09-02T18:56:20+08:00",
+    "recorded_at": "2026-09-02T18:56:20+08:00",
+    "notes": "F1a lockstep fixes merged"
+  }
+}

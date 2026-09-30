@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-032",
+  "parent": "T-20260920-031",
+  "label": "B25-CANDIDATE-LIVE-IDENTITY-CONTRACT",
+  "title": "Review the candidate design-hash observability failure and define a fail-closed live identity contract",
+  "kind": "board-evidence-contract",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-composite-live-identity-contract-adopted",
+  "assigned_owner": "identity_t032",
+  "depends_on": ["T-20260920-031"],
+  "dependency_exception": "T-031 hardware execution is terminal and final board state is independently proven golden; its documentation correction may complete in parallel with this read-only audit.",
+  "base_sha": "32303ba2340d32ec8b953294434cc9e41a704972",
+  "branch": "verify/T-20260920-032-b25-candidate-live-identity-contract",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-032",
+  "writes": [
+    "build/agents/T-20260920-032/** ignored local analysis",
+    "docs/tasks/evidence/T-20260920-032.json",
+    "docs/handoffs/T-20260920-032-b25-candidate-live-identity-contract.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-003.json",
+    "docs/tasks/evidence/T-20260920-021.json",
+    "docs/tasks/evidence/T-20260920-030.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/** read-only historical artifacts",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/** read-only failed-attempt artifacts",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/docs/tasks/evidence/T-20260920-031.json read-only"
+  ],
+  "scope": "Determine whether T-031 failed because the candidate was not configured or because a preserved/custom jtagserver could not expose a fresh design hash. Compare T-021's successful programming/terminal identity chain and T-031 raw programmer/enumeration logs, then define a fail-closed replacement identity contract for exactly one new board attempt. Do not touch GamePC or hardware.",
+  "acceptance": {
+    "historical_contract": "Prove from T-021 raw program result/script/log whether its accepted candidate configuration required a post-program candidate design hash, and identify the exact evidence that bridged SOF identity to LCVEX BOOT/READY.",
+    "T031_transactions": "Inventory every T-031 candidate/golden programmer invocation and distinguish quartus_pgm transaction success from wrapper identity-gate failure. Record exact paths, stdout hashes, checksums, JTAG IDs and retry protocol deviations.",
+    "observability": "Compare owned-server and preserved-standard jtagconfig output before/after programming. Determine what can and cannot be concluded from the stale golden hash, missing owned hash and changed node set; do not infer an undocumented hardware fact.",
+    "replacement_contract": "Either require a concrete supported method that can prove the live candidate hash before terminal, or define a strict compound identity chain: exact SHA-bound SOF and programmer command/checksum/JTAG-ID/config success, followed by candidate-unique LCVEX25 BOOT/READY/RXDBG in the first live terminal before any input. Missing startup identity must immediately fail and restore golden. Standard-server cached design hash is diagnostic only, never silently ignored.",
+    "functional_gate": "The replacement must retain all original paced ?/p/d/Z, RXPATH, RXCPU, RXDBG and mandatory golden-restoration requirements. It must authorize only one additional candidate configuration and one golden restoration, with no debug retries inside the board task.",
+    "decision": "State whether a new board attempt is justified without calling the correction a waiver. Create evidence/handoff with exact source artifacts/hashes, limitations and the proposed task boundary."
+  },
+  "resource": "Local read-only artifact analysis only; no heavy slot and no GamePC access.",
+  "forbidden_regions": [
+    "tracked RTL, firmware, QSF, SDC, IP, tests, policy, task ledger or expected results",
+    "GamePC, Quartus, JTAG, FPGA configuration, terminal, Flash/JIC/EPCQ, reset or power",
+    "editing T-021/T-031 worktrees or artifacts",
+    "treating programmer success alone as full candidate functional acceptance",
+    "message suppression, evidence deletion or hiding the T-031 retry-count deviation"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T18:09:42+08:00",
+    "agent_name": "identity_t032",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "partial": false,
+    "topic_evidence_head": "bd3516eae8a84e683ab829ad1f0f305be7ccf798",
+    "integration_evidence_sha": "d9694ce3c4ed2e0abcd8ef7c0fd476ca863a82fb",
+    "historical_contract": "T-021 actual success used exact SOF/programmer evidence followed by candidate-unique BOOT/READY, not an executed post-program candidate-hash gate",
+    "T031_audit": "candidate programmer=3 PASS transactions and golden programmer=3 PASS transactions; retries recorded as a process deviation; no terminal evidence",
+    "contract": "exact SHA-bound SOF plus one successful programmer transaction plus candidate-unique pre-input LCVEX25 startup; programmer or cached jtag hash alone is insufficient",
+    "next_board_limits": "candidate program=1, live terminal=1, golden restore=1, internal retries=0",
+    "evidence": "docs/tasks/evidence/T-20260920-032.json",
+    "handoff": "docs/handoffs/T-20260920-032-b25-candidate-live-identity-contract.md",
+    "next": "T-20260920-033 single-attempt final board interaction"
+  },
+  "created_at": "2026-09-20T18:08:36+08:00",
+  "updated_at": "2026-09-20T18:28:14+08:00"
+}

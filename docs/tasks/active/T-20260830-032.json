@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-032",
+  "label": "FPGA-G4",
+  "parent": "T-20260828-067",
+  "title": "真实 SoC RTL A10 顶层 synthesis/fit 实验（含显式 M20K BRAM）",
+  "kind": "fpga-real-runtime-flow",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "c64f30f",
+  "branch": "feature/T-20260830-032-fpga-g4",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-032",
+  "scope": "在 G2/G3/BRAM 主 RTL 集成后的当前主线上，把 A10 工程从 black-box stub 逐步换成真实 lcvex_core/catapult_soc_coh/AXI/SoC 路径：主 RTL 已含 SYNTHESIS 显式 altera_syncram M20K BRAM；跑 ipgenerate→synthesis→fitter（视内存时间可 STA/asm），记录每阶段峰值内存/时间/资源；目标确认真实 SoC 是否有可接受的 synthesis/fit 路径。",
+  "writes": [
+    "docs/handoffs/T-20260830-032-fpga-g4.md",
+    "docs/tasks/evidence/T-20260830-032.json",
+    "fpga/**",
+    "rtl/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260830-029-fpga-g2.md",
+    "docs/handoffs/T-20260830-030-fpga-g3.md",
+    "docs/handoffs/T-20260830-031-fpga-g2-int.md",
+    "rtl/**",
+    "fpga/catapult_a10/**"
+  ],
+  "validation": {
+    "l0": [
+      "真实 SoC A10 实验日志/结论",
+      "若无法完成，给出阶段、峰值内存、错误和下一步"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "真实 SoC A10 至少得到明确的 synthesis 或早期阶段峰值/失败结论；若成功继续 fit/STA/asm。",
+  "next": "若 OOM，优先立 L1D/L2 显式 RAM 包装任务；若成功，进入完整 B5 signoff。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T21:35:00+0800",
+  "updated_at": "2026-08-30T21:35:00+0800",
+  "known_limits": [
+    "不修改远端原始 QSF/SDC；不读 license；不启动完整 B5 full flow 除非实验明确。",
+    "不与并发远程 Quartus 冲突；一个实验一个。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-032-fpga-g4.md",
+  "evidence": "docs/tasks/evidence/T-20260830-032.json",
+  "merge_sha": "1ab0dfa",
+  "merged_at": "2026-08-30T23:50:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-30T23:50:00+0800",
+    "status": "accepted",
+    "head_sha": "1ab0dfa",
+    "notes": "G4: real SoC A10 synthesis PASS (46m17s, 13.5GB) with explicit M20K BRAM; fitter did not converge due L1D/L2 cache data implemented as LUT/ALM. No new dispatch per user pause."
+  }
+}

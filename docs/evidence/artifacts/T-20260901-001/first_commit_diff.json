@@ -1,0 +1,314 @@
+{
+  "status": "mismatch",
+  "category": "termination-boundary",
+  "records_compared": 66721,
+  "first_mismatch": {
+    "off_index": 66721,
+    "on_index": 66721,
+    "off": null,
+    "on": null,
+    "reason": "commit prefix equal but footer architectural summary differs"
+  },
+  "windows": {
+    "before": {
+      "off": [
+        {
+          "kind": "commit",
+          "seq": 66718,
+          "cycle": 227514,
+          "pc": "0x00000000440003b8",
+          "insn": "0xd65f03c0",
+          "next_pc": "0x000000004400000c",
+          "effects": {},
+          "fetch": {
+            "epoch": 0,
+            "occupancy": 0,
+            "peak": 0,
+            "push": 0,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        },
+        {
+          "kind": "commit",
+          "seq": 66719,
+          "cycle": 227518,
+          "pc": "0x000000004400000c",
+          "insn": "0xd2a88001",
+          "next_pc": "0x0000000044000010",
+          "effects": {
+            "gpr": {
+              "rd": 1,
+              "value": "0x0000000044000000"
+            }
+          },
+          "fetch": {
+            "epoch": 0,
+            "occupancy": 0,
+            "peak": 0,
+            "push": 0,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        },
+        {
+          "kind": "commit",
+          "seq": 66720,
+          "cycle": 227521,
+          "pc": "0x0000000044000010",
+          "insn": "0xf29fc001",
+          "next_pc": "0x0000000044000014",
+          "effects": {
+            "gpr": {
+              "rd": 1,
+              "value": "0x000000004400fe00"
+            }
+          },
+          "fetch": {
+            "epoch": 0,
+            "occupancy": 0,
+            "peak": 0,
+            "push": 0,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        },
+        {
+          "kind": "commit",
+          "seq": 66721,
+          "cycle": 227526,
+          "pc": "0x0000000044000014",
+          "insn": "0xf9000020",
+          "next_pc": "0x0000000044000018",
+          "effects": {
+            "memory": [
+              {
+                "addr": "0x000000004400fe00",
+                "wdata": "0x0000000000000000",
+                "strb": "00ff"
+              }
+            ]
+          },
+          "fetch": {
+            "epoch": 0,
+            "occupancy": 0,
+            "peak": 0,
+            "push": 0,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        }
+      ],
+      "on": [
+        {
+          "kind": "commit",
+          "seq": 66718,
+          "cycle": 175705,
+          "pc": "0x00000000440003b8",
+          "insn": "0xd65f03c0",
+          "next_pc": "0x000000004400000c",
+          "effects": {},
+          "fetch": {
+            "epoch": 250,
+            "occupancy": 0,
+            "peak": 1,
+            "push": 1,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        },
+        {
+          "kind": "commit",
+          "seq": 66719,
+          "cycle": 175709,
+          "pc": "0x000000004400000c",
+          "insn": "0xd2a88001",
+          "next_pc": "0x0000000044000010",
+          "effects": {
+            "gpr": {
+              "rd": 1,
+              "value": "0x0000000044000000"
+            }
+          },
+          "fetch": {
+            "epoch": 250,
+            "occupancy": 0,
+            "peak": 1,
+            "push": 1,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        },
+        {
+          "kind": "commit",
+          "seq": 66720,
+          "cycle": 175711,
+          "pc": "0x0000000044000010",
+          "insn": "0xf29fc001",
+          "next_pc": "0x0000000044000014",
+          "effects": {
+            "gpr": {
+              "rd": 1,
+              "value": "0x000000004400fe00"
+            }
+          },
+          "fetch": {
+            "epoch": 250,
+            "occupancy": 0,
+            "peak": 1,
+            "push": 1,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        },
+        {
+          "kind": "commit",
+          "seq": 66721,
+          "cycle": 175716,
+          "pc": "0x0000000044000014",
+          "insn": "0xf9000020",
+          "next_pc": "0x0000000044000018",
+          "effects": {
+            "memory": [
+              {
+                "addr": "0x000000004400fe00",
+                "wdata": "0x0000000000000000",
+                "strb": "00ff"
+              }
+            ]
+          },
+          "fetch": {
+            "epoch": 251,
+            "occupancy": 0,
+            "peak": 1,
+            "push": 1,
+            "pop": 0,
+            "flush": 0,
+            "stale_drain": 0,
+            "stale_drop": 0
+          }
+        }
+      ]
+    },
+    "after": {
+      "off": [],
+      "on": []
+    }
+  },
+  "headers": {
+    "off": {
+      "kind": "header",
+      "schema": "lcvex-commit-trace-v1",
+      "name": "neon_vect",
+      "image": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-001/build/microbench/perf_neon_vect.bin",
+      "image_sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+      "git_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+      "measurement_source_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+      "source_sha256": "217b415cfabe179b66643abc0fe9746fbbf7d033439e65ebabdcac74644c9974",
+      "max_cycles": 5000000,
+      "params": "{\"BASE_CONFIG\":\"nocache_d0\",\"D_L1\":\"0\",\"FETCH_FIFO_DEPTH\":\"2\",\"FETCH_FIFO_ENABLE\":\"0\",\"FIFO_VARIANT\":\"f0\",\"I_L1\":\"0\",\"L2\":\"0\",\"MEM_DELAY_MODE\":\"0\"}"
+    },
+    "on": {
+      "kind": "header",
+      "schema": "lcvex-commit-trace-v1",
+      "name": "neon_vect",
+      "image": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-001/build/microbench/perf_neon_vect.bin",
+      "image_sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+      "git_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+      "measurement_source_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+      "source_sha256": "217b415cfabe179b66643abc0fe9746fbbf7d033439e65ebabdcac74644c9974",
+      "max_cycles": 5000000,
+      "params": "{\"BASE_CONFIG\":\"nocache_d0\",\"D_L1\":\"0\",\"FETCH_FIFO_DEPTH\":\"2\",\"FETCH_FIFO_ENABLE\":\"1\",\"FIFO_VARIANT\":\"f1a\",\"I_L1\":\"0\",\"L2\":\"0\",\"MEM_DELAY_MODE\":\"0\"}"
+    }
+  },
+  "provenance": {
+    "off": {
+      "schema": "lcvex-commit-trace-v1",
+      "name": "neon_vect",
+      "image_sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+      "source_sha256": "217b415cfabe179b66643abc0fe9746fbbf7d033439e65ebabdcac74644c9974",
+      "measurement_source_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+      "max_cycles": 5000000,
+      "params": {
+        "BASE_CONFIG": "nocache_d0",
+        "D_L1": "0",
+        "FETCH_FIFO_DEPTH": "2",
+        "FETCH_FIFO_ENABLE": "0",
+        "FIFO_VARIANT": "f0",
+        "I_L1": "0",
+        "L2": "0",
+        "MEM_DELAY_MODE": "0"
+      },
+      "config": "nocache_d0"
+    },
+    "on": {
+      "schema": "lcvex-commit-trace-v1",
+      "name": "neon_vect",
+      "image_sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+      "source_sha256": "217b415cfabe179b66643abc0fe9746fbbf7d033439e65ebabdcac74644c9974",
+      "measurement_source_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+      "max_cycles": 5000000,
+      "params": {
+        "BASE_CONFIG": "nocache_d0",
+        "D_L1": "0",
+        "FETCH_FIFO_DEPTH": "2",
+        "FETCH_FIFO_ENABLE": "1",
+        "FIFO_VARIANT": "f1a",
+        "I_L1": "0",
+        "L2": "0",
+        "MEM_DELAY_MODE": "0"
+      },
+      "config": "nocache_d0"
+    },
+    "equal": {
+      "schema": true,
+      "name": true,
+      "image_sha256": true,
+      "source_sha256": true,
+      "measurement_source_sha": true,
+      "max_cycles": true,
+      "params_except_fifo": true
+    },
+    "same_source_and_image": true
+  },
+  "footers": {
+    "off": {
+      "kind": "footer",
+      "status": "pass",
+      "cycles": 227526,
+      "retired_insn": 66721,
+      "commit_digest": "0x3caef22144f0b28a",
+      "memory_digest": "0x3ba6dea5f6c76128"
+    },
+    "on": {
+      "kind": "footer",
+      "status": "pass",
+      "cycles": 175716,
+      "retired_insn": 66721,
+      "commit_digest": "0x3ec03fbc5b7681d0",
+      "memory_digest": "0x3ba6dea5f6c76128"
+    }
+  },
+  "trace_sha256": {
+    "off": "491c06f9f6d434977f1ee94fa694de5acdeb89ce947b97890be3b1024e4ef023",
+    "on": "3d684cc0d5ad08cf47b124a60773d8d3e1c41fbed389f4697ba94e9027bc0077"
+  },
+  "trace_paths": {
+    "off": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-001/build/agents/T-20260901-001/traces/neon_nocache_d0_f0.jsonl",
+    "on": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-001/build/agents/T-20260901-001/traces/neon_nocache_d0_f1a.jsonl"
+  }
+}

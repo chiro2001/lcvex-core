@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-048",
+  "label": "CORE-FP-OPERAND-C-CUT",
+  "title": "Core FP/NEON operand_c forwarding critical-path cut",
+  "kind": "rtl-timing-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-core-fp-operand-c-cut",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "review": {
+    "required": true,
+    "agent_type": "one-pass-blocking",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "只读检查 task JSON、T-047 handoff、rtl/lcvex_core.sv 与 owner diff；仅报告阻断性架构/流水线/验证风险"
+  },
+  "depends_on": [
+    "T-20260902-047"
+  ],
+  "base_sha": "b928c7779116fb6103773f6fa0fcff0de104ff00",
+  "branch": "fix/T-20260902-048-core-fp-operand-c-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-048",
+  "scope": "针对 full-FP signoff top-1 `soc|core|exmem_valid -> soc|core|idex_d.neon_fp_operand_c[17]`（27 逻辑级、22.660 ns、slack -2.759 ns）切断核心 FP/NEON V 寄存器转发到 ID/EX operand_c 的组合路径；允许采用受控 RAW stall、提前寄存选择或等价切级，不允许 SDC false_path，不回退既有 FP/核心/EMIF 切级成果。",
+  "reads": [
+    "docs/handoffs/T-20260902-047-fp-p5-rerun-round12.md",
+    "docs/tasks/evidence/T-20260902-047.json",
+    "docs/tasks/evidence/T-20260902-032.json",
+    "docs/tasks/evidence/T-20260902-036.json",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_pkg.sv",
+    "scripts/test_registry.json",
+    "Makefile",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/handoffs/T-20260902-048-core-fp-operand-c-cut.md",
+    "docs/tasks/evidence/T-20260902-048.json"
+  ],
+  "validation": {
+    "l0": [
+      "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile"
+    ],
+    "l1": [
+      "受影响的 core/FP/NEON SV 与 Cocotb 定向测试通过",
+      "新增或扩展 operand_c back-to-back RAW/stall 定向覆盖"
+    ],
+    "l2": [
+      "p7-1-fp-scalar-sequence 与 p7-3-neon-fp 中受影响定向锁步通过；若环境阻断则记录精确原因并保留 L1 证据"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "实现切断 exmem_valid 到 ID/EX FP/NEON operand_c 的同拍组合转发依赖，架构状态仍仅在 commit 更新，FP/NEON RAW、load-use、transaction kill/backpressure 与顺序提交语义不变；compile、定向 SV/Cocotb 与可运行的 L2 通过；不得用 false_path、关闭断言或修改参考结果。物理改善由后续独立 FP-P5 rerun 确认。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 60,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T13:04:27+08:00",
+  "updated_at": "2026-09-04T13:48:46+08:00",
+  "known_limits": [
+    "本任务不运行 Quartus full-FP flow、不修改 QSF/SDC、不生成 assembler/SOF、不接触 QEMU fork",
+    "切断组合前递可能为相关 FP/NEON 指令增加气泡；必须以定向测试和锁步证明语义正确",
+    "必须保持 T-032/T-034/T-036/T-038/T-040/T-042/T-044/T-046 以及 EMIF CDC/时序成果"
+  ],
+  "handoff": "docs/handoffs/T-20260902-048-core-fp-operand-c-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260902-048.json",
+  "head_sha": "89e54cc124edbce1d2ed5c384a3ff5db5c79ce0b",
+  "implementation_sha": "d219d170fce32549f4dd3f72e932c94b8b33a6c9",
+  "merge_sha": "84d9bf77b22174c0e9121194bd73d2211454a1ec",
+  "next": "集成后派发独立 FP-P5 rerun round13；只有所有 signoff timing 类别全绿才允许 assembler/SOF",
+  "dispatch": {
+    "sent_at": "2026-09-04T13:07:00+08:00",
+    "agent_name": "/root/t048_core_fp_operand_cut",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-048",
+    "branch": "fix/T-20260902-048-core-fp-operand-c-cut"
+  },
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T13:35:28+08:00",
+    "merged_at": "2026-09-04T13:44:30+08:00",
+    "recorded_at": "2026-09-04T13:48:46+08:00",
+    "notes": "Owner implementation and evidence merged. Integrator reran compile, P7-4 Cocotb 6/6, P7-1 sequence 388/388, P7-3 NEON FP 48/48 and registry consistency on merge_sha; all passed."
+  },
+  "review_dispatch": {
+    "sent_at": "2026-09-04T13:07:00+08:00",
+    "agent_name": "/root/t048_boundary_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-shared-snapshot",
+    "received_at": "2026-09-04T13:07:10+08:00",
+    "reported_at": "2026-09-04T13:24:08+08:00",
+    "status": "conditional_go",
+    "blockers": [
+      "EX/MEM V forwarding cut must cover every scalar FP, NEON FP and NEON integer producer/source dependency including FMLA/FMLS third source and V31",
+      "new RAW hazard must gate stall_id and fetch_fifo_pop without gating fp_rsp_ready",
+      "fp_load_use and transaction kill/commit ordering must remain intact"
+    ],
+    "known_adjacent_risk": "Existing irq_taken handling may not uniformly squash younger ID/EX and EX/MEM state; T-048 must not claim or silently expand into this fix. Track separately.",
+    "final_review": {
+      "sent_at": "2026-09-04T13:36:36+08:00",
+      "received_at": "2026-09-04T13:36:45+08:00",
+      "reported_at": "2026-09-04T13:43:26+08:00",
+      "head_sha": "89e54cc124edbce1d2ed5c384a3ff5db5c79ce0b",
+      "code_blockers": "none",
+      "notes": "V-source coverage, hazards, FIFO/flush and FP response/commit/backpressure review passed; physical STA remains for round13."
+    }
+  }
+}

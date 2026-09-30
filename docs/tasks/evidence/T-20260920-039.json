@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-039",
+  "state": "done",
+  "acceptance_status": "pass-b25-bram-microbench-coremark-board-and-exact-golden",
+  "branch": "batch/T-20260920-039-b25-post-bringup",
+  "base_sha": "763622496991b5cd7c743c5ff05b9678b763483c",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "required_member_tasks": [
+    "T-20260920-040", "T-20260920-041", "T-20260920-042", "T-20260920-043",
+    "T-20260920-044", "T-20260920-045", "T-20260920-047", "T-20260920-049",
+    "T-20260920-050", "T-20260920-051", "T-20260920-052", "T-20260920-053",
+    "T-20260920-054", "T-20260920-055"
+  ],
+  "superseded_attempts": {
+    "T-20260920-046": "v output was truncated by pre-fix finite UART WSPACE polling; replaced by T-049/T-053",
+    "T-20260920-048": "golden restore was blocked while the FTDI cable was absent; replaced by T-053 final golden transaction after enumeration returned"
+  },
+  "reproducible_build": {
+    "command": "LCVEX_MICROBENCH_TEST_DIR=build/agents/T-20260920-055/l0 bash fpga/catapult_a10/tools/run_microbench_tests.sh",
+    "status": "LCVEX_B25_MICROBENCH_L0_PASS",
+    "two_clean_builds_byte_identical": true,
+    "boot_elf_sha256": "712f0951ab50e9434a053517bb27fb835326925926e9c8b86d20fe72114a7bdd",
+    "boot_bin": {"bytes": 20448, "sha256": "241b0ce4dface8c4a9db782b63e4ada8674f5c8b51c00f228a795e98fc1aedab"},
+    "boot_hex_sha256": "93cbacda0b8d22864534da5f62ec8f6161ff69ede9eca10e0df2638e995709ab",
+    "boot_mif": {"bytes": 204942, "sha256": "0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f"},
+    "build_manifest_sha256": "d9a087765da1839ed4a2847132999e8755807300f06c015b6f5bae4cd632cd3a",
+    "host_microbench_signature": "8679CF21",
+    "host_coremark_selfcheck": "PASS",
+    "host_coremark_full_math": "PASS",
+    "image_contract": "PASS; upstream_files=8; image_end=0x58f8"
+  },
+  "validation_pipeline": {
+    "gate_d": {"task": "T-20260920-050", "green": 152, "red": 0, "coverage": 8760, "random_commits": 300006, "isa": "62/62", "baremetal_c": "200/200"},
+    "fresh_physical": {"task": "T-20260920-051", "setup_ns": 9.398, "hold_ns": 0.018, "ucp_input_paths": 60, "ucp_output_paths": 4, "reset_paths": 624, "fifo_reports": "24/24 no violation", "data_delay_reports": "20/20 no violation"},
+    "volatile_sof": {"task": "T-20260920-052", "bytes": 36842099, "sha256": "39c2945466804036366a6306125323b585bef097aded7e8fff494d60a3ea2def", "checksum": "0x31585D80", "design_hash": "48917DD6FD70C4420BD5765A206DACBB", "persistent_formats": 0}
+  },
+  "board_acceptance": {
+    "task": "T-20260920-053",
+    "initial_state_basis": "user-attested VexRiscv/Linux loaded from Flash; standard-server design hash is diagnostic-only",
+    "candidate_programmer_invocations": 1,
+    "terminal_sessions": 1,
+    "commands": [
+      {"command": "t", "result": "MBPASS 24 8679CF21"},
+      {"command": "v", "result": "CMSELF PASS", "iterations": 1, "cycles": 1479468, "score": "INVALID"},
+      {"command": "c", "result": "CMRESULT VALID", "iterations": 300, "cycles": 442800996, "hz": 25000000, "coremark_per_second_x1000": 16937, "coremark_per_mhz_x1000": 677, "final_crc": "5275"}
+    ],
+    "coremark_upstream_raw_crosscheck": "PASS",
+    "terminal_transcript": {"bytes": 92694, "sha256": "ae3c5b4171e3f85d1845672da614062ae78e7c2331ea072a2dce6336358c8d45"},
+    "strict_parser": {"task": "T-20260920-055", "result": "MICROBENCH_PARSE_PASS mode=all", "log_sha256": "e4a1d466e640787a7095a9eb84cf2ea4d9d656ae53582da6ceee043b05b8b29e"},
+    "direct_terminal_response_matcher": "timeout due to Windows 120-column ConHost redraw; raw transcript was strictly parsed; no retry",
+    "golden_programmer_invocations": 1,
+    "final_live_golden": {"result": "PASS", "bytes": 36844906, "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92", "checksum": "0x31510BB6", "design_hash": "193DE4BC8A30F3ED5F1F", "jtag_id": "0x02E060DD", "uart_phy_nodes": true, "postflight_result_sha256": "ffd89e59004d4428bf22fac991821cc9980e05aa710855953297aa8766eeb5ef"}
+  },
+  "separate_ddr_control": {"task": "T-20260920-041", "late_calibration_m_result": "DDR-OK", "this_task_m_commands": 0, "ddr_pressure_claim": false},
+  "batch_branch_integration": {"branch": "batch/T-20260920-039-b25-post-bringup", "integrated_source_head": "4ba3ad2800aa4d1966a78cac2cbee9be9e9fad50", "status": "fast-forwarded"},
+  "safety": {"jic_epcq_flash_writes_or_erases": 0, "reset_or_power_cycles": 0, "standard_or_unknown_process_stops": 0, "task_owned_server_stops": 2, "gamepc_lock": "released", "live_final_state": "exact frozen golden proven"},
+  "remaining_scope": ["full-FP Gate F release", "DDR/Cache stress", "Linux true-board run", "final P7/FPGA same-SHA release integration"],
+  "handoff": "docs/handoffs/T-20260920-039-b25-post-bringup-microbench-coremark.md"
+}

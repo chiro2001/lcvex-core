@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-011",
+  "label": "F1A-ON-GATED-RERUN",
+  "title": "F1a 默认-on 完整 Gate D 复跑（T-009 修复后）",
+  "kind": "final-regression",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-gate-d-f1a-rerun",
+  "agent_type": "gate-d-run",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-009"
+  ],
+  "base_sha": "a4503d0c56a674316cce92d5f83788e5473f8a24",
+  "branch": "verify/T-20260902-011-f1a-on-gated-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-011",
+  "scope": "在包含 T-009 F1a lockstep 修复的合并 SHA 上，以默认 FETCH_FIFO_ENABLE=1 重跑完整本地串行 Gate D，确认 T-006 的 9 个失败用例已闭合且无新回归。",
+  "reads": [
+    "Makefile",
+    "sim/difftest/**",
+    "scripts/**",
+    "docs/handoffs/T-20260902-009-f1a-lockstep-fixes.md",
+    "docs/tasks/evidence/T-20260902-006.json",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-011-f1a-on-gated-rerun.md",
+    "docs/tasks/evidence/T-20260902-011.json"
+  ],
+  "validation": {
+    "l0": [
+      "make test PASS"
+    ],
+    "l2": [
+      "Gate D 全量 PASS"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "默认-on 合并 SHA 上 Gate D 全绿；若失败保留日志与失败现场。",
+  "resource": {
+    "cpu": 4,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T18:57:00+08:00",
+  "updated_at": "2026-09-02T20:26:45+08:00",
+  "known_limits": [
+    "重型本地任务一次一个；使用 cgroup/VERILATOR_JOBS=1；不跑 Quartus/上板"
+  ],
+  "handoff": "docs/handoffs/T-20260902-011-f1a-on-gated-rerun.md",
+  "evidence": "docs/tasks/evidence/T-20260902-011.json",
+  "next": "全绿后评估 FETCH_FIFO_ENABLE 默认-on 并同步文档/FPGA candidate",
+  "dispatch": {
+    "sent_at": "2026-09-02T18:57:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-011",
+    "branch": "verify/T-20260902-011-f1a-on-gated-rerun"
+  },
+  "head_sha": "768e11eb0ded85b04ef9f56444c23d36a4d019ea",
+  "merge_sha": "7c35dda9931a4b89b579bad572b551fa356e11c0",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T20:24:10+08:00",
+    "merged_at": "2026-09-02T20:26:45+08:00",
+    "recorded_at": "2026-09-02T20:26:45+08:00",
+    "notes": "F1a default-on Gate D rerun PASS (151/0); T-006 failures closed; can evaluate FETCH_FIFO_ENABLE=1 as default."
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-012",
+  "label": "FP-NEON-PIPELINE-PLAN-AUDIT",
+  "title": "审核并完善 FP/NEON 流水化与多周期执行优化计划",
+  "kind": "review-doc",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "root-integrator",
+  "agent_type": "primary-integrator",
+  "model": "current-primary-session",
+  "reasoning_effort": "current-session",
+  "depends_on": [
+    "T-20260902-010"
+  ],
+  "base_sha": "d892ba7820cd6db39a1144d8d4b3236a43a11891",
+  "branch": "docs/T-20260902-012-fp-neon-pipeline-plan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-012",
+  "scope": "审核 docs/FP_NEON_PIPELINE_PLAN.md 与当前 RTL、P7 协议、性能路线、A10 full-FP 综合证据的一致性；修正未经证实或已过时的结论，收敛首选微架构、阶段 DAG、量化门槛、验证矩阵、风险与回退，为后续实现任务提供可直接登记的计划。不修改 RTL、测试、QEMU、项目总状态或既有 evidence。",
+  "planning_guidance": {
+    "audit": [
+      "区分已验证事实、设计决策和待测假设；资源/Fmax 数字必须能追溯到当前仓库证据。",
+      "保持 ARMv8.2-A AArch64 only、单发射、顺序执行、单核、顺序提交边界；不得借 FP 优化引入 OoO 或多提交。",
+      "重点审查 lane 共享、可变时延、backpressure、flush/kill、FPCR/FPSR、精确异常、V 相关和 QEMU PRE/COMMIT 一一对应。"
+    ],
+    "deliverable": [
+      "给出明确的推荐基线和暂缓方案，而不是把关键架构选择全部留给实现任务。",
+      "给出按真实依赖排序的阶段/任务包、每阶段进入条件、退出门、失败回退与需保存的证据。",
+      "把面积 fit 与时序/性能目标拆成可测量的硬门和优化目标，避免用仿真 cycle 代替 A10 Fmax/资源签核。"
+    ]
+  },
+  "writes": [
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/handoffs/T-20260902-012-fp-neon-pipeline-plan.md",
+    "docs/tasks/evidence/T-20260902-012.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-2_NEON_INT.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/P7-5_FP16_SQRT_MINMAX_ROUND.md",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_F1J_FULL_MATRIX_RESULTS.md",
+    "docs/FPGA_A10_RESOURCE_GATE_REEVAL.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md",
+    "docs/tasks/active/T-20260902-004.json",
+    "docs/tasks/active/T-20260902-007.json",
+    "docs/tasks/active/T-20260902-010.json",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/**",
+    "sim/**",
+    "scripts/**"
+  ],
+  "validation": {
+    "l0": [
+      "python3 -m json.tool docs/tasks/active/T-20260902-012.json",
+      "python3 -m json.tool docs/tasks/evidence/T-20260902-012.json",
+      "python3 scripts/check_task_timestamps.py --scope live --exit-code（全仓既有 24 errors/20 warnings；JSON 过滤确认 T-20260902-012 为 0 项）",
+      "人工核对本次修改的 Markdown 相对链接与引用路径存在"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "文档事实与当前 RTL/证据一致；首选方案、非目标、阶段 DAG、进入/退出门、量化验收、风险/回退和任务拆分完整；所有新增链接有效；不把规划或历史代理数据表述为已实现、A10 fit 或 Fmax 签核。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 2048,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.1
+  },
+  "created_at": "2026-09-02T23:55:07+08:00",
+  "updated_at": "2026-09-03T00:24:22+08:00",
+  "handoff": "docs/handoffs/T-20260902-012-fp-neon-pipeline-plan.md",
+  "evidence": "docs/tasks/evidence/T-20260902-012.json",
+  "head_sha": "035d1eeb0d00585678d6db507301fd7b99411bd3",
+  "merge_sha": "6c2e56a10dad470b4e43487cec397a721aa570d9",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T00:16:23+08:00",
+    "merged_at": "2026-09-03T00:19:08+08:00",
+    "recorded_at": "2026-09-03T00:19:16+08:00",
+    "notes": "计划已完成事实校准并收敛为面积优先、单在途、单共享 lane 的分阶段方案；链接/Make 入口/JSON/diff-check 全部通过。本任务无时间戳检查项；全仓 live checker 仍有 24 个历史 errors/20 warnings，未改写。未运行 RTL/Quartus，量化门明确标注为后续验收政策。"
+  },
+  "known_limits": [
+    "文档审阅不运行 Verilator 重型回归、QEMU 锁步、Quartus、Linux 或板测。",
+    "规划中的面积、Fmax 和吞吐阈值必须由后续同 SHA 实测证据签核。"
+  ],
+  "next": "登记 FP-P0 基线/资源分解任务，并独立复核、闭合 P7-2 DUP/SQADD decode-overlap 基线红项。"
+}

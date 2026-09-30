@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-028",
+  "label": "R20-TIMING-BATCH",
+  "title": "Integrate the R20 arithmetic-route and final-pack timing cuts",
+  "kind": "timing-batch-integration",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "local-and-physical-validation-complete-setup-open",
+  "assigned_owner": "codex-integrator",
+  "depends_on": ["T-20260906-027"],
+  "base_sha": "59c8d78bbb13f834c801e4897ad7c23ac698e833",
+  "functional_base_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "branch": "batch/T-20260906-028-r20",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-028",
+  "member_tasks": ["T-20260906-029", "T-20260906-030"],
+  "integration_order": ["T-20260906-029", "T-20260906-030"],
+  "scope": "Integrate two fresh R19 negative-slack cones with exact same-file write regions, run their merged L0-L2 union once under the shared local lock, and freeze R20 only if functional validation passes.",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv (parent ownership; member write_regions only)",
+    "batch-only integration tests and evidence",
+    "docs/tasks/active/T-20260906-028..030.json",
+    "docs/tasks/evidence/T-20260906-028.json",
+    "docs/handoffs/T-20260906-028-r20-timing-batch.md"
+  ],
+  "validation": {
+    "merge": "member diffs must stay inside registered write_regions; public interface/latency reconciliation is owned by T-030 integration lane",
+    "local": "one merged candidate runs the complete affected L0-L2 union while holding resource-lock local",
+    "physical": "a later fresh task runs one remote synthesis/fitter/STA flow while holding gamepc"
+  },
+  "acceptance": "Both cones are implemented without cross-region edits; merged candidate passes all affected scalar/NEON/FDIV/FSQRT and strict QEMU tests before any feature-branch promotion or physical claim.",
+  "resource": "No member starts heavy validation. Integrator acquires local for merged L0-L2; no fixed 16 GiB cap, but actual admission/parallelism/cgroup and peak resources must be recorded.",
+  "created_at": "2026-09-06T11:50:38+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-06T11:52:11+08:00",
+    "agent_name": "codex-integrator"
+  },
+  "candidate_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "evidence": "docs/tasks/evidence/T-20260906-028.json",
+  "handoff": "docs/handoffs/T-20260906-028-r20-timing-batch.md",
+  "physical_task": "T-20260906-031",
+  "physical_evidence_head": "9c4656cb79ee45d2bac20074e9f805fb9f3c505d",
+  "physical_merge_commit": "edaaca5bc3296aaf89f161a079ee09868b50b0b5",
+  "physical_result": "Fmax 45.15 MHz; setup WNS -2.147 ns; setup remains open",
+  "followup_task": "T-20260906-032",
+  "updated_at": "2026-09-06T19:09:21+08:00"
+}

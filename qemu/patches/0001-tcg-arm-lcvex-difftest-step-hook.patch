@@ -1,0 +1,94 @@
+diff --git a/accel/tcg/cpu-exec-common.c b/accel/tcg/cpu-exec-common.c
+index 44e8434..0bc7bf7 100644
+--- a/accel/tcg/cpu-exec-common.c
++++ b/accel/tcg/cpu-exec-common.c
+@@ -22,6 +22,7 @@
+ #include "system/tcg.h"
+ #include "qemu/plugin.h"
+ #include "accel/tcg/cpu-loop.h"
++#include "exec/lcvex-difftest.h"
+ #include "internal-common.h"
+ 
+ bool tcg_allowed;
+@@ -49,6 +50,18 @@ uint32_t curr_cflags(CPUState *cpu)
+      */
+     if (unlikely(cpu_single_stepping(cpu))) {
+         cflags |= CF_NO_GOTO_TB | CF_NO_GOTO_PTR | CF_SINGLE_STEP | 1;
++    } else if (unlikely(qemu_lcvex_difftest_active())) {
++        /*
++         * LCVEX difftest step 模式：强制单指令 TB 并禁止链式跳转，
++         * 使插件回调与异常入口都落在指令边界上。同时清掉 CF_PCREL：
++         * PCREL 的 TB 缓存键只含物理页、不含 VA，内核早期启动在低
++         * 别名（phys 直映 VA）执行过的 TB 会被高 VA 命中和复用，插件
++         * 上报的 insn vaddr 仍是旧翻译时的低地址（__pi_memset 别名
++         * 复用导致 next_pc 误报 0x4109xxxx vs DUT 0xffff80008109xxxx）。
++         * 非 PCREL 后缓存键包含 VA，别名不复用，vaddr 恒为真实 PC。
++         */
++        cflags &= ~CF_PCREL;
++        cflags |= CF_NO_GOTO_TB | CF_NO_GOTO_PTR | 1;
+     } else if (qatomic_read(&one_insn_per_tb)) {
+         cflags |= CF_NO_GOTO_TB | 1;
+     } else if (qemu_loglevel_mask(CPU_LOG_TB_NOCHAIN)) {
+diff --git a/include/plugins/qemu-plugin.h b/include/plugins/qemu-plugin.h
+index 3e913cd..432885c 100644
+--- a/include/plugins/qemu-plugin.h
++++ b/include/plugins/qemu-plugin.h
+@@ -304,6 +304,23 @@ void qemu_plugin_register_vcpu_discon_cb(qemu_plugin_id_t id,
+                                          qemu_plugin_vcpu_discon_cb_t cb,
+                                          void *userdata);
+ 
++/*
++ * LCVEX difftest 精确 step hook（见 exec/lcvex-difftest.h）。
++ * 仅当 LCVEX_DIFFTEST_STEP=1（QEMU fork step 模式）时有效。
++ */
++QEMU_PLUGIN_API
++int qemu_lcvex_difftest_active(void);
++
++/*
++ * 取走最近一次异常入口信息：返回 1 = 同步异常（*ec 为 ESR.EC，
++ * *esr 为完整 ESR，*far 为 FAR/故障地址），2 = 异步（IRQ/FIQ），
++ * 0 = 无。在 vcpu discon 回调中调用。
++ */
++QEMU_PLUGIN_API
++int qemu_lcvex_difftest_take_exception(unsigned int vcpu_index,
++                                       uint32_t *ec, uint32_t *esr,
++                                       uint64_t *far);
++
+ /** struct qemu_plugin_tb - Opaque handle for a translation block */
+ struct qemu_plugin_tb;
+ /** struct qemu_plugin_insn - Opaque handle for a translated instruction */
+diff --git a/target/arm/helper.c b/target/arm/helper.c
+index af45234..b1a3d31 100644
+--- a/target/arm/helper.c
++++ b/target/arm/helper.c
+@@ -35,6 +35,7 @@
+ #include "cpregs.h"
+ #include "target/arm/gtimer.h"
+ #include "qemu/plugin.h"
++#include "exec/lcvex-difftest.h"
+ 
+ static void switch_mode(CPUARMState *env, int mode);
+ #ifndef CONFIG_USER_ONLY
+@@ -9679,6 +9680,9 @@ void arm_cpu_do_interrupt(CPUState *cs)
+         cpu_set_interrupt(cs, CPU_INTERRUPT_EXITTB);
+     }
+ 
++    if (qemu_lcvex_difftest_active()) {
++        qemu_lcvex_difftest_note_exception(cs);
++    }
+     arm_do_plugin_vcpu_discon_cb(cs, last_pc);
+ }
+ #endif /* !CONFIG_USER_ONLY */
+diff --git a/target/arm/tcg/meson.build b/target/arm/tcg/meson.build
+index cbfac00..7ec25a2 100644
+--- a/target/arm/tcg/meson.build
++++ b/target/arm/tcg/meson.build
+@@ -51,6 +51,8 @@ arm_ss.add(when: 'TARGET_AARCH64', if_true: files(
+ arm_common_system_ss.add(when: 'CONFIG_ARM_V7M', if_true: files('cpu-v7m.c'))
+ arm_user_ss.add(when: 'TARGET_AARCH64', if_false: files('cpu-v7m.c'))
+ 
++arm_system_ss.add(when: 'TARGET_AARCH64', if_true: files('lcvex-difftest.c'))
++
+ arm_common_ss.add(zlib)
+ arm_common_ss.add(files(
+   'arith_helper.c',

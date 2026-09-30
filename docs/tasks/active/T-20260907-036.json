@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-036",
+  "label": "B25-BRINGUP-PLAN",
+  "title": "Freeze reference lessons and register the 25 MHz bring-up DAG",
+  "kind": "documentation-and-task-planning",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "plan-and-task-dag-recorded",
+  "assigned_owner": "codex-integrator",
+  "depends_on": ["T-20260906-032"],
+  "base_sha": "70e090a4a64d5743dcb0d3734fb13094ffe2355f",
+  "branch": "docs/T-20260907-036-bringup-plan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-036",
+  "scope": "Turn the local and GamePC a10-linux-riscv evidence into a bounded LCVEX 25 MHz bring-up plan through BRAM boot and polling JTAG-UART interaction, register the implementation/physical/board tasks, and write a compression-safe main-agent handoff.",
+  "writes": [
+    "docs/BRINGUP_25MHZ_PLAN.md",
+    "docs/tasks/active/T-20260907-036.json",
+    "docs/tasks/active/T-20260907-037.json through T-20260907-044.json",
+    "docs/tasks/evidence/T-20260907-036.json",
+    "docs/HANDOFF_20260907_BRINGUP_TO_CODEX.md",
+    "docs/tasks/TASKS.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md"
+  ],
+  "reads": [
+    "/home/chiro/projects/mycpu/a10-linux-riscv at b2ffcc9 (read-only)",
+    "GamePC D:/Projects/fpga-altra/a10-linux-riscv at b2ffcc9 (read-only)",
+    "T-035 runtime status and R19-R21 timing evidence",
+    "LCVEX Catapult top, SDC, BRAM, boot and JTAG-UART sources"
+  ],
+  "validation": "git diff --check; every new task/evidence JSON parses; DAG dependencies, write sets, resource locks and explicit assembler/JTAG permission gates are self-consistent.",
+  "acceptance": "A post-compression main agent can register worktrees and dispatch the three implementation lanes without reopening discovery; no implementation, Quartus, assembler, JTAG or board action occurs in this task.",
+  "resource": "Read-only inspection and documentation only; no local/gamepc heavy lock required and no JTAG access permitted.",
+  "forbidden_regions": [
+    "RTL/QEMU/QSF/SDC implementation changes",
+    "local or remote build artifacts",
+    "Quartus, assembler, JTAG server, programmer, terminal, power or board state"
+  ],
+  "created_at": "2026-09-07T00:21:42+08:00",
+  "evidence": "docs/tasks/evidence/T-20260907-036.json",
+  "plan": "docs/BRINGUP_25MHZ_PLAN.md",
+  "handoff": "docs/HANDOFF_20260907_BRINGUP_TO_CODEX.md",
+  "registered_tasks": [
+    "T-20260907-037",
+    "T-20260907-038",
+    "T-20260907-039",
+    "T-20260907-040",
+    "T-20260907-041",
+    "T-20260907-042",
+    "T-20260907-043",
+    "T-20260907-044"
+  ],
+  "updated_at": "2026-09-07T00:23:34+08:00"
+}

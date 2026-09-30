@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-007",
+  "label": "B25-QUARTUS-SYNTHESIS-SELECTOR",
+  "state": "done-local-hermetic-review-with-bram-blocker-split",
+  "acceptance_status": "hermetic-selector-pass-platform-closure-pass-bram-init-blocker-owned-by-T-20260909-001",
+  "partial": true,
+  "base_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "dispatch_head_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "candidate_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "source_head_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "branch": "fix/T-20260908-007-b25-quartus-synthesis-selector",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-007",
+  "owner": "b25_physical",
+  "review": {
+    "task_id": "T-20260908-008",
+    "result": "approved exact sole SYNTHESIS macro semantics per integrator follow-up",
+    "evidence": "docs/tasks/evidence/T-20260908-008.json",
+    "boundary": "one active unquoted SYNTHESIS macro; reject duplicates/other macros; standalone altsyncram excluded from QSF"
+  },
+  "timestamps": {
+    "sent_at": "2026-09-08T23:26:27+08:00",
+    "received_at": "2026-09-08T23:26:27+08:00",
+    "macro_edit_at": "2026-09-08T23:35:00+08:00",
+    "selector_check_at": "2026-09-08T23:37:56+08:00",
+    "bram_cache_first_run_at": "2026-09-08T23:38:49+08:00",
+    "boot_rebuild_at": "2026-09-08T23:39:00+08:00",
+    "bram_cache_authoritative_run_at": "2026-09-08T23:43:38+08:00",
+    "reported_at": "2026-09-09T00:37:30+08:00",
+    "hermetic_followup_sent_at": "2026-09-09T00:29:45+08:00",
+    "hermetic_followup_received_at": "2026-09-09T00:29:45+08:00",
+    "hermetic_tests_at": "2026-09-09T00:32:32+08:00"
+  },
+  "implementation": {
+    "files": [
+      "fpga/catapult_a10/quartus/catapult_a10.qsf",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/SHA256SUMS",
+    "fpga/catapult_a10/skeleton_manifest.json",
+    "fpga/catapult_a10/tools/check_platform.py",
+    "fpga/catapult_a10/tools/check_skeleton.py",
+    "fpga/catapult_a10/tools/check_synthesis_selector.py"
+    ],
+    "qsf_change": "one active set_global_assignment -name VERILOG_MACRO SYNTHESIS line",
+    "qsf_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "qsf_bytes": 13761,
+    "platform_manifest_sha256": "c87aac08e855fc4ac30ad6ddfa4db19d41644b6ab5f660e80e628063545a5e9d",
+    "sha256sums_sha256": "764d5cf14617ec0a59d5b8ec030a179254594e1555fb8e070130e94670e17bd7",
+    "skeleton_manifest_sha256": "35b47fb36402662776ed1e17cda9d2c2bba0c77f2940ae89d38b41ee684acc76",
+    "check_platform_sha256": "88812d7a7b2f77f5c4574a7833646b52a1afe504aa6b2452c11c8d6ca9887300",
+    "check_skeleton_sha256": "7a5d76f2204b414a51a7da08319fbadc021bcf6649eee9991c32ade06ec9fa1e",
+    "selector_checker_sha256": "03e2159cd7727902384e28213b98bb5ed2c2ba8d10d3de774c638bcad432d305",
+    "rtl_modified": false,
+    "qemu_modified": false,
+    "semantic_rtl_change": false
+  },
+  "reference": {
+    "qsf": "/home/chiro/projects/mycpu/a10-linux-riscv/hw/quartus/vex_soc_ddr/vex_soc_ddr.qsf",
+    "qsf_sha256": "a3af2707ed1b12a3598ba2d9d8a313ad8889fae76d46bbc3af34ce3a2ee4855a",
+    "assignment": "set_global_assignment -name VERILOG_MACRO SYNTHESIS",
+    "reference_macro_count": 1
+  },
+  "selector_audit": {
+    "checker": "fpga/catapult_a10/tools/check_synthesis_selector.py",
+    "result": "pass",
+    "artifact": "build/agents/T-20260908-007/prep/selector-check-final-hermetic.json",
+    "artifact_sha256": "05f623e43252bfe51aff0bf5f87fc87e39f3ee08708de93f2342be0e6e04d218",
+    "checks": {
+      "active_synthesis_macro_count": 1,
+      "unexpected_active_macros": 0,
+      "qsf_bram_assignment_count": 1,
+      "standalone_altsyncram_qsf_assignment_count": 0,
+      "bram_behavior_guarded_by_ifndef": true,
+      "bram_altsyncram_module_count": 1,
+      "cache_m20k_altera_syncram": true,
+      "simulation_boot_hex": true,
+      "synthesis_boot_mif": true,
+      "platform_manifest_count": 50,
+      "source_lock_target_count": 50
+    },
+    "status_log": "build/agents/T-20260908-007/prep/selector-check-final-hermetic.status",
+    "status_log_sha256": "4dc7cadf5d5ad522241a3d8b7526655808c89f88e9fe5dc59e2d449dc9996b0b"
+  },
+  "hermetic_checker_followup": {
+    "result": "pass",
+    "checker": "fpga/catapult_a10/tools/check_synthesis_selector.py",
+    "default_command": "cd build/agents/T-20260908-007/hermetic/no-sibling-cwd && python3 ../../../../../fpga/catapult_a10/tools/check_synthesis_selector.py",
+    "default_result": "exit 0; status PASS without reading or requiring repo-external reference",
+    "default_artifact": "build/agents/T-20260908-007/hermetic/default.stdout",
+    "default_artifact_sha256": "05f623e43252bfe51aff0bf5f87fc87e39f3ee08708de93f2342be0e6e04d218",
+    "valid_reference_result": "exit 0; external reference exact macro count 1",
+    "valid_reference_artifact": "build/agents/T-20260908-007/hermetic/valid.stdout",
+    "valid_reference_artifact_sha256": "0a0b579de53f5ab980ce38b6b9192daf318b8fae9bc73e0c604b59150ac0993f",
+    "negative_cases": {
+      "no_macro_reference": {"exit": 1, "stderr_sha256": "3af11eb2dbcd523bf1c3b185239f9ddac54ec28f4f9f88e704fa85655c058cc8"},
+      "duplicate_macro_reference": {"exit": 1, "stderr_sha256": "c6fbe25e5508456030692f364ac21753525415f10d7f2cba8c3078b23376e6b1"},
+      "missing_reference": {"exit": 1, "stderr_sha256": "333216bca80cde1cda87251aceb7e4e6085963d3bb14acef8c403f4b64d8cb36"}
+    },
+    "runner": "build/agents/T-20260908-007/run_hermetic_tests.sh",
+    "runner_log": "build/agents/T-20260908-007/hermetic/hermetic-tests-final.log",
+    "runner_log_sha256": "53bf533c16f0b8927e03fab6fdd39d08b667629f935975d9070f5a8548e8324c"
+  },
+  "preprocess_audit": {
+    "result": "pass",
+    "command": "bash build/agents/T-20260908-007/verify_selector_preprocess.sh",
+    "log": "build/agents/T-20260908-007/prep/preprocess.lock.log",
+    "log_sha256": "75dfe25f93c44fbad37d4231736ab76f4fb68555ee4e9d62116777850c4735c5",
+    "systemd_scope": "MemoryMax=16G MemorySwapMax=0",
+    "proof": [
+      "SYNTHESIS undefined: lcvex_bram_boot_behav and packed cache model selected; no altera_syncram",
+      "SYNTHESIS defined: lcvex_bram_boot_altsyncram and cache altera_syncram M20K selected; behavior model excluded",
+      "simulation top selects fpga/catapult_a10/boot/build/boot.hex",
+      "synthesis top selects ../boot/build/boot.mif",
+      "scalar simulation assertions present; synthesis assertions excluded"
+    ]
+  },
+  "boot_artifacts": {
+    "build_log": "build/agents/T-20260908-007/prep/boot-build.log",
+    "build_log_sha256": "235cdde5e5bc6254905f4e08d4a9084494d6e378edd1a56ce3960e46c79b1454",
+    "generator_hashes": {
+      "fpga/catapult_a10/boot/build.sh": "3410974f09765982b8566fa143ea4f64732a6d7d14a4328120d6ea96e78bdc2d",
+      "fpga/catapult_a10/boot/bin_to_mif.py": "2ebbf3968c495e96e3fcc51a02d51dafc2ea47b5ac9c76898d9d4681387bd67f"
+    },
+    "elf": {"bytes": 68832, "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"},
+    "bin": {"bytes": 957, "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"},
+    "hex": {"bytes": 2871, "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"},
+    "mif": {
+      "bytes": 204942,
+      "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+      "width": 64,
+      "depth": 8192,
+      "records": 8192,
+      "generated": true,
+      "tracked": false
+    },
+    "image_contract": {
+      "boot_bin_first8": "0x9100001f58001700",
+      "boot_hex_first8": "0x9100001f58001700",
+      "bram_init25_tb_expected": "0x9100001f580017c0",
+      "bin_hex_match": true,
+      "tb_expected_matches_image": false,
+      "diagnostic_log": "build/agents/T-20260908-007/prep/bram-image-contract.log",
+      "diagnostic_log_sha256": "b53d986ee852c74045360e02c157c9392b15df97873a7933d0993821f7e98095"
+    }
+  },
+  "platform_closure": {
+    "sha256sums": {"result": "pass", "files": 50, "log": "build/agents/T-20260908-007/prep/sha256sums.log", "log_sha256": "a18b796a2898c1f0fd28670b8de03b6f9fa4b654c45f7fb05b7f0fdcae735b8f"},
+    "skeleton": {"result": "pass", "files": 6, "require_boot_image": true, "log": "build/agents/T-20260908-007/prep/check-skeleton-final.log", "log_sha256": "30c33cd277e474247f42712d22b70cbbb33525993451d6db8dd958900ad99060"},
+    "check_platform": {"result": "pass", "files": 50, "log": "build/agents/T-20260908-007/prep/check-platform-fixed.log", "log_sha256": "f8c18dc4e70dfda310691a9fe2519a04011ccb24a613249057859b1004010a17"},
+    "check_platform_strict_source": {"result": "pass", "files": 50, "reference_commit": "3db828e74651fda377a33d84f2a2ca0e69901d72", "log": "build/agents/T-20260908-007/prep/check-platform-strict.log", "log_sha256": "ca3604e8b13c52afb24f88c3aec98b1542b17331b127bd4d9303f67e9247c990"},
+    "selector_checker": "pass; independently validates the exact 50-file manifest/SHA/source.lock target closure, sole SYNTHESIS macro, file list and branch contract"
+  },
+  "focused_tests": {
+    "runner": "build/agents/T-20260908-007/run_bram_cache_focused.sh",
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260908-007 b25_physical --min-local-available-mib 8192 --meta stage=bram_cache_focused_report --meta source_sha=ff88f6985f632de19896e17763182d1f44bd9703 -- systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- bash build/agents/T-20260908-007/run_bram_cache_focused.sh",
+    "lock": "local",
+    "systemd_scope": "MemoryMax=16G MemorySwapMax=0",
+    "verilator_jobs": 1,
+    "results": [
+      {"test": "lcvex_bram_init25_tb", "build_exit": 0, "runtime_exit": 0, "self_check": "FAIL", "reason": "TB expected 0x9100001f580017c0; generated candidate image is 0x9100001f58001700", "log": "build/agents/T-20260908-007/bram-cache/bram_init25.log", "log_sha256": "443159f87265d3b1b631b8613a01ae3c344ed93d703d7757a99ea8d5331552b9"},
+      {"test": "lcvex_bram_boot_tb", "build_exit": 0, "runtime_exit": 0, "self_check": "PASS", "log": "build/agents/T-20260908-007/bram-cache/bram_boot.log", "log_sha256": "b71c17b86b637fdaedfd6f90d77d3f7789a1fafe154ef2d79272120cde0a9ec2"},
+      {"test": "lcvex_cache_data_ram_tb", "build_exit": 0, "runtime_exit": 0, "self_check": "PASS", "log": "build/agents/T-20260908-007/bram-cache/cache_data_ram.log", "log_sha256": "b7235fd5d52857b30e5061f92c0b443f97d9a7ec733f8921c50bfe29e1e16c1f"}
+    ],
+    "runner_log": "build/agents/T-20260908-007/prep/bram-cache-report.lock.log",
+    "runner_log_sha256": "b3c7abf489059e0fb945d94e2e7461f2db5111dd6e057fbf3f18de89b421b93b",
+    "runner_result": "FAIL_expected_test_contract_mismatch",
+    "fresh_bram_init_compile_run": {"build_exit": 0, "runtime_exit": 0, "self_check": "FAIL_expected_test_contract_mismatch", "log": "build/agents/T-20260908-007/prep/bram-init25-fresh.lock.log", "log_sha256": "64dbbf09af14b00c0eb039878a0d4603485fbfc9f370f3108277e761e7048d82"},
+    "resource_journal": "build/agents/T-20260908-007/prep/resource-journal.log",
+    "resource_journal_sha256": "772b033db743b4acbb99c9ad3a293fc5b7efe58dc5b3195d328436ba74fbf25d",
+    "resource_note": "preprocess peak 86.9M; first BRAM/cache run peak 456.9M; authoritative report run peak 64.9M; fresh bram_init compile peak 368.6M",
+    "fresh_image_test_note": "fresh compile/run used task-local bram_init25_fresh output; PIPESTATUS wrapper telemetry was malformed but compile and runtime output were preserved separately"
+  },
+  "physical_policy": {
+    "gamepc_used": false,
+    "quartus_used": false,
+    "assembler_or_bitstream": false,
+    "jtag_board_flash": false,
+    "rtl_modified": false,
+    "check_platform_policy_updated": true,
+    "check_skeleton_macro_anchor_updated": true,
+    "qemu_modified": false,
+    "reference_or_expectations_modified": false,
+    "active_task_json_modified": false,
+    "tasks_project_status_roadmap_modified": false
+  },
+  "blockers": [
+    "T-008 approved the exact sole SYNTHESIS macro policy; check_platform.py now requires exactly that active assignment and check_skeleton.py requires its anchor.",
+    "Existing bram_init25 TB self-check expects 0x9100001f580017c0, while the deterministic candidate boot.bin/HEX produce 0x9100001f58001700. This blocker is explicitly split to independent T-20260909-001; T-007 does not modify the test expectation.",
+    "The permanent selector checker must remain hermetic by default; external reference validation is opt-in via --reference-qsf and is covered by positive/negative tests.",
+    "No Quartus physical run is authorized in T-007; fitter/STA/M20K physical proof remains pending after these local contract decisions."
+  ],
+  "handoff": "docs/handoffs/T-20260908-007-b25-quartus-synthesis-selector.md"
+}

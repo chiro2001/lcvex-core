@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-052",
+  "label": "FP-RSP-PREROUND-CUT",
+  "title": "Cut FP response-ready and iterative pre-round setup paths",
+  "kind": "rtl-timing-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-fp-rsp-preround-cut",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "review": {
+    "required": true,
+    "agent_type": "one-pass-blocking",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "只读审查 T-049 top-N 到 lcvex_fp_exec/lcvex_fp_scalar 的映射、held-response 握手和 iterative latency 风险"
+  },
+  "depends_on": [
+    "T-20260902-049"
+  ],
+  "base_sha": "3446a6507f024c0b79fff5fea0107837e1de8447",
+  "branch": "fix/T-20260902-052-fp-rsp-preround-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-052",
+  "scope": "修复 T-049 full-FP setup top 两个路径族：`exmem_valid~DUPLICATE -> g_fp_simd_enabled.fp_exec|rsp_r.gpr_data[6]`（-1.406 ns/27L）与 `g_iter.ap_pre.pa.exp2 -> g_iter.pp_pre.sig`（约 -1.392 ns）。限定在 FP transaction wrapper/scalar 内做最小寄存器控制解耦或切级，保持 held response、kill、单在途、slot/iterative latency 与 FP/NEON 架构语义；不得修改 core 或 SDC。",
+  "reads": [
+    "docs/handoffs/T-20260902-049-fp-p5-rerun-round13.md",
+    "docs/tasks/evidence/T-20260902-049.json",
+    "docs/handoffs/T-20260902-046-fp-divpre-slotres-cut3.md",
+    "docs/tasks/evidence/T-20260902-046.json",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/**",
+    "scripts/test_registry.json",
+    "Makefile",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "tb/sv/lcvex_fp_scalar_tb.sv",
+    "tb/sv/lcvex_neon_fp*.sv",
+    "sim/cocotb/test_p7_*.py",
+    "scripts/test_registry.json",
+    "docs/handoffs/T-20260902-052-fp-rsp-preround-cut.md",
+    "docs/tasks/evidence/T-20260902-052.json"
+  ],
+  "validation": {
+    "l0": [
+      "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile"
+    ],
+    "l1": [
+      "FP exec held-response/ready/kill 定向测试验证 rsp_valid 保持、payload 稳定、单次消费与 reset/kill 值",
+      "FP scalar/NEON P7-1/3/4/5 SV 与 Cocotb 受影响回归通过",
+      "任何 iterative stage/latency 变化都更新并验证 FDIV/FSQRT 与 slot 响应周期"
+    ],
+    "l2": [
+      "p7-1 scalar FP、p7-3 NEON FP、p7-4/p7-5 sequence 中受影响锁步通过"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "源码结构上切断 response ready/clear 对完整 rsp_r payload 的长控制路径，并进一步打断或实质缩短 ap_pre->pp_pre 组合路径；rsp_valid 下 payload 必须稳定到 ready，握手仅消费一次，kill/reset 优先级不变，空闲时 payload 无架构意义但 reset/kill 值明确；FPCR/FPSR/FCMP/raw-bit、FDIV/FSQRT、conversion GPR result、NEON lane 与顺序 commit 全部保持。compile、定向 L1 和可运行 L2 通过，不用 false_path/关闭断言/修改参考结果。实际物理改善由后续 FP-P5 rerun 确认。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 60,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T15:48:22+08:00",
+  "updated_at": "2026-09-04T17:10:56+08:00",
+  "known_limits": [
+    "T-051 owns rtl/lcvex_core.sv and core/IRQ tests; T-052 may read but must not modify core or T-051 worktree",
+    "若确认 response top 必须修改 core/exmem_can_adv/fp_rsp_ready，必须阻断并请求重新划分写集，不能越权",
+    "不得运行 Quartus、修改 QSF/SDC/QEMU fork、assembler/SOF 或远端 T-049 probe",
+    "本地重型 Verilator 与 T-051 不得同时占用超过 50% 资源；全部命令 cgroup <16 GiB、VERILATOR_JOBS=1"
+  ],
+  "handoff": "docs/handoffs/T-20260902-052-fp-rsp-preround-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260902-052.json",
+  "head_sha": "bf7e9feda1cf1128676f5f4e16f9a170aedbcc5f",
+  "implementation_commits": [
+    "90e58f10b4456a9edfd50c2cfe2c84a478612582",
+    "7e7c0aea8b0fa060f46432a4d20b9a9927073453"
+  ],
+  "merge_sha": "2ab1c2a1a29937c12c8e7892bbc2e9f0ccb88b98",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T16:30:05+08:00",
+    "merged_at": "2026-09-04T16:44:56+08:00",
+    "recorded_at": "2026-09-04T17:10:56+08:00",
+    "notes": "Final code review found no blockers. Integrator reran compile, FP exec response/kill/latency directed TB, P7-4 sequence 142/142 and P7-3 NEON FP 48/48 on merge_sha; all passed. Physical STA remains a separate follow-up."
+  },
+  "next": "与 T-051 串行集成后重跑 FP-P5；若 setup 全绿才进入 assembler/SOF",
+  "dispatch": {
+    "sent_at": "2026-09-04T15:49:29+08:00",
+    "agent_name": "/root/t052_fp_rsp_preround_cut",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-052",
+    "branch": "fix/T-20260902-052-fp-rsp-preround-cut"
+  },
+  "review_dispatch": {
+    "sent_at": "2026-09-04T15:49:29+08:00",
+    "agent_name": "/root/t052_fp_timing_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-shared-snapshot",
+    "received_at": "2026-09-04T15:49:29+08:00",
+    "reported_at": "2026-09-04T16:02:35+08:00",
+    "status": "conditional_go",
+    "blockers": [
+      "g_iter.it_divider does not connect iter_kill/iter_pause, so wrapper kill can expose a stale divider result to an immediately reissued FDIV",
+      "ap_pre cut must split after aligned extended operands and before effective add/sub/cancellation, carrying all special/format/round metadata",
+      "TX_DONE ready may leave invalid payload unchanged only if reset/kill still clear it and rsp_valid-held payload stability/single-consume are tested"
+    ],
+    "final_review": {
+      "sent_at": "2026-09-04T16:32:57+08:00",
+      "received_at": "2026-09-04T16:32:57+08:00",
+      "reported_at": "2026-09-04T16:42:31+08:00",
+      "head_sha": "bf7e9feda1cf1128676f5f4e16f9a170aedbcc5f",
+      "code_blockers": "none",
+      "test_blockers": "none",
+      "notes": "Response invalid-payload retention, ADD/SUB alignment split, IT_ALIGN reset/kill and divider cancellation reviewed; physical STA remains pending."
+    }
+  }
+}

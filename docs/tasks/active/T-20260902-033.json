@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-033",
+  "label": "FP-P5-RERUN-ROUND5",
+  "title": "FP-P5 rerun round5：T-032 后 full-FP synthesis/fit/STA",
+  "kind": "verify-fpga-physical",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p5-rerun5",
+  "agent_type": "remote-quartus-full-flow",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-032"
+  ],
+  "base_sha": "ed1a0b92cf2427a82ca19cd39c7f832c100dca88",
+  "branch": "verify/T-20260902-033-fp-p5-rerun-round5",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-033",
+  "scope": "在包含 T-032（ID/EX GPR forwarding cut）的合并 SHA 上重跑 full-FP synthesis→fitter→signoff STA；若 setup/hold/recovery/removal/min-pulse 全非负且 DDR 通过则进入 assembler/SOF。",
+  "reads": [
+    "docs/handoffs/T-20260902-031-fp-p5-rerun-round4.md",
+    "docs/handoffs/T-20260902-032-l1i-core-operand-cut.md",
+    "fpga/catapult_a10/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-033-fp-p5-rerun-round5.md",
+    "docs/tasks/evidence/T-20260902-033.json",
+    "build/agents/T-20260902-033/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-033-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "远端只读预检；SHA/QSF/SDC/IP 绑定"
+    ],
+    "l1": [
+      "synthesis/fit/STA 结果完整"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "full-FP synthesis/fitter/STA 同 SHA 报告完整；若时序全绿则 assembler/SOF；若仍红记录 top-N 与下一轮修复方向。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 43200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 180,
+    "extension_increment_minutes": 60,
+    "max_minutes": 720,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T20:58:00+08:00",
+  "updated_at": "2026-09-03T22:04:00+08:00",
+  "known_limits": [
+    "不编程/上板；不读取 license；不删除文件；不停止非 EDA 进程"
+  ],
+  "handoff": "docs/handoffs/T-20260902-033-fp-p5-rerun-round5.md",
+  "evidence": "docs/tasks/evidence/T-20260902-033.json",
+  "next": "若通过进入 Gate F-BOARD/发布候选；若失败继续 top-N 切级",
+  "dispatch": {
+    "sent_at": "2026-09-03T20:59:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "5afcbef2-eed7-401f-b909-64da673b4edb",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-033",
+    "branch": "verify/T-20260902-033-fp-p5-rerun-round5"
+  },
+  "head_sha": "df960a5ad7ec7790d6c2e7fbc7b7cf1313bd21fe",
+  "merge_sha": "f7855752f27d019f7d73c651594922a1dbc76336",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-03T22:03:44+08:00",
+    "merged_at": "2026-09-03T22:04:00+08:00",
+    "recorded_at": "2026-09-03T22:04:00+08:00",
+    "notes": "FP-P5 rerun round5 still blocked: sys_clk_50 setup -8.734ns new top fp_exec req_r.kind -> scalar_unit pp_pre 54L. Core/EMIF paths now closed. Next FP pre-round/iterative register cut."
+  }
+}

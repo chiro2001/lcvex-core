@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-008",
+  "title": "Gate E 冻结候选、验收口径与 P7 入口规划",
+  "kind": "milestone-planning",
+  "priority": "high",
+  "assigned_owner": "root-integrator",
+  "agent_type": "architecture-review",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "model_scope": "限定审查路线图、T-006/T-007 evidence、Gate D/CI 规则和 Linux 用户态条件；只给方向性验收建议",
+  "phase": "done",
+  "parent": "T-20260826-007",
+  "depends_on": ["T-20260826-007"],
+  "writes": [
+    "docs/ROADMAP.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/DEVELOPMENT_PLAN.md",
+    "docs/tasks/evidence/T-20260826-008.json",
+    "docs/handoffs/T-20260826-008-gate-e-review.md"
+  ],
+  "reads": [
+    "docs/ROADMAP.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/handoffs/T-20260826-006-strict-linux-root.md",
+    "docs/handoffs/T-20260826-007-linux-deep.md",
+    "docs/tasks/evidence/T-20260826-006.json",
+    "docs/tasks/evidence/T-20260826-007.json",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "base_sha": "fb12ca4",
+  "branch": "verify/T-20260826-008-gate-e-review",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-008",
+  "resource": {"cpu": 1, "memory_mb": 512, "disk_mb": 64, "timeout_s": 900},
+  "validation": {
+    "l0": ["文档交叉引用/JSON/evidence 校验"],
+    "l1": ["Gate D 冻结候选命令清单与 Linux early-boot 用户态判据评审"],
+    "l2": [],
+    "l3": ["仅在审核口径冻结后排队 Gate D/CI，不在本规划任务启动重型仿真"],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "明确 Gate E 的 early boot/用户态稳定判据、冻结 SHA 所需 Gate D/CI evidence、当前 strict Linux 链的覆盖边界和 P7 FP/NEON 进入条件；不把 16.5M 动态指令窗口直接标成 Gate E 通过。",
+  "created_at": "2026-08-26T14:00:00+08:00",
+  "updated_at": "2026-08-26T15:00:00+08:00",
+  "commits": ["3815958"],
+  "handoff": "docs/handoffs/T-20260826-008-gate-e-review.md",
+  "evidence": "docs/tasks/evidence/T-20260826-008.json",
+  "known_limits": [
+    "不修改 RTL/QEMU，不启动 Linux/Gate D 长跑；本任务只冻结验收口径。",
+    "P7 尚未开始，需 Gate E candidate 通过后再进入 FP/NEON 设计。"
+  ],
+  "next": "评审完成并归档；另行登记 Gate D/CI 冻结 candidate 实施任务。"
+}

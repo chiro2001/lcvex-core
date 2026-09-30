@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-014",
+  "label": "B25-RX-FIRMWARE-COMMAND-TRACE",
+  "title": "Add bounded CPU-visible getc, dispatch and putc observability to the B25 monitor",
+  "kind": "firmware-verification-observability",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-combined-vendor-full-soc-pass",
+  "assigned_owner": "monitor_disasm",
+  "batch_parent": "T-20260920-012",
+  "triggered_by": "T-20260920-011 partial evidence",
+  "depends_on": ["T-20260920-001", "T-20260920-005"],
+  "base_sha": "84cee3f202889fcfc036ea4545c51d1d36f9bca5",
+  "base_tree_sha": "3277d79bd882d7fea9b53f8ad8bd85eaf791ce1b",
+  "branch": "verify/T-20260920-014-b25-rx-firmware-command-trace",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-014",
+  "writes": [
+    "fpga/catapult_a10/boot/boot.S",
+    "fpga/catapult_a10/boot/README.md",
+    "fpga/catapult_a10/boot/check_image_contract.py only for the new image/output contract",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv::monitor-output expectations and command-observation checks only",
+    "build/agents/T-20260920-014/** ignored evidence",
+    "docs/tasks/evidence/T-20260920-014.json",
+    "docs/handoffs/T-20260920-014-b25-rx-firmware-command-trace.md"
+  ],
+  "reads": [
+    "docs/tasks/active/T-20260920-012.json",
+    "docs/tasks/evidence/T-20260920-011.json",
+    "rtl/lcvex_catapult_soc_pkg.sv",
+    "rtl/lcvex_catapult_soc_top.sv",
+    "T-005/T-001 full-SoC and vendor timing evidence"
+  ],
+  "write_regions": {
+    "boot.S": "monitor, uart_getc, uart_putc, emit_rx_observation, observation variables and strings only; no DDR/calibration behavior change",
+    "lcvex_catapult_soc_tb.sv": "RX diagnostic parsing/expectations only; no vendor timing model change",
+    "README/checker": "document and verify the frozen rotating-page ABI"
+  },
+  "scope": "Instrument the resident monitor without changing command semantics. Count valid uart_getc results and retain raw low 16 bits; count dispatches and retain command class/byte; count actual DATA stores and finite-wait drops in uart_putc. Read the frozen hardware observation offsets and emit one precisely formatted sub-64-byte page per autonomous observation. Startup and manual d retain RXDBG; the first autonomous page is also RXDBG, then autonomous calls rotate RXPATH/RXCPU/RXDBG without manual d advancing the page. Preserve p/PONG, ?/status, d/diagnostic and printable echo behavior.",
+  "software_packing": {
+    "getc_event": "bits31:16 valid-getc count, bits15:0 last raw DATA value",
+    "dispatch_event": "bits31:16 dispatch count, bits15:8 command class, bits7:0 command byte",
+    "putc_event": "bits31:16 successful DATA-write count, bits15:0 finite-wait drop count",
+    "command_classes": "0 none, 1 ping, 2 status, 3 memory, 4 debug, 5 printable echo"
+  },
+  "acceptance": {
+    "reset": "All software observation variables are explicitly initialized at _start before first report.",
+    "bounded_output": "Exact page formats are RXDBG %08X %08X\\r\\n (25 bytes), RXPATH %08X %08X %08X %08X\\r\\n (44 bytes), and RXCPU %08X %08X %08X %08X\\r\\n (43 bytes). Only one page is emitted per autonomous call; startup and manual d remain RXDBG and do not advance the autonomous page; the first periodic page remains RXDBG.",
+    "semantics": "After long empty polling, ?, p, d and Z each increment valid/dispatch exactly once with correct raw value/class/byte; successful TX writes and drops reconcile with expected output.",
+    "image": "boot image remains entirely below 0x10000 with stack [0xF000,0x10000), and image contract checker passes.",
+    "regression": "CAL-OK/CAL-WAIT/CAL-FAIL full-SoC and existing vendor-timed tests retain PONG/status/debug/echo behavior.",
+    "no_fix": "Do not alter command comparison, load width, retry limit or functional response path to make tests pass."
+  },
+  "resource": "Boot build and static checks are light. Obtain resource-lock local before Verilator/full-SoC; do not run concurrently with T-013 heavy validation. No GamePC/Quartus/JTAG/board action.",
+  "forbidden_regions": [
+    "RTL files",
+    "vendor-generated HDL",
+    "DDR/calibration functional policy",
+    "uart_getc command comparisons or uart_putc retry limit",
+    "scripts/test_registry.json",
+    "QSF/SDC/physical/board paths"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T06:19:59+08:00",
+    "agent_name": "monitor_disasm",
+    "model": "dsh-default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max",
+    "initial_budget": "30m",
+    "max_budget": "60m"
+  },
+  "created_at": "2026-09-20T06:17:59+08:00",
+  "result": {
+    "implementation_sha": "b3ca3d6c8780fd73706c40519e75220f7ec39c58",
+    "task_head_sha": "e564d9394bfcab85015ae514b01b97fac7d77832",
+    "boot_image": "PASS; 2011 bytes; sha256 96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "image_contract": "PASS",
+    "full_soc": "PASS on T-012 combined source SHA 84715ac674366e9fa26556d97d197599731de832",
+    "evidence": "docs/tasks/evidence/T-20260920-014.json"
+  },
+  "updated_at": "2026-09-20T09:29:16+08:00"
+}

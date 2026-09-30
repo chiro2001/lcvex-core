@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-002",
+  "label": "PE-F1D-TIMEOUT-AUDIT",
+  "parent": "T-20260830-033",
+  "title": "F1a 固定周期 timeout pair 架构等价口径审计",
+  "kind": "verification-methodology-audit",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-timeout-equivalence-audit",
+  "agent_type": "read-mostly-verification-audit",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260831-007"],
+  "base_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+  "branch": "review/T-20260901-002-f1a-timeout-equivalence",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-002",
+  "scope": "只读审计 T-007 中 10 个涉及 timeout/status/retired 差异的 pair，区分固定 5,000,000 周期造成的进度边界差异与真实架构差异；设计不降低比较强度的后继验收方案。不得修改 RTL、runner、workload、QEMU、比较器或参考结果，不运行 Verilator/Quartus/Gate/Linux。",
+  "planning_guidance": {
+    "analysis": [
+      "逐 pair 使用已归档 JSON/CSV 分类：timeout/timeout、timeout/pass、memory effect 差异、retired progress 差异；不得把 timeout 行末摘要不同直接判为 RTL 错误或直接判为等价。",
+      "核对 workload 的终止条件、max_cycles 语义、commit/memory digest 的累计范围，说明为什么固定周期与固定退休序号是不同实验。",
+      "为每类提出严格方案：运行至双方完成并比较最终状态，或按共同退休前缀逐提交锁步；任何方案都必须保留 PC、写回、NZCV、next PC 和内存副作用。"
+    ],
+    "output": [
+      "给出最小复测集合、建议上限/停止条件、预计资源和是否可与 neon 动态诊断共享 runner；不实际启动重型测试。",
+      "明确 98/98 当前门槛应如何解释；如需修改阶段门，列为需要用户/集成者批准的决策，不自行降低门槛。"
+    ]
+  },
+  "writes": [
+    "docs/F1A_TIMEOUT_EQUIVALENCE_AUDIT.md",
+    "docs/handoffs/T-20260901-002-f1a-timeout-equivalence.md",
+    "docs/tasks/evidence/T-20260901-002.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/PERFORMANCE_F1C_POSTFIX_RESULTS.md",
+    "docs/evidence/artifacts/T-20260831-007/f1c_matrix.json", "docs/evidence/artifacts/T-20260831-007/f1c_matrix.csv",
+    "docs/tasks/evidence/T-20260831-007.json", "scripts/run_perf_matrix.py", "sim/microbench/**", "baremetal/perf/**"
+  ],
+  "validation": {
+    "l0": ["JSON/CSV task/source/hash 与 10 个 timeout-related mismatch 重算"],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "完整分类 timeout 相关 pair，提出可执行且不弱化架构比较的复测契约、最小矩阵和资源计划；清楚标出哪些结论可由现有证据支持，哪些必须动态复测。",
+  "resource": {"cpu": 1, "memory_mb": 2048, "disk_mb": 512, "timeout_s": 1800, "allocation_ratio": 0.1},
+  "budget_policy": {"initial_minutes": 30, "extension_increment_minutes": 30, "max_minutes": 60, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "not_required", "rule": "只读数据与源码审计；禁止启动 Verilator/Quartus/Gate/Linux"},
+  "created_at": "2026-09-01T00:21:13+08:00",
+  "updated_at": "2026-09-01T00:45:13+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T00:23:53+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-008 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-002。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-002"
+  },
+  "handoff": "docs/handoffs/T-20260901-002-f1a-timeout-equivalence.md",
+  "evidence": "docs/tasks/evidence/T-20260901-002.json",
+  "merge_sha": "8d1252877964b15db34f8ff061947d5c3b63b6ab",
+  "merged_at": "2026-09-01T00:45:01+08:00",
+  "integrator_review": {
+    "received_at": "2026-09-01T00:38:10+08:00",
+    "correction_requested_at": "2026-09-01T00:40:07+08:00",
+    "corrected_at": "2026-09-01T00:43:46+08:00",
+    "accepted_at": "2026-09-01T00:45:13+08:00",
+    "status": "accepted_timeout_equivalence_audit",
+    "owner_report_tip": "aaa0d4b6618d2f5cf2690fb6f1364eb892115852",
+    "checks": [
+      "独立重算 artifact SHA256 匹配，10 个 timeout-related mismatch 分类与 T-007 原始 JSON/CSV 一致",
+      "确认 digest 为截至固定周期边界的累计提交/内存前缀，现有差异既不能直接判 RTL 错误也不能直接判等价",
+      "修正后明确禁止复用 T-007 worktree/build；后继任务须在自己的 sibling worktree 重建 10 个 runner 和 5 个 workload image",
+      "未运行 Verilator/QEMU/Quartus/Gate/Linux，98/98 门槛未降低"
+    ]
+  },
+  "known_limits": ["不产生动态共同前缀或运行至完成证据。", "不自行修改 98/98 签核门。"],
+  "next": "等待 neon commit 首分歧结论；随后登记 own-worktree 重建的最小动态复测或实现任务。"
+}

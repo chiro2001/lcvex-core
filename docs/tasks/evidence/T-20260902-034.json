@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-034",
+  "state": "done",
+  "partial": false,
+  "base_sha": "09452367976bef32e0518aa57e1538a80b5b97de",
+  "head_sha": "caefd9573f86f1da6bde93dc074fe90df4a8ee2b",
+  "branch": "fix/T-20260902-034-fp-pre-iter-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-034",
+  "scope": "FP-PRE-ITER-CUT: break the FP scalar pre-round/iterative setup path fp_exec req_r.kind -> scalar_unit g_iter pp_pre.sig by splitting the pre-round first stage into unpack capture (ap_pre) and align/multiply (pp_pre); keep raw-bit/FPCR/FPSR/order semantics and only add fixed pipeline latency.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv",
+      "docs/handoffs/T-20260902-034-fp-pre-iter-cut.md",
+      "docs/tasks/evidence/T-20260902-034.json"
+    ],
+    "summary": "In release FP_ITER=1 g_iter, added IT_ARITH pipeline stage and fp_arith_pre_t ap_pre/ap_pre_lo/ap_pre_hi registers. Stage 1 (IT_IDLE) captures unpacked/FZ-flushed operands and control; stage 2 (IT_ARITH) computes binary_pre_parts/fma_pre_parts/int_to_fp_pre and writes pp_pre*; stage 3 (IT_PREP) finishes with round_pack. This separates the slot/operand mux -> unpack -> align/multiply -> pp_pre combinational cone and removes req_r.kind as the direct source of pp_pre.sig. FCVT and pp_other paths plus FDIV/FSQRT iterative FSMs are unchanged.",
+    "latency_table": {
+      "scalar_add_sub_mul_fma_scvtf_ucvtf": {
+        "before": 4,
+        "after": 5
+      },
+      "neon_2s_noniter_fadd": {
+        "before": 7,
+        "after": 9
+      },
+      "scalar_cmp_minmax_frint_fp_to_int": {
+        "before": 4,
+        "after": 4
+      },
+      "neon_frint_2s": {
+        "before": 7,
+        "after": 7
+      },
+      "scalar_fdiv_s": {
+        "before": 259,
+        "after": 259
+      },
+      "scalar_fsqrt_s_d": {
+        "before": 67,
+        "after": 67
+      },
+      "scalar_fdiv_h": {
+        "before": 516,
+        "after": 516
+      },
+      "neon_fsqrt_2s": {
+        "before": 133,
+        "after": 133
+      }
+    },
+    "semantics": {
+      "raw_bit": "unchanged; same unpack/round/pack helpers and finish_pre path",
+      "commit_order": "unchanged; single outstanding fp_exec transaction and one held response",
+      "fpsr_fpcr": "unchanged; FPCR snapshot at acceptance, FPSR OR behavior preserved",
+      "fcmp_nzcv": "unchanged; pp_other path for CMP",
+      "kill_reset": "ap_pre* registers cleared on reset/kill with other pipeline registers"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator lint-only on lcvex_core with release filelist"
+    },
+    {
+      "run_id": "lcvex_fp_exec_tb",
+      "command": "conda run -n lcvex verilator --binary --timing --assert -j 1 --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir_fp_exec_t034/Vlcvex_fp_exec_tb",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Updated FADD.S=5 and NEON FADD.2S=9; includes single issue, held response, kill/reset, FDIV/FSQRT latency probes"
+    },
+    {
+      "run_id": "sim-sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/signoff STA (next FP-P5 rerun)",
+    "Cocotb P7-1/3/4/5 (not run in this task; SV + lcvex_fp_exec_tb cover the affected paths)",
+    "A76 required L2 lockstep sub-suite"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-034-fp-pre-iter-cut.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-034.json"
+    }
+  ],
+  "known_limits": [
+    "No physical timing run in this task; actual Fmax/slack must be confirmed by FP-P5 rerun.",
+    "FCVT and pp_other/CMP/MINMAX/FRINT/FP-to-int paths were not further split in this round.",
+    "FP pre-round arithmetic latency increased by one cycle per slot; NEON by one per slot.",
+    "If STA still shows req_r.kind -> ap_pre or ap_pre -> pp_pre as top, next cut should be at fp_exec slot-input registers or a third pre-round stage."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-03T22:07:00+08:00",
+    "received_at": "2026-09-03T22:07:30+08:00",
+    "reported_at": "2026-09-03T22:25:21+08:00"
+  },
+  "merge_sha": "e3a216fd6c5915a6e00d9bbe99c4d1d7c9e38909",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T22:25:51+08:00",
+    "merged_at": "2026-09-03T22:26:10+08:00",
+    "recorded_at": "2026-09-03T22:26:10+08:00",
+    "notes": "FP pre-round iterative cut merged and accepted"
+  }
+}

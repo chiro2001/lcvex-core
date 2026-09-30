@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-093",
+  "label": "B3-remainder",
+  "parent": "T-20260828-072",
+  "title": "B3 剩余：V82 已批准范围系统/维护/原子闭合余量",
+  "kind": "core-isa-b3-remainder",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "20ed5826972ab7bf3976a0a15898f7c8bf9a4181",
+  "branch": "feature/T-20260829-093-b3-remainder",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-093",
+  "scope": "在 feature/p7-final @ 20ed582 上继续 B3 剩余 V82-BASE+V82-SELECTED-EXT（SVE/POST-V82 除外）系统寄存器/维护/原子闭合：审计缺失项，补 DMB/DSB 类型与权限、DC/TLBI/AT 剩余 tuple、相关标量原子编码（与 C2 只在 core 解码/执行层配合，不修改共享 L2 目录协议）。增加定向解码/执行 TB 与负测；使用默认 Verilator 优化。",
+  "writes": [
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_sysreg.sv",
+    "rtl/lcvex_maintenance.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-093-b3-remainder.md",
+    "docs/tasks/evidence/T-20260829-093.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_GAPS.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "docs/handoffs/T-20260829-088-b3-system-maint-atomic.md",
+    "rtl/**",
+    "tb/**"
+  ],
+  "validation": {
+    "l0": [
+      "make compile 默认优化通过",
+      "新增解码/执行定向 TB 全绿",
+      "负测覆盖不支持的 SVE/POST-V82 编码拒绝"
+    ],
+    "l1": [
+      "受影响单核回归通过"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "V82 已批准范围内系统/维护/原子缺口完成闭合或明确列为外部后置，附覆盖矩阵与 head_sha 证据。",
+  "next": "B3 关闭后进入 B4/B5 profile freeze 与最终 Gate F-ISA。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T11:00:00+0800",
+  "updated_at": "2026-08-29T11:00:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T11:00:00+0800",
+    "agent_name": "b3_remainder",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-093"
+  },
+  "known_limits": [
+    "不引入 SVE/POST-V82。",
+    "与 C2 共享热点仅限 core 解码/执行层；不修改共享 L2 目录协议。",
+    "不启动 Quartus。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-093-b3-remainder.md",
+  "evidence": "docs/tasks/evidence/T-20260829-093.json",
+  "merge_sha": "8b4348d30aca6f30af541a71d1da2effb4615fc1",
+  "merged_at": "2026-08-29T12:07:07+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T12:07:07+08:00",
+    "status": "accepted",
+    "head_sha": "d76bc0a18df0c914abececb5c796dcb13aae3c44",
+    "notes": "Integrator re-ran make compile (default Verilator, RC=0) and all four B3 SV TBs (sys_decode/sysreg_access/maint_decode/atomic_barrier) PASS on branch. Merged into feature/p7-final @ 8b4348d."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T12:40:00+0800",
+        "new": "2026-08-29T12:07:07+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T12:40:00+0800",
+        "new": "2026-08-29T12:07:07+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "f5fd9556d6c973dfb2ba288bb402735acd27fba0",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "f5fd9556d6c973dfb2ba288bb402735acd27fba0"
+}

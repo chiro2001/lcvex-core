@@ -1,0 +1,674 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-024",
+  "label": "R19-QUARTUS-PHYSICAL",
+  "state": "physical-flow-complete-custom-directional-blocked",
+  "acceptance_status": "timing-observation-accepted-with-directional-blocker",
+  "partial": true,
+  "base_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "candidate_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "preparation_head_sha": "7fe3740a8c82f1e541ab52d000a286b166efa229",
+  "physical_rtl_parent_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "branch": "verify/T-20260906-024-r19-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-024",
+  "owner": "codex-integrator",
+  "preparation": {
+    "result": "pass",
+    "status": "preflight-ready; remote physical flow reached custom directional blocker",
+    "generator": "build/agents/T-20260906-024/tools/prepare.py",
+    "generator_source": "copied read-only from T-20260905-020 and patched only for R19 task/source/probe, closure guard and payload names",
+    "commands": [
+      "python3 -m py_compile build/agents/T-20260906-024/tools/prepare.py",
+      "python3 build/agents/T-20260906-024/tools/prepare.py > build/agents/T-20260906-024/runtime/prepare.stdout.final",
+      "python3 -m py_compile build/agents/T-20260906-024/prep/scripts/sta/parse_top50.py build/agents/T-20260906-024/prep/scripts/tools/write_download_gate.py",
+      "git diff --quiet 1c56632516c3d1e45c117d3a31dfa82faab9ecb8 -- rtl fpga",
+      "git diff --name-status 50b046b69341c13c4b93fffd89e5dda7d81590ff 1c56632516c3d1e45c117d3a31dfa82faab9ecb8 -- rtl fpga",
+      "git diff --check",
+      "jq empty docs/tasks/active/T-20260906-024.json docs/tasks/evidence/T-20260905-023.json"
+    ],
+    "source": {
+      "commit": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+      "full_tree_sha": "0426d7d99149df70576bb61dace185fb7605dec0",
+      "rtl_tree_sha": "7b6e4c76ba8cb13edce467b8b1aa4d651ca912d2",
+      "platform_rtl_tree_sha": "d106699393497bea2abac5fee48e466372ce0c42",
+      "rtl_fpga_worktree_match": true,
+      "formal_rtl_count": 47,
+      "platform_rtl_count": 2,
+      "source_hashes": {
+        "rtl/lcvex_core.sv": "f27a5e6570171ccb0028d8945659fa92624d950810b030ef19cc1b9f45075434",
+        "rtl/lcvex_fp_scalar.sv": "9c821e3cfc60c031c803b3791989fe01532b681e91eef4d82a0f690ff8c693d0",
+        "rtl/lcvex_neon_fp.sv": "0c524fd8a6fa4f5ccc2ac740d5c3ea321a3b2428b9fdfc59398a58544d32bcb2"
+      }
+    },
+    "manifest": {
+      "formal": {
+        "path": "build/agents/T-20260906-024/prep/manifest/manifest_t024_formal_source.json",
+        "sha256": "a620ffeac089a80fe70349f914b1f79d8edf6c5021666931cdabf3f41e7759f6",
+        "count": 52,
+        "tree_file_count": 52,
+        "categories": {"formal_rtl": 47, "platform_rtl": 2, "project": 3},
+        "missing": [],
+        "extra": [],
+        "bad": []
+      },
+      "expected": {
+        "path": "build/agents/T-20260906-024/prep/manifest/manifest_t024_expected.json",
+        "sha256": "d0fec18c8f0c7572ddc4c0f3dde139a959236f73b73d0f7084b759a5d39a7fea",
+        "count": 52,
+        "tree_file_count": 52,
+        "categories": {"formal_rtl": 47, "platform_rtl": 2, "project": 3},
+        "missing": [],
+        "extra": [],
+        "bad": []
+      },
+      "expected_sidecar": {
+        "path": "build/agents/T-20260906-024/prep/manifest/manifest_t024_expected.sha256",
+        "sha256": "7612d18be12191944dec7e78ed5a14c50670e7bd16989a6a2a4dee20c0137351"
+      },
+      "independent_recheck": "formal and expected trees each independently measured 52 files with missing=0, extra=0, bad=0"
+    },
+    "compatibility_copy": {
+      "result": "pass",
+      "formal_bytes": 220007,
+      "formal_sha256": "9c821e3cfc60c031c803b3791989fe01532b681e91eef4d82a0f690ff8c693d0",
+      "patched_bytes": 219979,
+      "patched_sha256": "a49302fd042ddf62830b0861e737736d765a5144f0df28ef9da0f673c1573833",
+      "copy": "build/agents/T-20260906-024/prep/compat/rtl/lcvex_fp_scalar.sv",
+      "diff": "build/agents/T-20260906-024/prep/compat/lcvex_fp_scalar.1c566325-to-quartus21.4.diff",
+      "diff_sha256": "3365c18b1245de4fbed10feef08a75a77bc091f5ed000f25a31ec467299dff5c",
+      "removed_default_ports": ["iter_kill", "iter_pause", "divider.kill", "divider.pause"],
+      "removed_line_count": 4,
+      "added_line_count": 4,
+      "formal_source_modified": false
+    },
+    "project_copy": {
+      "template_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-008",
+      "template_hashes": {
+        "real_a10_full_fp.qpf": "20d005d115c3bf2062125e862288e17300f5a55335eb50fca74b2d27ab6f3ca6",
+        "real_a10_full_fp.qsf": "a7f28ed986e26a3c62e700400b76bbe844f6203f93ff1447cc9bc15dd7733e50",
+        "real_a10_full_fp.sdc": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da"
+      },
+      "generated_hashes": {
+        "real_a10_full_fp.qpf": "20d005d115c3bf2062125e862288e17300f5a55335eb50fca74b2d27ab6f3ca6",
+        "real_a10_full_fp.qsf": "f76c4aa00be26ca99bd71580a64379783533641cb437c5d2b15181fbd77ffff8",
+        "real_a10_full_fp.sdc": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da"
+      },
+      "qsf_transform": "only 31 old T-008 probe-root occurrences replaced with the R19 probe root; reversible",
+      "qsf_transform_only": true
+    },
+    "qsf_closure": {
+      "result": "pass-static",
+      "qsf": "build/agents/T-20260906-024/prep/expected/project/real_a10_full_fp.qsf",
+      "qsf_sha256": "f76c4aa00be26ca99bd71580a64379783533641cb437c5d2b15181fbd77ffff8",
+      "direct_assignment_count": 14,
+      "direct_unique_path_count": 14,
+      "canonical_recursive_file_count": 19,
+      "missing": [],
+      "extra": [],
+      "expected_catalog": "build/agents/T-20260906-024/prep/closure/qsf_external_expected.json",
+      "expected_catalog_sha256": "d8a09f8ef50ead357d70dae42c94393d12244d64db26f5adebc63dad87a62afb",
+      "static_validation": "build/agents/T-20260906-024/prep/closure/qsf_static_validation.json",
+      "static_validation_sha256": "35e3a498aa692d5305d76ae15f9b2d7c5ad4db34c2d19d54bd5d15f2cb0ad9d5",
+      "guard": "build/agents/T-20260906-024/prep/scripts/preflight/qsf_closure_guard.ps1",
+      "guard_sha256": "9e85ade130f054523404c3f6b5d6795be0fa7289deeee9bd89a57e42836a117b",
+      "remote_file_existence_checked": true,
+      "remote_guard_result": "pass"
+    },
+    "r18_to_r19_physical_delta": {
+      "from": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+      "to": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+      "name_status": ["M\trtl/lcvex_core.sv", "M\trtl/lcvex_fp_scalar.sv"],
+      "numstat": ["97\t9\trtl/lcvex_core.sv", "175\t5\trtl/lcvex_fp_scalar.sv"],
+      "non_target_files": []
+    },
+    "preparation_artifacts": {
+      "hash_manifest": "build/agents/T-20260906-024/evidence/prep_artifact_hashes.txt",
+      "sha256": "b00bf86a64f05f7c3b041af86cd96e1c3a882324febd97c73baef21e1397698d",
+      "entries": 144,
+      "forbidden_artifact_count": 0
+    }
+  },
+  "payload": {
+    "remote_probe": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260906-024-r19-timing-probe",
+    "serial_stages": [
+      "qsf_closure",
+      "ipgenerate->synthesis",
+      "fitter",
+      "sta_signoff",
+      "custom_sta",
+      "postflight"
+    ],
+    "future_scripts_count": 24,
+    "release_gate_env": "LCVX_T024_RELEASE=1",
+    "memory": {
+      "admission_min_free_mb": 16384,
+      "runtime_safety_stop_free_mb": 14336,
+      "runtime_monitor": "run_stage_monitor.ps1 and run_custom_sta_monitor.ps1 monitor the Quartus process tree and stop only that tree"
+    },
+    "directional_reports": [
+      "idex_valid/core kill/control -> fp_exec.state.TX_DONE",
+      "core backpressure -> fp_rsp_hold_valid D",
+      "pp_pre -> pack_scan",
+      "pack_scan -> pack_pre",
+      "pack_pre -> pack_mid",
+      "pack_mid -> slot_result_r",
+      "global sys_clk_50 top-50/top-N"
+    ]
+  },
+  "remote": {
+    "status": "physical-flow-complete-custom-directional-blocked",
+    "host": "192.168.101.5",
+    "computer": "GAMEPC",
+    "probe": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260906-024-r19-timing-probe",
+    "contacted": true,
+    "probe_created": true,
+    "manifest_synced": true,
+    "remote_manifest_recheck": "not separately downloaded; synthesis proceeded after release-gated 52-file sync",
+    "qsf_closure_executed": true,
+    "qsf_closure_result": "pass",
+    "quartus_started": true,
+    "resource_snapshot": {
+      "captured_at": "2026-09-06T06:43:46.1903345+08:00",
+      "total_physical_mb": 63092.3,
+      "free_physical_mb": 21148.5,
+      "admission_min_free_mb": 16384,
+      "runtime_stop_threshold_mb": 14336,
+      "cpu_load_percent": 48.0,
+      "disk_d_free_bytes": 80069726208,
+      "quartus_eda_count": 2,
+      "jtagserver_pid_observed_only": 5476,
+      "forbidden_artifact_count": 0,
+      "source": "build/agents/T-20260906-024/runtime/status_reconcile.short.stdout"
+    },
+    "final_status_reconcile": {
+      "captured_at": "2026-09-06T10:56:03.9421390+08:00",
+      "artifact": "build/agents/T-20260906-024/runtime/status_reconcile.resume.stdout",
+      "artifact_sha256": "74060771d610bd4187de71124e66c9c41d250d855bf38a98ba64faa59b36baf8",
+      "ssh_exit_code": 0,
+      "probe_exists": true,
+      "fitter_root_count": 0,
+      "fitter_tree_count": 0,
+      "eda_count": 1,
+      "eda_observed_only": [{"pid": 5476, "name": "jtagserver.exe", "creation_date": "2026-09-01T00:40:01.038201+08:00"}],
+      "free_physical_mb": 37563.4,
+      "total_physical_mb": 63092.3,
+      "cpu_load_percent": 28.0,
+      "disk_d_free_bytes": 78774964224,
+      "forbidden_artifact_count": 0,
+      "note": "The short payload reports fitter_monitor_result=null because it probes the probe root; the project-level fitter.monitor_result.json was separately downloaded and hashes to 88062c3610c0c05627d6ddc8be10b750e55aa460092c2853a9b69b783b0f9a77."
+    },
+    "qsf_guard": {
+      "captured_at": "2026-09-06T00:37:24+08:00",
+      "result": "pass",
+      "direct_assignments": 14,
+      "canonical_files": 19,
+      "missing": 0,
+      "extra": 0,
+      "artifact": "build/agents/T-20260906-024/runtime/qsf_closure.catalog-fix.stdout"
+    },
+    "synthesis": {
+      "result": "pass",
+      "started_at": "2026-09-06T00:39:00.2252898+08:00",
+      "finished_at": "2026-09-06T06:24:58.8932596+08:00",
+      "wall_s": 20758.668,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "peak_private_mb": 11781.5,
+      "peak_working_set_mb": 10990.5,
+      "final_free_physical_mb": 28300.9,
+      "wrapper_log": "build/agents/T-20260906-024/runtime/stages/synthesis.wrapper.stdout.log",
+      "wrapper_log_bytes": 81891,
+      "wrapper_log_sha256": "965ddda8a820cdf727a1ddbb69a6faa2791cb57b8c7bd7d267c8f275f352a546"
+    },
+    "fitter": {
+      "result": "pass",
+      "root_processes": [
+        {"pid": 47000, "ppid": 26792, "name": "quartus_sh.exe", "created_at": "2026-09-06T06:25:53.430202+08:00"},
+        {"pid": 31456, "ppid": 47000, "name": "quartus_fit.exe", "created_at": "2026-09-06T06:25:55.212305+08:00"}
+      ],
+      "tree_processes": [47000, 31456, 28660, 56124],
+      "started_at": "2026-09-06T06:25:53.4151503+08:00",
+      "finished_at": "2026-09-06T06:57:44.6678247+08:00",
+      "wall_s": 1911.253,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "timeout": false,
+      "monitor_last_write": "2026-09-06T06:57:44.6638705+08:00",
+      "monitor_bytes": 63010,
+      "monitor_result": "build/agents/T-20260906-024/runtime/downloaded_partial/fitter.monitor_result.json",
+      "monitor_result_sha256": "88062c3610c0c05627d6ddc8be10b750e55aa460092c2853a9b69b783b0f9a77",
+      "peak_private_mb": 11091.9,
+      "peak_working_set_mb": 10866.5,
+      "final_free_physical_mb": 30800.7,
+      "wrapper_exit_code": 0,
+      "wrapper_log": "build/agents/T-20260906-024/runtime/stages/fitter.wrapper.stdout.log",
+      "wrapper_log_bytes": 8055,
+      "wrapper_log_sha256": "b7ebdd4d732ee61151786f23e6652bb2cbefb2dc7f936b0df76806915d0b91b2",
+      "post_stage_guard": "PASS"
+    },
+    "physical_stages": {
+      "synthesis": "pass",
+      "fitter": "pass",
+      "sta_signoff": "pass",
+      "custom_sta": "blocked_directional_exit29"
+    },
+    "fit_resources": {
+      "summary": "build/agents/T-20260906-024/runtime/downloaded_partial/real_a10_full_fp.fit.summary",
+      "summary_sha256": "e060fa12704a8a3e99d67fb44aed7066966a8e8d411998de4df617ba0b8f1192",
+      "logic_utilization_alms": {"used": 159740, "total": 427200, "percent": 37},
+      "total_registers": 96694,
+      "total_pins": {"used": 141, "total": 826, "percent": 17},
+      "block_memory_bits": {"used": 245608, "total": 55562240, "percent": "<1"},
+      "ram_blocks": {"used": 121, "total": 2713, "percent": 4},
+      "dsp_blocks": {"used": 186, "total": 1518, "percent": 12},
+      "plls": {"used": 3, "total": 112, "percent": 3},
+      "flow_report": "build/agents/T-20260906-024/runtime/downloaded_partial/real_a10_full_fp.flow.rpt",
+      "flow_report_sha256": "46985416cd41a8279c988ab9c0392c2ae5f42eeb9197eabb4491e39a46c2d0c5"
+    },
+    "sta_signoff": {
+      "result": "pass",
+      "started_at": "2026-09-06T07:48:26.9784022+08:00",
+      "finished_at": "2026-09-06T07:49:07.4347080+08:00",
+      "wall_s": 40.456,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "timeout": false,
+      "peak_private_mb": 6574.6,
+      "peak_working_set_mb": 6543.4,
+      "final_free_physical_mb": 30322.7,
+      "monitor_result": "build/agents/T-20260906-024/runtime/downloaded_partial/sta_signoff.monitor_result.json",
+      "monitor_result_sha256": "8d78996331cdb89b4035902c07ee24cbb26750e51d3f6b440217cbb527dc29ca",
+      "wrapper_exit_code": 0,
+      "wrapper_log": "build/agents/T-20260906-024/runtime/stages/sta_signoff.wrapper.stdout.log",
+      "wrapper_log_sha256": "b4845aba89b00b1411ccfb5e691a28eea66ce7b36329f2f5b76ae8be4f82c18a",
+      "post_stage_guard": "PASS",
+      "sta_report": "build/agents/T-20260906-024/runtime/downloaded_partial/real_a10_full_fp.sta.rpt",
+      "sta_report_sha256": "6a2aae1977ea548b6a83472e9ce8e63f38a85fe294fe3179bea55d7d4c958756",
+      "sta_summary": "build/agents/T-20260906-024/runtime/downloaded_partial/real_a10_full_fp.sta.summary",
+      "sta_summary_sha256": "283fabceee3ae972e91ed213230857569023c585839921b05d8c68530b708397"
+    },
+    "custom_sta": {
+      "result": "blocked_directional_exit29",
+      "started_at": "2026-09-06T07:49:45.7886004+08:00",
+      "finished_at": "2026-09-06T07:51:12.8714313+08:00",
+      "scripts_completed": ["report_top.tcl", "report_emif.tcl"],
+      "scripts_blocked": ["report_directional.tcl"],
+      "scripts_not_started": ["report_sys_clk_50_top50.tcl"],
+      "directional_exit_code": 29,
+      "safety_stopped": false,
+      "timeout": false,
+      "wrapper_exit_code": 29,
+      "wrapper_log": "build/agents/T-20260906-024/runtime/stages/custom_sta.wrapper.stdout.log",
+      "wrapper_log_sha256": "e6a573e50c4ffa7aef327d5d3ce25a14b5d0e0078ed10b1133b09770f5d4e7d0",
+      "post_stage_guard": "not_reached_after_directional_failure"
+    }
+  },
+  "validation": {
+    "python_compile": "pass",
+    "generator": "pass",
+    "manifest_recheck": "pass",
+    "qsf_static_closure": "pass",
+    "r18_to_r19_delta_guard": "pass",
+    "git_diff_check": "pass",
+    "json_check": "pass",
+    "remote_status_reconcile": {
+      "result": "pass-read-only-final",
+      "direct_ssh_exit_code": 0,
+      "artifact": "build/agents/T-20260906-024/runtime/status_reconcile.resume.stdout",
+      "artifact_sha256": "74060771d610bd4187de71124e66c9c41d250d855bf38a98ba64faa59b36baf8",
+      "captured_at": "2026-09-06T10:56:03.9421390+08:00",
+      "probe_exists": true,
+      "fitter_root_count": 0,
+      "fitter_tree_count": 0,
+      "eda_count": 1,
+      "jtagserver_pid_observed_only": 5476,
+      "free_physical_mb": 37563.4,
+      "total_physical_mb": 63092.3,
+      "cpu_load_percent": 28.0,
+      "disk_d_free_bytes": 78774964224,
+      "forbidden_artifact_count": 0,
+      "prior_artifact": "build/agents/T-20260906-024/runtime/status_reconcile.short.stdout",
+      "prior_artifact_sha256": "27814f61c094f74b2573328f2bb3c1e012c971603b976cb2c74ac15ca401998c"
+    },
+    "timestamp_check": {
+      "command": "python3 scripts/check_task_timestamps.py --scope live --json --exit-code",
+      "repo_exit_code": 1,
+      "repo_existing_issues": 118,
+      "t024_issues": 0,
+      "scope": "pre-existing repository-wide task timestamp records; no historical task files were modified",
+      "artifact": "build/agents/T-20260906-024/runtime/timestamp_check.resume.json",
+      "artifact_sha256": "7f6dae84b67512ebffdd509b8e55b396882728967180feee80866387b487c07f"
+    },
+    "heavy_verilator": "not_run-by-scope",
+    "qemu": "not_run-by-scope",
+    "quartus": {
+      "synthesis": "pass",
+      "fitter": "pass",
+      "sta_signoff": "pass",
+      "custom_sta": "blocked_directional_exit29"
+    }
+  },
+  "baseline": {
+    "task": "T-20260905-014",
+    "fmax_mhz": 43.0,
+    "setup_slack_ns": -3.256,
+    "tns_ns": -21736.217,
+    "failing_endpoints": 18309,
+    "r19_fresh_sta": {
+      "fmax_mhz": 44.24,
+      "setup_slack_ns": -2.602,
+      "setup_tns_ns": -6949.587,
+      "setup_failing_endpoints": 7562,
+      "hold_slack_ns": 0.015,
+      "recovery_slack_ns": 1.675,
+      "removal_slack_ns": 0.188,
+      "minimum_pulse_width_slack_ns": 9.403
+    },
+    "r19_synthesis": "pass",
+    "r19_fitter": "pass"
+  },
+  "policy": {
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false,
+    "unrelated_remote_process_terminated": false,
+    "remote_access_performed": true,
+    "source_rtl_functional_changes": false,
+    "qsf_or_sdc_timing_exception_added": false,
+    "jtagserver_observed_only": true,
+    "forbidden_artifact_count_final": 0,
+    "fresh_status_reconcile_only_once": true,
+    "stage_failure_retried": false
+  },
+  "risks": [
+    "R19 fitter and signoff STA passed, but custom report_directional.tcl stopped at idex_valid_to_tx_done with endpoint_missing (to_registers=0), exit=29; no retry was performed.",
+    "report_sys_clk_50_top50.tcl was not started because custom directional failed first; the available global sys_clk_50 evidence is the signoff report plus a custom top-10 report, not a 50-row parser result.",
+    "core backpressure -> fp_rsp_hold_valid D and acc-directed control queries were not reached by the failed directional script; they remain unmeasured.",
+    "The 19-file QSF recursive closure guard passed remotely; the separate remote manifest was not downloaded again in this checkpoint.",
+    "The Quartus 21.4 compatibility copy is intentionally separate from formal RTL and removes only the four already-proven default port values.",
+    "sys_clk_50 setup remains negative; this is an honest timing observation, not timing closure or permission for assembler/JTAG/board actions."
+  ],
+  "timestamps": {
+    "prepared_at": "2026-09-06T00:38:26.819830+08:00",
+    "remote_status_checked_at": "2026-09-06T10:56:03.9421390+08:00",
+    "fitter_completed_at": "2026-09-06T06:57:44.6678247+08:00",
+    "sta_signoff_completed_at": "2026-09-06T07:49:07.4347080+08:00",
+    "custom_directional_blocked_at": "2026-09-06T07:51:12.8714313+08:00",
+    "reported_at": "2026-09-06T11:12:58+08:00"
+  },
+  "timing_summary": {
+    "sta_report": "build/agents/T-20260906-024/runtime/downloaded_partial/real_a10_full_fp.sta.rpt",
+    "sta_report_sha256": "6a2aae1977ea548b6a83472e9ce8e63f38a85fe294fe3179bea55d7d4c958756",
+    "sta_summary": "build/agents/T-20260906-024/runtime/downloaded_partial/real_a10_full_fp.sta.summary",
+    "sta_summary_sha256": "283fabceee3ae972e91ed213230857569023c585839921b05d8c68530b708397",
+    "sys_clk_50": {
+      "fmax_mhz": 44.24,
+      "setup_slack_ns": -2.602,
+      "setup_tns_ns": -6949.587,
+      "setup_failing_endpoints": 7562,
+      "hold_slack_ns": 0.015,
+      "hold_failing_endpoints": 0,
+      "recovery_slack_ns": 1.675,
+      "recovery_failing_endpoints": 0,
+      "removal_slack_ns": 0.188,
+      "removal_failing_endpoints": 0,
+      "minimum_pulse_width_slack_ns": 9.403,
+      "minimum_pulse_width_failing_endpoints": 0,
+      "worst_case_setup_corner": "Slow 900mV 100C Model",
+      "worst_case_hold_corner": "Fast 900mV 0C Model"
+    },
+    "overall_worst_case": {
+      "setup_slack_ns": -2.602,
+      "hold_slack_ns": 0.015,
+      "recovery_slack_ns": 0.732,
+      "removal_slack_ns": 0.180,
+      "minimum_pulse_width_slack_ns": 0.120
+    },
+    "delta_vs_r17_t014": {
+      "fmax_mhz": 1.24,
+      "fmax_percent": 2.8837,
+      "setup_slack_ns": 0.654,
+      "setup_tns_ns": 14786.630,
+      "setup_failing_endpoints": -10747,
+      "hold_slack_ns": -0.001,
+      "recovery_slack_ns": 0.279,
+      "removal_slack_ns": -0.006,
+      "minimum_pulse_width_slack_ns": 0.007
+    },
+    "closure": "FAIL_setup_only; custom directional acceptance remains blocked at idex_valid_to_tx_done endpoint_missing"
+  },
+  "resource_usage": {
+    "device": "10AX115N4F40E3SG",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "r19": {
+      "logic_utilization_alms": 159740,
+      "total_registers": 96694,
+      "ram_blocks": 121,
+      "dsp_blocks": 186,
+      "pins": 141,
+      "plls": 3
+    },
+    "r17_t014": {
+      "logic_utilization_alms": 158939,
+      "total_registers": 95567,
+      "ram_blocks": 121,
+      "dsp_blocks": 186,
+      "pins": 141,
+      "plls": 3,
+      "source": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-014/build/agents/T-20260905-014/runtime/downloaded/real_a10_full_fp.fit.summary",
+      "summary_sha256": "4d98e431897a40b53769eb8f12e75e4498d7f959a02cdb14a9ab993211543b0e"
+    },
+    "delta_vs_r17_t014": {
+      "logic_utilization_alms": 801,
+      "logic_utilization_alms_percent": 0.504,
+      "total_registers": 1127,
+      "total_registers_percent": 1.179,
+      "ram_blocks": 0,
+      "dsp_blocks": 0,
+      "pins": 0,
+      "plls": 0
+    }
+  },
+  "directional_acceptance": {
+    "idex_valid_to_tx_done": {
+      "result": "blocked_endpoint_missing",
+      "from_registers": 2,
+      "to_registers": 0,
+      "paths": 0,
+      "reason": "endpoint_missing",
+      "report": "build/agents/T-20260906-024/runtime/downloaded_partial/t024_direction_idex_valid_to_tx_done.rpt",
+      "report_sha256": "a3415343607640a686598cf458689f1b494756fd3b1a23f0102058e55fa72c26"
+    },
+    "core_kill_control_to_tx_done": {
+      "result": "not_run",
+      "reason": "directional script stopped at idex_valid_to_tx_done endpoint_missing"
+    },
+    "core_backpressure_to_fp_rsp_hold_valid_D": {
+      "result": "not_run",
+      "reason": "directional script stopped before this query; no retry"
+    },
+    "old_pp_pre_to_pack_mid": {
+      "result": "pass_zero_paths",
+      "from_registers": 941,
+      "to_registers": 1221,
+      "paths": 0,
+      "report_sha256": "769ecd2b4834913dec9a61766d515992c0be6b45c19de1e845c5e9d05a4337ee"
+    },
+    "old_pp_pre_to_pack_pre": {
+      "result": "pass_zero_paths",
+      "from_registers": 941,
+      "to_registers": 1231,
+      "paths": 0,
+      "report_sha256": "44ffeb0db9229ab54ba7435825a049f24295375f9f65a2769ed0bc3e8ca621a7"
+    },
+    "pp_pre_to_pack_scan": {
+      "result": "pass_paths",
+      "from_registers": 941,
+      "to_registers": 1004,
+      "paths": 50,
+      "violated": 0,
+      "worst_slack_ns": 7.972,
+      "report_sha256": "10b74b867b3edb0f9d4539540ec343b7f48a4777042edb635e3d53cf97a3667d"
+    },
+    "pack_scan_to_pack_pre": {
+      "result": "pass_paths",
+      "from_registers": 1004,
+      "to_registers": 1231,
+      "paths": 50,
+      "violated": 0,
+      "worst_slack_ns": 14.823,
+      "report_sha256": "e4ebe0d49ce0c1807e3e2e65847bab0af1654fb70bd4b1685a46ec2638c030e8"
+    },
+    "pack_pre_to_pack_mid": {
+      "result": "pass_paths",
+      "from_registers": 1231,
+      "to_registers": 1221,
+      "paths": 50,
+      "violated": 0,
+      "worst_slack_ns": 3.146,
+      "report_sha256": "6cfd3ae079b41dda62df3f92e06fc7ebc30defcde3840ce58d58693afe94ee1d"
+    },
+    "pack_mid_to_slot_result": {
+      "result": "open_paths",
+      "from_registers": 1221,
+      "to_registers": 64,
+      "paths": 50,
+      "violated": 26,
+      "worst_slack_ns": -0.280,
+      "report_sha256": "3ac374c32f50679405f9c9ecf7105000b7ce6b3713804c854d68a7fac41b6ca1"
+    },
+    "slot_result_to_acc_and_core_control": {
+      "result": "not_run",
+      "reason": "directional script stopped before acc split"
+    },
+    "emif_clock_directional": {
+      "result": "pass",
+      "sys_clock_count": 1,
+      "emif_user_clock_count": 1,
+      "emif_wildcard_clock_count": 24,
+      "canonical_clock_count": 24,
+      "distinct_clock_pairs": 552,
+      "pairs_with_paths": 6,
+      "reported_paths_across_pairs": 300,
+      "emif_to_sys_paths": 0,
+      "sys_to_emif_paths": 0,
+      "aggregate_report": "build/agents/T-20260906-024/runtime/downloaded_partial/t024_emif_cross.rpt",
+      "aggregate_report_sha256": "41a7c22e7ca90fbeff1d237ad63c0e144c49c8d86131f32acdf2bc88ca0e461d"
+    },
+    "global_sys_clk_50_top_n": {
+      "result": "top10_available_top50_not_run",
+      "n": 10,
+      "clock": "sys_clk_50",
+      "paths": 10,
+      "violated": 10,
+      "worst_slack_ns": -2.602,
+      "logic_levels": 61,
+      "report": "build/agents/T-20260906-024/runtime/downloaded_partial/t024_setup_full.rpt",
+      "report_sha256": "cd758ecc1f0dba78cf3d6a6e82f9b2dbb8d0574f294d3c002caebe4915cfbebd",
+      "replacement_cone": "fp_exec.scalar_unit.g_iter.ap_pre -> fp_exec.scalar_unit.g_iter.pp_pre",
+      "top50_report": null,
+      "top50_reason": "report_sys_clk_50_top50.tcl was not started after report_directional.tcl exit=29"
+    }
+  },
+  "top_n": {
+    "source": "build/agents/T-20260906-024/runtime/downloaded_partial/t024_setup_full.rpt",
+    "source_sha256": "cd758ecc1f0dba78cf3d6a6e82f9b2dbb8d0574f294d3c002caebe4915cfbebd",
+    "n": 10,
+    "clock": "sys_clk_50",
+    "all_logic_levels": 61,
+    "rows": [
+      {"rank": 1, "slack_ns": -2.602, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[11]"},
+      {"rank": 2, "slack_ns": -2.602, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[22]"},
+      {"rank": 3, "slack_ns": -2.561, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[36]"},
+      {"rank": 4, "slack_ns": -2.560, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[11]"},
+      {"rank": 5, "slack_ns": -2.560, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[22]"},
+      {"rank": 6, "slack_ns": -2.560, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[28]"},
+      {"rank": 7, "slack_ns": -2.559, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[48]"},
+      {"rank": 8, "slack_ns": -2.558, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[11]"},
+      {"rank": 9, "slack_ns": -2.558, "from": "g_iter.ap_pre.pa.exp2[2]", "to": "g_iter.pp_pre.sig[22]"},
+      {"rank": 10, "slack_ns": -2.542, "from": "g_iter.ap_pre.pa.exp2[1]", "to": "g_iter.pp_pre.sig[11]"}
+    ],
+    "classification": "R17/T-014 top-50 idex_valid -> TX_DONE is absent from R19 top-10; R19 top-10 is the replacement ap_pre -> pp_pre cone. This is top-10 evidence only because the dedicated top-50 Tcl was skipped after the directional blocker."
+  },
+  "physical_runs": [
+    {
+      "stage": "synthesis",
+      "result": "pass",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "started_at": "2026-09-06T00:39:00.2252898+08:00",
+      "finished_at": "2026-09-06T06:24:58.8932596+08:00",
+      "wall_s": 20758.668,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "peak_private_mb": 11781.5,
+      "peak_working_set_mb": 10990.5,
+      "final_free_physical_mb": 28300.9,
+      "wrapper_log": "build/agents/T-20260906-024/runtime/stages/synthesis.wrapper.stdout.log",
+      "wrapper_log_sha256": "965ddda8a820cdf727a1ddbb69a6faa2791cb57b8c7bd7d267c8f275f352a546"
+    },
+    {
+      "stage": "fitter",
+      "result": "pass",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start fitter -end fitter",
+      "started_at": "2026-09-06T06:25:53.4151503+08:00",
+      "finished_at": "2026-09-06T06:57:44.6678247+08:00",
+      "wall_s": 1911.253,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "timeout": false,
+      "peak_private_mb": 11091.9,
+      "peak_working_set_mb": 10866.5,
+      "monitor_result_sha256": "88062c3610c0c05627d6ddc8be10b750e55aa460092c2853a9b69b783b0f9a77",
+      "wrapper_log_sha256": "b7ebdd4d732ee61151786f23e6652bb2cbefb2dc7f936b0df76806915d0b91b2"
+    },
+    {
+      "stage": "sta_signoff",
+      "result": "pass",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start sta_signoff -end sta_signoff",
+      "started_at": "2026-09-06T07:48:26.9784022+08:00",
+      "finished_at": "2026-09-06T07:49:07.4347080+08:00",
+      "wall_s": 40.456,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "timeout": false,
+      "peak_private_mb": 6574.6,
+      "peak_working_set_mb": 6543.4,
+      "monitor_result_sha256": "8d78996331cdb89b4035902c07ee24cbb26750e51d3f6b440217cbb527dc29ca",
+      "wrapper_log_sha256": "b4845aba89b00b1411ccfb5e691a28eea66ce7b36329f2f5b76ae8be4f82c18a"
+    },
+    {
+      "stage": "custom_sta",
+      "result": "blocked_directional_exit29",
+      "scripts": [
+        {"script": "report_top.tcl", "result": "pass", "exit_code": 0, "monitor_result_sha256": "8ffa10400bea819588d7ef03d7b458a92b728aa6f39efc05e6477a8fc8d57c1c"},
+        {"script": "report_emif.tcl", "result": "pass", "exit_code": 0, "monitor_result_sha256": "d31afdb35ac1df255c6bddf08290bff3cdd19ff092ede0754c0d18db4f8f611e"},
+        {"script": "report_directional.tcl", "result": "blocked_endpoint_missing", "exit_code": 29, "monitor_result_sha256": "bb90ff987575ea8d5c55b01ff2fe1f2c75ad659eb93f477f2f8e18ad0e77e41f"},
+        {"script": "report_sys_clk_50_top50.tcl", "result": "not_started"}
+      ],
+      "started_at": "2026-09-06T07:49:45.7886004+08:00",
+      "finished_at": "2026-09-06T07:51:12.8714313+08:00",
+      "wrapper_exit_code": 29,
+      "wrapper_log_sha256": "e6a573e50c4ffa7aef327d5d3ce25a14b5d0e0078ed10b1133b09770f5d4e7d0",
+      "retry": false
+    }
+  ],
+  "artifact_hashes": {
+    "final_status_reconcile": "74060771d610bd4187de71124e66c9c41d250d855bf38a98ba64faa59b36baf8",
+    "resume_artifact_hashes": "2114cb37dfac18e1069948751598a60c2c3389809eb5abb92b94e486510ff7d9",
+    "fit_report": "3461ee95339540bd0660c693fdd7d818477b35aad6923241b6898958ccc02048",
+    "fit_summary": "e060fa12704a8a3e99d67fb44aed7066966a8e8d411998de4df617ba0b8f1192",
+    "fit_plan_report": "808be0fc46445d4d7abff1002e065d51fa1fba7efdabcf1c3acfe85b65bc0562",
+    "fit_place_report": "2f1a497d181f92e064e295838c794f021e62d27258786d3c8453299af702cdf5",
+    "fit_route_report": "3b1e0171a1f10d0f5a1dd00a516919ce90493b18e48755c1cdef8165043672bd",
+    "fit_finalize_report": "ec3ae94261d8fe977799ef523edc8761c627257c8ca8f715dff4d5a630c980bc",
+    "fit_flow_report": "46985416cd41a8279c988ab9c0392c2ae5f42eeb9197eabb4491e39a46c2d0c5",
+    "sta_report": "6a2aae1977ea548b6a83472e9ce8e63f38a85fe294fe3179bea55d7d4c958756",
+    "sta_summary": "283fabceee3ae972e91ed213230857569023c585839921b05d8c68530b708397",
+    "custom_top_stdout": "5201c8c4231b6e7a31ee94607aa4dff866a3f412ddd106b954927ab00ec75281",
+    "custom_emif_stdout": "8ec9437df0aa0c1f8c6d279d61621022f022d0a196e8a9c7c7635be82695a9d5",
+    "custom_directional_stdout": "aa5a38a6b0bb3e74667feb707b4ac5314cb076cdcd6f3703fa03b6efe2ffed29",
+    "partial_download_stdout": "c206896347415940c59eab8a05ff101341cec17cb161f2dcc088e3491fb6c509",
+    "partial_download_stderr": "24cc36a3b9c2147b8ad380e6ba032a4788aa56b09b0d2da25eaa37d78177584b"
+  },
+  "handoff": "docs/handoffs/T-20260906-024-r19-quartus-physical.md"
+}

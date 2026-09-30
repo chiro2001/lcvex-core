@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-040",
+  "parent": "T-20260920-039",
+  "label": "B25-TRACKED-BOARD-RUNNER-SOP",
+  "title": "Promote the sealed board runner into a tracked parameterized tool and update the SOP",
+  "kind": "infrastructure",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-tracked-runner-and-final-seal-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-036", "T-20260920-038"],
+  "base_sha": "763622496991b5cd7c743c5ff05b9678b763483c",
+  "branch": "infra/T-20260920-040-b25-board-runner-repro",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-040",
+  "writes": [
+    "fpga/catapult_a10/tools/board_runner/**",
+    "fpga/catapult_a10/tools/test_board_runner.py",
+    "scripts/test_registry.json",
+    "Makefile board-runner-check entry",
+    "docs/FPGA_A10_JTAG_BURN_SOP.md",
+    "docs/handoffs/T-20260920-040-b25-board-runner-repro.md",
+    "docs/tasks/evidence/T-20260920-040.json",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-board-runner-repro/** task-owned AST/seal validation root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-prepare.ps1 task-owned bootstrap",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-board-runner-repro-r2/** task-owned final AST/seal validation root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-prepare-r2.ps1 task-owned r2 bootstrap",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-board-runner-repro-r3/** task-owned final hardened AST/seal root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-prepare-r3.ps1 task-owned final hardened bootstrap"
+  ],
+  "reads": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036/build/agents/T-20260920-036/tools/**",
+    "docs/tasks/evidence/T-20260920-031..038.json",
+    "docs/BRINGUP_25MHZ_PLAN.md",
+    "docs/B25_POST_BRINGUP_MICROBENCH_PLAN.md"
+  ],
+  "scope": "Preserve the proven fail-closed behavior while replacing task-specific hardcoded identities with an explicit manifest/config contract. Track only source scripts and fixtures, never Quartus binaries, DLLs, SOFs or raw large logs. One resource-locked GamePC window may create a fresh task-owned root solely to run PowerShell AST and byte-seal validation; no preflight, process enumeration, Quartus/JTAG or hardware command is permitted.",
+  "validation": {
+    "L0": ["bash -n", "python3 -m py_compile", "PowerShell AST parse when pwsh is available", "manifest/schema and command fixture tests"],
+    "L1": ["fail-closed negative matrix for hashes, cables, process ownership, markers, cached design hash and prohibited formats"],
+    "L2": [],
+    "L3": [],
+    "L4": []
+  },
+  "acceptance": "A clean clone contains every source needed to generate and seal a task-specific runner; candidate/golden identities and commands come only from a reviewed config; dry-run/fixture tests prove no hardware command is reachable after validation failure; SOP reflects the completed T-037/T-038 path.",
+  "forbidden_regions": [
+    "GamePC access other than task-owned filesystem upload plus PowerShell AST/seal validation",
+    "preflight, process enumeration, quartus_pgm, nios2-terminal, jtagconfig or jtagserver execution",
+    "copying proprietary binaries/DLLs/SOFs into Git",
+    "broad process termination",
+    "editing historical evidence or handoff"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T21:42:29+08:00",
+    "agent_name": "root",
+    "model": "main-agent current session",
+    "monitoring": "direct implementation; no subagent polling"
+  },
+  "validation_note": "The first no-hardware window reached AST 7/7 and seal 12/12 PASS, but its local wrapper returned 1 because grep -Fqx did not strip remote CRLF. R2 passed final AST/seal; subsequent fail-closed hardening added remote path/server-file/pin validation and changed sealed bytes. One fresh r3 root is therefore authorized for the immutable final bytes. None of the three windows may execute preflight or hardware paths.",
+  "result": {
+    "status": "done",
+    "implementation_head": "902c6b51c449651e86e84b6523805c5b903c671b",
+    "integration_evidence_sha": "18042578c9954d4244ec0276263d41a402c1d708",
+    "local": "PASS 19/19; registry 89 entries; bash/python/json/diff checks pass",
+    "remote": "final r3 AST 7/7 and seal 12/12 PASS; no preflight/hardware path",
+    "hardware_counts": "all zero",
+    "evidence": "docs/tasks/evidence/T-20260920-040.json",
+    "handoff": "docs/handoffs/T-20260920-040-b25-board-runner-repro.md",
+    "next": "T-20260920-041 exact DDR m-command contract"
+  },
+  "handoff": "docs/handoffs/T-20260920-040-b25-board-runner-repro.md",
+  "evidence": "docs/tasks/evidence/T-20260920-040.json",
+  "created_at": "2026-09-20T21:35:43+08:00",
+  "updated_at": "2026-09-20T22:09:39+08:00"
+}

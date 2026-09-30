@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "task_id": "T-YYYYMMDD-NNN",
+  "base_sha": "",
+  "head_sha": "",
+  "merge_sha": "",
+  "toolchain": {},
+  "qemu": {
+    "release": "",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": "",
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "",
+      "seed": null,
+      "wall_seconds": 0,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "",
+      "sha256": "",
+      "bytes": 0,
+      "owner": "",
+      "retain_until": "",
+      "reproduce": ""
+    }
+  ],
+  "known_limits": []
+}

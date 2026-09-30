@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-054",
+  "state": "done",
+  "acceptance_status": "pass-scoped-user-attested-flash-boot-preflight-policy",
+  "base_sha": "0765594782d14a106769b4325376bb45cc408f50",
+  "branch": "infra/T-20260920-054-attested-flash-boot-preflight",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-054",
+  "candidate_context": {
+    "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+    "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+    "candidate_sof_sha256": "39c2945466804036366a6306125323b585bef097aded7e8fff494d60a3ea2def",
+    "golden_sof_sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "read_only_chain_design_hash": "BD13E12CD20E8B71E260",
+    "frozen_golden_design_hash": "193DE4BC8A30F3ED5F1F",
+    "user_attestation": "User confirmed powered board loads VexRiscv/Linux reference from Flash."
+  },
+  "policy": {
+    "default": "require_golden_design_hash",
+    "special_mode": "user_attested_flash_boot",
+    "special_mode_task_id": "T-20260920-053",
+    "special_mode_contract_id": "t053-b25-coremark-uart-fixed",
+    "required_attestation_token": "user_confirmed_flash_boot_vexriscv_linux",
+    "candidate_identity_pinned": true,
+    "golden_identity_pinned": true,
+    "design_hash_in_special_mode": "diagnostic_only_not_live_identity",
+    "cable_jtag_id_uart_phy_checks_retained": true,
+    "eda_port_standard_server_checks_retained": true,
+    "candidate_terminal_golden_invocation_budgets_unchanged": [1, 1, 1]
+  },
+  "implementation": {
+    "files": [
+      "fpga/catapult_a10/tools/board_runner/validate_contract.py",
+      "fpga/catapult_a10/tools/board_runner/contract_common.ps1",
+      "fpga/catapult_a10/tools/board_runner/preflight.ps1",
+      "fpga/catapult_a10/tools/test_board_runner.py",
+      "fpga/catapult_a10/tools/board_runner/README.md",
+      "docs/FPGA_A10_JTAG_BURN_SOP.md"
+    ],
+    "default_contract_behavior_preserved": true,
+    "special_mode_rejected_for_other_task_ids": true,
+    "special_mode_rejected_for_changed_candidate_or_golden": true,
+    "special_mode_rejected_for_missing_or_wrong_attestation": true,
+    "initial_chain_still_requires_cable_jtag_id_uart_phy": true,
+    "final_golden_programmer_and_postflight_unchanged": true
+  },
+  "validation": {
+    "command": "make b25-board-runner-check",
+    "status": "PASS",
+    "tests": "25/25",
+    "bash_syntax": "PASS",
+    "python_compile": "PASS",
+    "diff_check": "PASS"
+  },
+  "resource": {
+    "gamepc_lock": "not used",
+    "remote_access": 0,
+    "quartus": 0,
+    "jtagconfig": 0,
+    "quartus_pgm": 0,
+    "terminal": 0,
+    "board_actions": 0
+  },
+  "known_limits": [
+    "No local PowerShell runtime is installed, so PowerShell AST validation will be performed by T-053's sealed remote AST stage before any programmer action.",
+    "This task records no hardware identity result. T-053 must preserve the prior failed read-only attempt, use the fixed attestation policy, retain all cable/JTAG-ID/UART/PHY checks, and complete the final exact-golden programmer plus postflight proof."
+  ],
+  "next": "Fast-forward this infrastructure branch into T-053's task branch, regenerate and validate the exact T-053 contract, then rerun present-only preflight and the authorized one-shot board flow under one uninterrupted GamePC lock.",
+  "handoff": "docs/handoffs/T-20260920-054-attested-flash-boot-preflight.md"
+}

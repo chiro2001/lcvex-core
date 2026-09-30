@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-084",
+  "state": "done",
+  "base_sha": "76a5b5c6d44b87773f10d9a3e05d4198288adfd7",
+  "head_sha": "8c5f57cee489620a93d25bd52cb98b6303503cf6",
+  "branch": "feature/T-20260829-084-b2b-fp-convert-round",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-084",
+  "sent_at": "2026-08-29T03:54:00+0800",
+  "received_at": "2026-08-29T04:10:00+0800",
+  "reported_at": "2026-08-29T04:30:00+0800",
+  "artifacts": [
+    {
+      "id": "artifact-b2b-handoff",
+      "owner": "T-20260829-084",
+      "uri": "docs/handoffs/T-20260829-084-b2b-fp-convert-round.md",
+      "reproduce": "git show HEAD:docs/handoffs/T-20260829-084-b2b-fp-convert-round.md",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "4700c9b2a48ea0b4af825274d554192357d8eee5aa59564e0de453cbfaa22eaa"
+    },
+    {
+      "id": "artifact-b2b-evidence",
+      "owner": "T-20260829-084",
+      "uri": "docs/tasks/evidence/T-20260829-084.json",
+      "reproduce": "cat docs/tasks/evidence/T-20260829-084.json",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "bccc06bc746be9f8fdcff52d3c95646f79882ac943144737a803f673f2e36f32"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-b2b-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "./obj_dir_fp_p7_4b2/lcvex_fp_scalar_p7_4_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Pre-built P7-4 scalar FMA/conversion raw-bit vector PASS; covers FMADD, SCVTF/UCVTF, FCVTZS/FCVTZU, FCVT S<->D, NaN/Inf/subnormal, FZ/DN and FPSR flags.",
+      "source_sha": "76a5b5c6d44b87773f10d9a3e05d4198288adfd7",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2b-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --timing -j 2 --top-module lcvex_fp_state_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv tb/sv/lcvex_fp_state_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "FPCR/FPSR/FPEN/trap/restore standalone module lint clean; verifies P7-0 state access matrix and checkpoint restore interface without full SoC build.",
+      "source_sha": "76a5b5c6d44b87773f10d9a3e05d4198288adfd7",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2b-003",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/cocotb/test_p7_4_fma_convert.py sim/cocotb/test_p7_5_fp16_sqrt_minmax_round.py sim/cocotb/test_fp_state.py sim/cocotb/test_p7_wiring.py && git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Cocotb sources syntax-check clean and no whitespace errors in the worktree.",
+      "source_sha": "76a5b5c6d44b87773f10d9a3e05d4198288adfd7",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "tools": {
+    "python": "3.12.10 / lcvex conda",
+    "verilator": "5.050",
+    "cocotb": "2.0.1",
+    "qemu_aarch64": "QEMU 11.1.0 local fork"
+  },
+  "known_limits": [
+    "本任务未新增 RTL；现有 V82-SELECTED-EXT 转换/舍入/FPCR 行已实现，本次以证据闭合和 oracle 差异记录为主。",
+    "完整 FP exception enable/trap 仍为 POST-V82-DEFERRED，未实现。",
+    "向量 FCVTN/FCVTL（尤其 4S->4H S->H 专用路径）未纳入当前 profile，保持 UDEF/后置。",
+    "P7-5 scalar H 完整 Verilator 新建在本环境因工具链缺少 conda ar 与 H-path 编译耗时未完成；已有 L2/L3 待集成者复跑。",
+    "未执行 QEMU strict lockstep（L2）或 Gate D（L3）。"
+  ],
+  "next": "集成者复跑 P7-4/P7-5 相关 L1/L2；若批准向量 FCVTN/FCVTL 另开实现任务。",
+  "merge_sha": "54ab298f33a767a940a7e63a57f1d18e2c7a75ac",
+  "handoff_sha": "1b7a025a8c04c7c199652ada17f71dfca490113b",
+  "integrator_review": {
+    "received_at": "2026-08-29T05:11:30+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "1b7a025a8c04c7c199652ada17f71dfca490113b",
+    "implementation_sha": "8c5f57cee489620a93d25bd52cb98b6303503cf6",
+    "notes": "B2b 为证据闭合：现有转换/舍入/FPCR/FPEN 行已实现，完整 FP exception enable/trap 保持 POST-V82-DEFERRED；无新 RTL。",
+    "merge_sha": "54ab298f33a767a940a7e63a57f1d18e2c7a75ac",
+    "result_sha": "8c5f57cee489620a93d25bd52cb98b6303503cf6"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "54ab298f33a767a940a7e63a57f1d18e2c7a75ac",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "1b7a025a8c04c7c199652ada17f71dfca490113b",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "8c5f57cee489620a93d25bd52cb98b6303503cf6",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-b2b-handoff",
+        "uri": "docs/handoffs/T-20260829-084-b2b-fp-convert-round.md",
+        "sha256": "4700c9b2a48ea0b4af825274d554192357d8eee5aa59564e0de453cbfaa22eaa",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b2b-evidence",
+        "uri": "docs/tasks/evidence/T-20260829-084.json",
+        "sha256": "bccc06bc746be9f8fdcff52d3c95646f79882ac943144737a803f673f2e36f32",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

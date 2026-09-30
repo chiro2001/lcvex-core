@@ -1,0 +1,38 @@
+# P7-3 Advanced SIMD FP Cocotb 入口。
+
+SIM ?= verilator
+TOPLEVEL_LANG ?= verilog
+TOPLEVEL ?= lcvex_soc_tb
+COCOTB_TEST_MODULES ?= test_p7_3_neon_fp
+SIM_BUILD ?= sim_build_p7_3_neon_fp
+MEM_DELAY_MODE ?= 0
+
+VERILOG_SOURCES = $(abspath ../../rtl/lcvex_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_fp_state.sv) \
+                  $(abspath ../../rtl/lcvex_fp_scalar.sv) \
+                  $(abspath ../../rtl/lcvex_neon_fp.sv) \
+                  $(abspath ../../rtl/lcvex_neon_int.sv) \
+                  $(abspath ../../rtl/lcvex_regfile.sv) \
+                  $(abspath ../../rtl/lcvex_alu.sv) \
+                  $(abspath ../../rtl/lcvex_muldiv.sv) \
+                  $(abspath ../../rtl/lcvex_mem.sv) \
+                  $(abspath ../../rtl/lcvex_mem_ram.sv) \
+                  $(abspath ../../rtl/lcvex_mem_delay.sv) \
+                  $(abspath ../../rtl/lcvex_mem_arb.sv) \
+                  $(abspath ../../rtl/lcvex_mem_router.sv) \
+                  $(abspath ../../rtl/lcvex_pl011.sv) \
+                  $(abspath ../../rtl/lcvex_pl061.sv) \
+                  $(abspath ../../rtl/lcvex_mmio_fabric.sv) \
+                  $(abspath ../../rtl/lcvex_gic.sv) \
+                  $(abspath ../../rtl/lcvex_decode.sv) \
+                  $(abspath ../../rtl/lcvex_mmu.sv) \
+                  $(abspath ../../rtl/lcvex_core.sv) \
+                  $(abspath ../../tb/sv/lcvex_soc_tb.sv)
+
+EXTRA_ARGS += --timing --assert
+MMIO_FABRIC_CPP := $(abspath ../mmio/lcvex_mmio_fabric.cc)
+CUSTOM_COMPILE_DEPS += $(MMIO_FABRIC_CPP)
+COMPILE_ARGS += $(MMIO_FABRIC_CPP)
+COMPILE_ARGS += -GMEM_DELAY_MODE=$(MEM_DELAY_MODE)
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

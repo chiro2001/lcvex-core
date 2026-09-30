@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-001",
+  "state": "done",
+  "partial": true,
+  "base_sha": "69a71e1",
+  "head_sha": "69a71e1e2c7b4e6f5e5e07dc95a419d2e3fa8ff3",
+  "merge_sha": "83fb62c31f4f3b6df144edbf3cb1f73cfbc01a2b",
+  "branch": "feature/T-20260830-001-fpga-a",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-001",
+  "scope": "FPGA-A: T-067 剩余模块 standalone Quartus synthesis 补齐（l2_probe、alu、regfile、muldiv、fp_scalar、neon_fp、mem_router、axi4_master、axi4_avalon_adapter、soc_axi、soc_coh），带 10 分钟超时保护",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-30T00:40:00+08:00",
+    "suite_start": "2026-08-30T00:49:00+08:00",
+    "suite_end": "2026-08-30T01:01:28+08:00",
+    "documents_written_at": "2026-08-30T01:03:42+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-001",
+    "note": "独立实验 QSF/QPF 与日志均在该目录；未修改原始工程/QSF/SDC/RTL，未读取 license。"
+  },
+  "module_results": [
+    {
+      "module": "l2_probe",
+      "exit": 0,
+      "elapsed": "3.2s",
+      "logic_cells": 673,
+      "device_resources": 2025,
+      "peak_vm_mb": 585,
+      "status": "pass"
+    },
+    {
+      "module": "alu",
+      "exit": 0,
+      "elapsed": "38.6s",
+      "logic_cells": 6563,
+      "device_resources": 6846,
+      "peak_vm_mb": 669,
+      "status": "pass"
+    },
+    {
+      "module": "regfile",
+      "exit": 0,
+      "elapsed": "3.7s",
+      "logic_cells": 3169,
+      "device_resources": 3378,
+      "peak_vm_mb": 556,
+      "status": "pass"
+    },
+    {
+      "module": "muldiv",
+      "exit": 0,
+      "elapsed": "4.5s",
+      "logic_cells": 1825,
+      "device_resources": 2100,
+      "peak_vm_mb": 600,
+      "dsp": 9,
+      "status": "pass"
+    },
+    {
+      "module": "fp_scalar",
+      "exit": 3,
+      "elapsed": "20.4s",
+      "peak_vm_mb": 629,
+      "status": "fail_lpm_divide",
+      "error": "lpm_divide LPM_WIDTHN > 64 at line 507/508"
+    },
+    {
+      "module": "neon_fp",
+      "exit": 3,
+      "elapsed": "58.8s",
+      "peak_vm_mb": 754,
+      "status": "fail_lpm_divide",
+      "error": "fp_scalar lpm_divide per scalar lane"
+    },
+    {
+      "module": "mem_router",
+      "exit": 0,
+      "elapsed": "3.1s",
+      "logic_cells": 175,
+      "device_resources": 1443,
+      "peak_vm_mb": 560,
+      "status": "pass"
+    },
+    {
+      "module": "axi4_master",
+      "exit": 0,
+      "elapsed": "4.2s",
+      "logic_cells": 3487,
+      "device_resources": 6497,
+      "peak_vm_mb": 602,
+      "status": "pass"
+    },
+    {
+      "module": "axi4_avalon_adapter",
+      "exit": 0,
+      "elapsed": "56.2s",
+      "logic_cells": 22381,
+      "device_resources": 25125,
+      "peak_vm_mb": 935,
+      "ram_segments": 1123,
+      "dsp": 9,
+      "status": "pass"
+    },
+    {
+      "module": "soc_axi",
+      "exit": 0,
+      "elapsed": "3.6s",
+      "logic_cells": 1144,
+      "device_resources": 3951,
+      "peak_vm_mb": 599,
+      "status": "pass"
+    },
+    {
+      "module": "soc_coh",
+      "exit": null,
+      "elapsed": "10m timeout",
+      "peak_vm_mb": null,
+      "status": "timeout",
+      "summary": "超过 10 分钟超时保护被停止，未得到最终 LC/VM；需要后续单独更长时隙或进一步拆分"
+    }
+  ],
+  "hotspot_table": "按 LC 排序（完成模块）：axi4_avalon_adapter 22,381；alu 6,563；axi4_master 3,487；regfile 3,169；muldiv 1,825；soc_axi 1,144；l2_probe 673；mem_router 175。soc_coh 超时未完成，结合 T-102 的 l2_wb/L1D，可确认 cache/coherence 层次仍是合成热点。",
+  "conclusions": [
+    "T-102 剩余 11 个模块中 9 个已完成 standalone synthesis，统计资源与内存可见。",
+    "fp_scalar 和 neon_fp 被 lpm_divide LPM_WIDTHN>64 阻断；这是 Quartus 可综合性问题，不是内存/逻辑规模问题。",
+    "axi4_avalon_adapter 是完成模块中 LC 最大者（22,381 LC，935MB VM，56s），但内存并不高。",
+    "soc_coh 10 分钟未完成，与 L1D/L2 共同指向 cache/coherence 组合层次是 70GB OOM 的主要来源。",
+    "轻模块：mem_router 仅 175 LC；l2_probe 673 LC；regfile/muldiv/soc_axi <2K LC。"
+  ],
+  "recommendations": [
+    "处理 fp_scalar/neon_fp 的 lpm_divide：多周期/分块/查表除法后再纳入完整综合。",
+    "对 soc_coh、l1_d_wb、l2_wb 做更细拆分或 Quartus partition；它们单独已经很大/超时。",
+    "考虑降低 cache SETS/WAYS 或使用更小的数据阵列参数做实验副本。",
+    "完成 soc_coh 单独长时隙（>15 分钟）以取得最终 LC/VM。",
+    "在稳定通过 Synthesis 前不启动完整 B5 full flow。"
+  ],
+  "artifacts": [
+    {
+      "id": "fpgaa-module-dir",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-001",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-001"
+    },
+    {
+      "id": "fpgaa-summary",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-001\\summary.txt",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-001"
+    }
+  ],
+  "known_limits": [
+    "soc_coh 因超时未得到最终资源数；其余结果仅 standalone synthesis，不含 fit/STA。",
+    "未启动完整 B5 full flow；未读 license；未修改原始工程/QSF/SDC/RTL。",
+    "fp_scalar/neon_fp 失败原因 lpm_divide，尚未修复。"
+  ],
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.documents_written_at",
+        "old": "2026-08-30T01:05:00+08:00",
+        "new": "2026-08-30T01:03:42+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "83fb62c31f4f3b6df144edbf3cb1f73cfbc01a2b",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "69a71e1e2c7b4e6f5e5e07dc95a419d2e3fa8ff3",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "integrator_review": {
+    "received_at": "2026-08-30T01:04:11+08:00",
+    "status": "accepted_partial",
+    "head_sha": "8301872f5d54e6f39708a5d6bbd23fe5f9b012b0",
+    "notes": "FPGA-A partial merged: 11 modules measured; l2_probe/alu/regfile/muldiv/mem_router/axi4_master/axi4_avalon_adapter/soc_axi pass; fp_scalar/neon_fp fail lpm_divide; soc_coh timeout. Continue in FPGA-B/C/E.",
+    "merge_sha": "83fb62c31f4f3b6df144edbf3cb1f73cfbc01a2b",
+    "result_sha": "69a71e1e2c7b4e6f5e5e07dc95a419d2e3fa8ff3"
+  }
+}

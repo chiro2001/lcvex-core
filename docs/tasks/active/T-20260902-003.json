@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-003",
+  "label": "SUBAGENT-SMOKE",
+  "title": "子代理调用冒烟测试：只读环境/仓库身份核验",
+  "kind": "infra-smoke",
+  "priority": "normal",
+  "phase": "done",
+  "dispatch_status": "done",
+  "assigned_owner": "dsh-smoke",
+  "agent_type": "readonly-smoke",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]，实际执行通道记录 dsh-default",
+  "reasoning_effort": "max",
+  "depends_on": [],
+  "base_sha": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+  "head_sha": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+  "branch": "none (read-only smoke)",
+  "worktree": "none (read-only smoke)",
+  "scope": "验证 dsh 子代理调用链路可用：subagent 收到完整任务包后，只读核验仓库身份、分支、HEAD、工具链存在性，并返回结构化报告。不修改任何文件，不运行重型构建，不产生构建产物。",
+  "reads": [
+    "AGENTS.md",
+    "docs/HANDOFF_20260902_TO_DSH.md",
+    "Makefile",
+    "rtl/lcvex_core.sv",
+    "docs/tasks/active/T-20260902-003.json"
+  ],
+  "writes": [
+    "docs/tasks/evidence/T-20260902-003.json",
+    "docs/handoffs/T-20260902-003-subagent-smoke.md"
+  ],
+  "validation": {
+    "l0": ["子代理调用成功并返回结构化报告"],
+    "l1": ["报告字段齐全：task/state/base/head/branch/worktree/sent_at/received_at/reported_at/files/tests/blockers/next"],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "收到 subagent 的最终报告，报告中的仓库身份与主 Agent 核验一致；无文件修改；无重型任务启动。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 512,
+    "disk_mb": 256,
+    "timeout_s": 600,
+    "allocation_ratio": 0.1
+  },
+  "budget_policy": {
+    "initial_minutes": 10,
+    "extension_increment_minutes": 5,
+    "max_minutes": 20,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T01:26:44+08:00",
+  "updated_at": "2026-09-02T01:28:00+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T01:27:09+08:00",
+    "recorded_at": "2026-09-02T01:28:00+08:00",
+    "notes": "subagent 只读冒烟测试通过；报告字段完整，仓库身份核验一致，无文件修改"
+  },
+  "known_limits": [
+    "只读冒烟测试；不创建 worktree、不提交代码、不运行 Verilator/Quartus/Gate。"
+  ],
+  "handoff": "docs/handoffs/T-20260902-003-subagent-smoke.md",
+  "evidence": "docs/tasks/evidence/T-20260902-003.json",
+  "next": "确认子代理调用链路正常后，按接手文档重新派发 T-20260902-001/002"
+}

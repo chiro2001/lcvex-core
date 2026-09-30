@@ -1,0 +1,13 @@
+%Warning-DECLFILENAME: fpga/opensynth/examples/sv_pkg_struct.sv:3:9: Filename 'sv_pkg_struct' does not match PACKAGE name: 'pkg_struct_pkg'
+    3 | package pkg_struct_pkg;
+      |         ^~~~~~~~~~~~~~
+                       ... For warning description see https://verilator.org/warn/DECLFILENAME?v=5.050
+                       ... Use "/* verilator lint_off DECLFILENAME */" and lint_on around source to disable this message.
+%Warning-UNUSEDSIGNAL: fpga/opensynth/examples/sv_pkg_struct.sv:21:12: Bits of signal are not used: 'item_q'[2:0]
+                                                                     : ... note: In instance 'pkg_struct_sample'
+   21 |     item_t item_q;
+      |            ^~~~~~
+                       ... For warning description see https://verilator.org/warn/UNUSEDSIGNAL?v=5.050
+                       ... Use "/* verilator lint_off UNUSEDSIGNAL */" and lint_on around source to disable this message.
+%Error: Exiting due to 2 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --lint-only --top-module pkg_struct_sample -Wall fpga/opensynth/examples/sv_pkg_struct.sv` failed. (See above for error)

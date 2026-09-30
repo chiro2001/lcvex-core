@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-037",
+  "label": "B25-BRINGUP-BATCH",
+  "state": "done-local-l0-l2",
+  "acceptance_status": "local-union-pass-physical-pending",
+  "base_sha": "689959472faf59844fb486834fad27f8fedb2ca6",
+  "source_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+  "branch": "batch/T-20260907-037-b25-bringup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037",
+  "owner": "codex-integrator",
+  "finalized_at": "2026-09-07T09:22:41+08:00",
+  "members": {
+    "T-20260907-038": "ab92f921792503dc1cbe8aea71935a928a6263d2",
+    "T-20260907-039": "ed2bc8e00faa52535021bd732e96dd3649a91be5",
+    "T-20260907-040": "f7e74b6ec9be1e0e26e343ec16c75b133fd23b4e",
+    "T-20260907-045": "a99fe45bb35f489cc1cbaef54558503d74901917"
+  },
+  "implementation": [
+    "clk_u59=100 MHz is divided by four to a real 25 MHz logic clock; Qsys auxiliary 100 MHz and EMIF 266.667 MHz domains are preserved.",
+    "A 64 KiB initialized BRAM boots at PC=0 with stack [0xF000,0x10000); the same ELF produces byte HEX and WIDTH=64 DEPTH=8192 MIF.",
+    "The BRAM-resident monitor emits four startup lines and supports p/PONG, status, DDR retest and printable echo through polling JTAG-UART addr[2].",
+    "MMU-off DDR is uncached for deterministic bring-up; the AXI line bridge returns offset0 from beat0 and serves offsets1..7 exactly once.",
+    "The AXI4-to-Avalon adapter returns bounded DECERR on in-flight calibration failure, EMIF-only reset and backend timeout, holds B/R under backpressure and drains/poisons late read epochs.",
+    "T-045 CDC synchronizers and QSF-relative generated MIF are explicitly represented in SDC/checkers/manifests."
+  ],
+  "source_hashes": {
+    "rtl/lcvex_axi4_avalon_adapter.sv": "cf42b896828fe4b769b2b808e2ff5823981de7bd68b0ef6add1e93f0b39acaf4",
+    "rtl/lcvex_catapult_soc_axi.sv": "b61fb21b02fcdd69fc1e12171235841ce811d3ae94ee1912c5651d0e99510204",
+    "rtl/lcvex_catapult_soc_top.sv": "d12ff1080d3ac2d2344e7da27eea44111cb52127235570a372bd52c7d42b931c",
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "512247879ae635ec764b8dfd545d28200628f608bbc3078c3e94d060730783ad",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f",
+    "fpga/catapult_a10/quartus/catapult_a10.qsf": "c82f9a7d6e9473d37ea8adcde125e3f327b3ccb8714fde7d4507d65963c42ba8",
+    "fpga/catapult_a10/boot/boot.S": "5bc1bf0f08d14890307229c450c46508a0f8e44af8fcd15df343413d134b8443",
+    "tb/sv/lcvex_catapult_soc_axi_bridge_tb.sv": "bea7e59acb40ca816c4ffa7cc5d6f47bfcea01123b904d815d6b59702c47be66",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv": "0219419997d6bd3b7d274f5dd892bc8253f0bebd1a0c3b728e0250530c2c56ab"
+  },
+  "boot_artifacts": {
+    "elf": {"bytes": 68832, "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"},
+    "bin": {"bytes": 957, "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"},
+    "hex": {"bytes": 2871, "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"},
+    "mif": {"bytes": 204942, "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7", "width": 64, "depth": 8192, "records": 8192, "tracked": false}
+  },
+  "validation": [
+    {
+      "run_id": "axi-line-bridge-exact",
+      "level": "L1",
+      "command": "LCVEX_AXI_BRIDGE_TEST_DIR=build/agents/T-20260907-037/axi-bridge-exact VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_axi_bridge_test.sh",
+      "result": "pass; offset0..7, fault sticky, response hold, nonsequential/write invalidation",
+      "log": "build/agents/T-20260907-037/axi-bridge-exact/run.log",
+      "log_sha256": "d301b23c989d763c738cf01538c2830e13b9c8272e52d336af5c503667008ec8"
+    },
+    {
+      "run_id": "emif-resilience-sv",
+      "level": "L1",
+      "command": "Verilator lcvex_axi4_avalon_tb at default focused timeout=32; see parent build log",
+      "result": "pass; normal CDC plus cal_fail, permanent stalls, late drain, EMIF-only reset, stalled command and partial AW/W",
+      "build_log": "build/agents/T-20260907-037/emif-resilience/sv/build.log",
+      "build_log_sha256": "0360e1d25034eaee1cd34d014c865cb79427c60c311818b6b0ef26bab677c5d3",
+      "run_log": "build/agents/T-20260907-037/emif-resilience/sv/run.log",
+      "run_log_sha256": "5106531ca775e41eb980269613615309aa9705f66f4dc7ea7f6bdc95e0643fd9"
+    },
+    {
+      "run_id": "emif-resilience-cocotb",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.axi4_avalon SIM_BUILD=build/agents/T-20260907-037/emif-resilience/cocotb SEED=0x00b2054",
+      "result": "pass 7/7",
+      "log": "build/agents/T-20260907-037/emif-resilience/cocotb/run.log",
+      "log_sha256": "a7db7677ca149b3512f9181ef6c43569cd60e4c5103059315547cc2b8bc760b0"
+    },
+    {
+      "run_id": "emif-timeout-lints",
+      "level": "L0",
+      "result": "pass for timeout=1 and production default=4096",
+      "timeout1_log_sha256": "993cd338187a89a55a2cf66a82a11155d892ea335977fb72de5b02fc039fdd86",
+      "production_log_sha256": "a9f04585eee08ff12ef1ca90642b62c2046ac7e930d3b026bc88a41d75b173ff"
+    },
+    {
+      "run_id": "b25-soc-smoke-final",
+      "level": "L2",
+      "command": "VERILATOR_JOBS=1 LCVEX_SOC_SMOKE_DIR=build/agents/T-20260907-037/soc-smoke-final bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "result": "pass; CAL-OK/WAIT/FAIL, exact four-line transcript, real EMIF read/write, external magic, PC=0/BRAM-only, PONG/status/m/echo exactly once",
+      "log": "build/agents/T-20260907-037/soc-smoke-final/smoke.log",
+      "log_sha256": "c7f56b81b9c20b19d7296f4562e38ae20098c034031dc6ee0ab430c4011686a6"
+    },
+    {
+      "run_id": "platform-static-closure",
+      "level": "L0-L1",
+      "command": "check_platform.py; check_skeleton.py --require-boot-image; sha256sum -c; test_registry --check --check-consistency; platform and SoC lint",
+      "result": "pass; 50-file vendor provenance retained, six skeleton files, 8192-word MIF closure, registry 83 items, both lints pass",
+      "logs": {
+        "check_platform": "f8c18dc4e70dfda310691a9fe2519a04011ccb24a613249057859b1004010a17",
+        "check_skeleton": "e91c01e0c16b01e44cea758c6c386478b4972b8fb4876cbd11c859dbee82caa2",
+        "sha256sums": "a18b796a2898c1f0fd28670b8de03b6f9fa4b654c45f7fb05b7f0fdcae735b8f",
+        "test_registry": "6d742cb0f0f2b1af6465778cb2d29878838f13a515ff4f0117e179582560dbff",
+        "platform_lint": "df30cd317afe29b3a61c7d990b9ff669d95ea703b09a257961b3ffd7264bc4b3",
+        "soc_lint": "7e0d6fe2382b3e87d234371192387bf585d756a383d6130272a9bdff77e5688d"
+      }
+    }
+  ],
+  "resource": {
+    "all_parent_heavy_runs_locked": true,
+    "lock": "/home/chiro/projects/.resource-locks/resource-lock local",
+    "min_local_available_mib": 8192,
+    "verilator_jobs": 1,
+    "task_local_tmpdir": true,
+    "final_status": "local FREE; gamepc FREE"
+  },
+  "followup_candidate": {
+    "candidate_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+    "affected_union": {
+      "tasks": ["T-20260908-002", "T-20260908-004"],
+      "status": "pass",
+      "summary": "T-002 base/cache/delay2 each 180/180; T-004 existing/focused x base/cache/delay2 each 45/45",
+      "evidence": "docs/tasks/evidence/T-20260908-004.json"
+    },
+    "gate_d": {
+      "task": "T-20260908-005",
+      "status": "pass",
+      "summary": "make test; M2/R1 40/40; delay2 32/32; P5a 26/26; Gate C 7/7; P5a MMU 3/3; P4b 5/5; random 3x100k/300006; coverage 62/62; baremetal-C 200",
+      "evidence": "docs/tasks/evidence/T-20260908-005.json"
+    },
+    "physical_status": "ready for fresh 25 MHz synthesis/fitter/STA; no SOF/JTAG/board claim"
+  },
+  "authorization": {
+    "used_gamepc_or_jtag": false,
+    "assembler_or_sof": false,
+    "flash_or_persistent_write": false,
+    "console_only_authorization": "nios2-terminal device=1 instance=0 remains recorded for T-044 after dependencies"
+  },
+  "blockers": [
+    "T-042 fresh synthesis/fitter/STA must prove MIF consumption, CDC filter resolution and all timing checks on this source SHA.",
+    "Gate D remains required before board programming.",
+    "T-043 assembler/SOF and volatile FPGA configuration are not authorized; JIC/EPCQ/Flash remains forbidden."
+  ],
+  "risks": [
+    "A timed-out accepted read whose backend never returns remains poisoned until explicit CPU reset; this intentionally favors epoch safety over continued DDR access.",
+    "The 4096-cycle production timeout is conservative but lacks a vendor worst-case latency proof; T-042/board observation must validate it.",
+    "The expanded direct-mode uncached attribute window includes unmapped holes, while the router still enforces the exact address map."
+  ],
+  "handoff": "docs/handoffs/T-20260907-037-b25-bringup-batch.md"
+}

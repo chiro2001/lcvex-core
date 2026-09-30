@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-001",
+  "label": "PE-F1D-NEON-DIAG",
+  "parent": "T-20260830-033",
+  "title": "F1a neon_vect 跨配置 commit-only 首分歧诊断",
+  "kind": "frontend-commit-divergence-diagnosis",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-neon-commit-diagnosis",
+  "agent_type": "verification-diagnosis",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260831-007"],
+  "base_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+  "branch": "verify/T-20260901-001-f1a-neon-commit-diff",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-001",
+  "scope": "在不修改 RTL、QEMU、workload、参考结果或正式比较口径的前提下，复现 T-007 中 nocache_d0/neon_vect 的 F0/F1a pass/pass commit-only mismatch，保存按退休序号对齐的首个提交包差异，并用至少一个 cache 配置确认五个 neon_vect mismatch 是否同源。任务只做诊断和最小可复现证据，不在原因未闭合前修 RTL，也不运行完整 196-row、Gate D、Linux 或 Quartus。",
+  "planning_guidance": {
+    "priority": [
+      "先检查 commit digest 的输入字段，确认没有周期、FIFO 计数、未初始化 padding 或 host 顺序等非架构字段；不得通过删除应比较的 PC、寄存器写回、NZCV、next PC、FP/NEON 状态来制造一致。",
+      "固定同一 neon_vect image/hash，重建且串行运行 nocache_d0_f0/f1a；按相同 retired seq 对齐，二分或增量定位第一条不同提交。",
+      "首分歧证据至少包含 seq、PC、指令编码/反汇编、整数/FP/NEON 写回、NZCV、next PC、内存副作用、F0/F1a 原始值和最近提交窗口。"
+    ],
+    "classification": [
+      "若首分歧来自真实架构状态，定位到具体 flush/quarantine/forwarding/FP-NEON commit 路径和最小修复边界。",
+      "若仅来自摘要实现的非架构输入，说明字段来源和为什么不属于提交契约；只能提出修复建议，不能弱化正式锁步比较。",
+      "若无法复现，核对 source/image/runner hash 与 T-007，不能改 seed、镜像或结果规避差异。"
+    ],
+    "confirmation": [
+      "使用 fullcache_d1 或 fullcache_d2 的 neon_vect 再现同一首分歧类别。",
+      "保存紧凑 JSON；完整 trace/log 留在任务 build 目录，不进 Git。"
+    ]
+  },
+  "writes": [
+    "docs/F1A_NEON_COMMIT_DIVERGENCE_DIAGNOSIS.md",
+    "docs/evidence/artifacts/T-20260901-001/first_commit_diff.json",
+    "docs/handoffs/T-20260901-001-f1a-neon-commit-diff.md",
+    "docs/tasks/evidence/T-20260901-001.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/PERFORMANCE_F1C_POSTFIX_RESULTS.md",
+    "docs/evidence/artifacts/T-20260831-007/f1c_matrix.json", "docs/tasks/evidence/T-20260831-007.json",
+    "sim/microbench/**", "scripts/run_perf_matrix.py", "rtl/**", "baremetal/perf/**"
+  ],
+  "validation": {
+    "l0": ["source/image/runner provenance audit；commit digest input-field audit"],
+    "l1": ["nocache_d0 F0/F1a neon_vect 同镜像可复现；按退休序号首分歧定位"],
+    "l2": ["至少一个 cache 配置复核同源；必要的现有定向 QEMU 锁步只读复核"],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "交付可复现的首个提交级差异和前后窗口，明确是 RTL 架构差异、摘要实现差异还是未闭合；给出单一最小后继修复任务的精确写集与验证矩阵。不得把相同 retired/memory 摘要直接视为等价。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 8192, "timeout_s": 3600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 60, "extension_increment_minutes": 60, "max_minutes": 180, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-09-01T00:23:53+08:00", "released_at": "2026-09-01T01:35:27+08:00", "reason": "两组 neon_vect F0/F1a trace 和 footer 诊断完成；构建约 1.05GB、运行 RSS 约 141MB，未发生重型并发", "rule": "本地唯一重型任务；15G/no-swap/50%-CPU/-j1；不与 Gate/Linux/Quartus 并发"},
+  "created_at": "2026-09-01T00:21:13+08:00",
+  "updated_at": "2026-09-01T01:40:08+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T00:23:53+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "agent_reuse_note": "复用已完成 T-007 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-001。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-001"
+  },
+  "handoff": "docs/handoffs/T-20260901-001-f1a-neon-commit-diff.md",
+  "evidence": "docs/tasks/evidence/T-20260901-001.json",
+  "merge_sha": "991684eac5e923f2013fe595467a293646b43502",
+  "merged_at": "2026-09-01T01:39:59+08:00",
+  "integrator_review": {
+    "received_at": "2026-09-01T01:38:46+08:00",
+    "accepted_at": "2026-09-01T01:40:08+08:00",
+    "status": "accepted_footer_only_digest_diagnosis",
+    "owner_report_tip": "04532d1decee3ce7b824aaa2f6546664b7e5b9be",
+    "checks": [
+      "nocache_d0 与 fullcache_d1 各 66721 条 active commit 逐条一致，首个差异只位于 footer commit_digest",
+      "两组 F0/F1a 的 retired、memory digest/effect count 和 MAGIC store 一致，原始 trace/artifact SHA256 匹配",
+      "源码复核确认正式 digest 无条件哈希 inactive payload，而 trace 只暴露 enable/count 有效的架构 effect",
+      "后继只允许规范化 inactive payload；PC、insn、next PC、enable/count 和全部 active payload 必须继续严格哈希"
+    ],
+    "decision": "未发现 RTL 架构提交差异；登记 runner-only 摘要规范化与双向 fixture。正式摘要修复及全部 98 对闭合前，F1a 保持默认关闭。"
+  },
+  "known_limits": ["尚未指出具体哪一根 inactive raw payload 导致旧摘要不同；后继规范化必须以 enable/count 为严格边界。", "完整 Gate D 授权已取得，但仅在后续 98/98 门槛满足后执行。"],
+  "next": "登记 runner-only inactive-payload canonicalization，实现双向摘要 fixture 后先跑 neon_vect 两配置，再执行 timeout 相关运行至完成闭合。"
+}

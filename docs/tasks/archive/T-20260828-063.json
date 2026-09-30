@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-063",
+  "title": "Catapult Windows 命令行创建 Quartus 工程与 Qsys/IP 再生成",
+  "kind": "fpga-quartus-project-create",
+  "priority": "high",
+  "assigned_owner": "catapult-project-create-dsv",
+  "agent_type": "implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只在用户指定 Windows 目录 D:\\Projects\\fpga-altra\\lcvex 用 Quartus Prime Pro 21.4 命令行创建/恢复可重生成工程并执行 Qsys/IP regenerate、最小 synthesis/fit/STA 验证；允许搜索在线 Quartus/Qsys CLI 官方资料；不修改 Linux 集成线 RTL/QEMU/平台包，不读取 license 内容，不删除用户未知文件。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "仅在工程拓扑、Qsys/IP 生成边界或综合证据出现歧义时补充审查；不替代远端实际验证。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "本任务以环境/工程创建为主，默认不阻塞；仅在写集、工具版本或生成边界发生实质变化时重审。"
+  },
+  "phase": "done",
+  "parent": "T-20260827-057",
+  "depends_on": [
+    "T-20260827-050"
+  ],
+  "input_tasks": [
+    "T-20260827-052",
+    "T-20260827-057"
+  ],
+  "input_note": "T-052/T-057 的离线与环境证据已完成但 phase=blocked；本任务正是为解除其阻塞而创建，不等待其 done。",
+  "writes": [
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/**",
+    "docs/handoffs/T-20260828-063-catapult-project-create.md",
+    "docs/tasks/evidence/T-20260828-063.json"
+  ],
+  "reads": [
+    "fpga/catapult_a10/**",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/active/T-20260827-052.json",
+    "docs/tasks/active/T-20260827-057.json",
+    "docs/tasks/evidence/T-20260827-052.json",
+    "docs/tasks/evidence/T-20260827-057.json",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+    "ssh://192.168.101.5/D:/Software/intelFPGA_pro/21.4"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "fpga/catapult_a10/README.md",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/tools/regenerate_qsys.sh"
+  ],
+  "base_sha": "837112e9d801e98545479abf34eb5ffb1f1a4e81",
+  "branch": "feature/T-20260828-063-catapult-project-create",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-063",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 4096,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true,
+    "extend_when": "owner 按 Asia/Shanghai 报告 sent_at/received_at/reported_at、文件、验证、阻断和剩余工作，且正在稳定推进工程创建/再生成时延长。"
+  },
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "write_rule": "只允许在 project_root 内创建/修改工程与构建产物；project_root 以外只读；不得删除或覆盖未知用户文件。"
+  },
+  "validation": {
+    "l0": [
+      "远端 D:\\Projects\\fpga-altra\\lcvex 存在且为有效 Quartus 工程：QPF/QSF/SDC/Qsys 入口完整",
+      "qsys-generate/ip-generate 实际执行，记录精确命令、版本、退出码、日志与报告路径",
+      "无越界写、license 内容未泄露、未覆盖未知用户文件"
+    ],
+    "l1": [
+      "最小 synthesis/fit/STA 或明确 dry-run 记录退出码与报告路径",
+      "工程生成产物与 fpga/catapult_a10 平台输入（Qsys 接口、器件、时钟）交叉核对"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [
+      "Quartus full compile/STA/DDR/板测由后续 B5/Gate-F-BOARD 任务执行"
+    ]
+  },
+  "acceptance": "在 D:\\Projects\\fpga-altra\\lcvex 用命令行创建/恢复可重生成的 Quartus Prime Pro 21.4 工程，并至少完成 Qsys/IP regenerate（含 ddr4_bot Qsys 与 EMIF 相关 IP），保存精确命令、工具版本、退出码、报告路径与 artifact 摘要；若工具/工程边界阻塞，给出最小可执行清单并保持 blocked。不得伪称 full compile、STA、DDR 或板测完成。",
+  "created_at": "2026-08-28T00:00:00+08:00",
+  "updated_at": "2026-08-28T01:11:00+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-28T00:40:27+08:00",
+    "agent_name": "t063_catapult_project",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-063"
+  },
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260828-063.json",
+  "handoff": "docs/handoffs/T-20260828-063-catapult-project-create.md",
+  "known_limits": [
+    "本任务只创建/恢复工程并验证可再生成路径，不宣称 full compile、STA、DDR 稳定性或板测完成。",
+    "远端写操作严格限定在 D:\\Projects\\fpga-altra\\lcvex；不得删除未知用户文件或修改 reference_root 其他内容。",
+    "Qsys/IP/Quartus 版本差异或 license 限制可能造成部分 IP 无法生成，需如实记录。"
+  ],
+  "next": "集成者确认远端工程创建与 Qsys/IP 再生成证据后，解除 T-052/T-057 阻塞，并推进 B0/B5 后续任务。",
+  "merge_sha": "d0f6e82",
+  "integration": {
+    "status": "done",
+    "strategy": "cherry-pick 380f2ac to feature/p7-fp-neon",
+    "merge_sha": "d0f6e82",
+    "validated_scope": "remote project created at D:\\Projects\\fpga-altra\\lcvex; Qsys/IP regenerate exit 0; smoke full compile exit 0; handoff/evidence only local writes",
+    "remaining_scope": "SFL sfl_sys.qsys input missing; main catapult_a10 top-level wrapper needed for real full flow/STA"
+  }
+}

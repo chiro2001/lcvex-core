@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-005",
+  "label": "PE-F1A-H03",
+  "parent": "T-20260830-033",
+  "title": "F1a FIFO fault-head/IABT 精确消费",
+  "kind": "frontend-correctness-fix",
+  "priority": "critical",
+  "phase": "cancelled",
+  "dispatch_status": "superseded",
+  "assigned_owner": "luna-f1a-fault-head",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260831-004", "T-20260830-046", "T-20260830-045"],
+  "base_sha": "c141fd57bc824dfd33bd42d1748b2c375410fe02",
+  "branch": "feature/T-20260831-005-f1a-fault-head",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005",
+  "scope": "修复 T-045 H-03：F1a FIFO 已能保存 current-epoch 取指 fault 的 PC/epoch/seq/FSC，但 fault head 只阻止 pop/issue，没有架构消费路径，可导致无 IABT 提交和永久无进展。修改前必须分别建立 MMU fetch fault、MMU-off IMEM fault 及 FIFO-full held fault 的可审计失败用例。推荐将 fault head 原子送入 IFID fault metadata，复用既有 fetch_merge_wb/sys_fetch_merge/sys_commit 异常入口和 QEMU PRE/COMMIT 合并语义；禁止从 FIFO 直接伪造绕过提交边界的 fault packet。保持 feature-off、T-046 committed marker、T-004 ready 原子转移与公共 ABI 不变。不处理 H-01/H-05/F1b。",
+  "planning_guidance": {
+    "root_cause_gate": [
+      "MMU fetch fault：仅映射 0x44000000 代码页，使 0x44001000 取指返回 FSC=0x07；pre-fix 必须观察 push_fault -> head_fault/count>0 -> pop=0 -> 无 IABT/timeout。",
+      "MMU-off IMEM fault：BR 跳到 mem_router TGT_NONE 地址 0x50000000，预期 FSC=0x10，精确保存 fault VA/epoch/seq。",
+      "FIFO-full held fault：count=2 时构造 fetch_fault_pending，恢复可消费后必须按序观察 old-head pop + held-fault push + fault-head consume，不丢不重。",
+      "pre-fix 动态根因门未成立前不得修改 RTL；不得用缩短 timeout、过滤 trace 或改参考结果伪造通过。"
+    ],
+    "required_architecture": [
+      "优先级保持 frontend_kill/fetch_merge_wb/sys_fetch_merge > fault_head_to_ifid_fire > ordinary_fifo_pop；wrong-path/stale fault 只能 drop。",
+      "fault head 原子捕获到 IFID 内部 metadata，并由 sys_at_id/sys_commit 或已有 older-WB fetch merge 消费；不绕过 commit_ready。",
+      "若 older WB 需要合并，保留其 token、GPR/SP/NZCV/memory effect 与 QEMU pending PRE/COMMIT 对应；合并后 fault token 不得另外提交。",
+      "无 older merge 时才允许 IFID synthetic fault 经现有 sys_commit 进入异常；ESR/FAR/ELR/next_pc 与异常入口状态只在 commit 更新。",
+      "commit_ready=0 时 fault head/IFID marker 全保持；commit 同拍清 younger FIFO/IFID/in-flight context，epoch 只增加一次。"
+    ],
+    "state_contract": [
+      "如新增 ifid_fetch_fault：reset/flush/restore=0，仅 fault-head consume 同拍置位，正常 pop/bubble/exception commit 清零，内部只读非架构状态。",
+      "如新增 ifid_fetch_fsc[5:0]：reset/flush/restore=0，与 marker 原子捕获并保持；只在 fault commit 用于 ESR。",
+      "fault token epoch/seq 必须 FIFO->IFID->commit 至多一次；fetch_fault_pending 继续仅表示 FIFO 满时的单 held fault，不扩展多 outstanding。"
+    ],
+    "stop_conditions": [
+      "fault 响应晚于 older commit，无法保持 QEMU pending PC/seq 合并语义",
+      "需要改 rtl/lcvex_pkg.sv、公共 mem_rsp_t、MMU/arbiter/SoC ABI、QEMU/plugin/comparator",
+      "修复扩大到 response ID/H-01、maintenance H-05、F1b 或完整性能签核"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_f1a.sh",
+    "docs/F1A_FAULT_HEAD_FIX.md",
+    "docs/handoffs/T-20260831-005-f1a-fault-head.md",
+    "docs/tasks/evidence/T-20260831-005.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/handoffs/T-20260830-045-f1a-static-audit.md",
+    "docs/F1A_DUPLICATE_RETIREMENT_FIX.md",
+    "docs/F1A_COMMIT_READY_HOLD_FIX.md",
+    "docs/tasks/evidence/T-20260831-004.json",
+    "tb/sv/lcvex_soc_tb.sv",
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/lockstep_coordinator.cc",
+    "qemu/plugins/lcvex_difftest.c"
+  ],
+  "validation": {
+    "l0": [
+      "pre-fix MMU/IMEM fault-head timeout 与 FIFO-full pending directed probe",
+      "post-fix SVA：fault eventually merge/IFID consume，token 至多一次，FSC/FAR/ELR/younger flush 正确",
+      "git diff --check、JSON、写集、新状态 reset/flush/restore/commit 时机静态核对"
+    ],
+    "l1": [
+      "SV+Cocotb MEM_DELAY_MODE=0/1/2，FIFO count=1/2，IFID valid/empty，ready drop/recover，branch/TLBI/reset",
+      "复跑 T-046 duplicate marker 与 T-004 ready-hold 原子转移；feature-off 异常路径逐周期不变"
+    ],
+    "l2": [
+      "FIFO-on base/cache/delay2 strict lockstep：hard_sys_fetch_fault、hard_neon_fetch_fault、新 MMU-page-end 和 MMU-off IMEM fault",
+      "严格比较 PC/next_pc/exception ESR/FAR/GPR/SP/NZCV/stores，QEMU/plugin 不修改"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "pre-fix fault-head 无架构消费可审计复现；post-fix 每个 current-epoch fault 只能走一次既有 older-WB merge 或 IFID/sys fault commit，commit_ready 背压不丢不重，flush/reset 清 younger，FSC/ESR/FAR/ELR/exception PC 正确，T-046 token 与 T-004 ready hold 不回归，L0-L2 全绿。默认 FIFO-off 不变；不宣称 H-01/H-05/F1b/F1c/Gate D/Linux。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 8192, "timeout_s": 3600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 60, "extension_increment_minutes": 60, "max_minutes": 180, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {
+    "status": "released",
+    "reason": "T-005 触发协议 stop condition 并完成诊断 checkpoint，释放重型队列给后继任务",
+    "reserved_at": "2026-08-31T11:37:23+08:00",
+    "released_at": "2026-08-31T12:51:56+08:00",
+    "rule": "一次一个 MemoryMax=15G/MemorySwapMax=0/CPUQuota=50%/-j1 作业"
+  },
+  "created_at": "2026-08-31T11:37:23+08:00",
+  "updated_at": "2026-08-31T12:53:02+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T11:39:34+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "agent_reuse_note": "复用已完成 H-03 只读边界收敛与 T-004 独立审阅的 gpt-5.6-luna(max) agent；当前只持有 T-20260831-005。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005"
+  },
+  "handoff": "docs/handoffs/T-20260831-005-f1a-fault-head.md",
+  "evidence": "docs/tasks/evidence/T-20260831-005.json",
+  "checkpoint_sha": "134d5c219369604ab16ca5b0416ef43819d4a2c6",
+  "checkpointed_at": "2026-08-31T12:51:39+08:00",
+  "cancelled_at": "2026-08-31T12:53:02+08:00",
+  "superseded_by": "T-20260831-006",
+  "write_lock": {
+    "status": "released",
+    "released_at": "2026-08-31T12:53:02+08:00",
+    "reason": "原定 FIFO-local 消费边界已被动态 stop condition 证伪；诊断物料移交收窄后继任务"
+  },
+  "blocker": {
+    "reported_at": "2026-08-31T12:31:42+08:00",
+    "status": "protocol_stop_condition",
+    "summary": "MMU fault response 在 older 0x44000ffc 已 commit 后才成为 FIFO head；FIFO-local synthetic fault packet 无法保持 QEMU pending PRE/COMMIT 合并语义。",
+    "diagnostic_correction": "后续审计将最小根因收窄到 F1a fetch_next_settled 错把 pending/translated 当作 outcome settled；不先扩 UID/QEMU ABI。"
+  },
+  "known_limits": [
+    "不修改 QEMU/plugin/comparator 或公共 memory ABI。",
+    "不运行完整 F1c、Gate D、Linux、Quartus 或上板。"
+  ],
+  "next": "转 cancelled/superseded 释放写集；后继 T-006 先修正 F1a system next-fetch settled 语义，若 first-trace 再证明 response identity 不足才升级 H-01/ABI。"
+}

@@ -1,0 +1,23 @@
+%Warning-DECLFILENAME: fpga/opensynth/examples/sv_features.sv:6:9: Filename 'sv_features' does not match PACKAGE name: 'feature_pkg'
+    6 | package feature_pkg;
+      |         ^~~~~~~~~~~
+                       ... For warning description see https://verilator.org/warn/DECLFILENAME?v=5.050
+                       ... Use "/* verilator lint_off DECLFILENAME */" and lint_on around source to disable this message.
+%Warning-UNUSEDSIGNAL: fpga/opensynth/examples/sv_features.sv:37:12: Bits of signal are not used: 'item_q'[2:0]
+                                                                   : ... note: In instance 'feature_sample'
+   37 |     item_t item_q;
+      |            ^~~~~~
+                       ... For warning description see https://verilator.org/warn/UNUSEDSIGNAL?v=5.050
+                       ... Use "/* verilator lint_off UNUSEDSIGNAL */" and lint_on around source to disable this message.
+%Warning-UNDRIVEN: fpga/opensynth/examples/sv_features.sv:21:17: Signal is not driven: 'data'
+                                                               : ... note: In instance 'feature_sample'
+   21 |     logic [7:0] data;
+      |                 ^~~~
+                   ... For warning description see https://verilator.org/warn/UNDRIVEN?v=5.050
+                   ... Use "/* verilator lint_off UNDRIVEN */" and lint_on around source to disable this message.
+%Warning-UNDRIVEN: fpga/opensynth/examples/sv_features.sv:22:17: Signal is not driven: 'valid'
+                                                               : ... note: In instance 'feature_sample'
+   22 |     logic       valid;
+      |                 ^~~~~
+%Error: Exiting due to 4 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --lint-only --top-module feature_sample -Wall fpga/opensynth/examples/sv_features.sv` failed. (See above for error)

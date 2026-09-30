@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-026",
+  "state": "done",
+  "base_sha": "bc2afb02",
+  "registration_sha": "72c56365",
+  "implementation_head": "8f0d06540e8a381fe40c23484ee47b7f2269169e",
+  "branch": "infra/T-20260906-026-resource-lock-guardian",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-026",
+  "reported_issue": "SIGKILL of the supervising Bash released the only guard owner while a child that had closed inherited guard descriptors could continue running.",
+  "resolution": {
+    "architecture": "outer Bash lock owner -> primary Python guardian -> stopped task plus independent pidfd lease keeper",
+    "start_gate": "The task remains blocked on a pipe until pidfd_open succeeds and the keeper acknowledges readiness.",
+    "guard_owners": ["outer Bash", "primary guardian", "pidfd lease keeper"],
+    "task_guard_fds": "explicitly closed before exec",
+    "single_failure_behavior": "SIGKILL of the outer Bash or primary guardian alone leaves another holder until the task root exits.",
+    "status_behavior": "A held guard with a dead/missing owner PID reports BUSY guardian=active and remains impossible to acquire."
+  },
+  "external_artifacts": {
+    "root": "/home/chiro/projects/.resource-locks",
+    "README.md": "d66daadfe83ed2b0f4dbfaed8d03d235993018170771cf99daf6f2f5983d3fbc",
+    "resource-lock": "31dd3f0d5069b4c44767afbc26bd7d01435c39de7e81d855bf9c41ec4d2ea058",
+    "resource-lock-guardian": "daa0babcd5e4b5ba7b83e5ae5d58df7bf58349328a38a08d0960f82f2870ac18",
+    "test-resource-lock": "32ccb10d2862c2fdfbf36ac848226c6be028af4c77b62dc150cae9ac84b263e2"
+  },
+  "validation": [
+    {
+      "command": "bash -n resource-lock test-resource-lock; compile(resource-lock-guardian source)",
+      "result": "pass"
+    },
+    {
+      "command": "/home/chiro/projects/.resource-locks/test-resource-lock",
+      "result": "pass",
+      "coverage": [
+        "existing free/busy, metadata, exit-code, admission and dual-lock tests",
+        "task closes all descriptors >=3 while lock stays busy",
+        "SIGKILL outer Bash while the no-guard-FD task remains alive",
+        "SIGKILL primary guardian while the no-guard-FD task remains alive",
+        "a blocking contender acquires only after the real task exits",
+        "no guardian process remains after the isolated test"
+      ]
+    }
+  ],
+  "production": {
+    "fault_injection_performed": false,
+    "heavy_job_started": false,
+    "status_after_test": ["local FREE", "gamepc FREE"]
+  },
+  "residual_risks": [
+    "Whole-host failure or simultaneous destruction of every guard holder can still leave a remote orphan.",
+    "A target that daemonizes violates the protocol; the lease follows the declared task root PID.",
+    "GamePC stale takeover still requires a remote process preflight."
+  ],
+  "timestamps": {
+    "started_at": "2026-09-06T08:01:58+08:00",
+    "validated_at": "2026-09-06T08:05:39+08:00",
+    "reported_at": "2026-09-06T08:05:39+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260906-026-resource-lock-guardian.md"
+}

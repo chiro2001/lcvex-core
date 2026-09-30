@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260910-001",
+  "label": "B25-UCP-INVARIANT-WAIVER-V2",
+  "state": "implementation-complete",
+  "acceptance_status": "pass-local-fixture-and-actual-t011-t013",
+  "partial": false,
+  "base_sha": "5702905425dfd149b791a7895a88ea453f8ad5a5",
+  "implementation_head": "c908140f95dc373de67b044513697fb4122ae7b2",
+  "branch": "infra/T-20260910-001-b25-ucp-invariant-v2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260910-001",
+  "owner": "root",
+  "timestamps": {
+    "initial_dispatch_sent_at": "2026-09-10T00:45:02+08:00",
+    "main_takeover_received_at": "2026-09-10T09:52:50+08:00",
+    "reported_at": "2026-09-10T10:47:02+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "takeover": {
+    "original_owner": "b25_ucp_invariant_v2",
+    "reason": "subagent platform usage limit",
+    "checkpoint_preserved": "initial physical_waivers_invariant.json draft",
+    "main_owner_actions": "completed policy, exporter, checker, fixture, provenance binding, actual report validation and documentation"
+  },
+  "files": {
+    "policy": {
+      "path": "fpga/catapult_a10/physical_waivers_invariant.json",
+      "bytes": 9991,
+      "sha256": "c1201d7f578e7bfd62480ad28e6a22ad8b58edf2bc33f2e73146c6b0236b299a",
+      "canonical_json_sha256": "1c72adbf88dc29253e3a32f66d6423621104bf43c5fd4be79dbea7c7cdee86a4"
+    },
+    "exporter": {
+      "path": "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py",
+      "bytes": 58834,
+      "sha256": "7afdb025f13408289c0ccd58fcbe9db9447dda04362e06c358852f4ca2f09b0e"
+    },
+    "checker": {
+      "path": "fpga/catapult_a10/tools/check_physical_waiver_invariants.py",
+      "bytes": 1776,
+      "sha256": "7521c1a2d70f67d47a103b73b89bf8a9a39f1cc8671f3fa8279bad8e2b29435a"
+    },
+    "fixture": {
+      "path": "fpga/catapult_a10/tools/run_physical_waiver_invariant_fixture.py",
+      "bytes": 25183,
+      "sha256": "41061a1a1cf0367f6ed0a234eca9e7b37f0174510ddbab101579a3350a32f026"
+    }
+  },
+  "contract": {
+    "version": 2,
+    "v1_preserved": true,
+    "duplicate_rule": "Only one exact terminal ~DUPLICATE on an internal endpoint may be lifted, and an unmarked base must exist in the same report. UCP rows must otherwise be identical; reset physical timing values/corners may differ but every row is independently validated.",
+    "ucp": {
+      "clocks": ["altera_reserved_tck", "soc|emif_adapter|emif_rst_sync1_n"],
+      "ports": {"altera_reserved_tdi": "input", "altera_reserved_tms": "input", "altera_reserved_tdo": "output"},
+      "normalized_paths": {"tdi": 25, "tms": 35, "tdo": 4, "input_total": 60, "output_total": 4},
+      "all_members_digest_bound": true,
+      "each_member_unique_hierarchy_class": true,
+      "empty_clock_fields": true,
+      "forbid_jtag_period_create_clock": true
+    },
+    "reset": {
+      "normalized_endpoints": 624,
+      "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+      "families": {"emif_req_q": 606, "emif_state_q": 4, "timeout_count_q": 13, "calibration_gate": 1},
+      "source": "soc|emif_adapter|emif_rst_sync1_n",
+      "launch_latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+      "cross_report_set_equality": "fast/slow recovery/removal all exact",
+      "violations": 0,
+      "require_every_detailed_slack_positive": true,
+      "forbid_reset_false_path": true
+    },
+    "provenance": {
+      "contract_lineage": "T-20260909-007 / 702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+      "measurement_profiles": ["T-20260909-011", "T-20260909-013"],
+      "candidate_identity": "task, candidate SHA/tree, branch/worktree, candidate manifest, SDC hashes, Quartus/device and immutable source pre/post manifest",
+      "content_binding": "exporter re-reads and hashes measurement artifacts and exact raw report set; checker rejects cross-profile report substitution",
+      "production_policy_guard": "canonical policy digest is embedded in the implementation; fixture policy requires explicit hidden opt-in and a task-owned ignored path"
+    }
+  },
+  "actual_validation": {
+    "t011": {
+      "raw": {"tdi": 26, "tms": 37, "tdo": 4, "reset_each": 627},
+      "normalized": {"tdi": 25, "tms": 35, "tdo": 4, "reset": 624},
+      "export": "PASS",
+      "check": "PASS",
+      "inventory": {"path": "build/agents/T-20260910-001/t011-invariant-inventory.json", "bytes": 63693, "sha256": "27ff388ba4ec185f1cb611efed91e6c001aefb873c8daa573cc0ec2a2ae03ee7"}
+    },
+    "t013": {
+      "raw": {"tdi": 25, "tms": 36, "tdo": 4, "reset_each": 626},
+      "normalized": {"tdi": 25, "tms": 35, "tdo": 4, "reset": 624},
+      "export": "PASS",
+      "check": "PASS",
+      "inventory": {"path": "build/agents/T-20260910-001/t013-invariant-inventory.json", "bytes": 62736, "sha256": "706a74342b61d018cf943987a42fd336933c46550c965ff8c4b07c4a1ed05e3f"}
+    },
+    "unprofiled_isolated_t013_clone": "REJECTED; normalized sets match but raw report hashes are not the selected reviewed measurement profile; no output emitted",
+    "mixed_t011_t013_report": "REJECTED; summary/raw counts disagree; no output emitted"
+  },
+  "fixture_validation": {
+    "matrix": {"path": "build/agents/T-20260910-001/invariant-fixture/matrix.json", "bytes": 8032, "sha256": "b7409c92abd931d5b41e4dac4fc3637c18730bc79d2df50b09fa06ebe873bccc"},
+    "positive_profiles": ["old-style duplicate selection", "new-style duplicate selection"],
+    "positive_pass": "2/2",
+    "negative_rejected": "27/27",
+    "negative_classes": [
+      "missing duplicate base",
+      "suffix variant/lowercase marker",
+      "marker in port/clock/reset source",
+      "two duplicates for one base",
+      "fast/slow UCP or timing-set drift",
+      "recovery/removal drift",
+      "endpoint deletion/replacement",
+      "hierarchy substitution",
+      "timing clock/count/detail/slack mismatch",
+      "provenance and inventory mutation",
+      "clock constraint/exception injection",
+      "production policy mutation and fixture-policy bypass"
+    ]
+  },
+  "validation_commands": [
+    {
+      "id": "pycompile",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile <three v2 tools>",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "id": "fixture-matrix",
+      "command": "python3 fpga/catapult_a10/tools/run_physical_waiver_invariant_fixture.py --output-dir build/agents/T-20260910-001/invariant-fixture",
+      "exit_code": 0,
+      "result": "2/2 positive PASS; 27/27 negative rejected"
+    },
+    {
+      "id": "actual-t011",
+      "command": "v2 exporter + checker on complete T-011 UCP/recovery/removal raw set and content-addressed measurement inputs",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "id": "actual-t013",
+      "command": "v2 exporter + checker on complete T-013 combined-clone UCP/recovery/removal raw set and T-013 candidate/SDC/manifests",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "id": "diff-check",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    }
+  ],
+  "v1_immutability": {
+    "physical_waivers.json": "284f9c140bba1c36992de222189f08c2b6b57d328949facee2d2128f0812c393",
+    "check_physical_waivers.py": "91cb58cd3046a054a6b3d21e798406ffbebc4dfdeae7baff656689dfea2d57c7",
+    "export_physical_waiver_inventory.py": "0b16b74b08307d9a67b88caf1594199079fe5f7f35766d6ec4b6c6320b7e41be",
+    "run_physical_waivers_fixture.py": "0b57b7016a901ae201c737cef26105c28513af8cf08df678ed775a3f3206cd4e",
+    "run_physical_inventory_exporter_fixture.py": "e9fec53fb37c7a800535f12991cf15782658f13a3625a9cf70e59070453a5204",
+    "all_equal_to_base": true
+  },
+  "resource_and_safety": {
+    "resource": "local light",
+    "resource_lock_required": false,
+    "gamepc_quartus_network_dut": false,
+    "rtl_sdc_qsf_manifest_modified": false,
+    "assembler_bitstream_jtag_board_flash": false
+  },
+  "integrator_review": {
+    "reviewed_at": "2026-09-10T10:53:13+08:00",
+    "integration_head": "2e7974db34b075f66dc9430de641c470e8b22d7b",
+    "pycompile": "PASS",
+    "fixture": "2/2 positive PASS; 27/27 negative rejected",
+    "actual_t011": "export/check PASS",
+    "actual_t013": "export/check PASS",
+    "matrix": {"path": "build/agents/T-20260910-001/integration/invariant-fixture/matrix.json", "bytes": 8104, "sha256": "6067ac2b38c2663e23923b3c3ffc65cbd8a123c682b95bc92d42aa6ce56d59c9"},
+    "result": "accepted"
+  },
+  "known_limits": [
+    "v2 intentionally accepts only the two reviewed measurement profiles and their content hashes; a future physical candidate needs an explicit reviewed profile addition",
+    "the strict parser inherits the Quartus 21.4 report grammar from v1 and fails closed on report-layout changes",
+    "T-013 documentary corrections are delivered separately by T-20260910-002"
+  ],
+  "handoff": "docs/handoffs/T-20260910-001-b25-ucp-invariant-waiver-v2.md"
+}

@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-015",
+  "label": "NEON-FETCH-FAULT-FPEN",
+  "state": "accepted",
+  "partial": false,
+  "acceptance_status": "integrator_pass_merged_l2_ap",
+  "base_sha": "0166ede4abab06aff35c06159acdde7570cafa6e",
+  "implementation_head": "6a910d58aef2ef3c4e905bc9933596a14edf67f2",
+  "head_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "merge_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "branch": "fix/T-20260905-015-neon-fetch-fault-fpen",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-015",
+  "scope": "修复 hard_neon_fetch_fault 的 FPEN/ISB 前置、绝对 branch PC 和 Q-store 数据页权限，并为页末 STR Q + following IABT 增加窄语义守卫；不修改 RTL、QEMU、参考结果或板级流程。",
+  "implementation": {
+    "commit": "6a910d58aef2ef3c4e905bc9933596a14edf67f2",
+    "files": [
+      "sim/difftest/test_program.py",
+      "sim/difftest/check_neon_fetch_fault.py",
+      "Makefile"
+    ],
+    "summary": "在首条 MOVI 前按 movz x5,#0x30,lsl#16; msr cpacr_el1,x5; ISB sy 设置 FPEN=11；branch 从 0x44000044 正确跳到 0x44000ffc；将 Q-store 数据页 L3 descriptor 从只读 AP=11 的 0x440024C3 修正为 EL1-RW AP=00 的 0x44002403。新增静态布局/权限、strict QEMU EC/PC、coordinator 20 条提交和 QEMU trace mem+mem2 tuple 检查，并提供旧 FPEN、旧 AP descriptor、EC=0x07 negative self-test。",
+    "sha256": {
+      "sim/difftest/test_program.py": "f23706e11e8273427e6799d4b033e73a45ee8590a2a55e731f103bcce9332204",
+      "sim/difftest/check_neon_fetch_fault.py": "ea75436ce3157c79ee1971583489675cfb602161988d4610f8dd7a74dda9f96e",
+      "Makefile": "6115edba3a850b0f9e43552606b4a0134303bddb9fe7fb22b91a866761a141b8"
+    }
+  },
+  "followup_failure": {
+    "source_sha": "0166ede4abab06aff35c06159acdde7570cafa6e",
+    "run": "build/t15/base",
+    "observed": "seq=18 page-end STR Q reached, but QEMU EC=0x25 ESR=0x9600004f FAR=0x44002000 while DUT expected EC=0x21 FAR=0x44001000",
+    "logs": {
+      "run": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-013/build/t15/base/run.log",
+      "run_sha256": "d87eb687105167ce3e28474eeb6f8cd6e9839dd709d86198b636153f0750ad9d",
+      "coord": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-013/build/t15/base/coord.log",
+      "coord_sha256": "80871429593d67df16d0786745479af88aecc32d2bcb8f37a561f0975379679a",
+      "qemu": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-013/build/t15/base/qemu.log",
+      "qemu_sha256": "646a6c10919079f99ff4ed559f34d4c327d01ed85f3e303a7f1081148cca4a41",
+      "fail": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-013/build/t15/base/fail.txt",
+      "fail_sha256": "963e5c1a1b4444fe17e808a6a8b1ade5cd335dafdd5dd7117cc219d29e6d9eac"
+    },
+    "root_cause": "L3_id[2]=0x440024C3 preserves OA/AF/valid but AP[7:6]=11 (EL1 read-only), so STR Q faults at the data VA before the following unmapped fetch",
+    "correction": "L3_id[2]=0x44002403 (AP[7:6]=00, EL1 RW; OA=0x44002000 and AF=1 unchanged)",
+    "required_retest": "base/cache strict 20/20 and semantic proof must be rerun on the corrected image"
+  },
+  "static_validation": [
+    {
+      "run_id": "owner-source-check-001",
+      "level": "L0",
+      "started_at": "2026-09-05T13:12:23+08:00",
+      "finished_at": "2026-09-05T13:12:23+08:00",
+      "source_sha": "6a910d58aef2ef3c4e905bc9933596a14edf67f2",
+      "command": "python3 -m py_compile sim/difftest/test_program.py sim/difftest/check_neon_fetch_fault.py; git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-015/static/source-check-ap-final.log",
+      "log_sha256": "c2043a7694483fdfb2d6ac75ff09e25a0dbe051b3c93b68a8635a178816a666d",
+      "resource_limit": "read-only/lightweight"
+    },
+    {
+      "run_id": "owner-semantic-guard-selftest-002",
+      "level": "L0",
+      "started_at": "2026-09-05T13:12:23+08:00",
+      "finished_at": "2026-09-05T13:12:25+08:00",
+      "source_sha": "6a910d58aef2ef3c4e905bc9933596a14edf67f2",
+      "command": "make p7-2-neon-fetch-fault-semantic-selftest",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "合法 CPACR/ISB/NEON/页末布局、EL1-RW descriptor、synthetic mem+mem2/EC=0x21 证据通过；故意旧 FPEN 布局、旧只读 descriptor 和 EC=0x07 证据均被拒绝。未启动 Verilator/QEMU/锁步/Quartus。",
+      "log": "build/agents/T-20260905-015/static/selftest-ap-final.log",
+      "log_sha256": "22e4bb9adc1228e4f8b13b00b25faaffbe58185e06c6eb8b4720fa411583b60f",
+      "resource_limit": "read-only/lightweight"
+    },
+    {
+      "run_id": "owner-image-layout-audit-003",
+      "level": "L0",
+      "started_at": "2026-09-05T13:12:25+08:00",
+      "finished_at": "2026-09-05T13:12:25+08:00",
+      "source_sha": "6a910d58aef2ef3c4e905bc9933596a14edf67f2",
+      "command": "python3 lightweight layout audit for build/agents/T-20260905-015/static/hard_neon_fetch_fault.bin",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "90112 bytes；CPACR @0x28、MSR @0x2c、ISB @0x30、MOVI @0x34；branch @0x44 -> 0x44000ffc；page-end Q store=0x3d800140；L3_id[1]=0；data descriptor=0x44002403、OA=0x44002000、AF=1、AP=00 (EL1 RW)。",
+      "artifact": "build/agents/T-20260905-015/static/hard_neon_fetch_fault.bin",
+      "artifact_sha256": "42b5b256fee8d5be1d78dba376cdfe42a868a15478f687352139a581572a21ef",
+      "log": "build/agents/T-20260905-015/static/layout-ap-final.log",
+      "log_sha256": "73c733ed5386dda1e8bb728cbe815213206d1b33a0397679b5b2cbd7d4745ae9",
+      "resource_limit": "read-only/lightweight"
+    },
+    {
+      "run_id": "owner-old-image-negative-004",
+      "level": "L0",
+      "started_at": "2026-09-05T13:12:25+08:00",
+      "finished_at": "2026-09-05T13:12:25+08:00",
+      "source_sha": "6a910d58aef2ef3c4e905bc9933596a14edf67f2",
+      "command": "python3 sim/difftest/check_neon_fetch_fault.py --image /home/chiro/projects/mycpu/lcvex-wt-T-20260905-013/build/difftest/hard_neon_fetch_fault.bin --static-only",
+      "exit_code": 1,
+      "result": "expected_reject",
+      "summary": "历史 false-green image 在旧 MOVI @0x28、缺失 CPACR/ISB、旧 branch layout 处被语义守卫拒绝；旧 AP=11 descriptor 也被拒绝。",
+      "log": "build/agents/T-20260905-015/static/old-ap-negative-final.log",
+      "log_sha256": "8c615e50b4e08b1b7df6de19aad98e38a9b975c255b08bd8c319640645455234",
+      "resource_limit": "read-only/lightweight"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "hard-neon-fetch-fault-static-image",
+      "uri": "build/agents/T-20260905-015/static/hard_neon_fetch_fault.bin",
+      "sha256": "42b5b256fee8d5be1d78dba376cdfe42a868a15478f687352139a581572a21ef",
+      "bytes": 90112,
+      "retain_until": "task-close"
+    },
+    {
+      "id": "semantic-guard",
+      "uri": "sim/difftest/check_neon_fetch_fault.py",
+      "sha256": "ea75436ce3157c79ee1971583489675cfb602161988d4610f8dd7a74dda9f96e"
+    }
+  ],
+  "integrator_dynamic_commands": {
+    "image": "conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;test_program.build_hard_neon_fetch_fault_program(\"build/difftest/hard_neon_fetch_fault.bin\")'",
+    "base_strict": "systemd-run --user --wait --collect --unit=lcvex-t015-neon-base -p WorkingDirectory=$PWD -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_fetch_fault.bin MAX_INSNS=20 PROGRESS_EVERY=1 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator PLUGIN=$PWD/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=$PWD/build/agents/T-20260905-015/l2/base/step.sock DUMP=$PWD/build/agents/T-20260905-015/l2/base/fail.txt COORD_LOG=$PWD/build/agents/T-20260905-015/l2/base/coord.log QEMU_LOG=$PWD/build/agents/T-20260905-015/l2/base/qemu.log bash sim/difftest/run_lockstep_step.sh > $PWD/build/agents/T-20260905-015/l2/base/run.log 2>&1",
+    "cache_strict": "systemd-run --user --wait --collect --unit=lcvex-t015-neon-cache -p WorkingDirectory=$PWD -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_fetch_fault.bin MAX_INSNS=20 PROGRESS_EVERY=1 COORD=$PWD/build/verilator_lockstep_l1dl2/lockstep_coordinator PLUGIN=$PWD/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=$PWD/build/agents/T-20260905-015/l2/cache/step.sock DUMP=$PWD/build/agents/T-20260905-015/l2/cache/fail.txt COORD_LOG=$PWD/build/agents/T-20260905-015/l2/cache/coord.log QEMU_LOG=$PWD/build/agents/T-20260905-015/l2/cache/qemu.log bash sim/difftest/run_lockstep_step.sh > $PWD/build/agents/T-20260905-015/l2/cache/run.log 2>&1",
+    "base_semantic": "systemd-run --user --wait --collect --unit=lcvex-t015-neon-guard-base -p WorkingDirectory=$PWD -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- conda run --no-capture-output -n lcvex python3 sim/difftest/check_neon_fetch_fault.py --image build/difftest/hard_neon_fetch_fault.bin --trace build/agents/T-20260905-015/l2/base/qemu.trace --strict-log build/agents/T-20260905-015/l2/base/qemu.log --coord-log build/agents/T-20260905-015/l2/base/coord.log --runner-log build/agents/T-20260905-015/l2/base/run.log --qemu-bin /home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 --plugin $PWD/qemu/plugins/lcvex_difftest.so --run-qemu --qemu-log build/agents/T-20260905-015/l2/base/trace-qemu.log",
+    "cache_semantic": "systemd-run --user --wait --collect --unit=lcvex-t015-neon-guard-cache -p WorkingDirectory=$PWD -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- conda run --no-capture-output -n lcvex python3 sim/difftest/check_neon_fetch_fault.py --image build/difftest/hard_neon_fetch_fault.bin --trace build/agents/T-20260905-015/l2/cache/qemu.trace --strict-log build/agents/T-20260905-015/l2/cache/qemu.log --coord-log build/agents/T-20260905-015/l2/cache/coord.log --runner-log build/agents/T-20260905-015/l2/cache/run.log --qemu-bin /home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 --plugin $PWD/qemu/plugins/lcvex_difftest.so --run-qemu --qemu-log build/agents/T-20260905-015/l2/cache/trace-qemu.log",
+    "neon_int_regression": "systemd-run --user --wait --collect --unit=lcvex-t015-neon-int -p WorkingDirectory=$PWD -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make p7-2-neon-int"
+  },
+  "integrator_validation": {
+    "level": "L2",
+    "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+    "result": "pass",
+    "summary": "base/cache strict 20/20；semantic guard 2/2；p7-2-neon-int 31/31。两案 seq18 均为 STR Q @0x44000ffc、next=0x44010200、exc=1，strict QEMU EC=0x21，trace 含两条精确 8-byte store；无 EC=0x07/0x25。",
+    "aggregate_log": "build/agents/T-20260905-015/merged-l2-ap/t015-dynamic.log",
+    "aggregate_log_sha256": "83085d934db2f4b8db4c57f02e68e6b40510b9a16646e66e706029d2e392b056",
+    "image": {
+      "path": "build/difftest/hard_neon_fetch_fault.bin",
+      "bytes": 90112,
+      "sha256": "42b5b256fee8d5be1d78dba376cdfe42a868a15478f687352139a581572a21ef"
+    },
+    "base": {
+      "run_sha256": "244281db6564c604674b0ef095d8368efeb0cc23fac245b060834f0a8e316c83",
+      "coord_sha256": "a998e35998804844c9a995c8825b471b6759cd67b4ceb80d18dd44dd0f4eeb7a",
+      "qemu_sha256": "a23cd68b1a52e8a0239e0f171d7436ce6c70c83aafaf461500a4e088f282fe5a",
+      "trace_sha256": "21e60ff0366546a378ba9f8372226e6956055d59669b84d00552d5279eddea7b"
+    },
+    "cache": {
+      "run_sha256": "244281db6564c604674b0ef095d8368efeb0cc23fac245b060834f0a8e316c83",
+      "coord_sha256": "39cfda6b42c9b932c8fa9b9b1ed4af0e4a2488e91c2832bf3fa6b35d10dc6d2b",
+      "qemu_sha256": "8399b781a6f1ac428228b4321957a4ac824d7256a6f9b28eb85cac1b37b521de",
+      "trace_sha256": "21e60ff0366546a378ba9f8372226e6956055d59669b84d00552d5279eddea7b"
+    }
+  },
+  "not_run": [
+    "Gate D、Quartus synthesis/fitter/STA、assembler、SOF/JIC/RBF、JTAG、上电和板测"
+  ],
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "rtl_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "board_action": false,
+    "heavy_verilator_or_qemu_started_by_owner": false
+  },
+  "known_limits": [
+    "静态 guard 精确绑定当前固定镜像布局和 EL1-RW 数据 descriptor；动态 guard 需 required-profile QEMU trace 与 strict runner 的独立日志共同证明 EC=0x21、页末 STR Q 及两条 8B store。",
+    "non-step QEMU trace 不注册 fork discon callback，因此 EC 以 strict step QEMU 日志为权威；trace 的 next_pc=0x44010200 与 mem+mem2 tuple 仍必须通过。",
+    "merge_sha、合并 SHA 上的完整 L0-L2、T-013 集成和任何 physical 结果由集成者补写。"
+  ],
+  "handoff": "docs/handoffs/T-20260905-015-neon-fetch-fault-fpen.md",
+  "reported_at": "2026-09-05T19:48:39+08:00",
+  "status": "accepted",
+  "next": "T-015 已被 T-013 candidate 738cc14 接受；后续保持 semantic guard 纳入 P7-2 fetch-fault 回归。"
+}

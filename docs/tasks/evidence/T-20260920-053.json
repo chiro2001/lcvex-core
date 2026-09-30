@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-053",
+  "state": "blocked",
+  "acceptance_status": "blocked-read-only-initial-golden-chain-mismatch-before-any-programming",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "branch": "verify/T-20260920-053-b25-coremark-uart-board",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-053",
+  "candidate_sof": {
+    "path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-052-b25-coremark-uart-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+    "bytes": 36842099,
+    "sha256": "39c2945466804036366a6306125323b585bef097aded7e8fff494d60a3ea2def",
+    "checksum": "0x31585D80",
+    "design_hash": "48917DD6FD70C4420BD5765A206DACBB"
+  },
+  "golden_sof": {
+    "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+    "bytes": 36844906,
+    "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "checksum": "0x31510BB6",
+    "design_hash": "193DE4BC8A30F3ED5F1F"
+  },
+  "started_at": "2026-09-27T19:06:00+08:00",
+  "finished_at": "2026-09-27T19:06:04+08:00",
+  "preflight": {
+    "result": "FAIL_CLOSED",
+    "read_only": true,
+    "pnP_inventory": {
+      "method": "Get-PnpDevice -PresentOnly",
+      "present_healthy_ftdi_0403_6014_count": 2,
+      "devices": [
+        {"status": "OK", "name": "USB Serial Converter", "instance_id": "USB\\VID_0403&PID_6014\\8&F2CB6FA&0&11"},
+        {"status": "OK", "name": "USB Serial Port (COM18)", "instance_id": "FTDIBUS\\VID_0403+PID_6014+8&F2CB6FA&0&11\\0000"}
+      ]
+    },
+    "candidate_and_golden_file_identity": "PASS",
+    "eda_conflict_count": 0,
+    "port_1310_listener_count": 0,
+    "preserved_standard_jtagserver_count": 1,
+    "preserved_standard_jtagserver_pid": 5640,
+    "jtagconfig": {
+      "exit_code": 0,
+      "invocations": 1,
+      "reported_cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+      "reported_jtag_id": "02E060DD",
+      "reported_design_hash": "BD13E12CD20E8B71E260",
+      "expected_golden_design_hash": "193DE4BC8A30F3ED5F1F",
+      "reported_uart_node": true,
+      "reported_phy_node": true,
+      "initial_golden_chain_contract": "FAIL"
+    },
+    "log": "build/agents/T-20260920-053/run/initial-hardware-preflight.log"
+  },
+  "resource": {
+    "lock": "gamepc",
+    "lock_after_run": "FREE",
+    "remote_task_root_created": false,
+    "board_runner_invoked": false
+  },
+  "safety": {
+    "candidate_program_invocations": 0,
+    "terminal_sessions": 0,
+    "golden_program_invocations": 0,
+    "quartus_pgm": 0,
+    "jtagconfig_read_only_invocations": 1,
+    "flash_or_epcq_actions": 0,
+    "reset_or_power_actions": 0,
+    "processes_stopped": 0,
+    "candidate_configuration": false,
+    "live_fpga_identity": "unproven; initial standard-server chain value is an observation only"
+  },
+  "known_limits": [
+    "The present-only FTDI enumeration confirms the GamePC sees USB VID 0403/PID 6014, but the read-only JTAG chain reports a design hash different from the frozen golden identity.",
+    "Standard jtagconfig design hashes can be cached; BD13E12CD20E8B71E260 is not treated as proof of the live FPGA image. The task's initial golden-chain gate nevertheless fails closed.",
+    "The fresh T-053 remote root/bootstrap freshness check did not run because the initial read-only gate failed; candidate, terminal and golden budgets remain unused."
+  ],
+  "next": "Wait for explicit user direction: allow a separate golden-only recovery before T-053 (adding one golden programmer transaction), manually restore/confirm exact golden and rerun the read-only gate, or stop board work.",
+  "handoff": "docs/handoffs/T-20260920-053-b25-coremark-uart-board.md"
+}

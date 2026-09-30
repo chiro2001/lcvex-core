@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-017",
+  "label": "B25-RX-CPU-OBSERVABILITY-FRESH-PHYSICAL",
+  "title": "Run fresh no-FP Quartus synthesis, fitter, STA and physical invariants for CPU-visible RX observability",
+  "kind": "fpga-physical-gate",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-physical-and-ucp-policy-integration-pass",
+  "assigned_owner": "monitor_disasm",
+  "depends_on": ["T-20260920-015", "T-20260920-016"],
+  "candidate_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+  "candidate_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+  "candidate_base_sha": "17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b",
+  "branch": "verify/T-20260920-017-b25-rx-cpu-observability-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-017-b25-rx-cpu-observability-fresh-physical",
+  "writes": [
+    "build/agents/T-20260920-017/** ignored local staging/runners/logs/reports",
+    "remote task-local root D:/Projects/fpga-altra/lcvex/build/T-20260920-017-b25-rx-cpu-observability-fresh-physical/**",
+    "docs/tasks/evidence/T-20260920-017.json",
+    "docs/handoffs/T-20260920-017-b25-rx-cpu-observability-fresh-physical.md"
+  ],
+  "reads": [
+    "T-20260920-007/T-20260920-009 physical and invariant evidence/runners as templates only",
+    "T-20260920-015 Gate D evidence",
+    "T-20260920-016 exact no-FP profile and boot identity"
+  ],
+  "scope": "Build a fresh task-owned Quartus project from profile e91d20f1 and the 2011-byte boot image. Recompute every source/stage manifest, run synthesis, fitter and STA from no prior DB, then generate overall timing, CDC/metastability, FIFO payload, data-delay and UCP/reset reports. Do not run assembler or create configuration artifacts.",
+  "input_contract": {
+    "profile_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+    "profile_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+    "a64_fp_simd": 0,
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "boot_expected_sha256": "872c3cbfdf9b1be3da2ef47f42543add6bb186e09e22169d1b169cc60918851",
+    "qsf_reference_count": 50,
+    "expected_stage_files": 174
+  },
+  "stages": ["preflight-and-fresh-root", "source-stage-and-manifest", "synthesis", "fitter", "sta-signoff", "overall-and-custom-reports", "ucp-reset-invariant", "final-acceptance-and-collection"],
+  "acceptance": {
+    "freshness": "Remote root did not exist before task creation; no db/incremental_db/output_files/config artifacts are imported. T-007 fitted DB/T-009 UCP/T-010 SOF are never copied.",
+    "source": "174-file stage and all 50 QSF references close; local/remote pre/post manifests and bound QPF/QSF/SDC/boot/RTL hashes match the candidate and remain immutable.",
+    "flow": "Quartus 21.4 synthesis, fitter and sta_signoff each exit 0, Successful, 0 errors, one process at a time.",
+    "timing": "sys_clk_25 and global setup/hold/recovery/removal/min-pulse all nonnegative; clocks/exceptions/ignored rows reviewed; Fmax and EMIF crossings recorded.",
+    "physical": "DDR/metastability PASS; FIFO payload 24/24; data-delay 20/20 with correct cardinality; no unexpected exception/ignored rows.",
+    "ucp": "Fresh raw UCP/reset reports normalize to the established policy with zero violations; recovery/removal nonnegative and provenance bound to this candidate.",
+    "artifact_boundary": "SOF/POF/JIC/RBF/JBC/SVF/JAM counts all zero; assembler is a separate task only after acceptance."
+  },
+  "resource": "Every GamePC action holds resource-lock gamepc. One Quartus process at a time; max processors 16 on the 24-thread host, minimum free physical memory 8192 MiB, exclusive lock means no separate 16 GiB hard cap. Use task-local paths and event-driven monitoring with up to one-hour waits.",
+  "forbidden_regions": [
+    "source/profile tracked files",
+    "T-007/T-009/T-010 DB, reports or configuration artifacts as physical evidence",
+    "assembler and all SOF/POF/JIC/RBF/JBC/SVF/JAM generation",
+    "JTAG/board/Flash/reset/power actions",
+    "stopping unknown or pre-existing processes"
+  ],
+  "created_at": "2026-09-20T10:15:20+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-20T10:16:35+08:00",
+    "agent_name": "rx_rtl_trace",
+    "model": "dsh-default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "reassignment": {
+    "sent_at": "2026-09-20T12:17:25+08:00",
+    "agent_name": "monitor_disasm",
+    "reason": "original owner returned an unrelated T-018 report after acceptance-v3 dispatch; T-017 authoritative fitted root remains preserved and clean",
+    "scope": "diagnose and complete report-only acceptance-v3/UCP without rerunning synthesis/fitter/STA"
+  },
+  "result": {
+    "status": "physical-pass",
+    "candidate_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+    "task_head_sha": "1956b6961d6044b240e9306ca6452478734f78ad",
+    "synthesis_fitter_sta": "PASS",
+    "overall_fifo_data_delay": "PASS; FIFO 24/24, data-delay 20/20",
+    "ucp_measurement": "PASS; normalized 60 input, 624 reset, zero violations",
+    "config_artifacts": 0,
+    "evidence": "docs/tasks/evidence/T-20260920-017.json",
+    "handoff": "docs/handoffs/T-20260920-017-b25-rx-cpu-observability-fresh-physical.md",
+    "ucp_policy_integration": "PASS; T-20260920-019 reviewed and integrated the candidate-specific invariant profile without changing waiver semantics; merged-SHA exporter/checker and 2/2 positive plus 27/27 negative fixtures pass",
+    "next": "T-20260920-020 assembler/SOF packaging from a fresh task-owned clone of the accepted T-017 fitted database"
+  },
+  "updated_at": "2026-09-20T12:53:04+08:00"
+}

@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-029",
+  "label": "R20-ARITH-ROUTE-CLOSURE",
+  "state": "review",
+  "partial": true,
+  "acceptance_status": "static-lane-pass-heavy-validation-pending",
+  "base_sha": "ef72f312350a682ef19628be6a9ab5e567fa0edf",
+  "registered_base_sha": "59c8d78bbb13f834c801e4897ad7c23ac698e833",
+  "functional_base_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "implementation_head": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+  "branch": "timing/T-20260906-029-r20-arith-route",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-029",
+  "owner": "r20_arith_route",
+  "model": "platform-default-confirmed-gpt-5.6-luna-max",
+  "reasoning_effort": "max",
+  "dispatch_model_argument_omitted": true,
+  "sent_at": "2026-09-06T11:52:11+08:00",
+  "received_at": "2026-09-06T11:52:11+08:00",
+  "reported_at": "2026-09-06T12:15:33+08:00",
+  "cone_id": "r19-ap-pre-to-pp-pre",
+  "write_regions": [
+    "rtl/lcvex_fp_scalar.sv::g_iter.IT_ARITH non-half routing only",
+    "tb/sv/lcvex_fp_scalar_r20_route_tb.sv",
+    "docs/tasks/evidence/T-20260906-029.json",
+    "docs/handoffs/T-20260906-029-r20-arith-route.md"
+  ],
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_scalar_r20_route_tb.sv"
+    ],
+    "rtl_sha256": "6462d2d821f397db2508c84a18f034d7cda01fe6820c3790b168d9479b6c8986",
+    "focused_tb_sha256": "0c7ad12a2961cc635d0c91f188e88f5561f9ecfbf760cb8af4e845f688c2434b",
+    "implementation_commit": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+    "summary": "将非 half IT_ARITH 路由改为闭合 unique case：ADD/SUB 进入 IT_ALIGN，MUL/FMA 四族进入 IT_MUL，SCVTF/UCVTF 进入 IT_PREP；default 仅写零化 pp_pre 并保留 IT_PREP 边界，不再调用 binary_pre_parts(ap_pre...)。",
+    "supported_nonhalf_ops": [
+      "FP_OP_ADD",
+      "FP_OP_SUB",
+      "FP_OP_MUL",
+      "FP_OP_FMADD",
+      "FP_OP_FMSUB",
+      "FP_OP_FNMADD",
+      "FP_OP_FNMSUB",
+      "FP_OP_SCVTF",
+      "FP_OP_UCVTF"
+    ],
+    "route_table": [
+      {
+        "ops": ["FP_OP_ADD", "FP_OP_SUB"],
+        "next_state": "IT_ALIGN",
+        "helper": "binary_align_parts"
+      },
+      {
+        "ops": ["FP_OP_MUL", "FP_OP_FMADD", "FP_OP_FMSUB", "FP_OP_FNMADD", "FP_OP_FNMSUB"],
+        "next_state": "IT_MUL",
+        "helper": "mul_product_pre"
+      },
+      {
+        "ops": ["FP_OP_SCVTF", "FP_OP_UCVTF"],
+        "next_state": "IT_PREP",
+        "helper": "int_to_fp_pre"
+      }
+    ],
+    "default": {
+      "next_state": "IT_PREP",
+      "payload": "pp_pre='0",
+      "wide_helper_call": false,
+      "invalid_op_finish": "current invalid op reaches IT_IDLE and exposes deterministic zero result/flags"
+    },
+    "assertions": "Four local route next-state properties are guarded by !SYNTHESIS; they cover the three supported families and the default prep/zero path while excluding pause/kill/valid-drop cycles."
+  },
+  "semantic_invariants": {
+    "state_enum": "unchanged",
+    "public_interface": "unchanged",
+    "latency_table": "unchanged",
+    "supported_operation_latency": "unchanged",
+    "half_path": "unchanged; existing ap_pre_lo/hi route remains outside the non-half case",
+    "reset_kill_pause_valid": "unchanged for existing payload/state handling; focused TB covers route-boundary behavior",
+    "slot_output": "not touched",
+    "round_pack_and_pack_output": "not touched",
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "false_path_added": false
+  },
+  "runs": [
+    {
+      "run_id": "owner-diff-check",
+      "level": "static",
+      "source_sha": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+      "command": "git diff --check HEAD^ HEAD",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-rtl-verilator-lint",
+      "level": "lightweight-elaboration",
+      "source_sha": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "allocated_memory_mb": 103.438
+    },
+    {
+      "run_id": "owner-route-tb-verilator-lint",
+      "level": "lightweight-elaboration",
+      "source_sha": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL --top-module lcvex_fp_scalar_r20_route_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r20_route_tb.sv",
+      "exit_code": 0,
+      "result": "pass_with_expected_warning",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "warning": "MULTIDRIVEN on private ap_pre is intentional: illegal_default_probe forces ap_pre.op to exercise the otherwise unreachable default; no error or unrelated diagnostic."
+    },
+    {
+      "run_id": "owner-synthesis-preprocess-lint",
+      "level": "lightweight-elaboration",
+      "source_sha": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -DSYNTHESIS rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0"
+    },
+    {
+      "run_id": "owner-route-static-grep",
+      "level": "static",
+      "source_sha": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+      "command": "if rg -n 'binary_pre_parts\\(ap_pre\\.op' rtl/lcvex_fp_scalar.sv; then exit 1; else echo 'PASS no non-half binary_pre_parts(ap_pre.op) call'; fi",
+      "exit_code": 0,
+      "result": "pass",
+      "notes": "No non-half generic binary_pre_parts(ap_pre.op, ...) call remains; half ap_pre_lo/hi calls are outside this lane and unchanged."
+    }
+  ],
+  "not_run": [
+    "focused Verilator binary execution (forbidden by timing-batch lane scope)",
+    "existing scalar/NEON SV runtime suites",
+    "Cocotb and QEMU/strict lockstep",
+    "merged-candidate L0-L2 union",
+    "Quartus synthesis/fitter/signoff STA",
+    "assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on or board test"
+  ],
+  "policy": {
+    "active_task_modified": false,
+    "rtl_modified": true,
+    "qemu_modified": false,
+    "qsf_or_sdc_modified": false,
+    "public_interface_modified": false,
+    "state_enum_modified": false,
+    "latency_table_modified": false,
+    "half_path_modified": false,
+    "slot_output_modified": false,
+    "heavy_validation_run": false,
+    "quartus_or_physical_run": false,
+    "assertions_disabled": false,
+    "reference_results_modified": false
+  },
+  "known_limits": [
+    "本 lane 只完成静态/轻量 elaboration；新 TB 未执行，不能作为功能绿证据。",
+    "新 TB 的非法 default 覆盖使用层次 force，lint 会报告预期 MULTIDRIVEN；该 force 仅用于打通不可达分支，未改变 RTL 接口。",
+    "集成者必须在 T-028 合并 SHA 上运行新 TB、既有 scalar/NEON SV+Cocotb 及受影响 L0-L2 union，并确认 T-030 合入后的联合行为。",
+    "实际 ap_pre->pp_pre 时序、面积和新 top-N 只能由后续 physical flow 评估；本 lane 不宣称 timing closure。"
+  ],
+  "merge_sha": null,
+  "integrator_review": {
+    "status": "pending",
+    "received_at": null,
+    "merged_at": null,
+    "notes": "等待 T-028 集成者按登记顺序合入并在合并 SHA 上联合验证。"
+  },
+  "handoff": "docs/handoffs/T-20260906-029-r20-arith-route.md",
+  "next": "Integrator checks write-region/latency invariants, merges ffe61e36 into the T-028 candidate before T-030, then runs the complete affected L0-L2 union and one later physical flow."
+}

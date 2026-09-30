@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-012",
+  "label": "B25-RX-CPU-VISIBLE-OBSERVABILITY-BATCH",
+  "title": "Correlate bridge, response-path, firmware dispatch and TX acceptance for physical JTAG-UART RX",
+  "kind": "diagnostic-batch-parent",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "combined-focused-response-trace-and-vendor-full-soc-pass",
+  "assigned_owner": "root",
+  "triggered_by": "T-20260920-011 partial evidence",
+  "depends_on": ["T-20260920-001", "T-20260920-005"],
+  "base_sha": "84cee3f202889fcfc036ea4545c51d1d36f9bca5",
+  "base_tree_sha": "3277d79bd882d7fea9b53f8ad8bd85eaf791ce1b",
+  "branch": "batch/T-20260907-037-b25-bringup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037",
+  "children": ["T-20260920-013", "T-20260920-014"],
+  "writes": [
+    "docs/tasks/active/T-20260920-012.json",
+    "docs/tasks/active/T-20260920-013.json",
+    "docs/tasks/active/T-20260920-014.json",
+    "scripts/test_registry.json only by the integrator after both lanes merge",
+    "batch integration evidence/handoff only"
+  ],
+  "scope": "Run two independent write lanes from one frozen base. T-013 adds read-only hardware path observation and vendor-timed verification. T-014 adds firmware-visible getc/dispatch/putc diagnostics and rotating bounded output. Merge each lane only into a temporary batch candidate, then run their affected L0-L2 union. No functional datapath fix is permitted until the first divergent boundary is demonstrated.",
+  "frozen_observability_abi": {
+    "base": "0x09003000",
+    "existing": {
+      "0x00": "platform calibration/status",
+      "0x08": "completed JTAG DATA-read count",
+      "0x10": "RVALID count/RX-seen/last byte"
+    },
+    "new_read_only_offsets": {
+      "0x18": "last matched JTAG bridge DATA response with RVALID=1, low 32 bits",
+      "0x20": "last matched router/PoC DATA response with RVALID=1, low 32 bits",
+      "0x28": "last matched core dmem DATA response with RVALID=1, low 32 bits",
+      "0x30": "path event counts and sticky fault flags",
+      "0x38": "accepted JTAG TX write count/seen/last byte"
+    },
+    "path_count_format": "bits31:24 bridge valid-event count, 23:16 PoC valid-event count, 15:8 dmem valid-event count; bit2=dmem sticky fault, bit1=PoC sticky fault, bit0=bridge sticky fault, bits7:3=0; valid-event counts wrap modulo 256 and empty DATA responses do not increment or overwrite raw values",
+    "tx_event_format": "bits31:16 bridge/Avalon accepted DATA-write count, bit8 TX-seen, bits7:0 last accepted byte; count wraps modulo 65536 and does not claim vendor FIFO enqueue when overflow is possible",
+    "reset": "all new hardware observation registers, counts and sticky flags reset to zero",
+    "sampling": "each stage uses one pending token created only by an accepted CPU-originated read of UART DATA 0x09000000 and cleared by its matched response fire, including fault responses; raw/count update only when matched rdata[15]=1; observation must not drive ready/valid, request, response or architectural state"
+  },
+  "firmware_output_contract": {
+    "line_limit": "Every emitted diagnostic line must be shorter than the 64-byte vendor TX FIFO; do not emit multiple diagnostic pages in one burst.",
+    "rotation": [
+      "RXDBG %08X %08X\\r\\n keeps the existing read-count and RX-event fields (25 bytes)",
+      "RXPATH %08X %08X %08X %08X\\r\\n reports bridge, PoC, dmem raw response and packed path counts (44 bytes)",
+      "RXCPU %08X %08X %08X %08X\\r\\n reports getc, dispatch, putc and hardware TX packed events (43 bytes)"
+    ],
+    "schedule": "startup emits RXDBG without advancing autonomous state; the first 0x40000-poll autonomous observation also emits RXDBG, then autonomous calls rotate RXPATH -> RXCPU -> RXDBG; manual d always emits RXDBG and never reads or advances the autonomous page",
+    "software_reset": "page index, getc-valid count/last raw, dispatch count/code/byte and putc write/drop counts initialize to zero at _start",
+    "compatibility": "Existing RXDBG first two fields retain their meaning; parsing must use the explicit page prefix."
+  },
+  "acceptance": {
+    "lane_independence": "T-013 and T-014 stay within disjoint declared writes and make no functional response-path change.",
+    "hardware_lane": "Vendor-timed single-byte tests prove bridge->PoC->dmem response payload equality, exactly-once counts, reset/fault behavior and read-only status mapping.",
+    "firmware_lane": "Boot image contract and CAL-WAIT full-SoC tests prove page rotation, getc/dispatch/putc accounting and unchanged p/?/d/Z behavior with every line below 64 bytes.",
+    "combined": "On the merged batch SHA, affected L0-L2 and existing vendor/full-SoC regressions pass; each injected byte has an identical full 32-bit vendor DATA word at bridge/PoC/dmem and correct software dispatch/TX accounting. In the controlled one-byte vendor model this word is 0x0000A400|byte, including RVALID, TX-not-full and AC status bits.",
+    "stop_rule": "Any pre-existing source failure must identify the first divergent boundary and stop before a functional RTL edit."
+  },
+  "resource": "Analysis and small Icarus runs are light. Any Verilator/full-SoC job obtains the local resource lock and uses a unique task output path. T-013 and T-014 may not run heavy jobs concurrently. This batch does not use GamePC, Quartus, JTAG or the board.",
+  "forbidden_regions": [
+    "functional ready/valid or response datapath changes",
+    "rtl/lcvex_core.sv, rtl/lcvex_catapult_soc_coh.sv and cache functional logic",
+    "vendor-generated JTAG-UART HDL",
+    "QSF, SDC, platform manifest or T-010 SOF",
+    "QEMU, Flash/JIC/EPCQ, reset, power or board actions"
+  ],
+  "created_at": "2026-09-20T06:17:59+08:00",
+  "integration": {
+    "candidate_sha": "84715ac674366e9fa26556d97d197599731de832",
+    "candidate_boot_bytes": 2011,
+    "candidate_boot_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "focused": "PASS; status ABI, observer unit and vendor bridge",
+    "image_contract": "PASS emit/check",
+    "heavy": "PASS on clean r4: response trace 4/4/4 with full-word equality and vendor CAL-OK/CAL-WAIT/CAL-FAIL full-SoC SOC_B25_ALL_PASS",
+    "evidence": "docs/tasks/evidence/T-20260920-012.json",
+    "handoff": "docs/handoffs/T-20260920-012-b25-rx-cpu-visible-observability-batch.md"
+  },
+  "updated_at": "2026-09-20T09:29:16+08:00"
+}

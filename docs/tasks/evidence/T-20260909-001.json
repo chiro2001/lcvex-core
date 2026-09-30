@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-001",
+  "label": "B25-BRAM-NONCIRCULAR-ORACLE",
+  "state": "done",
+  "acceptance_status": "oracle-and-fault-matrix-pass",
+  "partial": false,
+  "base_sha": "5e89563ba5e6577d6f81df5f08a19769fcada2ef",
+  "implementation_source_sha": "5e89563ba5e6577d6f81df5f08a19769fcada2ef",
+  "dispatch_parent_sha": "32286cdf835d948881fdb6b578515629243f929d",
+  "dispatch_commit": "1d6c1dc03d583a5b50620019e89b8c51447b4535",
+  "checked_head_before_docs": "5e89563ba5e6577d6f81df5f08a19769fcada2ef",
+  "branch": "fix/T-20260909-001-b25-bram-noncircular-oracle",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-001",
+  "owner": "b25_gate_d",
+  "timestamps": {
+    "sent_at": "2026-09-09T00:28:09+08:00",
+    "received_at": "2026-09-09T00:28:09+08:00",
+    "run_started_at": "2026-09-09T00:53:56+08:00",
+    "run_finished_at": "2026-09-09T00:54:07+08:00",
+    "reported_at": "2026-09-09T00:54:29+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "registration": {
+    "task_file": "docs/tasks/active/T-20260909-001.json",
+    "registration_commit": "32286cdf835d948881fdb6b578515629243f929d",
+    "dispatch_commit": "1d6c1dc03d583a5b50620019e89b8c51447b4535",
+    "checkout_registration_gap": true,
+    "checkout_gap_reason": "Base 5e89563b predates task registration. The active task JSON is not present in this worktree; registration and dispatch commits were inspected read-only and not modified."
+  },
+  "objective": "Replace the link-layout-dependent reset-word constant with an independent ELF-derived 64 KiB expected image; verify the AArch64 reset structure and complete ELF/BIN/HEX/MIF provenance; preserve BRAM boundary and byte-lane coverage.",
+  "write_scope": {
+    "tracked": [
+      "fpga/catapult_a10/boot/check_image_contract.py",
+      "fpga/catapult_a10/tools/run_bram_init25_test.sh",
+      "tb/sv/lcvex_bram_init25_tb.sv",
+      "docs/tasks/evidence/T-20260909-001.json",
+      "docs/handoffs/T-20260909-001-b25-bram-noncircular-oracle.md"
+    ],
+    "ignored_generated": "build/agents/T-20260909-001/**",
+    "forbidden_unchanged": [
+      "RTL",
+      "fpga/catapult_a10/boot/boot.S",
+      "fpga/catapult_a10/boot/boot.ld",
+      "fpga/catapult_a10/boot/build.sh",
+      "fpga/catapult_a10/boot/bin_to_mif.py",
+      "QSF",
+      "shared Makefile",
+      "scripts/test_registry.json",
+      "QEMU/reference/expectations",
+      "active task/TASKS/PROJECT_STATUS/ROADMAP"
+    ]
+  },
+  "source_identity": {
+    "rtl_bram_sha256": "7a3c4ae2328dbd81cd55ff5265e538db4ff312582ff9bfbee49bd9d3f837bf00",
+    "boot_source_sha256": "5bc1bf0f08d14890307229c450c46508a0f8e44af8fcd15df343413d134b8443",
+    "boot_linker_sha256": "8633c608b75f2a2ed0f4e64414bf3f93f26d745415399592005726e43d14abb9",
+    "boot_build_sha256": "3410974f09765982b8566fa143ea4f64732a6d7d14a4328120d6ea96e78bdc2d",
+    "bin_to_mif_sha256": "2ebbf3968c495e96e3fcc51a02d51dafc2ea47b5ac9c76898d9d4681387bd67f",
+    "original_tb_sha256": "3f7b0153a037e2aae42ddfed6558f37e8bd3ca60febc2472dcd40397c9268328",
+    "modified_tb_sha256": "437d44b39de755cba4b771aa4f2de60dcfb64553ef16ce7b0460e944ad13eee6",
+    "working_tree_clean_before_task": true,
+    "forbidden_source_changes": 0
+  },
+  "implementation": {
+    "checker": {
+      "path": "fpga/catapult_a10/boot/check_image_contract.py",
+      "sha256": "daf8a4a12ef23419d53ab9b7803ecdb3b958d951bb8b47311e94cf6793b4aa9f",
+      "modes": ["--emit", "--check"],
+      "independence": "Derives expected bytes only from ELF64 PT_LOAD and symbols; it never reads DUT debug output and never derives expected bytes from boot.hex or boot.mif.",
+      "elf_checks": [
+        "Require ELF64 little-endian executable, e_machine=AArch64, entry=0 and _start=0.",
+        "Parse every PT_LOAD, require load start 0 and all file/memory bytes within the 64 KiB BRAM window.",
+        "Decode word 0 as LDR X0 literal, sign-extend imm19<<2 from PC=0, resolve its 64-bit little-endian literal and require it equals __stack_top=0x10000.",
+        "Decode word 1 structurally as ADD XSP,X0,#0 (MOV SP,X0): sf=1, op=ADD, S=0, shift=0, imm12=0, Rn=X0, Rd=SP."
+      ],
+      "artifact_checks": [
+        "Require boot.bin to equal the contiguous ELF PT_LOAD payload exactly.",
+        "Require boot.hex to be strict one-byte-per-line ASCII HEX and equal boot.bin byte-for-byte.",
+        "Require MIF WIDTH=64, DEPTH=8192, hexadecimal radices, exactly 8192 records, and little-endian words equal the ELF-derived 64 KiB image including zero padding.",
+        "Emit exactly 65536 expected byte-HEX records plus a manifest binding file and decoded hashes for ELF/BIN/HEX/MIF/expected/source inputs.",
+        "Check manifest canonical SHA-256, artifact paths, artifact hashes, expected decoded hash, ELF layout/reset metadata and source hashes."
+      ]
+    },
+    "runner": {
+      "path": "fpga/catapult_a10/tools/run_bram_init25_test.sh",
+      "sha256": "45974033dd43309e97ff8bbf97dac5402627ddb5441a9fea9fdefdf02248a8db",
+      "positive": "Builds task-local boot artifacts, emits/checks the ELF-derived oracle, then compiles and runs the TB with explicit BOOT_HEX_FILE and EXPECTED_IMAGE_FILE string parameters.",
+      "negative": "Creates only task-local fixture copies and expects checker failure for 13 corruption/path/hash cases.",
+      "resource": "Wraps Verilator compile/runtime in resource-lock local, systemd-run user scope, MemoryMax=16G, MemorySwapMax=0, TMPDIR under task build, VERILATOR_JOBS=1.",
+      "pass_gate": "Requires both process exit 0 and an exact BRAM_INIT25_TB PASS line; a TB FAIL marker cannot be accepted with exit 0."
+    },
+    "tb": {
+      "path": "tb/sv/lcvex_bram_init25_tb.sv",
+      "expected_parameter": "EXPECTED_IMAGE_FILE",
+      "boot_parameter": "BOOT_HEX_FILE",
+      "oracle_use": "Loads independent expected_mem with $readmemh and assembles expected debug words from expected_mem[address+i].",
+      "coverage": [
+        "Reset/debug words at 0x0 and 0x8",
+        "Reserved stack debug words at 0xF000 and 0xFFF8 plus all stack bytes zero",
+        "0xFFFC/0xFFFF in-range accesses",
+        "0xFFFC eight-byte and 0xFFFF two-byte cross-boundary faults",
+        "exclusive 0x10000 top fault",
+        "program port remains idle"
+      ]
+    }
+  },
+  "tools": {
+    "python": {
+      "path": "/home/chiro/miniforge3/bin/python3",
+      "version": "Python 3.12.10",
+      "sha256": "1bd14e3108945fd71ae43fdeb640ac61135ef5a51c33fbd04e65e182b4cc8d02"
+    },
+    "verilator": {
+      "path": "/home/chiro/miniforge3/envs/lcvex/bin/verilator",
+      "version": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "sha256": "9213a72d341fd00d389936e45a16975b27b1f6725696fd303e4559b8f8c4bda3"
+    },
+    "aarch64_as": {
+      "path": "/usr/bin/aarch64-linux-gnu-as",
+      "version": "GNU assembler (GNU Binutils) 2.47",
+      "sha256": "d798e501ac1a4a674106e132865ba18236bb7e36304d18a1b886595b839f9f44"
+    },
+    "aarch64_ld": {
+      "path": "/usr/bin/aarch64-linux-gnu-ld",
+      "version": "GNU ld (GNU Binutils) 2.47",
+      "sha256": "4416c3c8b866fc4607e977ab4a6c1751b2ed6debfc090e9165161c96bc1b6d60"
+    },
+    "aarch64_objcopy": {
+      "path": "/usr/bin/aarch64-linux-gnu-objcopy",
+      "version": "GNU objcopy (GNU Binutils) 2.47",
+      "sha256": "1c66d805236ae2ca56c19ab894afd41d0d3c240e352d972ac1270b8d4131d99"
+    },
+    "aarch64_readelf": {
+      "path": "/usr/bin/aarch64-linux-gnu-readelf",
+      "version": "GNU readelf (GNU Binutils) 2.47",
+      "sha256": "df6221c7c23ae4f322f0c78db352f931c5b339bfc8b115c4904e4e2351d99699"
+    },
+    "resource_lock": {
+      "path": "/home/chiro/projects/.resource-locks/resource-lock",
+      "sha256": "31dd3f0d5069b4c44767afbc26bd7d01435c39de7e81d855bf9c41ec4d2ea058"
+    },
+    "systemd_run": {
+      "path": "/usr/bin/systemd-run",
+      "sha256": "e14f7e69b1c30ae2135de4abc8df315fe2f23a92ab5ee39d41d4fa5f0b0c6339"
+    },
+    "busybox_time": {
+      "path": "/usr/bin/busybox",
+      "version": "BusyBox v1.36.1-4",
+      "sha256": "5b882b9edba7516ecb6f0b15f92c900bbd64230ef255142b96d7dd0d60783406"
+    }
+  },
+  "artifacts": {
+    "boot_build": {
+      "directory": "build/agents/T-20260909-001/boot",
+      "boot.elf": {"bytes": 68832, "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"},
+      "boot.bin": {"bytes": 957, "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"},
+      "boot.hex": {"bytes": 2871, "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"},
+      "boot.mif": {"bytes": 204942, "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7"}
+    },
+    "oracle": {
+      "directory": "build/agents/T-20260909-001/final-run/oracle",
+      "expected_image_hex": {"bytes": 196608, "sha256": "4ef1195a185150b8ec9fba5acdcb0b44b4125e9f22a648db82368f26a4b2c57c", "decoded_bytes": 65536, "decoded_sha256": "7889fff7ca07867da8827cede9d0444ed306b7a2be42e2b2f934ec66be9b643b"},
+      "manifest": {"bytes": 3572, "sha256": "ea23bada3fee2e73f36f15f790b4cde9d7d5d17436eff173205af418b5ab590b", "manifest_sha256": "ed731c588379a2c665a98e305e2957c03182a6e0e6c61ff0659f13b6ca8a7be4"}
+    },
+    "logs": {
+      "runner_full": {"path": "build/agents/T-20260909-001/final-run.log", "sha256": "87e7ad7faba502f0439c811ca67268a8770d044968cd108ac9e6f1c54ad28008"},
+      "boot_build": {"path": "build/agents/T-20260909-001/final-run/boot-build.log", "sha256": "c3cd093f57c685bf555578c7cb14729bcb05c3e06f77bf5b0b92e73e1608cdef"},
+      "checker_build": {"path": "build/agents/T-20260909-001/final-run/oracle/contract-emit.log", "sha256": "58b2c80a56929b57eeebc82718a004c7a16d883b811a2873ba8ee7f72e25e27a"},
+      "checker_check": {"path": "build/agents/T-20260909-001/final-run/oracle/contract-check.log", "sha256": "3ba8e3e8a8ccd911c03bc6484ad0843eeb49aedff8e81a978302d47d4d08c2b5"},
+      "verilator_build": {"path": "build/agents/T-20260909-001/final-run/verilator-build.log", "sha256": "7b5bd96b3790410f896c0b791619f319538bc1b63343b7809ac069fd43396a8e"},
+      "verilator_run": {"path": "build/agents/T-20260909-001/final-run/verilator-run.log", "sha256": "3bea6031d2739c578c8d0ad76269c032d9fe53abfd70e76bde51bebab6653aba"},
+      "heavy_wrapper": {"path": "build/agents/T-20260909-001/final-run/heavy-wrapper.log", "sha256": "80ebcd15a7411a2b5861e4d357bd5e3b36b55cd1bcbd03f0e907d2d41767ccb6"}
+    }
+  },
+  "image_contract": {
+    "elf_entry": "0x0",
+    "elf_load_extent": 957,
+    "elf_pt_load_filesz": 957,
+    "elf_pt_load_memsz": 968,
+    "expected_image_bytes": 65536,
+    "zero_pad_bytes": 64579,
+    "reset_first_instruction": "0x58001700",
+    "reset_second_instruction": "0x9100001f",
+    "ldr_imm19": 184,
+    "ldr_literal_target": "0x2e0",
+    "ldr_literal_value": "0x0000000000010000",
+    "stack_top": "0x10000",
+    "mif_width": 64,
+    "mif_depth": 8192,
+    "mif_records": 8192,
+    "mif_little_endian_lane_zero": true,
+    "byte_comparisons": {
+      "elf_load_equals_bin": true,
+      "bin_equals_decoded_hex": true,
+      "mif_equals_elf_derived_image": true,
+      "mif_padding_all_zero": true,
+      "mismatch_counts": {"elf_bin": 0, "bin_hex": 0, "mif_expected": 0}
+    },
+    "first_bytes": "00 17 00 58 1f 00 00 91",
+    "first_mif_record": "0000 : 9100001F58001700;"
+  },
+  "fault_injection": {
+    "total": 13,
+    "passed_expected_failures": 13,
+    "cases": [
+      {"name": "missing_expected", "mutation": "remove expected image path", "failure": "expected image missing"},
+      {"name": "wrong_hex_path", "mutation": "remove boot.hex path", "failure": "boot.hex missing"},
+      {"name": "reset_byte", "mutation": "flip ELF reset byte", "failure": "reset word 0 is not LDR X0 literal"},
+      {"name": "imm19_target", "mutation": "flip ELF LDR imm19 bit", "failure": "LDR literal target/value mismatch"},
+      {"name": "mov_sp", "mutation": "flip ELF MOV SP,X0 field", "failure": "reset word 1 is not MOV SP,X0"},
+      {"name": "byte_reverse_bin", "mutation": "reverse first eight BIN bytes", "failure": "boot.bin differs from ELF PT_LOAD"},
+      {"name": "word_swap_bin", "mutation": "swap the two 32-bit reset words in BIN", "failure": "boot.bin differs from ELF PT_LOAD"},
+      {"name": "hex_byte", "mutation": "flip first HEX byte", "failure": "boot.hex differs from boot.bin"},
+      {"name": "hex_extra", "mutation": "append one HEX byte", "failure": "boot.hex differs from boot.bin"},
+      {"name": "mif_lane", "mutation": "reverse bytes in MIF record 0000", "failure": "MIF payload differs at offset 0"},
+      {"name": "mif_record", "mutation": "duplicate MIF address 0000", "failure": "duplicate MIF address 0x0"},
+      {"name": "mif_nonzero_padding", "mutation": "set MIF address 1FFF to one", "failure": "MIF payload differs at offset 65528"},
+      {"name": "stale_expected_hash", "mutation": "flip first expected-image byte without manifest update", "failure": "manifest expected-image file hash binding mismatch"}
+    ],
+    "fixture_root": "build/agents/T-20260909-001/final-run/faults",
+    "all_task_local": true
+  },
+  "validation": [
+    {
+      "run_id": "syntax-and-static",
+      "level": "L0_static",
+      "commands": [
+        "bash -n fpga/catapult_a10/tools/run_bram_init25_test.sh",
+        "python3 compile() of fpga/catapult_a10/boot/check_image_contract.py",
+        "git diff --check",
+        "manifest binding assertions"
+      ],
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "final-runner",
+      "level": "L1_SV_plus_L0_contract",
+      "command": "LCVEX_BRAM_INIT25_TEST_DIR=build/agents/T-20260909-001/final-run bash fpga/catapult_a10/tools/run_bram_init25_test.sh",
+      "started_at": "2026-09-09T00:53:56+08:00",
+      "finished_at": "2026-09-09T00:54:07+08:00",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_BOOT_BUILD_PASS; IMAGE_CONTRACT emit/check PASS; NEGATIVE_SUMMARY pass=13 total=13; Verilator compile/runtime PASS; exact BRAM_INIT25_TB PASS marker.",
+      "runner_log": "build/agents/T-20260909-001/final-run.log",
+      "runner_log_sha256": "87e7ad7faba502f0439c811ca67268a8770d044968cd108ac9e6f1c54ad28008"
+    },
+    {
+      "run_id": "resource-lock-verilator",
+      "level": "L1",
+      "lock_command": "/home/chiro/projects/.resource-locks/resource-lock run local mycpu T-20260909-001 b25_boot_oracle --min-local-available-mib 8192 --meta stage=bram-init25-verilator --meta source_sha=5e89563ba5e6577d6f81df5f08a19769fcada2ef --meta verilator_jobs=1 -- systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env TMPDIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260909-001/build/agents/T-20260909-001/final-run/tmp VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_bram_init25_test.sh --heavy-run ...",
+      "result": "pass",
+      "resource_policy": "local lock acquired; final status local FREE; gamepc FREE",
+      "verilator_jobs": 1,
+      "memory_max": "16G",
+      "memory_swap_max": "0",
+      "compile_max_rss_kib": 1472000,
+      "runtime_max_rss_kib": 19088,
+      "verilator_reported_compile_allocated_mb": 27.562,
+      "verilator_reported_runtime_allocated_mb": 8,
+      "positive_sim_finish_ns": 225
+    },
+    {
+      "run_id": "boot-image-build",
+      "level": "L0",
+      "command": "LCVEX_BOOT_BUILD_DIR=build/agents/T-20260909-001/boot bash fpga/catapult_a10/boot/build.sh",
+      "result": "pass",
+      "summary": "957-byte boot.bin; generated MIF generator self-check; existing linker RWX warning only.",
+      "artifacts": [
+        "boot.elf sha256 618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231",
+        "boot.bin sha256 aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+        "boot.hex sha256 c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa",
+        "boot.mif sha256 614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7"
+      ]
+    },
+    {
+      "run_id": "postflight-resource",
+      "level": "L0_static",
+      "command": "/home/chiro/projects/.resource-locks/resource-lock status all",
+      "result": "pass",
+      "summary": "local FREE; gamepc FREE; no orphaned verilator/lcvex_bram_init25 process."
+    }
+  ],
+  "policy": {
+    "rtl_modified": false,
+    "boot_firmware_modified": false,
+    "qsf_modified": false,
+    "shared_makefile_modified": false,
+    "test_registry_modified": false,
+    "qemu_modified": false,
+    "active_task_modified": false,
+    "reference_or_expectation_suppressed": false,
+    "gamepc_or_quartus": false,
+    "jtag_board_flash": false,
+    "large_tmp_log": false
+  },
+  "blockers": [],
+  "risks": [
+    "The expected image is an ELF-derived byte-HEX file and must be regenerated/hash-bound for every new boot ELF.",
+    "The checker requires source paths recorded in the manifest to remain available; integration should run it from the candidate checkout.",
+    "The existing RTL synthesis BRAM wrapper's known cross-word semantics remain outside this test-contract task."
+  ],
+  "next": [
+    "Integrator registers run_bram_init25_test.sh in the shared Makefile/test registry after accepting this write set.",
+    "Rerun the runner on the combined T-007 plus T-20260909-001 candidate; do not copy DUT HEX/MIF into the expected oracle.",
+    "Keep Quartus/M20K physical flow gated on the combined candidate and its regenerated ignored MIF."
+  ],
+  "handoff": "docs/handoffs/T-20260909-001-b25-bram-noncircular-oracle.md"
+}

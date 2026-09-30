@@ -1,0 +1,18 @@
+# B3-L2-WB 独立 Cocotb 入口；不接入现有 SoC/L2 单元测试。
+
+SIM ?= verilator
+TOPLEVEL_LANG ?= verilog
+TOPLEVEL ?= lcvex_l2_wb_cocotb_tb
+COCOTB_TEST_MODULES ?= test_l2_wb
+SIM_BUILD ?= ../../build/agents/T-20260827-055/cocotb
+
+VERILOG_SOURCES = $(abspath ../../rtl/lcvex_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_cache_data_ram.sv) \
+                  $(abspath ../../rtl/lcvex_l2_wb.sv) \
+                  $(abspath ../../rtl/lcvex_l2_probe.sv) \
+                  $(abspath ../../tb/sv/lcvex_l2_wb_bfm.sv) \
+                  $(abspath ../../tb/sv/lcvex_l2_wb_cocotb_tb.sv)
+
+EXTRA_ARGS += --timing --assert -Wall
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

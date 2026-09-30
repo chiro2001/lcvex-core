@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "contract_id": "non-executable-example",
+  "task_id": "T-20990101-001",
+  "remote": {
+    "host": "192.0.2.1",
+    "task_root": "D:/Projects/fpga-altra/lcvex/build/T-20990101-001-example",
+    "bootstrap_path": "D:/Projects/fpga-altra/lcvex/build/T-20990101-001-prepare.ps1"
+  },
+  "paths": {
+    "quartus_bin": "D:/Software/intelFPGA_pro/21.4/quartus/bin64",
+    "license_file": "D:/Software/intelFPGA_pro/21.4/license.dat",
+    "source_server": "D:/Projects/fpga-altra/jtag-30mhz"
+  },
+  "hardware": {
+    "jtag_id": "02E060DD",
+    "console_cable": "JTAG-MPSSE-Blaster [fixture]",
+    "program_cable": "MBFTDI-Blaster fixture on 127.0.0.1:1310",
+    "console_device": 1,
+    "console_instance": 0,
+    "server_port": 1310,
+    "server_frequency_hz": 15000000,
+    "terminal_to_golden_delay_s": 5,
+    "required_nodes": ["JTAG UART #0", "JTAG PHY #0"]
+  },
+  "candidate": {
+    "path": "D:/artifacts/candidate.sof",
+    "bytes": 100,
+    "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "checksum": "0x11111111",
+    "design_hash": "11111111111111111111"
+  },
+  "golden": {
+    "path": "D:/artifacts/golden.sof",
+    "bytes": 200,
+    "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "checksum": "0x22222222",
+    "design_hash": "22222222222222222222"
+  },
+  "server_bundle": {
+    "required_files": [
+      "ccl_ver.dll",
+      "client.conf",
+      "ftd2xx.dll",
+      "ftd2xx_real.dll",
+      "head_blaster.h",
+      "jtag_client.dll",
+      "jtag_hw_microsoft_catapult.dll",
+      "jtagserver.exe",
+      "msftdi.cfg",
+      "pgm_pgmdrv_apu_usb.dll"
+    ],
+    "pinned_sha256": {
+      "jtagserver.exe": "3333333333333333333333333333333333333333333333333333333333333333",
+      "jtag_hw_microsoft_catapult.dll": "4444444444444444444444444444444444444444444444444444444444444444",
+      "client.conf": "5555555555555555555555555555555555555555555555555555555555555555",
+      "msftdi.cfg": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
+  "terminal": {
+    "executable": "D:/Software/intelFPGA_pro/21.4/quartus/bin64/nios2-terminal.exe",
+    "startup_sequence": [
+      {"name": "boot", "regex": "LCVEX25 BOOT", "timeout_s": 180},
+      {"name": "ready", "regex": "READY", "timeout_s": 180}
+    ],
+    "steps": [
+      {"name": "ping", "byte_hex": "70", "response_regex": "PONG", "timeout_s": 300, "max_attempts": 1, "interval_s": 0}
+    ],
+    "postconditions": [],
+    "required_regex": ["PONG"],
+    "forbidden_regex": ["MBFAIL"]
+  },
+  "policy": {
+    "volatile_sof_only": true,
+    "persistent_formats_allowed": false,
+    "allow_reset": false,
+    "allow_power_cycle": false,
+    "allow_standard_or_unknown_process_stop": false,
+    "candidate_program_invocations": 1,
+    "terminal_sessions": 1,
+    "golden_program_invocations": 1
+  }
+}

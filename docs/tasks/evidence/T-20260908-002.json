@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-002",
+  "label": "B25-POSTPRE-WRITEBACK",
+  "state": "done",
+  "acceptance_status": "pass",
+  "partial": false,
+  "source_sha": "8316a1b8b94010ea31cf791e441e3f065197e841",
+  "implementation_commit": "8c0a8f41724427807802d0243f17818669c9d40a",
+  "branch": "fix/T-20260908-002-b25-postpre-writeback",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-002",
+  "owner": "b25_gate_d",
+  "sent_at": "2026-09-08T11:23:14+08:00",
+  "received_at": "2026-09-08T11:23:14+08:00",
+  "reported_at": "2026-09-08T12:02:42+08:00",
+  "timezone": "Asia/Shanghai",
+  "objective": "修复 AArch64 单寄存器 immediate pre/post-index 的 base writeback 与有效地址错配，覆盖普通 GPR、SP、Rt==Rn、B/H/W/X load/store 及延迟/cache 配置。",
+  "scope_boundary": {
+    "parent_followup_note": "T-20260908-002 仅负责 hard_postpre；register-offset single load/store 依赖属于 T-004。",
+    "modified_files": [
+      "rtl/lcvex_core.sv",
+      "sim/difftest/b25_postpre_writeback_matrix.py",
+      "sim/difftest/run_b25_postpre_writeback_matrix.sh"
+    ],
+    "decode_file_modified": false,
+    "register_offset_block_modified": false,
+    "common_typedef_ports_helpers_modified": false,
+    "fp_scalar_modified": false,
+    "qemu_reference_modified": false,
+    "test_expectations_modified": false
+  },
+  "root_cause": {
+    "first_failure": {
+      "test": "hard_postpre",
+      "seq": 21,
+      "pc": "0x44000054",
+      "insn": "0x38404e85",
+      "disassembly": "ldrb w5, [x20, #4]!",
+      "pre_x20": "0x44090010",
+      "qemu_x20_after": "0x44090014",
+      "rtl_x20_after": "0x44090015"
+    },
+    "forwarding": "在 cycle 67，EX/MEM 中较新的 ORR x20,x21,xzr 已产生 0x44090010，而 MEM/WB 中较旧 indexed load 的 wb3_extra 为 0x44090011。原 gprv 优先级为 EX/MEM wb3 -> MEM/WB wb3 -> EX/MEM 普通 GPR，错误选择了旧的 MEM/WB wb3；因此译码看到 stale base，并把当前指令的 mem_addr/wb3_extra 计算为 0x44090015。后续保持/再次捕获形成诊断中的 exmem VA 0x44090019，而 memwb VA 为 0x44090014。",
+    "sp_writeback": "原 EX/MEM SP 载荷只在 idex_d.sp_we && idex_d.is_pair 时使用 wb3_extra；单寄存器 SP pre/post 会误用 ALU ex_sp_wdata。修复将条件扩展为访存型 idex_d.sp_we && (idex_d.is_load || idex_d.is_store)，保留 ADD/SUB SP 的 ALU 结果路径。",
+    "architecture": "修复只改变 ID 前递选择和 EX/MEM 的已锁存 writeback payload；GPR/SP/NZCV 仍仅在 commit_fire/系统提交边界更新。"
+  },
+  "before": {
+    "source_sha": "8316a1b8b94010ea31cf791e441e3f065197e841",
+    "core_sha256": "f27a5e6570171ccb0028d8945659fa92624d950810b030ef19cc1b9f45075434",
+    "image": "build/difftest/hard_postpre.bin",
+    "image_sha256": "496d3e8196c600aecafec8c8c1c305728cc4574e021074879f22ad3d7ac90ef3",
+    "results": [
+      {
+        "mode": "base",
+        "result": "fail",
+        "exit_code": 1,
+        "summary": "seq=21 hard_postpre mismatch; x20 DUT=0x44090015 QEMU=0x44090014",
+        "log": "build/agents/T-20260908-002/baseline/logs/base.run.log",
+        "log_sha256": "142715704cef9963b193c076a656b23757b326dc5ab258e781aa48123c456055",
+        "diagnostic": "build/agents/T-20260908-002/baseline/base.fail",
+        "diagnostic_sha256": "757668469ecc5bc74a1c09975618a736f6bf2cfee0142fe81aea727d39873927",
+        "elapsed_s": 1.66,
+        "max_rss_kib": 550336
+      },
+      {
+        "mode": "cache",
+        "result": "fail",
+        "exit_code": 1,
+        "summary": "seq=21 hard_postpre mismatch; x20 DUT=0x44090015 QEMU=0x44090014",
+        "log": "build/agents/T-20260908-002/baseline/logs/cache.run.log",
+        "log_sha256": "67332f9f672a170fe09aad08909e559b347e8cbd5a09c49999c12a5146b8b0ba",
+        "diagnostic": "build/agents/T-20260908-002/baseline/cache.fail",
+        "diagnostic_sha256": "70bd435a01ddb6a92dcb7d58bc8db31c83ac16c39177948439bd3cc7996ad3ed",
+        "elapsed_s": 1.51,
+        "max_rss_kib": 550672
+      },
+      {
+        "mode": "delay2",
+        "result": "fail",
+        "exit_code": 1,
+        "summary": "seq=21 hard_postpre mismatch; x20 DUT=0x44090015 QEMU=0x44090014",
+        "log": "build/agents/T-20260908-002/baseline/logs/delay2.run.log",
+        "log_sha256": "bfbc9b51143917171763d6380660c2e2503aed8654958a3beb6cf66d9aaa15ef",
+        "diagnostic": "build/agents/T-20260908-002/baseline/delay2.fail",
+        "diagnostic_sha256": "70bd435a01ddb6a92dcb7d58bc8db31c83ac16c39177948439bd3cc7996ad3ed",
+        "elapsed_s": 1.51,
+        "max_rss_kib": 550528
+      }
+    ],
+    "debug_signal_log": "build/agents/T-20260908-002/baseline/debug-signal.log",
+    "debug_signal_log_sha256": "0eef1b869520485750fb725bbed224d14c4c0976ab94029074094d197cd8d5ff"
+  },
+  "after": {
+    "implementation_commit": "8c0a8f41724427807802d0243f17818669c9d40a",
+    "core_sha256": "f635b30ca57ff286339adc1a5003579e73c2f7032b211cb29b41ef0dfa3c4031",
+    "hard_postpre_image_sha256": "496d3e8196c600aecafec8c8c1c305728cc4574e021074879f22ad3d7ac90ef3",
+    "hard_postpre_modes": [
+      {
+        "mode": "base",
+        "max_insns": 70,
+        "result": "pass",
+        "exit_code": 0,
+        "summary": "PASS: mode=step 锁步 70 条与 QEMU 完全一致",
+        "log": "build/agents/T-20260908-002/after/logs/base-lockstep.log",
+        "log_sha256": "9aa5501260c710338545a6bd98ded5c4f3ac5c51687c6d4d6dc129e048dffe5a",
+        "time_log": "build/agents/T-20260908-002/after/logs/base-lockstep.time.txt",
+        "time_log_sha256": "4d4b92cdec7f0300aeca5a9aa095d911673c3d1555fe55897b115e90892d9dc3",
+        "elapsed_s": 1.56,
+        "max_rss_kib": 550128
+      },
+      {
+        "mode": "cache",
+        "max_insns": 70,
+        "result": "pass",
+        "exit_code": 0,
+        "summary": "PASS: mode=step 锁步 70 条与 QEMU 完全一致",
+        "log": "build/agents/T-20260908-002/after/logs/cache-lockstep.log",
+        "log_sha256": "1237b71a4b4cf25203df2cda7e96cdd04d0b6fa87dd630a3f14f98584a81870b",
+        "time_log": "build/agents/T-20260908-002/after/logs/cache-lockstep.time.txt",
+        "time_log_sha256": "6a4f6839b3d2be6831e7ddb1a8a852d208438d6e3962feb7fa8605b51c96c68d",
+        "elapsed_s": 1.45,
+        "max_rss_kib": 550096
+      },
+      {
+        "mode": "delay2",
+        "max_insns": 70,
+        "result": "pass",
+        "exit_code": 0,
+        "summary": "PASS: mode=step 锁步 70 条与 QEMU 完全一致",
+        "log": "build/agents/T-20260908-002/after/logs/delay2-lockstep.log",
+        "log_sha256": "73aa6701b564072e37f353f2004bf91735f0d696a81d84c6e3ef67e5a0dc76ed",
+        "time_log": "build/agents/T-20260908-002/after/logs/delay2-lockstep.time.txt",
+        "time_log_sha256": "5458d38a37f7aba5c055f224b9b3c2911301a46a8558904acac3966eb7ec59d7",
+        "elapsed_s": 1.45,
+        "max_rss_kib": 550672
+      }
+    ],
+    "debug_signal_log": "build/agents/T-20260908-002/after/logs/debug-run.log",
+    "debug_signal_log_sha256": "6b0749a53455e4e056f34ee4fd70282b1ba74400810eb362b667b5b7c841a36",
+    "debug_observation": "cycle 67 gprv20=0x44090010；修复后目标 commit gpr3=1/20/0x44090014，且无 exmem VA 0x44090019 错配"
+  },
+  "focused_matrix": {
+    "generator": "sim/difftest/b25_postpre_writeback_matrix.py",
+    "runner": "sim/difftest/run_b25_postpre_writeback_matrix.sh",
+    "image": "build/agents/T-20260908-002/matrix/b25_postpre_writeback_matrix.bin",
+    "image_sha256": "2cbaddc536616917f0fa339860301fd0ad5bf2fca143d4289c395eaf84d6bc22",
+    "words": 90,
+    "max_insns": 180,
+    "coverage": [
+      "B/H/W/X unsigned post-index load",
+      "B/H/W/X unsigned pre-index load",
+      "signed B/H/W post-index load",
+      "B/H/W/X pre-index store",
+      "B/H/W/X post-index store",
+      "Rt==Rn load and store for B/H/W/X",
+      "SP base load and store for B/H/W/X",
+      "post-index base immediately consumed by the next store"
+    ],
+    "modes": [
+      {
+        "mode": "base",
+        "result": "pass",
+        "exit_code": 0,
+        "summary": "180 条与 QEMU 完全一致",
+        "result_file": "build/agents/T-20260908-002/matrix/base.result"
+      },
+      {
+        "mode": "cache",
+        "result": "pass",
+        "exit_code": 0,
+        "summary": "180 条与 QEMU 完全一致",
+        "result_file": "build/agents/T-20260908-002/matrix/cache.result"
+      },
+      {
+        "mode": "delay2",
+        "result": "pass",
+        "exit_code": 0,
+        "summary": "180 条与 QEMU 完全一致",
+        "result_file": "build/agents/T-20260908-002/matrix/delay2.result"
+      }
+    ],
+    "runner_log": "build/agents/T-20260908-002/matrix/matrix.log",
+    "runner_log_sha256": "f89f8d633bd16891836bf19cc53331df6fba458e337e04f6f6ca1bf35005663d",
+    "disassembly": "build/agents/T-20260908-002/matrix/disassembly.txt",
+    "disassembly_sha256": "8738473bceb6a901dcf77c2c6605161c0fa683c77f615f653b2bd183996e4ce5",
+    "time_log": "build/agents/T-20260908-002/matrix/matrix.time.txt",
+    "time_log_sha256": "6f6a8301800056952834144b1c4c49519fe04331f5362d4c9d0a04f80ad80ed9",
+    "elapsed_s": 7.67,
+    "max_rss_kib": 550624
+  },
+  "commit_state_monitor": {
+    "command": "conda run --no-capture-output -n lcvex g++ ... debug_postpre.cc ... && build/agents/T-20260908-002/monitor/debug_postpre build/agents/T-20260908-002/matrix/b25_postpre_writeback_matrix.bin --monitor-commit-state",
+    "result": "pass",
+    "exit_code": 0,
+    "commits": 180,
+    "state_violations": 0,
+    "checks": ["GPR[0..30]", "SP_EL0", "SP_EL1", "NZCV"],
+    "log": "build/agents/T-20260908-002/monitor/run.log",
+    "log_sha256": "44b15ad9f782cda579b76691e6553595ee28ba25f51784af46bfb04ccb00e982",
+    "build_time_log": "build/agents/T-20260908-002/monitor/build.time.txt",
+    "build_time_log_sha256": "abb8854daecc053cefd820d8a2ebed62bf8f469d1a91db9a463199fe19e55a35",
+    "run_time_log": "build/agents/T-20260908-002/monitor/run.time.txt",
+    "run_time_log_sha256": "e40a38768cd0ea8993e04584acae60a5884f3ccdca0d958354bd80138e39b075",
+    "elapsed_s": 1.74,
+    "max_rss_kib": 549408
+  },
+  "p0_validation": {
+    "command": "env VERILATOR_JOBS=2 make test",
+    "result": "pass",
+    "exit_code": 0,
+    "summary": "P0 单元、SVA、Verilator、Cocotb、编码器检查全部通过",
+    "log": "build/agents/T-20260908-002/make-test/make-test.log",
+    "log_sha256": "816eceaf9021b68b773ced3ae3f8ba170397eff5531268a6247fa7c456aff987",
+    "time_log": "build/agents/T-20260908-002/make-test/make-test.time.txt",
+    "time_log_sha256": "f4192c7d9d2dd7ebe22f5e58a19cf5cfe7b6a9abc1def902fc78ec5cdaab45ec",
+    "elapsed_s": 227.87,
+    "max_rss_kib": 2557664,
+    "assertions_enabled": true
+  },
+  "source_and_tool_hashes": {
+    "rtl/lcvex_core.sv": "f635b30ca57ff286339adc1a5003579e73c2f7032b211cb29b41ef0dfa3c4031",
+    "rtl/lcvex_decode.sv": "1b01f3c482db2b5e509899740306806e094ee803b6f18dbe5239e80dfa262edf",
+    "sim/difftest/b25_postpre_writeback_matrix.py": "1d5d4397d531c714595e1ee090c2157d6d68eef214b4ea6475645960c2ce637c",
+    "sim/difftest/run_b25_postpre_writeback_matrix.sh": "adaf3dc4bb769b83f950779d456d30fc9ad95e489a9fc697c81a626454ad22a6",
+    "Makefile": "45b3b84faec5054034466741b5fcbbca1a1517075187c71af2cabb978787048c",
+    "scripts/toolcheck.sh": "e7f1a5173febd3a4f42060747ec93b7c46ec4c8eacf576c9be4bbe71214c1c3b",
+    "sim/difftest/run_lockstep_step.sh": "f9c413072527e580185b22a696d3004911a1a5248f701962842eb21c5e36418e",
+    "verilator": "9213a72d341fd00d389936e45a16975b27b1f6725696fd303e4559b8f8c4bda3",
+    "cocotb-config": "bd3e526c7b173d78cba3434961ab3d12c230a18ab584fbe8726970e603e2b040",
+    "python": "af60db6d6a42048d15231bdf43f2edfd4c28acfc8778012e989f669ae528c34d",
+    "make": "8a9d964876ac0619a77d0e98141af7741f41a01f3bbc81d470e2c4828db1f105",
+    "qemu_system_aarch64": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "qemu_plugin": "4175d7a0226a3f675c925ee55d7d61ce3d728be92b2d2dff1d76ce760c107f87",
+    "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_version": "11.1.0"
+  },
+  "resource_lock": {
+    "resource": "local",
+    "lock_command": "/home/chiro/projects/.resource-locks/resource-lock run local mycpu T-20260908-002 b25_gate_d --min-local-available-mib 8192",
+    "all_compile_and_lockstep_runs_locked": true,
+    "min_local_available_mib": 8192,
+    "verilator_jobs": 2,
+    "task_local_tmpdir": "build/agents/T-20260908-002/{baseline,after,matrix,make-test,monitor}/tmp",
+    "shared_qemu_read_only": true,
+    "gamepc": "not used",
+    "quartus_jtag_board_flash": "not used",
+    "current_observation_at_evidence": "local BUSY by unrelated T-20260908-004; gamepc FREE",
+    "artifact_manifest": "build/agents/T-20260908-002/meta/artifact-hashes.txt",
+    "artifact_manifest_sha256": "f48af175055fe358f3f57b8c0784cf8da5814aff78c5537f182d12022c496406"
+  },
+  "policy": {
+    "assertions_disabled": false,
+    "difftest_comparisons_disabled": false,
+    "reference_or_golden_modified": false,
+    "test_expectations_modified": false,
+    "active_task_modified": false,
+    "task_status_documents_modified": false,
+    "register_offset_block_modified": false,
+    "fp_scalar_modified": false,
+    "system_tmp_used_for_build": false,
+    "full_gate_d_run": false,
+    "external_hardware_used": false
+  },
+  "batch_validation": {
+    "batch_task": "T-20260907-037",
+    "candidate_sha": "3ffd0c119f691ab0aef98984cddf1ba0c5ab208a",
+    "status": "pass",
+    "command_scope": "串行 T-002/T-004 affected directed union；未运行 100k random 或 full Gate D",
+    "started_at": "2026-09-08T12:29:49+08:00",
+    "finished_at": "2026-09-08T12:32:54+08:00",
+    "run_root": "build/agents/T-20260907-037/combined-t002-t004-rerun",
+    "matrix": {
+      "base": "180/180 pass",
+      "cache": "180/180 pass",
+      "delay2": "180/180 pass"
+    },
+    "summary_log": "build/agents/T-20260907-037/combined-t002-t004-rerun/postpre/summary.log",
+    "summary_log_sha256": "5e6bbb41bff365d5691e02e1da58a3217d10dff9e98f9db4d8a51fa7179f0d84",
+    "run_log_sha256": {
+      "base": "b5d9ed823da926c13d5be129cc61e3bc5a5bc929b71f58c86f218eb195453609",
+      "cache": "cad990a7b255b79ab110a376b3ccbdb534bf360aa072cd698e09a8555821bd4e",
+      "delay2": "c5e5818731e774766282ef321475cdb0f10e47c7b9a8ae8beba3ac6f5b79ce17"
+    },
+    "resource_lock": {
+      "command_meta": "verilator_jobs=1,matrix=t002_t004_union_short_socket,memory_policy=exclusive-no-hard-cap,cpu_policy=adaptive",
+      "inside_status": "local BUSY pid=1411106 project=mycpu task=T-20260907-037 agent=b25_batch_combined",
+      "after_status": "local FREE; gamepc FREE",
+      "max_rss_kib": null,
+      "rss_note": "环境没有外部 /usr/bin/time；Verilator allocated 报告、时段和锁状态作为资源证据。"
+    }
+  },
+  "risks": [
+    "Rt==Rn 的 AArch64 overlap encoding 属于 QEMU/架构约束场景；本矩阵保留该编码并要求 RTL 与固定 QEMU 提交包一致，未自行定义额外 golden 结果。",
+    "本修复只覆盖 immediate pre/post-index；register-offset 单寄存器依赖由 T-004 独立处理。",
+    "本任务没有重新运行完整 Gate D；合并候选必须由集成者按队列重跑 Gate D。"
+  ],
+  "blockers": [],
+  "next": "在 candidate 3ffd0c11 上补 seed 1/2/3 与完整 Gate D；随后再决定 physical/board flow。",
+  "handoff": "docs/handoffs/T-20260908-002-b25-postpre-writeback.md"
+}

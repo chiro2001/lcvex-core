@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-009",
+  "label": "F1A-LOCKSTEP-FIX",
+  "title": "修复 F1a 默认-on Gate D 三类定向锁步回归",
+  "kind": "fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-f1a-lockstep-fix",
+  "agent_type": "rtl-debug-and-fix",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-006"
+  ],
+  "base_sha": "20639c8defd66407af87292844fd902b6bf00f6a",
+  "branch": "fix/T-20260902-009-f1a-lockstep-fixes",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-009",
+  "scope": "诊断并修复 F1a 默认-on（FETCH_FIFO_ENABLE=1）下完整 Gate D 暴露的 9 个定向锁步失败，根因分三类：(1) timer/RNDR 计数 off-by-one；(2) ADC/SBC/NGC 进位标志前递；(3) post-index load/store 地址与数据语义。修复后 F0 路径不得回归。",
+  "reads": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_alu.sv",
+    "rtl/lcvex_mem.sv",
+    "rtl/lcvex_mem_router.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "docs/handoffs/T-20260902-006-f1a-default-on-gated.md",
+    "docs/tasks/evidence/T-20260902-006.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-006/build/logs/fail_dumps/**",
+    "Makefile",
+    "sim/difftest/**"
+  ],
+  "writes": [
+    "rtl/**（按根因最小修改）",
+    "docs/handoffs/T-20260902-009-f1a-lockstep-fixes.md",
+    "docs/tasks/evidence/T-20260902-009.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "相关 SV/Cocotb 定向测试 PASS"
+    ],
+    "l1": [
+      "F0 显式关闭 lint/回归 PASS"
+    ],
+    "l2": [
+      "复跑失败用例（base/cache/delay2 的 hard_timer/hard_adc_sbc/hard_sve_probe/hard_postpre）PASS"
+    ],
+    "l3": [
+      "完整 Gate D 由集成者复跑"
+    ],
+    "l4": []
+  },
+  "acceptance": "9 个失败用例在 F1a-on 下复跑通过，F0 路径不回归；产出 handoff/evidence。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T18:11:00+08:00",
+  "updated_at": "2026-09-02T18:56:20+08:00",
+  "known_limits": [
+    "不修改 QEMU/测试期望；不关闭断言/差分；不运行完整 Gate D（集成者复跑）；不运行 Quartus/上板"
+  ],
+  "handoff": "docs/handoffs/T-20260902-009-f1a-lockstep-fixes.md",
+  "evidence": "docs/tasks/evidence/T-20260902-009.json",
+  "next": "修复合入后重跑完整默认-on Gate D，再评估 F1a 默认-on",
+  "dispatch": {
+    "sent_at": "2026-09-02T18:12:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-009",
+    "branch": "fix/T-20260902-009-f1a-lockstep-fixes"
+  },
+  "head_sha": "6a874fdfaafa519a25a2311fbf3eed4d548b578a",
+  "merge_sha": "386f62f2786202aa74fc3ded656937ac046f4b8d",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T18:54:30+08:00",
+    "merged_at": "2026-09-02T18:56:20+08:00",
+    "recorded_at": "2026-09-02T18:56:20+08:00",
+    "notes": "F1a lockstep fixes merged; 12/12 F1a-on and 4/4 F0-off targeted lockstep pass per owner. Full Gate D rerun remains next."
+  }
+}

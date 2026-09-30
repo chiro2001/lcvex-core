@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-045",
+  "parent": "T-20260920-039",
+  "label": "B25-MICROBENCH-COREMARK-VOLATILE-SOF",
+  "title": "Generate one content-addressed volatile SOF from the accepted CoreMark fitted database",
+  "kind": "fpga-assembler",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-and-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-043", "T-20260920-044"],
+  "base_sha": "4086c349",
+  "accepted_physical_candidate_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "accepted_physical_tree_sha": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+  "branch": "verify/T-20260920-045-b25-coremark-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-045",
+  "writes": ["task-owned assembler clone/artifacts", "docs/handoffs/T-20260920-045-b25-coremark-volatile-sof.md", "docs/tasks/evidence/T-20260920-045.json"],
+  "reads": ["accepted T-044 fitted database and payload manifests"],
+  "scope": "Clone the accepted fitted database, verify source/payload identity, invoke assembler once, collect and hash only the volatile SOF and reports.",
+  "acceptance": "Assembler Successful with 0 errors/0 warnings; exactly one SOF is content-addressed; fitted/source payloads remain unchanged; persistent configuration formats count is zero.",
+  "forbidden_regions": ["JIC/EPCQ/Flash", "JTAG/board", "more than one assembler invocation", "source/SDC/QSF/RTL modification"],
+  "resource": "Acquire resource-lock gamepc.",
+  "source_remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-044-b25-coremark-fresh-physical",
+  "target_remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-045-b25-coremark-volatile-sof",
+  "dispatch": {
+    "sent_at": "2026-09-21T00:49:00+08:00",
+    "agent_name": "root",
+    "assembler_invocation_budget": 1
+  },
+  "result": {
+    "evidence_commit": "50c6d22de149113fcb63277565c0397fc971c52a",
+    "integration_commit": "aa67995a",
+    "status": "PASS",
+    "assembler_invocations": 1,
+    "sof_bytes": 36842099,
+    "sof_sha256": "c648f9fe1744d66f5e60f97a2aa706a36d295d1029e887d4f3155d292127df4f",
+    "persistent_configuration_artifacts": 0
+  },
+  "created_at": "2026-09-20T21:35:43+08:00",
+  "updated_at": "2026-09-21T00:55:00+08:00"
+}

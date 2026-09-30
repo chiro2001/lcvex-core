@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-037",
+  "label": "B25-BRINGUP-BATCH",
+  "title": "Integrate 25 MHz clock, initialized BRAM boot and polling JTAG-UART",
+  "kind": "bringup-batch-integration",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-board-functional-pass-golden-restored",
+  "assigned_owner": "codex-integrator",
+  "depends_on": ["T-20260906-035", "T-20260907-036"],
+  "base_sha": "689959472faf59844fb486834fad27f8fedb2ca6",
+  "branch": "batch/T-20260907-037-b25-bringup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037",
+  "member_tasks": ["T-20260907-038", "T-20260907-039", "T-20260907-040", "T-20260907-045"],
+  "integration_order": ["T-20260907-038", "T-20260907-039", "T-20260907-040", "T-20260907-045"],
+  "scope": "Merge the clock, BRAM monitor, JTAG-UART and EMIF resilience lanes into a board candidate that runs from initialized 64 KiB BRAM at a real 25 MHz CPU clock, reports calibration/DDR status, and provides polling JTAG-UART PING/PONG and character echo without IRQ, Flash or Linux.",
+  "writes": [
+    "shared Makefile/test registry and Catapult SoC integration test",
+    "platform/skeleton manifests and checkers after member merge",
+    "rtl/lcvex_catapult_soc_top.sv::MMU-off DDR cacheability integration policy",
+    "rtl/lcvex_catapult_soc_axi.sv::line-fill response correctness fixes discovered by integration",
+    "tb/sv/lcvex_catapult_soc_axi_bridge_tb.sv and focused runner",
+    "docs/tasks/active/T-20260907-037..040.json and T-20260907-045.json",
+    "docs/tasks/evidence/T-20260907-037.json",
+    "docs/handoffs/T-20260907-037-b25-bringup-batch.md"
+  ],
+  "validation": {
+    "L0": "AArch64 build/disassembly, 64 KiB range, ELF-to-HEX/MIF byte equality and protocol constants",
+    "L1": "clock/reset, BRAM init, JTAG-UART Avalon DATA/CONTROL/RX/TX/backpressure and calibration/DDR directed SV/Cocotb",
+    "L2": "full Catapult SoC simulation from PC=0 observes LCVEX25 BOOT, READY, PONG, echo and real DDR adapter read/write counts",
+    "L3": "detached Gate D may overlap later GamePC physical work but must pass before board programming"
+  },
+  "acceptance": "Merged candidate passes the affected local union; serial interaction remains available even if DDR calibration fails; no assembler, JTAG, power or board action is performed.",
+  "resource": "Every local heavy run acquires local with >=8192 MiB admission, VERILATOR_JOBS=1 and measured resources. Return 75 means wait.",
+  "forbidden_regions": [
+    "QEMU fork changes",
+    "JIC/EPCQ/Flash write path",
+    "interrupt-driven UART or Linux",
+    "assembler, quartus_pgm, JTAG, power-on or board test"
+  ],
+  "integration_discoveries": [
+    "AArch64 post-index load using SP is not yet implemented correctly; B25 firmware uses explicit SUB/STR and LDR/ADD stack sequences.",
+    "MMU-off DDR must bypass L1/L2 for a deterministic real adapter magic test.",
+    "AXI line-fill first response previously returned the final beat low word and offset 7 was skipped; both are fixed with a dedicated offset0..7 regression."
+  ],
+  "result": {
+    "source_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+    "status": "accepted; affected union, final Gate D/physical/assembler and corrected board interaction pass",
+    "evidence": "docs/tasks/evidence/T-20260907-037.json",
+    "handoff": "docs/handoffs/T-20260907-037-b25-bringup-batch.md",
+    "final_physical": {
+      "task": "T-20260909-013",
+      "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+      "status": "fresh synthesis/fitter/STA plus timing/DDR/metastability/FIFO/data-delay/UCP-v2 PASS",
+      "evidence": "docs/tasks/evidence/T-20260909-013.json"
+    },
+    "remaining_gates": [
+      "repeat full-FP fresh physical and board signoff before a full-FP release",
+      "close external DDR calibration and Linux board acceptance separately"
+    ],
+    "sof_package": {
+      "task": "T-20260907-043",
+      "status": "pass; Quartus assembler Successful, 0 errors/0 warnings, exactly one volatile SOF",
+      "bytes": 36842093,
+      "sha256": "032c82dd88f99c5e19b845d199e6ef6d205e4be6b62c8171a2f9370a0032920b",
+      "evidence": "docs/tasks/evidence/T-20260907-043.json"
+    },
+    "gate_d": {
+      "task": "T-20260908-005",
+      "candidate_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+      "status": "pass",
+      "evidence": "docs/tasks/evidence/T-20260908-005.json"
+    },
+    "board_attempt": {
+      "task": "T-20260907-044",
+      "status": "initial frozen-SOF attempt failed; corrected successor chain completed BRAM boot, bidirectional polling JTAG-UART and exact golden recovery",
+      "initial_evidence": "docs/tasks/evidence/T-20260907-044.json",
+      "corrected_closeout_task": "T-20260920-037",
+      "corrected_closeout_status": "candidate functional PASS with BOOT/READY/?/PONG/RXDBG/Z and RXPATH/RXCPU acceptance",
+      "corrected_closeout_evidence": "docs/tasks/evidence/T-20260920-037.json",
+      "golden_recovery_task": "T-20260920-038",
+      "golden_recovery_status": "PASS; live exact golden identity proven",
+      "golden_recovery_evidence": "docs/tasks/evidence/T-20260920-038.json",
+      "final_board_state": "live golden SOF proven",
+      "root_cause": "proven: rtl/lcvex_bram_boot.sv synthesis-only altera_syncram response captured stale req_q on the address-accept edge",
+      "fix_task": "T-20260919-001 accepted at bd59d4fc",
+      "boundary": "external DDR remains DDR-FAIL; full-FP release and Linux board acceptance are separate gates"
+    }
+  },
+  "dispatch": {
+    "sent_at": "2026-09-07T03:07:03+08:00",
+    "agent_name": "codex-integrator"
+  },
+  "created_at": "2026-09-07T00:23:34+08:00",
+  "updated_at": "2026-09-20T20:39:54+08:00"
+}

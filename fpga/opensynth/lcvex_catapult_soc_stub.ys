@@ -1,0 +1,6 @@
+# A2 generic Yosys script for the plain-Verilog SoC boundary stub.
+# This is a proxy only: it does not contain the real LCVEX core/cache/SoC logic.
+read_verilog -sv fpga/opensynth/rtl/lcvex_catapult_soc_stub_top.v
+synth -top lcvex_catapult_soc_stub_top -lut 4
+write_verilog -noattr -noexpr build/tmp/opensynth/a2/stub_netlist.v
+stat -json

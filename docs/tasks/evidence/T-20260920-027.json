@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-027",
+  "state": "done",
+  "acceptance_status": "fresh-physical-pass-under-T028-source-qualified-warning-contract-and-T029-production-invariant-profile",
+  "candidate_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+  "candidate_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+  "branch": "verify/T-20260920-027-b25-logic-imm-repair-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-027-b25-logic-imm-repair-fresh-physical",
+  "fresh_inputs": {
+    "profile_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+    "profile_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+    "rtl_decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "boot_expected_sha256": "41cf41ee945b7060a6172e45c08ab86ddb4df3cd4ce31e5cceb1abeaa9d0926f",
+    "stage_manifest_sha256": "ad7643fdb7b66816776e5cffa8a2982e43979947da7de1711e411087f3dd1e4f",
+    "stage_archive_sha256": "ccf37034cdeb6f5085406b67d285902a43ec99d59d819bcbbbb79d715b9bd8d2",
+    "stage_file_count": 174,
+    "qsf_reference_count": 50,
+    "stage_derivation": "platform=50 support-exclusive=29 rtl=47 mirror=47"
+  },
+  "resource": {
+    "resource": "gamepc",
+    "all_gamepc_actions_locked": true,
+    "one_quartus_process_at_a_time": true,
+    "max_processors": 16,
+    "detected_processors": 24,
+    "minimum_free_physical_mib": 8192,
+    "preflight_free_physical_mib": 42405.8,
+    "preflight_disk_d_free_bytes": 66661945344,
+    "final_free_physical_mib": 42371.8,
+    "final_disk_d_free_bytes": 64720257024,
+    "final_gamepc": "FREE",
+    "unknown_process_stopped": false
+  },
+  "stages": [
+    {
+      "stage": "preflight-and-fresh-root",
+      "status": "PASS",
+      "root_preexisting": false,
+      "eda_process_count": 0,
+      "marker": "PREFLIGHT_PASS"
+    },
+    {
+      "stage": "source-stage-and-manifest",
+      "status": "PASS",
+      "marker": "STAGE_DERIVATION_PASS platform=50 support=29 rtl=47 mirror=47 total=174 qsf=50",
+      "remote_source_hash_bad_count": 0,
+      "remote_qsf_missing_count": 0,
+      "source_pre_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06",
+      "source_post_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06"
+    },
+    {
+      "stage": "synthesis",
+      "status": "FAIL_ACCEPTANCE_WARNING_16788",
+      "quartus_status": "Successful",
+      "errors": 0,
+      "total_warnings": 234,
+      "warning_16788_count": 1,
+      "warning_16788_source": "vendor-generated alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd:243; ir_in_2d[2][4] has no driver",
+      "parallel_marker": "16 of the 24 processors detected",
+      "min_free_physical_mib": 42354.6,
+      "syn_report_sha256": "3f9346ffd73999b75f1d3f1a055902e2d3612b239971b650ddc20551d49efee5",
+      "syn_smsg_sha256": "b6a63076bc7dcd1e58f6aac4df5c4676429b923655214b2477529e1dd2d343ba",
+      "syn_summary_sha256": "14a313d5971625de155163f1f0c3359496534900d01128bad15b347fb01bcb41",
+      "flow_report_sha256": "df4724a3601da6e6c3271c47915c7fc4816f1b943ca46fbfa40863f90560cb8b",
+      "stdout_sha256": "7e542ef31d94af0832d32a1c8d9236a74b4923f24ecb413774fe77ad5f082107"
+    },
+    {
+      "stage": "fitter",
+      "status": "PASS",
+      "quartus_status": "Successful",
+      "errors": 0,
+      "min_free_physical_mib": 42354.6,
+      "resources": {
+        "alms": 75818,
+        "registers": 80743,
+        "ram_blocks": 121,
+        "dsp_blocks": 21,
+        "plls": 3
+      },
+      "fit_report_sha256": "2c6793d38a70a5717b6e5589e5b231f672f91e0fc77f40c0122cee1bb6bf15ba",
+      "fit_summary_sha256": "0e7d1864de081c3b740afd43ab5d8271e85ca54100492d8f1df0281f137c8c2b",
+      "stdout_sha256": "839428d607536be2671af55b97f9f262c5e687897cd4c92046166e81a356058d"
+    },
+    {
+      "stage": "sta-signoff",
+      "status": "PASS",
+      "quartus_status": "Successful",
+      "errors": 0,
+      "min_free_physical_mib": 42333.7,
+      "report_sha256": "27a2a95ee39f2298b46a8f6aad57e00d701f9b3e8280bc1b1ef6272eca4a9fd1",
+      "summary_sha256": "e0e0900d7324ea7845ac7c6f07cea15c2bb541c4389523a7845f6b82252f925f",
+      "stdout_sha256": "02bb667a480b3f39a1a122cf913c254e7966b0185b0f294b7a4ab9aee091d0dc"
+    },
+    {
+      "stage": "overall-and-custom-reports",
+      "status": "PASS_REPORT_ONLY",
+      "markers": ["T027_OVERALL_PASS", "T027_PAYLOAD_PASS", "T027_DATA_DELAY_PASS"],
+      "overall_report_sha256": {
+        "sys_clk_25_setup": "f5103e3a53469aad9866a540777785ec4db7931d48cd714da33564047bb0d6c8",
+        "sys_clk_25_hold": "b1ec0b8061fcb1639de5959ea344b891e31352bec2a088074c8522772d548576",
+        "sys_clk_25_recovery": "7c43ef03c8357ff3bfdee68b48e40eccfb5ee9a8435d8fe2e21f132a54616554",
+        "sys_clk_25_removal": "92eb4ca98f1cc3814111709a4e9836e0843653d4e1f58184c6851952e427afab",
+        "min_pulse_width": "cad48fb9578bb22b643196748dbad333a57d631b393bad24e1406bc2b6b96bbf"
+      },
+      "fifo_payload": {
+        "families": 6,
+        "models": 2,
+        "reports": 24,
+        "nothing_to_report": 24,
+        "ignored_exception_rows": 0,
+        "summary_sha256": "167458dc2cc33112f34140de4e9929800be0d22fc54c6fb65d2fe0920989166d",
+        "result": "PASS"
+      },
+      "cdc_data_delay": {
+        "corners": 4,
+        "routes": 5,
+        "groups": 20,
+        "violations": 0,
+        "worst_slack_ns": 1.020,
+        "summary_sha256": "02792da0942a2880a5b9e74276b5889fa1ae2e4c82e30009e6ac284e5625ab0b",
+        "result": "PASS"
+      },
+      "source_sdc_contract_checks": {
+        "fifo_payload": "PASS",
+        "cdc_data_delay": "PASS",
+        "set_max_delay_commands": 0
+      }
+    },
+    {
+      "stage": "ucp-reset-report-only-measurement",
+      "status": "PASS_NORMALIZED_REPORT_ONLY",
+      "raw_summary_sha256": "32666688163eb12f314420267d756c92cb74805075b3c93f89c887e4e9a14d32",
+      "normalized_measurement_path": "build/agents/T-20260920-027/analysis/t027-invariant-measurement.json",
+      "normalized_measurement_sha256": "a350136deccf9148eb976340752c4e57915a95da684333f5b83d2f312639777e",
+      "ucp": {
+        "raw_input_paths": 61,
+        "normalized_input_paths": 60,
+        "raw_output_paths": 4,
+        "normalized_output_paths": 4,
+        "clocks": 2,
+        "violations": 0,
+        "duplicate_tdi_rows": 1,
+        "normalized_port_endpoint_digests_match_policy": true
+      },
+      "reset": {
+        "raw_recovery_paths": 638,
+        "raw_removal_paths": 638,
+        "normalized_recovery_paths": 624,
+        "normalized_removal_paths": 624,
+        "duplicate_recovery_rows": 14,
+        "duplicate_removal_rows": 14,
+        "recovery_slack_ns": 1.388,
+        "removal_slack_ns": 0.238,
+        "violations": 0,
+        "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+        "family_counts": [606, 4, 13, 1],
+        "normalized_endpoint_digest_matches_policy": true
+      },
+      "raw_report_sha256": {
+        "ucp_fast": "84f5fe6dc8c93f8fc2620b9ae5c6f25ba67c79d17fcdd0dfc405602142e5cccf",
+        "ucp_slow": "84f5fe6dc8c93f8fc2620b9ae5c6f25ba67c79d17fcdd0dfc405602142e5cccf",
+        "fast_recovery": "bde3cf0a3e46c8739952cedc4ac579ea491cde2b4e265f0dc7c870a2ca119533",
+        "fast_removal": "2fd40574d423c456778d7a4e6c8451572119397b36be04b842664659ace846d8",
+        "slow_recovery": "7b88c265b6024aa399a60b5208f1032a4ec150c203eca241fb56c48657adeab4",
+        "slow_removal": "b89bf5f648d2205fd9824c1d9ce83c54e20f234c3a37a9ac02cdce25564ba289"
+      }
+    },
+    {
+      "stage": "final-acceptance-and-collection",
+      "status": "PASS_WITH_SYNTHESIS_BLOCKER",
+      "marker": "T027_FINAL_READONLY_SCAN_PASS",
+      "file_count": 1328,
+      "output_files": 26,
+      "acceptance_v3_files": 659,
+      "config_artifacts": 0,
+      "eda_process_count": 0,
+      "source_pre_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06",
+      "source_post_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06"
+    }
+  ],
+  "physical": {
+    "sys_clk_25_setup_ns": 7.481,
+    "sys_clk_25_hold_ns": 0.017,
+    "sys_clk_25_recovery_ns": 13.549,
+    "sys_clk_25_removal_ns": 0.178,
+    "min_pulse_ns": 0.120,
+    "all_violations": 0,
+    "exceptions_and_clock_constraints": "report-only generated; no timing violation",
+    "config_artifacts": 0
+  },
+  "integrator_acceptance": {
+    "reviewed_at": "2026-09-20T17:13:14+08:00",
+    "integration_branch": "batch/T-20260907-037-b25-bringup",
+    "validation_sha": "e6c0e9bd1232a4d2beb8b089b50a18a0c6cde4ac",
+    "validation_tree_sha": "ee32d37b23a44bed8d35fe436e99d6410a709bdb",
+    "superseding_evidence": "docs/tasks/evidence/T-20260920-028.json",
+    "production_invariant_profile": "docs/tasks/evidence/T-20260920-029.json",
+    "decision": "The original global Warning 16788 zero-count condition mixed a repaired tracked-RTL defect with an unchanged Quartus-generated SLD padding identity. It is superseded for this exact candidate by the fail-closed source-qualified contract proven in T-20260920-028.",
+    "tracked_rtl_warning_16788_unique_identities": 0,
+    "generated_sld_warning_16788_unique_identities": 1,
+    "generated_sld_identity": {
+      "message_id": 16788,
+      "net": "ir_in_2d[2][4]",
+      "source_basename": "alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd",
+      "source_line": 243,
+      "canonical_hpath": "auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|sldfabric"
+    },
+    "raw_row_contract": "exactly one generated detail row in syn.smsg and one generated summary row in syn.rpt; raw reports remain visible and unmodified",
+    "normalized_sld_sopcinfo_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+    "topology_contract": "Quartus 21.4; COUNT=2; N_SEL_BITS=2; N_NODE_IR_BITS=5; exact NODE_INFO, module/hpath set, endpoint hpaths and node IR widths 1/3 from T-028. Any signature, count, topology, tool or tracked-source drift fails closed and requires fresh physical evidence.",
+    "suppression_filter_waiver": false,
+    "result": "PASS"
+  },
+  "safety": {
+    "assembler": false,
+    "sof_pof_jic_rbf_jbc_svf_jam": 0,
+    "jtag": false,
+    "board_configuration": false,
+    "flash_epcq_jic": false,
+    "reset_power": false,
+    "tracked_qsf_sdc_rtl_modified": false,
+    "unknown_process_stopped": false
+  },
+  "artifacts": {
+    "local_runtime_root": "build/agents/T-20260920-027/remote-collect",
+    "final_scan_log": "build/agents/T-20260920-027/logs/final-scan.log",
+    "final_scan_log_sha256": "47ce1eff3d67eb4b63cb462393d15f03807627c7e3fea31c4faa8fba44c7eae3",
+    "stage_archive": "build/agents/T-20260920-027/sync/stage-t027.tar.gz",
+    "stage_manifest": "build/agents/T-20260920-027/sync/stage-manifest.json"
+  },
+  "known_limits": [
+    "Synthesis is Successful/0 errors and retains one raw vendor-generated SLD JTAG hub warning. T-028 supersedes the original global-zero condition with an exact source-qualified, topology-bound contract; no filtering, waiver or message suppression is used.",
+    "The raw T-027 UCP/reset counts are recorded separately from the normalized invariant counts. The normalized endpoint membership and digests match the reviewed invariant policy; no tracked policy/profile was changed.",
+    "T-029 binds the T-027 report-only measurement into the production invariant profile without changing waiver semantics, regexes, cardinalities or thresholds.",
+    "No assembler, SOF/POF/JIC/RBF/JBC/SVF/JAM generation, JTAG, board configuration, Flash/EPCQ, reset, or power action was performed."
+  ],
+  "handoff": "docs/handoffs/T-20260920-027-b25-logic-imm-repair-fresh-physical.md"
+}

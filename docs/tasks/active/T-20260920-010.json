@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-010",
+  "label": "B25-RX-OBSERVABILITY-VOLATILE-SOF",
+  "title": "Generate one volatile SOF from the accepted RX observability fitted database",
+  "kind": "assembler-package",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "quartus-assembler-success-and-volatile-sof-frozen",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-006", "T-20260920-007", "T-20260920-009"],
+  "base_sha": "25f9825b3d9734d433b9ca17024316c4a656c5f7",
+  "base_tree_sha": "4acb612d6ca50ba9a332362796dae6dd37662f0c",
+  "branch": "verify/T-20260920-010-b25-rx-observability-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-010",
+  "remote_source": "D:/Projects/fpga-altra/lcvex/build/T-20260920-007-b25-rx-observability-fresh-physical",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-010-b25-rx-observability-volatile-sof",
+  "writes": [
+    "build/agents/T-20260920-010/** ignored assembler logs/artifacts",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-010-b25-rx-observability-volatile-sof/** task-owned exact clone",
+    "docs/tasks/evidence/T-20260920-010.json",
+    "docs/handoffs/T-20260920-010-b25-rx-observability-volatile-sof.md"
+  ],
+  "scope": "Create a never-before-used byte-identical clone of the accepted T-007 remote physical project, verify source and fitted database identities, run only Quartus assembler once, and seal the single volatile catapult_a10.sof with size/hash/checksum.",
+  "validation": "Pre/post source and fitted payload manifests remain identical except assembler output/log metadata; assembler reports Successful with zero errors; exactly one SOF exists and no persistent or alternate programming format is generated.",
+  "acceptance": "One content-addressed SOF is produced from the exact accepted T-007 fitted DB without synthesis, fitter, STA, source edits, JTAG or board action.",
+  "resource": "All GamePC clone/query/assembler/fetch operations acquire gamepc; no local heavy job is required.",
+  "forbidden_regions": [
+    "synthesis, fitter, timing optimization or source/QSF/SDC/RTL/boot modification",
+    "POF/JIC/RBF/JBC/SVF/JAM or any Flash/EPCQ format",
+    "quartus_pgm, jtagconfig, nios2-terminal, board reset/power or hardware access",
+    "stopping unknown or pre-existing processes"
+  ],
+  "created_at": "2026-09-20T05:25:33+08:00",
+  "evidence_head_sha": "9547bd953b6adb3169dd50116e2bf60fa14a15b3",
+  "evidence": "docs/tasks/evidence/T-20260920-010.json",
+  "handoff": "docs/handoffs/T-20260920-010-b25-rx-observability-volatile-sof.md",
+  "updated_at": "2026-09-20T05:32:30+08:00"
+}

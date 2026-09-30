@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-031",
+  "label": "B25-LOGIC-IMM-REPAIR-BOARD-CLOSEOUT",
+  "title": "Volatile-configure the accepted T-030 SOF, prove paced JTAG-UART interaction, and restore golden",
+  "kind": "board-bringup-acceptance",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "completed-functional-fail-golden-rollback-pass",
+  "assigned_owner": "board_t031",
+  "depends_on": ["T-20260920-027", "T-20260920-028", "T-20260920-029", "T-20260920-030"],
+  "base_sha": "4b01d42dfaff0592faf99f91f2f38b53cd53130c",
+  "branch": "verify/T-20260920-031-b25-logic-imm-repair-board-closeout",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-031-b25-logic-imm-repair-board-closeout",
+  "authorization": {
+    "user_statement": "许可使用Quartus和JTAG来烧写和测试设备；JTAG已经连接到远程gamepc，可以测试；直接使用给定nios2-terminal命令即可读取和交互。",
+    "scope": "Volatile SRAM configuration of the exact accepted SOF, direct JTAG-UART interaction, and volatile golden restoration/control only.",
+    "excluded": ["JIC/EPCQ/Flash write or erase", "power cycle", "board or SoC reset", "stopping unknown or pre-existing processes"]
+  },
+  "writes": [
+    "build/agents/T-20260920-031/** ignored programming/terminal/control evidence",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-031-b25-logic-imm-repair-board-closeout/** task-owned remote root",
+    "docs/tasks/evidence/T-20260920-031.json",
+    "docs/handoffs/T-20260920-031-b25-logic-imm-repair-board-closeout.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-003.json historical golden JTAG-UART control",
+    "docs/tasks/evidence/T-20260920-021.json and its task-local programming/terminal runners as templates only",
+    "docs/tasks/evidence/T-20260920-030.json",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/** exact candidate read-only",
+    "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof exact golden read-only"
+  ],
+  "input_contract": {
+    "candidate_sof": {
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842105,
+      "sha256": "bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264",
+      "quartus_checksum": "0x315AC2B3",
+      "design_hash": "0CC907F3DD48A9C78864E3C5BD66B9AF",
+      "jtag_usercode": "0xFFFFFFFF"
+    },
+    "golden_sof": {
+      "remote_path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "quartus_checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F"
+    },
+    "jtag_id": "0x02E060DD",
+    "console_cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "program_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310",
+    "device": 1,
+    "instance": 0,
+    "program_server_source": "D:/Projects/fpga-altra/jtag-30mhz",
+    "program_server_channel": 0,
+    "program_server_frequency_hz": 15000000
+  },
+  "interaction": {
+    "terminal_command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "session": "Use one live SSH PTY/direct nios2-terminal session. Wait for READY and a later zero-event RXDBG page proving startup TX drain. Send each raw byte only after the preceding response; stop the command sequence on first missing response.",
+    "commands": [
+      "? -> CLOCK25 CAL-(OK|WAIT|FAIL) DDR-(OK|FAIL)",
+      "p -> PONG",
+      "d -> immediate RXDBG",
+      "Z -> printable Z echo"
+    ]
+  },
+  "acceptance": {
+    "preflight": "Under gamepc lock, candidate/golden identities match, no conflicting EDA/programmer/terminal or port-1310 owner exists, exactly one standard Quartus jtagserver is identified and preserved, and read-only jtagconfig shows the expected cable/JTAG ID/current golden design and nodes.",
+    "candidate_configuration": "Start one task-owned 15 MHz/channel-0 server from the frozen server bundle, configure the exact candidate SOF once with quartus_pgm, require exit 0 plus tool/configuration/operation/checksum/JTAG-ID/design-hash checks, then stop only the recorded owned server PID and preserve the standard server.",
+    "startup": "The first direct terminal connects and observes LCVEX25 BOOT, one CAL state, one DDR state, READY and startup/autonomous RXDBG.",
+    "commands": "The same live session proves CLOCK25 status, PONG, immediate RXDBG and printable Z echo in paced order.",
+    "hardware_path": "RXPATH contains bridge=PoC=dmem with final low16 0xA45A, at least four bridge/PoC/dmem valid events and zero fault bits.",
+    "firmware_path": "RXCPU contains four valid getc/dispatch events, final getc low16 0xA45A, final dispatch class=5 byte=0x5A, and positive putc/TX progress; final RXDBG event captures count=4 and byte=0x5A.",
+    "golden_control": "After terminal evidence is sealed, always volatile-configure the exact golden SOF using a new task-owned server run. Require programmer/checksum/JTAG-ID success, final golden design hash and JTAG UART/JTAG PHY nodes, standard-server preservation, no residual task process/port and link the historical T-003 bidirectional golden control. Final board state is golden even when candidate acceptance passes.",
+    "evidence": "Hash-bind candidate/golden programming results, full first-session transcript, input offsets/timestamps, parsed RXDBG/RXPATH/RXCPU rows, process ownership, server bundle, final enumeration and all safety predicates. Functional failure plus successful golden restoration remains a failed goal result, not a pass."
+  },
+  "failure_policy": "At the first candidate programming or interaction failure, stop only task-owned processes, preserve complete evidence, and immediately attempt exact golden volatile restoration. If golden restoration cannot be proven, stop and report without reset/power/Flash or process-wide cleanup.",
+  "resource": "Hold resource-lock gamepc across the complete preflight, candidate programming, terminal interaction, golden restoration, evidence fetch and postflight. Do not split the board ownership window. Monitor external waits event-driven with up to one-hour waits and no frequent polling.",
+  "forbidden_regions": [
+    "tracked source/RTL/firmware/QSF/SDC/IP/policy/expected-result changes",
+    "synthesis, fitter, STA or assembler",
+    "JIC/EPCQ/Flash write or erase and any persistent configuration format",
+    "power cycle, board reset or SoC reset",
+    "stopping the standard jtagserver, unknown or pre-existing processes",
+    "ordinary-file stdin or batching ?/p/d/Z in place of the required live paced session"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T17:38:19+08:00",
+    "agent_name": "board_t031",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "blocked",
+    "partial": true,
+    "topic_evidence_head": "93067787a10c4a44d2c8eb8d1d8d0b1bfa43e748",
+    "integration_evidence_sha": "6848124bea9f5a547562d67412004d754fcd20f0",
+    "candidate_programming": "three debugging quartus_pgm invocations, each exit 0 with tool/configuration/operation/checksum/JTAG-ID PASS; this exceeded the single-configuration task contract and is recorded as a process deviation",
+    "identity_gate": "FAIL; owned jtagconfig exposed no candidate design hash and the preserved standard server continued to expose cached golden design hash",
+    "terminal": "NOT STARTED; no ?/p/d/Z bytes and no RXDBG/RXPATH/RXCPU candidate evidence",
+    "golden_restoration": "PASS after each candidate transaction; final exact golden design hash 193DE4BC8A30F3ED5F1F with JTAG UART/PHY, no conflicts, port 1310 free",
+    "final_board_state": "golden SOF running",
+    "safety": "no JIC/EPCQ/Flash, reset, power cycle, synthesis/fitter/STA/assembler or unknown/pre-existing process stop",
+    "evidence": "docs/tasks/evidence/T-20260920-031.json",
+    "handoff": "docs/handoffs/T-20260920-031-b25-logic-imm-repair-board-closeout.md",
+    "next": "T-20260920-032 independent candidate live-identity contract audit; no hardware retry until accepted"
+  },
+  "created_at": "2026-09-20T17:37:08+08:00",
+  "updated_at": "2026-09-20T18:13:41+08:00"
+}

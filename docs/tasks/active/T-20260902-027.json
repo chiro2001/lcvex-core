@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-027",
+  "label": "EMIF-FIFO-RESET-CDC-DEEP",
+  "title": "EMIF async FIFO/reset CDC 深度修复（hold/recovery）",
+  "kind": "fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-emif-cdc-deep",
+  "agent_type": "rtl-cdc-fix",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-025"
+  ],
+  "base_sha": "87354542f502e1ec74971b5d63435e9590601b89",
+  "branch": "fix/T-20260902-027-emif-fifo-reset-cdc-deep",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-027",
+  "scope": "修复 T-20260902-025 仍负的 EMIF↔sys FIFO/reset CDC 路径：灰码跨域 hold（rd_ptr_bin_q→rd_ptr_gray_wr1_q、response_fifo mem→cpu_state/read_beat）和 reset synchronizer recovery（logic_rst_n_q→emif_rst_sync*），做真实 RTL 同步/复位释放修复。",
+  "reads": [
+    "docs/handoffs/T-20260902-025-fp-p5-rerun-round2.md",
+    "docs/handoffs/T-20260902-024-a10-rtl-cdc-harden.md",
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "rtl/lcvex_calibration_gate.sv",
+    "fpga/catapult_a10/rtl/**",
+    "Makefile",
+    "sim/**",
+    "tb/**"
+  ],
+  "writes": [
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "rtl/lcvex_calibration_gate.sv",
+    "fpga/catapult_a10/rtl/**",
+    "docs/handoffs/T-20260902-027-emif-fifo-reset-cdc-deep.md",
+    "docs/tasks/evidence/T-20260902-027.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "lint_soc.sh/lint_platform.sh PASS"
+    ],
+    "l1": [
+      "git diff --check",
+      "B2 AXI4/Avalon 回归 PASS"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "灰码/复位同步路径有真实 RTL 修复；本地 lint/回归通过；为下一轮 FP-P5 STA 提供 RTL。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T13:18:00+08:00",
+  "updated_at": "2026-09-03T14:11:20+08:00",
+  "known_limits": [
+    "不运行 Quartus fit/STA；不修改 Qsys 生成物；不改变功能语义"
+  ],
+  "handoff": "docs/handoffs/T-20260902-027-emif-fifo-reset-cdc-deep.md",
+  "evidence": "docs/tasks/evidence/T-20260902-027.json",
+  "next": "FP-P5 rerun",
+  "dispatch": {
+    "sent_at": "2026-09-03T13:18:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-027",
+    "branch": "fix/T-20260902-027-emif-fifo-reset-cdc-deep"
+  },
+  "head_sha": "3615cb3ade2589d9205885e951166fbe25e7e7b3",
+  "merge_sha": "29bbf85eb91357c696fedc5aac35932d0ae3f330",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T14:10:50+08:00",
+    "merged_at": "2026-09-03T14:11:20+08:00",
+    "recorded_at": "2026-09-03T14:11:20+08:00",
+    "notes": "EMIF FIFO/reset CDC deep hardening merged; compile passes. Next FP-P5 rerun with T-026+T-027."
+  }
+}

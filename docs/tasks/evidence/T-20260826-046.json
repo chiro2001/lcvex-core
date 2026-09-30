@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-046",
+  "base_sha": "aefa7f2a362ce99e71a7958825581a0bae84a4e0",
+  "head_sha": "aefa7f2a362ce99e71a7958825581a0bae84a4e0",
+  "merge_sha": "2c76543fb02b92a6c10fbe3e56de4b1c52e82d59",
+  "review_status": "complete",
+  "conclusion": {
+    "p6_local_exit": "supported",
+    "gate_e_local": "pass",
+    "gate_e_formal": "pending-policy-and-ci",
+    "main_promotion": "not-performed",
+    "p7_started": false
+  },
+  "reviewers": [
+    {
+      "role": "root-integrator",
+      "scope": "逐项证据审计、manifest 实际回读、路线图与 P7 依赖核对"
+    },
+    {
+      "role": "independent-read-only-review",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "high",
+      "scope": "Gate D/E 本地口径、正式晋级边界、P7 前阻断项与高层顺序",
+      "result": "同意 P6 本地功能完成；正式 Gate E/main/CI 未完成；未发现有效验收链相互矛盾"
+    }
+  ],
+  "inputs": [
+    {"path": "docs/tasks/evidence/T-20260826-042.json", "sha256": "e54df7312ccc61929001a9fd143069146d891b6d7974879b86e8f17f418e521b"},
+    {"path": "docs/tasks/evidence/T-20260826-043.json", "sha256": "2c767e03ea0adf80a06bedd76f56a4f0a71933bd1f41b41633c4dc3380c07fd0"},
+    {"path": "docs/tasks/evidence/T-20260826-044.json", "sha256": "0f826d2494499790c745a22b07a5c6b0e422356aa8fcf6952ec71257d4b659eb"},
+    {"path": "docs/ROADMAP.md", "sha256": "818eacd208250c4685cd0cbfce180ca18e0ba7714272e0b829336338f604abdd"},
+    {"path": "docs/PROJECT_STATUS.md", "sha256": "41191b2a599ec6acfa0da20246178f9525931245c8c464068aae40b760d7faa2"},
+    {"path": "docs/ISA_SCOPE.md", "sha256": "10cda70c23ad94dc80ae5737c4ada48ae3fd24c7d9e093b0a32ebfc64d2fd9e5"},
+    {"path": "docs/ISA_GAPS.md", "sha256": "5b7230cf9432459472689ba6f88668ece5ffb4f0a01ffdc2507ed382b0ffeb2e"}
+  ],
+  "read_only_checks": [
+    {
+      "id": "gate-e-valid-manifest-reread",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3: checkpoint.read_manifest(lite/retry/chain, main/chain-final)",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "lite 70 entries，last_seq=34999999；main 10 entries，last_seq=4999999"
+    },
+    {
+      "id": "gate-e-invalid-chain-rejection",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3: checkpoint.read_manifest(main/chain-current)",
+      "expected_result": "ValueError",
+      "result": "pass",
+      "summary": "无效链因 plugin 与 parent 摘要不匹配被拒绝，不能伪装成有效 parent"
+    },
+    {
+      "id": "parent-current-plugin-source-equivalence",
+      "command": "git diff --quiet 337d700 b2568a5 -- qemu/plugins",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "T-039 parent 与 b2568a5 的 plugin 源码无差异；二进制 SHA 差异来自不同构建产物，严格 child 仍按 parent 二进制绑定"
+    }
+  ],
+  "criteria": [
+    {
+      "criterion": "Gate D 在同一冻结 source SHA 完整通过",
+      "status": "sufficient",
+      "evidence": "T-043 b2568a5 完整复跑 exit 0；M2/R1 40/40、delay2 32、hardening 26、random 3x100k、coverage、baremetal-C、50/50 rc=0"
+    },
+    {
+      "criterion": "Gate D/E 使用同一 RTL candidate",
+      "status": "sufficient",
+      "evidence": "T-043/T-044 source_sha 均为 b2568a506088ac34ef1529975b120a3f0849b0c1"
+    },
+    {
+      "criterion": "固定 QEMU 与 Linux 输入、可审计 provenance",
+      "status": "sufficient-local",
+      "evidence": "T-044 记录 QEMU/Image/DTB/CPU/machine/icount/plugin/coordinator/filelist SHA；两条有效 manifest 实际回读"
+    },
+    {
+      "criterion": "fresh-root early boot 与 EL0 /init 稳定窗口",
+      "status": "sufficient-local",
+      "evidence": "lite 35M，出现 Run /init 与 /init ready；用户地址 SVC 路径继续锁步，70 checkpoints/490 artifacts"
+    },
+    {
+      "criterion": "main early-boot continuation",
+      "status": "sufficient-with-declared-limit",
+      "evidence": "T-039 finalized parent 后 5M，跨过旧 SCTLR 首错，10 checkpoints/70 artifacts；main 无 initrd，不宣称 main 用户态"
+    },
+    {
+      "criterion": "失败分类与无效链隔离",
+      "status": "sufficient",
+      "evidence": "长 socket 为 0 提交；current-plugin child 真实回读失败并 do-not-reuse；pending 链未作为 parent"
+    },
+    {
+      "criterion": "同晋级 SHA 的可信 CI 与干净 QEMU patch replay",
+      "status": "missing-for-formal-promotion",
+      "evidence": "本轮按用户策略未等待 CI；固定 QEMU binary/patch SHA 与历史幂等 replay 可追溯，但无 b2568a5 的可信远端 run/干净 replay artifact"
+    },
+    {
+      "criterion": "checkpoint finalize 成功后才发布 complete/finalized",
+      "status": "contradicted",
+      "evidence": "T-044 chain-current 在 parent plugin 校验失败前已写完成态，随后 read_manifest 失败；已登记 T-045"
+    },
+    {
+      "criterion": "SCTLR PAuth 位的脏 sidecar restore 负路径",
+      "status": "indirect-only",
+      "evidence": "T-042 有共享掩码、SVA、正常 MSR/MRS、常规 checkpoint smoke 与 Linux 长跑，但没有永久注入 bit31/30/27/13 的 sidecar fixture"
+    },
+    {
+      "criterion": "进入 P7 前有一致的标量 ISA/覆盖率基线",
+      "status": "documentation-drift",
+      "evidence": "ISA_GAPS 是较新快照；ISA_SCOPE 顶部仍保留 P5a 尚未实现描述，DEVELOPMENT_PLAN 也有早期阶段状态；61/60 是 seen/expected 记账而非覆盖失败，但显示方式易误解"
+    }
+  ],
+  "p7_entry_assessment": {
+    "scalar_memory_exception_local_gates": "pass",
+    "ci_literal_requirement": "deferred-by-user-policy-but-not-removed-from-formal-docs",
+    "checkpoint_evidence_blocker": "T-045 must close before publishing or reusing new P7 checkpoint parents",
+    "restore_negative_fixture": "add before extending checkpoint state for FP/NEON",
+    "protocol_prerequisite": "P7 architecture task must define V0-V31, FPCR/FPSR, optional vector commit fields, QEMU comparison, failure dump and next checkpoint sidecar version while preserving scalar commit fields"
+  },
+  "recommended_order": [
+    "用户确认阶段策略：P6 本地完成，正式 Gate E/main/CI 后置",
+    "完成 T-045 finalize 原子性回归",
+    "补 PAuth dirty-sidecar fixture，并收敛 ISA_SCOPE/ISA_GAPS/coverage 基线",
+    "创建 P7 架构与验证协议任务，先设计 FPCR/FPSR、V 状态、commit/difftest/checkpoint 边界",
+    "按 FPCR/FPSR -> FP32/FP64 标量 -> NEON 整数/访存 -> 选定 NEON 浮点分层实现；正式 main/CI 在用户选定节点执行"
+  ],
+  "decisions_required": [
+    "是否确认 P6 状态为本地完成、正式 Gate E/main/CI 后置，并允许前置缺口关闭后在 feature 分支启动 P7",
+    "还是先执行可信 CI/QEMU 干净 patch replay并晋级 main，再开始 P7",
+    "是否接受 T-045、PAuth dirty-sidecar fixture 和标量范围文档收敛作为 P7 编码前的最小前置包"
+  ],
+  "known_limits": [
+    "本任务没有实施 T-045、PAuth fixture、CI/main 晋级或任何 P7 功能。",
+    "本地 P6 结论不等于完整 ARMv8.2 ISA、完整 Linux 用户空间、FP/NEON/SVE 或多核支持。"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-018",
+  "base_sha": "5e17f56e85ebcd82f081262f8338ed3b99ca12ee",
+  "head_sha": "5e17f56e85ebcd82f081262f8338ed3b99ca12ee",
+  "merge_sha": "0bf4b34",
+  "toolchain": {
+    "assembler": "GNU assembler 2.47 (aarch64-linux-gnu-as)",
+    "probe_arch": "-march=armv8.2-a"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "worktree_note": "external fork had pre-existing local difftest modifications; audit did not modify it",
+    "source_sha256": {
+      "target/arm/tcg/translate-a64.c": "9b389b128f15d5ec862fe5b87bf0777a624fe54150b7bedc4d47c049ad6ce172",
+      "target/arm/tcg/a64.decode": "752c95108544a4a4582efa318b1aae0418ad16aeb2f27cb9877c4849501013fc",
+      "target/arm/tcg/cpregs-at.c": "d726a12305f6b24ee175f160a34e595967ea7f6a5ca953745b69aa7c4b1e1fc9",
+      "target/arm/helper.c": "dbd135667ed5992bc65c7cdefdfa0584ca00ca3525f94aaf84bbeafad3fad12b",
+      "target/arm/tcg/tlb-insns.c": "face7209b41e03d5a01057126c4d1ef0ef55caa6273da801471aa7ccf5a3b827"
+    }
+  },
+  "rtl": {
+    "decoder_sha256": "0b8ab979155ab31b44da2f3cf2be3e0194f569186757ac13f46772d4c00c8547",
+    "core_sha256": "33d9c698fbfd156097bf2f726032752b91390ff20a1067d7c1cb3fb702a7fabc",
+    "pkg_sha256": "ea0e3e8517c49ef7bd34e1bc0707b69f64a993751d902f90f7df1a538c2a26d5"
+  },
+  "runs": [
+    {
+      "run_id": "assembler-maint-armv82-001",
+      "level": "L0",
+      "command": "per-instruction aarch64-linux-gnu-as -march=armv8.2-a probe for TLBI/IC/DC/AT",
+      "cpuset": "2",
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TLBI E1 12 forms, IC IALLUIS/IALLU/IVAU, DC IVAC/ISW/CVAC/CVAU/CIVAC/CVAP/ZVA, AT S1E0R/W/S1E1RP/WP all assemble; VMALLE1OS, DC CVADP and AT S1E1RP/WP fail under armv8.0/8.1 as expected, CVAP/RP/WP pass armv8.2"
+    },
+    {
+      "run_id": "assembler-encoding-001",
+      "level": "L0",
+      "command": "aarch64-linux-gnu-objdump -d on individual armv8.2 probe objects",
+      "cpuset": "2",
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "encodings": {
+        "dc_cvap_x0": "d50b7c20",
+        "at_s1e0r_x0": "d5087840",
+        "at_s1e0w_x0": "d5087860",
+        "at_s1e1rp_x0": "d5087900",
+        "at_s1e1wp_x0": "d5087920",
+        "tlbi_vmalle1is": "d508831f"
+      }
+    },
+    {
+      "run_id": "source-crosscheck-001",
+      "level": "L0",
+      "command": "rg/sed cross-check QEMU cpregs-at.c/helper.c/tlb-insns.c against rtl/lcvex_decode.sv/lcvex_core.sv",
+      "cpuset": "2",
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "findings": [
+        "No ARMv8.2 E1 TLBI form missing; decoder covers CRM=3/7 and op2=0,1,2,3,5,7",
+        "DC CVAP missing from MAINT enum/decoder; QEMU tuple CRM=12, op1=3, op2=1",
+        "AT S1E0R/W and S1E1RP/WP missing; decoder only accepts CRM=8 op2=0/1",
+        "Decoder maintenance matches do not constrain op1 for IC/DC/TLBI, risking over-acceptance; TLBI op1=4 E2 forms must not execute when EL2 is disabled"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "maint_probe_source",
+      "path": "build/tmp/T-20260826-018/maint_probe.s",
+      "status": "diagnostic probe; not committed"
+    }
+  ],
+  "known_limits": [
+    "No RTL/QEMU implementation or lockstep test was run; this is an encoding/source audit only.",
+    "QEMU source worktree is dirty from pre-existing difftest changes; hashes and commit are recorded for reproducibility.",
+    "TLBI OS/RV/range, DC CVADP and EL2/EL3 maintenance remain outside ARMv8.2-A scalar scope."
+  ]
+}

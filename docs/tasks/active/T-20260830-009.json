@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-009",
+  "label": "P-parent",
+  "parent": "",
+  "title": "性能验证工作负载线：规划与集成",
+  "kind": "perf-line-parent",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "6559336cf63d548bd3e183590236ee6afa0998e2",
+  "branch": "feature/t-20260830-009-p-parent",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-009",
+  "scope": "性能验证 workload/基础设施，按 docs/PERFORMANCE_WORKLOAD_PLAN.md 执行；不把小基准伪装成架构/Fmax 签核。",
+  "writes": [
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/handoffs/T-20260830-009-perf-parent.md",
+    "docs/tasks/evidence/T-20260830-009.json"
+  ],
+  "reads": [
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "baremetal/**",
+    "sim/microbench/**",
+    "scripts/build-microbench.sh",
+    "Makefile"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "可构建/可运行或提供可运行方案"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可复现的性能 workload/基础设施，记录 cycle/参数/SHA；明确不替代 A10/Fmax。",
+  "next": "P-line workload/baseline parent closed；后续性能实现与同 SHA 复测由 T-20260830-033 及其 F1/F3 child DAG 承接。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T02:52:27+08:00",
+  "updated_at": "2026-08-30T19:21:22+08:00",
+  "known_limits": [
+    "不启动 Quartus；本地重型 Verilator 需 cgroup <16GiB、VERILATOR_JOBS=1；与 C3/FPGA 重型构建串行。",
+    "不把性能代理数据写成架构/Fmax 签核。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-009-perf-parent.md",
+  "evidence": "docs/tasks/evidence/T-20260830-009.json",
+  "merge_sha": "ed72c107ae40b095bb8d660dff5f6b2487154c2f",
+  "merged_at": "2026-08-30T13:17:25+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T19:21:22+08:00",
+    "status": "accepted",
+    "checks": [
+      "P-INFRA and P-ALU/P-MEM/P-FP/P-MC/P-MIXED child tasks are done",
+      "runtime calibration/fix, 14-workload snapshot and F0 cache/latency baseline are done",
+      "performance results remain proxy measurements and do not claim A10 Fmax or architecture signoff"
+    ],
+    "notes": "Parent coordination task closed after reconciling T-010 and confirming all workload/baseline children."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T06:00:00+0800",
+        "new": "2026-08-30T02:52:27+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T06:00:00+0800",
+        "new": "2026-08-30T02:52:27+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks."
+  }
+}

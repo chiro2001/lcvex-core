@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260901-003",
+  "label": "PE-F1E-DIGEST-CANON",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "v2_canonicalization_and_representative_pairs_pass",
+  "base_sha": "e65005c2beab3e2b1fc25e8bc0f49a868b3c16ff",
+  "head_sha": "5254184fb09bb02cec9b2f404ec48a55b609bfcf",
+  "measurement_source_sha": "5254184fb09bb02cec9b2f404ec48a55b609bfcf",
+  "final_report_tip": "f4d80ca38c3d30e73a7e64c2bd2942942877ddae",
+  "merge_sha": "b77955c2483ba598143ff91fbfabdaf443734198",
+  "branch": "infra/T-20260901-003-commit-digest-canonical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-003",
+  "owner": "luna-commit-digest-canonicalization",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-01T01:44:32+08:00",
+    "received_at": "2026-09-01T01:44:32+08:00",
+    "reported_at": "2026-09-01T02:56:41+08:00"
+  },
+  "scope": "修复性能 runner commit digest 的 inactive payload 摘要边界；提取生产 helper、加入直接调用 fixture、传播 v2 digest schema，并在 nocache_d0/fullcache_d1 两组 neon_vect F0/F1a 上验证严格相等。不改 RTL/QEMU/workload/reference/comparator，不跑完整矩阵/Gate/Linux/Quartus。",
+  "writes": [
+    "sim/microbench/commit_digest.h",
+    "sim/microbench/commit_digest_test.cc",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "scripts/run_perf_matrix.py",
+    "scripts/test_registry.json",
+    "Makefile",
+    "docs/F1A_COMMIT_DIGEST_CANONICALIZATION.md",
+    "docs/handoffs/T-20260901-003-commit-digest-canonical.md",
+    "docs/tasks/evidence/T-20260901-003.json"
+  ],
+  "files_not_modified": [
+    "rtl/**",
+    "tb/**",
+    "scripts/compare_commit_traces.py",
+    "baremetal/perf/t_neon_vect.c",
+    "QEMU fork",
+    "reference results"
+  ],
+  "commits": [
+    {"sha": "5254184fb09bb02cec9b2f404ec48a55b609bfcf", "message": "verify: canonicalize commit digest payload", "contents": "helper, fixture, runner, perf runner, matrix, registry, Makefile"},
+    {"sha": "pending", "message": "docs: record commit digest v2 evidence", "contents": "diagnosis doc, handoff, task evidence"}
+  ],
+  "schema": {
+    "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+    "trace_record_schema": "lcvex-commit-trace-v1",
+    "historical_v1_artifacts_rewritten": false,
+    "fnv_offset": "1469598103934665603",
+    "fnv_prime": "1099511628211",
+    "byte_order": "little-endian byte feed",
+    "invalid_vector_count": "count > 4 returns invalid; raw count remains hashed",
+    "monitor_boundary": "mon_we"
+  },
+  "provenance": {
+    "image": {"path": "build/microbench/perf_neon_vect.bin", "bytes": 1864, "sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf"},
+    "source_bundle_sha256": "be1d5d1c6c988d84b80d03821822568eec115302445c4500b0e2b3e4a9f6f5d3",
+    "measurement_source_sha_unique": true,
+    "same_image_per_pair": true,
+    "same_toolchain_per_pair": true,
+    "same_non_fifo_parameters_per_pair": true,
+    "source_tree_clean_at_measurement": true,
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cross_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "python": "3.12.10",
+    "perf_cflags": "-O2",
+    "max_cycles": 5000000,
+    "source_file_sha256": {
+      "sim/microbench/commit_digest.h": "5980956f3faaa820fa4c7da89893fca77655028151ccc4537a834385010313fb",
+      "sim/microbench/commit_digest_test.cc": "d35f5bdae72fe3d9ad5973b8eb70f62c0c3d66b038ca2c4fad3f6137ae115c27",
+      "sim/microbench/microbench_runner.cc": "2a01b996a7b0246394dc2c03bc4caafcf43063fa2c779596539a172bb8b8cb2b",
+      "sim/microbench/perf_runner.py": "bbae7215d350646a91d2f32880c6400c43e7a6c0e98cbe602aad57eb8dffd5bd",
+      "scripts/run_perf_matrix.py": "69137a22dafa17d0d4d937d029bd5a485633b24fa6ba68f923250e4a743724c0",
+      "scripts/test_registry.json": "3705d153465f841a44d1647da4d8e307303eb0d993def59a2f85ebd9145bf84e",
+      "Makefile": "8d775be0fd31b8bb25febcd40e11782af6f10336533e5f4706f9ab00273e8764"
+    }
+  },
+  "resources": {
+    "memory_max": "15G",
+    "memory_swap_max": "0",
+    "cpu_quota": "50%",
+    "makeflags": "-j1",
+    "verilator_jobs": 1,
+    "heavy_builds_serialized": true,
+    "command_wrapper": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1",
+    "build_allocated_mb": {"nocache_d0_f0": 1043.500, "nocache_d0_f1a": 1044.273, "fullcache_d1_f0": 1045.488, "fullcache_d1_f1a": 1046.250},
+    "build_wall_seconds": {"nocache_d0_f0": 601.894, "nocache_d0_f1a": 615.574, "fullcache_d1_f0": 611.668, "fullcache_d1_f1a": 640.498},
+    "run_rss_kb": {"nocache_d0_f0": 140184, "nocache_d0_f1a": 140156, "fullcache_d1_f0": 140448, "fullcache_d1_f1a": 140716}
+  },
+  "commands": {
+    "image_build": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env PERF_ONLY=neon_vect PERF_CFLAGS=-O2 bash scripts/build-microbench.sh build/microbench/perf_neon_vect.bin",
+    "fixture": "make commit-digest-test",
+    "python_compile": "python3 -m py_compile sim/microbench/perf_runner.py scripts/run_perf_matrix.py",
+    "registry": "python3 scripts/test_registry.py --check --check-consistency && python3 scripts/test_registry_test.py",
+    "schema_guard_negative": "python3 -c \"import scripts.run_perf_matrix as m; m.require_digest_schema([{'config':'legacy_f0','name':'neon_vect','commit_digest_schema':'lcvex-commit-digest-v1'}])\"",
+    "runner_build": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 make VERILATOR_JOBS=1 PERF_RUNNER_DIR={task_runner_dir} PERF_I_L1={I_L1} PERF_D_L1={D_L1} PERF_L2={L2} PERF_MEM_DELAY_MODE={delay} PERF_FETCH_FIFO_ENABLE={fifo_enable} microbench-build-config",
+    "runner_run": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 sim/microbench/perf_runner.py --runner {runner} --image build/microbench/perf_neon_vect.bin --name neon_vect --max-cycles 5000000 --git-sha 5254184fb09bb02cec9b2f404ec48a55b609bfcf --measurement-source-sha 5254184fb09bb02cec9b2f404ec48a55b609bfcf --source-sha be1d5d1c6c988d84b80d03821822568eec115302445c4500b0e2b3e4a9f6f5d3 --param BASE_CONFIG={base} --param I_L1={I_L1} --param D_L1={D_L1} --param L2={L2} --param MEM_DELAY_MODE={delay} --param FETCH_FIFO_ENABLE={fifo_enable} --param FETCH_FIFO_DEPTH=2 --param FIFO_VARIANT={fifo} --trace {trace} --out {report}",
+    "comparator": "python3 scripts/compare_commit_traces.py --off {f0_trace} --on {f1a_trace} --out {comparison} --window 4",
+    "matrix_aggregate": "python3 scripts/run_perf_matrix.py --aggregate-only --configs nocache_d0,fullcache_d1 --workloads neon_vect --out-dir build/agents/T-20260901-003/matrix"
+  },
+  "fixture": {
+    "command": "make commit-digest-test",
+    "result": "PASS: commit digest v2 helper fixtures",
+    "golden": "8b782b3f31381149",
+    "direct_production_helper": true,
+    "inactive_categories": ["gpr1", "gpr2", "gpr3", "sp", "nzcv", "mem1", "mem2", "exception", "monitor(mon_we=0)", "vector(count=0)", "fpcr", "fpsr"],
+    "active_categories": ["seq", "pc", "next_pc", "insn", "gpr1/2/3 enable+rd+data", "sp enable+data", "nzcv enable+data", "mem1/2 enable+addr+data+strb", "exception valid+code+esr+far", "monitor mon_we+valid+addr+data+data2", "vector count+4 slots rd/lo/hi", "fpcr enable+data", "fpsr enable+data"],
+    "vector_overflow": "count=5 returns invalid and raw count remains detectable",
+    "deterministic": true
+  },
+  "correction": {
+    "reason": "active payload sensitivity assertions now copy an independent enabled baseline for every subfield; added vec_write_count=1 tail slots 1..3 inactive equality",
+    "production_helper_changed": false,
+    "production_runner_changed": false,
+    "runners_rebuilt": false,
+    "dynamic_results_reused": ["nocache_d0 F0/F1a", "fullcache_d1 F0/F1a"],
+    "timestamps_corrected_to_dispatch": "2026-09-01T01:44:32+08:00",
+    "reported_at": "2026-09-01T02:56:41+08:00"
+  },
+  "runner_builds": [
+    {"config": "nocache_d0_f0", "path": "build/agents/T-20260901-003/runners/nocache_d0_f0/microbench_runner", "bytes": 12790728, "sha256": "e7e408a077e4704f50c42a27d79adda4cc4ed78ba1dadd64342f76d0f822911f", "build_log": "build/agents/T-20260901-003/runners/nocache_d0_f0.build.log", "build_log_bytes": 9089, "build_log_sha256": "facbc9f94ccd78d0c2779143704252344ab0bc44caa7ce87c3e52b0781b8bcbf"},
+    {"config": "nocache_d0_f1a", "path": "build/agents/T-20260901-003/runners/nocache_d0_f1a/microbench_runner", "bytes": 12807912, "sha256": "b4caca01b0bd0d7af287dd95c2348c4cbc008da69d099b6a67bf40513f574ec0", "build_log": "build/agents/T-20260901-003/runners/nocache_d0_f1a.build.log", "build_log_bytes": 9092, "build_log_sha256": "61a6dbf5bd91bb8309d4237bc8f126993643b29ee1ad90aa88846d0ea74b4c34"},
+    {"config": "fullcache_d1_f0", "path": "build/agents/T-20260901-003/runners/fullcache_d1_f0/microbench_runner", "bytes": 12866840, "sha256": "8c41ce7e69bfd27f3420f1fa570720f0d2105ca42ed15ba98c68e5d74c9b119d", "build_log": "build/agents/T-20260901-003/runners/fullcache_d1_f0.build.log", "build_log_bytes": 9095, "build_log_sha256": "8605b80bd23feeb453c85ba25579ed04d8d1ab3b730c5f3c1268b6fa3c06ffbd"},
+    {"config": "fullcache_d1_f1a", "path": "build/agents/T-20260901-003/runners/fullcache_d1_f1a/microbench_runner", "bytes": 12883840, "sha256": "c20d701788a8b9c030e262ac7b8d4b36b7edcec5d2dcbc2588c1f52b5e72af93", "build_log": "build/agents/T-20260901-003/runners/fullcache_d1_f1a.build.log", "build_log_bytes": 9098, "build_log_sha256": "28706753e0fbc93d2d2d29b12d1d0db0583e0d80476015cdf523c2d1d0391e8a"}
+  ],
+  "image_build": {"path": "build/microbench/perf_neon_vect.bin", "bytes": 1864, "sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf", "log": "build/agents/T-20260901-003/images/neon_build.log", "log_bytes": 316, "log_sha256": "aa68db55ea919827e1959728f872f8616a744e23fc3e110a0caa81d7cf47efb1"},
+  "runs": [
+    {"id": "neon_nocache_d0_f0", "config": "nocache_d0", "mode": "f0", "status": "pass", "returncode": 0, "cycles": 227526, "retired_insn": 66721, "commit_digest": "5c1d4f0a0f31cfe7", "memory_digest": "3ba6dea5f6c76128", "committed_memory_effects": 4116, "commit_digest_schema": "lcvex-commit-digest-v2-active-payload", "commit_digest_valid": true, "wall_sec": 6.413329, "rss_kb": 140184, "report": "build/agents/T-20260901-003/traces/neon_nocache_d0_f0.json", "report_bytes": 6901, "report_sha256": "86411f89e93a7a3d2b9886a530e2a79bf3804a6fe467aa59de76a652cb472882", "trace": "build/agents/T-20260901-003/traces/neon_nocache_d0_f0.jsonl", "trace_bytes": 20441841, "trace_sha256": "dbcb24b0fdd0ecdfdf93b6624692b435ed24d45c31692d39bc51f4d9d771e6b6", "runner_log": "build/agents/T-20260901-003/traces/neon_nocache_d0_f0.runner.log", "runner_log_bytes": 6996, "runner_log_sha256": "445387b98cf5697905e5a25fd652c93ad62dfd1c54ad4ac4b91439c44cd7778f", "fetch_fifo": {"enable": 0, "epoch_final": 0, "epoch_bumps": 0, "occupancy_max": 0, "peak_signal_max": 0, "push": 0, "pop": 0, "flush": 0, "stale_drop": 0, "stale_drain_cycles": 0, "overflow": 0}},
+    {"id": "neon_nocache_d0_f1a", "config": "nocache_d0", "mode": "f1a", "status": "pass", "returncode": 0, "cycles": 175716, "retired_insn": 66721, "commit_digest": "5c1d4f0a0f31cfe7", "memory_digest": "3ba6dea5f6c76128", "committed_memory_effects": 4116, "commit_digest_schema": "lcvex-commit-digest-v2-active-payload", "commit_digest_valid": true, "wall_sec": 5.833042, "rss_kb": 140156, "report": "build/agents/T-20260901-003/traces/neon_nocache_d0_f1a.json", "report_bytes": 6952, "report_sha256": "3a40d80ef93b857eb2b02afe2db0dabba11fdfa58d551d1cc64a20480d222a1e", "trace": "build/agents/T-20260901-003/traces/neon_nocache_d0_f1a.jsonl", "trace_bytes": 20534072, "trace_sha256": "9086b0699b69ef2f827d9b5a82df76201792f0eb4748a7631826b84df8ebd3f1", "runner_log": "build/agents/T-20260901-003/traces/neon_nocache_d0_f1a.runner.log", "runner_log_bytes": 7047, "runner_log_sha256": "8bf8914cece52b9bcf6fba0ecb86634d2f37fc2c36a68d6d983e6fef98e6aa8d", "fetch_fifo": {"enable": 1, "epoch_final": 251, "epoch_bumps": 10747, "occupancy_max": 1, "peak_signal_max": 1, "push": 66724, "pop": 66722, "flush": 10747, "stale_drop": 10745, "stale_drain_cycles": 0, "overflow": 0}},
+    {"id": "neon_fullcache_d1_f0", "config": "fullcache_d1", "mode": "f0", "status": "pass", "returncode": 0, "cycles": 253416, "retired_insn": 66721, "commit_digest": "5c1d4f0a0f31cfe7", "memory_digest": "3ba6dea5f6c76128", "committed_memory_effects": 4116, "commit_digest_schema": "lcvex-commit-digest-v2-active-payload", "commit_digest_valid": true, "wall_sec": 7.163324, "rss_kb": 140448, "report": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f0.json", "report_bytes": 6985, "report_sha256": "7ebc279c0d85ff13c1112f95ce062f97caafd92613ae9d7ba7820e8cf9d5177f", "trace": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f0.jsonl", "trace_bytes": 20442195, "trace_sha256": "d929d1bf0bee31c6088628da869dd786b654546293fd62a4f85d0b47cfac6ef5", "runner_log": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f0.runner.log", "runner_log_bytes": 7080, "runner_log_sha256": "69a11ca35bdccbd3e5668f422bc133caf2b1da2c7422a2833d032e7c9243c14d", "fetch_fifo": {"enable": 0, "epoch_final": 0, "epoch_bumps": 0, "occupancy_max": 0, "push": 0, "pop": 0, "flush": 0, "stale_drop": 0, "stale_drain_cycles": 0, "overflow": 0}},
+    {"id": "neon_fullcache_d1_f1a", "config": "fullcache_d1", "mode": "f1a", "status": "pass", "returncode": 0, "cycles": 200033, "retired_insn": 66721, "commit_digest": "5c1d4f0a0f31cfe7", "memory_digest": "3ba6dea5f6c76128", "committed_memory_effects": 4116, "commit_digest_schema": "lcvex-commit-digest-v2-active-payload", "commit_digest_valid": true, "wall_sec": 6.269907, "rss_kb": 140716, "report": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f1a.json", "report_bytes": 7037, "report_sha256": "a5cd380310ee7bf64be6a1e34a9a37993cca8c656060f799fa48b560aa533215", "trace": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f1a.jsonl", "trace_bytes": 20534645, "trace_sha256": "cf9d48664c456b8392655399380f431935de5387a9db17ea2fcedb61df82d679", "runner_log": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f1a.runner.log", "runner_log_bytes": 7132, "runner_log_sha256": "7a9082abd0d3fb5e67f5df8fd44571cc932a90e9b27bd728e11ea84857f514a9", "fetch_fifo": {"enable": 1, "epoch_final": 251, "epoch_bumps": 10747, "occupancy_max": 1, "peak_signal_max": 1, "push": 66725, "pop": 66722, "flush": 10747, "stale_drop": 10745, "stale_drain_cycles": 96, "overflow": 0}}
+  ],
+  "comparisons": [
+    {"id": "nocache_d0_v2", "off": "build/agents/T-20260901-003/traces/neon_nocache_d0_f0.jsonl", "on": "build/agents/T-20260901-003/traces/neon_nocache_d0_f1a.jsonl", "path": "build/agents/T-20260901-003/comparisons/nocache_d0_v2.json", "bytes": 9228, "sha256": "b9d6ced537255795fdfa755ac6d2fc221b2cf58ce83b34dc503d61a0fde435fa", "status": "equal", "category": "equal", "records_compared": 66721, "digest_schema": "lcvex-commit-digest-v2-active-payload"},
+    {"id": "fullcache_d1_v2", "off": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f0.jsonl", "on": "build/agents/T-20260901-003/traces/neon_fullcache_d1_f1a.jsonl", "path": "build/agents/T-20260901-003/comparisons/fullcache_d1_v2.json", "bytes": 9244, "sha256": "484fa030e42c60af50c8fcb5335407cd18e1b9d724923f69cbd5db31b9f0a1cf", "status": "equal", "category": "equal", "records_compared": 66721, "digest_schema": "lcvex-commit-digest-v2-active-payload"}
+  ],
+  "matrix": {
+    "schema": "lcvex-perf-matrix-f1c-v1",
+    "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+    "rows": 4,
+    "configs": ["nocache_d0_f0", "nocache_d0_f1a", "fullcache_d1_f0", "fullcache_d1_f1a"],
+    "workloads": ["neon_vect"],
+    "json": {"path": "build/agents/T-20260901-003/matrix/matrix.json", "bytes": 31682, "sha256": "e52fb48d83df96a7da739bd7539a3bfd97f6fd3cf6a66e48618a4f1d9caaac0a"},
+    "csv": {"path": "build/agents/T-20260901-003/matrix/matrix.csv", "bytes": 2226, "sha256": "a13688f3db4ea635c2a90a460075309c61af7867153093a4fa591d6ead3ae8a2"},
+    "csv_schema_column": true,
+    "all_rows_v2": true,
+    "strict_pairs_equal": true
+  },
+  "validation": [
+    {"level": "L0", "command": "make commit-digest-test", "result": "PASS: commit digest v2 helper fixtures", "exit_code": 0},
+    {"level": "L0", "command": "python3 -m py_compile sim/microbench/perf_runner.py scripts/run_perf_matrix.py", "result": "pass", "exit_code": 0},
+    {"level": "L0", "command": "python3 scripts/test_registry.py --check --check-consistency && python3 scripts/test_registry_test.py", "result": "registry 64 items and unit tests pass", "exit_code": 0},
+    {"level": "L0", "command": "matrix schema guard with legacy v1 row", "result": "expected digest schema provenance mismatch", "exit_code": 0},
+    {"level": "L1", "command": "four serialized Verilator runner builds", "result": "all pass; allocated 1043.500/1044.273/1045.488/1046.250 MB", "exit_code": 0},
+    {"level": "L1", "command": "four serialized neon_vect perf_runner runs", "result": "all pass; v2 valid=true; retired=66721; commit/memory/effects equal per pair", "exit_code": 0},
+    {"level": "L2", "command": "python3 scripts/compare_commit_traces.py --self-test", "result": "commit trace comparator self-test: PASS (equal/duplicate/skip/effect/wrong-path/termination)", "exit_code": 0},
+    {"level": "L2", "command": "compare nocache_d0 and fullcache_d1 v2 traces", "result": "both equal, records_compared=66721", "exit_code": 0},
+    {"level": "L0", "command": "python3 -m json.tool docs/tasks/evidence/T-20260901-003.json; git diff --check; git status --short --branch", "result": "pass; JSON and whitespace checks clean; only declared docs/evidence files staged", "exit_code": 0}
+  ],
+  "not_run": ["完整 196-row 矩阵", "Gate D", "Linux", "Quartus/FPGA", "QEMU lockstep"],
+  "conclusion": "生产 v2 digest 已正确对 inactive payload 规范化，同时保留所有架构字段和 active payload；两个代表性 neon_vect F0/F1a pair 的 status/retired/v2 commit digest/memory digest/effect count 与 active trace 全部严格相等。",
+  "next": "集成者在合并 SHA 上复跑任务要求子集；其余历史 mismatch 和完整 98/98 矩阵另立后续闭合。"
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-008",
+  "label": "B25-RX-OBSERVABILITY-NOFP-PROFILE",
+  "state": "done",
+  "acceptance_status": "content-addressed-profile-and-affected-l0-l2-pass",
+  "partial": false,
+  "base_sha": "85992f53c850091a466836e7fd4424dde6000484",
+  "base_tree_sha": "dd41ba4d9a1a97d819f9356697f28aa89326d64f",
+  "profile_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+  "profile_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+  "branch": "fpga/T-20260920-008-b25-rx-observability-nofp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-008",
+  "owner": "root",
+  "timestamps": {
+    "created_at": "2026-09-20T04:10:55+08:00",
+    "profile_committed_at": "2026-09-20T04:22:00+08:00",
+    "validation_finished_at": "2026-09-20T04:27:18+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "change": {
+    "path": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+    "diff": "parameter logic A64_FP_SIMD = 1'b1 -> 1'b0",
+    "lines_added": 1,
+    "lines_removed": 1,
+    "profile_file_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+    "all_changed_paths": [
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv"
+    ]
+  },
+  "profile_contract": {
+    "purpose": "Fast first-board validation of the RXDBG PC=0, polling JTAG-UART and DDR diagnostic path.",
+    "monitor_scalar_only": true,
+    "architectural_limit": "FP/NEON execution units are removed. Software must not execute FP/NEON; this profile is not final full-FP/P7 release closure.",
+    "provenance": "This is a one-line derivative of the Gate-D-passed full-FP candidate 85992f53, not a claim that 85992f53 itself was no-FP."
+  },
+  "boot_identity": {
+    "bin_bytes": 1204,
+    "bin_sha256": "7d8cf878785aebf699cbb3d332df2d3c7e03f1b5045a2a1080771cc0310322d4",
+    "mif_bytes": 204942,
+    "mif_sha256": "491f30c491f034f52b5222c7b8831f9b234b1d8bc7a84cf6180697bf78655c90"
+  },
+  "validation": [
+    {
+      "name": "scope and parameter propagation",
+      "result": "PASS",
+      "detail": "Exactly one tracked file and one added/removed line; board default 0 propagates board-to-SoC-to-core generate gate.",
+      "log": {
+        "path": "build/agents/T-20260920-008/static/scope-parameter.log",
+        "bytes": 342,
+        "sha256": "6a8af5845eb128cfdc65ad85844edfdb60866c20e4db1c43887d6eaeefb2ed7c"
+      }
+    },
+    {
+      "name": "no-FP static closure",
+      "result": "PASS",
+      "checks": [
+        "core lint with A64_FP_SIMD=0",
+        "SoC lint with A64_FP_SIMD=0",
+        "board skeleton lint consuming default A64_FP_SIMD=0",
+        "Quartus synthesis-selector contract"
+      ],
+      "logs": {
+        "core_lint_sha256": "87ba019652d69e6b72654e99854f30d808a3f7c28d47c653257fcff5b9be9635",
+        "soc_lint_sha256": "64724ae5a432c48e859446fa2a71388d484c60174ac476b60a45b6fcb8673658",
+        "platform_lint_sha256": "4ed7b0db9d6fca0c8e8eadd2571f166ccb4dd86a85f43e1641f9601e6fb0e63e",
+        "selector_sha256": "1b5d7d2ecaf80c7a6a0ed7756dc1523e27cb8fd906a9ec80b18fa73a7ad7a2f8"
+      }
+    },
+    {
+      "name": "corrected M20K synthesis timing",
+      "result": "BRAM_M20K_TIMING_TEST_PASS",
+      "log": {
+        "path": "build/agents/T-20260920-008/m20k-v2-wrapper.log",
+        "bytes": 4848,
+        "sha256": "2a505ee6305e0c6a22ffaf2f17d5128a3c05f5f1865827ca241d8af053e6a287"
+      }
+    },
+    {
+      "name": "vendor-timed JTAG-UART focused bridge and status",
+      "result": "PASS for Icarus and Verilator bridge plus status observability",
+      "log": {
+        "path": "build/agents/T-20260920-008/jtag-focused-v2-wrapper.log",
+        "bytes": 10336,
+        "sha256": "d52f36d81ee318e8aea5bcf7da55ed64222cab53da1f7f05875e47ba6b9c0de7"
+      }
+    },
+    {
+      "name": "combined no-FP RXDBG full-SoC evidence",
+      "result": "PASS by exact input-equivalence reuse of T-20260920-005",
+      "reason": "The only T-008 change is the board top, which is absent from filelist_soc.f. Every SoC/boot source and both runners are byte-identical between T-005 source 8f25c8e1 and profile 05ea2488. T-005 already ran this exact SoC input with -GA64_FP_SIMD=0.",
+      "prior_result": {
+        "scenarios": "CAL-OK/CAL-WAIT/CAL-FAIL",
+        "empty_data_reads": 262144,
+        "commits_during_empty_poll": 2359302,
+        "coverage": "startup/periodic/dynamic RXDBG, status, PONG, echo and exactly-once RX",
+        "smoke_log_sha256": "acd4b1d713595c92e36a4176d8855796f77234aab8788d67fa4d07d2955dda6e"
+      },
+      "equivalence_log": {
+        "path": "build/agents/T-20260920-008/soc-input-equivalence.log",
+        "bytes": 952,
+        "sha256": "f1e4e00cb589370a77859602c7a847be658e4aefb30f1721c06ebc63f97e0166"
+      }
+    }
+  ],
+  "resource_lock": {
+    "local_attempt": "Returned 75 because pypto-x verify-0052-ops-batch4 legitimately held local.",
+    "decision": "No unlocked fallback and no duplicate heavy run: exact source/runner equivalence proves the existing T-005 no-FP full-SoC result covers the unchanged SoC input set.",
+    "attempt_log_sha256": "859c19f9a8481b6a33e92e015e51781a5ddf9bb98a1ab7aea713ef64fbd3c9e2"
+  },
+  "harness_notes": [
+    "Two initial board-lint wrapper attempts incorrectly exported VERILATOR_BIN to the Perl wrapper itself and recursed through --get-supported. Only task-owned process trees rooted at PIDs 199012 and 212944 were terminated.",
+    "The corrected run removed VERILATOR_BIN from the environment, selected the conda environment through PATH, and passed. The invalid logs are retained as task-local artifacts and are not acceptance evidence."
+  ],
+  "safety_and_scope": {
+    "full_fp_baseline_modified": false,
+    "rx_observability_or_monitor_modified": false,
+    "qsf_or_sdc_modified": false,
+    "assertion_or_expected_result_modified": false,
+    "gamepc_or_quartus_run": false,
+    "assembler_or_sof": false,
+    "jtag_board_flash_reset_power": false
+  },
+  "handoff": "docs/handoffs/T-20260920-008-b25-rx-observability-nofp-profile.md",
+  "next": "Fast-forward T-20260920-007 to profile 05ea2488/tree 23e4c515, then execute the already prepared fresh GamePC physical flow."
+}

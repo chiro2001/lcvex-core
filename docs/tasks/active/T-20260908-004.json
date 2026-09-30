@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-004",
+  "label": "B25-REGISTER-OFFSET-STORE-HAZARD",
+  "title": "Preserve both index and store-data dependencies for register-offset stores",
+  "kind": "rtl-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-batch-union",
+  "assigned_owner": "b25_emif_resilience_impl",
+  "depends_on": ["T-20260908-003"],
+  "base_sha": "5b2f4e6b",
+  "branch": "fix/T-20260908-004-b25-regoffset-store-hazard",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-004",
+  "batch_parent": "T-20260907-037",
+  "scope": "Fix the independently triaged seed-1 register-offset store hazard: decode must retain rn, rm index and rt store-data dependencies simultaneously so a preceding producer of rm cannot be bypassed. Preserve all load/store extension, shift, SP/XZR and commit semantics.",
+  "write_regions": [
+    "rtl/lcvex_decode.sv::single register-offset load/store block beginning at the M3 register-offset comment; dependency metadata assignments only",
+    "one new uniquely named focused test/runner",
+    "docs/tasks/evidence/T-20260908-004.json",
+    "docs/handoffs/T-20260908-004-b25-regoffset-store-hazard.md",
+    "build/agents/T-20260908-004/** ignored artifacts"
+  ],
+  "shared_file_exception": {
+    "other_task": "T-20260908-002",
+    "mutual_exclusion": "T-002 owns only pre/post-index decode blocks and core wb3 regions; T-004 owns only the earlier register-offset single load/store block. Common typedefs, ports, default decode state, helper functions and shared test registry are integration-lane-only.",
+    "integration": "Each lane commits independently; integrator cherry-picks serially and reruns the combined directed union before Gate D."
+  },
+  "reads": [
+    "docs/tasks/evidence/T-20260908-003.json",
+    "existing random seed generator/trace and register-offset directed image",
+    "rtl/lcvex_core.sv hazard readers read-only"
+  ],
+  "validation": [
+    "Create a focused adjacent producer -> register-offset STRB/STRH/STRW/STR dependency matrix including rm!=rt, rm==rt, XZR and base/data hazards.",
+    "Reproduce 0x78377a80 strh w0,[x20,x23,lsl#1] before the fix and prove address 0x4408000e after it.",
+    "Run the existing hard_reg_offset lockstep in base/cache/delay2 plus focused lint/SVA; heavy work under local resource-lock.",
+    "Do not run the 100k random suite or full Gate D; the integration candidate reruns seed1 then seeds2/3."
+  ],
+  "acceptance": "All three logical sources rn/rm/rt remain visible to the hazard machinery and the exact seed-1 root instruction plus the focused register-offset matrix match QEMU without weakening checks.",
+  "resource": {
+    "lock": "local",
+    "policy": "Acquire resource-lock run local for every compilation/lockstep; task-local TMPDIR/build output; return 75 means wait."
+  },
+  "forbidden_regions": [
+    "rtl/lcvex_decode.sv pre/post-index blocks or common declarations/helpers",
+    "rtl/lcvex_core.sv and FP scalar RTL",
+    "QEMU/reference/golden/existing test expectation changes",
+    "full Gate D or 100k random suite",
+    "GamePC/Quartus/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T11:46:43+08:00",
+  "updated_at": "2026-09-08T13:14:54+08:00",
+  "result_head": "943a30b07df1c314f5cb5f5bace8f2aa9d2452f8",
+  "result_evidence": "docs/tasks/evidence/T-20260908-004.json",
+  "integrated_head": "a55a5be0",
+  "integrator_review": {
+    "received_at": "2026-09-08T12:16:30+08:00",
+    "reviewed_at": "2026-09-08T12:16:30+08:00",
+    "status": "accepted-batch-union",
+    "batch_candidate_sha": "3ffd0c119f691ab0aef98984cddf1ba0c5ab208a",
+    "batch_validation": "T-002 base/cache/delay2 each 180/180 pass; T-004 existing/focused × base/cache/delay2 each 45/45 pass.",
+    "gate_d_candidate_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+    "gate_d_evidence": "docs/tasks/evidence/T-20260908-005.json",
+    "pending": "none; full Gate D is green"
+  },
+  "merge_sha": "3ffd0c119f691ab0aef98984cddf1ba0c5ab208a",
+  "dispatch": {
+    "sent_at": "2026-09-08T11:50:10+08:00",
+    "agent_name": "b25_emif_resilience_impl",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "2a128104fefb6472dac1ff0aff784fd22a4c2057"
+  }
+}

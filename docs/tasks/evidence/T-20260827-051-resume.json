@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-051",
+  "state": "done",
+  "base_sha": "5d460192dfb8a72173c76077cae5bd05251e9eb9",
+  "head_sha": "d453e29f557701cefc53a4a6d70386d7cc938427",
+  "merge_sha": "d453e29f557701cefc53a4a6d70386d7cc938427",
+  "branch": "feature/p7-fp-neon",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "scope": "P7-0 13 列 LCVXFP01 checkpoint root/resume runner、timer profile 约束和真实短链闭环",
+  "protocol": {
+    "fp_sidecar": "LCVXFP01 gzip raw size=552",
+    "manifest_columns": "7..13 accepted; P7 required uses column 13",
+    "manifest_context": {
+      "p7_state": "LCVXFP01",
+      "p7_cpu_profile": "a76-v1",
+      "p7_vector_bytes": "16"
+    },
+    "qemu_cpu_for_checkpoint": "cortex-a76,cntfrq=1000000000,has_el3=false,has_el2=false",
+    "restore": "checkpoint.read_fp_state -> gzip raw -> coordinator --restore-fp -> same-edge DUT restore"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "qemu_release": "11.1.0",
+    "qemu_base_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_patch_set": "0001..0012",
+    "qemu_version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "qemu_binary_sha256": "f0accfb67c2b4b79e39e40768b3c522a5f960515424839d90654d514c31f3aca",
+    "plugin_sha256": "caf7f1223eabf24af032c4a685f50dbbaf59b80e5e336e708764beed7e8d09f5",
+    "kernel_coordinator_sha256": "47c7ca3025f1b97298ea784fe7a81d4efa5157931ebdeb377f472a65df0862ce"
+  },
+  "runs": [
+    {
+      "run_id": "integrator-resume-shell-001",
+      "level": "L0",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "bash -n sim/difftest/run_lockstep_step.sh sim/difftest/run_lockstep_resume.sh && git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7 root/resume runner shell syntax and whitespace check pass"
+    },
+    {
+      "run_id": "integrator-resume-manifest-smoke-002",
+      "level": "L0",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "conda run --no-capture-output -n lcvex python3 sim/difftest/checkpoint_manifest_smoke.py && conda run --no-capture-output -n lcvex python3 sim/difftest/checkpoint_resume_manifest_smoke.py && conda run --no-capture-output -n lcvex python3 scripts/trace_manifest_smoke.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "checkpoint input/artifact hash、resume provenance/atomicity、trace manifest 均通过"
+    },
+    {
+      "run_id": "integrator-p7-13col-fixture-003",
+      "level": "L0",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "conda run --no-capture-output -n lcvex python3 <inline P7 fixture: strict root manifest + 13-column TSV + FP_STATE.pack + finalize/read_fp_state>",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "552B LCVXFP01、manifest column 13、path and seq validation pass"
+    },
+    {
+      "run_id": "integrator-kernel-coordinator-build-004",
+      "level": "L1",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "conda run --no-capture-output -n lcvex make lockstep-build-kernel VERILATOR_JOBS=6",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "当前 P7 RTL/FP restore 接线的 RESET_PC=0x40000000 kernel coordinator 构建通过"
+    },
+    {
+      "run_id": "integrator-p7-root-roundtrip-005",
+      "level": "L2",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "CKPT_DIR=<run-root>/root RAM_FILE=<run-root>/ram-backend.bin SOCK=<run-root>/s.sock MON_SOCK=<run-root>/m.sock COORD=<repo>/build/verilator_lockstep_kernel/lockstep_coordinator KERNEL=1 DIFF_CKPT=1 CKPT_EVERY=7 MAX_INSNS=7 FP_NEON=required QEMU_CPU='cortex-a76,cntfrq=1000000000,has_el3=false,has_el2=false' IMAGE=/tmp/Image-t80000 bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "A76 required root lockstep 7 条通过；seq=6 finalize；8 artifacts；包含 base-6.dev.fp.gz",
+      "chain": "build/tmp/T-20260827-051-p7-roundtrip4.IPvqNo/root",
+      "manifest_sha256": "324b6046077773a72b2eefb57512ed653b2230ca7a08949b5b1a5cbf0afa7e22",
+      "manifest_tsv_sha256": "759e20e9767bfe45268b451ec396cd575637bd782fa75ef9c645164b88f966b6",
+      "fp_sidecar": {
+        "path": "build/tmp/T-20260827-051-p7-roundtrip4.IPvqNo/root/base-6.dev.fp.gz",
+        "raw_size": 552,
+        "compressed_size": 47,
+        "sha256": "6efc9e2e85838a5b6c90f34da33b2ff41997bed04517791bf8bd0266e5b58616"
+      }
+    },
+    {
+      "run_id": "integrator-p7-resume-explicit-006",
+      "level": "L2",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "CHAIN=<run-root>/root RESUME_SEQ=6 MAX_INSNS=1 IMAGE=/tmp/Image-t80000 DTB=<run-root>/root/qemu-fdt-raw.bin FP_NEON=required QEMU_CPU='cortex-a76,cntfrq=1000000000,has_el3=false,has_el2=false' COORD=<repo>/build/verilator_lockstep_kernel/lockstep_coordinator PLUGIN=<repo>/qemu/plugins/lcvex_difftest.so QEMU_BIN=<qemu>/qemu-system-aarch64 bash sim/difftest/run_lockstep_resume.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "QEMU incoming + DUT same-edge FP restore 后，下一条 seq 通过；coordinator exit 0",
+      "coord_log_sha256": "f63c45014e0fdc431e1f23402de4f4692af24400cd0549589126b3bdbfe47d7b",
+      "qemu_log_sha256": "f7cb205fe6bc4042a2025ee9f9371f7a47301b397d72f91ec4e26021b4c1f613"
+    },
+    {
+      "run_id": "integrator-p7-resume-default-profile-007",
+      "level": "L2",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "CHAIN=<run-root>/root RESUME_SEQ=6 MAX_INSNS=1 IMAGE=/tmp/Image-t80000 DTB=<run-root>/root/qemu-fdt-raw.bin FP_NEON=required COORD=<repo>/build/verilator_lockstep_kernel/lockstep_coordinator PLUGIN=<repo>/qemu/plugins/lcvex_difftest.so QEMU_BIN=<qemu>/qemu-system-aarch64 bash sim/difftest/run_lockstep_resume.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "省略 QEMU_CPU 时 runner 采用 1GHz A76 profile，runtime context 严格匹配并恢复通过",
+      "coord_log_sha256": "aefdaaef4c40e743564e0a82b7d02e7ea0806599986a3dc5f06c67eda10f1e94",
+      "qemu_log_sha256": "a23073c1284b24894756ce940880351c9169dfe6cfd575703ac19b37821632ab"
+    },
+    {
+      "run_id": "integrator-p7-invalid-timer-profile-008",
+      "level": "L2-negative",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "FP_NEON=required DIFF_CKPT=1 QEMU_CPU='cortex-a76,cntfrq=62500000,has_el3=false,has_el2=false' IMAGE=/does/not/exist bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 2,
+      "result": "expected_reject",
+      "summary": "当前 runner 在启动前拒绝 62.5MHz P7 checkpoint profile，保护 1GHz RTL timer contract",
+      "log": "build/tmp/p7-invalid-profile-current.log",
+      "log_sha256": "86ce4b0021ffc389b24f29975726de2caea9524adb98317841272f29620cc343"
+    },
+    {
+      "run_id": "integrator-rtl-lint-009",
+      "level": "L1",
+      "source_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "command": "conda run --no-capture-output -n lcvex make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "当前 rtl/filelist.f Verilator lint 通过"
+    },
+    {
+      "run_id": "integrator-post-review-default-resume-010",
+      "level": "L2",
+      "source_sha": "55a070e46189cfe73448638825c8c12099e907a4",
+      "command": "CHAIN=/home/chiro/projects/mycpu/lcvex/build/tmp/T-20260827-051-p7-roundtrip4.IPvqNo/root RESUME_SEQ=6 MAX_INSNS=1 IMAGE=/tmp/Image-t80000 DTB=/home/chiro/projects/mycpu/lcvex/build/tmp/T-20260827-051-p7-roundtrip4.IPvqNo/root/qemu-fdt-raw.bin FP_NEON=required COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep_kernel/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 COORD_PIN=2 QEMU_PIN=3 bash sim/difftest/run_lockstep_resume.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "profile enforcement 修复后，省略 QEMU_CPU 仍自动采用 canonical A76+1GHz，13 列 FP restore 下一条锁步通过",
+      "coord_log_sha256": "d08f9541d8e8d7746cd4cf25bb03adc738398a7e08e5d9950aff49421f9d2e11",
+      "qemu_log_sha256": "8204d88fe9876c4adce25d98831e3bb5791348465b5162045cad0fb15f0afa23"
+    },
+    {
+      "run_id": "integrator-post-review-json-011",
+      "level": "L0",
+      "source_sha": "55a070e46189cfe73448638825c8c12099e907a4",
+      "command": "bash -n sim/difftest/run_lockstep_step.sh sim/difftest/run_lockstep_resume.sh && git diff --check && python3 -m json.tool docs/tasks/active/T-20260827-051.json && python3 -m json.tool docs/tasks/evidence/T-20260827-051-resume.json",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "profile/path 修复后的 shell、task JSON 和 evidence JSON 通过"
+    },
+    {
+      "run_id": "integrator-post-review-profile-negative-012",
+      "level": "L0-negative",
+      "source_sha": "55a070e46189cfe73448638825c8c12099e907a4",
+      "command": "FP_NEON=required P7_MAX_ADAPTER=1 DIFF_CKPT=1 QEMU_CPU='max,cntfrq=1000000000,has_el3=false,has_el2=false' IMAGE=/does/not/exist bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 2,
+      "result": "expected_reject",
+      "summary": "max adapter 即使声明 1GHz 也被拒绝用于 P7 checkpoint",
+      "log": "build/tmp/p7-invalid-max-profile-current.log",
+      "log_sha256": "7762c521f708d955c059c04b648d920b29351cb4fbab63a9830f0ee18ffa4868"
+    },
+    {
+      "run_id": "integrator-max-legacy-checkpoint-negative-013",
+      "level": "L0-negative",
+      "source_sha": "d54bedad2cb37401a2649d13459948d51dc3a7f4",
+      "command": "FP_NEON=required P7_MAX_ADAPTER=1 DIFF_CKPT=0 CKPT_EVERY=1 QEMU_CPU='max,has_el3=false,has_el2=false' IMAGE=/does/not/exist bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 2,
+      "result": "expected_reject",
+      "summary": "max adapter 对 legacy monitor checkpoint（DIFF_CKPT=0、CKPT_EVERY>0）同样被拒绝",
+      "log": "build/tmp/p7-invalid-max-legacy-ckpt-current.log",
+      "log_sha256": "805709f3e1b275ee878d510edffab72109511e268d49daaea75961ccbc3249e2"
+    },
+    {
+      "run_id": "integrator-p7-legacy-checkpoint-negative-014",
+      "level": "L0-negative",
+      "source_sha": "d453e29f557701cefc53a4a6d70386d7cc938427",
+      "command": "FP_NEON=required P7_MAX_ADAPTER=0 DIFF_CKPT=0 CKPT_EVERY=1 QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' IMAGE=/does/not/exist bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 2,
+      "result": "expected_reject",
+      "summary": "P7 required 的旧 QMP-only checkpoint 路径被拒绝，必须使用 DIFF_CKPT=1 LCVXFP01",
+      "log": "build/tmp/p7-invalid-p7-legacy-checkpoint-current.log",
+      "log_sha256": "c1526491f696e9b35d1736cf12e21445381c2290250a7e2fa6a90457a98e60bb"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "p7-root-manifest",
+      "uri": "build/tmp/T-20260827-051-p7-roundtrip4.IPvqNo/root/manifest.json",
+      "sha256": "324b6046077773a72b2eefb57512ed653b223ca7a08949b5b1a5cbf0afa7e22",
+      "bytes": 4248,
+      "owner": "root-integrator",
+      "retain_until": "T-051-archive",
+      "reproduce": "integrator-p7-root-roundtrip-005"
+    },
+    {
+      "id": "p7-root-tsv",
+      "uri": "build/tmp/T-20260827-051-p7-roundtrip4.IPvqNo/root/manifest.tsv",
+      "sha256": "759e20e9767bfe45268b451ec396cd575637bd782fa75ef9c645164b88f966b6",
+      "bytes": 851,
+      "owner": "root-integrator",
+      "retain_until": "T-051-archive",
+      "reproduce": "integrator-p7-root-roundtrip-005"
+    },
+    {
+      "id": "p7-fp-sidecar",
+      "uri": "build/tmp/T-20260827-051-p7-roundtrip4.IPvqNo/root/base-6.dev.fp.gz",
+      "sha256": "6efc9e2e85838a5b6c90f34da33b2ff41997bed04517791bf8bd0266e5b58616",
+      "bytes": 47,
+      "raw_bytes": 552,
+      "owner": "root-integrator",
+      "retain_until": "T-051-archive",
+      "reproduce": "integrator-p7-root-roundtrip-005"
+    },
+    {
+      "id": "p7-resume-coordinator-log",
+      "uri": "build/tmp/r.fHmFFH/coord.log",
+      "sha256": "f63c45014e0fdc431e1f23402de4f4692af24400cd0549589129d9d1f4e5839abcb7",
+      "bytes": 190,
+      "owner": "root-integrator",
+      "retain_until": "T-051-archive",
+      "reproduce": "integrator-p7-resume-explicit-006"
+    }
+  ],
+  "known_limits": [
+    "本证据只覆盖 P7-0 状态/协议/checkpoint；不覆盖 P7-1 FP 算术、NEON 访存或完整 P7 ISA。",
+    "root 短链使用 Linux Image 的 bootloader 前 7 条；更深 kernel 指令仍受当前标量 ISA 子集限制。",
+    "QEMU/Verilator/QEMU plugin 构建与 full Gate D/F 仍由集成者重型队列处理。",
+    "P7 checkpoint 必须使用 1GHz A76 cntfrq 属性；62.5MHz 负向链保留但不可恢复。"
+  ],
+  "review": {
+    "agent_id": "01a03f65-6800-78f0-86d0-e677742d29c3",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T12:09:52+08:00",
+    "received_at": "2026-08-27T12:10:20+08:00",
+    "reported_at": "2026-08-27T12:11:12+08:00",
+    "elapsed_seconds": 80,
+    "source_sha": "d453e29f557701cefc53a4a6d70386d7cc938427",
+    "status": "pass_go",
+    "blocking_points": []
+  },
+  "next": "P7-0 已归档；登记并派发 P7-1 标量 FP32/FP64 算术垂直任务。"
+}

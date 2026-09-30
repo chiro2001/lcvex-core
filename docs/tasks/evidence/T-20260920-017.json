@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-017",
+  "label": "B25-RX-CPU-OBSERVABILITY-FRESH-PHYSICAL",
+  "state": "done",
+  "acceptance_status": "fresh-synthesis-fitter-sta-custom-acceptance-and-ucp-pass",
+  "candidate_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+  "candidate_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+  "branch": "verify/T-20260920-017-b25-rx-cpu-observability-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-017-b25-rx-cpu-observability-fresh-physical",
+  "owner": "rx_rtl_trace",
+  "received_at": "2026-09-20T10:16:35+08:00",
+  "reported_at": "2026-09-20T12:00:39+08:00",
+  "fresh_inputs": {
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "expected_image_sha256": "872c3cbfdf9b1be3da2ef47f42543add6bb186e09e22169d1b169cc60918851",
+    "expected_image_file_sha256": "41cf41ee945b7060a6172e45c08ab86ddb4df3cd4ce31e5cceb1abeaa9d0926f",
+    "stage_manifest_sha256": "4a40486090a3711b7a15f7f5238e00efc497b0684801d41b84312b4c7fb3ae0d",
+    "stage_archive_sha256": "43a67a1b0b7f0f3d50a9ea7be8df11249e6e1d0f6e3c59a53b17d61a947e87ef",
+    "stage_cardinality": 174,
+    "qsf_reference_count": 50,
+    "derivation": "platform_manifest=50, non-overlapping board support=29, rtl mirror=47, root rtl/filelist+sv=48"
+  },
+  "resource": {
+    "resource": "gamepc",
+    "all_gamepc_actions_locked": true,
+    "initial_preflight": {
+      "root_preexisting": false,
+      "eda_process_count": 0,
+      "physical_free_mib": 42982.9,
+      "disk_d_free_bytes": 70116032512,
+      "marker": "PREFLIGHT_PASS"
+    },
+    "final_status": "gamepc FREE"
+  },
+  "stages": [
+    {
+      "stage": "preflight-and-fresh-root",
+      "status": "PASS",
+      "log_sha256": "f3f91a4bd87b9d31b3678be012131b5237f8f894f613f26b98bc4c8c1e0e6084"
+    },
+    {
+      "stage": "source-stage-and-manifest",
+      "status": "PASS",
+      "marker": "STAGE_DERIVATION_PASS platform=50 support=29 rtl=47 mirror=47 total=174 qsf=50",
+      "log_sha256": "5f1cfbb8cb2ca4d9b330439cb32710b2c79352eb63c7c99ea395ed7b82689c96"
+    },
+    {
+      "stage": "remote-source-prepare",
+      "status": "PASS",
+      "markers": ["RESUME_PREFLIGHT_PASS", "REMOTE_SOURCE_PREPARE_CUSTOM_PASS"],
+      "log_sha256": "fa6fdbc53f3ad1ab80ba73834f8209711c6d5c4c71ff81105a212be36144c8e8"
+    },
+    {
+      "stage": "synthesis",
+      "status": "PASS_BY_QUARTUS_REPORT",
+      "wrapper_exit_note": "PowerShell Process.ExitCode blank caused wrapper marker SYNTHESIS_FAIL; report/summary independently show Successful/0 errors",
+      "started_at": "2026-09-20T10:58:02.1094111+08:00",
+      "finished_at": "2026-09-20T11:05:12.9308215+08:00",
+      "elapsed": "00:07:10.821",
+      "min_free_physical_mib": 42371.6,
+      "quartus_report_sha256": "dffab4b7c641830f559700c6ba77eee4f13bf5b6a9db8042e7656bdfb1a9ee43",
+      "summary_sha256": "1943a2236b61bd2df50ce4056fc8e2c23d769a1d0ec9843ddd9331b261405e66",
+      "flow_sha256": "50a9191888b5bb3ff04079b8bb9604dc7648b3b78f7a0a0f5b52fe78e1c93d50",
+      "processors": "24 detected / 16 maximum",
+      "errors": 0,
+      "warnings": 235
+    },
+    {
+      "stage": "fitter",
+      "status": "PASS_BY_QUARTUS_REPORT",
+      "started_at": null,
+      "finished_at": "2026-09-20T11:23:02.1009199+08:00",
+      "elapsed": "approximately 00:17:50",
+      "min_free_physical_mib": 42422.1,
+      "quartus_report_sha256": "97646725ad87044e11372cf08ed2e2d436eaeb6387c5bdaf144006eed38c2401",
+      "summary_sha256": "6c318d868fb0cfd5313c4382040941a8613c7dcf46e6231736a8fd2f683c0a14",
+      "flow_sha256": "f0c80bbcebff77e72be7f3ddf1e6e7f8fb842b763b08ab0e858fb240c95c8aa6",
+      "resources": {"alms": 74710, "registers": 80745, "ram_blocks": 121, "dsp_blocks": 21, "plls": 3},
+      "processors": "24 detected / 16 maximum",
+      "errors": 0,
+      "warnings": 12
+    },
+    {
+      "stage": "sta_signoff",
+      "status": "PASS_BY_QUARTUS_REPORT",
+      "started_at": null,
+      "finished_at": "2026-09-20T11:24:13.6024959+08:00",
+      "elapsed": "approximately 00:01:11",
+      "min_free_physical_mib": 42680.2,
+      "quartus_report_sha256": "40e620b716039a1c672d95b07f1ab1c2467bcbaacafdefeaa9c717683c596e39",
+      "summary_sha256": "f86e3f7bc983eb3466cb5e4e97f39a7739cd8b9ecbffa30b34d2494a429dd7e0",
+      "flow_sha256": "ca74cac29b89f54ec75b20208464f570c2f36498fcaaf8fe3bfc529273bda613",
+      "sys_clk_25": {"setup_ns": 8.628, "hold_ns": 0.017, "recovery_ns": 0.521, "removal_ns": 0.170},
+      "errors": 0,
+      "warnings": 2
+    },
+    {
+      "stage": "custom-acceptance",
+      "status": "PASS",
+      "marker": "T017_ACCEPTANCE_V3_PASS",
+      "log_sha256": "5f58378119776627f833b4b5202af41eaeebbffed44bd04f471c7d72a2f9d60b",
+      "source_diff": 0,
+      "clone_diff": 14,
+      "clone_bad_diff": 0,
+      "config_artifacts": 0
+    }
+  ],
+  "custom_acceptance": {
+    "status": "T017_ACCEPTANCE_V3_PASS",
+    "source_pre_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "source_post_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "clone_baseline_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "clone_post_manifest_sha256": "b3232ba2991121ccf4450f6497ffcd20c2c0f78d4a1d48c74120c9492ca27925",
+    "clone_query_diff_objects": 14,
+    "clone_bad_diff_objects": 0,
+    "config_artifacts": 0,
+    "overall": {
+      "sys_clk_25_setup_ns": 8.628,
+      "sys_clk_25_hold_ns": 0.017,
+      "sys_clk_25_recovery_ns": 13.578,
+      "sys_clk_25_removal_ns": 0.153,
+      "min_pulse_ns": 0.120,
+      "all_violations": 0,
+      "exceptions": [],
+      "clock_constraints": []
+    },
+    "fifo_payload": {
+      "families": 6,
+      "models": 2,
+      "reports": 24,
+      "nothing_to_report": 24,
+      "ignored_exception_rows": 0,
+      "result": "PASS"
+    },
+    "cdc_data_delay": {
+      "corners": 4,
+      "routes": 5,
+      "groups": 20,
+      "violations": 0,
+      "worst_slack_ns": 1.250,
+      "datapath_only_ns": 2.000,
+      "result": "PASS"
+    },
+    "ucp_reset_invariant": {
+      "inventory": "build/agents/T-20260920-017/analysis/t017-invariant-inventory.json",
+      "inventory_sha256": "ae0b3ea8587e9d1535d5a0050931ce0833b1b8317541b0d6b6ca6011c447e972",
+      "normalized_ucp_input_paths": 60,
+      "normalized_reset_paths": 624,
+      "tdi_tms_tdo": [25, 35, 4],
+      "reset_families": [606, 4, 13, 1],
+      "violations": 0,
+      "raw_reset_paths_each": 634,
+      "duplicate_paths_each": 10,
+      "worst_recovery_slack_ns": 1.730,
+      "worst_removal_slack_ns": 0.206,
+      "result": "PASS"
+    },
+    "invariant_policy_sha256": "69d44470415655098b4ec0a740861f6775304fa510f8cb43898977f44befcb50",
+    "invariant_policy_canonical_sha256": "7d1aab3035914eecb358a0f1072cbf46bce644b7541ab4eb538ffaa1281d3651",
+    "invariant_exporter_sha256": "9e298d161bd7863d156c691e43f8915bcc92c9d0e3242ba095d23ade284e10ce"
+  },
+  "physical_not_run": {
+    "fitter": "PASS_BY_QUARTUS_REPORT",
+    "sta_signoff": "PASS_BY_QUARTUS_REPORT",
+    "overall_custom_reports": "PASS",
+    "ucp_reset_invariant": "PASS",
+    "sof_pof_jic_rbf_jbc_svf_jam": 0,
+    "assembler": false,
+    "jtag_board_flash_reset_power": false
+  },
+  "handoff": "docs/handoffs/T-20260920-017-b25-rx-cpu-observability-fresh-physical.md",
+  "known_limits": [
+    "PowerShell wrappers reported blank Process.ExitCode; stage PASS claims are based on independent Quartus Successful/0-error reports and summary files.",
+    "The UCP exporter uses a derived contract-header-normalized summary artifact only to preserve the frozen T-007 producer lineage; the original T017 raw summary remains unchanged and is hash-recorded separately.",
+    "The task-owned remote root is preserved for audit; no configuration artifact, assembler, JTAG, Flash, reset or power action was performed."
+  ],
+  "final_readonly_scan": {
+    "marker": "T017_FINAL_READONLY_SCAN_PASS",
+    "physical_free_mib": 42626.5,
+    "disk_d_free_bytes": 68188196864,
+    "eda_process_count": 0,
+    "desired_root_files": 1331,
+    "desired_output_files": 26,
+    "desired_runtime_acceptance_v3_files": 659,
+    "desired_config_artifacts": 0,
+    "wrong_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-017-b25-rx-observability-fresh-physical",
+    "wrong_root_files": 0,
+    "wrong_root_config_artifacts": 0,
+    "source_manifest_equal": true,
+    "source_pre_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "source_post_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19"
+  },
+  "next": "T017 physical evidence is complete and may be integrated as a report-only no-FP candidate; assembler/SOF and board interaction remain separate explicitly authorized tasks."
+}

@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-019",
+  "label": "B25-RX-CPU-OBSERVABILITY-UCP-INVARIANT-PROFILE",
+  "state": "done",
+  "acceptance_status": "T017-profile-bound-exporter-checker-and-fixtures-pass",
+  "base_sha": "957b00b46d7a6d61ec11419f8be1566156d9a62f",
+  "logic_commit": "30e52226",
+  "owner": "rx_verify_plan",
+  "received_at": "2026-09-20T12:25:03+08:00",
+  "reported_at": "2026-09-20T12:45:34+08:00",
+  "tool_channel": "dsh-default (user-confirmed gpt-5.6-luna[max])",
+  "source": {
+    "task": "T-20260920-017",
+    "inventory": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/analysis/t017-invariant-inventory.json",
+      "bytes": 67409,
+      "sha256": "ae0b3ea8587e9d1535d5a0050931ce0833b1b8317541b0d6b6ca6011c447e972"
+    },
+    "stage_manifest_sha256": "4a40486090a3711b7a15f7f5238e00efc497b0684801d41b84312b4c7fb3ae0d",
+    "stage_archive_sha256": "43a67a1b0b7f0f3d50a9ea7be8df11249e6e1d0f6e3c59a53b17d61a947e87ef",
+    "stage_file_count": 174,
+    "stage_qsf_reference_count": 50
+  },
+  "policy": {
+    "path": "fpga/catapult_a10/physical_waivers_invariant.json",
+    "bytes": 15232,
+    "sha256": "54c5bd98a4ea5047f19892cca0c74a5d798be3607e5b22ce09186ff5df9ca820",
+    "canonical_digest": "c116e580f03b3366b15425a2ed934dc671207bf874a5660cb299520920f03acc",
+    "accepted_profile": "T-20260920-017",
+    "report_profile": "T-20260920-017",
+    "candidate_manifest_semantics": "Derived canonical/alias candidate manifest binds the T-017 stage manifest by stage_manifest_sha256; stage archive hash, 174-file count and 50 QSF-reference count are retained as explicit provenance fields. The original T-017 inventory candidate_manifest=null is not mutated."
+  },
+  "candidate_manifest": {
+    "path": "build/agents/T-20260920-019/t017-candidate-manifest.json",
+    "bytes": 43408,
+    "sha256": "1cab668b2231695a48eb91ec8f48ff758f9eb2afa0a65ca13b4ad68d0e4322c9",
+    "canonical_sha256": "2d9c2d744d85af6db5a047c166822e8baad1eb56e68b987a17598d2a3fa3ac4b",
+    "canonical_entries": 53,
+    "qsf_relative_aliases": 47,
+    "stage_manifest_sha256": "4a40486090a3711b7a15f7f5238e00efc497b0684801d41b84312b4c7fb3ae0d"
+  },
+  "exporter": {
+    "path": "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py",
+    "bytes": 58834,
+    "sha256": "1dc472f54e6a81851dacfb80ba59aaa90271cf24c881daa05404a8bb50d0e810",
+    "production_policy_digest": "c116e580f03b3366b15425a2ed934dc671207bf874a5660cb299520920f03acc"
+  },
+  "measurement": {
+    "candidate_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+    "candidate_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+    "source_pre_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "source_post_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+    "normalized_ucp_input_paths": 60,
+    "normalized_reset_paths": 624,
+    "ports": {
+      "altera_reserved_tdi": 25,
+      "altera_reserved_tms": 35,
+      "altera_reserved_tdo": 4
+    },
+    "reset_families": {
+      "emif_req_q": 606,
+      "emif_state_q": 4,
+      "timeout_count_q": 13,
+      "calibration_gate": 1
+    },
+    "violations": 0,
+    "recovery_removal_worst_slack_ns": {
+      "fast_recovery": 1.73,
+      "fast_removal": 0.206,
+      "slow_recovery": 1.73,
+      "slow_removal": 0.206
+    }
+  },
+  "reports": {
+    "summary": "0b371bc2ae7f6c59c43099ba238a3d87eb0244e30f8156e4f79cb643dfc38f56",
+    "fast_recovery": "97a9e43116dff722f87180f35cc2bf49883624b36678c1d2a157c8ed01a7a16",
+    "fast_removal": "6da2eb3a5788079a438e94fc6481e68823a453b182ba78739985577245d0dd80",
+    "slow_recovery": "f1afe063a3ca4da1a2b9e2def76c25a9b8eda187bac3d45e076e687113b4c599",
+    "slow_removal": "9071c2b0cab4f4ae052c7ded7864d0638f3142ee119f85fa2395f569071478ff",
+    "ucp_fast": "58bd8cca68c1e5e82fde8513b4d4f2bc8724f0a68c204ff2be177ed4f9cefb51",
+    "ucp_slow": "58bd8cca68c1e5e82fde8513b4d4f2bc8724f0a68c204ff2be177ed4f9cefb51"
+  },
+  "verification": {
+    "policy_json": "PASS",
+    "policy_semantics_unchanged": ["ucp", "jtag_hierarchy", "reset_control", "forbidden", "inventory_schema", "contract_lineage", "schema_version", "policy_id"],
+    "export_command": "python3 fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py --policy ... --provenance build/agents/T-20260920-019/t017-measurement.json --candidate-manifest build/agents/T-20260920-019/t017-candidate-manifest.json --output build/agents/T-20260920-019/t017-invariant-inventory.json",
+    "export_result": "PHYSICAL_WAIVER_INVARIANT_EXPORT_PASS",
+    "export_log": {"path": "build/agents/T-20260920-019/logs/export.log", "bytes": 203, "sha256": "548bb4e1ca5d38f24a3ce238f674427e733ef2dee66adc13d481f4de50b75853"},
+    "checker_result": "PASS normalized_ucp=60 normalized_reset=624",
+    "checker_log": {"path": "build/agents/T-20260920-019/logs/check.log", "bytes": 146, "sha256": "eb52b4918073ef4d64d01b0ecc24da133cf1a17e108cf99e449138b463e2e600"},
+    "fixture_result": "2/2 positive PASS; 27/27 negative rejected",
+    "fixture_matrix": {"path": "build/agents/T-20260920-019/invariant-fixture/matrix.json", "bytes": 8032, "sha256": "8b83cbdb0aab40b4ce7c1e71eab093471a3892890d33b497dee261cf790ecad1"},
+    "py_compile": "PASS",
+    "py_compile_log": {"path": "build/agents/T-20260920-019/logs/pycompile.log", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+  },
+  "integration": {
+    "reviewed_at": "2026-09-20T12:53:04+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "validation_sha": "9067aa3d64d050ef1faf669033827eadcb56b5e9",
+    "validation_tree_sha": "ae25bf73054b0a97cd234184eba9b76e85bf916b",
+    "topic_logic_commit": "30e52226085909a39d70cacb4db6f8952fa73b3f",
+    "topic_evidence_commit": "a7cc2fad09f4e30a65c31fad11e6d7bbcad66634",
+    "export_result": "PHYSICAL_WAIVER_INVARIANT_EXPORT_PASS",
+    "checker_result": "PASS normalized_ucp=60 normalized_reset=624",
+    "fixture_result": "2/2 positive PASS; 27/27 negative rejected",
+    "py_compile": "PASS",
+    "inventory_sha256": "5ffd3adc7df6cfa6d363ab785d4e4aa0a3f06af13690c243479f213899655139",
+    "fixture_matrix_sha256": "10e1abe46498e4fa93baf6fac6b8c96c692ac5c6171d3f9f26b9614b20714f98",
+    "resource": "local light checks only; no heavy resource slot, GamePC, Quartus, assembler, JTAG or board access"
+  },
+  "safety": {
+    "gamepc": false,
+    "quartus": false,
+    "rtl_qsf_sdc": false,
+    "assembler": false,
+    "jtag_board_flash": false,
+    "tracked_diff_scope": "policy and exporter only before evidence commit"
+  },
+  "next": "T-20260920-020 assembler/SOF packaging from a fresh task-owned clone of the accepted T-017 fitted database."
+}

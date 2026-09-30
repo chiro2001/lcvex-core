@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-037",
+  "state": "done",
+  "partial": false,
+  "base_sha": "b47175ea90f55ec3ba4873e617e2ac9aab0efdd6",
+  "head_sha": "903b31261322d286f06342bf85e53c70f2e30a57",
+  "branch": "feature/T-20260830-037-pe-f0-baseline",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-037",
+  "scope": "PE-F0: build measurable cache/delay baseline matrix for P-line, with retired/IPC/stall/cache/transaction counters; no RTL performance optimization, no Quartus.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "created_at": "2026-08-30T13:15:00+08:00",
+    "documents_written_at": "2026-08-30T13:16:00+08:00"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cross_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "os": "Linux",
+    "python": "3.12",
+    "perf_cflags": "-O2",
+    "max_cycles": 5000000,
+    "cgroup": {
+      "method": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0",
+      "memory_max_bytes": 16106127360,
+      "memory_swap_max_bytes": 0,
+      "used_for": "each Verilator runner build; one heavy build at a time"
+    }
+  },
+  "qemu": {
+    "release": "not used",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": "f11feca3364e6e071c288cae3bc4a8040608f500b31c44c810b1bd5171a74b1d",
+  "matrix": {
+    "artifact_json": "docs/evidence/artifacts/T-20260830-037/perf_baseline_matrix.json",
+    "artifact_csv": "docs/evidence/artifacts/T-20260830-037/perf_baseline_matrix.csv",
+    "configs": [
+      "nocache_d0",
+      "l1i_d0",
+      "l1d_d0",
+      "l1id_d0",
+      "l1id_l2_d0",
+      "nocache_d1",
+      "nocache_d2",
+      "fullcache_d1",
+      "fullcache_d2"
+    ],
+    "workloads": [
+      "alu_latency",
+      "alu_ilp",
+      "ctrl_branch",
+      "muldiv",
+      "mem_seq",
+      "mem_random",
+      "mem_ldst",
+      "fp_scalar",
+      "fp_fp16",
+      "neon_vect",
+      "kernel_crc",
+      "kernel_hash",
+      "kernel_matmul",
+      "kernel_sort"
+    ],
+    "row_count": 126,
+    "config_summary": [
+      {
+        "config": "nocache_d0",
+        "workloads_total": 14,
+        "pass": 14,
+        "timeout": 0,
+        "cycles_sum_passed": 17971370,
+        "ipc_avg_passed": 0.239191,
+        "ram_req_sum_passed": 4750906,
+        "arb_req_sum_passed": 4750906
+      },
+      {
+        "config": "l1i_d0",
+        "workloads_total": 14,
+        "pass": 14,
+        "timeout": 0,
+        "cycles_sum_passed": 17973482,
+        "ipc_avg_passed": 0.239073,
+        "ram_req_sum_passed": 482401,
+        "arb_req_sum_passed": 482401
+      },
+      {
+        "config": "l1d_d0",
+        "workloads_total": 14,
+        "pass": 13,
+        "timeout": 1,
+        "cycles_sum_passed": 14656594,
+        "ipc_avg_passed": 0.240941,
+        "ram_req_sum_passed": 4090855,
+        "arb_req_sum_passed": 4090855
+      },
+      {
+        "config": "l1id_d0",
+        "workloads_total": 14,
+        "pass": 13,
+        "timeout": 1,
+        "cycles_sum_passed": 14658568,
+        "ipc_avg_passed": 0.240821,
+        "ram_req_sum_passed": 297488,
+        "arb_req_sum_passed": 297488
+      },
+      {
+        "config": "l1id_l2_d0",
+        "workloads_total": 14,
+        "pass": 13,
+        "timeout": 1,
+        "cycles_sum_passed": 15158642,
+        "ipc_avg_passed": 0.235549,
+        "ram_req_sum_passed": 250037,
+        "arb_req_sum_passed": 297488
+      },
+      {
+        "config": "nocache_d1",
+        "workloads_total": 14,
+        "pass": 12,
+        "timeout": 2,
+        "cycles_sum_passed": 17251008,
+        "ipc_avg_passed": 0.155176,
+        "ram_req_sum_passed": 3136098,
+        "arb_req_sum_passed": 3136110
+      },
+      {
+        "config": "nocache_d2",
+        "workloads_total": 14,
+        "pass": 9,
+        "timeout": 5,
+        "cycles_sum_passed": 7155308,
+        "ipc_avg_passed": 0.105411,
+        "ram_req_sum_passed": 875868,
+        "arb_req_sum_passed": 875877
+      },
+      {
+        "config": "fullcache_d1",
+        "workloads_total": 14,
+        "pass": 13,
+        "timeout": 1,
+        "cycles_sum_passed": 15658716,
+        "ipc_avg_passed": 0.230918,
+        "ram_req_sum_passed": 250037,
+        "arb_req_sum_passed": 297488
+      },
+      {
+        "config": "fullcache_d2",
+        "workloads_total": 14,
+        "pass": 13,
+        "timeout": 1,
+        "cycles_sum_passed": 16136201,
+        "ipc_avg_passed": 0.226612,
+        "ram_req_sum_passed": 250037,
+        "arb_req_sum_passed": 297488
+      }
+    ],
+    "timeouts": [
+      {
+        "config": "l1d_d0",
+        "name": "mem_random",
+        "cycles": 5000000
+      },
+      {
+        "config": "l1id_d0",
+        "name": "mem_random",
+        "cycles": 5000000
+      },
+      {
+        "config": "l1id_l2_d0",
+        "name": "mem_random",
+        "cycles": 5000000
+      },
+      {
+        "config": "nocache_d1",
+        "name": "mem_seq",
+        "cycles": 5000000
+      },
+      {
+        "config": "nocache_d1",
+        "name": "mem_random",
+        "cycles": 5000000
+      },
+      {
+        "config": "nocache_d2",
+        "name": "alu_latency",
+        "cycles": 5000000
+      },
+      {
+        "config": "nocache_d2",
+        "name": "alu_ilp",
+        "cycles": 5000000
+      },
+      {
+        "config": "nocache_d2",
+        "name": "ctrl_branch",
+        "cycles": 5000000
+      },
+      {
+        "config": "nocache_d2",
+        "name": "mem_seq",
+        "cycles": 5000000
+      },
+      {
+        "config": "nocache_d2",
+        "name": "mem_random",
+        "cycles": 5000000
+      },
+      {
+        "config": "fullcache_d1",
+        "name": "mem_random",
+        "cycles": 5000000
+      },
+      {
+        "config": "fullcache_d2",
+        "name": "mem_random",
+        "cycles": 5000000
+      }
+    ],
+    "nocache_d0_cycles_sum_passed": 17971370,
+    "snapshot_alignment": "nocache_d0 cycles sum 17,971,370 matches P-SNAPSHOT 14-workload total 17,971,370",
+    "main_findings": [
+      "Delay-0 cache configs do not reduce cycles; I-L1 neutral, D-L1 and I+D+L1/L2 increase cycles on common 13-workload subset.",
+      "I-L1, D-L1, and L2 substantially reduce arb/RAM transactions (often 10x-20x), but single-outstanding pipeline cannot convert traffic reduction into IPC.",
+      "Memory-heavy workloads (mem_seq/mem_ldst/mem_random) show the largest stall/cycle sensitivity; mem_random times out with D-L1 or L2 at 5M cycles.",
+      "Memory delay mode 1 and 2 greatly increase cycle counts and cause timeouts; full cache does not recover the added latency for mem_seq/mem_random.",
+      "Recommendation: prioritize F3 (bounded outstanding/MSHR/store buffer) for memory-heavy; keep F1 as front-end prerequisite; do not prioritize cache capacity/strategy work on this baseline."
+    ]
+  },
+  "artifact_sha256": {
+    "perf_baseline_matrix.json": "f7ccc6635ce283df2ba4095fe6a2c2d35bff22a4baaf85202c00f3bd82494b94",
+    "perf_baseline_matrix.csv": "22fe7d91fb07d47fdf35d6bc416279bd2c4209704c2683a25d0b8053abbdcb1b",
+    "PERFORMANCE_BASELINE_MATRIX.md": "877e4d8c6000a4663f20b55351760ea090f82d33d94499c01791b1988b932633",
+    "scripts/run_perf_matrix.py": "b3446b1645d02e601bc632abd87200522b303f3b21f1fb277aab52a34ec28eb1",
+    "sim/microbench/microbench_runner.cc": "73b331ae25533e4ec94f3be930915ff72c118272baf1318a93abee0050e2bfb8",
+    "sim/microbench/perf_runner.py": "4e827758d6a6668c02278fbac7330297fec3aa1c55093e266a659e4cab9cccac",
+    "tb/sv/lcvex_soc_tb.sv": "8afcc878288ce8b4baed7bbf55a4d0787cc5bc1f72a68efeb1233dd69d2179ca",
+    "Makefile": "8ccc61e6418bc4f62b59e36c6a689c3f785960e4812f971a2a2e5b64fdd95bd5"
+  },
+  "runs": [
+    {
+      "run_id": "owner-f0-runner-builds-001",
+      "level": "L0",
+      "commands": [
+        "make VERILATOR_JOBS=1 PERF_RUNNER_DIR=build/microbench_runner_<cfg> PERF_I_L1=... PERF_D_L1=... PERF_L2=... PERF_MEM_DELAY_MODE=... microbench-build-config under systemd-run MemoryMax=15G MemorySwapMax=0"
+      ],
+      "configs_built": [
+        "nocache_d0",
+        "l1i_d0",
+        "l1d_d0",
+        "l1id_d0",
+        "l1id_l2_d0",
+        "nocache_d1",
+        "nocache_d2",
+        "fullcache_d1",
+        "fullcache_d2"
+      ],
+      "result": "pass",
+      "summary": "All 9 configured runners built successfully one at a time."
+    },
+    {
+      "run_id": "owner-f0-matrix-runs-001",
+      "level": "L0",
+      "command": "python3 scripts/run_perf_matrix.py --configs all --workloads all --skip-build --out-dir build/perf_matrix",
+      "result": "pass",
+      "row_count": 126,
+      "summary": "Ran all 14 P-line workloads on all 9 configs; timeouts recorded as status=timeout."
+    },
+    {
+      "run_id": "owner-f0-aggregate-001",
+      "level": "L0",
+      "command": "python3 scripts/run_perf_matrix.py --configs all --workloads all --aggregate-only --out-dir build/perf_matrix",
+      "result": "pass",
+      "summary": "Aggregated per-run JSON into matrix.json/matrix.csv and copied to docs/evidence/artifacts/T-20260830-037/."
+    }
+  ],
+  "known_limits": [
+    "No Quartus/FPGA; no A10/Fmax signoff.",
+    "MEM_DELAY_MODE supports only 0/1/2 (2 = LFSR random 0..4), not fixed 4/16/32 cycles.",
+    "Stall/cache counters are simulation proxy events, not ARM PMU events.",
+    "Wall time is not a stable metric because unrelated external Verilator builds were running.",
+    "Some workloads time out at 5M cycles; those rows are not treated as passed."
+  ]
+}

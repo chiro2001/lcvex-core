@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-074",
+  "label": "A0",
+  "parent": "T-20260828-071",
+  "title": "开源综合工具链能力矩阵与可行性验证",
+  "kind": "opensynth-capability",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "branch": "feature/T-20260829-074-a0-toolchain-capability",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-074",
+  "scope": "建立隔离工具环境并固定版本；尝试解析/综合小型 SV、lcvex_core/Cache、SoC wrapper；记录 package/struct/interface/厂商原语失败点；输出 capability.json 和工具链锁定。",
+  "writes": [
+    "fpga/opensynth/toolchain.lock",
+    "fpga/opensynth/capability.json",
+    "fpga/opensynth/**",
+    "docs/handoffs/T-20260829-074-a0-toolchain-capability.md",
+    "docs/tasks/evidence/T-20260829-074.json"
+  ],
+  "acceptance": "至少完成小型 SV 和一项真实 LCVEX 模块；工具缺失或失败有明确原因和 fallback；A0 handoff/evidence 可审计。",
+  "next": "A0 通过后进入 A1 核心/内存 generic synth 代理。",
+  "updated_at": "2026-08-29T02:18:22+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T01:47:44+0800",
+    "agent_name": "a0_toolchain_capability",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-074",
+    "branch": "feature/T-20260829-074-a0-toolchain-capability"
+  },
+  "integrator_review": {
+    "received_at": "2026-08-29T02:16:50+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "314c3eb9517efb59758bf1a0cfdee94c89abb29d",
+    "implementation_sha": "42622212067c6939f972eda1c8bd40f2d6b51e4c",
+    "notes": "A0 完成：Verilator 可消费当前 SV/真实模块；Yosys 直接读 RTL 因 package/import/interface/unpacked-array 失败；sv2v 不可用；nextpnr-ecp5 仅最小 ECP5 smoke。A1 采用生成式扁平视图 fallback。"
+  },
+  "merge_sha": "27db8fffb3f85736cee140878d0d68a6feb63191",
+  "merged_at": "2026-08-29T02:18:22+08:00",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T02:25:00+0800",
+        "new": "2026-08-29T02:18:22+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T02:25:00+0800",
+        "new": "2026-08-29T02:18:22+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "42622212067c6939f972eda1c8bd40f2d6b51e4c",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "42622212067c6939f972eda1c8bd40f2d6b51e4c"
+}

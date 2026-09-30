@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-014",
+  "label": "P7-2-DUP-SQADD-DECODE",
+  "title": "修复 P7-2 DUP/SQADD decode overlap 基线红项",
+  "kind": "fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-p72-decode-fix",
+  "agent_type": "rtl-decode-fix",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-012"
+  ],
+  "base_sha": "8aa10fe4c5aa37e23b9d75a695e137e018a9d473",
+  "branch": "fix/T-20260902-014-p72-dup-sqadd-decode",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-014",
+  "scope": "修复 `sim-cocotb-p7-2-neon` 中 `test_p7_2_unsupported_udef` 的 SQADD 用例：`0x4E220C20` 被现有 B2c DUP decode 分支错误捕获，导致本应 UDEF 的 SQADD 未按 unsupported 处理。修复 decode 优先级/掩码，使 DUP 与 SQADD 等编码不重叠；保持 P7-2 其它测试全绿。",
+  "reads": [
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_pkg.sv",
+    "docs/P7-2_NEON_INT.md",
+    "docs/handoffs/T-20260902-004-quartus-fp-neon-compat.md",
+    "docs/handoffs/T-20260902-008-neon-lane-clamp.md",
+    "sim/cocotb/test_p7_2_neon.py",
+    "Makefile"
+  ],
+  "writes": [
+    "rtl/lcvex_decode.sv",
+    "docs/handoffs/T-20260902-014-p72-dup-sqadd-decode.md",
+    "docs/tasks/evidence/T-20260902-014.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "make sim-cocotb-p7-2-neon 10/10 PASS"
+    ],
+    "l1": [
+      "sim-sv-p7-2-neon PASS",
+      "git diff --check"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "P7-2 Cocotb unsupported UDEF 用例恢复全绿，DUP/SQADD 不再重叠；不扩大指令矩阵，不改 QEMU/测试期望。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T00:52:30+08:00",
+  "updated_at": "2026-09-03T01:10:25+08:00",
+  "known_limits": [
+    "不修改 NEON 整数 datapath；不新增指令支持；不运行完整 Gate D"
+  ],
+  "handoff": "docs/handoffs/T-20260902-014-p72-dup-sqadd-decode.md",
+  "evidence": "docs/tasks/evidence/T-20260902-014.json",
+  "next": "FP-P0 退出前必须闭合该红项",
+  "dispatch": {
+    "sent_at": "2026-09-03T00:53:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-014",
+    "branch": "fix/T-20260902-014-p72-dup-sqadd-decode"
+  },
+  "head_sha": "bdd2e281fbbfa3446aee963df8106de248d1b323",
+  "merge_sha": "347e509873bdb9507b984892e47e8890c2a465bb",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T01:09:00+08:00",
+    "merged_at": "2026-09-03T01:10:25+08:00",
+    "recorded_at": "2026-09-03T01:10:25+08:00",
+    "notes": "DUP/SQADD decode overlap fixed; P7-2 cocotb now 10/10."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-010",
+  "state": "done",
+  "partial": false,
+  "base_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+  "head_sha": "fc6b923f63a7bb7e72ed3cb3a6f313005d7c7ed9",
+  "content_sha": "fc6b923f63a7bb7e72ed3cb3a6f313005d7c7ed9",
+  "owner_tip_sha": "e1f3f6cfe4d67082b18e635634297b3b68c79d0c",
+  "merge_sha": "4d4a6f0c3a0b45483d228abb2fb12688986014cc",
+  "branch": "feature/t-20260830-010-p-infra",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-010",
+  "scope": "P-INFRA: perf single-build, JSON cycle/hash/params report, Makefile and docs. Does not modify P-ALU/MEM/FP/NEON/MC/KERNEL workload files.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "created_at": "2026-08-30T03:04:00+08:00",
+    "documents_written_at": "2026-08-30T03:04:00+08:00"
+  },
+  "toolchain": {
+    "cross_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "runner": "existing build/microbench_runner/microbench_runner (prebuilt binary; no new heavy Verilator build)"
+  },
+  "runs": [
+    {
+      "run_id": "owner-perf-smoke-build-001",
+      "source_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "PERF_ONLY=smoke bash scripts/build-microbench.sh",
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Built build/microbench/perf_smoke.bin (632 bytes) in isolated worktree."
+    },
+    {
+      "run_id": "owner-perf-smoke-json-002",
+      "source_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 sim/microbench/perf_runner.py --runner /home/chiro/projects/mycpu/lcvex/build/microbench_runner/microbench_runner --image build/microbench/perf_smoke.bin --name smoke --param iters=1000",
+      "wall_seconds": 1.53,
+      "cpu_count": 1,
+      "peak_rss_mb": 133.1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "JSON report has status=pass, cycles=16082, git_sha, source_hash, image_hash, toolchain, params."
+    },
+    {
+      "run_id": "owner-mb-all-regression-003",
+      "source_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash scripts/build-microbench.sh && ./build/microbench_runner/microbench_runner --image build/microbench/mb_all.bin --name mb_all",
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Original mb_all still builds; existing runner reports PASS at 2698 cycles."
+    },
+    {
+      "run_id": "owner-cpp-syntax-004",
+      "source_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "g++ -std=c++14 -fsyntax-only -I... sim/microbench/microbench_runner.cc",
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Modified C++ runner source passes syntax check; no heavy Verilator build was started."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-010-perf-infra.md",
+      "sha256": "9f150c8cae05cdfbe733412ca37511883a8d3a9097f31d2518539dc50ae0705a",
+      "owner": "T-20260830-010",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-010-perf-infra.md"
+    },
+    {
+      "id": "perf-smoke-json",
+      "uri": "build/microbench/perf_smoke.json",
+      "sha256": null,
+      "owner": "T-20260830-010",
+      "retain_until": "task-close",
+      "reproduce": "python3 sim/microbench/perf_runner.py --runner ... --image build/microbench/perf_smoke.bin --name smoke --out build/microbench/perf_smoke.json"
+    }
+  ],
+  "known_limits": [
+    "Did not rebuild the Verilator runner; used the already-built runner binary for smoke execution.",
+    "C++ --json path was syntax-checked but not executed; Python perf_runner is the verified JSON path.",
+    "No Quartus started; no FPGA/Fmax claims.",
+    "t_smoke.c is infrastructure-only and not one of the real performance workload categories."
+  ],
+  "status": "done",
+  "integration": {
+    "reviewed_at": "2026-08-30T19:21:22+08:00",
+    "result": "accepted_equivalent_cherry_picks",
+    "integrated_commits": [
+      "59ba1b2969d1f73a614c21583d5dd9daaf0ffaca",
+      "4d4a6f0c3a0b45483d228abb2fb12688986014cc"
+    ],
+    "patch_id_mapping": {
+      "bb6a5db0af7f91b491b71ec7133f586d9703d571": "5065dca641d54881dda10a00a7610d569fd694cb",
+      "59ba1b2969d1f73a614c21583d5dd9daaf0ffaca": "5065dca641d54881dda10a00a7610d569fd694cb",
+      "fc6b923f63a7bb7e72ed3cb3a6f313005d7c7ed9": "0ea0bf5c33bba3a4fa22bdf0c8f825b2c0876b16",
+      "4d4a6f0c3a0b45483d228abb2fb12688986014cc": "0ea0bf5c33bba3a4fa22bdf0c8f825b2c0876b16"
+    },
+    "note": "No new test was run for ledger reconciliation; original owner runs and later P-line/F0 evidence remain authoritative."
+  },
+  "correction_record": {
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-010-perf-infra.md",
+        "sha256": "9f150c8cae05cdfbe733412ca37511883a8d3a9097f31d2518539dc50ae0705a",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

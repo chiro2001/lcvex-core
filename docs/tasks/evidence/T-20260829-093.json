@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-093",
+  "state": "done",
+  "base_sha": "20ed582",
+  "head_sha": "f5fd9556d6c973dfb2ba288bb402735acd27fba0",
+  "merge_sha": "8b4348d30aca6f30af541a71d1da2effb4615fc1",
+  "branch": "feature/T-20260829-093-b3-remainder",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-088",
+  "sent_at": "2026-08-29T12:03:32+08:00",
+  "received_at": "2026-08-29T12:03:32+08:00",
+  "reported_at": "2026-08-29T12:03:32+08:00",
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches_sha256": null,
+    "binary_sha256": null
+  },
+  "rtl_filelist_sha256": "404108df9586747b6993e490fdda9d223112c0513041926f59d65cda499154c8",
+  "tools": {
+    "python": "3.12.10",
+    "verilator": "5.050",
+    "cocotb": "2.0.1"
+  },
+  "artifacts": [
+    {
+      "id": "artifact-b3-093-pkg",
+      "owner": "T-20260829-093",
+      "uri": "rtl/lcvex_pkg.sv",
+      "reproduce": "git diff rtl/lcvex_pkg.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "deccde0aedbc57a23e4e777e8ff9a4cd57dc4f3f2f2850ae31f90fddbd630fa9"
+    },
+    {
+      "id": "artifact-b3-093-decode",
+      "owner": "T-20260829-093",
+      "uri": "rtl/lcvex_decode.sv",
+      "reproduce": "git diff rtl/lcvex_decode.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "2e3bdded93bdd019b095b123005d224d0d2c98c1949ffaf40adedc21182f6d1e"
+    },
+    {
+      "id": "artifact-b3-093-sysreg-tb",
+      "owner": "T-20260829-093",
+      "uri": "tb/sv/lcvex_b3_sysreg_access_tb.sv",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_sysreg_access_tb -Mdir build/b3_sysreg_access rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_sysreg_access_tb.sv && conda run --no-capture-output -n lcvex ./build/b3_sysreg_access/Vlcvex_b3_sysreg_access_tb",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "10a884bb73ad2b1be5fb6184aa56dc07510fece881867cccdc7943014c937c16"
+    },
+    {
+      "id": "artifact-b3-093-atomic-tb",
+      "owner": "T-20260829-093",
+      "uri": "tb/sv/lcvex_b3_atomic_barrier_tb.sv",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_atomic_barrier_tb -Mdir build/b3_atomic_barrier rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_atomic_barrier_tb.sv && conda run --no-capture-output -n lcvex ./build/b3_atomic_barrier/Vlcvex_b3_atomic_barrier_tb",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "2eb666c288c5518f710500e41e3d53ccb1c4a516e9f4c9aa466f041c256da581"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-b3-093-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 120 conda run --no-capture-output -n lcvex verilator --lint-only --timing -Wall -j 2 --top-module lcvex_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "decoder module lint passed",
+      "source_sha": "20ed582",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 300,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-093-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 60 make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "full core lint passed; Verilator Walltime 34.756s",
+      "source_sha": "20ed582",
+      "seed": null,
+      "wall_seconds": 35,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 387,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-093-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_sys_decode_tb -Mdir build/b3_sys_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_sys_decode_tb.sv && timeout 30 conda run --no-capture-output -n lcvex ./build/b3_sys_decode/Vlcvex_b3_sys_decode_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "barrier decoder TB rebuild+pass",
+      "source_sha": "20ed582",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 248,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-093-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_sysreg_access_tb -Mdir build/b3_sysreg_access rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_sysreg_access_tb.sv && timeout 30 conda run --no-capture-output -n lcvex ./build/b3_sysreg_access/Vlcvex_b3_sysreg_access_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "sysreg access decoder TB rebuild+pass (includes OSLSR_EL1)",
+      "source_sha": "20ed582",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 249,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-093-005",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_maint_decode_tb -Mdir build/b3_maint_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_maint_decode_tb.sv && timeout 30 conda run --no-capture-output -n lcvex ./build/b3_maint_decode/Vlcvex_b3_maint_decode_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "maintenance decoder TB rebuild+pass",
+      "source_sha": "20ed582",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 248,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-093-006",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_atomic_barrier_tb -Mdir build/b3_atomic_barrier rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_atomic_barrier_tb.sv && timeout 30 conda run --no-capture-output -n lcvex ./build/b3_atomic_barrier/Vlcvex_b3_atomic_barrier_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "new atomic/barrier scalar matrix decoder TB pass",
+      "source_sha": "20ed582",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 249,
+      "disk_delta_mb": null
+    }
+  ],
+  "known_limits": [
+    "No QEMU strict lockstep or Gate D run in this slice; oracle is QEMU 11.1.0 source (debug_helper.c and a64.decode), not new QEMU execution.",
+    "CONTEXTIDR_EL1 remains unimplemented; would require core state/checkpoint and was intentionally left out to limit shared-core writes.",
+    "DC CVADP, TLBI OS/RV/range, EL2/EL3 maintenance, RCpc, other LSE128, PMU remain out of approved range.",
+    "Full make compile did pass in this worktree; however concurrent external Verilator builds were still present, so integration should re-run in a quiet resource slot."
+  ],
+  "next": "Integrator review; optionally continue with CONTEXTIDR_EL1 or full QEMU sysreg inventory.",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "sent_at",
+        "old": "2026-08-29T12:10:00+0800",
+        "new": "2026-08-29T12:03:32+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "received_at",
+        "old": "2026-08-29T12:15:00+0800",
+        "new": "2026-08-29T12:03:32+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "reported_at",
+        "old": "2026-08-29T12:25:00+0800",
+        "new": "2026-08-29T12:03:32+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "8b4348d30aca6f30af541a71d1da2effb4615fc1",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "f5fd9556d6c973dfb2ba288bb402735acd27fba0",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "f5fd9556d6c973dfb2ba288bb402735acd27fba0",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "handoff_sha": "f5fd9556d6c973dfb2ba288bb402735acd27fba0",
+  "integrator_review": {
+    "received_at": "2026-08-29T12:07:07+08:00",
+    "status": "accepted",
+    "head_sha": "d76bc0a18df0c914abececb5c796dcb13aae3c44",
+    "notes": "Integrator re-ran make compile (default Verilator, RC=0) and all four B3 SV TBs (sys_decode/sysreg_access/maint_decode/atomic_barrier) PASS on branch. Merged into feature/p7-final @ 8b4348d.",
+    "merge_sha": "8b4348d30aca6f30af541a71d1da2effb4615fc1",
+    "result_sha": "f5fd9556d6c973dfb2ba288bb402735acd27fba0"
+  }
+}

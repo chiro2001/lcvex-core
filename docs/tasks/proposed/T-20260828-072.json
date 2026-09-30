@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-072",
+  "title": "V82 非 SVE profile 指令补完线（B 线）",
+  "kind": "parallel-line",
+  "priority": "high",
+  "phase": "done",
+  "assigned_owner": "root-integrator (proposed; child owners TBD)",
+  "base_sha": "95ee3e5b74152331b369ba1ee5e1fac4d4a32e75",
+  "functional_baseline_sha": "78771bf",
+  "plan": "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+  "branch": "feature/T-20260828-072-v82-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-072",
+  "children": [
+    "B0",
+    "B1",
+    "B2a",
+    "B2b",
+    "B2c",
+    "B3",
+    "B4",
+    "B5"
+  ],
+  "scope": "按 V82-BASE + V82-SELECTED-EXT 清单，把非 SVE ARMv8.2-A 指令/系统/FP/ASIMD 支持补完；SVE/SME 和 POST-V82-DEFERRED 扩展明确排除。",
+  "acceptance": "见 v2 计划 B0-B5 退出条件；profile manifest 100% rows 有 RTL/SV/Cocotb/QEMU 或明确 blocked；合入后保持 P6/P7/Gate D 回归。",
+  "known_limits": [
+    "不包含 SVE/SME/Crypto/PAuth/MTE/MOPS/未批准 LSE128",
+    "共享 core/pkg/commit/memory 热点需与 C 线串行",
+    "QEMU fork 修改全局串行"
+  ],
+  "dispatch_status": "complete"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "kernel_hash",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "3ed4cd06133dd05dc46c6b5703a8b2e123e6a4b1fcc27fa836c1feda58a68f8c",
+  "source_sha256": "3ed4cd06133dd05dc46c6b5703a8b2e123e6a4b1fcc27fa836c1feda58a68f8c",
+  "image_hash": "e800011683cc5415427fbd451d41488be7051910b4abfb3c76c4082e59b42a58",
+  "image_sha256": "e800011683cc5415427fbd451d41488be7051910b4abfb3c76c4082e59b42a58",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 55476,
+  "wall_sec": 1.805917,
+  "rss_kb": 139280,
+  "rss": 136.016,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_kernel_hash.bin",
+    "--name",
+    "kernel_hash",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: kernel_hash (55476 cycles)\n",
+  "runner_stderr": ""
+}

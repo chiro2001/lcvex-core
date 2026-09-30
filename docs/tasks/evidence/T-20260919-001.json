@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260919-001",
+  "label": "B25-M20K-READ-ALIGNMENT",
+  "state": "done",
+  "acceptance_status": "stale-read-reproduced-and-fixed-local-l0-l2-pass",
+  "partial": false,
+  "base_sha": "81b2b897fdbec81e5f1a57729204ecf36569059b",
+  "dispatch_head_sha": "c0bb03f7cac9c2524bcc45d359f04d157e1c760c",
+  "implementation_commit": "7a0c6705fb06df7785a95bfc3707e8cbd17749d1",
+  "implementation_tree_sha": "22c74cf8543fb0a636ed2376018e59bbb506f204",
+  "branch": "fix/T-20260919-001-b25-m20k-read-alignment",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-001",
+  "owner": "root",
+  "timestamps": {
+    "task_created_at": "2026-09-19T21:40:34+08:00",
+    "implementation_committed_at": "2026-09-19T21:54:02+08:00",
+    "final_validation_finished_at": "2026-09-19T21:58:14+08:00",
+    "reported_at": "2026-09-19T22:02:42+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "root_cause_proof": {
+    "model": "A test-only altera_syncram stub samples address/data at clock0 and updates q_a/q_b after the edge. A separate posedge process therefore observes the previous q value, matching the synchronous M20K timing property hidden by the behavioral byte array.",
+    "pre_fix_rtl": {
+      "source": "batch/T-20260907-037-b25-bringup before this fix",
+      "sha256": "7a3c4ae2328dbd81cd55ff5265e538db4ff312582ff9bfbee49bd9d3f837bf00",
+      "result": "expected fail",
+      "exit_code": 1,
+      "failures": [
+        "first PC=0-equivalent read actual=0x8877665544332216 (parked word 7), expected=0x8877665544332211 (word 0)",
+        "next aligned word read actual=0x8877665544332211 (word 0), expected=0x8877665544332210 (word 1)",
+        "first debug word actual=0x8877665544332211 (word 0), expected=0x8877665544332215 (word 4)"
+      ],
+      "interpretation": "The old request and debug wrappers returned the previous synchronous RAM word. Reset-time address-zero precharge could hide only the first fetch; the next changed address remained stale."
+    },
+    "post_fix_rtl": {
+      "sha256": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+      "result": "pass",
+      "exit_code": 0,
+      "marker": "BRAM_M20K_TIMING_TB PASS"
+    }
+  },
+  "implementation": {
+    "rtl": "rtl/lcvex_bram_boot.sv::lcvex_bram_boot_altsyncram",
+    "changes": [
+      "Make port-A address/data/byte-enable/read-control registers explicit at CLOCK0, matching the intended synchronous M20K contract.",
+      "On req_accept, capture word address, byte offset and read/write response kind; drive the live accepted address on that edge and hold it until rsp_ready retires the response.",
+      "Return read data directly from the post-edge q_a shifted by the captured offset instead of capturing the previous q_a in the accept-edge always_ff.",
+      "Capture debug byte offset on the same edge as the synchronous port-B address and combine it with post-edge q_b, eliminating the extra stale-data register."
+    ],
+    "reset_values": {
+      "rsp_read_r": 0,
+      "req_waddr_r": 0,
+      "req_off_r": 0,
+      "dbg_off_r": 0
+    },
+    "commit_timing": {
+      "request": "held address/offset/kind and fault update only on req_accept",
+      "write": "existing byte-enabled write side effect remains on req_accept edge",
+      "read": "rsp_valid becomes visible after the accept edge with the corresponding post-edge q_a and remains stable under backpressure",
+      "debug": "dbg_addr and dbg_off are associated on one edge; post-edge q_b and captured offset form dbg_rdata"
+    },
+    "unchanged": [
+      "behavioral RAM implementation and byte-address semantics",
+      "public single-outstanding and one-cycle response contract",
+      "QSF, SDC, generated vendor IP, boot image and software",
+      "core/cache/AXI/EMIF/JTAG-UART RTL"
+    ]
+  },
+  "source_artifacts": {
+    "rtl/lcvex_bram_boot.sv": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+    "tb/sv/altera_syncram_sync_stub.sv": "c0eaa83dd5497114ff12a9740988a19dee265ce7bced6e3db3ddd504ae8f7670",
+    "tb/sv/lcvex_bram_boot_m20k_tb.sv": "d9ed42da35157c159aa0f581e66768c5a7fa20c855130ae658e58fa8880711b1",
+    "fpga/catapult_a10/tools/run_bram_m20k_timing_test.sh": "6c2e6aea545c2932cb72a6bf626cd620668f18b30115884e3655af2d3d94d540",
+    "scripts/test_registry.json": "54941829ed6089b4579db98828b3c6aa3fe7780dc316a118bdab40b0fc6ce5b8"
+  },
+  "validation": [
+    {
+      "name": "pre-fix vendor-faithful timing regression",
+      "command": "LCVEX_M20K_RTL_SOURCE=/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/rtl/lcvex_bram_boot.sv LCVEX_M20K_TIMING_DIR=$PWD/build/agents/T-20260919-001/pre-fix-authoritative VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_bram_m20k_timing_test.sh",
+      "result": "expected fail, exit 1, three stale-word mismatches",
+      "build_log": {
+        "path": "build/agents/T-20260919-001/pre-fix-authoritative/verilator-build.log",
+        "bytes": 4204,
+        "sha256": "df91884e971cb719bea6a49318c191c98670e727712da0ef520b88a9b2cc7055"
+      },
+      "run_log": {
+        "path": "build/agents/T-20260919-001/pre-fix-authoritative/verilator-run.log",
+        "bytes": 539,
+        "sha256": "860b82f70113743cf7f30cd437491137f1e0db426b6b6510c732135686d75e02"
+      }
+    },
+    {
+      "name": "post-fix vendor-faithful timing regression",
+      "command": "LCVEX_M20K_TIMING_DIR=$PWD/build/agents/T-20260919-001/post-fix-final-sha VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_bram_m20k_timing_test.sh",
+      "result": "pass",
+      "coverage": [
+        "first accepted PC=0-equivalent read independent of reset-time address",
+        "consecutive changed address",
+        "in-word unaligned offset",
+        "three-cycle response backpressure stability while live req changes",
+        "byte write rotation and readback",
+        "cross-word and out-of-range faults",
+        "debug word and byte-offset alignment"
+      ],
+      "build_log": {
+        "path": "build/agents/T-20260919-001/post-fix-final-sha/verilator-build.log",
+        "bytes": 4198,
+        "sha256": "69dd9ec23e2383c4d582881cafc93f70b51622ebb45b03a72438782d71445ccc"
+      },
+      "run_log": {
+        "path": "build/agents/T-20260919-001/post-fix-final-sha/verilator-run.log",
+        "bytes": 265,
+        "sha256": "a043b579a999ebf986781b22cc341b6251bb6b54d54575a9030942411185229d"
+      }
+    },
+    {
+      "name": "existing behavioral BRAM directed TB",
+      "command": "verilator --binary --timing --assert ... --top-module lcvex_bram_boot_tb",
+      "result": "BRAM_BOOT_TB PASS",
+      "build_log_sha256": "61c97e92fdce46618cb2d6dd42258ea6e6ffde50f35be7961a9b57400ed2a465",
+      "run_log": {
+        "path": "build/agents/T-20260919-001/behavioral-final/verilator-run.log",
+        "bytes": 253,
+        "sha256": "7df67ce0ae204b27ecc98d9a5e0315e06ca9656eab73729badea01a81219af35"
+      }
+    },
+    {
+      "name": "B25 independent ELF-derived image oracle",
+      "command": "LCVEX_BRAM_BOOT_BUILD_DIR=... LCVEX_BRAM_INIT25_TEST_DIR=... bash fpga/catapult_a10/tools/run_bram_init25_test.sh; then run its --heavy-run phase under the T-20260919-001 local resource lock",
+      "result": "emit/check PASS, 13/13 negative faults PASS, BRAM_INIT25_TB PASS",
+      "image": {
+        "elf_sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231",
+        "bin_sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+        "hex_sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa",
+        "mif_sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+        "expected_image_sha256": "7889fff7ca07867da8827cede9d0444ed306b7a2be42e2b2f934ec66be9b643b"
+      },
+      "oracle_manifest": {
+        "path": "build/agents/T-20260919-001/bram-oracle/oracle/image_manifest.json",
+        "bytes": 3622,
+        "sha256": "acc9725ddc65299d4c820eb097b9b85db05c59d9f5e671ddc6d7e9631daa049b"
+      },
+      "build_log_sha256": "ca5b9ec2607d8e4ee0b558ee783aa060c1ba1c9e48f4ee0d2eb4b8a267d53b",
+      "run_log": {
+        "path": "build/agents/T-20260919-001/bram-oracle/verilator-run.log",
+        "bytes": 1144,
+        "sha256": "a73a2189d2c42a1c6db92d0f5faf990ac91fc9d331f36ea1056051f66de4fe5a"
+      }
+    },
+    {
+      "name": "B25 SoC resident-monitor smoke",
+      "command": "resource-lock run local lcvex T-20260919-001 root ... -- env LCVEX_SOC_SMOKE_DIR=build/agents/T-20260919-001/soc-smoke VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "result": "SOC_B25_ALL_PASS and LCVEX_CATAPULT_A10_B25_SOC_SMOKE_PASS",
+      "scenarios": [
+        "cal-ok PASS",
+        "CAL-WAIT/no-ddr mode=0 PASS",
+        "CAL-FAIL/no-ddr mode=2 PASS"
+      ],
+      "wrapper_log": {
+        "path": "build/agents/T-20260919-001/soc-smoke-wrapper.log",
+        "bytes": 6161,
+        "sha256": "da568b37509f0db8ce8b8b0472f68dc43989fc89d10539e17bc832cdb3d57bc1"
+      },
+      "run_log": {
+        "path": "build/agents/T-20260919-001/soc-smoke/smoke.log",
+        "bytes": 455,
+        "sha256": "b927ba0012aa14d40a1614987a54302f1b0066e5211ded1289961ff428871879"
+      }
+    },
+    {
+      "name": "compile and SoC lint",
+      "commands": [
+        "make compile",
+        "bash fpga/catapult_a10/tools/lint_soc.sh"
+      ],
+      "result": "PASS",
+      "make_compile_log_sha256": "ca7fcfb354256e9ae9661cf30d58b88265632e04b62ef1d257ebef209420cd91",
+      "soc_lint_log_sha256": "a31a6dff843cb5755a5d6f6f94eaa9d06526d37f111d043c3799e13947c51fea"
+    },
+    {
+      "name": "platform, selector and registry static closure",
+      "commands": [
+        "python3 fpga/catapult_a10/tools/check_platform.py",
+        "python3 fpga/catapult_a10/tools/check_skeleton.py --require-boot-image",
+        "cd fpga/catapult_a10 && sha256sum -c SHA256SUMS",
+        "python3 fpga/catapult_a10/tools/check_synthesis_selector.py",
+        "make test-registry-check"
+      ],
+      "result": "platform 50 PASS; skeleton 6 PASS with expected local Quartus TOOLCHAIN_MISSING advisory; SHA256SUMS 50/50; selector PASS; registry 85 entries and consistency PASS",
+      "log": {
+        "path": "build/agents/T-20260919-001/static-validation.log",
+        "bytes": 3918,
+        "sha256": "f98f09dd8f4d73d4408ae7b44da87b93a849a350196d7ffdc1566342b5776720"
+      }
+    }
+  ],
+  "resource_lock": {
+    "focused_stub_and_static_checks": "small local jobs; no heavy slot required",
+    "heavy_jobs_locked": [
+      "BRAM oracle Verilator build/run",
+      "B25 SoC smoke",
+      "make compile and SoC lint final capture"
+    ],
+    "first_oracle_attempt": "Correctly returned 75 while pypto-x held local; static/oracle checks completed and the Verilator phase was deferred.",
+    "final": "T-20260919-001 holds no resource. After release, local was acquired by pypto-x/u-ops-registry-batch3; gamepc remained FREE."
+  },
+  "known_existing_non_blocker": {
+    "command": "python3 scripts/test_registry_test.py",
+    "result": "fails its hard-coded expected L0 ID list",
+    "classification": "pre-existing test fragility; reproduced unchanged on batch/T-20260907-037-b25-bringup. The authoritative make test-registry-check passes with 85 entries and source consistency. No out-of-scope registry unit-test rewrite was made."
+  },
+  "safety_and_scope": {
+    "qemu_or_reference_modified": false,
+    "qsf_or_sdc_modified": false,
+    "vendor_generated_ip_modified": false,
+    "assertion_disabled": false,
+    "quartus_or_gamepc_run": false,
+    "assembler_or_bitstream": false,
+    "jtag_or_board_action": false,
+    "flash_reset_or_power_action": false,
+    "unknown_process_stopped": false
+  },
+  "not_run": [
+    "full Gate D on the integration merge SHA",
+    "Quartus synthesis/fitter/STA/assembler",
+    "SOF generation or FPGA configuration",
+    "JTAG-UART board interaction",
+    "JIC/EPCQ/Flash/reset/power"
+  ],
+  "integration": {
+    "status": "accepted",
+    "implementation_cherry_pick": "c4c75ca6",
+    "evidence_cherry_pick": "bd59d4fc188b1df31c14d4dc4a5de5c55b907166",
+    "merge_tree_sha": "2a6b3a993d5b1d390dbdc112f8a12a4f1f7811a6",
+    "reviewed_at": "2026-09-19T22:16:06+08:00",
+    "checks": [
+      "changed paths exactly match the registered RTL/test/runner/registry/evidence write set",
+      "merge-SHA vendor-faithful timing test PASS with RTL SHA-256 10c16f8a...c576cbf",
+      "merge-SHA synthesis selector PASS and registry 85-entry consistency PASS",
+      "merge-SHA platform 50, skeleton 6, SHA256SUMS 50/50 and boot image contract emit/check PASS",
+      "merge-SHA BRAM oracle negative suite 13/13 PASS before its heavy phase correctly returned 75 because another project held local",
+      "owner implementation tree already records locked behavioral BRAM, BRAM oracle heavy and CAL-OK/WAIT/FAIL SoC smoke PASS; no result was fabricated for the deferred duplicate heavy run"
+    ],
+    "artifacts": {
+      "focused_wrapper_sha256": "515d10476ac2c371e8594f38104eb5f6f273106c6dcc230492c6e76bf8acc6f4",
+      "focused_run_sha256": "6bcb989e6f0542d5084e99e21cf09130173523431f303b9b8341e8e272a40492",
+      "selector_sha256": "05f623e43252bfe51aff0bf5f87fc87e39f3ee08708de93f2342be0e6e04d218",
+      "registry_sha256": "f483c1db60d6db18ccefe562255168c6a83707f04ab3de54240f3bc31beeebab",
+      "static_validation_sha256": "7c1de7cdd213f9b8d8416bc9df1a7d229a6458f6bed2cc84243649a8dcfbed7b",
+      "oracle_static_and_wait_sha256": "866b2936a791830b88ed37cf7eb8f3d9127b7ace66c835c15bc73249c721841c"
+    }
+  },
+  "handoff": "docs/handoffs/T-20260919-001-b25-m20k-read-alignment.md",
+  "next": "Run Gate D on the frozen integration SHA. In parallel, create a clearly labeled A64_FP_SIMD=0 scalar bring-up profile for the fastest fresh GamePC synthesis/fitter/STA; it cannot be called the final full-FP release candidate. A separate assembler/SOF gate is required before corrected volatile board retest."
+}

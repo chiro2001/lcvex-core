@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-013",
+  "label": "B25-FINAL-FRESH-PHYSICAL",
+  "title": "Run final fresh B25 synthesis, fitter and STA with closed SDC policy",
+  "kind": "quartus-final-physical-signoff",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-after-v2-invariant-signoff",
+  "assigned_owner": "b25_final_fresh_physical",
+  "depends_on": ["T-20260909-011"],
+  "base_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "branch": "verify/T-20260909-013-b25-final-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-013",
+  "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260909-013-b25-final-fresh-physical",
+  "writes": [
+    "build/agents/T-20260909-013/** ignored local scripts/logs/reports",
+    "remote_probe/** fresh Quartus build and report artifacts",
+    "docs/tasks/evidence/T-20260909-013.json",
+    "docs/handoffs/T-20260909-013-b25-final-fresh-physical.md"
+  ],
+  "reads": [
+    "candidate SHA d2f5cfdd2791945a82d47300b94debd0e40a96d6 tracked source closure",
+    "docs/tasks/evidence/T-20260909-011.json and T-20260909-002.json",
+    "T-011 FIFO/data-delay/UCP waiver checkers and exporter",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-002/build/agents/T-20260909-002/** (designated read-only reference for proven stage/preflight/report scripts)"
+  ],
+  "scope": "Create a source-manifest-verified fresh remote probe, run exactly synthesis then fitter then STA, and apply the complete T-011 acceptance suite to fresh outputs. Preserve boot MIF binding, 25 MHz sys clock and all four data-delay corners. Do not reuse fitted QDB as the final result.",
+  "validation": [
+    "Before synthesis, prove remote candidate closure, SDC hash 7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5, exact QSF/MIF selector and no pre-existing QDB/output/configuration artifact.",
+    "Run synthesis, fitter and STA serially with exact start/end timestamps, exit codes, process/resource snapshots and complete pre/post artifact manifests.",
+    "Require 25 MHz setup/hold/recovery/removal/min-pulse nonnegative, DDR five checks PASS, metastability PASS, expected M20K binding/resources and no new unconstrained rows beyond exact T-011 waiver.",
+    "Require six FIFO payload exceptions, five four-corner data-delay routes/path cardinalities/2 ns markers, actual UCP inventory export plus corrected waiver checker PASS, and no ignored/overridden target bound.",
+    "Run final local platform/skeleton/selector/SHA and checker union against the exact candidate; preserve logs and hashes."
+  ],
+  "acceptance": "A fresh candidate-built synthesis/fitter/STA result passes all functional timing, DDR, metastability, exact CDC exception and UCP waiver gates with immutable provenance and no forbidden stage/artifact.",
+  "resource": "All GamePC stages, report queries and artifact collection use /home/chiro/projects/.resource-locks/resource-lock run gamepc. One Quartus process at a time; event-driven monitoring with up to one-hour waits, no frequent polling.",
+  "forbidden_regions": [
+    "tracked RTL/SDC/QSF/manifest/SHA/test/task/status changes outside this task evidence/handoff",
+    "reuse of T-002 fitted DB as the final physical result",
+    "assembler, quartus_asm, SOF/POF/JIC/RBF generation",
+    "quartus_pgm, nios2-terminal, JTAG, FPGA configuration, reset/power, Flash",
+    "another worktree or another task's remote probe"
+  ],
+  "created_at": "2026-09-09T14:28:30+08:00",
+  "updated_at": "2026-09-10T10:53:13+08:00",
+  "result": {
+    "source_head": "72712675ff588b49a538f4567411abb9e4f76174",
+    "integration_commit": "2e7974db34b075f66dc9430de641c470e8b22d7b",
+    "evidence": "docs/tasks/evidence/T-20260909-013.json",
+    "handoff": "docs/handoffs/T-20260909-013-b25-final-fresh-physical.md",
+    "physical_flow": "synthesis/fitter/STA/timing/DDR/metastability/FIFO/data-delay PASS",
+    "ucp_resolution": "T-20260910-001 v2 invariant proves T-011 raw 63/627 and T-013 raw 61/626 normalize to identical full UCP input/reset sets 60/624; actual T-013 export/check PASS on the integration SHA",
+    "provenance_correction": "T-20260910-002 checked 25 artifact references with 0 mismatch and changed no measured result",
+    "acceptance": "PASS; fresh synthesis/fitter/STA, timing, DDR, metastability, FIFO payload, data-delay and v2 UCP invariant signoff complete",
+    "next": "T-20260907-043 remains a separate explicit assembler/SOF authorization gate"
+  },
+  "dispatch": {
+    "sent_at": "2026-09-09T14:38:51+08:00",
+    "agent_name": "b25_final_fresh_physical",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "706d8ab17cc36318aeb7727441acdc89778aa941"
+  }
+}

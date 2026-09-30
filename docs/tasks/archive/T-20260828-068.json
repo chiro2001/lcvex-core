@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-068",
+  "title": "P7-4 冻结候选完整 Gate D（Gate-F ISA candidate）",
+  "kind": "gate-d-frozen-candidate",
+  "priority": "high",
+  "assigned_owner": "root-integrator",
+  "agent_type": "integrator",
+  "model": "",
+  "model_selection": "集成者串行执行",
+  "reasoning_effort": "max",
+  "phase": "done",
+  "parent": "T-20260828-066",
+  "depends_on": ["T-20260828-066"],
+  "input_note": "P7-4 合入 P7 线后，在冻结 SHA c007164 的 detached gate worktree 跑完整 Gate D，作为 Gate-F ISA 候选证据。",
+  "writes": [
+    "docs/tasks/evidence/T-20260828-068.json",
+    "docs/handoffs/T-20260828-068-gate-d-p7-4.md"
+  ],
+  "reads": [
+    "sim/difftest/run_gate_d.sh",
+    "docs/ISA_SCOPE.md",
+    "docs/P7-4_FMA_CONVERT.md"
+  ],
+  "base_sha": "c0071641d31b0f8c2f4cfea10e44e1c4d5d5c4b4",
+  "branch": "detached-gate-T-20260828-068",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-gate-T-20260828-067",
+  "resource": {
+    "cpu": 6,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l3": ["完整 Gate D 在冻结 SHA 全绿：M2/R1、delay2、hardening、Gate C、P5a、P4b、随机 3×100k、coverage、baremetal-C"]
+  },
+  "acceptance": "冻结 SHA c007164 完整 Gate D 全绿并记录 evidence；作为 Gate-F ISA candidate 证据，不宣称 Gate F-ISA 正式通过（仍需 CI/main 晋级与正式验收）。",
+  "created_at": "2026-08-28T04:16:00+08:00",
+  "updated_at": "2026-08-28T04:16:00+08:00",
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260828-068.json",
+  "handoff": "docs/handoffs/T-20260828-068-gate-d-p7-4.md",
+  "known_limits": [
+    "本任务证明冻结 SHA 的完整 Gate D 全绿，不证明 Gate F-BOARD、CI 晋级、Linux/nightly 或正式发布。",
+    "P7-4 未列族（FP16/sqrt/estimate/minmax/round/SVE）仍后置。"
+  ],
+  "next": "Gate-F ISA 正式验收与 CI/main 晋级仍按既定条件；继续 B5 full flow 重跑（T-067）与 Gate F-MEM/BOARD。"
+}

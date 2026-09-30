@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-046",
+  "label": "B25-GATE-D",
+  "state": "failed",
+  "acceptance_status": "gate-d-red",
+  "partial": true,
+  "source_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+  "dispatch_parent_sha": "e6506fe6911637effc7954c31fc38ada976ed385",
+  "dispatch_head_sha": "b0749a63c164a210239366738c43fa03b7e91e36",
+  "checked_head_sha": "b0749a63c164a210239366738c43fa03b7e91e36",
+  "branch": "verify/T-20260907-046-b25-gate-d",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-046",
+  "owner": "b25_gate_d",
+  "received_at": "2026-09-07T09:28:00+08:00",
+  "run_started_at": "2026-09-07T09:36:54+08:00",
+  "reported_at": "2026-09-07T09:47:09+08:00",
+  "timezone": "Asia/Shanghai",
+  "objective": "在冻结的 B25 source candidate 上运行未修改的 make test 与 Gate D 全套，保留断言、QEMU 参考比较和每个失败现场。",
+  "source_match": {
+    "source_commit_is_ancestor": true,
+    "non_docs_diff_empty": true,
+    "non_docs_diff_rc": 0,
+    "functional_tree_entries": 501,
+    "source_functional_tree_sha256": "7bda0cd76d487cc79c222150f4458966ce48195503210e5c877ce68e4f8f302b",
+    "head_functional_tree_sha256": "7bda0cd76d487cc79c222150f4458966ce48195503210e5c877ce68e4f8f302b",
+    "functional_tree_diff_empty": true,
+    "functional_manifest": "build/agents/T-20260907-046/meta/source-functional-tree.txt",
+    "head_manifest": "build/agents/T-20260907-046/meta/head-functional-tree.txt",
+    "docs_only_diff": [
+      "docs/PROJECT_STATUS.md",
+      "docs/ROADMAP.md",
+      "docs/handoffs/T-20260907-037-b25-bringup-batch.md",
+      "docs/tasks/TASKS.md",
+      "docs/tasks/active/T-20260907-037.json",
+      "docs/tasks/active/T-20260907-042.json",
+      "docs/tasks/active/T-20260907-045.json",
+      "docs/tasks/active/T-20260907-046.json",
+      "docs/tasks/evidence/T-20260907-037.json",
+      "docs/tasks/evidence/T-20260907-039.json",
+      "docs/tasks/evidence/T-20260907-040.json",
+      "docs/tasks/evidence/T-20260907-045.json"
+    ],
+    "active_task_modified": false,
+    "worktree_clean_after_run": true
+  },
+  "tools": {
+    "conda_environment": "lcvex",
+    "verilator": {
+      "path": "/home/chiro/miniforge3/envs/lcvex/bin/verilator",
+      "version": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "sha256": "9213a72d341fd00d389936e45a16975b27b1f6725696fd303e4559b8f8c4bda3"
+    },
+    "verilator_coverage": {
+      "path": "/home/chiro/miniforge3/envs/lcvex/bin/verilator_coverage",
+      "version": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "sha256": "11d69c7bc1a99027a70fd544a22cb6e5e45caea026a85b5581b6530367fcddd5"
+    },
+    "cocotb_config": {
+      "path": "/home/chiro/miniforge3/envs/lcvex/bin/cocotb-config",
+      "version": "2.0.1",
+      "sha256": "bd3e526c7b173d78cba3434961ab3d12c230a18ab584fbe8726970e603e2b040"
+    },
+    "python": {
+      "path": "/home/chiro/miniforge3/envs/lcvex/bin/python",
+      "version": "Python 3.12.14",
+      "sha256": "af60db6d6a42048d15231bdf43f2edfd4c28acfc8778012e989f669ae528c34d"
+    },
+    "make": {
+      "path": "/home/chiro/miniforge3/envs/lcvex/bin/make",
+      "version": "GNU Make 4.4.1",
+      "sha256": "8a9d964876ac0619a77d0e98141af7741f41a01f3bbc81d470e2c4828db1f105"
+    },
+    "aarch64_gcc": {
+      "path": "/usr/bin/aarch64-linux-gnu-gcc",
+      "version": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+      "sha256": "2fcae05bfafdfc6c0c3453431ce4538fdb8b481169c4670ae48be48a28e4fbe9"
+    },
+    "aarch64_objcopy": {
+      "path": "/usr/bin/aarch64-linux-gnu-objcopy",
+      "version": "GNU objcopy (GNU Binutils) 2.47",
+      "sha256": "1c66d805236ae2ca56c19ab894afd41d0d3c240e352d972ac1270b8d4131d99c"
+    },
+    "busybox_time_fallback": {
+      "path": "/usr/bin/busybox",
+      "version": "BusyBox v1.36.1-4",
+      "sha256": "5b882b9edba7516ecb6f0b15f92c900bbd64230ef255142b96d7dd0d60783406"
+    }
+  },
+  "qemu": {
+    "fork_path": "/home/chiro/projects/mycpu/qemu",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "version_file": "qemu/VERSION",
+    "version_file_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "binary": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+    "binary_version": "QEMU emulator version 11.1.0 (v11.1.0-dirty)",
+    "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "plugin_source": "qemu/plugins/lcvex_difftest.c",
+    "plugin_source_sha256": "b5adf6c888ab318e19c27d5a407cfbba5d7ec8763f301cf49065df8475e75595",
+    "plugin_protocol_h_sha256": "af62b3d8e4dd4625d958aef222303a97f3828b6c5cf8fb5d76c20ce94868b6b1",
+    "plugin_protocol_py_sha256": "655d82b4e0ee2da35edbe0751c18ffff803b9e92b09d206d7f5cd5b5dd195412",
+    "plugin_binary": "qemu/plugins/lcvex_difftest.so",
+    "plugin_binary_sha256": "bbb1e2c15ba11e3fb3a045fc117ef8cf6b22cc42523245dd17ddce863e6f7eae",
+    "fork_worktree_status": "dirty pre-existing local fork; read-only during this task"
+  },
+  "gate_definition_hashes": {
+    "Makefile": "45b3b84faec5054034466741b5fcbbca1a1517075187c71af2cabb978787048c",
+    "scripts/toolcheck.sh": "e7f1a5173febd3a4f42060747ec93b7c46ec4c8eacf576c9be4bbe71214c1c3b",
+    "sim/difftest/run_gate_d.sh": "21e55129476439e6e4d3dccec44a1dcf150bc6d821d8d48576c52f7cc3e992c7",
+    "scripts/run_lockstep_parallel.sh": "1e0f1e81c3f1ba9368b05afd7b399ca0a05f86afab5072319f14072558194f87",
+    "sim/difftest/run_lockstep_step.sh": "f9c413072527e580185b22a696d3004911a1a5248f701962842eb21c5e36418e",
+    "sim/difftest/run_m2_4b.sh": "834eb8ff9c0026cb9e5f7bb6ec3309544bc1ba1c6a5465af0a3a04b1c2722228",
+    "sim/difftest/run_p5a_hardening.sh": "b83b967310114c05f0b1d6883033dbf7365292921b8197bdccafbf74741f36f6",
+    "sim/difftest/run_gate_c.sh": "6eaf022f9a46c8c950bde75cfd6a114ae362a4206a3b0f4815e9d8b4886351ff",
+    "sim/difftest/run_p5a.sh": "5b915c667e082de265d17f1f2c2225be0f8538193aaebce7bb3e6763e261a63c",
+    "sim/difftest/run_p4b.sh": "98a1052ad26cd8562633eccbe3f37e65e4bf8df6a389b04985420e4503a365e4"
+  },
+  "validation": [
+    {
+      "run_id": "explicit-make-test",
+      "level": "L0-L1",
+      "command": "make test",
+      "exit_code": 0,
+      "result": "pass",
+      "elapsed_s": 224.890,
+      "max_rss_kib": 2553984,
+      "summary": "P0 单元、SVA、Verilator、Cocotb、编码器检查全部通过",
+      "log": "build/agents/T-20260907-046/logs/make-test.log",
+      "log_sha256": "8e5ca962b772469fbc768f4db29709b5728e858af34ba4e4ee23c302c470b22c",
+      "time_log": "build/agents/T-20260907-046/logs/make-test.time.txt",
+      "time_log_sha256": "4bc956bd90ed659b800cba7f026d7ba53809eb95d3020e0b5c6f2d4b561de067"
+    },
+    {
+      "run_id": "gate-d-full",
+      "level": "L3",
+      "command": "bash sim/difftest/run_gate_d.sh --parallel",
+      "exit_code": 1,
+      "result": "fail",
+      "elapsed_s": 385.361,
+      "max_rss_kib": 3965856,
+      "summary": "Gate D 有 4 项失败；未跳过断言、参考比较或 baremetal-C",
+      "log": "build/agents/T-20260907-046/logs/gate-d.log",
+      "log_sha256": "db818de93e657cdfdb4008940c9e8b8377770f130480a7a2b97f3f27851719fb",
+      "time_log": "build/agents/T-20260907-046/logs/gate-d.time.txt",
+      "time_log_sha256": "ffcd06330ef9f03d9dc220be0139f2c71717ce27ff3036c0182be8e1e070a5d5",
+      "planner_observations": [
+        "base/cache lockstep planner: parallel=3 cpus=[0 1 2]",
+        "delay2 lockstep planner: parallel=3 cpus=[0 1 2]",
+        "P5a planner: parallel=3 cpus=[0 1 2]"
+      ],
+      "group_results": [
+        {
+          "name": "make test（单元 + SVA）",
+          "result": "pass",
+          "summary": "Gate 内嵌 make test 通过"
+        },
+        {
+          "name": "make coverage（缓存/MMU TB 覆盖率）",
+          "result": "pass",
+          "summary": "5 个 coverage TB 合并，verilator_coverage rank=8760"
+        },
+        {
+          "name": "M2-4b/4c 定向锁步（base + 全缓存）",
+          "result": "fail",
+          "summary": "base phase 1/40 failed hard_postpre；cache phase 1/40 failed hard_postpre；脚本汇总 RED: 2/34",
+          "failed_groups": ["hard_postpre"],
+          "passed_groups": [
+            "hard_barrier", "hard_selfmod", "hard_tlbi", "hard_mair_bypass", "hard_block_desc",
+            "hard_sys_fetch_fault", "hard_msr_mmu_on", "hard_esr_far", "hard_compiler_isa",
+            "hard_pair_ldst", "hard_reg_offset", "hard_ext_addsub", "hard_madd", "hard_csel",
+            "hard_bfm", "hard_insn_gaps", "hard_ldr_literal", "hard_exclusive", "hard_p6_isa",
+            "hard_big_mem", "hard_uart", "hard_pl031", "hard_crc32", "hard_pl061", "hard_timer",
+            "hard_gic", "hard_irq", "hard_irq_daif", "hard_ldur", "hard_ttbr1", "hard_psci",
+            "hard_id_sysreg", "hard_dit", "hard_varshift", "hard_ldtr_sttr", "hard_adc_sbc",
+            "hard_allint", "hard_sctlr_pauth", "hard_sve_probe"
+          ]
+        },
+        {
+          "name": "lockstep-build-l1dl2-delay2 构建",
+          "result": "pass",
+          "summary": "全缓存随机延迟协调器构建通过"
+        },
+        {
+          "name": "随机 smoke 镜像重新生成",
+          "result": "pass",
+          "summary": "seed=1、3000 条指令镜像生成通过"
+        },
+        {
+          "name": "delay2-cache-*（并行）",
+          "result": "fail",
+          "summary": "1/32 failed hard_postpre；random_smoke 通过",
+          "failed_groups": ["hard_postpre"],
+          "passed_groups": [
+            "hard_barrier", "hard_selfmod", "hard_tlbi", "hard_mair_bypass", "hard_block_desc",
+            "hard_sys_fetch_fault", "hard_msr_mmu_on", "hard_esr_far", "hard_pair_ldst",
+            "hard_reg_offset", "hard_ext_addsub", "hard_madd", "hard_csel", "hard_bfm",
+            "hard_insn_gaps", "hard_ldr_literal", "hard_p6_isa", "hard_exclusive", "hard_big_mem",
+            "hard_uart", "hard_pl031", "hard_crc32", "hard_pl061", "hard_timer", "hard_gic",
+            "hard_irq", "hard_irq_daif", "hard_ldur", "hard_ttbr1", "hard_allint", "random_smoke"
+          ]
+        },
+        {
+          "name": "P5a-Hardening + M2 定向（13 组）",
+          "result": "pass",
+          "summary": "26 项并行锁步全部通过",
+          "passed_groups": [
+            "hard_nzcv", "hard_movwide", "hard_addsub_shift", "hard_bcond_f", "hard_ap_matrix",
+            "hard_af", "hard_uxn_pxn", "hard_ttbr_gap", "hard_pa_oob", "hard_barrier",
+            "hard_selfmod", "hard_tlbi", "hard_mair_bypass", "hard_block_desc", "hard_sys_fetch_fault",
+            "hard_msr_mmu_on", "hard_esr_far", "hard_compiler_isa", "hard_pair_ldst", "hard_reg_offset",
+            "hard_ext_addsub", "hard_madd", "hard_csel", "hard_bfm", "hard_insn_gaps", "hard_ldr_literal"
+          ]
+        },
+        {
+          "name": "Gate C 异常/EL0-EL1（7 组）",
+          "result": "pass",
+          "summary": "7/7 锁步通过"
+        },
+        {
+          "name": "P5a MMU 数据翻译（3 组）",
+          "result": "pass",
+          "summary": "p5a_mmu、p5a_mmu_el0、p5a2_fetch 全部通过"
+        },
+        {
+          "name": "P4b 异常/系统指令",
+          "result": "pass",
+          "summary": "5/5 锁步通过"
+        },
+        {
+          "name": "随机回归（seed 1~3 × 100k）",
+          "result": "fail",
+          "summary": "seed=1 生成 trace 后在 Cocotb 差分 522990 处失败；make 在 seed=1 停止，seed=2/3 未执行"
+        },
+        {
+          "name": "指令覆盖记账（random 1~3 trace ↔ ISA_SCOPE）",
+          "result": "fail",
+          "summary": "random_2.trace、random_3.trace 不存在；不是 PASS 或 SKIP"
+        },
+        {
+          "name": "baremetal-C 工具链/镜像",
+          "result": "pass",
+          "summary": "bm_c.bin 生成成功，只有既有 RWX LOAD warning"
+        },
+        {
+          "name": "baremetal-C 锁步",
+          "result": "pass",
+          "summary": "200 条与 QEMU 完全一致"
+        }
+      ]
+    }
+  ],
+  "first_failure": {
+    "chronological_gate_log_line": 701,
+    "step": "M2-4b/4c 定向锁步（base phase）",
+    "test": "hard_postpre",
+    "repeated_in": ["M2 base", "M2 cache", "delay2 cache"],
+    "seq": 21,
+    "pc": "0x44000054",
+    "insn_encoding": "0x38404e85",
+    "disassembly": "ldrb w5, [x20, #4]!",
+    "pre_state": {
+      "pc": "0x44000054",
+      "next_pc": "0x44000054",
+      "x0": "0xdef09abc56781234",
+      "x20": "0x44090010",
+      "x21": "0x44090010",
+      "nzcv": "0x4",
+      "sp": "0x0"
+    },
+    "dut_state": {
+      "commit_pc": "0x44000054",
+      "next_pc": "0x44000058",
+      "gpr_we": true,
+      "rd": 5,
+      "wdata": "0x0",
+      "x20_after": "0x44090015",
+      "pipeline": "ifid(v=0 pc=0x44000058 insn=0xaa1f02b4) idex(v=1 insn=0xaa1f02b4) exmem(v=0 insn=0x38404e85) memwb(v=0 insn=0x38404e85) commit=1",
+      "data": "exmem(va=0x44090019 pa=0x44090019 rdata=0xbbaa000000) memwb(va=0x44090014 rdata=0xbbaa000000)",
+      "control": "stall(id=0 if=0 wb=0) sys(at=0 hold=0 commit=0 ready=1) fire=0 daif=f"
+    },
+    "qemu_state": {
+      "commit_pc": "0x44000054",
+      "next_pc": "0x44000058",
+      "x5_after": "0x0",
+      "x20_after": "0x44090014",
+      "x21": "0x44090010",
+      "nzcv": "0x4",
+      "sp": "0x0"
+    },
+    "mismatch": "仅 x20 base writeback 不一致：DUT=0x44090015，QEMU=0x44090014；访问数据 x5 均为 0",
+    "recent_commits": "seq=0..20 全部 OK，PC/next_pc 与 QEMU 一致",
+    "full_diagnostic": "build/agents/T-20260907-046/failures/hard_postpre/fail.txt",
+    "full_diagnostic_sha256": "70bd435a01ddb6a92dcb7d58bc8db31c83ac16c39177948439bd3cc7996ad3ed",
+    "coord_log": "build/agents/T-20260907-046/failures/hard_postpre/coord.log",
+    "coord_log_sha256": "12535df9eadecf065b584af73e1c20b62b90d672e80527246dfa7bee8e56a040",
+    "qemu_log": "build/agents/T-20260907-046/failures/hard_postpre/qemu.log",
+    "qemu_log_sha256": "3203b83dcf9d9495e078774557d8f3e66405466a64bbca8423571b621e1d9a8c",
+    "run_log": "build/agents/T-20260907-046/failures/hard_postpre/run.log",
+    "run_log_sha256": "3a5906b6b94844f4023c714d4a83f6d7d5985add12398baef39f20a49f52b086",
+    "image": "build/agents/T-20260907-046/failures/hard_postpre/hard_postpre.bin",
+    "image_sha256": "496d3e8196c600aecafec8c8c1c305728cc4574e021074879f22ad3d7ac90ef3"
+  },
+  "additional_failures": [
+    {
+      "step": "随机回归（seed 1~3 × 100k）",
+      "seed": 1,
+      "first_reported_mismatch": {
+        "insn_index": 2807,
+        "pc": "0x440044c4",
+        "insn_encoding": "0x78377a80",
+        "disassembly": "strh w0, [x20, x23, lsl #1]",
+        "rtl_memory": "[(1141374976, 0, 2)]",
+        "qemu_memory": "[(1141374990, 0, 2)]"
+      },
+      "total_reported_errors": 522990,
+      "results_xml": "build/difftest/random_1_results.xml",
+      "results_xml_sha256": "6917e640e524f141f5311912745f85349bb39f8ca21d54f624bd829b382c08eb",
+      "trace": "build/difftest/random_1.trace",
+      "trace_sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e"
+    },
+    {
+      "step": "指令覆盖记账",
+      "result": "fail",
+      "missing_inputs": ["build/difftest/random_2.trace", "build/difftest/random_3.trace"]
+    }
+  ],
+  "artifacts": {
+    "artifact_hash_manifest": "build/agents/T-20260907-046/meta/artifact-hashes.txt",
+    "artifact_hash_manifest_sha256": "cc79d580b7d2f4fdfd891d17ff485cedbbf320f65a05b0957d63f9c43adce77c",
+    "first_failure_artifact_manifest": "build/agents/T-20260907-046/meta/first-failure-artifacts.sha256",
+    "first_failure_artifact_manifest_sha256": "0bc3098b011af22b4f2f352a1dfc8899fd1c7b06a87f06ac17db4f11d49c28cd",
+    "preflight": "build/agents/T-20260907-046/meta/preflight-before-plugin.txt",
+    "preflight_sha256": "b72837da27e47ede017efc5ee68fe60ef6b13a0247f38f2d14f763172d393996",
+    "plugin_preflight": "build/agents/T-20260907-046/meta/preflight-before-tests.txt",
+    "plugin_preflight_sha256": "f11b2e479f5635dec6402cec2005f8e709db10481d626d581e8cb15bbda938e3",
+    "postflight": "build/agents/T-20260907-046/meta/postflight.txt",
+    "postflight_sha256": "126342fa7ced054a5ed4d955b74e82810f3061b5766e9d5b9548d7ae51eb6b91",
+    "group_results": "build/agents/T-20260907-046/meta/group-results.txt",
+    "group_results_sha256": "56bd67863e64d6a416e6d60deb3c8b5a6448c04534dab405cb9ae7fff5c09934",
+    "first_failure_summary": "build/agents/T-20260907-046/meta/first-failure.txt",
+    "first_failure_summary_sha256": "5477d770a606b4b4d680679c7fdd71c31276af49754a140b616414ba65d9183d",
+    "resource_lock_final": "build/agents/T-20260907-046/meta/resource-lock-final.txt",
+    "resource_lock_final_sha256": "2f560ea96f09ba0cdf30dfb747da5eb34dbb47860765b1c93f44713a85fc4f5f"
+  },
+  "resource_lock": {
+    "resource": "local",
+    "lock_command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260907-046 b25_gate_d --min-local-available-mib 8192",
+    "all_heavy_runs_locked": true,
+    "min_local_available_mib": 8192,
+    "observed_available_mib_at_admission": 11992,
+    "verilator_jobs": 2,
+    "lockstep_parallel_planner": 3,
+    "lockstep_cpus": [0, 1, 2],
+    "task_local_tmpdir": "build/agents/T-20260907-046/tmp",
+    "resource_owner_metadata": "build/agents/T-20260907-046/meta/preflight-before-plugin.txt",
+    "final_status": "local FREE; gamepc FREE",
+    "system_tmp_used_for_build": false
+  },
+  "policy": {
+    "assertions_disabled": false,
+    "difftest_comparisons_disabled": false,
+    "reference_or_golden_modified": false,
+    "test_expectations_modified": false,
+    "missing_tools_converted_to_pass": false,
+    "missing_traces_converted_to_pass": false,
+    "baremetal_skipped": false,
+    "rtl_modified": false,
+    "qemu_modified": false,
+    "gamepc_or_jtag_used": false,
+    "quartus_assembler_sof_or_board_action": false,
+    "active_task_modified": false,
+    "status_documents_modified": false
+  },
+  "known_limits": [
+    "Gate D 未通过；当前 candidate 不得标记为 Gate D green、release candidate 或允许板级配置。",
+    "失败暴露为通用 pre-index LDRB 的 base writeback 偏移问题；本任务未修改实现，也未尝试自动修复。",
+    "随机回归在 seed=1 首次失败后由 make 停止，seed=2/3 没有执行；其缺失 trace 被覆盖记账明确判为失败。",
+    "本任务未访问 GamePC、Quartus、JTAG、assembler、SOF、板卡或 Flash。"
+  ],
+  "blockers": [
+    "需修复并重新验证 hard_postpre 的 pre-index base writeback，再重新运行完整 Gate D。",
+    "随机回归 seed=1 的差分级联错误需在修复后重新确认；seed=2/3 需完整执行并通过覆盖记账。"
+  ],
+  "handoff": "docs/handoffs/T-20260907-046-b25-gate-d.md"
+}

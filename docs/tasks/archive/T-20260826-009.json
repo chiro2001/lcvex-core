@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-009",
+  "title": "Gate D candidate 本地全量回归",
+  "kind": "gate-regression",
+  "priority": "high",
+  "assigned_owner": "luna-monitor-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "在 detached candidate worktree 运行本地 Gate D 全量并记录资源/失败现场；不修改 RTL/QEMU",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "只读检查 candidate SHA、Gate D 命令清单和 evidence 边界"
+  },
+  "phase": "cancelled",
+  "parent": "T-20260826-008",
+  "depends_on": ["T-20260826-008"],
+  "writes": [
+    "docs/tasks/evidence/T-20260826-009.json",
+    "docs/handoffs/T-20260826-009-gate-d-candidate.md"
+  ],
+  "reads": [
+    "sim/difftest/run_gate_d.sh",
+    "scripts/ci-fast.sh",
+    "scripts/ci-difftest.sh",
+    "docs/ROADMAP.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/handoffs/T-20260826-008-gate-e-review.md"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/VERIFICATION.md",
+    "docs/TEST_ENHANCEMENT_PLAN.md"
+  ],
+  "base_sha": "8f5895c",
+  "branch": "verify/T-20260826-009-gate-d-candidate",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-009",
+  "resource": {
+    "cpu": 6,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 7200,
+    "cpus": [0, 1, 2, 3, 4, 5]
+  },
+  "validation": {
+    "l0": ["git status/sha and toolcheck"],
+    "l1": ["make test", "make coverage"],
+    "l2": ["make difftest difftest-hazard p4c p5a p6-lse p6-wfi"],
+    "l3": ["bash sim/difftest/run_gate_d.sh"],
+    "l4": [],
+    "seeds": [1, 2, 3, 4, 5]
+  },
+  "acceptance": "detached candidate SHA 上本地 Gate D 全量脚本及其覆盖/SVA/随机/延迟/QEMU 差分子项全绿；精确命令、资源、日志/artifact hash 可复现；失败立即停止并保留现场，不修改参考结果。CI 尚不作为本任务完成前置。",
+  "created_at": "2026-08-26T16:00:00+08:00",
+  "updated_at": "2026-08-26T18:00:00+08:00",
+  "commits": ["ab27a82", "9972893"],
+  "handoff": "docs/handoffs/T-20260826-009-gate-d-candidate.md",
+  "evidence": "docs/tasks/evidence/T-20260826-009.json",
+  "known_limits": [
+    "本地 Gate D 通过不等于 Gate E 通过；Gate E 还需同 SHA Linux 判据和可信 CI 评估。",
+    "Gate D 运行期间不得启动 Linux 长跑或其他重型 QEMU 作业。"
+  ],
+  "next": "首个 lint 阻断已取证并取消；T-011 将在 T-010 修复 candidate 上重新运行完整 Gate D。"
+}
+

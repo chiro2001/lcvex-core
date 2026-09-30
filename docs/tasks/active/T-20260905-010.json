@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-010",
+  "label": "R17-FP-P1-SPLIT",
+  "title": "Split the ordinary FP round-pack p1 normalization cone",
+  "kind": "rtl-timing-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-accepted",
+  "assigned_owner": "codex-r17-fp-p1-split",
+  "agent_type": "rtl-implementation",
+  "model_selection": "spawn_agent/followup_task omits model; user-confirmed default gpt-5.6-luna[max]",
+  "depends_on": [
+    "T-20260905-009"
+  ],
+  "dependency_override": "Speculative timing implementation starts from the exact T-009 candidate while its broad functional validation is still running; this lane may not integrate until T-009 is done.",
+  "base_sha": "80b7664215d4547cbca638ad7beb5b8de2e78997",
+  "pre_t012_candidate_sha": "32622b4d153bad7ca55b1a02c91b213fe6729bf5",
+  "required_integration_base_sha": "b9b1121ffc2c8fff0da9f752a4172159e8d95e62",
+  "timing_evidence_commit": "46181b25e677ef42324ef4e8081a2731c7da3c68",
+  "branch": "timing/T-20260905-010-r17-fp-p1-split",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-010",
+  "cone_id": "R17-FP-PPPRE-PACKMID",
+  "timing_paths": {
+    "count_top50": 26,
+    "slack_range_ns": [-4.797, -4.683],
+    "logic_levels": 65,
+    "startpoint": "fp_exec.scalar_unit.g_iter.pp_pre*",
+    "endpoint": "fp_exec.scalar_unit.g_iter.pack_mid*"
+  },
+  "scope": "Use the Round16 top-50 raw report to split round_pack_p1's normalization/leading-bit/GRS construction into one additional real register boundary for ordinary pp_pre producers. Preserve the existing iterative DIV/SQRT path, special-value priority, FPCR rounding/FZ/DN/AHP behavior, packed-half dual-lane semantics, response hold, kill/reset, and architectural commit timing.",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "docs/handoffs/T-20260905-010-r17-fp-p1-split.md",
+    "docs/tasks/evidence/T-20260905-010.json"
+  ],
+  "write_regions": [
+    "rtl/lcvex_fp_scalar.sv::round_pack_pre/round_pack_iter_p1/round_pack_p1",
+    "rtl/lcvex_fp_scalar.sv::g_iter IT_PREP/IT_PACK_PRE/IT_PACK and pack_pre registers",
+    "tb/sv/lcvex_fp_exec_tb.sv::round17 latency/reset/kill/valid-drop/pause checks",
+    "task-local handoff/evidence"
+  ],
+  "forbidden_regions": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv public interfaces",
+    "QEMU/QSF/SDC",
+    "false paths, assertion disable, or reference-result changes"
+  ],
+  "latency_budget": {
+    "ordinary_roundpack_ops_per_slot": 1,
+    "iterative_div_sqrt": 0,
+    "commit_order": 0
+  },
+  "pre_batch_validation": [
+    "git diff --check",
+    "static RTL/state/reset/kill/hold review only while the T-009 heavy queue is occupied"
+  ],
+  "batch_acceptance_tests": [
+    "FP exec directed SV and Cocotb",
+    "P7-1/P7-3/P7-4/P7-5 SV+Cocotb and strict lockstep matrices",
+    "reset/kill/valid-drop/backpressure checks for the added state"
+  ],
+  "acceptance": "The new boundary materially shortens pp_pre-to-pack register combinational depth, adds no combinational bypass, and clears all new non-architectural state on reset/kill/valid-drop. The owner stops after implementation, directed test updates, and static review; integration and all simulation/physical claims are made only by the batch integrator.",
+  "created_at": "2026-09-05T09:25:14+08:00",
+  "updated_at": "2026-09-05T19:48:39+08:00",
+  "merge_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "integration_evidence": "docs/tasks/evidence/T-20260905-013.json",
+  "physical_evidence": "docs/tasks/evidence/T-20260905-014.json",
+  "review": {
+    "status": "accepted",
+    "summary": "Exact-SHA functional union passed; T-014 proves old pp_pre-to-pack_mid is a true 0-path. New pp_pre-to-pack_pre cone is carried into T-017."
+  },
+  "implementation_head": "e4f3d5b8bad1b55c7b4c4c4423b51269ae72c4f3",
+  "test_head": "f3f35044ab974c36180cec3788395abd410a11b2",
+  "documentation_head": "ef45d70441c6e5972d7fd1a5ca29b0bf9b81c055",
+  "review_result": {
+    "status": "accepted_for_candidate",
+    "reported_at": "2026-09-05T09:59:43+08:00",
+    "notes": "Independent review accepted the p0/p1 split after e4f3d5b restored the missing round_pack_h emax declaration. This remains speculative until merged onto the repaired T-009 base and jointly validated, then physically measured."
+  },
+  "board_policy": "No assembler, bitstream generation, JTAG, programming, power-on, or board test without explicit user permission."
+}

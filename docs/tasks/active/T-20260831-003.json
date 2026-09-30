@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-003",
+  "label": "FPGA-G6-SYNC",
+  "parent": "T-20260828-067",
+  "title": "A10 current-candidate 远端隔离同步与 hash closure",
+  "kind": "fpga-remote-candidate-sync",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-a10-candidate-sync",
+  "agent_type": "remote-infrastructure",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260831-001", "T-20260831-002"],
+  "base_sha": "19d266a7dcffe43de7e0fdcc7057f8881be6a47f",
+  "branch": "infra/T-20260831-003-a10-candidate-sync",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-003",
+  "scope": "把当前集成候选 19d266a 的 Quartus source closure 同步到远端全新隔离目录 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260831-003\\candidate，保持 repo-relative rtl/ 与 fpga/catapult_a10/ 结构，生成 source/file hash manifest 并在 Windows 逐项回读验证。同步前后只读检查资源和现有 EDA 进程；若已有 Quartus/仿真/编程运行则 WAIT。不得覆盖或删除远端原工程/旧 build，不启动 Quartus/Qsys/仿真/编程，不修改本地 source。该 candidate 仅供后续 reduced/partition 资源实验，不是最终 release SHA。",
+  "user_authorization": {
+    "authorized_at": "2026-08-31T00:41:15+08:00",
+    "scope": "Quartus/board 后续执行已授权；本任务只同步 candidate",
+    "constraints": "参考 a10-linux-riscv；监控内存；不得停止、暂停或抢占任何运行中进程"
+  },
+  "planning_guidance": {
+    "closure": [
+      "source SHA 固定为 19d266a7dcffe43de7e0fdcc7057f8881be6a47f；本地 worktree 必须 clean。",
+      "至少同步 Git 跟踪的 rtl/**、fpga/catapult_a10/**，保持 QSF 相对路径可解析；不得包含 .git、build、obj_dir、日志、SOF、license、QEMU 或用户缓存。",
+      "生成 manifest 记录 source commit、每个相对路径、bytes、SHA256、总文件数/总字节、Quartus project entry；远端回读集合必须与本地精确一致。",
+      "运行本地 platform offline/strict-source/SHA256SUMS/skeleton checker 后才打包；远端 candidate 内再执行不依赖 Quartus 的 hash closure。"
+    ],
+    "remote_safety": [
+      "写入唯一新目录 build/T-20260831-003/candidate；存在且非空时不得覆盖，报告 collision 并 blocked。",
+      "同步前后只读采集 EDA/high-memory processes、physical/pagefile/disk；任何已有 EDA 作业时不传输或执行第二作业。",
+      "禁止 Stop-Process/taskkill/reboot/priority/pagefile change；禁止删除旧目录、清理 stale DB、读取 license 内容。",
+      "不得运行 quartus_sh/quartus_syn/quartus_fit/quartus_sta/quartus_asm/qsys/vsim/questa/quartus_pgm；仅允许工具文件存在性检查。"
+    ],
+    "post_sync": [
+      "远端验证关键 QPF/QSF/SDC/source.lock/SHA256SUMS/platform/skeleton/Qsys/SFL 与 RTL filelist hashes；输出 remote manifest hash。",
+      "检查 QSF 引用的 repo-relative source 在 candidate 中存在，区分 vendor generated payload 和 LCVEX RTL；不得用旧远端 key hash 填充新证据。",
+      "明确记录 candidate 是 resource experiment SHA；后续 core 修改合入后最终 full/release candidate 必须重新同步。"
+    ]
+  },
+  "writes": [
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/build/T-20260831-003/candidate/**",
+    "docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md",
+    "docs/handoffs/T-20260831-003-a10-candidate-sync.md",
+    "docs/tasks/evidence/T-20260831-003.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+    "docs/tasks/evidence/T-20260831-001.json",
+    "docs/tasks/evidence/T-20260831-002.json",
+    "rtl/**",
+    "fpga/catapult_a10/**",
+    "/home/chiro/projects/a10-linux-riscv/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex"
+  ],
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "write_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260831-003\\candidate",
+    "forbidden": "No overwrite/delete outside new root; no process/system/license/Quartus/simulation/programming action"
+  },
+  "validation": {
+    "l0": [
+      "local worktree clean + platform offline/strict-source/50-hash/skeleton PASS",
+      "local candidate manifest set/hash/bytes reproducible",
+      "remote new-root collision check and pre/post resource/process snapshots",
+      "remote exact file-set/hash/bytes closure and QSF source-reference existence",
+      "JSON、git diff --check、docs/evidence write set"
+    ],
+    "l1": [], "l2": [], "l3": [], "l4": []
+  },
+  "acceptance": "远端新隔离 candidate 精确绑定 19d266a，文件集合/bytes/SHA256 与本地 closure 一致，QSF 相对路径源齐全；同步全程未覆盖/删除旧文件、未停止或改变进程、未运行任何 Quartus/Qsys/simulation/programming、未读取 license。",
+  "resource": {"cpu": 1, "memory_mb": 2048, "disk_mb": 2048, "timeout_s": 1800, "allocation_ratio": 0.1},
+  "budget_policy": {"initial_minutes": 30, "extension_increment_minutes": 30, "max_minutes": 60, "max_is_hard_stop": false, "background_after_max": true},
+  "created_at": "2026-08-31T02:23:14+08:00",
+  "updated_at": "2026-08-31T03:15:13+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T02:27:13+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 A10 preflight/provenance 的 gpt-5.6-luna(max) agent；当前只持有 T-20260831-003。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-003"
+  },
+  "handoff": "docs/handoffs/T-20260831-003-a10-candidate-sync.md",
+  "evidence": "docs/tasks/evidence/T-20260831-003.json",
+  "merge_sha": "765cc3d3ca46be327523c5d46d2b26d11a4df62b",
+  "merged_at": "2026-08-31T03:15:13+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-31T03:14:13+08:00",
+    "status": "accepted_remote_candidate_sync",
+    "owner_report_tip": "e11e7545239b8c99a4af4c4122bcec2f6f934f7f",
+    "candidate_commit": "19d266a7dcffe43de7e0fdcc7057f8881be6a47f",
+    "checks": [
+      "merge SHA only adds the three declared documentation/evidence files; RTL/QSF/SDC/platform payload unchanged",
+      "local staging manifest sidecar, all 150 entry bytes/SHA-256 records, 121-file tracked set and 29/29 aliases independently verified",
+      "post-reboot remote readback PASS: 150/150 files, 3476191 bytes, no missing/extra/hash mismatch, QSF 49/49 and aliases 29/29",
+      "post-reboot EDA/Quartus process count remains zero; no process was stopped, paused, reprioritized or preempted"
+    ],
+    "notes": "接受 19d resource-experiment candidate 的同步闭包。重启后物理空闲 38142 MB，低于 40960 MB 启动门，因此不启动 Quartus；T-004/H-03 合入后最终 candidate 必须从新 SHA 重建。"
+  },
+  "known_limits": [
+    "不运行 synthesis/fit/STA/assembler/simulation/program/board test。",
+    "candidate 不是最终 release SHA；后续 core 修复合入后最终执行需重新同步。",
+    "重启后远端物理空闲 38142 MB，低于 40960 MB reduced/partition 启动门；Quartus 执行保持 WAIT。"
+  ],
+  "next": "等待 T-004 释放重型槽；可并行登记 H-03 和新 SHA candidate 同步，但 <=35GB reduced/partition synthesis 仅在远端物理空闲 >=40960 MB、pagefile 可用 >=8192 MB、EDA=0 时启动；full synthesis 保持 blocked。"
+}

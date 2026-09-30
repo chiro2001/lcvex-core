@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-010",
+  "base_sha": "73f0d51",
+  "head_sha": "3bdfa33",
+  "merge_sha": "3bdfa33",
+  "runs": [
+    {
+      "run_id": "owner-l0-lint-001",
+      "source_sha": "",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "make compile",
+      "seed": null,
+      "wall_seconds": 0.3,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "known_limits": [
+    "仅修正 ADC/SBC carry 临时量宽度；p6-lse/完整 Gate D 由新 candidate 任务复跑。"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-006",
+  "label": "MAINT-V82-HERMETIC-ENTRY",
+  "title": "Make p6-maint-v82 runnable from a clean worktree",
+  "kind": "verification-infrastructure",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged-and-joint-validated",
+  "assigned_owner": "codex-r16-fp-roundpack-cut",
+  "agent_type": "verification-infrastructure",
+  "model_selection": "spawn_agent model omitted; user-confirmed default gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "batch_parent": "T-20260905-002",
+  "depends_on": [],
+  "base_sha": "8383cb05808393cc2ad391af261089321d0e2288",
+  "branch": "infra/T-20260905-006-maint-v82-hermetic",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-006",
+  "reproduction": [
+    "clean worktree make p6-maint-v82 first fails creating build/difftest/hard_maint_v82.bin",
+    "after manually creating build/difftest it fails because qemu/plugins/lcvex_difftest.so is absent"
+  ],
+  "scope": "Make the existing p6-maint-v82 target declare/create only its real local prerequisites so a clean worktree reaches the six lockstep windows. Do not change the maintenance programs, reference results, protocol, RTL, or QEMU source.",
+  "writes": [
+    "Makefile",
+    "docs/handoffs/T-20260905-006-maint-v82-hermetic.md",
+    "docs/tasks/evidence/T-20260905-006.json"
+  ],
+  "forbidden_regions": [
+    "rtl/**",
+    "sim/difftest/test_program.py",
+    "qemu plugin/fork source",
+    "QSF/SDC",
+    "JTAG/SOF/board actions"
+  ],
+  "acceptance": [
+    "git diff --check",
+    "make -n p6-maint-v82 shows directory and plugin preparation before execution",
+    "test registry consistency remains green",
+    "actual clean-worktree execution is deferred to the single heavy queue and may expose the separately tracked T-20260905-005 RTL failure"
+  ],
+  "integration": "Cherry-pick after read-only review onto the Round16 candidate; the merged SHA full p6-maint-v82 run is final evidence.",
+  "created_at": "2026-09-05T04:52:06+08:00",
+  "updated_at": "2026-09-05T06:05:48+08:00",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "evidence": "docs/tasks/evidence/T-20260905-006.json",
+  "board_policy": "No JTAG programming, bitstream assembly, power-on, or board test without explicit user permission."
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-018",
+  "label": "C4-8",
+  "parent": "T-20260829-100",
+  "title": "C4 8核规模测量：参数化 elaboration/有限 smoke/趋势",
+  "kind": "multicore-scale-c4-8",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "26c52676ae8d64a24e8ba0668f8f9903c9c3b7ab",
+  "branch": "feature/T-20260830-018-c4-8-scale",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-018",
+  "scope": "按 docs/C4_SCALE_PREWORK.md 对 CORE_COUNT=8 运行参数化 Verilator lint/elaboration、有限 synthetic L1 client smoke、资源/延迟趋势；记录最高通过规模；不宣称 8核完整功能/架构合规/Linux SMP。",
+  "writes": [
+    "docs/handoffs/T-20260830-018-c4-8-scale.md",
+    "docs/tasks/evidence/T-20260830-018.json",
+    "rtl/**",
+    "tb/**",
+    "sim/**"
+  ],
+  "reads": [
+    "docs/C4_SCALE_PREWORK.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "rtl/**",
+    "tb/**"
+  ],
+  "validation": {
+    "l0": [
+      "CORE_COUNT=8 lint/elab 结果",
+      "有限 smoke 或明确不可行"
+    ],
+    "l1": [
+      "资源/延迟趋势记录"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付 8核规模测量报告与 JSON；明确哪些为通过/未测。",
+  "next": "据结果决定 16/32 核是否继续。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T03:38:19+08:00",
+  "updated_at": "2026-08-30T03:38:19+08:00",
+  "known_limits": [
+    "不宣称 8核完整功能；不启动 Quartus；本地重型构建 cgroup <16GiB、VERILATOR_JOBS=1。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-018-c4-8-scale.md",
+  "evidence": "docs/tasks/evidence/T-20260830-018.json",
+  "merge_sha": "e235f839a5e34082a939a9d4935eabf4ea297ece",
+  "merged_at": "2026-08-30T04:00:38+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T04:00:38+08:00",
+    "head_sha": "3eb55e3",
+    "notes": "C4-8 merged via cherry-pick. 8-core lint/elab PASS, synthetic smoke 21 transactions/403 cycles, no deadlock. Scale-candidate only."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T09:10:00+0800",
+        "new": "2026-08-30T03:38:19+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T09:10:00+0800",
+        "new": "2026-08-30T03:38:19+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T10:00:00+0800",
+        "new": "2026-08-30T04:00:38+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T10:00:00+0800",
+        "new": "2026-08-30T04:00:38+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "e235f839a5e34082a939a9d4935eabf4ea297ece",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "e235f839a5e34082a939a9d4935eabf4ea297ece"
+}

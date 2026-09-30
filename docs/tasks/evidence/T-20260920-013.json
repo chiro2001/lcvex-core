@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-013",
+  "label": "B25-RX-HARDWARE-RESPONSE-TRACE",
+  "state": "oracle-corrected-focused-pass-heavy-rerun-pending",
+  "acceptance_status": "observation-implementation-and-focused-l0-pass; vendor-full-word-oracle-corrected; heavy-rerun-pending",
+  "base_sha": "84cee3f202889fcfc036ea4545c51d1d36f9bca5",
+  "source_sha": "2ef00c37e0004c2096b7bc0897e52f858382abb9",
+  "branch": "verify/T-20260920-013-b25-rx-hardware-response-trace",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-013",
+  "owner": "rx_rtl_trace",
+  "received_at": "2026-09-20T06:19:59+08:00",
+  "reported_at": "2026-09-20T09:07:31+08:00",
+  "implementation": {
+    "commits": [
+      "7fd221ef2894daa31dc3397a165d0931e8a7a60b",
+      "747655978c92a3c1d71824d6c7d18ed1cfd14bd7",
+      "25c052a79d7bbcb53a1c9b078b74f0a9dbce69d9",
+      "2ef00c37e0004c2096b7bc0897e52f858382abb9"
+    ],
+    "files": [
+      "rtl/lcvex_catapult_soc_pkg.sv",
+      "rtl/lcvex_catapult_soc_top.sv",
+      "tb/sv/lcvex_catapult_soc_status_tb.sv",
+      "tb/sv/lcvex_catapult_soc_rx_observer_tb.sv",
+      "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_rx_response_trace_tb.sv",
+      "fpga/catapult_a10/tb/filelist_rx_response_trace.f",
+      "fpga/catapult_a10/tools/run_rx_response_trace.sh"
+    ],
+    "abi": {
+      "0x09003018": "last matched CPU-originated UART DATA bridge response low 32 bits; updates only when response is non-fault and RVALID bit15 is one",
+      "0x09003020": "last matched CPU-originated UART DATA PoC/router response low 32 bits; same RVALID-qualified update",
+      "0x09003028": "last matched CPU-originated UART DATA core dmem response low 32 bits; same RVALID-qualified update",
+      "0x09003030": "bits31:24 bridge RVALID-event count, 23:16 PoC RVALID-event count, 15:8 dmem RVALID-event count, bits2:0 sticky dmem/PoC/bridge fault",
+      "0x09003038": "bits31:16 bridge/Avalon accepted DATA-write pulse count, bit8 TX-seen, bits7:0 last accepted byte; no vendor FIFO enqueue claim"
+    },
+    "reset": "all observation pending tokens, RVALID-qualified counts, raw payloads, sticky faults and TX fields reset to zero",
+    "matching": "each stage has an exact UART_DATA read-accept token; every matching response clears its token, including fault responses; unmatched responses do not update observation state",
+    "functional_boundary": "observation-only sequential state; no existing request/response/ready/valid assignment, datapath, core/coh/router/vendor HDL or boot image changed"
+  },
+  "verification": {
+    "focused_runner": "fpga/catapult_a10/tools/run_rx_response_trace.sh --focused",
+    "boot_image": {
+      "bytes": 1204,
+      "boot_bin_sha256": "7d8cf878785aebf699cbb3d332df2d3c7e03f1b5045a2a1080771cc0310322d4",
+      "boot_hex_sha256": "e24afca92f89312598f6627b928c0869b8361b2704608ccd7d792392e4598e3c",
+      "boot_mif_sha256": "491f30c491f034f52b5222c7b8831f9b234b1d8bc7a84cf6180697bf78655c90"
+    },
+    "status_iverilog": {
+      "result": "PASS",
+      "marker": "CATAPULT_STATUS_OBSERVABILITY_TEST PASS",
+      "run_log": "build/agents/T-20260920-013/status-iverilog-run.log",
+      "run_log_sha256": "ed797769bbf562436522c73419f293c3689815e80d4a3f51407ad8694445446c"
+    },
+    "observer_unit_iverilog": {
+      "result": "PASS",
+      "marker": "RX_OBSERVER_UNIT PASS",
+      "coverage": "reset, response backpressure, empty RVALID=0, fault clear/sticky/no-count, reset while pending, TX pulse",
+      "run_log": "build/agents/T-20260920-013/observer-iverilog-run.log",
+      "run_log_sha256": "5115a394af4b8aa856303a31f260109d16dd6c2562cfd5eb7b934040f1b8e8b1"
+    },
+    "vendor_bridge_iverilog": {
+      "result": "PASS",
+      "vendor_timing": true,
+      "marker": "JTAG_UART_TEST PASS",
+      "run_log": "build/agents/T-20260920-013/bridge-iverilog-run.log",
+      "run_log_sha256": "6aedcc11eed588e080ffb026fb50f887446e8bceb4272acf79a5bb965e4435be"
+    },
+    "runner_fix": {
+      "result": "PASS",
+      "bash_n": true,
+      "safe_argv_check": "PASS; constructed argv retains -GBOOT_IMAGE=\"...\"",
+      "minimal_verilator_lint": "PASS; Verilator 5.050 parsed the response-trace filelist with quoted string parameter",
+      "lint_log_sha256": "e44eb80e6033f1839c4d7b66dc2cd1aa8c7f3f6a6d1bde115e5057d99536b9d4"
+    },
+    "full_soc_response_trace": {
+      "command": "fpga/catapult_a10/tools/run_rx_response_trace.sh --verilator",
+      "result": "FAILED_BEFORE_VENDOR_STAGE",
+      "exit": 1,
+      "first_failure": "old runner passed -GBOOT_IMAGE=relative/path without preserving quotes; Verilator rejected the string parameter",
+      "old_failure_log_sha256": "e573e6ca563e836be1a53d220496eb8e7927235ca2174b82587dc53d4d664531",
+      "fix_commit": "25c052a79d7bbcb53a1c9b078b74f0a9dbce69d9",
+      "next": "rerun once under resource-lock local; vendor --all was not reached",
+      "r2_result": "FAILED_TEST_ORACLE_CORRECTION",
+      "r2_classification": "test-oracle correction; bridge/PoC/dmem full-word payloads were equal",
+      "r2_observed_payloads": ["0000A43F", "0000A470", "0000A464", "0000A45A"],
+      "r2_expected_before_fix": ["0000803F", "00008070", "00008064", "0000805A"],
+      "r2_vendor_expected_after_fix": ["0000A43F", "0000A470", "0000A464", "0000A45A"],
+      "r2_build_log_sha256": "72f43e3934e62ac904949e826946aaa621967dc9b7a2819aed3abd03fb1f1b48",
+      "r2_run_log_sha256": "d8baab9666675b1d8bd5e1f1d481e0c7c61ed2851b525685c7250d365d669283",
+      "r2_vendor_stage": "not reached"
+    }
+  },
+  "safety_and_scope": {
+    "gamepc": false,
+    "quartus": false,
+    "jtag": false,
+    "board_or_flash": false,
+    "core_coh_router_vendor_functional_change": false,
+    "boot_or_test_registry_change": false,
+    "generated_artifacts": "only ignored build/agents/T-20260920-013 evidence"
+  },
+  "handoff": "docs/handoffs/T-20260920-013-b25-rx-hardware-response-trace.md",
+  "known_limits": [
+    "The corrected r2 full trace reached Verilator runtime; the first failure was an oracle mismatch, not a response-path mismatch. All three stages returned identical full vendor DATA words.",
+    "The vendor --all stage was not reached; rerun the corrected oracle once under the local resource lock.",
+    "The full trace uses a 32-bit 65536-read target with a bounded timeout and checks modulo-256 +1 valid-event deltas for each injected byte; timeout is a test failure, never an unbounded wait."
+  ],
+  "next": "After local lock availability, run --verilator once, then integrate with T-014 only after the response trace proves or localizes the first divergent boundary."
+}

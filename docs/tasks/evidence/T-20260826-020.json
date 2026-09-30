@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-020",
+  "base_sha": "1b92a22a55b856908be34720b46f820ff5aea0e8",
+  "head_sha": "1b92a22a55b856908be34720b46f820ff5aea0e8",
+  "merge_sha": "b4345ee",
+  "toolchain": {
+    "environment": "conda:lcvex",
+    "python": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "coordinator_kernel_sha256": "d917166830b3f50eb24164561924d49fb06a540efe5a0d123d12bcd4c66659ef",
+    "coordinator_kernel_nofp_sha256": "0570c1d5e2385f09b822ff5de69600907c5be33c5fdaeded6c404f6b1785c661"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97"
+  },
+  "rtl": {
+    "source_sha": "1b92a22a55b856908be34720b46f820ff5aea0e8",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "coordinator_source_sha256": "aaad174e72339235a7c69b3eaf7735b9e42e548906b7d37cb93c1cabb5b4d5b7"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l4-lite-21m-001",
+      "source_sha": "1b92a22",
+      "runner_role": "integrator-monitor",
+      "level": "L4",
+      "command": "PIN=2 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 bash sim/difftest/run_lockstep_resume.sh",
+      "cpuset": "2",
+      "cpu_count": 1,
+      "resource_policy": "本地总资源上限 50%，单核物理绑定；无资源升级",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "从 parent global=16509999 恢复，连续 5,000,000 条逐指令锁步无 mismatch，seq=4999999 正常结束。",
+      "manifest_sha256": "5787823115770336fa4cab618cb20e55f1c81cbaa966a7b90eaf42afeb5880d2",
+      "manifest_tsv_sha256": "8280bc1fa86d22cc21ac32be5dc57327e7490600076401f97f5a222bc45b1498",
+      "parent_manifest_sha256": "940bc245b4f4075734d73baff07db71206f06e45e5ab252792c3c57c6fa2441b",
+      "parent_global_seq": 16509999,
+      "global_seq_offset": 16510000,
+      "local_artifact_range_inclusive": [499999, 4999999],
+      "global_artifact_range_inclusive": [17009999, 21509999],
+      "entries": 10,
+      "chain_bytes": 2677948,
+      "log": "build/agents/T-20260826-020/logs/lite.log"
+    },
+    {
+      "run_id": "owner-l4-main-21m-001",
+      "source_sha": "1b92a22",
+      "runner_role": "integrator-monitor",
+      "level": "L4",
+      "command": "PIN=3 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 bash sim/difftest/run_lockstep_resume.sh",
+      "cpuset": "3",
+      "cpu_count": 1,
+      "resource_policy": "本地总资源上限 50%，单核物理绑定；无资源升级",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "从 parent global=16509999 恢复，连续 5,000,000 条逐指令锁步无 mismatch，seq=4999999 正常结束。",
+      "manifest_sha256": "f2c5ad90d85c33c4b5e9939a1fc1b174245886f51e8055da71941c33b46f2279",
+      "manifest_tsv_sha256": "27d3dfd494a6b13141a7fd99b6059c66d988c5ecdca2a50ebc6571865de5995f",
+      "parent_manifest_sha256": "b5ec7dae81609df49bb6a66c529ecc880b0d274d7974f1661a1ffcced4ab6849",
+      "parent_global_seq": 16509999,
+      "global_seq_offset": 16510000,
+      "local_artifact_range_inclusive": [499999, 4999999],
+      "global_artifact_range_inclusive": [17009999, 21509999],
+      "entries": 10,
+      "chain_bytes": 13792055,
+      "log": "build/agents/T-20260826-020/logs/main.log"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "lite-21m-strict-child",
+      "path": "build/tmp/T-20260826-020/lite-21m/chain",
+      "manifest_sha256": "5787823115770336fa4cab618cb20e55f1c81cbaa966a7b90eaf42afeb5880d2",
+      "manifest_tsv_sha256": "8280bc1fa86d22cc21ac32be5dc57327e7490600076401f97f5a222bc45b1498",
+      "status": "complete",
+      "entries": 10,
+      "local_last": 4999999,
+      "global_last": 21509999,
+      "bytes": 2677948
+    },
+    {
+      "id": "main-21m-strict-child",
+      "path": "build/tmp/T-20260826-020/main-21m/chain",
+      "manifest_sha256": "f2c5ad90d85c33c4b5e9939a1fc1b174245886f51e8055da71941c33b46f2279",
+      "manifest_tsv_sha256": "27d3dfd494a6b13141a7fd99b6059c66d988c5ecdca2a50ebc6571865de5995f",
+      "status": "complete",
+      "entries": 10,
+      "local_last": 4999999,
+      "global_last": 21509999,
+      "bytes": 13792055
+    }
+  ],
+  "known_limits": [
+    "两线均从 T-007 finalized parent 续跑 5M；结果证明严格续跑窗口，不等价于 Gate E 或完整 Linux 用户态验收。",
+    "main 输入仍引用 legacy /tmp/Image-t80000；该文件只读且本轮未产生新的 /tmp 大文件。",
+    "本任务未修改 RTL、QEMU 或 parent chain；下一轮 ISA 修改后需从新 SHA 重新创建 continuation candidate。"
+  ]
+}

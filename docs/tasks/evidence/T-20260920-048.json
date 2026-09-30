@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-048",
+  "state": "blocked",
+  "acceptance_status": "golden-not-restored-cable-not-enumerated",
+  "base_sha": "890002aa503159aa9310f14718acf88145d4975e",
+  "branch": "verify/T-20260920-048-b25-coremark-golden-recovery",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-048",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-048-b25-coremark-golden-recovery",
+  "started_at": "2026-09-27T15:50:39+08:00",
+  "finished_at": "2026-09-27T15:50:48+08:00",
+  "sealed_source": {
+    "task": "T-20260920-036",
+    "manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "byte_identical_tools": 9,
+    "remote_ast_files": 6,
+    "remote_ast_parse_errors": 0,
+    "remote_seal_files": 9,
+    "remote_freshness": "PASS"
+  },
+  "programmer": {
+    "mode": "golden-only",
+    "runner_attempts": 1,
+    "quartus_pgm_stdout_created": true,
+    "quartus_pgm_configuration_succeeded": false,
+    "device_count_configured": 0,
+    "failure": "Error (213013): Programming hardware cable not detected",
+    "marker_path": "build/agents/T-20260920-048/run/recovery/golden-quartus-pgm.once",
+    "marker_sha256": "4e0e88a27d0e8d6871b035894ca711266e4df6bb6192711f9557ad0a336b6e97",
+    "program_result_sha256": "7cb3ee555aa93aa4d6891b093870d130950e0a42162754befe62ec292fbcd7cf",
+    "stdout_bytes": 38,
+    "stdout_sha256": "bf9f06b0b4b6a948962f90f2f6119b42117712812c39f01dbc13bcae544b38bc",
+    "stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"
+  },
+  "device_visibility": {
+    "ftdi_shim_log_bytes": 72,
+    "ftdi_shim_log_sha256": "bdd9448e0fecea152a819226aa09535d1a24afb61c439a55d1b462bf1429738c",
+    "ft_create_device_info_list_results": [0, 0],
+    "device_counts": [0, 0],
+    "readonly_pnp_query": {
+      "command": "Get-CimInstance Win32_PnPEntity | Where-Object { $_.Name -match 'FTDI|Single RS232-HS|MPSSE|Blaster' }",
+      "matching_rows": 0,
+      "hardware_mutation": false
+    }
+  },
+  "resource": {
+    "lock": "gamepc",
+    "lock_after_run": "FREE",
+    "eda_preflight": 0,
+    "eda_postflight": 0,
+    "port_1310_preflight": 0,
+    "port_1310_postflight": 0,
+    "standard_jtagserver_preserved": true,
+    "task_owned_server_cleaned": true
+  },
+  "safety": {
+    "candidate_programmer_invocations": 0,
+    "terminal_sessions": 0,
+    "golden_programmer_attempts": 1,
+    "golden_configurations": 0,
+    "jtagconfig": 0,
+    "persistent_flash_epcq": 0,
+    "reset_power": 0,
+    "standard_or_unknown_process_stops": 0,
+    "live_final_identity": "unproven"
+  },
+  "artifacts": {
+    "summary_sha256": "d662ef633d8a3c89d13d43fe5176ceef870c7c7aaf7aef945c77be7e0954b32c",
+    "remote_ast_sha256": "eecfd78213a1f42676a70c180a0379c31b939dc7d848c321b19b8395bdde963f",
+    "remote_seal_sha256": "809c9c509b67afb5d89ede87e25892dc5a3072fdc7ad9ed9db4a3b414acf7d31",
+    "golden_program_log_sha256": "01f4121c50ef40776574dac6797b24917f573ba21437d638ba0ff85e49228945"
+  },
+  "known_limits": [
+    "No exact golden configuration occurred because the remote host saw no FTDI cable. The standard jtagserver's cached chain view is not live-identity evidence.",
+    "The one golden attempt budget for T-048 is consumed; no retry is authorized in this task."
+  ],
+  "next": "Wait for GamePC to enumerate the MPSSE Blaster before a separately registered golden-only recovery transaction.",
+  "handoff": "docs/handoffs/T-20260920-048-b25-coremark-golden-recovery.md"
+}

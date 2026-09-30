@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-085",
+  "state": "done",
+  "base_sha": "708b3c38065f02efd9c461a97ae7528912d090c7",
+  "head_sha": "d9f644c65660fa005f8e109d02f04845cd25e60b",
+  "branch": "feature/T-20260829-085-b2c-vector-memory",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-085",
+  "sent_at": "2026-08-29T05:16:00+0800",
+  "received_at": "2026-08-29T05:52:00+0800",
+  "reported_at": "2026-08-29T05:52:00+0800",
+  "artifacts": [
+    {
+      "id": "artifact-b2c-handoff",
+      "owner": "T-20260829-085",
+      "uri": "docs/handoffs/T-20260829-085-b2c-vector-memory.md",
+      "reproduce": "git show HEAD:docs/handoffs/T-20260829-085-b2c-vector-memory.md",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "eae98ae99fd8638ccdcffb8814a61d60677229a4ec317a22f40a5b1595f39aa9"
+    },
+    {
+      "id": "artifact-b2c-evidence",
+      "owner": "T-20260829-085",
+      "uri": "docs/tasks/evidence/T-20260829-085.json",
+      "reproduce": "cat docs/tasks/evidence/T-20260829-085.json",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "0d1fb780f3089a268182a249079f09abe408582e7d2419fbe9a7b1f9dea174b1"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-b2c-l0-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "./obj_dir_neon/lcvex_neon_int_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Raw-bit NEON unit PASS including DUP scalar/element cases.",
+      "source_sha": "52a510aefc288b8428b0a99030764d9a572ebd63",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2c-l0-002",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/cocotb/test_p7_2_neon.py && git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Cocotb source syntax and whitespace clean.",
+      "source_sha": "52a510aefc288b8428b0a99030764d9a572ebd63",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2c-l1-cocotb-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "TMPDIR=<worktree>/tmp_build PYGPI_PYTHON_BIN=/home/chiro/miniforge3/envs/lcvex/bin/python COCOTB_TEST_MODULES=test_p7_2_neon COCOTB_TESTCASE=test_p7_2_dup_replicate,test_p7_2_ld1r_replicate COCOTB_TOPLEVEL=lcvex_soc_tb TOPLEVEL_LANG=verilog <worktree>/tmp_build/sim_build_p7_2_neon/Vtop",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Built SoC Vtop with verilator -cc --exe --no-assert -O0 -j2, then make -C ... -f Vtop.mk -j2 AR=/usr/bin/ar, then ran the two new Cocotb tests. TESTS=2 PASS=2 FAIL=0.",
+      "source_sha": "52a510aefc288b8428b0a99030764d9a572ebd63",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2c-l1-cocotb-default-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "TMPDIR=<worktree>/tmp_build conda run -n lcvex make -j1 -C sim/cocotb -f Makefile.p7_2_neon SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_p7_2_neon COCOTB_TESTCASE=test_p7_2_dup_replicate,test_p7_2_ld1r_replicate MEM_DELAY_MODE=0 SIM_BUILD=<worktree>/tmp_build/sim_build_p7_2_neon",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "After cherry-picking 0288e25 (FP scalar default-optimization fix), built and ran Cocotb with default optimization/assert. Verilator generation ~42s; TESTS=2 PASS=2 FAIL=0.",
+      "source_sha": "d9f644cede14afd2f6b7f8e9a9f447b423bbab8f",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2c-l1-direct-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --no-assert -O0 -j2 --top-module lcvex_b2c_vector_tb ... && make -C tmp_build/direct_b2c -f Vlcvex_b2c_vector_tb.mk -j2 AR=/usr/bin/ar && ./tmp_build/direct_b2c/lcvex_b2c_vector_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Direct-core self-checking SV testbench PASS for DUP scalar/element and LD1R pipeline/commit/state.",
+      "source_sha": "52a510aefc288b8428b0a99030764d9a572ebd63",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b2c-l1-blocked-attempt",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "Standard cocotb make attempt with default optimization",
+      "exit_code": 124,
+      "result": "not_completed",
+      "note": "Earlier attempts timed out before -O0 workaround and before AR fix; superseded by successful direct manual build.",
+      "source_sha": "52a510aefc288b8428b0a99030764d9a572ebd63",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "tools": {
+    "python": "3.12.10 / lcvex conda",
+    "verilator": "5.050",
+    "cocotb": "2.0.1",
+    "qemu_aarch64": "QEMU 11.1.0 local fork (not used in this task)"
+  },
+  "known_limits": [
+    "L1/Cocotb 两个新增定向已在默认优化下通过；未跑全量 sim-cocotb-p7-2-neon 其它既有用例，未跑 L2/QEMU strict lockstep 和 Gate D。",
+    "commit packet 仍只有两个 store slot；多寄存器 store 族按 store slot 分批策略 deferred。",
+    "L1 Cocotb 和 direct core lint 因同机长时 Verilator 构建争用未完成，不能作为闭合依据。",
+    "未执行 QEMU strict lockstep (L2) 或 Gate D (L3)。",
+    "未实现 SVE/SME、完整 FP exception trap、MOPS/MTE/PAuth/Crypto。"
+  ],
+  "next": "资源窗口复跑 make sim-cocotb-p7-2-neon；集成者合并后复跑 P7-2 L1/L2；结构化/多寄存器访存另开任务按 store slot 分批。",
+  "merge_sha": "14bbd7174feef157d2952219b9369a5cbd731f31",
+  "handoff_sha": "997f34c437db0cd1975d61ab58cdebaebe0e1a52",
+  "integrator_review": {
+    "received_at": "2026-08-29T10:46:46+08:00",
+    "status": "accepted",
+    "head_sha": "997f34c437db0cd1975d61ab58cdebaebe0e1a52",
+    "implementation_sha": "dc783dc",
+    "notes": "B2c DUP scalar/element + LD1R 已合入；使用默认优化（含 FP scalar 修复）跑通定向 Cocotb PASS=2/2，raw-unit PASS；结构化/多寄存器访存保持 deferred。",
+    "merge_sha": "14bbd71",
+    "result_sha": "d9f644c65660fa005f8e109d02f04845cd25e60b"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "14bbd71",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "997f34c437db0cd1975d61ab58cdebaebe0e1a52",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "d9f644c65660fa005f8e109d02f04845cd25e60b",
+        "reason": "set explicit result head from evidence head_sha"
+      },
+      {
+        "field": "merge_sha",
+        "old": "14bbd71",
+        "new": "14bbd7174feef157d2952219b9369a5cbd731f31",
+        "reason": "expand to full merge SHA"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-b2c-handoff",
+        "uri": "docs/handoffs/T-20260829-085-b2c-vector-memory.md",
+        "sha256": "eae98ae99fd8638ccdcffb8814a61d60677229a4ec317a22f40a5b1595f39aa9",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b2c-evidence",
+        "uri": "docs/tasks/evidence/T-20260829-085.json",
+        "sha256": "0d1fb780f3089a268182a249079f09abe408582e7d2419fbe9a7b1f9dea174b1",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

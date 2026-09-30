@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-016",
+  "state": "done",
+  "partial": false,
+  "base_sha": "cc3362684313cea207fd2e52df9104d58af8d02b",
+  "head_sha": "efc4ae9",
+  "branch": "feature/T-20260902-016-fp-p2-single-lane-slot",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-016",
+  "scope": "FP-P2: replace 4-lane NEON FP and core scalar FP replication with one shared 64-bit lane engine plus NEON slot sequencer, preserving raw-bit/commit semantics and FP-P1 transaction handshake.",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "jobs": "VERILATOR_JOBS=1 for local"
+  },
+  "files": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "docs/handoffs/T-20260902-016-fp-p2-single-lane-slot.md"
+  ],
+  "design": {
+    "slots": {
+      "scalar H/S/D": 1,
+      "NEON 2S": 2,
+      "NEON 4S": 4,
+      "NEON 2D": 2,
+      "NEON 4H": 2,
+      "NEON 8H": 4
+    },
+    "engine_count_in_release": 1,
+    "accumulator": "128-bit raw V result",
+    "flags": "per-slot FPSR OR"
+  },
+  "runs": [
+    {
+      "run_id": "compile",
+      "command": "make compile",
+      "result": "pass"
+    },
+    {
+      "run_id": "fp-exec-directed",
+      "command": "verilator --binary --timing --assert --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv",
+      "result": "pass",
+      "summary": "slot order, accumulator, flags OR, high-zero, FMA operand C, SCVTF sign extension, FCVTZS, FCMEQ mask, held response/backpressure, kill/reset"
+    },
+    {
+      "run_id": "sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass"
+    },
+    {
+      "run_id": "sim-sv-core-smoke",
+      "command": "make VERILATOR_JOBS=1 sim-sv",
+      "result": "pass",
+      "summary": "lcvex_core_tb scalar + FPCR/FPSR wiring smoke"
+    },
+    {
+      "run_id": "cocotb-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "summary": "5/5 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "summary": "4/4 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "summary": "5/5 PASS (after fixing FP-wait adjacent-stage duplicate)"
+    },
+    {
+      "run_id": "cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "summary": "8/8 PASS"
+    }
+  ],
+  "known_limits": [
+    "No Quartus synthesis/fit/STA/SOF run; expected area reduction not numerically measured.",
+    "The 4-lane combinational lcvex_neon_fp module remains as a standalone raw-bit SV reference, not instantiated by lcvex_core.",
+    "No L2 lockstep run in this task."
+  ],
+  "next": "FP-P3 iterative sqrt/div and common round/pack convergence; then FP-P4 workload and engine-count evidence.",
+  "merge_sha": "070a350ce723a0150d4e72dfae7f0b7f96be1b3d",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T03:45:00+08:00",
+    "merged_at": "2026-09-03T03:17:20+08:00",
+    "recorded_at": "2026-09-03T03:17:20+08:00",
+    "notes": "FP-P2 merged and accepted"
+  }
+}

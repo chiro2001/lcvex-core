@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-002",
+  "state": "done",
+  "partial": false,
+  "base_sha": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+  "head_sha": "a943110629007645941b31cd7eed47d5d0787ea8",
+  "branch": "docs/T-20260902-002-a10-jtag-burn-review",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-002",
+  "model": "deepseek-v4-flash",
+  "reasoning_effort": "max",
+  "sent_at": "2026-09-02T01:29:20+08:00",
+  "received_at": "2026-09-02T01:30:00+08:00",
+  "reported_at": "2026-09-02T01:41:10+08:00",
+  "scope": "只读调研 a10-linux-riscv 真机 JTAG 烧写经验与自建 jtagserver 路径，产出 LCVEX Catapult A10 JTAG 烧写 SOP；不运行烧写/编程/上板。",
+  "deliverables": [
+    "docs/FPGA_A10_JTAG_BURN_SOP.md",
+    "docs/handoffs/T-20260902-002-a10-jtag-burn-review.md",
+    "docs/tasks/evidence/T-20260902-002.json"
+  ],
+  "boundaries": {
+    "modified_a10_linux_riscv": false,
+    "started_jtag_server": false,
+    "ran_quartus_pgm": false,
+    "ran_programming": false,
+    "ran_board_power_reset": false,
+    "read_license_content": false,
+    "wrote_remote_files": false,
+    "stopped_any_process": false
+  },
+  "reference": {
+    "repo": "/home/chiro/projects/a10-linux-riscv",
+    "commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "status": "clean",
+    "key_quotes": [
+      "AGENTS.md:36 JTAG ID 0x02E060DD",
+      "AGENTS.md:49-50 SOF 290AB3... / JIC 86EE77...",
+      "AGENTS.md:66-68 禁止按进程名杀 jtagserver/system-console，只停记录 PID",
+      "docs/04 §8.2 lines 185-198 真机 SOF 烧写路径与结果"
+    ],
+    "verified_board_path": {
+      "summary": "SOF direct JTAG config via self-built jtagserver on 127.0.0.1:1310; no verified JIC board write in archived docs",
+      "command": "quartus_pgm -c 'MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310' -m JTAG -o 'p;<sof>'",
+      "duration_s": [
+        44,
+        48
+      ],
+      "errors": 0,
+      "jtag_id": "0x02E060DD",
+      "console_command": "nios2-terminal -c JTAG-MPSSE-Blaster -i 0"
+    },
+    "jic_generation": {
+      "command": "quartus_cpf -c output_file.cof",
+      "evidence": "docs/04 lines 129-138; scripts/reproduce_hardware.ps1 lines 50-61",
+      "jic_generated_sha256": "0538BCC0EA4CE811D42EE54B348B159EDD112B197DC06F58964171C4F9DF20FB",
+      "golden_jic_sha256": "86EE77AD2E69AFEE7E5280B54C84D24821B1DA3838E8803D882AFBA272CC3196",
+      "board_write_verified": false
+    }
+  },
+  "remote_probes": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "powershell.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "read_only": true,
+    "probes": [
+      {
+        "id": "remote-tools-existence",
+        "result": "Found jtagserver.exe, jtagconfig.exe, nios2-terminal.exe, quartus_cpf.exe, quartus_pgm.exe under D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64"
+      },
+      {
+        "id": "remote-jtag30mhz-inventory",
+        "result": "D:\\Projects\\fpga-altra\\jtag-30mhz contains jtagserver.exe, jtag_client.dll, jtag_hw_microsoft_catapult.dll, jtag_hw_microsoft_catapult.dll.orig, msftdi.cfg, client.conf, port.txt, test-30mhz.ps1, burn.log"
+      },
+      {
+        "id": "remote-mbftdi-source",
+        "result": "D:\\Projects\\fpga-altra\\jtag_hw_mbftdi_blaster is extracted Marsohod MBFTDI source; readme and source confirm PROGRAMER_NAME 'MBFTDI-Blaster v2.1b', FT232H Catapult debug dongle VID 0x0403/0x6014, DEV_NAME MBUSB-0, msftdi.cfg channel/frequency"
+      },
+      {
+        "id": "remote-script-params",
+        "result": "test-30mhz.ps1 starts jtagserver.exe with --foreground --no-config --port 1310 --port-file port.txt; sets QUARTUS_JTAG_CLIENT_CONFIG=client.conf and QUARTUS_JTAG_CLIENT_NO_LOCAL_SERVER=1; checks jtagconfig output for 02E060DD; optional flash command uses MBFTDI-Blaster cable"
+      },
+      {
+        "id": "remote-burn-log",
+        "result": "burn.log records quartus_pgm MBFTDI-Blaster on 127.0.0.1:1310, programming file a10_ddr_io.sof, JTAG ID 0x02E060DD, success 0 errors, elapsed 48s"
+      },
+      {
+        "id": "remote-bin64-current-driver",
+        "result": "Quartus bin64 currently has original jtag_hw_microsoft_catapult.dll (SHA E8AC5BA4..., 237568 B); custom DLL is only under jtag-30mhz (SHA B7FE801A..., 229376 B); no msftdi.cfg in bin64, so global install has not been applied at probe time"
+      }
+    ],
+    "hashes": {
+      "jtag30mhz_jtagserver_exe": "72562A0193AA2B4C0B6332256453F9F337AC61FB18CDAC8895F30706228314EE",
+      "jtag30mhz_jtag_client_dll": "A987A40EBB2630C4F5296E86373484769E9D87F26FBBDDA3F26CE9E940BE1969",
+      "jtag30mhz_custom_catapult_dll": "B7FE801AE91C50BD7EA159EA905D732A0B13ADA9F7791B85384A6DC8167092F6",
+      "jtag30mhz_orig_catapult_dll": "E8AC5BA4170AAC6ED0B6478A8ACF3BB4516ED6771277C28FD62FCBE03C6CE24F",
+      "jtag30mhz_msftdi_cfg": "36580939AB36D1B38A3A118C54B49529484B352B00D004F94FE0F7C8445F15EF",
+      "jtag30mhz_client_conf": "850870F8867409ED2917275F1150192EB36D66B3ABF5F2EA00F74C09EB62BDEB",
+      "jtag30mhz_test_ps1": "E413D06AA1B0DE75DCF92134DE490AF2015BC131B255E85B5A400673EFA25B3E",
+      "jtag30mhz_burn_log": "B0311D71ABBC3555B4F8B1414AF765457D7DB87E500C8A6912FBA1F03E10E4DB",
+      "quartus_jtagconfig_exe": "BBE3E525F678394D2E1AD958F9E0057571A7A66AC21CF4BC63A9846C76A9A86A",
+      "quartus_pgm_exe": "B5D5A4C313CC912132F177135080CE9D62055025885ACBBF6C3E169ADF674F12",
+      "quartus_nios2_terminal_exe": "E5FACE867C688E9E399B19D7C0203EA1C9F6D52E996A0C499A073E2E07E15AD0",
+      "quartus_cpf_exe": "218E1E04653AB21488826D0937B888C4E6269A477B004AF2E850FB2710381204"
+    }
+  },
+  "lcvex_findings": {
+    "jtag_identity_open": "jtagconfig reports 10AT115S(1|2) while QSF DEVICE is 10AX115N4F40E3SG; human confirmation required before programming",
+    "preflight_program_gate": "WAIT",
+    "no_current_lcvex_sof": "local fpga/catapult_a10 is platform/skeleton; historical T-064 SOF is not current candidate",
+    "boot_console_markers": [
+      "LCVEX-BOOT",
+      "DDR-OK"
+    ],
+    "addresses": {
+      "jtag_uart": "0x09000000",
+      "epcq_csr": "0x09001000",
+      "platform_status": "0x09003000",
+      "ddr_window": "0x40000000"
+    }
+  },
+  "acceptance_mapping": {
+    "sop_with_commands_and_paths": true,
+    "identity_steps": true,
+    "server_start_stop": true,
+    "sof_and_jic_distinction": true,
+    "jtag_uart_console": true,
+    "risks_and_rollback": true,
+    "verified_vs_pending_labeled": true,
+    "every_burn_command_cited": true,
+    "lcvex_human_coordination_points": true,
+    "evidence_and_handoff_present": true,
+    "claims_board_burn_complete": false
+  },
+  "merge_sha": "18befa10c2a312c050d9e80fb1afa2d369f7e119",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T01:41:10+08:00",
+    "merged_at": "2026-09-02T01:43:20+08:00",
+    "recorded_at": "2026-09-02T01:43:20+08:00",
+    "notes": "JTAG SOP merged; read-only review accepted; board programming remains blocked by JTAG identity/SOF freeze"
+  }
+}

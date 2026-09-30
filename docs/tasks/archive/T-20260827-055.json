@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-055",
+  "title": "B3-L2-WB 包容式写回缓存与单客户端 probe",
+  "kind": "cache-l2-writeback",
+  "priority": "high",
+  "assigned_owner": "b3-l2-wb-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现模块级包容式 L2 write-back/write-allocate、dirty victim、单客户端 probe、maintenance 和独立 scoreboard；不接入 CPU/L1/SoC，不修改 B0 平台或 P7 核心",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "若 dirty victim/probe/maintenance 边界出现歧义，再补一次范围拆解；不扩大写集"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审 task JSON、双轨 L2/一致性冻结规则、目标 diff 和独立验证；检查 write-back/write-allocate、dirty eviction、probe、fault/maintenance/单核多核预留，不提供逐行实现"
+  },
+  "review_record": {
+    "agent_id": "01a03ff4-00bb-76c2-9296-37206910f34c",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T05:22:11+08:00",
+    "received_at": "2026-08-27T05:24:26+08:00",
+    "reported_at": "2026-08-27T05:24:26+08:00",
+    "elapsed_seconds": 100,
+    "status": "go",
+    "blocking_before_acceptance": [
+      "dirty victim 必须完整写回成功后才能复用 tag；写回失败保留 valid+dirty，refill 失败不发布新 tag/成功响应。",
+      "CORE_COUNT=1 probe、clean/invalidate maintenance 和 source/transaction/owner/sharer 预留必须在模块级边界闭合。",
+      "独立 SV/Cocotb scoreboard/SVA 必须覆盖随机替换、背压、partial-store、fault、probe、reset 与无丢失/重复。"
+    ],
+    "boundary": "允许 owner 只实现 T-055 L2 module/BFM/scoreboard L0-L1；不接 P7 core/L1/SoC，不修改 B0/B2 或集成热点。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "一次简明缓存协议审核只报告阻断风险；仅在 L2/probe 契约、写集或 evidence 实质变化时重审",
+    "required_sequence": "一次 Sol 方向审查后允许 owner 实现；核心接线和 Gate F-MEM 前必须闭合阻断项"
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "extend_when": "owner 在自然 checkpoint 带时间戳报告新增 cache 状态/scoreboard/测试证据且写集稳定",
+    "control": "集成者根据 reported_at - dispatch_sent_at 动态延长；不因等待窗口到期中断 owner",
+    "progress_report_fields": [
+      "sent_at",
+      "received_at",
+      "reported_at",
+      "elapsed_seconds",
+      "files",
+      "tests",
+      "blockers",
+      "remaining_minutes",
+      "extension_request"
+    ]
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "仅在预算允许时监控 L2 module/BFM/scoreboard；全 Cache/QEMU/Linux/Gate 由集成者队列执行"
+  },
+  "disabled_profiles": [
+    "deepseek-v4-flash[max]"
+  ],
+  "phase": "done",
+  "execution": {
+    "agent_id": "01a03ff7-9156-7b32-96dc-fc314e092dbd",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T05:25:56+08:00",
+    "budget_minutes": 30,
+    "budget_exhausted_at": "2026-08-27T05:56:12+08:00",
+    "execution_instance_shutdown_at": "2026-08-27T06:05:01+08:00",
+    "execution_instance_shutdown_reason": "预算 checkpoint 后仍无 owner progress/commit；保留 worktree，转入短 continuation slice",
+    "budget_policy": "initial=30m; extension=+15m by timestamped progress; max=60m",
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": null
+    }
+  },
+  "continuation_execution": {
+    "agent_id": "01a0401b-5295-7ab1-a102-78e3a68388b9",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T06:05:01+08:00",
+    "budget_minutes": 15,
+    "budget_policy": "固定 15m continuation；不自动延长，结束时必须提交 checkpoint/review/blocked",
+    "reported_at": "2026-08-27T06:21:13+08:00",
+    "received_at": "2026-08-27T06:21:13+08:00",
+    "elapsed_seconds": 972,
+    "state": "review",
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": null
+    }
+  },
+  "owner_handoff": {
+    "state": "review",
+    "implementation_commit": "dbc9a8733e3fc3073527ffda05a404fa5d267bf1",
+    "evidence_internal_head": "4de37d5762bb7d99f62f42518aa45b771d74ca65",
+    "evidence_head_reported": "dbc9a8733e3fc3073527ffda05a404fa5d267bf1",
+    "handoff": "docs/handoffs/T-20260827-055-b3-l2-wb.md",
+    "evidence": "docs/tasks/evidence/T-20260827-055.json",
+    "scope_accepted_for_integration": "standalone 64B write-back/write-allocate L2, single-client probe/maintenance and independent SV/Cocotb evidence",
+    "scope_remaining": "clean FPGA-line merge and integrator L0/L1 rerun; L1/SoC wiring, D-L1 write-back, QEMU and Gate F-MEM remain later"
+  },
+  "integration": {
+    "status": "pass_l0_l1",
+    "strategy": "在 feature/fpga-catapult-a10 上按 B3 owner commit 合入，复跑独立 SV/Cocotb L0/L1；不修改 P7 core/pkg、B0/B2 或现有 lcvex_l2_tb",
+    "source_sha": "48930ae4fa4ef9050c2560d5fa5cbe012d76117e",
+    "code_merge_sha": "48930ae4fa4ef9050c2560d5fa5cbe012d76117e",
+    "evidence_merge_sha": "cfa8b9aec01596bc6f3e28d982cfa28b53a93a82",
+    "merge_sha": "cfa8b9aec01596bc6f3e28d982cfa28b53a93a82",
+    "validated_scope": "clean feature/fpga-catapult-a10 B0+B1+B2+B3 lineage and B3 L0/L1",
+    "remaining_scope": "B4/L1 coherence、D-L1 write-back、CPU/SoC connection、QEMU/Gate F-MEM and board gates"
+  },
+  "progress_reports": [
+    {
+      "type": "scheduler_budget_checkpoint",
+      "observed_at": "2026-08-27T05:55:37+08:00",
+      "sent_at": "2026-08-27T05:56:12+08:00",
+      "received_at": null,
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 1781,
+      "actual_elapsed_seconds": null,
+      "files": [
+        "rtl/lcvex_l2_probe.sv",
+        "rtl/lcvex_l2_wb.sv",
+        "tb/sv/lcvex_l2_wb_bfm.sv",
+        "tb/sv/lcvex_l2_wb_tb.sv"
+      ],
+      "tests": "尚未收到 owner test report",
+      "blockers": "未提交 checkpoint/handoff/evidence；无证据批准预算延长",
+      "remaining_minutes": 0,
+      "extension_request": "not_approved_pending_progress",
+      "measurement": "只记录 scheduler 观察，不替代 owner reported_at"
+    },
+    {
+      "type": "scheduler_execution_handoff",
+      "observed_at": "2026-08-27T06:03:50+08:00",
+      "sent_at": "2026-08-27T06:05:01+08:00",
+      "received_at": null,
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 2274,
+      "actual_elapsed_seconds": null,
+      "files": [
+        "rtl/lcvex_l2_probe.sv",
+        "rtl/lcvex_l2_wb.sv",
+        "tb/sv/lcvex_l2_wb_bfm.sv",
+        "tb/sv/lcvex_l2_wb_tb.sv"
+      ],
+      "tests": "尚未收到 owner test report",
+      "blockers": "首个执行实例未提交 checkpoint/evidence，已保留 worktree 并转 continuation",
+      "remaining_minutes": 15,
+      "extension_request": "continuation_15m_only",
+      "measurement": "只记录 scheduler 观察，不替代 owner reported_at"
+    },
+    {
+      "type": "owner_final",
+      "sent_at": "2026-08-27T06:05:01+08:00",
+      "received_at": "2026-08-27T06:21:13+08:00",
+      "reported_at": "2026-08-27T06:21:13+08:00",
+      "elapsed_seconds": 972,
+      "actual_elapsed_seconds": 972,
+      "files": [
+        "rtl/lcvex_l2_probe.sv",
+        "rtl/lcvex_l2_wb.sv",
+        "tb/sv/lcvex_l2_wb_bfm.sv",
+        "tb/sv/lcvex_l2_wb_tb.sv",
+        "tb/sv/lcvex_l2_wb_cocotb_tb.sv",
+        "sim/cocotb/Makefile.l2_wb",
+        "sim/cocotb/test_l2_wb.py",
+        "docs/L2_WRITEBACK.md",
+        "docs/handoffs/T-20260827-055-b3-l2-wb.md",
+        "docs/tasks/evidence/T-20260827-055.json"
+      ],
+      "tests": "SV build/run PASS，93 transactions/903 beats；Cocotb 1/1 PASS，2430ns；JSON/diff-check PASS",
+      "blockers": "none；L1/SoC、QEMU、Gate D/F 后置",
+      "remaining_minutes": 0,
+      "extension_request": "none",
+      "measurement": "owner 提供 reported_at 与 elapsed_seconds，按 dispatch_sent_at=2026-08-27T06:05:01+08:00 计算"
+    }
+  ],
+  "parent": "T-20260827-050",
+  "depends_on": [
+    "T-20260827-050",
+    "T-20260827-054"
+  ],
+  "writes": [
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_l2_probe.sv",
+    "tb/sv/lcvex_l2_wb_bfm.sv",
+    "tb/sv/lcvex_l2_wb_tb.sv",
+    "sim/cocotb/Makefile.l2_wb",
+    "sim/cocotb/test_l2_wb.py",
+    "docs/L2_WRITEBACK.md",
+    "docs/handoffs/T-20260827-055-b3-l2-wb.md",
+    "docs/tasks/evidence/T-20260827-055.json"
+  ],
+  "reads": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/decisions/ADR-20260827-003-p7-fpga-parallel-axi4.md",
+    "docs/COMMIT_PACKET.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_l1_d.sv",
+    "rtl/lcvex_l1_i.sv",
+    "tb/sv/lcvex_l2_tb.sv",
+    "fpga/catapult_a10/platform_manifest.json",
+    "docs/AXI4_PROFILE.md",
+    "docs/AXI4_AVALON_ADAPTER.md"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/AXI4_PROFILE.md",
+    "docs/AXI4_AVALON_ADAPTER.md"
+  ],
+  "base_sha": "94725bf3c8452c471d76c4c637f33bdd21cf8884",
+  "branch": "feature/T-20260827-055-b3-l2-wb",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-055",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "新增/修改 JSON 通过 python3 -m json.tool；git diff --check",
+      "line/tag/dirty/probe/maintenance 命令边界与未来 CORE_COUNT/source_id 预留静态检查"
+    ],
+    "l1": [
+      "独立 Verilator SV scoreboard：读 miss/refill、写 miss allocate、写 hit dirty、dirty victim 先完整写回、fault 不丢数据、单客户端 probe、clean/invalidate maintenance",
+      "独立 Cocotb 随机替换/partial-store/fault/backpressure：dirty implies valid、probe 完成前不复用 tag、无丢失/重复、reset 后无 stale response"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": [
+      "记录替换/背压/故障随机 seed 和最后事务窗口"
+    ]
+  },
+  "acceptance": "建立模块级包容式 L2 write-back/write-allocate：64B line、dirty metadata、write miss refill 后分配并合并 partial store、dirty victim 先完成完整写回再复用 tag、refill/writeback fault 不静默丢数据；提供 CORE_COUNT=1 的单客户端 probe request/response、clean/invalidate maintenance 和未来 source/transaction/owner/sharer 边界预留。独立 SV/Cocotb scoreboard 与 SVA 必须覆盖随机替换、背压、partial-store、fault、probe、reset 和无丢失/重复并通过 L0-L1。不得接入 P7 core/L1/SoC、修改 B0 fpga/catapult_a10、引入厂商 IP、修改 filelist/顶层 Makefile、QEMU 或 scripts/test_registry；不得宣称全 Cache、Gate F-MEM 或板级完成。",
+  "created_at": "2026-08-27T05:20:00+08:00",
+  "updated_at": "2026-08-27T06:32:40+08:00",
+  "commits": [
+    "dbc9a8733e3fc3073527ffda05a404fa5d267bf1"
+  ],
+  "handoff": "docs/handoffs/T-20260827-055-b3-l2-wb.md",
+  "evidence": "docs/tasks/evidence/T-20260827-055.json",
+  "known_limits": [
+    "phase=done 表示 B3 模块级 write-back/probe/maintenance L0/L1 已在 clean FPGA line 验收；不表示 L1/SoC/系统一致性或 Gate F-MEM 完成。",
+    "只做模块级 L2 candidate；D-L1 write-back、PTW/维护接线、QEMU lockstep 和完整 Gate F-MEM 后置。",
+    "CORE_COUNT=1；不实现跨核 MESI/MOESI、ACE/CHI、硬件一致 DMA 或完整多核目录。",
+    "B0 exact Quartus/Qsys regenerate、STA、DDR 校准和板测仍由平台队列负责。"
+  ],
+  "next": "T-055 已完成并归档；B3 新模块写集已释放。后续按 B4/L1 coherence 和系统接线计划继续，B0 工具阻断仍单独保留。",
+  "archived_at": "2026-08-27T06:34:12+08:00"
+}
+

@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-052",
+  "state": "review",
+  "base_sha": "c76cc28d53bcab4af0e42dcf4ca8dbb4426dcb6e",
+  "head_sha": "0202448eaf9ec33c68050fd0be273b65c46a4d8f",
+  "merge_sha": "",
+  "branch": "feature/T-20260827-052-b0-platform",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-052",
+  "scope": "fpga/catapult_a10 platform whitelist, manifest, provenance, hashes and offline checks only",
+  "source": {
+    "project": "a10-linux-riscv",
+    "repo_path": "/home/chiro/projects/a10-linux-riscv",
+    "commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "read_only": true,
+    "golden_sha256_reused": false,
+    "target_payload_file_count": 15
+  },
+  "toolchain": {
+    "python3": {
+      "command": "python3 --version",
+      "version": "Python 3.12.10",
+      "exit_code": 0
+    },
+    "git": {
+      "command": "git --version",
+      "version": "git version 2.55.0",
+      "exit_code": 0
+    },
+    "ip-generate": {
+      "which_command": "command -v ip-generate",
+      "which_exit_code": 1,
+      "version_command": "ip-generate --version",
+      "version_exit_code": 127,
+      "status": "missing"
+    },
+    "qsys-generate": {
+      "which_command": "command -v qsys-generate",
+      "which_exit_code": 1,
+      "version_command": "qsys-generate --version",
+      "version_exit_code": 127,
+      "status": "missing"
+    },
+    "quartus_sh": {
+      "which_command": "command -v quartus_sh",
+      "which_exit_code": 1,
+      "version_command": "quartus_sh --version",
+      "version_exit_code": 127,
+      "status": "missing"
+    },
+    "quartus": {
+      "which_command": "command -v quartus",
+      "which_exit_code": 1,
+      "status": "missing"
+    }
+  },
+  "platform_contract": {
+    "device": "10AX115N4F40E3SG",
+    "family": "Arria 10",
+    "quartus": "21.4.0 Pro Build 67",
+    "board_input_hz": 100000000,
+    "logic_domain_hz": 50000000,
+    "ddr_reference_hz": 266666667,
+    "ddr_dq_bits": 72,
+    "emif_user_data_bits": 512,
+    "flash": "EPCQL1024 / Active Serial x4",
+    "console": "Altera Avalon JTAG-UART",
+    "qsys_speed_grade": 2,
+    "emif_speed_grade": 3,
+    "device_speed_grade": 3,
+    "speed_grade_status": "inconsistent; exact-tool regeneration and later STA required"
+  },
+  "runs": [
+    {
+      "run_id": "owner-offline-static-001",
+      "source_sha": "0202448eaf9ec33c68050fd0be273b65c46a4d8f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool fpga/catapult_a10/platform_manifest.json; python3 fpga/catapult_a10/tools/check_platform.py; git diff --check; bash -n fpga/catapult_a10/tools/regenerate_qsys.sh",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 0,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "JSON、15 文件 manifest/source.lock/SHA256SUMS 闭包、平台锚点、禁收编项和脚本语法通过"
+    },
+    {
+      "run_id": "owner-fresh-clone-static-002",
+      "source_sha": "0202448eaf9ec33c68050fd0be273b65c46a4d8f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash -c 'set -o pipefail; { git status --short --branch; git rev-parse HEAD; python3 -m json.tool fpga/catapult_a10/platform_manifest.json >/dev/null; python3 fpga/catapult_a10/tools/check_platform.py; git diff --check; } 2>&1 | tee ../fresh-clone-static.log",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 3,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "fresh clone HEAD=0202448e，PLATFORM_CHECK_PASS files=15"
+    },
+    {
+      "run_id": "owner-fresh-clone-qsys-regenerate-003",
+      "source_sha": "0202448eaf9ec33c68050fd0be273b65c46a4d8f",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "bash -o pipefail -c 'fpga/catapult_a10/tools/regenerate_qsys.sh 2>&1 | tee ../regenerate-attempt-pipefail.log'",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": 1,
+      "exit_code": 127,
+      "result": "blocked",
+      "summary": "ip-generate 缺失；入口打印 TOOL_MISSING，未产生 generated.sha256 或 Qsys_bb.v diff"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "platform-manifest",
+      "uri": "fpga/catapult_a10/platform_manifest.json",
+      "sha256": "f1680e3fb3660b9bbb76cd063fbf3ef8c9d0e12afd9a19aaf2e5e44f510e8049",
+      "bytes": 8306,
+      "owner": "b0-platform-luna",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "source-lock",
+      "uri": "fpga/catapult_a10/source.lock",
+      "sha256": "0815deb9fbff904a7bfd8d87b6d4a1f900937f9ccb3e942c1a826889bd611c4e",
+      "bytes": 2503,
+      "owner": "b0-platform-luna",
+      "retain_until": "review",
+      "reproduce": "python3 fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "target-sha256-list",
+      "uri": "fpga/catapult_a10/SHA256SUMS",
+      "sha256": "1c50e94f1e99a988af5864cd884b7f40f0e80a904ce86a36456b9f0231f3a2e4",
+      "bytes": 1588,
+      "owner": "b0-platform-luna",
+      "retain_until": "review",
+      "reproduce": "sha256sum over manifest payload paths"
+    },
+    {
+      "id": "fresh-clone-static-log",
+      "uri": "build/agents/T-20260827-052/fresh-clone-static.log",
+      "sha256": "1469605e436c3b0045d55474db2d435408889197db4c3843d8d9916b6874f869",
+      "bytes": 152,
+      "owner": "b0-platform-luna",
+      "retain_until": "review",
+      "reproduce": "owner-fresh-clone-static-002"
+    },
+    {
+      "id": "qsys-regenerate-attempt-log",
+      "uri": "build/agents/T-20260827-052/regenerate-attempt-pipefail.log",
+      "sha256": "55e7c20a023d90e6d8804eddd0adfdee1cee8067ad635cb8dff47372ebf81219",
+      "bytes": 457,
+      "owner": "b0-platform-luna",
+      "retain_until": "review",
+      "reproduce": "owner-fresh-clone-qsys-regenerate-003"
+    },
+    {
+      "id": "qsys-regenerate-internal-log",
+      "uri": "build/agents/T-20260827-052/fresh-clone/build/agents/T-20260827-052/qsys-ip-regenerate/regenerate.log",
+      "sha256": "55e7c20a023d90e6d8804eddd0adfdee1cee8067ad635cb8dff47372ebf81219",
+      "bytes": 457,
+      "owner": "b0-platform-luna",
+      "retain_until": "review",
+      "reproduce": "fpga/catapult_a10/tools/regenerate_qsys.sh"
+    }
+  ],
+  "regeneration": {
+    "status": "blocked",
+    "entrypoint": "fpga/catapult_a10/tools/regenerate_qsys.sh",
+    "required_tools": [
+      "ip-generate",
+      "qsys-generate",
+      "quartus_sh"
+    ],
+    "tool_missing_reason": "The execution environment has no Quartus Prime Pro/Qsys installation in PATH.",
+    "generated_sha256": null,
+    "interface_diff": null,
+    "acceptance_blocker": true
+  },
+  "known_limits": [
+    "真实 Qsys/IP regenerate 未通过；必须在精确 Quartus 21.4 Build 67 环境复跑。",
+    "未运行 Quartus full compile、STA、DDR March 或板测。",
+    "DDR 模组精确 part、物理 UART/LED 引脚和完整 2 GiB 稳定窗口未由输入确认。",
+    "B0 不实现 AXI4、Cache、SoC、CPU、RISC-V 软件链或 32-to-512 bridge。"
+  ]
+}

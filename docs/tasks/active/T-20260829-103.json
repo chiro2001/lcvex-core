@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-103",
+  "label": "C4-dualcore-baseline",
+  "parent": "T-20260828-073",
+  "title": "C4 双核 baseline 测量（C4-pre 补充：CORE_COUNT=2 规模基线）",
+  "kind": "multicore-c4-baseline",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "2a697bb922e6e7af353d399b2f0e6f6bb26d150c",
+  "branch": "feature/T-20260829-103-c4-dualcore-baseline",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-103",
+  "scope": "使用现有 C2 CORE_COUNT=2 配置，按 docs/C4_SCALE_PREWORK.md 测量模板产出双核 baseline：compile/elab 时间与 RSS、有限事务 smoke、目录/仲裁/PoC 位宽 proxy、单事务吞吐 proxy。只读测量，不修改 RTL 功能；所有重型 Verilator 必须 cgroup 限制 <16GiB。",
+  "writes": [
+    "docs/C4_DUALCORE_BASELINE.md",
+    "docs/handoffs/T-20260829-103-c4-dualcore-baseline.md",
+    "docs/tasks/evidence/T-20260829-103.json",
+    "fpga/opensynth/c4_dualcore_baseline.json"
+  ],
+  "reads": [
+    "docs/C4_SCALE_PREWORK.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/handoffs/T-20260829-092-c2-remainder.md",
+    "docs/handoffs/T-20260829-086-c2-dualcore-msi.md",
+    "rtl/**",
+    "tb/sv/lcvex_c2_dualcore_tb.sv",
+    "tb/sv/lcvex_c2_l1_msi_tb.sv"
+  ],
+  "validation": {
+    "l0": [
+      "C4 模板字段完整、JSON 合法、git diff --check",
+      "C2 DUALCORE_TB / L1_MSI_TB smoke 通过"
+    ],
+    "l1": [
+      "记录 cgroup 限制方法与峰值 RSS",
+      "明确 baseline 不代表 4/8/16/32 核功能完成"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可复用的 CORE_COUNT=2 baseline 报告与机器可读 JSON，字段按 C4-pre 模板。",
+  "next": "作为 C4 后续 8/16/32 核测量对比基线。",
+  "resource": {
+    "cpu": 4,
+    "memory_mb": 16384,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T20:24:05+08:00",
+  "updated_at": "2026-08-29T20:24:05+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T20:24:05+08:00",
+    "agent_name": "c4_dualcore_baseline",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "high",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-103"
+  },
+  "known_limits": [
+    "这不是 4/8/16/32 核功能验收，只做双核规模基线。",
+    "所有重型 Verilator 必须 cgroup <16GiB；一次一个。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-103-c4-dualcore-baseline.md",
+  "evidence": "docs/tasks/evidence/T-20260829-103.json",
+  "merge_sha": "cd43247f7367a1d390a82f3e3273c5022b2023a3",
+  "merged_at": "2026-08-29T20:55:52+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T20:55:52+08:00",
+    "status": "accepted",
+    "head_sha": "eff8c776e662bba1cbca325ee42c8a8887516f27",
+    "notes": "C4 dual-core baseline accepted. CORE_COUNT=2: dualcore build 371s/3.36GB RSS; l1_msi build 24s/434MB; both smoke PASS. Used systemd-run cgroup MemoryMax=16G, -j1. Docs only, no RTL changes. Baseline only, not 4/8/16/32 correctness."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T20:30:00+0800",
+        "new": "2026-08-29T20:24:05+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T20:30:00+0800",
+        "new": "2026-08-29T20:24:05+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T20:30:00+0800",
+        "new": "2026-08-29T20:24:05+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T21:00:00+0800",
+        "new": "2026-08-29T20:55:52+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T21:00:00+0800",
+        "new": "2026-08-29T20:55:52+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "208b6a4cfee37ad86df4268ac3ad2018b3723769",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "208b6a4cfee37ad86df4268ac3ad2018b3723769"
+}

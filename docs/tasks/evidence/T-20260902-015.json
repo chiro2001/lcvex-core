@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-015",
+  "state": "done",
+  "partial": false,
+  "base_sha": "fb53b80bfd42a9b52bce46e61bf5b4cd753b0e79",
+  "head_sha": "cfa5938",
+  "branch": "feature/T-20260902-015-fp-p1-transaction-wrapper",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-015",
+  "scope": "FP-P1: freeze FP transaction payload, add clocked single-owner fp_exec wrapper, integrate core owner/issued/response-hold/kill/reset without changing raw FP arithmetic/commit order.",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "jobs": "VERILATOR_JOBS=1 for local"
+  },
+  "files": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "docs/handoffs/T-20260902-015-fp-p1-transaction-wrapper.md"
+  ],
+  "runs": [
+    {
+      "run_id": "compile",
+      "command": "make compile",
+      "result": "pass",
+      "summary": "Verilator lint-only on lcvex_core with filelist PASS"
+    },
+    {
+      "run_id": "sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "summary": "P7-1 scalar FP raw-bit directed vectors PASS"
+    },
+    {
+      "run_id": "sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "summary": "P7-3 NEON FP raw-unit directed vectors PASS"
+    },
+    {
+      "run_id": "sv-fp-exec-wrapper",
+      "command": "verilator --binary ... --top-module lcvex_fp_exec_tb",
+      "result": "pass",
+      "summary": "Transaction wrapper directed test: single issue, scalar/NEON raw, FDIV, FCMP NZCV, response hold, kill, reset PASS"
+    },
+    {
+      "run_id": "sim-sv-core-smoke",
+      "command": "make VERILATOR_JOBS=1 sim-sv",
+      "result": "pass",
+      "summary": "lcvex_core_tb scalar + FPCR/FPSR wiring smoke PASS"
+    },
+    {
+      "run_id": "cocotb-fp-scalar",
+      "command": "direct: cd sim/cocotb && PYGPI_PYTHON_BIN=... COCOTB_TEST_MODULES=test_p7_fp_scalar ... ./sim_build_p7_1_fp_scalar/Vtop --timing --assert",
+      "result": "pass",
+      "summary": "Cocotb P7-1 scalar FP pipeline/FPEN/fault/backpressure/unsupported: 5/5 PASS (direct Vtop run; make wrapper had stdout write error after successful link)",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "summary": "P7-4 scalar/NEON FMA and integer/fixed conversion raw-bit vectors PASS (scalar + NEON entries)"
+    },
+    {
+      "run_id": "sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "summary": "P7-5 scalar FP16/sqrt/minmax/frint/fcvt and NEON FP16 raw-bit vectors PASS (scalar + NEON entries)"
+    }
+  ],
+  "known_limits": [
+    "No fit/STA/Quartus run.",
+    "FP-P1 intentionally keeps 1 scalar + 4-lane NEON replication; structural sharing is FP-P2.",
+    "Simple FP now has transaction handshake latency; no resource/performance claim."
+  ],
+  "next": "Integrator rerun P7-1/3/4/5 Cocotb and confirm before FP-P2.",
+  "merge_sha": "3fa3a879f2da1c200844627db4a231d4aac3bee8",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T02:45:03+08:00",
+    "merged_at": "2026-09-03T02:46:45+08:00",
+    "recorded_at": "2026-09-03T02:46:45+08:00",
+    "notes": "FP-P1 merged and accepted"
+  }
+}

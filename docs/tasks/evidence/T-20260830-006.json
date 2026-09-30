@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-006",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "6fdb8d362893e88aa3699b5b7f9ae6024f9ad333",
+  "head_sha": "45b1cca2c1b0f1c6ace9c045dc4ec742e3d9c857",
+  "branch": "feature/T-20260830-006-fpga-f",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-006",
+  "scope": "FPGA-F: reduced B5 synthesis rerun. Synchronise current main to remote isolated build/T-20260830-006, run A64_FP_SIMD=0 + L2 64x1 soc_only synthesis first, and stop on OOM/high-memory failure. No full B5 flow.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "created_at": "2026-08-30T02:00:00+08:00",
+    "sync_start": "2026-08-30T02:11:30+08:00",
+    "soc_only_start": "2026-08-30T02:17:33+08:00",
+    "soc_only_end": "2026-08-30T02:18:17+08:00",
+    "documents_written_at": "2026-08-30T02:20:47+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-006",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "original_modified": false,
+    "license_read": false,
+    "full_flow_started": false,
+    "physical_memory_bytes": 66157113344,
+    "logical_processors": 24
+  },
+  "toolchain": {
+    "quartus_syn": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+    "monitor_script": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-006\\run_quartus_monitor.ps1"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-sync-isolated-rtl-001",
+      "source_sha": "6fdb8d362893e88aa3699b5b7f9ae6024f9ad333",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "scp rtl/*.sv and fpga/catapult_a10/rtl/*.sv 192.168.101.5:D:/Projects/fpga-altra/lcvex/build/T-20260830-006/rtl/ ; create isolated soc_only_reduced QSF/QPF and reduced top copy",
+      "seed": null,
+      "wall_seconds": 60,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "45 RTL .sv files copied to isolated remote experiment dir (43 root + 2 A10 platform); original remote QSF/SDC/RTL untouched; isolated top defaults L2_SETS=64, L2_WAYS=1, A64_FP_SIMD=0."
+    },
+    {
+      "run_id": "owner-l0-quartus-compat-patches-002",
+      "source_sha": "6fdb8d362893e88aa3699b5b7f9ae6024f9ad333",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "Patch isolated copies: remove input defaults in fp_scalar; wrapper rdg slices in decode; replace non-constant loop; widen enum literals in pkg.",
+      "seed": null,
+      "wall_seconds": 30,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Quartus 21.4 parser/elaboration compatibility fixes applied only to build/T-20260830-006/rtl copies. Needed before current main RTL could be analysed."
+    },
+    {
+      "run_id": "owner-soc-reduced-synthesis-003",
+      "source_sha": "6fdb8d362893e88aa3699b5b7f9ae6024f9ad333",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File run_quartus_monitor.ps1 -ProjectDir D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-006\\soc_only_reduced -Project soc_only_reduced -Revision soc_only_reduced -LogBase ...\\syn5 -MaxMinutes 35 -MemLimitGB 45",
+      "seed": null,
+      "wall_seconds": 44.6,
+      "cpu_count": 24,
+      "cpuset": "",
+      "peak_pm_mb": 45812.2,
+      "peak_ws_mb": 44582.6,
+      "disk_delta_mb": null,
+      "exit_code": null,
+      "result": "blocked_high_memory_abort",
+      "summary": "Quartus synthesis for A64_FP_SIMD=0 + L2 64x1 soc_only reached ~45.8GB private / ~44.6GB working set in ~45s and terminated without a successful report. Log stopped after 'Elaborating from top-level entity' with an incomplete trailing 'W'. No new syn.rpt/summary; no full flow started."
+    }
+  ],
+  "blocker": {
+    "type": "high-memory elaboration abort",
+    "detail": "The reduced soc_only synthesis did not complete. Peak private memory 45,812 MB across Quartus processes; process disappeared after 44.6s; output log truncated mid-warning; no new synthesis report. This is treated as OOM-equivalent/blocked for FPGA-F and prevents step 3/4 and the full B5 flow.",
+    "stage": "Analysis & Synthesis / elaborating from top-level entity after syntax compatibility patches",
+    "known_predecessor": "T-20260828-067 reported Quartus synthesis OOM ~75GB; this run shows the combination of FPGA-B/C/D/E reductions still cannot finish on the current 64GB physical-memory Windows host."
+  },
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-006-fpga-f.md",
+      "sha256": "2c55a56f66b198829a538e47dedec1d521f64ad02bb9418823a01424166e6650",
+      "bytes": null,
+      "owner": "T-20260830-006",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-006-fpga-f.md"
+    },
+    {
+      "id": "remote-experiment-root",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-006",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-006",
+      "retain_until": "task-close",
+      "reproduce": "Remote isolated RTL/QSF/Log; original remote project untouched."
+    },
+    {
+      "id": "remote-soc-qsf",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-006\\soc_only_reduced\\soc_only_reduced.qsf",
+      "sha256": null,
+      "bytes": 3780,
+      "owner": "T-20260830-006",
+      "retain_until": "task-close",
+      "reproduce": "soc_only reduced QSF referencing isolated rtl"
+    },
+    {
+      "id": "remote-soc-samples",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-006\\soc_only_reduced\\syn5.samples.csv",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-006",
+      "retain_until": "task-close",
+      "reproduce": "Memory/time samples; peak 45812 MB PM"
+    },
+    {
+      "id": "remote-soc-stdout",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-006\\soc_only_reduced\\syn5.out.log",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-006",
+      "retain_until": "task-close",
+      "reproduce": "Log truncated at elaboration"
+    }
+  ],
+  "known_limits": [
+    "Step 2 blocked; steps 3 and 4 not attempted.",
+    "No full B5 fit/STA/SOF evidence.",
+    "Current main RTL needed isolated Quartus 21.4 compatibility patches; these are not in the formal repo RTL and are not validated as functional substitutes.",
+    "Remote host has about 64GB physical memory; observed 45.8GB peak was enough to abort this run.",
+    "No license content read; no original QSF/SDC/RTL modified; no full flow started."
+  ],
+  "status": "blocked",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.documents_written_at",
+        "old": "2026-08-30T02:30:00+08:00",
+        "new": "2026-08-30T02:20:47+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-006-fpga-f.md",
+        "sha256": "2c55a56f66b198829a538e47dedec1d521f64ad02bb9418823a01424166e6650",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

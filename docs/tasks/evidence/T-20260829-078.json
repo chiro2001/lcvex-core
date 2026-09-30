@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-078",
+  "state": "done",
+  "base_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+  "head_sha": "fe36fe4ad4e798aa5f4678ce944fff3925de058d",
+  "branch": "feature/T-20260829-078-b1-scalar-closure",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-078",
+  "sent_at": "2026-08-29T02:26:00+0800",
+  "received_at": "2026-08-29T02:38:05+0800",
+  "reported_at": "2026-08-29T02:38:05+0800",
+  "artifacts": [
+    {
+      "id": "artifact-b1-decode-change",
+      "owner": "T-20260829-078",
+      "uri": "rtl/lcvex_decode.sv",
+      "reproduce": "git diff rtl/lcvex_decode.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "1ad712392e02c253e3b85dfcc8ed50913980564cf6ed1c1a0252dd669e6b4ee0"
+    },
+    {
+      "id": "artifact-b1-alu-tests",
+      "owner": "T-20260829-078",
+      "uri": "sim/cocotb/test_alu.py",
+      "reproduce": "make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_alu COCOTB_TEST_MODULES=test_alu SIM_BUILD=sim_build_alu_b1",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "1efe81e626ec90e8d8d6eb727c737ba3bcc5875de670da616aebfaad11954fac"
+    },
+    {
+      "id": "artifact-b1-core-directed-test",
+      "owner": "T-20260829-078",
+      "uri": "sim/cocotb/test_b1_logic_ror.py",
+      "reproduce": "make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_b1_logic_ror SIM_BUILD=sim_build_b1_core",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "a752f37353d4442897b9a931a7577f08aff14ca2ec2f8a210879a0edcfbeb929"
+    },
+    {
+      "id": "artifact-b1-decode-tb",
+      "owner": "T-20260829-078",
+      "uri": "tb/sv/lcvex_b1_decode_tb.sv",
+      "reproduce": "conda run -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b1_decode_tb rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b1_decode_tb.sv && conda run -n lcvex ./obj_dir/Vlcvex_b1_decode_tb",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "375ef87f3dc99242da45236b68d844f0a3483d906868a609d0cec4b3b006806b"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-b1-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_alu COCOTB_TEST_MODULES=test_alu SIM_BUILD=sim_build_alu_b1",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "TESTS=15 PASS=15 FAIL=0; includes new ALU ROR X/W and logical-ROR inv_b tests",
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b1-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b1_decode_tb rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b1_decode_tb.sv && conda run --no-capture-output -n lcvex ./obj_dir/Vlcvex_b1_decode_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "PASS: logical ROR accepted, ADD/SUB ROR UDEF, XZR/SP decode semantics",
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b1-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 -m py_compile sim/cocotb/test_b1_logic_ror.py sim/cocotb/test_alu.py",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "new core-directed cocotb and ALU test files are syntactically valid",
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "tools": {
+    "python": "3.12.10 / lcvex conda",
+    "verilator": "5.050",
+    "cocotb": "2.0.1"
+  },
+  "known_limits": [
+    "sim/cocotb/test_b1_logic_ror.py was authored but not executed in this environment because complete lcvex_soc_tb Verilator compilation was resource/scheduling limited; decoder/ALU L1 equivalents all pass.",
+    "docs/V82_PROFILE_MANIFEST.md not modified: outside this task's permitted write set; BASE-DP-018 status update deferred to integrator.",
+    "Only L1 tests were run; no QEMU lockstep/Gate D subset was executed in this B1 worktree."
+  ],
+  "next": "Integrator review; optionally rerun test_b1_logic_ror with full SoC build; update profile manifest status.",
+  "merge_sha": "98c7133d231a10753e70d39b88ea6d8f27a8d32f",
+  "handoff_sha": "c5c0893100a844fb8e53cad8e66bd5fa5ba1baeb",
+  "integrator_review": {
+    "received_at": "2026-08-29T02:39:50+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "c5c0893100a844fb8e53cad8e66bd5fa5ba1baeb",
+    "implementation_sha": "fe36fe4ad4e798aa5f4678ce944fff3925de058d",
+    "notes": "B1 实现 logical shifted-register ROR；ALU cocotb 15/15、decoder SV TB 通过；完整 SoC 核心定向 cocotb 未执行，列为资源后补。BASE-DP-018 已在 profile 中更新为 implemented。",
+    "merge_sha": "98c7133d231a10753e70d39b88ea6d8f27a8d32f",
+    "result_sha": "fe36fe4ad4e798aa5f4678ce944fff3925de058d"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "98c7133d231a10753e70d39b88ea6d8f27a8d32f",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "c5c0893100a844fb8e53cad8e66bd5fa5ba1baeb",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "fe36fe4ad4e798aa5f4678ce944fff3925de058d",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-b1-decode-change",
+        "uri": "rtl/lcvex_decode.sv",
+        "sha256": "1ad712392e02c253e3b85dfcc8ed50913980564cf6ed1c1a0252dd669e6b4ee0",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b1-alu-tests",
+        "uri": "sim/cocotb/test_alu.py",
+        "sha256": "1efe81e626ec90e8d8d6eb727c737ba3bcc5875de670da616aebfaad11954fac",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b1-core-directed-test",
+        "uri": "sim/cocotb/test_b1_logic_ror.py",
+        "sha256": "a752f37353d4442897b9a931a7577f08aff14ca2ec2f8a210879a0edcfbeb929",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-b1-decode-tb",
+        "uri": "tb/sv/lcvex_b1_decode_tb.sv",
+        "sha256": "375ef87f3dc99242da45236b68d844f0a3483d906868a609d0cec4b3b006806b",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

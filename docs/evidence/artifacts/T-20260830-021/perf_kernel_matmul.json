@@ -1,0 +1,31 @@
+{
+  "name": "kernel_matmul",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "28792914fff28e82fa546ae1125543a8cfad5e533bc7b483a60016f65b3d0729",
+  "source_sha256": "28792914fff28e82fa546ae1125543a8cfad5e533bc7b483a60016f65b3d0729",
+  "image_hash": "591f07d83da50b47ba57760f75e2fffe40c0dfd0c3821973c300b7c7ae03a8c4",
+  "image_sha256": "591f07d83da50b47ba57760f75e2fffe40c0dfd0c3821973c300b7c7ae03a8c4",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 497454,
+  "wall_sec": 4.206618,
+  "rss_kb": 139268,
+  "rss": 136.004,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_kernel_matmul.bin",
+    "--name",
+    "kernel_matmul",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: kernel_matmul (497454 cycles)\n",
+  "runner_stderr": ""
+}

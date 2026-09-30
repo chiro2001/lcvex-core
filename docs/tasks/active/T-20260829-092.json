@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-092",
+  "label": "C2-remainder",
+  "parent": "T-20260828-073",
+  "title": "C2 双核 MSI 剩余：原子/屏障/维护/reset-fault 定向闭合",
+  "kind": "multicore-c2-remainder",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "20ed5826972ab7bf3976a0a15898f7c8bf9a4181",
+  "branch": "feature/T-20260829-092-c2-remainder",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-092",
+  "scope": "在 feature/p7-final @ 20ed582 上完成 C2 双核共享 L2 目录式 MSI 尚未关闭的定向实现：CAS/LDXR-STXR 原子族、ISB/DSB/DMB barrier、DC CIVAC/IC IVAU+ISB 维护、双核 reset/fault 定向。保持 CORE_COUNT=1 单核回归不回归；不引入 ACE/CHI、不引入 SVE；使用默认 Verilator 优化。",
+  "writes": [
+    "rtl/**",
+    "tb/sv/lcvex_c2_dualcore_tb.sv",
+    "tb/sv/lcvex_l1_msi_tb.sv",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-092-c2-remainder.md",
+    "docs/tasks/evidence/T-20260829-092.json"
+  ],
+  "reads": [
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/L2_WRITEBACK.md",
+    "docs/handoffs/T-20260829-086-c2-dualcore-msi.md",
+    "rtl/**",
+    "tb/**"
+  ],
+  "validation": {
+    "l0": [
+      "make compile 默认优化通过",
+      "LCVEX_C2_DUALCORE_TB PASS",
+      "LCVEX_C2_L1_MSI_TB PASS"
+    ],
+    "l1": [
+      "CORE_COUNT=1 单核回归通过",
+      "CAS/LDXR-STXR/barrier/DC/IC/reset-fault 定向 TB 全绿"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "C2 原子/屏障/维护/reset-fault 定向全部实现并通过，双核 message passing/L1+MSI TB 仍全绿；C2 可关闭并进入 C3 四核实现。",
+  "next": "C2 关闭后派发 C3 四核实现；随后进行最终 Gate D / F-ISA / F-MEM 复跑。",
+  "resource": {
+    "cpu": 3,
+    "memory_mb": 12288,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T11:00:00+0800",
+  "updated_at": "2026-08-29T11:00:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T11:00:00+0800",
+    "agent_name": "c2_remainder",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-092"
+  },
+  "known_limits": [
+    "不启动 Quartus，不触碰 T-067 远端工程。",
+    "不引入 ACE/CHI/SVE；CORE_COUNT=1 为回归锚点。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-092-c2-remainder.md",
+  "evidence": "docs/tasks/evidence/T-20260829-092.json",
+  "merge_sha": "c18ba3c5983976e94bed5dc56129c83332e9254d",
+  "merged_at": "2026-08-29T16:45:26+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T16:45:26+08:00",
+    "status": "accepted",
+    "head_sha": "71c743f74a7edd314e67ab45871057e5d0baaaa0",
+    "notes": "Merged T-092 directed closure. Verified on branch: atomic_fail/atomic_ok/maint_barrier/reset_fault + DUALCORE_TB + L1_MSI_TB all PASS. make compile on main RC=0. Remaining known limits recorded: CORE_COUNT=1 full regression, running-reset-restart assert, full-core fault injection (core_fault=0)."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T17:45:00+0800",
+        "new": "2026-08-29T16:45:26+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T17:45:00+0800",
+        "new": "2026-08-29T16:45:26+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "accaa23adbb3e503bc42ac4cfd4dba6974915ba4"
+}

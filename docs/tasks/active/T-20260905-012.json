@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-012",
+  "label": "DYNAMIC-PC-TOKEN-SVA",
+  "title": "Repair elastic EX/MEM capture and dynamic-token invariants",
+  "kind": "correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-accepted",
+  "assigned_owner": "codex-integrator",
+  "agent_type": "correctness-implementation",
+  "depends_on": [
+    "T-20260905-009"
+  ],
+  "dependency_override": "Created from the failed T-009 candidate to resolve its P7-3 backpressure integration blocker before T-009 can complete.",
+  "base_sha": "80b7664",
+  "failing_candidate_sha": "32622b4d153bad7ca55b1a02c91b213fe6729bf5",
+  "branch": "fix/T-20260905-012-dynamic-pc-token-sva",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-012",
+  "scope": "Repair the WB-backpressured empty-EX/MEM handshake exposed by the T-009 self-loop test. Branch flush and FP response capture must use an EX/MEM acceptance condition, not the stricter EX/MEM-to-WB advance condition; an FP response may never be captured while rsp_ready is low. Also correct the adjacent-pipeline invariant: architectural PC is not a dynamic instruction identity because a self-loop can legally place distinct instances of the same PC in adjacent stages. Retain FIFO token epoch+seq uniqueness checks and add a directed repeated-PC regression.",
+  "failure": {
+    "test": "sim-cocotb-p7-3-neon-fp::test_p7_3_backpressure_and_fpcr_raw",
+    "assertion": "rtl/lcvex_core.sv:4742",
+    "time_ns": 14100,
+    "observation": "With commit_ready low, FP occupies MEM/WB and B . occupies EX/MEM. On release the branch enters MEM/WB fetch-wait; a younger FP response was captured into empty EX/MEM while rsp_ready=0, leaving the same epoch+seq in ID/EX and EX/MEM. The branch had also advanced while flush_id was suppressed by the stricter stall_wb gate."
+  },
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "sim/cocotb/test_p7_3_neon_fp.py",
+    "docs/handoffs/T-20260905-012-dynamic-pc-token-sva.md",
+    "docs/tasks/evidence/T-20260905-012.json"
+  ],
+  "forbidden_regions": [
+    "fetch/MMU/maintenance functional control",
+    "FP datapath or request behavior",
+    "QEMU/QSF/SDC",
+    "assertion disable switches or expected-result weakening"
+  ],
+  "validation": [
+    "focused P7-3 NEON-FP Cocotb",
+    "core/FIFO/backpressure assertion suites",
+    "T-009 full L0-L2 restart on the repaired candidate"
+  ],
+  "acceptance": "Branch redirect and FP response capture fire exactly when an empty or advancing EX/MEM can accept; rsp_ready=0 cannot populate EX/MEM or duplicate a token. The self-loop backpressure test passes with repeated dynamic PCs, no assertion is globally disabled, and true same-token adjacency/duplicate commit remains asserted. T-011 must remain read-only until this core-file fix is integrated into its base.",
+  "created_at": "2026-09-05T09:25:14+08:00",
+  "updated_at": "2026-09-05T19:48:39+08:00",
+  "merge_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "integration_evidence": "docs/tasks/evidence/T-20260905-013.json",
+  "review": {
+    "status": "accepted",
+    "summary": "Repeated-PC token invariants, EX/MEM acceptance, and FP response/data-MMU overlap passed the exact T-013 L0-L2 union."
+  },
+  "board_policy": "No assembler, bitstream generation, JTAG, programming, power-on, or board test without explicit user permission.",
+  "head_sha": "7ce5a64d6a7c0ad2af15f1a8d3b9b466e3afd441",
+  "handoff": "docs/handoffs/T-20260905-012-dynamic-pc-token-sva.md",
+  "evidence": "docs/tasks/evidence/T-20260905-012.json"
+}

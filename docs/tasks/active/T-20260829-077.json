@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-077",
+  "label": "D0",
+  "parent": "T-20260828-073",
+  "title": "多核差分协议 LCVX-DIFF-MC-v2 可行性",
+  "kind": "difftest-protocol-feasibility",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "branch": "feature/T-20260829-077-d0-mc-diff-feasibility",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-077",
+  "scope": "扩展协议 envelope 为 LCVX-DIFF-MC-v2（version/core_id/global_seq/vcpu_seq/event_kind/commit），保留 v1 单核解析；探测 QEMU 多 vCPU/插件回调能力，确定逐核 PRE/GO/COMMIT/ACK/ASYNC/STOP 序列可达性；若不能逐核退休则给出 reference-model/litmus fallback。",
+  "writes": [
+    "docs/LCVX_DIFF_MC_V2.md",
+    "docs/handoffs/T-20260829-077-d0-mc-diff-feasibility.md",
+    "docs/tasks/evidence/T-20260829-077.json"
+  ],
+  "acceptance": "两核最小序列可重放或明确 fallback；不修改 QEMU 共享热点；v1 单核 ABI 保持兼容。",
+  "next": "D0 通过后作为 C1/C2 多核差分实现依据。",
+  "updated_at": "2026-08-29T02:08:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T01:47:44+0800",
+    "agent_name": "d0_mc_diff_feasibility",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-077",
+    "branch": "feature/T-20260829-077-d0-mc-diff-feasibility"
+  },
+  "integrator_review": {
+    "received_at": "2026-08-29T01:57:30+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "b8c99f69914fa304b3d48cd79ed2a047cd2d6cf8",
+    "implementation_sha": "5ed0c555a870d0e3f0180126c925319738481b1b",
+    "notes": "D0 可行性结论清晰：v1 兼容、可区分核、无官方 after-retirement、推荐 reference-model/litmus fallback。C1 可按 fallback 推进；后续如需 strict lockstep 另立串行 QEMU fork 任务。"
+  },
+  "merge_sha": "9e528232f0d760e15f78731842fd266b848f637f",
+  "merged_at": "2026-08-29T02:08:00+0800",
+  "head_sha": "5ed0c555a870d0e3f0180126c925319738481b1b",
+  "correction_record": {
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "5ed0c555a870d0e3f0180126c925319738481b1b",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+nohup: 忽略输入
+cluster1-nofp rc=0 wall=1.262s 09:05:21
+cluster2-nofp rc=0 wall=1.975s 09:05:23
+cluster2-coh-nofp rc=0 wall=2.715s 09:05:26

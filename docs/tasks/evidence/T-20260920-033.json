@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-033",
+  "label": "B25-COMPOSITE-IDENTITY-BOARD-CLOSEOUT",
+  "state": "blocked",
+  "acceptance_status": "blocked-gamepc-parser-before-preflight",
+  "partial": false,
+  "base_sha": "4d7f6ea23cc868ffc8cdbbc81aab24db26e57ce7",
+  "head_sha": null,
+  "head_sha_note": "Self-referential evidence; final commit SHA is reported in the handoff and agent response.",
+  "evidence_parent_sha": "67ddc2017fd78905f3c81037cf4227cc8ebc31f4",
+  "branch": "verify/T-20260920-033-b25-composite-identity-board-closeout",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-033",
+  "owner": "board_t033",
+  "sent_at": "2026-09-20T18:30:22+08:00",
+  "received_at": "2026-09-20T18:30:22+08:00",
+  "reported_at": "2026-09-20T18:47:35+08:00",
+  "artifact_sealed_at": "2026-09-20T18:45:07.131529+08:00",
+  "scope": {
+    "hardware_access": false,
+    "candidate_programmer_invocations": 0,
+    "golden_programmer_invocations": 0,
+    "terminal_sessions": 0,
+    "candidate_marker": "not-created",
+    "golden_marker": "not-created",
+    "preflight_reached": false,
+    "remote_root_prepare_reached": false,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "standard_server_stopped": false,
+    "unknown_process_stopped": false
+  },
+  "resource_lock": {
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-033 board_t033 -- bash build/agents/T-20260920-033/tools/run_once.sh",
+    "exit_code": 2,
+    "ownership_window_count": 1,
+    "released_after_exit": true
+  },
+  "script_seal": {
+    "manifest": "build/agents/T-20260920-033/script-manifest.json",
+    "manifest_sha256": "185be9bd1ed17ad08829ebc2a50c1c91bb9712977ad00b570b1ef3e794d9dcbd",
+    "files": [
+      {"name": "preflight.ps1", "bytes": 4110, "sha256": "0edf67a9bfc53519a4a7117dfe33150ff5db0289393fdebc7fa9938a6f542fef", "remote": true},
+      {"name": "prepare_root.ps1", "bytes": 1045, "sha256": "bd34b45eb87b5853bdd779d5b8ca9dc0a2a4a3d0cae8208db8b174616bb16fa6", "remote": true},
+      {"name": "program_once.ps1", "bytes": 18408, "sha256": "67d13ce15c7b273fcedb461b9d38362eca6f6e70b00f572110d9946f2ec2f319", "remote": true},
+      {"name": "postflight.ps1", "bytes": 3716, "sha256": "067ea33aefd78e4bb5a68d7bf179da8127656d83bbeb82b1ebb2161d7f02980b", "remote": true},
+      {"name": "verify_seal.ps1", "bytes": 1568, "sha256": "db933ebada9ce6edad641a93d332233391d377fe0090e9584e0112590e891469", "remote": true},
+      {"name": "direct_terminal.py", "bytes": 15096, "sha256": "2af0d9bfcd3b8c3164385c283a44f2b4c8719a93b158ff8a6d573fecd07afe77", "remote": false},
+      {"name": "run_once.sh", "bytes": 9618, "sha256": "9f6324d854e3e2c4256a555e090613ccfa2e0a0e7c5f8730a3f4a871e3f3878b", "remote": false},
+      {"name": "seal_manifest.py", "bytes": 1577, "sha256": "097064dd9d31777980a5792ef19b75400168123ce50fd8558ce3bce8d842c6e5", "remote": false}
+    ]
+  },
+  "syntax_validation": {
+    "bash_n": {"status": 0, "artifact": "build/agents/T-20260920-033/preflight/bash-n.log", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "python_py_compile": {"status": 0, "artifact": "build/agents/T-20260920-033/preflight/python-compile.log", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "jq_manifest": {"status": 0, "predicate": "task_id=T-20260920-033, files=8, remote_files=5"},
+    "git_diff_check": {"status": 0}
+  },
+  "gamepc_parser": {
+    "attempted_before_hardware": true,
+    "invocation_count": 5,
+    "invocation_count_note": "Exactly one parser invocation for each of five distinct .ps1 files; this was not an internal retry of any script.",
+    "scripts": [
+      {"name": "preflight.ps1", "status": 255, "artifact": "build/agents/T-20260920-033/preflight/parser-preflight.ps1.log", "sha256": "111619dee2e56a55cc58e1c834f693eff240ea15eadae1937ee6c5137dcde07c"},
+      {"name": "prepare_root.ps1", "status": 255, "artifact": "build/agents/T-20260920-033/preflight/parser-prepare_root.ps1.log", "sha256": "111619dee2e56a55cc58e1c834f693eff240ea15eadae1937ee6c5137dcde07c"},
+      {"name": "program_once.ps1", "status": 255, "artifact": "build/agents/T-20260920-033/preflight/parser-program_once.ps1.log", "sha256": "111619dee2e56a55cc58e1c834f693eff240ea15eadae1937ee6c5137dcde07c"},
+      {"name": "postflight.ps1", "status": 255, "artifact": "build/agents/T-20260920-033/preflight/parser-postflight.ps1.log", "sha256": "111619dee2e56a55cc58e1c834f693eff240ea15eadae1937ee6c5137dcde07c"},
+      {"name": "verify_seal.ps1", "status": 255, "artifact": "build/agents/T-20260920-033/preflight/parser-verify_seal.ps1.log", "sha256": "111619dee2e56a55cc58e1c834f693eff240ea15eadae1937ee6c5137dcde07c"}
+    ],
+    "failure": "The remote Windows command layer split the unescaped PowerShell pipeline in the -Command parser wrapper; pwsh reported 'Out-Null' is not recognized as an internal or external command.",
+    "hardware_phase_entered": false,
+    "hardware_programmer_terminal_invocations": 0
+  },
+  "artifacts": {
+    "summary": {"path": "build/agents/T-20260920-033/final/summary.txt", "bytes": 831, "sha256": "edd9430c47dbc0bbe470e64d92c78326978cfd2afa82314e51e5952f4610dcdc"},
+    "local_seal_log": {"path": "build/agents/T-20260920-033/preflight/local-seal.log", "bytes": 2496, "sha256": "185be9bd1ed17ad08829ebc2a50c1c91bb9712977ad00b570b1ef3e794d9dcbd"},
+    "remote_programmer_logs": [],
+    "terminal_transcript": null,
+    "postflight_log": null
+  },
+  "blocker": {
+    "class": "setup-parser-failure",
+    "no_retry_per_contract": true,
+    "message": "T-033 stopped before preflight because GamePC parser validation failed; no script replacement, remote-root prepare, JTAG config, terminal, candidate quartus_pgm or golden quartus_pgm was attempted."
+  },
+  "integration_review": {
+    "reviewed_at": "2026-09-20T18:50:17+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "evidence_merge_sha": "b17a8e3d76283a3de28ce8ac7f6ebef3c1743cd8",
+    "evidence_merge_tree": "f881ee2293a74c9d3fffe5c71651922ab20a76bd",
+    "topic_evidence_head": "f916aee6087cffc353e23069b80a212772159a0a",
+    "artifact_hash_recheck": "PASS; all accessible path/SHA256 pairs match",
+    "hardware_count_recheck": "candidate=0 golden=0 terminal=0",
+    "result": "BLOCKED_BEFORE_HARDWARE",
+    "successor_scope": "validate a file-based PowerShell AST parser transport with no JTAG/hardware before any new board attempt"
+  },
+  "next": "Do not resume this task. If hardware validation is still required, open a new task with a newly sealed parser transport and an explicitly approved single hardware window."
+}

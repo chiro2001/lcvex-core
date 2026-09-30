@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-083",
+  "state": "done",
+  "base_sha": "54d1ccf0c2c67e504d5b8528eac37a249bc45221",
+  "head_sha": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812",
+  "branch": "feature/T-20260829-083-a3-correlation-report",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-083",
+  "metadata": {
+    "sent_at": "2026-08-29T03:04:00+0800",
+    "received_at": "2026-08-29T03:04:00+0800",
+    "reported_at": "2026-08-29T03:04:00+0800",
+    "timezone": "Asia/Shanghai",
+    "state": "review",
+    "files": "docs/handoffs/T-20260829-083-a3-correlation-report.md,docs/tasks/evidence/T-20260829-083.json,fpga/opensynth/a3_correlation_report.md,fpga/opensynth/a3_correlation_data.json",
+    "tests": "python3 -m json.tool fpga/opensynth/a3_correlation_data.json; git diff --check",
+    "blockers": "无新增阻断；不替代Quartus；不解除T-067",
+    "next": "集成者复核；A线如继续可进入A4趋势回归（可选）；Gate F-BOARD仍由T-067/Quartus负责"
+  },
+  "task": {
+    "id": "T-20260829-083",
+    "label": "A3",
+    "title": "A3 开源代理与 A10 基线相关性报告",
+    "kind": "opensynth-correlation-report",
+    "parent": "T-20260828-071"
+  },
+  "method": "只读分析既有 A1/A2 开源代理 artifact，并引用 T-064 A10 真实 full-flow/STA 作为方向参考。不运行 Quartus/Yosys/nextpnr；不做线性换算；不新增 A10 Fmax 声明。",
+  "artifacts": [
+    {
+      "id": "a3-correlation-report",
+      "uri": "fpga/opensynth/a3_correlation_report.md",
+      "sha256": "2b724e59c5bed9d47caac973e76490381b433c3a63537c155fd61f03831b4170",
+      "bytes": 7240,
+      "retain_until": "task-review",
+      "reproduce": "cat fpga/opensynth/a3_correlation_report.md"
+    },
+    {
+      "id": "a3-correlation-data",
+      "uri": "fpga/opensynth/a3_correlation_data.json",
+      "sha256": "6c5b052ea941641bc65bd1f1e723f572e244ce3063f0416b8b68dced213bd152",
+      "bytes": 11405,
+      "retain_until": "task-review",
+      "reproduce": "python3 -m json.tool fpga/opensynth/a3_correlation_data.json"
+    },
+    {
+      "id": "a3-handoff",
+      "uri": "docs/handoffs/T-20260829-083-a3-correlation-report.md",
+      "sha256": "0679b01a744eae7c548e8226a0d688c45c2d7dfcf302b63192efac0bbae3368f",
+      "bytes": 3196,
+      "retain_until": "task-review",
+      "reproduce": "cat docs/handoffs/T-20260829-083-a3-correlation-report.md"
+    }
+  ],
+  "toolchain": {
+    "a1_yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1)",
+    "a1_abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+    "a2_yosys_oss": "Yosys 0.68+136 (git sha1 c30457480-dirty, Clang 21.1.8)",
+    "a2_verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "a2_nextpnr_ecp5": "nextpnr-0.11.1-18-gdec04b3b",
+    "a10_quartus": "Quartus Prime Shell/Pro 21.4.0 Build 67 12/06/2021",
+    "python": "Python 3.12.10"
+  },
+  "input_sha256": {
+    "fpga/opensynth/capability.json": "3ff9ce1512f979233307e0b89f4fdc6f6ca42553a72c4e2a680eb5519b0e7195",
+    "fpga/opensynth/a1_generic_synth_stats.json": "a5c27ff87bc78a55a940326abf91155762538d645e4529b7e155cb25ad4da300",
+    "fpga/opensynth/a2_soc_stub_stats.json": "d8c66aac65b0fbdeba99e4c22a3922b59a5b0aaa042a920ca0a670e4c059db6f",
+    "fpga/opensynth/a2_soc_stub_manifest.md": "d9cb3daa6ba9fb830ffe3e2b0411f3ee2ed4d02647be2f821b64a850735e1072",
+    "docs/tasks/archive/T-20260828-064.json": "a91823adda033edeb3d36a58c0042ba2f92f67d2d410dd66cad03cb868ff9069",
+    "docs/tasks/evidence/T-20260828-064.json": "29c18485dc2d94941c8a778601abc3380f7f23b346a2bb5aa6a7a7c29259a4e6",
+    "docs/handoffs/T-20260828-064-catapult-fullflow.md": "eb262d71c97f4d671f6df12fa8332d91da050c1454778b68ed54a9968177fc27"
+  },
+  "proxy_summary": {
+    "a1": {
+      "modules": {
+        "lcvex_axi4_master": {
+          "lut4": 1870,
+          "dff": 2406,
+          "ram_bits": 0,
+          "dsp": "N/A"
+        },
+        "lcvex_mem_delay": {
+          "lut4": 63,
+          "dff": 241,
+          "ram_bits": 0,
+          "dsp": "N/A"
+        },
+        "lcvex_mem_arb": {
+          "lut4": 20,
+          "dff": 3,
+          "ram_bits": 0,
+          "dsp": "N/A"
+        }
+      },
+      "ranking": {
+        "by_lut4": [
+          "lcvex_axi4_master",
+          "lcvex_mem_delay",
+          "lcvex_mem_arb"
+        ],
+        "by_dff": [
+          "lcvex_axi4_master",
+          "lcvex_mem_delay",
+          "lcvex_mem_arb"
+        ]
+      },
+      "proxy_lut_share": {
+        "lcvex_axi4_master": 0.9575,
+        "lcvex_mem_delay": 0.0323,
+        "lcvex_mem_arb": 0.0102
+      },
+      "proxy_dff_share": {
+        "lcvex_axi4_master": 0.9079,
+        "lcvex_mem_delay": 0.0909,
+        "lcvex_mem_arb": 0.0011
+      }
+    },
+    "a2": {
+      "module": "lcvex_catapult_soc_stub_top",
+      "num_cells": 0,
+      "num_ports": 109,
+      "num_port_bits": 2627,
+      "netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+      "verilator_real_soc_elaboration": "PASS",
+      "nextpnr_ecp5": "FAIL(IO), Fmax N/A"
+    },
+    "a10_t064_reference": {
+      "device": "10AX115N4F40E3SG",
+      "fit": {
+        "alms": 4468,
+        "registers": 8641,
+        "pins": 141,
+        "ram_blocks": 27,
+        "dsp_blocks": 0,
+        "plls": 3
+      },
+      "sta": {
+        "worst_setup_slack_ns": 0.22,
+        "worst_hold_slack_ns": 0.017,
+        "worst_recovery_slack_ns": 0.53,
+        "worst_removal_slack_ns": 0.112,
+        "worst_min_pulse_slack_ns": 0.12,
+        "fmax_mhz": {
+          "sys_clk_50": 213.49,
+          "clk_y3": 499.25,
+          "emif_core_user_clk": 283.29,
+          "emif_core_cal_master_clk": 266.88
+        }
+      }
+    }
+  },
+  "correlation_conclusions": [
+    "A1 代理内部排序稳定：AXI4 master > mem_delay > mem_arb（LUT/FF 均一致）。",
+    "A1 代理呈寄存器偏重、DSP/RAM 未映射；A10 fit 为 registers > ALMs、0 DSP；仅定性趋势，不换算。",
+    "A2 是 0-cell boundary stub，不与 A10 资源比较；2627 port bits vs 141 pins 不能用于引脚/面积预测。",
+    "A3 未运行 Quartus/Yosys/nextpnr；T-064 STA/Fmax 只作外部参考，A3 不声称 A10 Fmax。"
+  ],
+  "known_limits": [
+    "A1 未包含 lcvex_core/lcvex_l2，不是完整 SoC 开源代理。",
+    "Generic 4-LUT/FF 不是 A10/ECP5 厂商资源；ALM 与 LUT 不可直接换算。",
+    "A2 stub 0-cell，不代表真实面积；ECP5 nextpnr 因 IO 超限失败。",
+    "T-064 无模块级 A10 fit 分解，无法验证 A10 模块排序。",
+    "本报告非 A10 signoff、不替代 Quartus、不解除 T-067。"
+  ],
+  "runs": [
+    {
+      "run_id": "owner-a3-json-validate-001",
+      "command": "python3 -m json.tool fpga/opensynth/a3_correlation_data.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-a3-diff-check-002",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "qemu": {
+    "binary_sha256": "",
+    "commit": "N/A",
+    "patches_sha256": "",
+    "release": "N/A"
+  },
+  "merge_sha": "dcf053f7bfd93def56d26c85fbf61774209bc5f4",
+  "handoff_sha": "f6c00127c7b6995f2a2523d6b154259d0398127a",
+  "integrator_review": {
+    "received_at": "2026-08-29T03:05:00+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "f6c00127c7b6995f2a2523d6b154259d0398127a",
+    "implementation_sha": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812",
+    "notes": "A3 只做方向性比较；A1/A2 非 A10 资源；报告明确不替代 Quartus/T-067。",
+    "merge_sha": "dcf053f7bfd93def56d26c85fbf61774209bc5f4",
+    "result_sha": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "dcf053f7bfd93def56d26c85fbf61774209bc5f4",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "f6c00127c7b6995f2a2523d6b154259d0398127a",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "2ddd7236bb801bd6d587685757f3f7d8d2b2d812",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-115",
+  "label": "AUD-10",
+  "parent": "",
+  "title": "补 test registry 入口与反向检查",
+  "kind": "external-audit-action",
+  "priority": "low",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "5be2a1df42c76baaca3ff70391c2dbceea6c82ef",
+  "branch": "feature/T-20260829-115-aud-10",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-115",
+  "scope": "补 P7/FP/NEON/多核/FPGA/CDC 条目；check 与 Makefile/runner 一致性；明确部分清单。",
+  "writes": [
+    "docs/handoffs/T-20260829-115-aud-10.md",
+    "docs/tasks/evidence/T-20260829-115.json"
+  ],
+  "reads": [
+    "docs/audit/external-results/findings.md",
+    "docs/audit/external-results/action-items.md"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "necessary evidence/handoff recorded"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 2048,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.3
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T23:30:00+0800",
+  "updated_at": "2026-08-29T23:30:00+0800",
+  "known_limits": [
+    "所有重型 Verilator 必须 cgroup <16GiB。",
+    "不引入 SVE/POST-V82。",
+    "外部审计结果不作为唯一完成证据。"
+  ],
+  "handoff": "docs/handoffs/aud-10.md",
+  "evidence": "docs/tasks/evidence/T-20260829-115.json",
+  "merge_sha": "8f42401f41107e91bd55daa54ca41928ed65f2bc",
+  "merged_at": "2026-08-30T00:17:53+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T00:17:53+08:00",
+    "status": "accepted",
+    "head_sha": "539ef8dccc8a9e06b04ecfd65d20dc309e56ad00",
+    "notes": "AUD-10 merged. Registry 22->63 entries, added fpga-platform/multicore-cluster domains, test-registry-check now schema+consistency, make test-registry-check PASS."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T00:40:00+0800",
+        "new": "2026-08-30T00:17:53+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T00:40:00+0800",
+        "new": "2026-08-30T00:17:53+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "fbd24b09638d9ae1aba770277331ac2fb1c5052b",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "fbd24b09638d9ae1aba770277331ac2fb1c5052b"
+}

@@ -1,0 +1,474 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260831-002",
+  "label": "FPGA-G6-PROV",
+  "state": "review",
+  "partial": false,
+  "owner": "luna-a10-provenance",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "base_sha": "4764d834c33055814846db46dc29c6fc74290358",
+  "head_sha": "a2c811c50af953a3aee7faf1f685f88d4d9d0d7e",
+  "content_sha": "d929dd88ccc06fdc9edfc2824cbb89744edd2329fcee736b8f539f60f53cddc9",
+  "merge_sha": "",
+  "dispatch_sent_at": "2026-08-31T01:23:22+08:00",
+  "sent_at": "2026-08-31T01:23:22+08:00",
+  "received_at": "2026-08-31T02:02:03+08:00",
+  "reported_at": "2026-08-31T02:14:10+08:00",
+  "followup_sent_at": "2026-08-31T02:07:20+08:00",
+  "followup_received_at": "2026-08-31T02:08:43+08:00",
+  "followup_reported_at": "2026-08-31T02:14:10+08:00",
+  "branch": "infra/T-20260831-002-a10-provenance-relock",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-002",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-08-31T01:23:22+08:00",
+    "sent_at": "2026-08-31T01:23:22+08:00",
+    "received_at": "2026-08-31T02:02:03+08:00",
+    "reported_at": "2026-08-31T02:14:10+08:00",
+    "test_event_timing": "unknown for initial implementation runs; no commit time substituted"
+  },
+  "files": [
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/source.lock",
+    "fpga/catapult_a10/SHA256SUMS",
+    "fpga/catapult_a10/skeleton_manifest.json",
+    "fpga/catapult_a10/tools/check_platform.py",
+    "fpga/catapult_a10/README.md",
+    "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+    "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+    "docs/tasks/evidence/T-20260831-002.json"
+  ],
+  "tests": "metadata/static-only + check_skeleton contract",
+  "scope": "重锁 Catapult A10 source/target provenance，并加固 check_platform.py；禁止修改平台 payload、远端工程和 Quartus/Qsys/仿真状态。",
+  "reference": {
+    "repo": "/home/chiro/projects/a10-linux-riscv",
+    "commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "status": "clean; HEAD matches locked commit",
+    "read_only_operations": [
+      "git status --porcelain=v1 --untracked-files=all",
+      "git rev-parse --verify HEAD^{commit}",
+      "git rev-parse --verify <locked-commit>^{commit}",
+      "git cat-file blob <locked-commit>:<source_path>"
+    ],
+    "license_read": false,
+    "checkout_or_write": false
+  },
+  "provenance_relock": {
+    "manifest_files": 50,
+    "source_lock_rows": 50,
+    "raw_blob_sha256_bytes_match": "50/50",
+    "preflight_match": "27/50",
+    "preflight_mismatch": "23/50",
+    "updated_source_paths": [
+      "hw/ip/sfl/ip/sfl_sys/clk.ip",
+      "hw/ip/sfl/ip/sfl_sys/clk/clk.cmp",
+      "hw/ip/sfl/ip/sfl_sys/clk/clk_bb.v",
+      "hw/ip/sfl/ip/sfl_sys/clk/clk_inst.v",
+      "hw/ip/sfl/ip/sfl_sys/clk/clk_inst.vhd",
+      "hw/ip/sfl/ip/sfl_sys/clk/synth/clk.v",
+      "hw/ip/sfl/ip/sfl_sys/epcq/altera_asmi_parallel_1910/synth/epcq_altera_asmi_parallel_1910_rmd4qmi.v",
+      "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_asmi_parallel_epcq_epcq.v",
+      "hw/ip/sfl/ip/sfl_sys/epcq/altera_epcq_controller_191/synth/altera_epcq_controller_epcq_epcq.v",
+      "hw/ip/sfl/ip/sfl_sys/epcq/epcq.cmp",
+      "hw/ip/sfl/ip/sfl_sys/epcq/epcq_bb.v",
+      "hw/ip/sfl/ip/sfl_sys/epcq/epcq_inst.v",
+      "hw/ip/sfl/ip/sfl_sys/epcq/epcq_inst.vhd",
+      "hw/ip/sfl/ip/sfl_sys/epcq/synth/epcq.v",
+      "hw/ip/sfl/ip/sfl_sys/rst.ip",
+      "hw/ip/sfl/ip/sfl_sys/rst/rst.cmp",
+      "hw/ip/sfl/ip/sfl_sys/rst/rst_bb.v",
+      "hw/ip/sfl/ip/sfl_sys/rst/rst_inst.v",
+      "hw/ip/sfl/ip/sfl_sys/rst/rst_inst.vhd",
+      "hw/ip/sfl/ip/sfl_sys/rst/synth/rst.v",
+      "hw/ip/sfl/sfl_sys.cmp",
+      "hw/ip/sfl/sfl_sys_inst.vhd",
+      "hw/ip/sfl/synth/sfl_sys.v"
+    ],
+    "path_role_target_preserved": true
+  },
+  "target_relock": {
+    "target_files": 50,
+    "sha256sums_entries": 50,
+    "sha256sums_check": "50/50",
+    "updated_target_paths": [
+      {
+        "path": "quartus/catapult_a10.qsf",
+        "sha256": "78032dc5634dc08bf15e916fb70e9f2f6ddefd6b2dd5d59600b3c4c3a236f19d",
+        "bytes": 13647
+      },
+      {
+        "path": "quartus/catapult_a10.sdc",
+        "sha256": "caf847755a8c42f2e88ea09e434888938ad4382193400593ddcc986f26154a8c",
+        "bytes": 5656
+      }
+    ],
+    "payload_content_modified": false
+  },
+  "skeleton_manifest_relock": {
+    "path": "fpga/catapult_a10/skeleton_manifest.json",
+    "top_payload_path": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+    "top_payload_sha256": "e72d81427c4426ceab8093e6c2666c1b2bc38e21b077ffa120150f8c10811678",
+    "top_payload_bytes": 10593,
+    "manifest_sha256": "f97a0f723c0d573cf1b8624322e958ee4853e1e39dee221c773dfd599deb7ec0",
+    "manifest_bytes": 4189,
+    "metadata_only": true,
+    "top_payload_modified": false
+  },
+  "immutable_path_check": {
+    "command": "git diff --quiet 4764d834c33055814846db46dc29c6fc74290358..HEAD -- fpga/catapult_a10/quartus fpga/catapult_a10/qsys fpga/catapult_a10/flash fpga/catapult_a10/jtag_uart rtl",
+    "exit_code": 0,
+    "result": "empty BASE..HEAD diff; all platform payload and RTL paths unchanged",
+    "scope": "first delivery BASE..HEAD; correction commit is metadata-only"
+  },
+  "first_delivery_write_set_check": {
+    "command": "git diff --name-only 4764d834c33055814846db46dc29c6fc74290358..a2c811c50af953a3aee7faf1f685f88d4d9d0d7e",
+    "exit_code": 0,
+    "result": [
+      "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+      "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+      "docs/tasks/evidence/T-20260831-002.json",
+      "fpga/catapult_a10/README.md",
+      "fpga/catapult_a10/SHA256SUMS",
+      "fpga/catapult_a10/platform_manifest.json",
+      "fpga/catapult_a10/source.lock",
+      "fpga/catapult_a10/tools/check_platform.py"
+    ],
+    "expected_file_count": 8
+  },
+  "final_write_set_check": {
+    "command": "git diff --name-only 4764d834c33055814846db46dc29c6fc74290358..HEAD",
+    "exit_code": 0,
+    "result": [
+      "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+      "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+      "docs/tasks/evidence/T-20260831-002.json",
+      "fpga/catapult_a10/README.md",
+      "fpga/catapult_a10/SHA256SUMS",
+      "fpga/catapult_a10/platform_manifest.json",
+      "fpga/catapult_a10/skeleton_manifest.json",
+      "fpga/catapult_a10/source.lock",
+      "fpga/catapult_a10/tools/check_platform.py"
+    ],
+    "expected_file_count": 9
+  },
+  "correction_write_set_check": {
+    "command": "git diff --name-only a2c811c50af953a3aee7faf1f685f88d4d9d0d7e..HEAD",
+    "exit_code": 0,
+    "result": [
+      "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+      "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+      "docs/tasks/evidence/T-20260831-002.json",
+      "fpga/catapult_a10/skeleton_manifest.json"
+    ],
+    "expected_file_count": 4
+  },
+  "checker": {
+    "offline_mode": "default and no reference-repository access",
+    "strict_mode": "explicit --strict-source with optional --source-repo and --source-commit",
+    "checks": [
+      "manifest/source.lock/SHA256SUMS/actual payload exact 50-file closure",
+      "source and target SHA-256/byte-count format and values",
+      "duplicate, missing, extra and unsafe absolute/Windows/traversal paths",
+      "strict source repository clean status, exact HEAD and commit resolvability",
+      "strict raw Git blob SHA-256 and byte count for every source.lock row"
+    ],
+    "success_prefix_preserved": "PLATFORM_CHECK_PASS files=50"
+  },
+  "check_skeleton": {
+    "command": "python3 fpga/catapult_a10/tools/check_skeleton.py",
+    "status": "pass_with_toolchain_missing",
+    "started_at": "unknown; command event timestamp not retained",
+    "finished_at": "unknown; command event timestamp not retained",
+    "reason": "skeleton_manifest metadata corrected for unchanged top; default checker writes the local report artifact but this run is explicitly required and the report remains uncommitted under build/agents/T-20260827-062/.",
+    "result": "TOOLCHAIN_MISSING quartus_sh,ip-generate,qsys-generate; SKELETON_CHECK_PASS files=6 toolchain_report=/home/chiro/projects/mycpu/lcvex-wt-T-20260831-002/build/agents/T-20260827-062/skeleton-toolchain-report.json",
+    "exit_code": 0,
+    "manifest_fail": false
+  },
+  "artifacts": [
+    {
+      "id": "platform-manifest",
+      "uri": "fpga/catapult_a10/platform_manifest.json",
+      "sha256": "8f27533fd27930b9023778c00e23642f0f9080075878b3af6b133db6a99b9a11",
+      "bytes": 22448,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum fpga/catapult_a10/platform_manifest.json"
+    },
+    {
+      "id": "source-lock",
+      "uri": "fpga/catapult_a10/source.lock",
+      "sha256": "2a2ca8107cb1713fbf558415911c4100a96244d9cfeb19091ecd0e8c6ea66629",
+      "bytes": 8803,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum fpga/catapult_a10/source.lock"
+    },
+    {
+      "id": "target-sums",
+      "uri": "fpga/catapult_a10/SHA256SUMS",
+      "sha256": "551549acf944400cb756006f591e944cbf76214c18e3bccf6b25c02c9278e21c",
+      "bytes": 5453,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum fpga/catapult_a10/SHA256SUMS"
+    },
+    {
+      "id": "skeleton-manifest",
+      "uri": "fpga/catapult_a10/skeleton_manifest.json",
+      "sha256": "f97a0f723c0d573cf1b8624322e958ee4853e1e39dee221c773dfd599deb7ec0",
+      "bytes": 4189,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum fpga/catapult_a10/skeleton_manifest.json"
+    },
+    {
+      "id": "strict-source-checker",
+      "uri": "fpga/catapult_a10/tools/check_platform.py",
+      "sha256": "949509a123479bbcd132a4c0130fb7ef01eb17eb5a20ee22ac0470feea646bd8",
+      "bytes": 23668,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum fpga/catapult_a10/tools/check_platform.py"
+    },
+    {
+      "id": "platform-readme",
+      "uri": "fpga/catapult_a10/README.md",
+      "sha256": "39e192193574eb287882c5c32764f8d75d509876555e5bc219f841c96be09742",
+      "bytes": 8671,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum fpga/catapult_a10/README.md"
+    },
+    {
+      "id": "provenance-relock-doc",
+      "uri": "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+      "sha256": "d929dd88ccc06fdc9edfc2824cbb89744edd2329fcee736b8f539f60f53cddc9",
+      "bytes": 8185,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum docs/FPGA_A10_PROVENANCE_RELOCK.md"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+      "sha256": "4b39895d9b070dae3fc136a73f5298cddd4d323edfc5ace0512c696e58fdfffd",
+      "bytes": 6233,
+      "owner": "T-20260831-002",
+      "reproduce": "sha256sum docs/handoffs/T-20260831-002-a10-provenance-relock.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260831-002.json",
+      "sha256": "self-referential; bind via final correction tip",
+      "bytes": null,
+      "owner": "T-20260831-002",
+      "reproduce": "jq -e . docs/tasks/evidence/T-20260831-002.json"
+    }
+  ],
+  "commands": [
+    {
+      "run_id": "ref-status-001",
+      "command": "git -C /home/chiro/projects/a10-linux-riscv status --porcelain=v1 --untracked-files=all; git -C /home/chiro/projects/a10-linux-riscv rev-parse --verify HEAD^{commit}",
+      "exit_code": 0,
+      "result": "clean; 3db828e74651fda377a33d84f2a2ca0e69901d72"
+    },
+    {
+      "run_id": "source-raw-002",
+      "command": "逐行以 git -C /home/chiro/projects/a10-linux-riscv cat-file blob 3db828e74651fda377a33d84f2a2ca0e69901d72:<source_path> 计算 SHA-256 与 wc -c，并与 50 行 source.lock/manifest 比较",
+      "exit_code": 0,
+      "result": "source_entries=50 source_lock_rows=50 strict_raw_match=50 errors=0"
+    },
+    {
+      "run_id": "json-003",
+      "command": "jq -e . fpga/catapult_a10/platform_manifest.json docs/tasks/evidence/T-20260831-002.json",
+      "exit_code": 0,
+      "result": "valid JSON"
+    },
+    {
+      "run_id": "compile-004",
+      "command": "python3 -m py_compile fpga/catapult_a10/tools/check_platform.py",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "offline-005",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+      "exit_code": 0,
+      "result": "PLATFORM_CHECK_PASS files=50 strict_source=OFF"
+    },
+    {
+      "run_id": "strict-006",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py --strict-source --source-repo /home/chiro/projects/a10-linux-riscv --source-commit 3db828e74651fda377a33d84f2a2ca0e69901d72",
+      "exit_code": 0,
+      "result": "PLATFORM_CHECK_PASS files=50 strict_source=PASS repo=/home/chiro/projects/a10-linux-riscv commit=3db828e74651fda377a33d84f2a2ca0e69901d72"
+    },
+    {
+      "run_id": "target-sums-007",
+      "command": "(cd fpga/catapult_a10 && sha256sum -c SHA256SUMS)",
+      "exit_code": 0,
+      "result": "50/50 OK"
+    },
+    {
+      "run_id": "diff-check-008",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "correction_validation": [
+    {
+      "run_id": "correction-json-001",
+      "command": "jq -e . docs/tasks/evidence/T-20260831-002.json fpga/catapult_a10/skeleton_manifest.json",
+      "exit_code": 0,
+      "result": "JSON validation recorded separately for the two JSON files; markdown inputs are checked by git diff --check"
+    },
+    {
+      "run_id": "correction-sha256-002",
+      "command": "sha256sum fpga/catapult_a10/platform_manifest.json fpga/catapult_a10/source.lock fpga/catapult_a10/SHA256SUMS fpga/catapult_a10/skeleton_manifest.json fpga/catapult_a10/tools/check_platform.py fpga/catapult_a10/README.md docs/FPGA_A10_PROVENANCE_RELOCK.md docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+      "exit_code": 0,
+      "result": "8/8 actual SHA-256 and byte counts recorded in artifacts"
+    },
+    {
+      "run_id": "correction-diff-003",
+      "command": "git diff --check a2c811c50af953a3aee7faf1f685f88d4d9d0d7e..HEAD",
+      "exit_code": 0,
+      "result": "pass after correction commit; no whitespace errors"
+    },
+    {
+      "run_id": "correction-clean-004",
+      "command": "git status --short --branch",
+      "exit_code": 0,
+      "result": "clean after correction commit; final correction tip is reported only in FINAL"
+    }
+  ],
+  "negative_tests": [
+    {
+      "fixture": "isolated copy IWZURa",
+      "mutation": "source.lock first source SHA-256 replaced by 64 zeroes",
+      "commands": [
+        "python3 <fixture>/catapult_a10/tools/check_platform.py",
+        "python3 <fixture>/catapult_a10/tools/check_platform.py --strict-source --source-repo /home/chiro/projects/a10-linux-riscv --source-commit 3db828e74651fda377a33d84f2a2ca0e69901d72"
+      ],
+      "exit_codes": [1, 1],
+      "result": "both reject: source.lock mismatch flash/sfl/ip/sfl_sys/clk.ip"
+    },
+    {
+      "fixture": "isolated copy LNuARt",
+      "mutation": "SHA256SUMS qpf hash replaced by 64 zeroes",
+      "commands": [
+        "python3 <fixture>/catapult_a10/tools/check_platform.py",
+        "python3 <fixture>/catapult_a10/tools/check_platform.py --strict-source --source-repo /home/chiro/projects/a10-linux-riscv --source-commit 3db828e74651fda377a33d84f2a2ca0e69901d72"
+      ],
+      "exit_codes": [1, 1],
+      "result": "both reject: SHA256SUMS mismatch quartus/catapult_a10.qpf"
+    },
+    {
+      "fixture": "isolated copy Lx1qbV",
+      "mutation": "source.lock first target path duplicated onto clk/clk.cmp",
+      "command": "python3 <fixture>/catapult_a10/tools/check_platform.py",
+      "exit_code": 1,
+      "result": "rejects duplicate source.lock target path and closure mismatch"
+    },
+    {
+      "fixture": "isolated copy XFHgeV",
+      "mutation": "manifest first target path replaced by ../escape",
+      "command": "python3 <fixture>/catapult_a10/tools/check_platform.py",
+      "exit_code": 1,
+      "result": "rejects unsafe path ../escape"
+    },
+    {
+      "fixture": "isolated copy A4Sxcx",
+      "mutation": "SHA256SUMS first path replaced by ../escape",
+      "command": "python3 <fixture>/catapult_a10/tools/check_platform.py",
+      "exit_code": 1,
+      "result": "rejects unsafe SHA256SUMS path ../escape"
+    }
+  ],
+  "fixture_handling": {
+    "copies": "temporary copies of fpga/catapult_a10 only; real reference and payload untouched",
+    "cleanup": "all five exact fixture directories moved to the desktop trash after tests",
+    "remaining_fixture_dirs": 0
+  },
+  "head_semantics": {
+    "head_sha": "a2c811c50af953a3aee7faf1f685f88d4d9d0d7e",
+    "content_sha": "d929dd88ccc06fdc9edfc2824cbb89744edd2329fcee736b8f539f60f53cddc9",
+    "content_sha_meaning": "实际主重锁正文 docs/FPGA_A10_PROVENANCE_RELOCK.md 的 SHA-256",
+    "final_correction_tip": "由本 follow-up FINAL 报告给出；evidence 不自引用自身 hash"
+  },
+  "correction_record": {
+    "pre_correction_head_sha": "a2c811c50af953a3aee7faf1f685f88d4d9d0d7e",
+    "correction_scope": [
+      "fpga/catapult_a10/skeleton_manifest.json",
+      "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+      "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+      "docs/tasks/evidence/T-20260831-002.json"
+    ],
+    "prior_reported_at": "2026-08-31T02:05:08+08:00",
+    "reported_at": "2026-08-31T02:14:10+08:00",
+    "reason": "收件 metadata/evidence 更正；首次交付 head 保留为 a2c811c，最终 correction tip 不在 evidence 内预写"
+  },
+  "blockers": [
+    "前序 full synthesis 资源门仍 BLOCKED；speed-grade 不一致、远端 candidate 尚未同步、JTAG device identity 仍待确认",
+    "工具链缺 quartus_sh/ip-generate/qsys-generate；check_skeleton contract 已 PASS，但真实生成/综合仍 blocked_tool_missing"
+  ],
+  "writes": [
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/source.lock",
+    "fpga/catapult_a10/SHA256SUMS",
+    "fpga/catapult_a10/skeleton_manifest.json",
+    "fpga/catapult_a10/tools/check_platform.py",
+    "fpga/catapult_a10/README.md",
+    "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+    "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+    "docs/tasks/evidence/T-20260831-002.json"
+  ],
+  "non_actions": [
+    "未修改 QPF/QSF/SDC/Qsys/SFL/JTAG-UART/RTL payload 内容",
+    "未运行 Quartus、Qsys、仿真、综合、fit、STA、assembler 或 programming",
+    "未写远端工程，未读取 license 内容，未操作 JTAG/Flash/EPCQ",
+    "未 checkout/reset/写入参考仓，未停止或改变任何进程"
+  ],
+  "risks_and_next": [
+    "source raw blob 与本地 target 生成物的字节差异仍需精确 Quartus 21.4 生成流程解释；本任务不复制参考生成物",
+    "前序 full synthesis 资源 BLOCKED、speed-grade 不一致、远端 candidate 未同步和 JTAG device identity 风险保持不变",
+    "集成者在合并 SHA 上复跑 offline/strict-source；随后另立 candidate 同步和 reduced/partition synthesis 任务"
+  ],
+  "next": "integrator 在 correction tip 复跑 jq、8 个可哈希文件 sha256、git diff --check、9-file BASE..HEAD 写集和 payload immutable diff；随后另立远端 candidate 同步和 reduced/partition synthesis 任务",
+  "test_event_timing": {
+    "initial_implementation_runs": "unknown; 原始命令未保留 started_at/finished_at，未以 commit time 代替",
+    "check_skeleton": "unknown; command event timestamp not retained",
+    "correction_static_audit": {
+      "started_at": "2026-08-31T02:04:58+08:00",
+      "finished_at": "2026-08-31T02:04:58+08:00",
+      "timezone": "Asia/Shanghai"
+    },
+    "post_correction_validation": {
+      "started_at": "2026-08-31T02:15:25+08:00",
+      "finished_at": "2026-08-31T02:15:25+08:00",
+      "timezone": "Asia/Shanghai",
+      "result": "jq, eight non-self SHA-256 records, BASE..HEAD immutable diff, BASE..HEAD write set, a2c..HEAD correction write set, both diff checks, and clean status all passed"
+    }
+  },
+  "integrator_review": {
+    "received_at": "2026-08-31T02:20:27+08:00",
+    "merge_sha": "ea21c0da415571672c8b7fe6f2b76e23139292a1",
+    "status": "accepted_provenance_relock",
+    "commands": [
+      {
+        "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+        "result": "PLATFORM_CHECK_PASS files=50 strict_source=OFF"
+      },
+      {
+        "command": "python3 fpga/catapult_a10/tools/check_platform.py --strict-source --source-repo /home/chiro/projects/a10-linux-riscv --source-commit 3db828e74651fda377a33d84f2a2ca0e69901d72",
+        "result": "PLATFORM_CHECK_PASS files=50 strict_source=PASS"
+      },
+      {
+        "command": "cd fpga/catapult_a10 && sha256sum -c SHA256SUMS",
+        "result": "50/50 OK"
+      },
+      {
+        "command": "python3 fpga/catapult_a10/tools/check_skeleton.py",
+        "result": "SKELETON_CHECK_PASS files=6；本地仅 TOOLCHAIN_MISSING 提示，未要求 Quartus"
+      },
+      {
+        "command": "git diff --quiet 4764d83..18f25f6 -- fpga/catapult_a10/quartus fpga/catapult_a10/qsys fpga/catapult_a10/flash fpga/catapult_a10/jtag_uart rtl",
+        "result": "pass；platform payload/RTL content unchanged"
+      }
+    ],
+    "decision": "验收本地 source/target/skeleton provenance；远端 current-candidate 同步与 reduced synthesis 继续独立 gated。"
+  }
+}

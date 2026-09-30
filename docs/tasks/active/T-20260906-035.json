@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-035",
+  "label": "R21-QUARTUS-PHYSICAL",
+  "title": "Run fresh A10 synthesis, fitter and signoff STA for R21",
+  "kind": "physical-timing-validation",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "physical-complete-setup-open-accepted",
+  "assigned_owner": "r21_physical",
+  "depends_on": ["T-20260906-032"],
+  "base_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+  "candidate_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+  "branch": "verify/T-20260906-035-r21-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-035",
+  "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260906-035-r21-timing-probe",
+  "scope": "Prepare an exact R21 manifest and fresh isolated probe, then run one serialized synthesis, fitter, signoff STA and nonfatal top-50/directional report flow. Compare against R20/T-031 and prove or measure both R21 target cones.",
+  "writes": [
+    "docs/tasks/active/T-20260906-035.json",
+    "docs/tasks/evidence/T-20260906-035.json",
+    "docs/handoffs/T-20260906-035-r21-quartus-physical.md",
+    "build/agents/T-20260906-035/** ignored preparation/runtime artifacts",
+    "fresh remote probe D:/Projects/fpga-altra/lcvex/build/T-20260906-035-r21-timing-probe"
+  ],
+  "reads": [
+    "T-031 R20 physical evidence, manifests and nonfatal report scripts",
+    "T-032 R21 local evidence",
+    "fpga/catapult_a10/real_a10_full_fp/**"
+  ],
+  "validation": {
+    "preflight": "candidate/source SHA, formal/expected manifest, recursive QSF closure, no EDA conflict, free memory and forbidden-artifact gate",
+    "stages": "synthesis -> fitter -> sta_signoff -> nonfatal custom reports; one gamepc lock holder and one Quartus stage at a time",
+    "reports": [
+      "global sys_clk_50 setup top-50/top-N",
+      "div_pre -> it_fin_mid and replacement iterative round-pack cones",
+      "ap_pre -> fma_align registers",
+      "fma_align registers -> pp_pre",
+      "old ap_pre -> pp_pre direct FMA cone",
+      "pack_mid -> pack_result margin and R20 preserved cones",
+      "Fmax/setup/hold/recovery/removal/min-pulse and resource delta"
+    ]
+  },
+  "acceptance": "All allowed physical stages and nonfatal reports complete on an exact R21 database; report setup closure honestly and preserve zero-path/removed-cone results.",
+  "resource": "Every remote Quartus stage must acquire shared gamepc via resource-lock. Return 75 means wait. Admission >=16 GiB and runtime safety monitor remain mandatory; never terminate unrelated processes.",
+  "forbidden_regions": [
+    "RTL/QEMU changes",
+    "QSF/SDC timing exceptions",
+    "assembler or bitstream generation",
+    "quartus_pgm/JTAG/programming/power-on/board test"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-06T19:47:37+08:00",
+    "agent_name": "r21_physical",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true
+  },
+  "result": {
+    "owner_commit": "dc2ae31f2bd8f5a5c505688960884c1a153323a0",
+    "integration_commit": "18b6b303",
+    "fmax_mhz": 48.57,
+    "setup_wns_ns": -0.588,
+    "setup_tns_ns": -67.238,
+    "setup_failing_endpoints": 550,
+    "non_setup_checks": "hold/recovery/removal/min-pulse all nonnegative",
+    "forbidden_artifact_count": 0
+  },
+  "integrator_review": {
+    "received_at": "2026-09-07T03:04:15+08:00",
+    "accepted_at": "2026-09-07T03:06:06+08:00",
+    "result": "accepted-as-R21-physical-baseline-with-50MHz-setup-open",
+    "checks": "clean owner worktree; evidence-only write set; key local artifact hashes match evidence; gamepc/local FREE; no assembler or forbidden artifact"
+  },
+  "created_at": "2026-09-06T19:47:37+08:00",
+  "updated_at": "2026-09-07T03:06:06+08:00"
+}

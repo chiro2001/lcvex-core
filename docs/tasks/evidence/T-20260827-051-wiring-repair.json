@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-051-wiring-repair",
+  "state": "done",
+  "base_sha": "90efd1555246ee3887ab095890dced0181a76c3d",
+  "source_sha": "4e42205c39aba7584d0f4a3822dc20ba73504b92",
+  "merge_sha": "5045b193fbd58bce998c1e26b86851f11d311420",
+  "merge_line": "feature/p7-fp-neon",
+  "branch": "feature/T-20260827-051-p7-wiring-repair",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring-repair",
+  "owner_report": {
+    "sent_at": "2026-08-27T09:54:13+08:00",
+    "received_at": "2026-08-27T10:34:47+08:00",
+    "reported_at": "2026-08-27T10:34:47+08:00",
+    "elapsed_seconds": 2434,
+    "state": "repair_ready",
+    "implementation_sha": "4e42205c39aba7584d0f4a3822dc20ba73504b92"
+  },
+  "scope": "Lorentz wiring review 三项阻断修复：ID system-commit 背压、普通 microbench FP restore 输入清零、FP_INIT/FP_COMMIT fail-fp.json 完整失败诊断与真实 socket 负测。",
+  "excluded": [
+    "P7-1/P7-2/P7-3 FP/NEON arithmetic and memory",
+    "AXI/Cache/FPGA",
+    "QEMU fork source/build/replay and external QEMU writes",
+    "active task JSON",
+    "TASKS.md",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md"
+  ],
+  "files": [
+    "Makefile",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_commit_backpressure_tb.sv",
+    "sim/cocotb/test_commit_backpressure.py",
+    "sim/microbench/microbench_runner.cc",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/fail_fp_smoke.py",
+    "docs/handoffs/T-20260827-051-wiring-repair.md",
+    "docs/tasks/evidence/T-20260827-051-wiring-repair.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.4 (conda lcvex)",
+    "cocotb": "2.0.1"
+  },
+  "runs": [
+    {
+      "run_id": "repair-static-001",
+      "level": "L0",
+      "command": "git diff --check && python3 -m py_compile sim/difftest/fail_fp_smoke.py sim/cocotb/test_commit_backpressure.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "patch whitespace and Python syntax checks pass。"
+    },
+    {
+      "run_id": "repair-core-lint-002",
+      "level": "L1",
+      "command": "make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "core/filelist Verilator lint pass。"
+    },
+    {
+      "run_id": "repair-sv-core-003",
+      "level": "L1",
+      "command": "make sim-sv",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "scalar plus P7-0 FPCR/FPSR wiring SV smoke pass。"
+    },
+    {
+      "run_id": "repair-sv-backpressure-004",
+      "level": "L1",
+      "command": "make sim-sv-backpressure",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "原 M1 背压与新增 CPACR/FPCR ID system-commit ready=0 无 packet/无状态更新、释放后原子提交均通过。"
+    },
+    {
+      "run_id": "repair-cocotb-backpressure-005",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_commit_backpressure SIM_BUILD=sim_build_bp",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "2/2 tests pass，含 system MSR backpressure。"
+    },
+    {
+      "run_id": "repair-p7-cocotb-006",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_p7_wiring SIM_BUILD=sim_build_p7_wiring",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-0 SoC FPCR/FPSR、trap、restore 同沿测试 1/1 pass。"
+    },
+    {
+      "run_id": "repair-microbench-007",
+      "level": "L0",
+      "command": "make microbench",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "microbench runner 显式清零 FP restore inputs 后 mb_all 2698 cycles pass。"
+    },
+    {
+      "run_id": "repair-lockstep-build-008",
+      "level": "L1",
+      "command": "make lockstep-build",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator coordinator/C++ fail package writer 编译通过。"
+    },
+    {
+      "run_id": "repair-fail-fp-009",
+      "level": "L1/L2-negative",
+      "command": "make fail-fp-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "真实本地 SOCK_SEQPACKET peer 复现 FP_INIT 与 FP_COMMIT mismatch；两案 JSON 可解析，字段完整，fail.txt 保留 first_fp_raw_mismatch。",
+      "artifact_root": "build/tmp/fail-fp-smoke-ae6ua65n",
+      "artifacts": [
+        {
+          "path": "build/tmp/fail-fp-smoke-ae6ua65n/fp-init/fail-fp.json",
+          "sha256": "0f70b6155e783f0e48f9bde6a460278eb4539f8fd1b6e3bdde42d7e691268660"
+        },
+        {
+          "path": "build/tmp/fail-fp-smoke-ae6ua65n/fp-init/fail.txt",
+          "sha256": "036ac4f98cf1ba19f1f5ef25dee02463d13bf34f7118b05d73aad8d96c927487"
+        },
+        {
+          "path": "build/tmp/fail-fp-smoke-ae6ua65n/fp-commit/fail-fp.json",
+          "sha256": "7efe19e8455174279f74191f6af2ffc72166be4ef2aa07d0380b2cf7d7f5089f"
+        },
+        {
+          "path": "build/tmp/fail-fp-smoke-ae6ua65n/fp-commit/fail.txt",
+          "sha256": "bb4f8c9d451167210dd70e54d2e761aa7999f93ad4a23979400cf1ccfe1f1282"
+        }
+      ],
+      "seed": "not applicable; deterministic protocol fixture"
+    }
+  ],
+  "resolved_failures": [
+    {
+      "run_id": "repair-lockstep-build-initial",
+      "command": "make lockstep-build",
+      "exit_code": 1,
+      "result": "resolved",
+      "log_path": null,
+      "summary": "Verilator 首次生成 build/verilator_lockstep/Vlcvex_soc_tb__Syms__Slow.cpp 报 Can't write file；当时 repair worktree 没有 build/，显式创建 worktree-local build/verilator_lockstep 后重跑通过。失败发生在生成目录阶段，未发现源码错误；原始 console capture 无持久 log。",
+      "seed": "not applicable"
+    },
+    {
+      "run_id": "repair-fail-fp-json-format",
+      "command": "make fail-fp-smoke",
+      "exit_code": 1,
+      "result": "resolved",
+      "log_path": "build/tmp/fail-fp-smoke-0r9j1ufo/fp-init/fail-fp.json",
+      "summary": "首版 writer 在 recent_records 与 errors 之间漏逗号，Python json.loads 明确报错；已修复并以 ae6ua65n 目录重跑全路径通过。",
+      "seed": "not applicable"
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "known_limits": [
+    "fail-fp.json 的 socket disassembly 采用可复现的 .inst raw encoding；协议本身不携带 host disassembler 文本。",
+    "FP failure JSON 仅在 FP_INIT/FP_COMMIT mismatch 或 frame protocol failure 路径发布；普通 scalar/ASYNC/WAIT failure 继续使用 fail.txt。",
+    "repair 未修改 QEMU fork，也未把 QEMU 状态逐条回灌 DUT。"
+  ],
+  "integration_validation": {
+    "runner_role": "root-integrator",
+    "source_sha": "5045b193fbd58bce998c1e26b86851f11d311420",
+    "result": "pass_l0_l2",
+    "runs": [
+      {
+        "run_id": "integrator-repair-writeset-010",
+        "level": "L0",
+        "command": "compare git diff 90efd1555246ee3887ab095890dced0181a76c3d..4e42205c39aba7584d0f4a3822dc20ba73504b92 against T-20260827-051 repair writes",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "10 个 repair 文件均在登记写集内。"
+      },
+      {
+        "run_id": "integrator-repair-compile-011",
+        "level": "L1",
+        "command": "make compile",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "filelist/core/FP wiring lint 通过。"
+      },
+      {
+        "run_id": "integrator-repair-lockstep-build-012",
+        "level": "L1",
+        "command": "make lockstep-build",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "coordinator 与 fail-fp writer 编译通过。",
+        "artifact": "build/verilator_lockstep/lockstep_coordinator"
+      },
+      {
+        "run_id": "integrator-repair-sv-core-013",
+        "level": "L1",
+        "command": "make sim-sv",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "scalar + FPCR/FPSR MRS/MSR wiring SV smoke 通过。"
+      },
+      {
+        "run_id": "integrator-repair-sv-backpressure-014",
+        "level": "L1",
+        "command": "make sim-sv-backpressure",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "普通 WB 与 CPACR/FPCR system-commit backpressure 原子性通过。"
+      },
+      {
+        "run_id": "integrator-repair-microbench-015",
+        "level": "L0",
+        "command": "make microbench",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "FP restore 输入清零后的 mb_all 2698 cycles 通过。",
+        "artifact": "build/microbench_runner/microbench_runner"
+      },
+      {
+        "run_id": "integrator-repair-fail-fp-016",
+        "level": "L1/L2-negative",
+        "command": "make fail-fp-smoke",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "FP_INIT/FP_COMMIT mismatch 两类 fail-fp.json 均可解析且字段完整。",
+        "artifact_root": "build/tmp/fail-fp-smoke-k3j8emgp"
+      },
+      {
+        "run_id": "integrator-repair-cocotb-backpressure-017",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_commit_backpressure SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-051/integrator/cocotb-backpressure",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "2/2 Cocotb tests 通过。"
+      },
+      {
+        "run_id": "integrator-repair-cocotb-p7-018",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_p7_wiring SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-051/integrator/cocotb-p7-wiring",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P7-0 SoC FP state/trap/restore Cocotb 1/1 通过。"
+      },
+      {
+        "run_id": "integrator-repair-qemu-a76-zero-019",
+        "level": "L2",
+        "command": "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=14 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so IMAGE=/home/chiro/projects/mycpu/lcvex/build/difftest/q6_svc.bin bash sim/difftest/run_lockstep_step.sh",
+        "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648 + 0001..0012",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "Cortex-A76 required handshake、FP_INIT/FP_COMMIT 与 14 条 scalar/exception lockstep 通过。",
+        "coord_log": "build/tmp/p7-wiring-a76-20260827.coord.log",
+        "qemu_log": "build/tmp/p7-wiring-a76-20260827.qemu.log"
+      },
+      {
+        "run_id": "integrator-repair-qemu-a76-fpstate-020",
+        "level": "L2",
+        "command": "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=10 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-required/fp_sysreg.bin bash sim/difftest/run_lockstep_step.sh",
+        "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648 + 0001..0012",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "真实 FPCR/FPSR MRS/MSR 的 FP_INIT/FP_COMMIT、DUT effect/raw state 与 10 条 A76 lockstep 通过。",
+        "coord_log": "build/tmp/p7-wiring-fp-20260827.coord.log",
+        "qemu_log": "build/tmp/p7-wiring-fp-20260827.qemu.log"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "integrator-fp-init-failure",
+      "uri": "build/tmp/fail-fp-smoke-k3j8emgp/fp-init/fail-fp.json",
+      "sha256": "5029390c07cb180d4dad4c826a801f426fb7322bd86a63dd170836816e47f765",
+      "bytes": 25855,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "integrator-repair-fail-fp-016"
+    },
+    {
+      "id": "integrator-fp-commit-failure",
+      "uri": "build/tmp/fail-fp-smoke-k3j8emgp/fp-commit/fail-fp.json",
+      "sha256": "96bc7d7df8bf6358f9c05ba4207c7f0a113859199e3f1b7f279e5263ad74a819",
+      "bytes": 27653,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "integrator-repair-fail-fp-016"
+    },
+    {
+      "id": "integrator-coordinator",
+      "uri": "build/verilator_lockstep/lockstep_coordinator",
+      "sha256": "0bbbab36bd381a719f9910ba4d601aed0c91a27645480fb2f2b622509b4056dd",
+      "bytes": 1088880,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "integrator-repair-lockstep-build-012"
+    },
+    {
+      "id": "integrator-a76-zero-coord-log",
+      "uri": "build/tmp/p7-wiring-a76-20260827.coord.log",
+      "sha256": "cefd963789a04f11de6d5a1089caec65ed296ff96969749141fbe38578174e17",
+      "bytes": 1036,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "integrator-repair-qemu-a76-zero-019"
+    },
+    {
+      "id": "integrator-a76-fpstate-coord-log",
+      "uri": "build/tmp/p7-wiring-fp-20260827.coord.log",
+      "sha256": "eb339c0ae7e9cf8aa761d6225f199f3605f33e448139937cd1689675920b814f",
+      "bytes": 775,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "integrator-repair-qemu-a76-fpstate-020"
+    }
+  ],
+  "next": "repair 已在 merge SHA 5045b193 通过集成者 L0-L2 并完成；parent T-051 仍需 13 列 resume runner、真实 FP/NEON arithmetic/memory、Linux/Gate D/F。"
+}

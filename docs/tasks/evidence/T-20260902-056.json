@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-056",
+  "state": "done",
+  "partial": false,
+  "base_sha": "32c77ae334d1f61b081a7919359d5e40f645b984",
+  "head_sha": "12a610f609a1e14a46ccdee680c990ee9bea69ff",
+  "merge_sha": "d5aeb4bd92c9ea5ab4c78e52aa962393be2608db",
+  "branch": "fix/T-20260902-056-fp-align-magnitude-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-056",
+  "scope": "在 T-052 add_align 寄存器之后增加 FP_ITER ADD/SUB effective magnitude/result boundary，切断 add_align_hi 到 pp_pre_hi 的宽位路径并保持 IEEE/FPCR/FPSR/latency 协议。",
+  "implementation": {
+    "commits": [
+      "ac20e55a094c9728908d2b73c02f2d468e6dd126",
+      "12a610f609a1e14a46ccdee680c990ee9bea69ff"
+    ],
+    "documentation_commits": [
+      "b5df14ecfa478f177407cb45d3a55817b983a3eb",
+      "74845bf1c5ab49a14e5977760aabe3ef7926a960"
+    ],
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv",
+      "docs/handoffs/T-20260902-056-fp-align-magnitude-cut.md",
+      "docs/tasks/evidence/T-20260902-056.json"
+    ],
+    "summary": "IT_ALIGN 只从已寄存 add_align 完成 256-bit effective compare/add/sub 并寄存 magnitude、result_sign、signed exp2/common exponent；IT_ADD 携带 DN/原 operand/classification 与 format/FZ/RMode/input_flags，完成 NaN->Inf->双零->有限相消 special/zero 解析并构造 pp_pre。IT_ADD 和 add_mid* reset/kill 清零、无架构提交。",
+    "state_boundary": {
+      "it_align": "no magnitude==0 test, zero pack, or special mux; captures effective magnitude/sign/exp2 plus special metadata",
+      "it_add": "special/zero resolution and pp_pre field construction after add_mid register",
+      "reset_kill": "IT_IDLE; add_mid/add_mid_lo/add_mid_hi all zero",
+      "valid_drop": "state returns IT_IDLE without iter_done; internal payload has no architectural meaning",
+      "architectural_commit": "none until existing FP exec slot/response path"
+    },
+    "latency": {
+      "scalar_add_sub_s_d_h": {"before": 6, "after": 7},
+      "neon_add_sub_2slot": {"before": 11, "after": 13},
+      "neon_add_sub_4slot": {"before": 21, "after": 25},
+      "mul_fma_conversion_other": "unchanged",
+      "fdiv_s_d": 261,
+      "fsqrt_s_d": 69,
+      "fsqrt_h": 70,
+      "fdiv_h": 518,
+      "neon_fsqrt_2s": 137
+    },
+    "policy": {
+      "core_modified": false,
+      "neon_fp_modified": false,
+      "qemu_modified": false,
+      "qsf_sdc_modified": false,
+      "false_path_added": false,
+      "assertions_disabled": false,
+      "reference_results_modified": false
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile-final",
+      "stage": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make compile",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T21:44:00+08:00",
+      "finished_at": "2026-09-04T21:44:03+08:00",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "fp-exec-directed-final",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'conda run --no-capture-output -n lcvex verilator --binary --timing --assert --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir/Vlcvex_fp_exec_tb'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T21:41:32+08:00",
+      "finished_at": "2026-09-04T21:42:51+08:00",
+      "replay_started_at": "2026-09-04T21:44:12+08:00",
+      "replay_finished_at": "2026-09-04T21:44:12+08:00",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "checks": [
+        "FP_ITER valid drop/reissue",
+        "IT_ALIGN and IT_ADD kill/reissue",
+        "qNaN payload, sNaN quiet/IOC, DN, Inf-Inf invalid",
+        "RN/RP/RM/RZ exact cancellation zero sign",
+        "RN/RP halfway rounding and IXC",
+        "FZ input and IDC",
+        "H scalar and NEON H dual-lane arithmetic",
+        "NEON 2S/4S slot order and latency",
+        "FDIV/FSQRT latency, kill/reissue, reset, held response"
+      ],
+      "latency_observed": {
+        "fadd_s": 7,
+        "fadd_h": 7,
+        "fadd_d": 7,
+        "neon_fadd_2s": 13,
+        "neon_fadd_4s": 25,
+        "fmul_s": 6,
+        "fmadd_s": 6,
+        "neon_fmul_2s": 11,
+        "fdiv_s": 261,
+        "fsqrt_s": 69,
+        "fsqrt_d": 69,
+        "fsqrt_h": 70,
+        "fdiv_h": 518,
+        "neon_fsqrt_2s": 137
+      },
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "git-diff-check-final",
+      "stage": "postflight",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T21:43:37+08:00",
+      "finished_at": "2026-09-04T21:43:37+08:00"
+    },
+    {
+      "run_id": "l1-sv-p7-1-fp-scalar",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-sv-fp-scalar'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:01:55+08:00",
+      "finished_at": "2026-09-04T22:02:15+08:00",
+      "tests": "P7-1 scalar raw-bit directed vectors",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l1-cocotb-p7-1-fp-scalar",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-cocotb-fp-scalar'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:02:23+08:00",
+      "finished_at": "2026-09-04T22:03:22+08:00",
+      "tests": {"total": 5, "pass": 5, "fail": 0, "skip": 0},
+      "seed": 1788530601,
+      "tool": "Verilator 5.050, cocotb 2.0.1, Python 3.12.4",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l1-sv-p7-3-neon-fp",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-sv-p7-3-neon-fp'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:03:29+08:00",
+      "finished_at": "2026-09-04T22:04:06+08:00",
+      "tests": "P7-3 NEON 2S/4S/2D raw FP vectors",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l1-cocotb-p7-3-neon-fp",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-cocotb-p7-3-neon-fp'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:04:13+08:00",
+      "finished_at": "2026-09-04T22:05:16+08:00",
+      "tests": {"total": 4, "pass": 4, "fail": 0, "skip": 0},
+      "seed": 1788530714,
+      "tool": "Verilator 5.050, cocotb 2.0.1, Python 3.12.4",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l1-sv-p7-4-fma-convert",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-sv-p7-4-fma-convert'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:05:23+08:00",
+      "finished_at": "2026-09-04T22:06:17+08:00",
+      "tests": "P7-4 scalar and NEON FMA/conversion raw vectors",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l1-cocotb-p7-4-fma-convert",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-cocotb-p7-4-fma-convert'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:06:24+08:00",
+      "finished_at": "2026-09-04T22:07:24+08:00",
+      "tests": {"total": 6, "pass": 6, "fail": 0, "skip": 0},
+      "seed": 1788530843,
+      "tool": "Verilator 5.050, cocotb 2.0.1, Python 3.12.4",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l1-sv-p7-5-fp16-sqrt-minmax-round",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-sv-p7-5-fp16-sqrt-minmax-round'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:07:33+08:00",
+      "finished_at": "2026-09-04T22:10:23+08:00",
+      "tests": "P7-5 scalar/NEON FP16 sqrt/minmax/frint/fcvt raw vectors",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l1-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-cocotb-p7-5-fp16-sqrt-minmax-round'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:10:32+08:00",
+      "finished_at": "2026-09-04T22:11:32+08:00",
+      "tests": {"total": 8, "pass": 8, "fail": 0, "skip": 0},
+      "seed": 1788531091,
+      "tool": "Verilator 5.050, cocotb 2.0.1, Python 3.12.4",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l2-lockstep-preflight-missing-build-dir",
+      "stage": "L2-preflight",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make p7-1-fp-scalar p7-1-fp-scalar-edge p7-1-fp-scalar-rounding p7-1-fp-scalar-sequence'",
+      "result": "fail_infrastructure",
+      "exit_code": 2,
+      "started_at": "2026-09-04T22:12:01+08:00",
+      "finished_at": "2026-09-04T22:12:05+08:00",
+      "reason": "worktree lacked build/; Verilator could not write build/verilator_lockstep",
+      "remediation": "mkdir -p build; rerun passed; no RTL/QEMU source change"
+    },
+    {
+      "run_id": "l2-p7-1-fp-scalar-all",
+      "stage": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make p7-1-fp-scalar p7-1-fp-scalar-edge p7-1-fp-scalar-rounding p7-1-fp-scalar-sequence'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:12:21+08:00",
+      "finished_at": "2026-09-04T22:13:24+08:00",
+      "comparisons": {"base": "28/28", "edge": "38/38", "rounding": "18/18", "sequence": "388/388", "sequence_seed": 1, "sequence_rounds": 32},
+      "tool": "Verilator 5.050, QEMU strict step, FP_NEON=required",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l2-p7-3-neon-fp",
+      "stage": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make p7-3-neon-fp'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:13:32+08:00",
+      "finished_at": "2026-09-04T22:13:35+08:00",
+      "comparisons": "48/48",
+      "tool": "Verilator 5.050, QEMU strict step, FP_NEON=required",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l2-p7-4-fma-convert-all",
+      "stage": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make p7-4-fma-convert p7-4-fma-convert-edge p7-4-fma-convert-rounding p7-4-fma-convert-sequence'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:13:43+08:00",
+      "finished_at": "2026-09-04T22:13:54+08:00",
+      "comparisons": {"base": "94/94", "edge": "54/54", "rounding": "27/27", "sequence": "142/142", "sequence_seed": 1, "sequence_rounds": 8},
+      "tool": "Verilator 5.050, QEMU strict step, FP_NEON=required",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "l2-p7-5-fp16-sqrt-minmax-round-all",
+      "stage": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make p7-5-fp16-sqrt-minmax-round p7-5-fp16-sqrt-minmax-round-edge p7-5-fp16-sqrt-minmax-round-rounding p7-5-fp16-sqrt-minmax-round-sequence'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T22:14:04+08:00",
+      "finished_at": "2026-09-04T22:14:15+08:00",
+      "comparisons": {"base": "102/102", "edge": "59/59", "rounding": "40/40", "sequence": "66/66", "sequence_seed": 1, "sequence_rounds": 6},
+      "tool": "Verilator 5.050, QEMU strict step, FP_NEON=required",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    },
+    {
+      "run_id": "integrator-merged-sha-l2-representative",
+      "stage": "integrator-L2",
+      "source_sha": "d5aeb4bd92c9ea5ab4c78e52aa962393be2608db",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'set -eu; export VERILATOR_JOBS=1; make p7-1-fp-scalar-sequence; make p7-3-neon-fp; make p7-4-fma-convert-sequence; make p7-5-fp16-sqrt-minmax-round-sequence'",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T23:43:49+08:00",
+      "finished_at": "2026-09-04T23:44:55+08:00",
+      "comparisons": {
+        "p7_1_scalar_sequence": {"result": "388/388", "seed": 1, "rounds": 32},
+        "p7_3_neon_fp": "48/48",
+        "p7_4_fma_convert_sequence": {"result": "142/142", "seed": 1, "rounds": 8},
+        "p7_5_fp16_sqrt_minmax_round_sequence": {"result": "66/66", "seed": 1, "rounds": 6}
+      },
+      "tool": "Verilator 5.050, QEMU strict step, FP_NEON=required",
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    }
+  ],
+  "not_run": [
+    "Quartus synthesis/fitter/signoff STA and FP-P5 rerun",
+    "assembler/SOF/JIC/FPGA programming"
+  ],
+  "known_limits": [
+    "物理 setup 改善尚未由 Quartus FP-P5 确认；T-053 的 add_align_hi->pp_pre_hi top-N 需在合并 SHA 重跑。",
+    "P7-1 lockstep 首次失败为 worktree build/缺失；创建 build/ 后原命令重跑通过。",
+    "QEMU plugin 编译保留既有 QEMU_PLUGIN_MEM_VALUE_U128 未处理 warning，未影响 strict lockstep。"
+  ],
+  "validation": {
+    "source_head": "12a610f609a1e14a46ccdee680c990ee9bea69ff",
+    "git_diff_check": "pass",
+    "make_compile": "pass",
+    "fp_exec_directed": "pass",
+    "fp_iter_valid_drop": "pass",
+    "fp_iter_add_kill": "pass",
+    "special_round_fz": "pass",
+    "latency_table": "pass",
+    "l1_sv": {"p7_1": "pass", "p7_3": "pass", "p7_4": "pass", "p7_5": "pass"},
+    "l1_cocotb": {"p7_1": "5/5", "p7_3": "4/4", "p7_4": "6/6", "p7_5": "8/8"},
+    "l2_lockstep": {
+      "p7_1": {"base": "28/28", "edge": "38/38", "rounding": "18/18", "sequence": "388/388"},
+      "p7_3": "48/48",
+      "p7_4": {"base": "94/94", "edge": "54/54", "rounding": "27/27", "sequence": "142/142"},
+      "p7_5": {"base": "102/102", "edge": "59/59", "rounding": "40/40", "sequence": "66/66"}
+    },
+    "resource_policy": "all Verilator invocations used systemd-run MemoryMax=16G, MemorySwapMax=0 and VERILATOR_JOBS=1"
+  },
+  "integrator_validation": {
+    "recorded_at": "2026-09-04T23:46:08+08:00",
+    "source_sha": "d5aeb4bd92c9ea5ab4c78e52aa962393be2608db",
+    "make_compile": "pass",
+    "fp_exec_directed": "pass",
+    "l2_representative": {
+      "p7_1_scalar_sequence": "388/388",
+      "p7_3_neon_fp": "48/48",
+      "p7_4_fma_convert_sequence": "142/142",
+      "p7_5_fp16_sqrt_minmax_round_sequence": "66/66"
+    },
+    "result": "pass"
+  },
+  "timestamps": {
+    "sent_at": "2026-09-04T21:20:36+08:00",
+    "received_at": "2026-09-04T21:20:36+08:00",
+    "reported_at": "2026-09-04T22:14:53+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260902-056-fp-align-magnitude-cut.md"
+}

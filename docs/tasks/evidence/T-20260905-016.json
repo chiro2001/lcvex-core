@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-016",
+  "label": "R18-CORE-SYSKILL-CUT",
+  "state": "review",
+  "partial": true,
+  "acceptance_status": "owner_static_pass_integrator_l0_l2_physical_pending",
+  "base_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "implementation_head": "c8194730e61ffd7967afa3a4971027ad341e7a14",
+  "head_sha": "c8194730e61ffd7967afa3a4971027ad341e7a14",
+  "branch": "timing/T-20260905-016-r18-core-syskill-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-016",
+  "batch_parent": "T-20260905-013",
+  "depends_on": ["T-20260905-013", "T-20260905-014"],
+  "scope": "在保持精确异常/IRQ/restore kill、held response、单在途 owner、FCVT GPR RAW 和提交顺序的前提下，切断 sys_commit 到 fp_tx_kill/TX_DONE 的冗余组合反馈，并加入 owner 互斥的 SVA、SV 和 Cocotb 定向覆盖。",
+  "timing_input": {
+    "task": "T-20260905-014",
+    "raw_top50_report": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-014/build/agents/T-20260905-014/runtime/downloaded/t014_sys_clk_50_setup_top50.rpt",
+    "raw_top50_sha256": "b0213270ddcf0c205b42ec570966bdceb348ab1bb97acc3cf265559cfb022c0e",
+    "parsed_top50": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-014/build/agents/T-20260905-014/runtime/downloaded/t014_top50_parsed.json",
+    "parsed_top50_sha256": "41c712c0ae844bf69bf44e115ca80821527c7fae64aaf6d68812506a031a677b",
+    "clock": "sys_clk_50",
+    "top50_paths": 50,
+    "worst_slack_ns": -3.256,
+    "worst_data_delay_ns": 23.509,
+    "logic_levels": 26,
+    "from": "soc|core|idex_valid",
+    "to": "soc|core|g_fp_simd_enabled.fp_exec|state.TX_DONE",
+    "cause": "decode/live forwarding -> sys_commit_ready/sys_commit -> fp_tx_kill -> fp_rsp_ready/rsp_ready -> TX_DONE D",
+    "directional_baseline": {
+      "old_pp_pre_to_pack_mid_paths": 0,
+      "exmem_valid_to_acc_paths": 50,
+      "memwb_wb_rd_to_acc_paths": 50,
+      "exmem_wb_rd_to_acc_paths": 50
+    }
+  },
+  "implementation": {
+    "commit": "c8194730e61ffd7967afa3a4971027ad341e7a14",
+    "files": [
+      "rtl/lcvex_core.sv",
+      "tb/sv/lcvex_core_tb.sv",
+      "sim/cocotb/test_core_syskill.py"
+    ],
+    "summary": "fp_tx_kill retains fetch_merge_wb, wb_exc_commit, irq_taken, wfi_irq_take, wfi_wake and difftest_restore_sys_valid, while sys_commit is removed. fp_tx_active aggregates candidate/issued/busy/response phases for five same-cycle mutual-exclusion assertions. The existing core SV smoke gains +T016_SYSKILL probes for TX_DONE hold, MSR/ERET/UDEF/WFI and FCVTZS/FCVTZU raw GPR-to-CBNZ paths; a standalone Cocotb module mirrors these checks.",
+    "source_sha256": {
+      "rtl/lcvex_core.sv": "9a6d9a1d4ab72024c747cfbfb4ce3fad62968620a7bea620a8f04376ca8c4b7a",
+      "tb/sv/lcvex_core_tb.sv": "e2f32debd4d2faac53a3d1a4b6f17f070e732421a78027032d8f88b8326d89a8",
+      "sim/cocotb/test_core_syskill.py": "a833afedc4177f3caef92c2b33f591ed6cbc2c49090151c69e6ee86a32b99fc6"
+    },
+    "false_path_added": false,
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "qemu_modified": false,
+    "fp_datapath_modified": false
+  },
+  "proof": {
+    "owner_definition": "fp_tx_active = fp_tx_candidate || fp_tx_issued || fp_tx_busy || fp_rsp_valid",
+    "sys_commit_drain": "sys_commit requires !idex_valid && !exmem_valid && !memwb_valid plus sys_commit_ready and commit_ready",
+    "assertions": [
+      "sys_commit |-> !fp_tx_candidate",
+      "sys_commit |-> !fp_tx_issued",
+      "sys_commit |-> !fp_tx_busy",
+      "sys_commit |-> !fp_rsp_valid",
+      "sys_commit |-> !fp_tx_active"
+    ],
+    "real_kills_retained": [
+      "fetch_merge_wb",
+      "wb_exc_commit",
+      "irq_taken",
+      "wfi_irq_take",
+      "wfi_wake",
+      "difftest_restore_sys_valid"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "owner-diff-check-001",
+      "source_sha": "c8194730e61ffd7967afa3a4971027ad341e7a14",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check b350141..c8194730",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-016/static/source-structure-check.log",
+      "log_sha256": "9a9b60b113f92305a72bd93436a9a667109d13429c9aed457946a4b950e95e71"
+    },
+    {
+      "run_id": "owner-python-ast-002",
+      "source_sha": "c8194730e61ffd7967afa3a4971027ad341e7a14",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 AST parse of sim/cocotb/test_core_syskill.py",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-016/static/python-ast-check.log",
+      "log_sha256": "d6a5d3421849a7ced470f9363971957f7f10a525caa349a67b13688ab4899b2a"
+    },
+    {
+      "run_id": "owner-structural-proof-003",
+      "source_sha": "c8194730e61ffd7967afa3a4971027ad341e7a14",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "static source check of fp_tx_kill real-kill closure, sys_commit exclusion, SVA and focused test markers",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-016/static/source-structure-check.log",
+      "log_sha256": "9a9b60b113f92305a72bd93436a9a667109d13429c9aed457946a4b950e95e71"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t016-source-test-hashes",
+      "uri": "build/agents/T-20260905-016/static/rtl-test-hashes.txt",
+      "sha256": "c3bccfa56ed38da36c0eee699c2e6738edbaaba338167a99a6d08a68ab94966f",
+      "owner": "codex-r18-core",
+      "retain_until": "task-close",
+      "reproduce": "sha256sum rtl/lcvex_core.sv tb/sv/lcvex_core_tb.sv sim/cocotb/test_core_syskill.py"
+    }
+  ],
+  "not_run": [
+    "Verilator compile, SV runtime and Cocotb runtime",
+    "T-013/T-016 merged L0-L2 joint validation",
+    "QEMU build, plugin, reference results and strict lockstep",
+    "Quartus synthesis/fitter/signoff STA and new top-50",
+    "assembler, SOF/bitstream, JTAG, programming, power-on and board test"
+  ],
+  "known_limits": [
+    "Owner evidence proves only source structure and lightweight syntax; no functional green result is claimed until the integrator runs the focused and joint regressions on the merged SHA.",
+    "Physical improvement is not claimed until a fresh post-fit STA confirms the idex_valid-to-TX_DONE cone is removed or reports its replacement cone.",
+    "The SV +T016_SYSKILL path reuses the existing core smoke harness and is not executed by the owner per the task resource gate."
+  ],
+  "integrator_fields_pending": [
+    "merged candidate SHA and source/artifact hashes",
+    "focused SV/Cocotb result plus complete affected L0-L2 union, including T-012 overlap, IRQ-young and P7 regressions",
+    "new physical synthesis/fitter/signoff STA, directional old/new cone counts, top-N cluster and timing/resource delta"
+  ],
+  "handoff": "docs/handoffs/T-20260905-016-r18-core-syskill-cut.md",
+  "board_policy": "No assembler, bitstream, JTAG, programming, power-on or board test without explicit user permission."
+}

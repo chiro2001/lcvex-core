@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-011",
+  "candidate_sha": "acc3f95aaf12b84e1a8fd14f06eff5f8d25fc1b2",
+  "head_sha": "acc3f95aaf12b84e1a8fd14f06eff5f8d25fc1b2",
+  "merge_sha": "",
+  "toolchain": {
+    "python": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "make": "GNU Make 4.4.1",
+    "cpu_binding": "0-5",
+    "memory_limit_mb": 8192
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_path": "../qemu/build/qemu-system-aarch64",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_path": "qemu/VERSION",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_source_path": "qemu/plugins/lcvex_difftest.c",
+    "plugin_source_sha256": "8e9a8ba9ef4fce3044423db6faf09532fbda5c92bbf1f4fa204d66c239d452a2",
+    "note": "QEMU/plugin 仅只读构建/检查；未修改外部 fork。"
+  },
+  "rtl": {
+    "filelist_path": "rtl/filelist.f",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-toolcheck-001",
+      "source_sha": "acc3f95",
+      "runner_role": "luna-monitor-agent",
+      "level": "L0",
+      "command": "taskset -c 0-5 bash scripts/toolcheck.sh",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 3.0,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/T-20260826-011/logs/toolcheck.log",
+      "log_sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9"
+    },
+    {
+      "run_id": "owner-l1-make-test-001",
+      "source_sha": "acc3f95",
+      "runner_role": "luna-monitor-agent",
+      "level": "L1",
+      "command": "VERILATOR_JOBS=6 taskset -c 0-5 make test",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 5.0,
+      "exit_code": 2,
+      "result": "fail",
+      "first_failure": {
+        "stage": "sim-sv",
+        "tool": "verilator --binary --timing --assert -Wall -j 6",
+        "source": "tb/sv/lcvex_core_tb.sv:64:16",
+        "message": "PINMISSING: lcvex_soc_tb dut 缺少 difftest_restore_ssbs、difftest_restore_uao、difftest_restore_tco；Exiting due to 3 warning(s)",
+        "reference_not_modified": true,
+        "carry_width_lint": "pass"
+      },
+      "log": "build/T-20260826-011/logs/make-test.log",
+      "log_sha256": "9e8136d71ccb8be09dbfa6187673440db037533e063369c38b1b67215113d666"
+    },
+    {
+      "run_id": "owner-l1-coverage-001",
+      "level": "L1",
+      "command": "taskset -c 0-5 make coverage",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    },
+    {
+      "run_id": "owner-l2-difftest-001",
+      "level": "L2",
+      "command": "taskset -c 0-5 make difftest difftest-hazard p4c p5a p6-lse p6-wfi",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    },
+    {
+      "run_id": "owner-l3-gate-d-001",
+      "level": "L3",
+      "command": "taskset -c 0-5 bash sim/difftest/run_gate_d.sh",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "toolcheck-log",
+      "path": "build/T-20260826-011/logs/toolcheck.log",
+      "sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9",
+      "bytes": 291,
+      "status": "pass"
+    },
+    {
+      "id": "make-test-first-failure-log",
+      "path": "build/T-20260826-011/logs/make-test.log",
+      "sha256": "9e8136d71ccb8be09dbfa6187673440db037533e063369c38b1b67215113d666",
+      "bytes": 2590,
+      "status": "preserved"
+    }
+  ],
+  "known_limits": [
+    "carry-width 修复后的 lint 阶段通过，但 sim-sv 的 PINMISSING warning-as-error 阻断 make test；未关闭断言、抑制 warning 或修改参考结果。",
+    "按首个真实失败立即停止，coverage、L2 定向差分和 run_gate_d 未执行；本 evidence 不能宣称 Gate D 通过。",
+    "未启动 Linux 长跑或额外重型 QEMU 作业，也未修改 active/TASKS/PROJECT_STATUS/ROADMAP。"
+  ]
+}

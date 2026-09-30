@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-012",
+  "base_sha": "8d294b5",
+  "head_sha": "511cacf",
+  "merge_sha": "511cacf",
+  "runs": [
+    {
+      "run_id": "owner-l0-sim-sv-001",
+      "source_sha": "",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "VERILATOR_JOBS=1 make sim-sv",
+      "seed": null,
+      "wall_seconds": 22.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 136,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "known_limits": ["仅补 testbench 输入 pin；Gate D candidate 需在 T-011 重新运行。"]
+}

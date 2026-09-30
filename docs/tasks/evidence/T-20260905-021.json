@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-021",
+  "label": "R19-CORE-FP-RESPONSE-CONTROL",
+  "state": "accepted-local-physical-pending",
+  "partial": true,
+  "acceptance_status": "integrator_affected_l0_l2_pass_physical_pending",
+  "base_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "implementation_head": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+  "head_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+  "documentation_tip": "final documentation/evidence commit is intentionally not self-referenced",
+  "merge_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "branch": "timing/T-20260905-021-r19-core-fp-response-control",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-021",
+  "depends_on": ["T-20260905-019"],
+  "scope": "在保持 ready/valid、held response、MMU/data overlap、fetch-fault merge、精确提交和 kill/reissue 语义的前提下，隔离 memwb_fetch_wait/stall_wb/exmem_can_accept 对 FP wrapper TX_DONE D 的残余控制锥，并补充 T016 focused 检查。",
+  "timing_source": {
+    "task": "T-20260905-014",
+    "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+    "raw_top50_report": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-014/build/agents/T-20260905-014/runtime/downloaded/t014_sys_clk_50_setup_top50.rpt",
+    "raw_top50_report_sha256": "b0213270ddcf0c205b42ec570966bdceb348ab1bb97acc3cf265559cfb022c0e",
+    "clock": "sys_clk_50",
+    "top50_paths": 50,
+    "worst_slack_ns": -3.256,
+    "worst_data_delay_ns": 23.509,
+    "logic_levels": 26,
+    "from": "soc|core|idex_valid",
+    "to": "soc|core|g_fp_simd_enabled.fp_exec|state.TX_DONE",
+    "residual_chain": "memwb_fetch_wait -> stall_wb -> exmem_can_accept -> fp_rsp_ready/fp_consume -> TX_DONE",
+    "why_boolean_rewrite_is_unsafe": "memwb_fetch_wait may coincide with an occupied older EX/MEM entry; consuming the FP response would clear ID/EX while EX/MEM remains held and lose the response"
+  },
+  "implementation": {
+    "commit": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+    "files": [
+      "rtl/lcvex_core.sv",
+      "tb/sv/lcvex_core_tb.sv",
+      "sim/cocotb/test_core_syskill.py"
+    ],
+    "source_sha256": {
+      "rtl/lcvex_core.sv": "d3d95117eda4489336ef31f339ab6c4d451b71d4f91efd7acf970a79192c199c",
+      "tb/sv/lcvex_core_tb.sv": "b7f5c93aa02dd3cb90afd84aedc71f37cfc45f24ab6e44b31b18fe5d7eb8f98b",
+      "sim/cocotb/test_core_syskill.py": "f7b8977185d8448c5734e0070e68ed69e576200090c4921b725251b3cf90d089"
+    },
+    "summary": "Add a one-entry wrapper-to-core response hold with direct bypass. The wrapper rsp_ready is fp_exec_rsp_ready = A64_FP_SIMD && !fp_rsp_hold_valid; core fp_rsp_ready/fp_consume retains the exact EX/MEM acceptance predicate. A blocked raw response is captured once, fp_tx_issued remains set until core consumption, and kill/reset clears ownership and hold before any architectural effect.",
+    "boundary": {
+      "wrapper_ready": "A64_FP_SIMD && !fp_rsp_hold_valid",
+      "wrapper_ready_inputs": ["A64_FP_SIMD", "fp_rsp_hold_valid"],
+      "wrapper_ready_excludes": ["memwb_fetch_wait", "stall_wb", "exmem_can_accept", "fp_rsp_accept_blocked", "fp_tx_kill"],
+      "core_ready": "fp_rsp_valid && exmem_can_accept && !fp_rsp_accept_blocked && !fp_tx_kill",
+      "direct_bypass": "When fp_rsp_hold_valid=0 and core fp_rsp_ready=1, raw fp_exec_rsp is consumed directly and no hold register is written.",
+      "blocked_capture": "When raw fp_exec_rsp is valid/accepted but core fp_rsp_ready=0, fp_rsp_hold captures the complete packed response and holds valid until fp_consume.",
+      "owner": "fp_tx_issued clears on core fp_consume rather than raw wrapper handshake, preventing duplicate request issue while a held response is pending.",
+      "kill": "lcvex_fp_exec kill priority and core hold kill priority discard a same-edge raw response atomically; core kill boundaries remain unchanged.",
+      "payload": "fp_rsp muxes hold over raw; all FP result/flags/NZCV/GPR forwarding uses the core-facing stable response.",
+      "architectural_latency": "Direct response-to-EX/MEM latency is unchanged; a response that was previously held in TX_DONE reaches EX/MEM on the same later acceptance edge, with only the non-architectural storage location changed.",
+      "datapath_modified": false,
+      "public_interface_modified": false,
+      "latency_definition_modified": false,
+      "false_path_added": false
+    },
+    "sva": [
+      "raw wrapper response with empty hold implies fp_exec_rsp_ready",
+      "raw response blocked at core boundary enters fp_rsp_hold on the next cycle unless kill",
+      "held response remains held while core-side ready is low",
+      "held response clears exactly after core-side ready/consume",
+      "hold and wrapper raw response never overlap",
+      "core-facing response payload remains stable while valid and not ready unless killed"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "owner-rtl-lint",
+      "stage": "static",
+      "level": "L0",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_core -f rtl/filelist.f",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01",
+      "finished_at": "2026-09-05T23:10:18+08:00",
+      "log": "build/agents/T-20260905-021/static/rtl_lint.log",
+      "log_sha256": "04425261e609e2a07b0d920f548d869b33909b985046153f1b2286852f5cb606",
+      "notes": "Only existing UNUSEDSIGNAL warnings; no error."
+    },
+    {
+      "run_id": "owner-no-fp-lint",
+      "stage": "static",
+      "level": "L0",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_core -GA64_FP_SIMD=0 -f rtl/filelist.f",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01",
+      "started_at": "2026-09-05T23:15:00+08:00",
+      "finished_at": "2026-09-05T23:15:01+08:00",
+      "log": "build/agents/T-20260905-021/static/rtl_lint_nofp.log",
+      "log_sha256": "ababef2cc9705bafd8f0e128371b0277447415dfabbac1169beed314bab914ff",
+      "notes": "No-FP generate branch elaborates with the new boundary."
+    },
+    {
+      "run_id": "owner-python-ast",
+      "stage": "static",
+      "level": "L0",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "python3 AST parse of sim/cocotb/test_core_syskill.py",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-021/static/python_ast.log",
+      "log_sha256": "27ecbfbb1a46723e797598006170e28330159a403e990fdb170ba2d994192e7e"
+    },
+    {
+      "run_id": "owner-structure-check",
+      "stage": "static",
+      "level": "L0",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "Python source/write-scope check for wrapper connection, ready inputs, precise kills, hold markers and exact changed files",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-021/static/structure_check.log",
+      "log_sha256": "9f662c3be47918d82f40ce24aa92eb60be27145160a811dfa2ba04012096e80a"
+    },
+    {
+      "run_id": "owner-focused-sv-build",
+      "stage": "focused-compile",
+      "level": "L1",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_core_tb -Mdir build/agents/T-20260905-021/static/sv_obj -o lcvex_core_tb -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_core_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01",
+      "started_at": "2026-09-05T23:10:31+08:00",
+      "finished_at": "2026-09-05T23:11:23+08:00",
+      "jobs": 1,
+      "log": "build/agents/T-20260905-021/static/sv_compile.log",
+      "log_sha256": "930b1643df99b437997cc83c4c4eb065a6759376b92ef5af04b0ab77ac2a7995",
+      "peak_allocated_mb": 198.023
+    },
+    {
+      "run_id": "owner-focused-sv-runtime",
+      "stage": "focused-runtime",
+      "level": "L1",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "build/agents/T-20260905-021/static/sv_obj/lcvex_core_tb +T016_SYSKILL",
+      "exit_code": 0,
+      "result": "pass",
+      "started_at": "2026-09-05T23:11:33+08:00",
+      "finished_at": "2026-09-05T23:11:33+08:00",
+      "log": "build/agents/T-20260905-021/static/sv_focused.log",
+      "log_sha256": "972093366f5177ac822749c97d79952bb0c4aa134ef08a3a31b24af54a77e376",
+      "checks": [
+        "R19 raw wrapper response boundary under forced WB backpressure",
+        "held response payload stable for at least three cycles and consumed once",
+        "system-after-FP MSR_FPCR/ERET/UDEF/WFI",
+        "FCVTZS/FCVTZU raw GPR response and immediate CBNZ target"
+      ],
+      "tool": "Verilator 5.050 2026-07-01"
+    },
+    {
+      "run_id": "owner-focused-cocotb",
+      "stage": "focused-runtime",
+      "level": "L1",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_core_syskill SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260905-021/build/agents/T-20260905-021/static/cocotb_core_syskill",
+      "exit_code": 0,
+      "result": "pass",
+      "started_at": "2026-09-05T23:11:43+08:00",
+      "finished_at": "2026-09-05T23:12:39+08:00",
+      "log": "build/agents/T-20260905-021/static/cocotb_core_syskill.log",
+      "log_sha256": "e9d829359ffc80c54208760b6bcf52ea781bd796289bbea18d85963951b5d22d",
+      "tool": "Verilator 5.050 2026-07-01; Cocotb 2.0.1",
+      "tests": ["test_core_syskill.test_r18_core_syskill"]
+    },
+    {
+      "run_id": "owner-diff-check",
+      "stage": "static",
+      "level": "L0",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "git diff --check 50b046b6..9eab7d1e",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "live-task-timestamp-check",
+      "stage": "static",
+      "level": "L0",
+      "source_sha": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "command": "python3 scripts/check_task_timestamps.py --scope live --exit-code",
+      "exit_code": 1,
+      "result": "preexisting_repository_history_errors",
+      "notes": "The repository-wide checker reported 65 historical errors and 53 warnings in older T-20260830/T-20260902 records; this owner task was not listed in the pre-commit scan. No historical task JSON was modified."
+    }
+  ],
+  "resource": {
+    "focused_verilator_jobs": 1,
+    "focused_sv_peak_allocated_mb": 198.023,
+    "cocotb_compile_peak_allocated_mb": 176.922,
+    "heavy_queue": "No heavy QEMU/lockstep/Quartus job started by owner"
+  },
+  "integrator_validation": {
+    "candidate_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+    "independent_review": "pass: no P0/P1 functional blocker or combinational loop; direct, capture, held-consume and kill/reset transitions reviewed cycle by cycle",
+    "focused": {
+      "result": "pass",
+      "log": "build/agents/T-20260905-023/1c566325/focused/all.log",
+      "sha256": "08672b72e1efd5a76cbfa2fd85539be2d69dbf7ad049ae414af39609c21f480f",
+      "summary": "registry 80, FP wrapper, T016 held response/system-after-FP/FCVT RAW SV and standalone Cocotb"
+    },
+    "l0_l1": {
+      "result": "pass",
+      "log": "build/agents/T-20260905-023/1c566325/l0-l1/all.log",
+      "sha256": "91f392857ac60b819a6c47fea269d092570cf42ce43fff31034fdf8e46c72a9b",
+      "natural_overlap": "blocked_cycles=3 data_issues=1 consume=1 exmem_captures=1 fp_commits=1 load_commits=1",
+      "irq_young": "FIFO off/on x delay 0/2 all pass including held FP response squash"
+    },
+    "expected_fail": {
+      "result": "pass_expected_fail",
+      "outer_exit_code": 2,
+      "program_exit_code": 1,
+      "assertion": "rtl/lcvex_core.sv:4817 Q-store second-half response fault",
+      "wrapper_log_sha256": "d5daa591be4b50225dead5ef0f967d9d153c615334fb4bace63c9ceb330d97bc",
+      "assert_log_sha256": "02297d18bd832c0fa554e82a685322c57e8a48007ec1d07461035f7ac4447faa"
+    },
+    "l2": {
+      "result": "pass",
+      "scope": "affected strict D+E union",
+      "strict_commits": 1155,
+      "batch_d_sha256": "b72128baba8d37fe78f86b437e0c711b6517f7308c8e346d3959be46997c97e0",
+      "batch_e_sha256": "b47fd3fb4ccf147dca3756b0ded3123f618a66b3a1d6c45a90a7b4ab4aa650e1"
+    },
+    "physical_timing": "pending; no timing improvement claimed"
+  },
+  "not_run": [
+    "full Gate D and the unaffected L2 A-C/F batches",
+    "Quartus synthesis/fitter/signoff/custom STA and new top-N",
+    "assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, quartus_pgm, JTAG, programming, power-on and board test"
+  ],
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "false_path_added": false,
+    "fp_scalar_datapath_modified": false,
+    "neon_fp_datapath_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "active_task_modified": true,
+    "heavy_validation_run": true,
+    "quartus_started": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false,
+    "unknown_files_deleted": false
+  },
+  "known_limits": [
+    "Only focused SV/Cocotb and static validation is bound to this owner SHA; integrator must rerun affected T-019/T-012/IRQ/expected-fail suites on the merged candidate.",
+    "Physical timing improvement is not claimed until T-020 or the next fresh post-fit STA confirms the old TX_DONE cone is absent and classifies replacement top-N paths.",
+    "The wrapper ready now accepts a raw response on a kill edge, but wrapper kill and hold kill have priority and discard it atomically; merged kill/reissue regressions must retain this proof.",
+    "No board-release action is authorized while setup/hold/recovery/removal/min-pulse and DDR gates are not all green."
+  ],
+  "validation": {
+    "git_diff_check": "pass",
+    "rtl_lint": "pass",
+    "no_fp_lint": "pass",
+    "python_ast": "pass",
+    "structure_check": "pass",
+    "focused_sv_compile": "pass",
+    "focused_sv_runtime": "pass",
+    "focused_cocotb_runtime": "pass",
+    "owner_write_scope": "pass: RTL core + T016 SV/Cocotb only",
+    "physical_timing": "pending_integrator_fresh_sta"
+  },
+  "timestamps": {
+    "dispatch_sent_at": "2026-09-05T22:40:12+08:00",
+    "dispatch_timestamp_note": "Parent payload did not include an explicit sent_at; task created_at is used as the dispatch lower bound.",
+    "sent_at": "2026-09-05T22:40:12+08:00",
+    "received_at": "2026-09-05T22:52:00+08:00",
+    "implementation_commit_at": "2026-09-05T23:13:16+08:00",
+    "reported_at": "2026-09-05T23:15:27+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260905-021-r19-core-fp-response-control.md",
+  "next": "Integrator cherry-picks 9eab7d1e and the docs-only tip, reruns T016/T012/IRQ/expected-fail and affected L0-L2 on the merged candidate, then performs one fresh physical STA before any timing or release claim."
+}

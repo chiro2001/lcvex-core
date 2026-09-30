@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-118",
+  "base_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+  "head_sha": "ee8b9027cb72de481f0fa7d3a00a1927cb5dc711",
+  "merge_sha": "32f247c9fa787cbf90de5439bf7999ffbf587825",
+  "label": "AUD-13",
+  "state": "done",
+  "owner": "audit-action-dsv",
+  "branch": "feature/T-20260829-118-aud-13",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-118",
+  "sent_at": "2026-08-30T06:00:00+0800",
+  "received_at": "2026-08-30T06:00:00+0800",
+  "reported_at": "2026-08-30T06:46:15+08:00",
+  "toolchain": {
+    "qemu": "11.1.0",
+    "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "verilator": "5.050",
+    "python": "3.12",
+    "make": "GNU Make"
+  },
+  "resource": {
+    "memory_cgroup_limit_mb": 16384,
+    "memory_swap": 0,
+    "verilator_jobs": 1,
+    "qemu_build_jobs": 2,
+    "systemd_scope": "transient service, MemoryAccounting=yes"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches_sha256": "33abdb70e02fbfd40b6fa784302c6f5ff25410960c97958cc1804f6070615c94",
+    "per_file_sha256": {
+      "0001-tcg-arm-lcvex-difftest-step-hook.patch": "6ac5a638208e4c72bd5b4cc0ef73615cd436a36718b2712d5c6b7a02d2a191ec",
+      "0002-lcvex-checkpoint-hook.patch": "291ab2d5e9bdaa83ec462616a89fd742448e3624f579e35ff04d814048bd22ba",
+      "0003-lcvex-wfi-idle-plugin-hook.patch": "763f1b422aadc641ad98c818c994ad984470b536be065d710bf7c4717db32035",
+      "0004-lcvex-timer-recalc-after-restore.patch": "8971b2eb8d9dda15cb00a870f4975d5d04b0f7139d2882321a461597eb5e6eaf",
+      "0005-lcvex-wfxt-idle-plugin-hook.patch": "c5c92a17d13108c0ea5a8ae561cae08452ed448ee61c69f90e6e02e1554aa9af",
+      "0006-lcvex-timer-offset-schedule.patch": "69b2c41d30472eac580570d6ce281dd5ec917248442bb1d359cf86fc5a50fc24",
+      "0007-lcvex-generic-timer-step-kick.patch": "29372142eb1301d6ed7c740bb680a6af22e6404e9560a75d6ff8a149b2428fc2",
+      "0008-lcvex-wait-resume-cntvct.patch": "515f86fefcd488879f4eb3080437a61636dd5a802aceddb6449e4f62a6bd34f3",
+      "0009-lcvex-sys-sidecar-v3.patch": "5cfdbaf557884eb918083d885137c13c6b0d0c975402bf4f0a7b29ce6756a54c",
+      "0010-lcvex-plugin-exception-note-context.patch": "d4a29a9beb76731bfe3d354a5923d083fa841ffd1a7e62fd9cfee96230781b1e",
+      "0011-lcvex-aarch64-vfpd32-off.patch": "f84212831ff25ff2d40f314024925ec2c735674a6f08ddb4b9fa5e56ddc12f9c",
+      "0012-lcvex-fp-state.patch": "320328f8baac2d9f1714e7aa87097e9ee8ff4bb257688b3e0447db5d88389fdc"
+    },
+    "canonical_hash_match": true,
+    "fresh_replay_reproducible": false,
+    "clean_build_from_stored_patches": "FAIL",
+    "fail_reason": "0012 zero-context hunk applied by git apply after qemu-plugin.h include guard; qemu-plugin.h included twice -> struct qemu_lcvex_fp_state redefinition in plugins/core.c",
+    "current_fork_diffs": [
+      "0012 FP state block placement differs (stored patch appends at EOF under git apply)",
+      "LCVXSYS4 / CONTEXTIDR_EL1 sidecar v4 changes not in stored patches (T-20260829-097)",
+      "target/arm/helper.c gt_cntvoff_write/gt_cntpoff_write qemu_cpu_kick additions not in stored patches"
+    ],
+    "workaround_binary_sha256": "ebff60b637309adb5395cd124609659c9fe8eac1e0b617ed394f20602e6f1322",
+    "plugin_sha256": "856b93f24c8cad85f68eb9c37ab6fdc28beeeed2e341425eecd6f72f014a2fa2"
+  },
+  "runs": [
+    {
+      "run_id": "aud13-hash-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/qemu_patch_hash.py --check 33abdb70e02fbfd40b6fa784302c6f5ff25410960c97958cc1804f6070615c94",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "combined hash matches AUD-06 canonical; 12/12 files"
+    },
+    {
+      "run_id": "aud13-fresh-apply-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash qemu/scripts/apply-patches.sh /home/chiro/projects/mycpu/qemu-replay-T-20260829-118-script",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "clean local clone at fixed commit; 12 patches applied, 0 skipped. Note: git apply places 0012 at EOF; this is an application-success but not build-success."
+    },
+    {
+      "run_id": "aud13-qemu-clean-build-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --unit=aud13-qemu-build -p MemoryMax=16G -p MemorySwapMax=0 make -j2 (fresh patched tree)",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 1,
+      "result": "fail",
+      "summary": "FAIL at plugins/core.c: struct qemu_lcvex_fp_state redefinition; 0012 outside include guard under git apply. Log: build-aud13.log first failure section."
+    },
+    {
+      "run_id": "aud13-plugin-build-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make -C qemu/plugins QEMU_DIR=/home/chiro/projects/mycpu/qemu-replay-T-20260829-118",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "plugin built against fresh corrected tree; sha256 856b93f2...; warning QEMU_PLUGIN_MEM_VALUE_U128 unhandled switch only."
+    },
+    {
+      "run_id": "aud13-qemu-workaround-build-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "diagnostic: manually moved 0012 FP block inside qemu-plugin.h include guard, then make -j2 under same cgroup",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "workaround QEMU build PASS. Binary sha256 ebff60...; NOT canonical because tree still differs from current fork (no LCVXSYS4, no extra timer kicks)."
+    },
+    {
+      "run_id": "aud13-qemu-trace-smoke-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "QEMU_DIR=$FRESH python3 sim/difftest/run_qemu.py --trace-only --program p2 --limit 40",
+      "seed": null,
+      "wall_seconds": 10.1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "fresh QEMU + plugin emitted p2 trace; gzip trace sha256 444ca4177140f72afc11bc206388c27683cbbc289b4969cb2d95457c7e8e37ff. This is QEMU-side smoke on workaround tree, not canonical lockstep."
+    },
+    {
+      "run_id": "aud13-lockstep-build-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --unit=aud13-lockstep-build -p MemoryMax=16G -p MemorySwapMax=0 env VERILATOR_JOBS=1 MAKEFLAGS=-j1 make lockstep-build",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator coordinator build PASS; Verilator report walltime 361.020s, 37 C++ files, 48 modules; cgroup MemoryMax=16G, swap 0."
+    },
+    {
+      "run_id": "aud13-lockstep-smoke-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "QEMU_BIN=$FRESH/build/qemu-system-aarch64 PLUGIN=$WT/qemu/plugins/lcvex_difftest.so COORD=$WT/build/verilator_lockstep/lockstep_coordinator IMAGE=$WT/build/difftest/q6_svc.bin MAX_INSNS=14 bash sim/difftest/run_lockstep_step.sh",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PASS: mode=step 锁步 14 条与 QEMU 完全一致 on workaround tree; coord log sha256 90ca43f7..., qemu log sha256 ace18342..."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260829-118-aud-13.md",
+      "sha256": "9f061a4658ff2983329631ed4a9959a85db1bf8f9c72323fb8b788f79e2a6dfb",
+      "bytes": null,
+      "owner": "T-20260829-118",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260829-118-aud-13.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260829-118.json",
+      "sha256": "2bfa92470c85615cea56bee646a13bd7aff162e60aae66672ea86840e00bbae0",
+      "bytes": null,
+      "owner": "T-20260829-118",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/tasks/evidence/T-20260829-118.json"
+    }
+  ],
+  "known_limits": [
+    "无外网，QEMU 干净克隆使用本地已有固定 commit 仓库作为镜像源；这不改变应验证的 patch 内容。",
+    "原样 12 patches 的 clean build 失败，因此不能作为 canonical fresh replay 通过证据。",
+    "手工移动 0012 块后的构建和 QEMU trace smoke 仅为诊断 workaround，不等同于当前 fork。",
+    "未运行完整 Gate D / Linux / checkpoint 联合恢复；不涉及 SVE/POST-V82。",
+    "T-097 QEMU fork 的 sidecar v4 改动未出现在 qemu/patches，需后续补 patch/对账。",
+    "workaround 锁步 smoke 通过仅证明修正 0012 后管线可用；不是 canonical fresh replay 通过。"
+  ],
+  "status": "done",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "reported_at",
+        "old": "2026-08-30T06:48:00+0800",
+        "new": "2026-08-30T06:46:15+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260829-118-aud-13.md",
+        "sha256": "9f061a4658ff2983329631ed4a9959a85db1bf8f9c72323fb8b788f79e2a6dfb",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "evidence",
+        "uri": "docs/tasks/evidence/T-20260829-118.json",
+        "sha256": "2bfa92470c85615cea56bee646a13bd7aff162e60aae66672ea86840e00bbae0",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ],
+    "evidence_finalization": [
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "ee8b9027cb72de481f0fa7d3a00a1927cb5dc711",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T07:07:49+08:00",
+    "head_sha": "19342464d792174d11c7602ade9c6cb21a8d1a24",
+    "notes": "AUD-13 resolved by T-20260830-023: fresh replay now truly passes with 13-patch canonical set.",
+    "merge_sha": "32f247c9fa787cbf90de5439bf7999ffbf587825",
+    "result_sha": "ee8b9027cb72de481f0fa7d3a00a1927cb5dc711"
+  }
+}

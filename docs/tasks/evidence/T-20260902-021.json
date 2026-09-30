@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-021",
+  "state": "done",
+  "partial": false,
+  "base_sha": "87e7e0b047e1e80bd2f1f192fd3f1dbf3b2bd4be",
+  "head_sha": "2dbb4e12ef656958eb0620ff7208a2a9cb2a20c3",
+  "branch": "fix/T-20260902-021-a10-cdc-sdc-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-021",
+  "scope": "A10 CDC/SDC formal fix: replace 8 Quartus-21.4-unsupported -quiet with -nowarn in fpga/catapult_a10 SDC; add/adjust EMIF core_usr_clk <-> sys_clk_50 asynchronous CDC, reset/calibration synchronizer, async-FIFO and DDR-core red-path constraints based on T-20260902-019 signoff STA.",
+  "changes": [
+    {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "type": "constraint_fix",
+      "summary": "Replaced 8 get_clocks/get_registers -quiet with -nowarn; removed unusable set_clock_groups guard; corrected wildcard hierarchy names for soc|emif_adapter FIFO/reset synchronizers; added FIFO memory-data, calibration-gate first-stage, adapter reset synchronizer and documented async control/reset false paths for EMIF core_usr_clk <-> sys_clk_50 and DDR core red paths."
+    }
+  ],
+  "source_evidence": {
+    "task": "T-20260902-019",
+    "handoff": "docs/handoffs/T-20260902-019-fp-p5-physical.md",
+    "evidence": "docs/tasks/evidence/T-20260902-019.json",
+    "remote_sta_report": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-019-probe\\real_a10_full_fp\\output_files\\real_a10_full_fp.sta.rpt"
+  },
+  "sdc_replace_count": {
+    "original_quiet": 8,
+    "remaining_quiet": 0,
+    "nowarn_occurrences": 79,
+    "verification_command": "grep -c -- '-quiet' fpga/catapult_a10/quartus/catapult_a10.sdc"
+  },
+  "analysis": {
+    "sys_clk_50_hold_negative": {
+      "reported_slack": -6.677,
+      "root_cause": "response_fifo memory read data and gray-pointer source->first-synchronizer paths from EMIF core_usr_clk to sys_clk_50; previous SDC register filters lacked soc|emif_adapter prefix and were ignored by TimeQuest.",
+      "constraint": "wildcarded set_false_path/set_max_delay for FIFO pointers and set_false_path from response_fifo memory to CPU-side read_line_q/response_code_q."
+    },
+    "emif_core_usr_clk_setup_recovery_negative": {
+      "reported_setup_slack": -9.186,
+      "reported_recovery_slack": -8.439,
+      "root_cause": "CPU power-on reset/control crossing sys_clk_50 -> EMIF core_usr_clk into EMIF IP and EMIF-side adapter state/response FIFO memory.",
+      "constraint": "set_false_path from reset_gate_inst|logic_rst_n_q to emif|emif_bot|*, soc|emif_adapter|emif_req_q*, response_fifo/* and request_fifo/*."
+    },
+    "sys_clk_50_removal_ddr_core_negative": {
+      "reported_removal_slack": -5.48,
+      "reported_ddr_core_setup_slack": -4.549,
+      "root_cause": "EMIF status/reset sync and adapter raw cal_fail/cpu_domain_rst control paths into CPU domain; same paths also appear in DDR Core report.",
+      "constraint": "calibration_gate first-stage false paths, EMIF IP -> CPU-domain soC/adapter register false paths; raw cal_fail RTL sync still required."
+    }
+  },
+  "remote_static_validation": {
+    "performed": true,
+    "type": "read-only TimeQuest SDC read",
+    "command_summary": "quartus_sta -t: project_open real_a10_full_fp; create_timing_netlist 3_slow_900mv_100c; read_sdc C:/Users/Chiro/AppData/Local/Temp/t021.sdc",
+    "result": "READ_SDC_OK, 0 errors, 0 warnings (no ignored-filter/empty-collection warnings after corrected wildcards)",
+    "not_run": [
+      "full synthesis",
+      "full fitter",
+      "full signoff STA",
+      "assembler/SOF",
+      "programming/JTAG"
+    ]
+  },
+  "local_static_validation": {
+    "git_diff_check": "PASS",
+    "bracket_balance": "PASS",
+    "quiet_replacement_verified": true
+  },
+  "known_limits": [
+    "SDC exceptions model the current asynchronous control/reset structure; they are not a functional CDC signoff.",
+    "RTL still uses raw cal_fail in CPU-side adapter state and CPU reset directly in EMIF-side FSM/reset; per-domain reset and synchronized status consumption must be fixed separately before Gate F-MEM/F-BOARD.",
+    "No full STA rerun was performed; expected next verification is the FP-P3T + FP-P5 rerun using this SDC."
+  ],
+  "next": [
+    "Register FP-P3T for fp_exec/scalar_unit critical path.",
+    "Create RTL CDC hardening task for adapter/calibration_gate synchronized cal_failed_cpu and per-domain EMIF-side reset release.",
+    "After both, rerun FP-P4 functional and FP-P5 synthesis/fitter/signoff STA; only non-negative setup/hold/recovery/removal/min-pulse permits assembler/SOF."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-03T07:03:00+08:00",
+    "received_at": "2026-09-03T07:03:00+08:00",
+    "reported_at": "2026-09-03T07:20:00+08:00"
+  },
+  "merge_sha": "afe775647b765a6222928268eb870bdeaa29c4bd",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T07:20:39+08:00",
+    "merged_at": "2026-09-03T07:21:05+08:00",
+    "recorded_at": "2026-09-03T07:21:05+08:00",
+    "notes": "A10 SDC/CDC fix merged and accepted"
+  }
+}

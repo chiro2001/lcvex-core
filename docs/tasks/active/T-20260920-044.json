@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-044",
+  "parent": "T-20260920-039",
+  "label": "B25-MICROBENCH-COREMARK-FRESH-PHYSICAL",
+  "title": "Run fresh no-FP Quartus physical signoff for the microbench and CoreMark payload",
+  "kind": "fpga-physical",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-and-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-042", "T-20260920-043"],
+  "base_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_tree_sha": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+  "branch": "verify/T-20260920-044-b25-coremark-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-044",
+  "writes": ["task-owned local/remote physical artifacts", "task-owned remote root", "docs/handoffs/T-20260920-044-b25-coremark-fresh-physical.md", "docs/tasks/evidence/T-20260920-044.json"],
+  "reads": ["frozen T-042/T-043 candidate", "T-027/T-029 physical and invariant contracts"],
+  "scope": "Fresh source stage, synthesis, fitter, STA, FIFO/data-delay/UCP and MIF payload identity checks at 25 MHz; no assembler or hardware access.",
+  "acceptance": "All physical stages and production invariants pass on one source/payload identity with non-negative timing and no unclassified tracked-source warning; zero configuration artifacts.",
+  "forbidden_regions": ["assembler", "SOF/JIC/POF/RBF/JBC/SVF/JAM generation", "JTAG", "board", "Flash/reset/power"],
+  "resource": "Acquire resource-lock gamepc for the complete fresh flow.",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-044-b25-coremark-fresh-physical",
+  "dispatch": {
+    "sent_at": "2026-09-20T23:59:57+08:00",
+    "agent_name": "root",
+    "monitoring": "event-driven long waits; no frequent polling"
+  },
+  "result": {
+    "evidence_commit": "dc6be4aebcc1e825fb903e2abdb4370c5dbb9255",
+    "integration_commit": "4086c349",
+    "status": "PASS",
+    "sys_clk_25_setup_hold_ns": [9.398, 0.018],
+    "normalized_ucp_reset": [60, 4, 624],
+    "configuration_artifacts": 0
+  },
+  "created_at": "2026-09-20T21:35:43+08:00",
+  "updated_at": "2026-09-21T00:49:00+08:00"
+}

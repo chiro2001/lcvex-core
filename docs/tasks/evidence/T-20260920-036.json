@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-036",
+  "label": "B25-BOARD-RUNNER-AST-COMPAT-SEAL",
+  "state": "done",
+  "acceptance_status": "pass-remote-ast-and-seal",
+  "partial": false,
+  "base_sha": "f75b42f8b5aa2de606af7b28d198ec295ae329c5",
+  "head_sha": null,
+  "branch": "infra/T-20260920-036-b25-board-runner-ast-compat-seal",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036",
+  "owner": "runner_t036",
+  "sent_at": "2026-09-20T19:34:40+08:00",
+  "received_at": "2026-09-20T19:34:40+08:00",
+  "remote_window_started_at": "2026-09-20T19:39:26+08:00",
+  "artifact_sealed_at": "2026-09-20T19:39:32+08:00",
+  "reported_at": "2026-09-20T19:44:26+08:00",
+  "scope": {
+    "hardware_access": false,
+    "programmer_invocations": 0,
+    "terminal_sessions": 0,
+    "jtag_invocations": 0,
+    "process_enumeration": 0,
+    "process_query_invocations": 0,
+    "process_termination": 0,
+    "fpga_configuration": 0,
+    "flash_actions": 0,
+    "reset_or_power_actions": 0
+  },
+  "source_contract": {
+    "source_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-035",
+    "source_tools": "build/agents/T-20260920-035/tools",
+    "source_manifest_sha256": "40b9c0b4bad3c2979d36694e547c4831411886299d350511ee2a6bdd3a988e48",
+    "prepare_sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d",
+    "run_board_once_sha256": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018"
+  },
+  "copy_provenance": {
+    "destination_tools": "build/agents/T-20260920-036/tools",
+    "source_hashes_checked_before_copy": true,
+    "changed_files": ["validate_scripts.ps1", "verify_seal.ps1"],
+    "unchanged_files": ["prepare_task_root.ps1", "preflight.ps1", "program_once.ps1", "postflight.ps1", "direct_terminal.py", "run_board_once.sh", "seal_manifest.py"],
+    "no_other_semantic_delta": true,
+    "unchanged_file_hashes": [
+      {"name": "prepare_task_root.ps1", "bytes": 1866, "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d"},
+      {"name": "preflight.ps1", "bytes": 4120, "sha256": "29f46fca907c56288ebb7cd0a99a57750f3e0c7e452b940f76e36f1ace5aad31"},
+      {"name": "program_once.ps1", "bytes": 16007, "sha256": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e"},
+      {"name": "postflight.ps1", "bytes": 4558, "sha256": "3bad7a13a6e3765982b16247602a814dac45d9dc6b34ddc9ca605d8941f540f8"},
+      {"name": "direct_terminal.py", "bytes": 16101, "sha256": "059bb54fa1f1d3c01209ead636ca5cfcc536d2e4b4a2d41819a3d18f9a4a2e66"},
+      {"name": "run_board_once.sh", "bytes": 9819, "sha256": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018"},
+      {"name": "seal_manifest.py", "bytes": 1886, "sha256": "e95f87a2e91b73202edca05b9b441ad6def328c9c061e86cb111dd5ebf7c2cde"}
+    ],
+    "reviewed_diffs": [
+      {
+        "file": "validate_scripts.ps1",
+        "source_bytes": 2496,
+        "source_sha256": "91a7f57279f0f2b9cf62ae2350850a7314ac9c7aa401f45c165bacfe29dfc5d8",
+        "final_bytes": 2491,
+        "final_sha256": "73632da1b96e445df0302be273ee777e11da218e71f43183e7c33aebe1646592",
+        "diff": "Replace untyped Parser::ParseFile refs with Token[]/ParseError[] refs; replace Generic.List records/parseFailures with ordinary arrays and +=; serialize files directly from the ordinary records array."
+      },
+      {
+        "file": "verify_seal.ps1",
+        "source_bytes": 2909,
+        "source_sha256": "cb9bb5e85b2e8675c2d700a3474848b7a1333730a2d9b81eb5cfc87662556ef9",
+        "final_bytes": 2871,
+        "final_sha256": "7fd26eac819fa141dbf9b7a2255bc8854cc5f6175c6ec42179e2edca30eeac85",
+        "diff": "Replace Generic.List records with an ordinary array and +=; serialize files directly from the ordinary records array; seal checks and semantics unchanged."
+      }
+    ]
+  },
+  "local_bundle": {
+    "directory": "build/agents/T-20260920-036",
+    "tools": "build/agents/T-20260920-036/tools",
+    "manifest": "build/agents/T-20260920-036/script-manifest.json",
+    "manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "wrapper": {
+      "path": "build/agents/T-20260920-036/remote-validation-wrapper.sh",
+      "sha256": "b8616dba672e28136338cc26ca10ac4bcea6d9698aec4cce1d139ae1e3753dd5"
+    },
+    "files": [
+      {"name": "prepare_task_root.ps1", "bytes": 1866, "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d", "remote": true},
+      {"name": "validate_scripts.ps1", "bytes": 2491, "sha256": "73632da1b96e445df0302be273ee777e11da218e71f43183e7c33aebe1646592", "remote": true},
+      {"name": "verify_seal.ps1", "bytes": 2871, "sha256": "7fd26eac819fa141dbf9b7a2255bc8854cc5f6175c6ec42179e2edca30eeac85", "remote": true},
+      {"name": "preflight.ps1", "bytes": 4120, "sha256": "29f46fca907c56288ebb7cd0a99a57750f3e0c7e452b940f76e36f1ace5aad31", "remote": true},
+      {"name": "program_once.ps1", "bytes": 16007, "sha256": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e", "remote": true},
+      {"name": "postflight.ps1", "bytes": 4558, "sha256": "3bad7a13a6e3765982b16247602a814dac45d9dc6b34ddc9ca605d8941f540f8", "remote": true},
+      {"name": "direct_terminal.py", "bytes": 16101, "sha256": "059bb54fa1f1d3c01209ead636ca5cfcc536d2e4b4a2d41819a3d18f9a4a2e66", "remote": true},
+      {"name": "run_board_once.sh", "bytes": 9819, "sha256": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018", "remote": true},
+      {"name": "seal_manifest.py", "bytes": 1886, "sha256": "e95f87a2e91b73202edca05b9b441ad6def328c9c061e86cb111dd5ebf7c2cde", "remote": true}
+    ]
+  },
+  "local_validation": {
+    "bash_n": {"status": 0, "commands": ["bash -n build/agents/T-20260920-036/tools/run_board_once.sh", "bash -n build/agents/T-20260920-036/remote-validation-wrapper.sh"]},
+    "python_py_compile": {"status": 0, "command": "python3 -m py_compile build/agents/T-20260920-036/tools/direct_terminal.py build/agents/T-20260920-036/tools/seal_manifest.py"},
+    "manifest_jq": {"status": 0, "predicate": "task_id=T-20260920-036, files=9, all remote=true, bytes>0, SHA256=64 lowercase hex"},
+    "consumer_id_root_audit": {"status": 0, "result": "no stale T-20260920-034/T-20260920-035 consumer ID or remote root in T-036 wrapper/tools"},
+    "powershell_transport_audit": {"status": 0, "result": "no -Command, ParseInput, ReadToEnd, Invoke-Expression, FromBase64String or stdin PowerShell transport"},
+    "binder_audit": {"status": 0, "result": "corrected files have Token[]/ParseError[] refs, ordinary arrays, no Generic.List, no @(records) binder pattern"},
+    "single_use_preflight_gate_audit": {"status": 0, "result": "preflight gate remains immediately after PREFLIGHT_STATUS; no hardware path is reachable from validation wrapper"},
+    "git_diff_check": {"status": 0}
+  },
+  "remote": {
+    "resource_lock": {
+      "all_gamepc_actions_locked": true,
+      "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-036 runner_t036 -- bash build/agents/T-20260920-036/remote-validation-wrapper.sh",
+      "window_exit": 0,
+      "remote_retry": false
+    },
+    "remote_host": "192.168.101.5",
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-036-b25-board-runner-ast-compat-seal",
+    "bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-036-prepare.ps1",
+    "freshness": {"status": 0, "meaning": "root and bootstrap absent before any upload"},
+    "bootstrap_upload": {"status": 0, "count": 1, "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d"},
+    "bootstrap_prepare": {"status": 0, "result": "PREPARE_ROOT_RESULT=PASS; root and incoming created"},
+    "bundle_upload": {"status": 0, "count": 1, "manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc"},
+    "remote_ast": {"status": 0, "result": "PASS", "parse_error_count": 0, "files": 6},
+    "remote_seal": {"status": 0, "result": "PASS", "checked_count": 9, "all_bytes_match": true, "all_sha256_match": true},
+    "remote_root_state_after": "created-and-preserved",
+    "remote_bootstrap_state_after": "uploaded-once-and-preserved",
+    "hardware_boundary": "No preflight, program_once, postflight, direct_terminal, run_board_once, jtagconfig, quartus_pgm, nios2-terminal, jtagserver, process query, FPGA/JTAG/Flash/reset/power operation was executed."
+  },
+  "artifacts": {
+    "freshness_log": {"path": "build/agents/T-20260920-036/remote-seal/freshness.log", "sha256": "048e2ba89ae430962e02f5341cf60c694fb7e131cb417790075a56b32ca09992"},
+    "bootstrap_upload_log": {"path": "build/agents/T-20260920-036/remote-seal/bootstrap-upload.log", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "bootstrap_log": {"path": "build/agents/T-20260920-036/remote-seal/bootstrap.log", "sha256": "a00a5aafdc37ceab48eefcb1ca434ac7b1ecca5ea052ee9d17101af06d1e259c"},
+    "bundle_upload_log": {"path": "build/agents/T-20260920-036/remote-seal/bundle-upload.log", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    "remote_ast_log": {"path": "build/agents/T-20260920-036/remote-seal/remote-ast.log", "sha256": "a7753c25a1976ffe29500ad849290d4b5c9c7bf7cf413344589a42ae72eedf79"},
+    "remote_seal_log": {"path": "build/agents/T-20260920-036/remote-seal/remote-seal.log", "sha256": "a41db330ef03bfed7eb0b2b8f585b4e5bb24e1dcf7489013334b0e929bc9051a"}
+  },
+  "integration_review": {
+    "reviewed_at": "2026-09-20T19:46:40+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "evidence_merge_sha": "15046cdf17c8ff213e874f524eebf8e0764de506",
+    "evidence_merge_tree": "50a5f5db77a8af13f951f01e04ffa777bde5122b",
+    "topic_evidence_head": "aba0d91185ef3fec620b4f19fccbd47ad96d8d95",
+    "artifact_hash_recheck": "PASS",
+    "remote_ast_recheck": "PASS 6/6",
+    "remote_seal_recheck": "PASS 9/9",
+    "result": "PASS"
+  },
+  "next": "Consumed byte-for-byte by T-20260920-037 and T-20260920-038; closed without rerunning or editing the T-036 remote root."
+}

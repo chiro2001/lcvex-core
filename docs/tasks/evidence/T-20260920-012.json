@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-012",
+  "label": "B25-RX-CPU-VISIBLE-OBSERVABILITY-BATCH",
+  "state": "done",
+  "acceptance_status": "combined-hardware-firmware-observability-and-vendor-full-soc-pass",
+  "partial": false,
+  "base_sha": "84cee3f202889fcfc036ea4545c51d1d36f9bca5",
+  "source_sha": "84715ac674366e9fa26556d97d197599731de832",
+  "source_tree_sha": "810e809c5ebd4e96d75d28df923d5d2c4166e0a8",
+  "branch": "batch/T-20260907-037-b25-bringup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037",
+  "owner": "root",
+  "lanes": {
+    "hardware": {
+      "task": "T-20260920-013",
+      "head_sha": "e670117763e8448d06139c07b55c580782fca05e",
+      "result": "PASS after runner and generated-vendor DATA-word oracle corrections"
+    },
+    "firmware": {
+      "task": "T-20260920-014",
+      "head_sha": "e564d9394bfcab85015ae514b01b97fac7d77832",
+      "result": "PASS after raw-low16 vendor DATA-word oracle correction"
+    }
+  },
+  "implementation": {
+    "functional_datapath_changed": false,
+    "hardware_observation": [
+      "per-stage pending tokens for CPU-originated UART DATA reads",
+      "RVALID-qualified sticky full-word response at bridge, PoC and core dmem",
+      "modulo-256 valid-event counts and per-stage sticky fault bits",
+      "accepted JTAG DATA-write count/seen/last byte",
+      "read-only platform offsets 0x18/0x20/0x28/0x30/0x38"
+    ],
+    "firmware_observation": [
+      "valid uart_getc count and last raw DATA low16",
+      "dispatch count/class/byte",
+      "successful uart_putc DATA-store and finite-wait drop counts",
+      "RXDBG/RXPATH/RXCPU autonomous page rotation with manual d compatibility"
+    ],
+    "line_bytes": {"RXDBG": 25, "RXPATH": 44, "RXCPU": 43},
+    "reset": "all hardware and firmware observation state initializes to zero",
+    "vendor_data_contract": "For the controlled one-byte vendor model, full DATA word is 0x0000A400|byte: RVALID bit15, TX-not-full bit13, AC bit10 and low byte. Empty polls do not overwrite sticky valid-event payloads."
+  },
+  "verification": {
+    "combined_focused": {
+      "result": "PASS",
+      "coverage": ["status read-only ABI", "observer reset/backpressure/fault/empty-response/TX", "vendor bridge Icarus"]
+    },
+    "response_trace_r4": {
+      "result": "PASS",
+      "marker": "RX_RESPONSE_TRACE PASS checks=4 bridge=4 poc=4 dmem=4",
+      "inputs": ["?", "p", "d", "Z"],
+      "payloads": ["0x0000A43F", "0x0000A470", "0x0000A464", "0x0000A45A"],
+      "bridge_poc_dmem_full_word_equal": true,
+      "valid_event_count_each_stage": 4,
+      "faults": 0,
+      "verilator": "5.050 2026-07-01 conda-forge",
+      "build_log": {"path": "build/agents/T-20260920-012/combined-verilator-r4/verilator-build.log", "bytes": 36999, "sha256": "88a7ba5c329ea0f45cf9409c946d3f5dd32453fb94b570229094c66b7c6e4737"},
+      "run_log": {"path": "build/agents/T-20260920-012/combined-verilator-r4/verilator-run.log", "bytes": 330, "sha256": "9114a3cd9c6594ab41774dd9ac367b3a4d909dce38f7931544f2f2afc384f62a"}
+    },
+    "vendor_timing_r4": {
+      "result": "PASS",
+      "focused_iverilog_sha256": "6aedcc11eed588e080ffb026fb50f887446e8bceb4272acf79a5bb965e4435be",
+      "focused_verilator_sha256": "7bbfbfa372529dc19e01f1835f25af5072a55551e68a70a0b03280abcf413694",
+      "status_iverilog_sha256": "ed797769bbf562436522c73419f293c3689815e80d4a3f51407ad8694445446c",
+      "status_verilator_sha256": "cc0b5077d89416c51cef262c2b6085f6ce46d80efe32ff1a27ab8dc33294b48b",
+      "full_soc": {
+        "result": "SOC_B25_ALL_PASS",
+        "scenarios": ["CAL-OK", "CAL-WAIT", "CAL-FAIL"],
+        "cal_wait_empty_reads": 262144,
+        "cal_wait_commits": 2359306,
+        "cal_wait_cycles": 12058697,
+        "smoke_log": {"path": "build/agents/T-20260920-012/combined-vendor-r4/soc/smoke.log", "bytes": 527, "sha256": "5c7eb4985b933bba429d20502dd650fc9b956bffa446eadd7f9a3d1a173cc4b4"},
+        "wrapper_log": {"path": "build/agents/T-20260920-012/combined-vendor-r4/soc-wrapper.log", "bytes": 18645, "sha256": "36c1fe96fa10a2baacaf189489362d418f19c38ef652ce8909853b88eeacdfee"}
+      }
+    },
+    "boot_image": {
+      "bytes": 2011,
+      "bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+      "elf_sha256": "cb75626365299b3dbc7fe60f2c42f8192d8dc29baf098d382716f4b06304e94f",
+      "hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+      "mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+      "image_contract": "PASS emit/check",
+      "expected_sha256": "872c3cbfdf9b1be3da2ef47f42543add6bb186e09e22169d1b169cc60918851b",
+      "manifest_path": "build/agents/T-20260920-012/final-image-contract/manifest.json",
+      "manifest_file_sha256": "cda17309c7781c22caf42b2e6a216d288ada4924bcb8ace3875e92f0b12a0828"
+    },
+    "registry": "PASS; 87 entries and runner consistency"
+  },
+  "diagnostic_iterations": [
+    {"run": "r1", "result": "test runner failure before simulation", "correction": "preserve quotes around Verilator string parameter BOOT_IMAGE", "build_log_sha256": "e573e6ca563e836be1a53d220496eb8e7927235ca2174b82587dc53d4d664531"},
+    {"run": "r2", "result": "three layers returned identical A4xx words; oracle expected over-simplified 80xx", "correction": "bind full generated-vendor DATA composition", "run_log_sha256": "d8baab9666675b1d8bd5e1f1d481e0c7c61ed2851b525685c7250d365d669283"},
+    {"run": "r3", "result": "response trace PASS; RXCPU raw-low16 was A464 while test expected 8064", "correction": "firmware test retains all generated-vendor low16 status bits", "smoke_log_sha256": "941e7775bcca967c616922622bea59646129b06a6d1c17fa830827aa59587dff"},
+    {"run": "r4", "result": "PASS; clean combined response trace plus vendor focused/full-SoC"}
+  ],
+  "resources_and_safety": {
+    "all_heavy_local_runs_held_resource_lock": true,
+    "minimum_available_mib": 8192,
+    "verilator_jobs": 1,
+    "final_local_status": "FREE",
+    "gamepc_used": false,
+    "quartus_or_jtag_used": false,
+    "board_or_flash_action": false,
+    "reset_or_power_action": false
+  },
+  "conclusion": "The vendor-timed model carries each RX DATA word unchanged from bridge through PoC to core dmem, and firmware sees the complete raw low16 and dispatches all commands in simulation. No functional response-path RTL defect was reproduced. The new non-intrusive physical observation must now pass Gate D and fresh physical flow before one bounded volatile board test localizes the physical-only failure.",
+  "handoff": "docs/handoffs/T-20260920-012-b25-rx-cpu-visible-observability-batch.md",
+  "next": "Run Gate D on the frozen source SHA, then fresh Quartus synthesis/fitter/STA/assembler. Only the resulting content-addressed SOF may be used for the authorized volatile direct JTAG-UART board test."
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-004",
+  "state": "done",
+  "partial": false,
+  "base_sha": "732aa5691134b2aaef64b50c570da2b7ad001497",
+  "head_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f",
+  "branch": "fix/T-20260902-004-quartus-fp-neon-compat",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-004",
+  "scope": "修复 Quartus Prime Pro 21.4 elaboration 兼容错误：fp_scalar 非定常 loop、neon_int set_lane 64-bit 越界、neon_fp is_double 64-bit 越界；保持架构/FPCR/FPSR/测试期望不变。",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.4",
+    "os": "Linux",
+    "jobs": "VERILATOR_JOBS=1 for all local builds"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make compile",
+      "exit_code": 2,
+      "result": "fail_preexisting_warning",
+      "summary": "Standard make compile fails on pre-existing rtl/lcvex_core.sv:436 UNUSEDSIGNAL warning; confirmed same failure on pristine base via git stash, so not caused by this task.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l0-lint-suppress-002",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only -Wall -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL --top-module lcvex_core -f rtl/filelist.f",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Equivalent RTL lint with the pre-existing UNUSEDSIGNAL warning suppressed passes.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l0-static-compat-003",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "grep/static check: no non-constant fp_scalar loop; all i*64/index*64 slices guarded by i<2/index<2; git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Quartus compatibility static self-check passed.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-sv-fp-scalar-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-1 FP scalar raw-bit directed TB PASS.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-sv-neon-int-005",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-2-neon",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-2 NEON integer raw-bit unit PASS.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-sv-neon-fp-006",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-3 NEON FP raw-bit unit PASS.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-sv-p7-4-007",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-4 scalar/NEON FMA and conversion raw-bit vectors PASS.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-sv-p7-5-008",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-5 scalar/NEON FP16/sqrt/minmax/frint raw-bit vectors PASS.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-cocotb-fp-scalar-009",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TESTS=5 PASS=5 FAIL=0.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-cocotb-p7-2-010",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-2-neon",
+      "exit_code": 2,
+      "result": "fail_unrelated_preexisting",
+      "summary": "TESTS=10 PASS=9 FAIL=1. test_p7_2_unsupported_udef fails on SQADD because the existing B2c DUP decode branch captures 0x4E220C20; no file touched by this task changes decode, so this is outside T-20260902-004 scope.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-cocotb-p7-3-011",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TESTS=4 PASS=4 FAIL=0.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-cocotb-p7-4-012",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TESTS=5 PASS=5 FAIL=0.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-l1-cocotb-p7-5-013",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TESTS=8 PASS=8 FAIL=0.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    },
+    {
+      "run_id": "owner-git-diff-check-014",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Whitespace/error check clean.",
+      "source_sha": "325d2da85f8cd351b6a3975d29440e9dc6d0ee9f"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "owner": "T-20260902-004",
+      "uri": "docs/handoffs/T-20260902-004-quartus-fp-neon-compat.md",
+      "reproduce": "cat docs/handoffs/T-20260902-004-quartus-fp-neon-compat.md",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": null
+    },
+    {
+      "id": "evidence",
+      "owner": "T-20260902-004",
+      "uri": "docs/tasks/evidence/T-20260902-004.json",
+      "reproduce": "cat docs/tasks/evidence/T-20260902-004.json",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": null
+    }
+  ],
+  "known_limits": [
+    "No remote Quartus full-FP synthesis was run in this task; only local Verilator validation.",
+    "Standard make compile is blocked by a pre-existing UNUSEDSIGNAL warning in rtl/lcvex_core.sv; direct lint with that warning suppressed passes.",
+    "sim-cocotb-p7-2-neon has one unrelated pre-existing failure in test_p7_2_unsupported_udef (SQADD captured by existing B2c DUP decode branch).",
+    "No fit/STA/SOF/programming run.",
+    "This task does not modify rtl/lcvex_decode.sv or rtl/lcvex_core.sv, per write-set scope."
+  ],
+  "next": "Merge and rerun remote real full-FP synthesis; optionally file a separate decode task for B2c DUP/SQADD encoding overlap if full P7-2 cocotb green is required.",
+  "timestamps": {
+    "sent_at": "2026-09-02T08:18:53+08:00",
+    "received_at": "2026-09-02T08:19:00+08:00",
+    "reported_at": "2026-09-02T08:56:53+08:00"
+  },
+  "merge_sha": "922d4f82f88b2871e2baee4252a0de8e12df1e0e",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T08:57:59+08:00",
+    "merged_at": "2026-09-02T08:59:40+08:00",
+    "recorded_at": "2026-09-02T08:59:40+08:00",
+    "notes": "Merged Quartus FP/NEON compatibility fixes; integrator reran make compile and sim-sv-fp-scalar on merge SHA; P7-2 unrelated failure documented"
+  }
+}

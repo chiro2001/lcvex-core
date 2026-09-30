@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-011",
+  "label": "B25-SDC-SIGNOFF-BATCH",
+  "state": "done",
+  "acceptance_status": "local-union-and-isolated-fitted-overlay-pass",
+  "partial": false,
+  "base_sha": "fcb61cb9ebff2f389f43b0f0a3973d9314176779",
+  "candidate_sha": "4618c17f85a3a84f28824a9d5964d8600c3d966d",
+  "remote_overlay_sha": "17faa2b9cbc746290963d078985e115574d54088",
+  "physical_source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "branch": "batch/T-20260907-037-b25-bringup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037",
+  "owner": "codex-integrator",
+  "timestamps": {
+    "local_merged_l1_finished_at": "2026-09-09T13:20:05+08:00",
+    "remote_preflight_at": "2026-09-09T13:37:19+08:00",
+    "remote_clone_finished_at": "2026-09-09T13:37:54+08:00",
+    "remote_payload_ucp_finished_at": "2026-09-09T13:45:36+08:00",
+    "remote_data_delay_final_started_at": "2026-09-09T13:52:12+08:00",
+    "remote_data_delay_final_finished_at": "2026-09-09T13:53:50+08:00",
+    "remote_timing_summary_started_at": "2026-09-09T13:58:03+08:00",
+    "remote_timing_summary_finished_at": "2026-09-09T13:58:36+08:00",
+    "final_local_union_finished_at": "2026-09-09T14:26:32+08:00",
+    "reported_at": "2026-09-09T14:26:32+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "members": {
+    "T-20260909-008": {
+      "result_head": "dd6c344d285e7982a4f0b57587dafab12a0df653",
+      "integration_commits": ["34da0aea", "87e1f196"],
+      "status": "accepted"
+    },
+    "T-20260909-009": {
+      "result_head": "1483a0b79a7e3091556f81c6214fab93a7368a84",
+      "integration_commits": ["b5805bbf", "dd02ac54", "7fdc59a3"],
+      "status": "accepted"
+    },
+    "T-20260909-010": {
+      "result_head": "71d310508de3c6fc2549fda5534f36ec063cb26d",
+      "corrected_implementation_head": "cebb871a3b6ffa362a6e7c1fb5877f36fce4190d",
+      "status": "accepted-after-source-sha-and-exception-schema-hardening"
+    },
+    "T-20260909-012": {
+      "result_head": "59007a80e99f0ef9fdaa4f4ed68ac3a89cadeb4e",
+      "integration_commits": ["070b29f4", "0756471d", "902b1db4", "4618c17f"],
+      "status": "accepted-after-report-parser-hardening"
+    }
+  },
+  "candidate_identity": {
+    "sdc": {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "bytes": 14384,
+      "sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5"
+    },
+    "physical_waiver_policy_sha256": "284f9c140bba1c36992de222189f08c2b6b57d328949facee2d2128f0812c393",
+    "manifest_and_SHA256SUMS_updated": true,
+    "remote_overlay_to_final_delta": "After remote_overlay_sha, only task metadata and offline policy/exporter/checker files changed; RTL, QSF, SDC, platform manifest and SHA256SUMS physical inputs are unchanged."
+  },
+  "local_validation": {
+    "static_union": {
+      "command": "python3 check_fifo_payload_sdc.py --self-test; python3 check_cdc_data_delay_sdc.py --fault-matrix; run_physical_waivers_fixture.py; run_physical_inventory_exporter_fixture.py; check_physical_waivers.py on actual T-011 inventory; check_platform.py; check_skeleton.py; check_synthesis_selector.py; sha256sum -c SHA256SUMS",
+      "result": "PASS: FIFO 6/6 faults, CDC 10/10 faults, waiver 18/18 faults, exporter 13/13 faults, actual inventory PASS, platform/skeleton/selector/hash closure PASS",
+      "log": "build/agents/T-20260909-011/integration-final/static-union.log",
+      "sha256": "696286cbf4067296031b6276e59ee47f2dcae06baafe9d237c29de900e2e8285"
+    },
+    "adapter_sv_sva": {
+      "resource": "resource-lock local",
+      "verilator_jobs": 2,
+      "result": "PASS; --assert; finished at 3 us",
+      "compile_log_sha256": "77c1dcc0b325b3fae45bd7ccb8d7004ac378683eee95767d5160a349f19a05c4",
+      "run_log_sha256": "c8d5d16c7c495a94a0e2b0adb88261723fdc88fab813479a43c8f6c517279fcb"
+    },
+    "adapter_cocotb": {
+      "resource": "resource-lock local",
+      "seed": "0x00b2054",
+      "result": "TESTS=7 PASS=7 FAIL=0 SKIP=0",
+      "log": "build/agents/T-20260909-011/merged/cocotb/run.log",
+      "sha256": "cb206e682472968034b0059eb73b196178e9106b5de4bfac809d89b0c59f6536"
+    }
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "resource": "all remote create/copy/query/collect actions used resource-lock gamepc",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "source": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/fpga/catapult_a10",
+    "task_root": "D:/Projects/fpga-altra/lcvex/build/T-20260909-011-b25-sdc-overlay-17faa2b9",
+    "source_file_count": 541,
+    "source_bytes": 806579868,
+    "preflight": "PASS; EDA_COUNT=0; D: free 89520873472 bytes; free physical 42758.1 MiB",
+    "clone": {
+      "method": "robocopy /E /COPY:DAT /DCOPY:DAT /XJ into a unique task clone; no overwrite/delete of T-002",
+      "robocopy_exit": 1,
+      "source_preclone_manifest_sha256": "3d54e392aa3e7dd0620b6b7a45824b69f2baa6dcd135880fa019afdca09595d2",
+      "clone_baseline_manifest_sha256": "3d54e392aa3e7dd0620b6b7a45824b69f2baa6dcd135880fa019afdca09595d2",
+      "overlay_prequery_manifest_sha256": "9837d9d6035d9f485f7a128ae0f23037ed1b3d5f4d59651ac46286d52fd6bfee",
+      "overlay_postquery_manifest_sha256": "c4d01dd12e2eb8d18e4b03b0837601085d662e3033f30c9f92354f64789f7cdd",
+      "scratch_query_diff_rows": 24,
+      "scratch_query_effect": "Quartus report-only sessions changed report/cache rows only in the disposable clone; each accepted family started from a fresh source-identical clone and prior attempts were archived.",
+      "source_postquery_manifest_sha256": "3d54e392aa3e7dd0620b6b7a45824b69f2baa6dcd135880fa019afdca09595d2",
+      "source_query_diff_rows": 0
+    },
+    "safety": {
+      "synthesis": false,
+      "fitter": false,
+      "assembler": false,
+      "programming_or_jtag": false,
+      "board_or_flash": false,
+      "forbidden_artifacts": 0,
+      "eda_processes_after": 0
+    }
+  },
+  "physical_overlay_results": {
+    "fifo_payload": {
+      "exact_families": ["request_mem_to_emif_req", "response_mem_to_txn_local", "response_mem_to_read_len", "response_mem_to_read_beat", "response_mem_to_read_line", "response_mem_to_response_code"],
+      "result": "all six setup/hold payload queries report Nothing to report; no broad adapter exception was added",
+      "remaining_global_hold_wns_ns": 0.018,
+      "report_hash_manifest": "build/agents/T-20260909-011/runtime/payload_reports.sha256",
+      "report_hash_manifest_sha256": "75a02f48f35288c82d19c4696c34b1d7696f3d1bd01c857219e279c73a9073eb"
+    },
+    "cdc_data_delay": {
+      "corners": {
+        "3_slow_900mv_0c": {"request_wr": 1.145, "request_rd": 1.158, "response_rd": 1.365, "response_wr": 1.327, "poison": 0.984},
+        "3_slow_900mv_100c": {"request_wr": 1.089, "request_rd": 1.116, "response_rd": 1.320, "response_wr": 1.289, "poison": 0.927},
+        "MIN_fast_900mv_0c": {"request_wr": 1.495, "request_rd": 1.522, "response_rd": 1.741, "response_wr": 1.700, "poison": 1.407},
+        "MIN_fast_900mv_100c": {"request_wr": 1.381, "request_rd": 1.420, "response_rd": 1.680, "response_wr": 1.641, "poison": 1.287}
+      },
+      "units": "ns slack",
+      "path_contract": "four Gray routes have 3/3 source/target/path rows; poison has 1/1/1; all 20 groups have 0 violations and Max Delay Exception (Datapath Only) 2.000",
+      "worst_slack_ns": 0.927,
+      "quartus_sta_exit": 0,
+      "wall_seconds": 97.514,
+      "stdout_sha256": "78373e0589f82fd7fd43c865cbc5eafb9875e7f01fb928859867bee9b255c4db",
+      "report_hash_manifest_sha256": "ad289cfbfc0152f4209cf37fea43ac8873912378bf2cc6f36fb2198aa282b602"
+    },
+    "timing_summary": {
+      "sys_clk_25_setup_wns_ns": 7.949,
+      "sys_clk_25_hold_wns_ns": 0.018,
+      "sys_clk_25_recovery_wns_ns": 13.596,
+      "sys_clk_25_removal_wns_ns": 0.187,
+      "min_pulse_wns_ns": 0.120,
+      "all_violations": 0,
+      "quartus_sta_exit": 0,
+      "report_hash_manifest_sha256": "67d756333769d4c0a1a1a7980c6fe91376632717aa0f26b25af7d1ced9001245"
+    },
+    "ucp_and_reset_waiver": {
+      "unconstrained_clocks": ["altera_reserved_tck", "soc|emif_adapter|emif_rst_sync1_n"],
+      "illegal_clocks": 0,
+      "input_ports": {"altera_reserved_tdi": 26, "altera_reserved_tms": 37},
+      "output_ports": {"altera_reserved_tdo": 4},
+      "fast": {"recovery_paths": 627, "recovery_violated": 0, "recovery_wns_ns": 1.202, "removal_paths": 627, "removal_violated": 0, "removal_wns_ns": 0.191},
+      "slow": {"recovery_paths": 627, "recovery_violated": 0, "recovery_wns_ns": 1.202, "removal_paths": 627, "removal_violated": 0, "removal_wns_ns": 0.191},
+      "exported_inventory": "build/agents/T-20260909-011/integration-final/t011-physical-waiver-inventory.json",
+      "inventory_sha256": "b42e16f6de2bc40620122bdca9111c1cd4e5fa60be7d9b03a61caf6b7afde9f8",
+      "checker_result": "PHYSICAL_WAIVER_CHECK_PASS"
+    }
+  },
+  "transient_harness_attempts": [
+    {
+      "attempt": "resource-lock-metadata",
+      "accepted": false,
+      "reason": "remote resource-lock commands carried an incorrectly hand-expanded candidate_sha label 17faa2b9f1b8a9acf892392359b451256e1c5d2a; the label did not select inputs, the uploaded SDC was independently hash-checked as 7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5, and git rev-parse verifies the actual overlay commit as 17faa2b9cbc746290963d078985e115574d54088"
+    },
+    {
+      "attempt": 1,
+      "accepted": false,
+      "reason": "data-delay verifier rejected pre-existing unrelated ignored/invalid formal-SDC rows; payload and UCP collection still completed successfully"
+    },
+    {
+      "attempt": 2,
+      "accepted": false,
+      "reason": "TimeQuest returned 3 paths, 0 violations and +1.145 ns, but a whitespace-fragile Tcl regex expected one space after the report sentence"
+    },
+    {
+      "attempt": 3,
+      "accepted": true,
+      "reason": "route-scoped exception validation and whitespace-tolerant report parsing; all four corners passed on a fresh clone"
+    }
+  ],
+  "known_limits": [
+    "This batch is a report-only SDC overlay on the frozen T-002 fitted netlist; it proves constraint resolution and timing margins but not a fresh compile with the merged SDC.",
+    "The formal SDC still contains historical reset/EMIF broad rows that TimeQuest classifies as ignored, invalid or fully overridden. They are unchanged by T-008/T-009 and the five CDC bounds are individually Complete/non-ignored, but a future cleanup should inventory those historical rows instead of treating the whole ignored report as empty.",
+    "One final fresh synthesis/fitter/STA is required before any assembler or board authorization request."
+  ],
+  "handoff": "docs/handoffs/T-20260909-011-b25-sdc-signoff-batch.md"
+}

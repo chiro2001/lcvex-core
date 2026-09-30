@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-105",
+  "label": "external-audit-run",
+  "parent": "T-20260829-104",
+  "title": "按外部审计材料包执行独立审计并接收结果",
+  "kind": "verification-audit",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "2edc7573551bcd8e7ab2408858d011aed58fed2c",
+  "head_sha": "66ce5a4fe95544d374e3f78ebce6bb6c22dc70d4",
+  "branch": "verify/T-20260829-105-external-audit-run",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-105",
+  "depends_on": [
+    "T-20260829-104"
+  ],
+  "scope": "以 feature/p7-final @ 2edc757 为审计基线，按 docs/audit/ 的 9 个方向独立静态核查源码、测试设计、任务 DAG、handoff、evidence、构建入口和已有风险声明；结果写入 external-results。按用户最终口径，动态回归列为可选移交项，由原开发 Agent 执行。不是 Arm/DO-254/ISO 产品认证，不修改功能代码，不运行 Gate D、长 Linux、Quartus、远端实验或板测。",
+  "writes": [
+    "docs/audit/external-results/**",
+    "docs/handoffs/T-20260829-105-external-audit-run.md",
+    "docs/tasks/evidence/T-20260829-105.json"
+  ],
+  "reads": [
+    "docs/**",
+    "rtl/**",
+    "tb/**",
+    "sim/**",
+    "qemu/**",
+    "fpga/**",
+    "scripts/**",
+    "env/**",
+    "Makefile",
+    ".github/**"
+  ],
+  "context_docs": [
+    "docs/audit/README.md",
+    "docs/audit/self-assessment.md",
+    "docs/audit/evidence-index.md",
+    "docs/audit/01-governance.md",
+    "docs/audit/02-reproducibility.md",
+    "docs/audit/03-rtl-quality.md",
+    "docs/audit/04-isa-architecture.md",
+    "docs/audit/05-verification.md",
+    "docs/audit/06-multicore.md",
+    "docs/audit/07-fpga.md",
+    "docs/audit/08-security-boundary.md",
+    "docs/audit/09-risks.md"
+  ],
+  "validation": {
+    "l0": [
+      "审计材料路径、JSON、SHA/hash 和任务元数据一致性检查",
+      "V82 profile、QEMU patch、FPGA manifest 等仓库自检入口"
+    ],
+    "l1": [
+      "静态审阅 RTL/CDC/reset/参数化/commit/QEMU 协议",
+      "口径调整前 make compile PASS，仅作为执行记录",
+      "口径调整前 make test 中止（exit 130），不作为验收结果"
+    ],
+    "l2": [
+      "动态回归和 bug 复现列为 DYN-01..08，由原开发 Agent 另立任务执行"
+    ],
+    "l3": []
+  },
+  "acceptance": "完成 9 方向独立静态审计；findings.md 记录基线、方法、限制、逐方向结论和证据；action-items.md 中每条发现包含 EXT ID、严重级别、状态、证据引用、复现/验证方式、建议动作；evidence JSON 保存静态检查和口径调整前动态执行事实；动态项明确移交原开发 Agent；不把已披露且边界准确的限制机械重复为缺陷。",
+  "resource": {
+    "cpu": 6,
+    "memory_mb": 15360,
+    "memory_cgroup_limit_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 10800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T22:49:29+0800",
+  "updated_at": "2026-08-29T23:18:39+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T22:49:29+0800",
+    "agent_name": "primary-external-auditor",
+    "model": "current-session",
+    "reasoning_effort": "high",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-105"
+  },
+  "known_limits": [
+    "审计是项目范围内的证据一致性和风险审计，不构成 Arm 架构认证或产品签核。",
+    "不修改 RTL/tb/sim/qemu/fpga/Makefile/CI 功能内容。",
+    "不启动 Quartus、远端实验、完整 Gate D、长 Linux 或板测。",
+    "不读取或记录密码、私钥、license 内容及其他敏感信息。",
+    "make test 在用户改为静态优先后中止，exit 130，无总体 PASS/FAIL。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-105-external-audit-run.md",
+  "evidence": "docs/tasks/evidence/T-20260829-105.json",
+  "merge_sha": "72e026d15bc6e3c27d748dec11963f7385bf7307",
+  "merged_at": "2026-08-29T23:18:39+0800",
+  "integrator_review": {
+    "received_at": "2026-08-29T23:18:39+0800",
+    "status": "accepted",
+    "head_sha": "66ce5a4fe95544d374e3f78ebce6bb6c22dc70d4",
+    "result_sha": "dd4add4a80890c6084a45258fe7f8df5970668bc",
+    "notes": "Static external audit integrated. 9 findings: high=1, medium=6, low=2. Dynamic regression remains optional and delegated to original domain agents."
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-005",
+  "label": "B25-ASYNC-FIFO-PAYLOAD-HOLD-AUDIT",
+  "state": "review",
+  "acceptance_status": "audit-complete; SDC-fix-recommended; physical-closure-not-accepted",
+  "partial": true,
+  "base_sha": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "candidate_sha": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "physical_source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "head_sha": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "branch": "verify/T-20260909-005-b25-async-fifo-payload-hold-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-005",
+  "owner": "b25_hold_endpoint_audit",
+  "timestamps": {
+    "dispatch_received_at": "2026-09-09T10:35:01+08:00",
+    "remote_preflight_at": "2026-09-09T10:39:02.3846898+08:00",
+    "sta_started_at": "2026-09-09T12:02:20.3409382+08:00",
+    "sta_finished_at": "2026-09-09T12:03:19.8083347+08:00",
+    "final_remote_postflight_at": "2026-09-09T12:08:23.5746954+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "toolchain": {
+    "host": "GAMEPC",
+    "host_ip": "192.168.101.5",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "quartus_sta": "D:/Software/intelFPGA_pro/21.4/quartus/bin64/quartus_sta.exe",
+    "quartus_sta_sha256": "d55962dd4fd902a1748c1a1a98a0c0257f12e3f510dd27770fc065162e91ebe7",
+    "device": "10AX115N4F40E3SG",
+    "parallel_workers_reported": 16
+  },
+  "fitted_database": {
+    "reuse": true,
+    "probe": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical",
+    "project_dir": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/fpga/catapult_a10/quartus",
+    "runtime_dir": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005",
+    "snapshot": "final",
+    "pre_post_hash_equal": true,
+    "hashes": {
+      "catapult_a10.qpf": {"bytes": 34, "sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd"},
+      "catapult_a10.qsf": {"bytes": 13972, "sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46"},
+      "catapult_a10.sdc": {"bytes": 13943, "sha256": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f"},
+      "output_files/catapult_a10.fit.summary": {"bytes": 705, "sha256": "176f857fb23d050fe425f0cb81bd28d289503105928ae074d94db651b851d600"},
+      "output_files/catapult_a10.sta.summary": {"bytes": 9138, "sha256": "e1c979959907d7d3dee6500046d0b6dd2d95e65e876a7bb3e1b53ad74d157246"},
+      "output_files/catapult_a10.sta.rpt": {"bytes": 17780478, "sha256": "dc1832b5180698b24eef657c8b3aed7823b688ff137871c14deca42d761b5f2d"},
+      "qdb/report.fit.rdb": {"bytes": 2206331, "sha256": "665b7e780c79c075df54ebbf399eb3608fa75e22039ddf13d04d477ab995f9e4"},
+      "qdb/report.sta.rdb": {"bytes": 1986200, "sha256": "99c94c64b43bbf498e24e95a142ea5a4c79845a49ee7bc52ce9a308a1a91704a"},
+      "qdb/catapult_a10.sta.qmsgdb": {"bytes": 688128, "sha256": "569ccdf89a94b3df3d3f97e5af73d77fa322d0840b8e378ba8b8fa63e1b4351f"}
+    },
+    "pre_capture": "build/agents/T-005/runtime/remote_hash_pre.lock.log",
+    "post_capture": "build/agents/T-005/runtime/remote_postflight_final.lock.log"
+  },
+  "commands": [
+    {
+      "stage": "remote_preflight",
+      "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260909-005 b25_async_fifo_payload_hold_audit --meta stage=remote_preflight --meta source_sha=2a10d23740e67850cdae7e91fd834c53c7746cac --meta fitted_source_sha=702bd8ee5295efe8a2ad9e094d6c12471a1d3089 -- ssh -o BatchMode=yes -o ConnectTimeout=10 192.168.101.5 pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand <remote_preflight.ps1>",
+      "result": "pass; EDA_COUNT=0; project/output_files/qdb present",
+      "capture": "build/agents/T-005/runtime/remote_preflight.lock.log",
+      "capture_sha256": "42d888717ffcbe4ca60536bebbf75763b0fdaf9dc090cb005a428633695e0c02"
+    },
+    {
+      "stage": "quartus_sta_report_only",
+      "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260909-005 b25_async_fifo_payload_hold_audit --meta stage=quartus_sta_payload_hold_audit_with_global_guard --meta source_sha=2a10d23740e67850cdae7e91fd834c53c7746cac --meta fitted_source_sha=702bd8ee5295efe8a2ad9e094d6c12471a1d3089 --meta fitted_database_reuse=true --meta remote_runtime=T-005 -- ssh -o BatchMode=yes -o ConnectTimeout=10 192.168.101.5 pwsh.exe -NoLogo -NoProfile -NonInteractive -File D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005/run_audit.ps1",
+      "inner_command": "D:/Software/intelFPGA_pro/21.4/quartus/bin64/quartus_sta.exe -t D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005/t005_async_fifo_hold_audit.tcl",
+      "started_at": "2026-09-09T12:02:20.3409382+08:00",
+      "finished_at": "2026-09-09T12:03:19.8083347+08:00",
+      "wall_seconds": 59.468,
+      "quartus_pid": 16760,
+      "exit_code": 0,
+      "quartus_stdout": {"path": "build/agents/T-005/runtime/quartus_sta.stdout.log", "bytes": 38615, "sha256": "3b6728e33b04a1472f17d2b666239cfd6618e5c17a090aa483e7426c9f55a101"},
+      "quartus_stderr": {"path": "build/agents/T-005/runtime/quartus_sta.stderr.log", "bytes": 104, "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"}
+    },
+    {
+      "stage": "remote_postflight",
+      "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260909-005 b25_async_fifo_payload_hold_audit --meta stage=remote_postflight_final --meta fitted_source_sha=702bd8ee5295efe8a2ad9e094d6c12471a1d3089 --meta remote_runtime=T-005 -- ssh -o BatchMode=yes -o ConnectTimeout=10 192.168.101.5 pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand <remote_postflight.ps1>",
+      "result": "pass; EDA_COUNT=0; RUNTIME_FORBIDDEN_COUNT=0; source and DB hashes unchanged",
+      "capture": "build/agents/T-005/runtime/remote_postflight_final.lock.log",
+      "capture_sha256": "03bc44339e002f9a32f09c3c92eca83145a1da77a8f1434e7ca54f1e7ee17b2a"
+    }
+  ],
+  "resource": {
+    "lock": "gamepc",
+    "busy_return_75_observed": true,
+    "busy_return_75_events": 7,
+    "busy_owner_observed": "T-20260909-006/b25_cdc_exception_precedence_audit",
+    "final_status": "local FREE; gamepc FREE",
+    "policy": "Every remote query, script sync, report run, readback and postflight was lock-protected; no bare quartus_sta invocation"
+  },
+  "fifo_collections": {
+    "request_mem": {"pattern": "*request_fifo|mem*", "count": 1815, "direction": "cpu_clk write -> emif_clk read"},
+    "response_mem": {"pattern": "*response_fifo|mem*", "count": 1558, "direction": "emif_clk write -> cpu_clk read"},
+    "adapter_registers": {"pattern": "soc|emif_adapter|*", "count": 5462},
+    "request_emif_req_q": {"pattern": "soc|emif_adapter|emif_req_q*", "count": 606},
+    "response_txn_local_q": {"pattern": "soc|emif_adapter|txn_local_q*", "count": 1},
+    "response_read_len_q": {"pattern": "soc|emif_adapter|read_len_q*", "count": 1},
+    "response_read_beat_q": {"pattern": "soc|emif_adapter|read_beat_q*", "count": 8},
+    "response_read_line_q": {"pattern": "soc|emif_adapter|read_line_q*", "count": 512},
+    "response_code_q": {"pattern": "soc|emif_adapter|response_code_q*", "count": 2},
+    "response_cpu_state_q": {"pattern": "soc|emif_adapter|cpu_state_q*", "count": 11},
+    "response_read_addr_q": {"pattern": "soc|emif_adapter|read_addr_q*", "count": 69}
+  },
+  "timing": {
+    "clock_relation": "emif|emif_bot|emif_bot_core_usr_clk (266.67 MHz) -> sys_clk_25 (25 MHz)",
+    "path_report_detail": "report_timing -detail full_path includes launch/latch clocks, relationship, clock skew, data delay, slack, worst-case operating condition and SDC Exception",
+    "setup_fast_900mV_0C": {
+      "request_mem_to_emif_req_q": {"paths": 0, "status": "no paths; existing SDC 3b complete"},
+      "response_mem_to_txn_local_q": {"paths": 18, "violated": 0, "worst_slack_ns": 4.262, "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk", "latch_clock": "sys_clk_25", "exception": "No SDC Exception on Path"},
+      "response_mem_to_read_len_q": {"paths": 18, "violated": 0, "worst_slack_ns": 4.166, "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk", "latch_clock": "sys_clk_25", "exception": "No SDC Exception on Path"},
+      "response_mem_to_read_beat_q": {"paths": 144, "violated": 0, "worst_slack_ns": 3.723, "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk", "latch_clock": "sys_clk_25", "exception": "No SDC Exception on Path"},
+      "response_mem_to_read_line_q": {"paths": 0, "status": "no paths; existing SDC 3b complete"},
+      "response_mem_to_response_code_q": {"paths": 0, "status": "no paths; existing SDC 3b complete"},
+      "response_mem_to_all_adapter": {"paths": 180, "violated": 0, "worst_slack_ns": 3.723}
+    },
+    "hold_slow_900mV_0C": {
+      "request_mem_to_emif_req_q": {"paths": 0, "status": "no paths; existing SDC 3b complete"},
+      "response_mem_to_txn_local_q": {"paths": 18, "violated": 7, "worst_slack_ns": -10.338, "top_from": "soc|emif_adapter|response_fifo|mem~514", "top_to": "soc|emif_adapter|txn_local_q", "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk", "latch_clock": "sys_clk_25", "relationship_ns": -0.117, "clock_skew_ns": 11.290, "data_delay_ns": 1.531, "exception": "No SDC Exception on Path"},
+      "response_mem_to_read_len_q": {"paths": 18, "violated": 7, "worst_slack_ns": -10.105, "top_from": "soc|emif_adapter|response_fifo|mem~514", "top_to": "soc|emif_adapter|read_len_q[0]", "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk", "latch_clock": "sys_clk_25", "relationship_ns": -0.117, "clock_skew_ns": 11.297, "data_delay_ns": 1.792, "exception": "No SDC Exception on Path"},
+      "response_mem_to_read_beat_q": {"paths": 144, "violated": 56, "worst_slack_ns": -9.256, "top_from": "soc|emif_adapter|response_fifo|mem~515", "top_to": "soc|emif_adapter|read_beat_q[3]", "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk", "latch_clock": "sys_clk_25", "relationship_ns": -0.117, "clock_skew_ns": 11.290, "data_delay_ns": 2.222, "exception": "No SDC Exception on Path"},
+      "response_mem_to_read_line_q": {"paths": 0, "status": "no paths; existing SDC 3b complete"},
+      "response_mem_to_response_code_q": {"paths": 0, "status": "no paths; existing SDC 3b complete"},
+      "response_mem_to_all_adapter": {"paths": 180, "violated": 70, "worst_slack_ns": -10.338, "endpoint_distribution": {"txn_local_q": 18, "read_len_q[0]": 18, "read_beat_q[0..7]": 144}}
+    }
+  },
+  "exception_overlay": {
+    "type": "hypothetical endpoint-only in-memory set_false_path; checked-in SDC not modified",
+    "applied_paths": [
+      {"from": "*request_fifo|mem*", "to": "soc|emif_adapter|emif_req_q*", "collection_counts": [1815, 606], "reason": "request payload CDC; redundant confirmation of existing 3b"},
+      {"from": "*response_fifo|mem*", "to": "soc|emif_adapter|txn_local_q*", "collection_counts": [1558, 1], "reason": "response packet/control CDC; omitted endpoint"},
+      {"from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_len_q*", "collection_counts": [1558, 1], "reason": "response packet/control CDC; omitted endpoint"},
+      {"from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_beat_q*", "collection_counts": [1558, 8], "reason": "response packet/control CDC; omitted endpoint"},
+      {"from": "*response_fifo|mem*", "to": "soc|emif_adapter|read_line_q*", "collection_counts": [1558, 512], "reason": "response payload CDC; redundant confirmation of existing 3b"},
+      {"from": "*response_fifo|mem*", "to": "soc|emif_adapter|response_code_q*", "collection_counts": [1558, 2], "reason": "response status CDC; redundant confirmation of existing 3b"}
+    ],
+    "hold_effect": {
+      "response_mem_to_all_adapter_before": {"paths": 180, "violated": 70, "worst_slack_ns": -10.338},
+      "response_mem_to_all_adapter_after": {"paths": 0, "status": "Nothing to report"},
+      "global_sys_clk_25_hold_before": {"paths": 50, "violated": 50, "worst_slack_ns": -10.338},
+      "global_sys_clk_25_hold_after": {"paths": 50, "violated": 0, "worst_slack_ns": 0.018, "first_remaining_endpoint": "sfl_inst|epcq|epcq|asmi_parallel_inst|altera_asmi_parallel_epcq_epcq|add_msb_reg", "synchronizer_remaining_example": "soc|emif_adapter|request_fifo|rd_ptr_gray_wr1_q[0] -> soc|emif_adapter|request_fifo|rd_ptr_gray_wr2_q[0]"},
+      "interpretation": "all response-memory paths in the broad adapter query terminate in the enumerated response packet sinks; unrelated EPCQ/JTAG and FIFO synchronizer hold paths remain globally timed"
+    },
+    "exception_reports": {
+      "baseline": {"path": "build/agents/T-20260909-005/runtime/remote/T-005/slow_baseline_exceptions_hold.rpt", "bytes": 342332, "sha256": "75f34ecd4fd46b3cbc78828094dc0c4862bde10d68371452149bd9592f7d1dca", "existing_3b_status": "Complete"},
+      "overlay": {"path": "build/agents/T-20260909-005/runtime/remote/T-005/slow_overlay_exceptions_hold.rpt", "bytes": 355031, "sha256": "22b72765d64bf590f3c7791f5192b2f4688e3d7cc1aafbf46be45887b2ad0240", "new_endpoint_status": "Complete"}
+    }
+  },
+  "protocol_proof": {
+    "rtl_file": "rtl/lcvex_axi4_avalon_adapter.sv",
+    "gray_pointer_fifo": {
+      "rd_empty_equation": "rd_empty = (rd_ptr_gray_q == wr_ptr_gray_rd2_q)",
+      "payload_equation": "rd_data = mem[rd_ptr_bin_q[ADDR_WIDTH-1:0]]",
+      "write_event": "wr_en && !wr_full writes mem at wr_ptr_bin_q and advances registered wr_ptr_gray_q",
+      "read_event": "rd_en && !rd_empty advances rd_ptr_bin_q/rd_ptr_gray_q",
+      "sync_chain": "wr_ptr_gray_rd1_q <= wr_ptr_gray_q; wr_ptr_gray_rd2_q <= wr_ptr_gray_rd1_q on rd_clk",
+      "result": "a newly written entry can make rd_empty false only after two rd_clk synchronizer samples"
+    },
+    "adapter_capture": {
+      "rd_enable": "resp_fifo_rd_en = cpu_fifo_rst_n && (cpu_state_q == CPU_WAIT_RESPONSE) && !resp_fifo_empty && !cal_failed_cpu",
+      "capture": "CPU_WAIT_RESPONSE samples resp_fifo_rd_packet when resp_fifo_rd_en, then stores read_line_q/read_beat_q and response_code_q or emits the write response",
+      "stability_window": "after the write pointer crosses rd1/rd2, rd_en is asserted after rd_empty recomputes; packet capture occurs on the following rd_clk edge, so payload has at least two full read-clock periods before capture (normally the third edge after a near-edge write)",
+      "qualification": "the proof depends on Gray pointer one-bit transitions, FIFO no-overwrite/full protocol, and registered rd_en/rd_ptr behavior; no second payload synchronizer is claimed"
+    },
+    "decision": "SDC-fix",
+    "decision_reason": "physical reports identify exactly the three omitted response packet/control endpoint families; endpoint-only overlay removes those payload CDC paths and leaves unrelated synchronization hold timed, matching the RTL protocol contract",
+    "alternative": "RTL-read-register is not selected because it changes latency/RTL state and is not required by the protocol proof; reconsider only if future CDC analysis rejects async-memory payload use"
+  },
+  "future_action": {
+    "exact_write_regions": [
+      "fpga/catapult_a10/quartus/catapult_a10.sdc: section 3b only (current lines 93-102); add endpoint-only set_false_path from {*response_fifo|mem*} to {soc|emif_adapter|txn_local_q*}",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc: section 3b only; add endpoint-only set_false_path from {*response_fifo|mem*} to {soc|emif_adapter|read_len_q*}",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc: section 3b only; add endpoint-only set_false_path from {*response_fifo|mem*} to {soc|emif_adapter|read_beat_q*}"
+    ],
+    "forbidden_regions": ["rtl/**", "qemu/**", "fpga/catapult_a10/quartus/catapult_a10.qsf", "active task JSON", "TASKS.md", "PROJECT_STATUS.md", "ROADMAP.md"],
+    "required_l0_l2": [
+      {"level": "L0", "command": "make -C sim/cocotb -f Makefile.axi4_avalon SIM=verilator TOPLEVEL=lcvex_axi4_avalon_cocotb_tb COCOTB_TEST_MODULES=test_axi4_avalon SIM_BUILD=build/agents/<future-task>/cocotb", "purpose": "replay request/response FIFO, reset and payload protocol cases"},
+      {"level": "L1", "command": "verilator --lint-only --timing --assert -Wall -Wno-fatal --top-module lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv", "purpose": "lint/SVA and endpoint reset protocol"},
+      {"level": "L2", "command": "reuse the existing directed AXI/Avalon QEMU lockstep/difftest lane plus the focused adapter SV/Cocotb cases after the SDC-only change; record source SHA and no RTL delta", "purpose": "confirm no architectural response/latency regression"}
+    ],
+    "required_report_revalidation": [
+      "post-fit quartus_sta report-only on a fresh SDC-applied timing database; rerun report_timing setup/hold for both FIFO memories and every enumerated endpoint family",
+      "confirm response txn_local/read_len/read_beat paths report Complete endpoint-only exceptions and no -ignored exception; confirm request mem->emif_req remains Complete",
+      "rerun global setup/hold/recovery/removal/min-pulse, report_exceptions, report_clocks and unconstrained-path checks; retain unrelated synchronizer hold",
+      "physical closure remains blocked until all required timing classes are nonnegative and existing unconstrained-clock risks are resolved"
+    ]
+  },
+  "artifacts": [
+    {"id": "collection-overlay-summary", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/t005_collection_and_overlay_summary.tsv", "sha256": "c09709feb057917712e99df7120e8a3ba411c3a769ba300db5253e06775afd83", "bytes": 20352, "owner": "b25_hold_endpoint_audit", "reproduce": "run remote T-005 Tcl report-only script"},
+    {"id": "response-txn-local-hold", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_baseline_response_txn_local_hold.rpt", "sha256": "6abfddebb18f7b7698534bb35ecc051ef02822d003fa1b893de612bbaa669ab8", "bytes": 256458, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -hold -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|txn_local_q*}]"},
+    {"id": "response-read-len-hold", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_baseline_response_read_len_hold.rpt", "sha256": "e6497587d4c704e51e1176835966b9ba9d5a69c8371db00159dda3a4476ac94b", "bytes": 256498, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -hold -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|read_len_q*}]"},
+    {"id": "response-read-beat-hold", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_baseline_response_read_beat_hold.rpt", "sha256": "312022cb4579c0ab19efaa1f4f909aa1701f771428dfe18991ba7e27555323a5", "bytes": 2061235, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -hold -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|read_beat_q*}]"},
+    {"id": "response-all-adapter-hold", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_baseline_response_all_adapter_hold.rpt", "sha256": "9a46a2a5843eb99aa70b4650594b834180459fe60b596b807f7198f9b8153821", "bytes": 2569686, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -hold -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|*}]"},
+    {"id": "response-all-adapter-overlay-hold", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_overlay_response_all_adapter_hold.rpt", "sha256": "c7c68a2725cde97a8333c886efa3dbc87510e9d62f2d9d0dd1d195a8be00afa0", "bytes": 77, "owner": "b25_hold_endpoint_audit", "reproduce": "same report after exact endpoint-only overlay"},
+    {"id": "response-txn-local-setup", "uri": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005/fast_baseline_response_txn_local_setup.rpt", "sha256": "04d45a2389dc1fca30f918c80f090734b3d0eaa0291ed6da6c0d3ca9e042ab5b", "bytes": 256871, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -setup -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|txn_local_q*}]"},
+    {"id": "response-read-len-setup", "uri": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005/fast_baseline_response_read_len_setup.rpt", "sha256": "f3c38706e482c47dff78ec2bb49cbf3bec0f485a13a53de95361f0266385c33a", "bytes": 256915, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -setup -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|read_len_q*}]"},
+    {"id": "response-read-beat-setup", "uri": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005/fast_baseline_response_read_beat_setup.rpt", "sha256": "72ba46587da57000161d58860f5338e773a9b48c30039ccc77a4e1cb437e902a", "bytes": 2064854, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -setup -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|read_beat_q*}]"},
+    {"id": "response-all-adapter-setup", "uri": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005/fast_baseline_response_all_adapter_setup.rpt", "sha256": "5c7b4c3855add9ceb0099a02a20629f079e343a6ccb67db98df0c5b667d13fb6", "bytes": 2573990, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -setup -from [get_registers {*response_fifo|mem*}] -to [get_registers {soc|emif_adapter|*}]"},
+    {"id": "response-all-adapter-overlay-setup", "uri": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/runtime/T-005/fast_overlay_response_all_adapter_setup.rpt", "sha256": "c7c68a2725cde97a8333c886efa3dbc87510e9d62f2d9d0dd1d195a8be00afa0", "bytes": 77, "owner": "b25_hold_endpoint_audit", "reproduce": "same report after exact endpoint-only overlay"},
+    {"id": "global-hold-before", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_baseline_global_sys_clk_25_hold_top50.rpt", "sha256": "0a3b61e5a2132094a9c2ecc9068ada8f4df024c0d4e090ec0f07b003c7b57189", "bytes": 783038, "owner": "b25_hold_endpoint_audit", "reproduce": "report_timing -hold -to_clock [get_clocks {sys_clk_25}] -npaths 50"},
+    {"id": "global-hold-after", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_overlay_global_sys_clk_25_hold_top50.rpt", "sha256": "d937b2de5a460101891930b77e67ccc5626fb56d0ec50fffdac73c9c69df8da7", "bytes": 681622, "owner": "b25_hold_endpoint_audit", "reproduce": "same global report after exact endpoint-only overlay"},
+    {"id": "exceptions-before", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_baseline_exceptions_hold.rpt", "sha256": "75f34ecd4fd46b3cbc78828094dc0c4862bde10d68371452149bd9592f7d1dca", "bytes": 342332, "owner": "b25_hold_endpoint_audit", "reproduce": "report_exceptions -file <path>"},
+    {"id": "exceptions-after", "uri": "build/agents/T-20260909-005/runtime/remote/T-005/slow_overlay_exceptions_hold.rpt", "sha256": "22b72765d64bf590f3c7791f5192b2f4688e3d7cc1aafbf46be45887b2ad0240", "bytes": 355031, "owner": "b25_hold_endpoint_audit", "reproduce": "report_exceptions -file <path> after overlay"},
+    {"id": "sta-script", "uri": "build/agents/T-005/prep/t005_async_fifo_hold_audit.tcl", "sha256": "dbea9b82c3e00e85d3d8316b74ec7df8425f6716566ba663320724bf5ce19bda", "bytes": 11745, "owner": "b25_hold_endpoint_audit", "reproduce": "quartus_sta -t <script>"},
+    {"id": "sta-stdout", "uri": "build/agents/T-005/runtime/quartus_sta.stdout.log", "sha256": "3b6728e33b04a1472f17d2b666239cfd6618e5c17a090aa483e7426c9f55a101", "bytes": 38615, "owner": "b25_hold_endpoint_audit", "reproduce": "remote wrapper output"},
+    {"id": "sta-stderr", "uri": "build/agents/T-005/runtime/quartus_sta.stderr.log", "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52", "bytes": 104, "owner": "b25_hold_endpoint_audit", "reproduce": "remote wrapper output"},
+    {"id": "remote-postflight", "uri": "build/agents/T-005/runtime/remote_postflight_final.lock.log", "sha256": "03bc44339e002f9a32f09c3c92eca83145a1da77a8f1434e7ca54f1e7ee17b2a", "bytes": 8398, "owner": "b25_hold_endpoint_audit", "reproduce": "lock-protected remote postflight"},
+    {"id": "artifact-path-correction", "uri": "build/agents/T-005/runtime/artifact_path_correction.txt", "sha256": "7086ef400d5e462bc74bf53e5bf67eec927722466e25ba727b10d96d51694764", "bytes": 968, "owner": "b25_hold_endpoint_audit", "reproduce": "migrate local remote/probe/runtime/T-005 to build/agents/T-20260909-005/runtime/remote/T-005 preserving bytes/timestamps"}
+  ],
+  "transient_harness_events": [
+    {"event": "resource-lock busy", "result": "return 75; waited and retried only after gamepc FREE", "owner_seen": "T-20260909-006/b25_cdc_exception_precedence_audit"},
+    {"event": "first Tcl model spelling", "result": "quartus_sta exit 0 but create_timing_netlist rejected fast_900mV_0C/slow_900mV_0C; no reports or DB writes; corrected to Quartus 21.4 fast/slow"},
+    {"event": "clock variant", "result": "initial user-SDC-only report showed clk_y3; generated Qsys EMIF SDC was located and replayed in signoff order, yielding emif_bot_core_usr_clk and exact -10.338 ns"},
+    {"event": "local artifact path correction", "result": "all downloaded report files moved from untracked remote/probe/runtime/T-005 to build/agents/T-20260909-005/runtime/remote/T-005; root remote/ removed only after empty-directory cleanup; bytes and hashes preserved"}
+  ],
+  "policy": {
+    "rtl_modified": false,
+    "checked_in_sdc_modified": false,
+    "qsf_modified": false,
+    "active_task_json_modified": false,
+    "tasks_status_docs_modified": false,
+    "qemu_modified": false,
+    "synthesis_rerun": false,
+    "fitter_rerun": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "board_or_flash_action": false,
+    "forbidden_remote_artifacts": 0,
+    "eda_processes_postflight": 0,
+    "local_root_untracked_remote_removed": true,
+    "physical_signoff": "not accepted; existing hold/unconstrained-clock blockers remain"
+  },
+  "known_limits": [
+    "This is a fitted-DB report-only audit; it does not claim physical closure and does not modify the checked-in SDC.",
+    "The endpoint-only overlay removes all response-memory paths in the broad adapter query, including fitter same-clock memory aliases; these are still packet payload sinks covered by the existing 3b contract.",
+    "No new L0-L2 simulation was needed for this no-RTL audit; future SDC commit must rerun the listed protocol and post-fit reports.",
+    "Two unconstrained clock names observed in the frozen database, altera_reserved_tck and soc|emif_adapter|emif_rst_sync1_n, remain outside this payload decision."
+  ]
+}

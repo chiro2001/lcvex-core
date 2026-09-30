@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-040",
+  "label": "B25-TRACKED-BOARD-RUNNER-SOP",
+  "state": "done",
+  "acceptance_status": "tracked-parameterized-runner-local-negative-matrix-and-final-remote-ast-seal-pass",
+  "partial": false,
+  "base_sha": "763622496991b5cd7c743c5ff05b9678b763483c",
+  "implementation_head": "902c6b51c449651e86e84b6523805c5b903c671b",
+  "implementation_tree": "07ae612f446f0d7879b40a2fb3898ae3a5c0f08d",
+  "branch": "infra/T-20260920-040-b25-board-runner-repro",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-040",
+  "owner": "root",
+  "sent_at": "2026-09-20T21:42:29+08:00",
+  "received_at": "2026-09-20T21:42:29+08:00",
+  "reported_at": "2026-09-20T22:07:17+08:00",
+  "provenance": {
+    "source_task": "T-20260920-036",
+    "source_manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "byte_identical_copy_before_parameterization": true,
+    "source_files": {
+      "prepare_task_root.ps1": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d",
+      "validate_scripts.ps1": "73632da1b96e445df0302be273ee777e11da218e71f43183e7c33aebe1646592",
+      "verify_seal.ps1": "7fd26eac819fa141dbf9b7a2255bc8854cc5f6175c6ec42179e2edca30eeac85",
+      "preflight.ps1": "29f46fca907c56288ebb7cd0a99a57750f3e0c7e452b940f76e36f1ace5aad31",
+      "program_once.ps1": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e",
+      "postflight.ps1": "3bad7a13a6e3765982b16247602a814dac45d9dc6b34ddc9ca605d8941f540f8",
+      "direct_terminal.py": "059bb54fa1f1d3c01209ead636ca5cfcc536d2e4b4a2d41819a3d18f9a4a2e66",
+      "run_board_once.sh": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018",
+      "seal_manifest.py": "e95f87a2e91b73202edca05b9b441ad6def328c9c061e86cb111dd5ebf7c2cde"
+    }
+  },
+  "implementation": {
+    "tracked_root": "fpga/catapult_a10/tools/board_runner",
+    "tracked_source_files": 14,
+    "contract": "candidate/golden/tool/server/cable/terminal plan and safety policy are task-specific JSON, locally validated and included in the remote byte seal",
+    "seal": "schema v2 binds eleven runner source files plus board-contract.json",
+    "terminal": "ordered startup predicates and contract-defined paced steps; repeated steps require a response for every input plus a separate accept_regex",
+    "bookkeeping_fix": "programmer invocation counts are read from fetched program-result.json rather than PROGRAMMER_PID text captured by PowerShell",
+    "quiescence": "contract-bound 0-60 second terminal-to-golden delay; this is not a retry",
+    "safety": "only an owned jtagserver PID can be stopped; contract rejects persistent formats, reset, power and standard/unknown process termination"
+  },
+  "local_validation": {
+    "commands": [
+      "make b25-board-runner-check",
+      "make test-registry-check",
+      "git diff --check"
+    ],
+    "unit_tests": "PASS 19/19",
+    "registry": "PASS 89 entries and Makefile/runner consistency",
+    "bash_n": "PASS",
+    "python_compile": "PASS",
+    "contract_negative_matrix": [
+      "persistent candidate format rejected",
+      "safety-policy relaxation rejected",
+      "task mismatch rejected",
+      "bad/lowercase hash rejected",
+      "candidate=golden rejected",
+      "server path traversal rejected",
+      "console endpoint drift rejected",
+      "remote path/host injection rejected",
+      "empty or invalid terminal plan rejected",
+      "repeated step without accept_regex rejected",
+      "invalid contract proved to stop before fake ssh/scp"
+    ],
+    "artifacts": {
+      "board_runner_check": {"path": "build/agents/T-20260920-040/final/board-runner-check.log", "bytes": 767, "sha256": "e616e2f5120262cafa5d5501b033eca3f6f86d2cfdb57a0a4e75e02d8b089f53"},
+      "registry_check": {"path": "build/agents/T-20260920-040/final/registry-check.log", "bytes": 164, "sha256": "70bfe4c369ec93cc4e14b8a72965b0d1ed65f59d025a0911da06deb347c2a7e2"},
+      "diff_check": {"path": "build/agents/T-20260920-040/final/diff-check.log", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    }
+  },
+  "remote_validation": {
+    "resource_lock": "All three windows used resource-lock gamepc; local and gamepc were FREE afterward.",
+    "window_1": "AST 7/7 and seal 12/12 PASS; wrapper exit 1 only because exact grep did not strip remote CRLF. No hardware path. Superseded by later source hardening.",
+    "window_2": "Fresh r2 root, wrapper PASS, AST/seal PASS; superseded by final fail-closed path/server validation changes.",
+    "window_3_final": {
+      "root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-board-runner-repro-r3",
+      "bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-040-prepare-r3.ps1",
+      "wrapper_exit": 0,
+      "contract": {"path": "build/agents/T-20260920-040/board-contract.json", "bytes": 3055, "sha256": "f15113494f96cc8e6ccfa215aec691fccdf77e247a41f901cbef3321242eaf47"},
+      "manifest": {"path": "build/agents/T-20260920-040/script-manifest.json", "bytes": 2440, "sha256": "5f305d1f96ad853bceb0d97a6dcfd0fe1b23307b1056964c7bab85be61ed7d4e", "files": 12},
+      "ast": {"result": "PASS", "files": 7, "parse_failure_count": 0, "path": "build/agents/T-20260920-040/remote-validation-r3/ast.log", "bytes": 2209, "sha256": "0cc29f3ecf6094da7efa72fea3832e68d5b1e79eacfd99626b17daeb622f4e15"},
+      "seal": {"result": "PASS", "checked_count": 12, "path": "build/agents/T-20260920-040/remote-validation-r3/seal.log", "bytes": 6322, "sha256": "fb1d6e2fbc8d34590e03fc1f03ddc63e15fe540ebd69371133a88105ed07ddc9"},
+      "root_state_after": "created and preserved; not reused or deleted"
+    }
+  },
+  "scope_counts": {
+    "gamepc_filesystem_ast_seal_windows": 3,
+    "preflight_invocations": 0,
+    "process_enumerations": 0,
+    "quartus_invocations": 0,
+    "jtagconfig_invocations": 0,
+    "programmer_invocations": 0,
+    "terminal_sessions": 0,
+    "fpga_configurations": 0,
+    "jic_epcq_flash_actions": 0,
+    "reset_power_actions": 0,
+    "process_stops": 0
+  },
+  "known_limits": [
+    "The parameterized preflight/program/terminal/postflight path has final PowerShell AST and seal proof but has not yet executed hardware; T-041 is its first authorized live consumer.",
+    "Large logs, SOFs, Quartus binaries and driver DLLs remain outside Git by design; the contract freezes their identities and acquisition paths."
+  ],
+  "integration_review": {
+    "reviewed_at": "2026-09-20T22:09:39+08:00",
+    "branch": "batch/T-20260920-039-b25-post-bringup",
+    "evidence_import_sha": "18042578c9954d4244ec0276263d41a402c1d708",
+    "evidence_import_tree": "9701394e8ca3e8df02e03a0e169ce9dd6cb5c5ac",
+    "topic_implementation_head": "902c6b51c449651e86e84b6523805c5b903c671b",
+    "topic_evidence_head": "72758f34",
+    "merged_local_tests": "PASS 19/19",
+    "merged_registry": "PASS 89 entries and Makefile/runner consistency",
+    "remote_final_ast_seal": "PASS 7/7 AST and 12/12 seal on final r3 bytes",
+    "result": "PASS"
+  },
+  "next": "Closed. Generate and review the T-041 exact contract before one DDR m-command board control."
+}

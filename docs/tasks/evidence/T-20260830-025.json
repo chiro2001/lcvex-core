@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-025",
+  "state": "done",
+  "base_sha": "37b5822f738b24e263b121934693142b9f7ec271",
+  "head_sha": "a31f03209d3232cfceef667dc61e57ecd68307a7",
+  "branch": "feature/T-20260830-025-ext-01-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "scope": "闭合 EXT-01-001/EXT-01-002：为 T-104/T-099 建立并回填 correction records，补齐 result head/merge/artifact hash；复核/扩展时间戳校验脚本；更新审计 action 状态。只改文档与脚本。",
+  "audit_actions": [
+    "EXT-01-001",
+    "EXT-01-002"
+  ],
+  "corrections": [
+    {
+      "task": "T-20260829-104",
+      "type": "evidence-finalization",
+      "material_source_sha": "5f78319234a603f522af407e5378b7ef786fa1d1",
+      "result_head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+      "merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+      "artifact_sha256": "0b7f940ac863ff5926e2eab5d00ac6d2fd51a8c60e28b9fe2708dcdd5d45a6e0",
+      "git_tree_sha": "3605d8b18d5f6160538aab69a8565cf0d59e1d76",
+      "old_values_preserved": true,
+      "files_updated": [
+        "docs/tasks/active/T-20260829-104.json",
+        "docs/tasks/evidence/T-20260829-104.json"
+      ]
+    },
+    {
+      "task": "T-20260829-099",
+      "type": "timestamp-correction-and-evidence-finalization",
+      "verified_source_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+      "result_head_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+      "merge_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+      "old_values_preserved": true,
+      "files_updated": [
+        "docs/tasks/active/T-20260829-099.json",
+        "docs/tasks/evidence/T-20260829-099.json"
+      ]
+    }
+  ],
+  "correction_record": {
+    "old_values_preserved": true,
+    "note": "T-104/T-099 old values are preserved in their own active/evidence correction_record fields; this task only records that the corrections were applied by T-20260830-025.",
+    "tasks": [
+      "T-20260829-104",
+      "T-20260829-099"
+    ],
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "a31f03209d3232cfceef667dc61e57ecd68307a7",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "a31f03209d3232cfceef667dc61e57ecd68307a7",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "a31f03209d3232cfceef667dc61e57ecd68307a7",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "t025-handoff",
+        "uri": "docs/handoffs/T-20260830-025-ext-01-fix.md",
+        "sha256": "29b2ac9c0a815f082de974acd7a5c83e7e3791ba829cbf9c5ee3cdb329c0ef55",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "t025-evidence",
+        "uri": "docs/tasks/evidence/T-20260830-025.json",
+        "sha256": "d315c6f12660d81e8affb885ce4ae32698f6f5260be3c63ad93e34753879d18c",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "t025-checker",
+        "uri": "scripts/check_task_timestamps.py",
+        "sha256": "59c555ebe4c2936ed7a590c3983f40e15c0652cc78d7cd97f561cec8cfe76b43",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  },
+  "script_changes": {
+    "file": "scripts/check_task_timestamps.py",
+    "change": "Skip old_* and correction_record preserved values when collecting live timestamps; update docstring.",
+    "existing_checks": [
+      "Event vs ledger/backfill timestamp separation",
+      "review >= dispatch",
+      "run >= dispatch",
+      "review <= now via event future check",
+      "event <= carrying git commit"
+    ]
+  },
+  "action_status": {
+    "EXT-01-001": "resolved",
+    "EXT-01-002": "resolved",
+    "note": "Named T-104/T-099 issues are closed; other historical evidence/timestamp gaps remain and are recorded as known limits."
+  },
+  "runs": [
+    {
+      "run_id": "t025-py-compile-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m py_compile scripts/check_task_timestamps.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Timestamp checker syntax OK."
+    },
+    {
+      "run_id": "t025-json-valid-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/active/T-20260829-099.json docs/tasks/active/T-20260829-104.json docs/tasks/evidence/T-20260829-099.json docs/tasks/evidence/T-20260829-104.json docs/tasks/evidence/T-20260830-025.json",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All touched core JSON files parse."
+    },
+    {
+      "run_id": "t025-diff-check-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace errors."
+    },
+    {
+      "run_id": "t025-script-live-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/check_task_timestamps.py --scope live --json",
+      "exit_code": 0,
+      "result": "pass-with-known-residual",
+      "summary": "No T-099/T-104 errors remain; overall live scope still has 192 errors/119 warnings from other historical/proposed/active records."
+    },
+    {
+      "run_id": "t025-scope-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --name-only && git status --short",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Changed files are docs/tasks/active/**/evidence/**, docs/audit/**, scripts/check_task_timestamps.py, new handoff/evidence; no RTL/QEMU/FPGA/Makefile changes."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t025-handoff",
+      "uri": "docs/handoffs/T-20260830-025-ext-01-fix.md",
+      "owner": "T-20260830-025",
+      "retain_until": "repository-history",
+      "sha256": "29b2ac9c0a815f082de974acd7a5c83e7e3791ba829cbf9c5ee3cdb329c0ef55",
+      "bytes": null,
+      "reproduce": "git show HEAD:docs/handoffs/T-20260830-025-ext-01-fix.md | sha256sum"
+    },
+    {
+      "id": "t025-evidence",
+      "uri": "docs/tasks/evidence/T-20260830-025.json",
+      "owner": "T-20260830-025",
+      "retain_until": "repository-history",
+      "sha256": "d315c6f12660d81e8affb885ce4ae32698f6f5260be3c63ad93e34753879d18c",
+      "bytes": null,
+      "reproduce": "python3 -m json.tool docs/tasks/evidence/T-20260830-025.json"
+    },
+    {
+      "id": "t025-checker",
+      "uri": "scripts/check_task_timestamps.py",
+      "owner": "T-20260830-025",
+      "retain_until": "repository-history",
+      "sha256": "59c555ebe4c2936ed7a590c3983f40e15c0652cc78d7cd97f561cec8cfe76b43",
+      "bytes": null,
+      "reproduce": "python3 scripts/check_task_timestamps.py --scope live --json"
+    }
+  ],
+  "known_limits": [
+    "未批量定稿 T-086/T-092/T-093/T-096/T-098/T-100/T-103 等历史 done 任务 evidence。",
+    "时间戳脚本 live 范围仍有 192 error/119 warning，属于其他历史记录和 planned/future 时间字段，未在本任务全量修正。",
+    "EXT-03-001 仍 open，需要 FPGA/TimeQuest 动态验证。",
+    "未运行重型 Verilator/Gate D/Quartus；未修改 RTL/QEMU/FPGA/Makefile。"
+  ],
+  "next": "由集成者合入；后续 evidence-finalization 与 timestamp-cleanup 任务处理剩余历史记录。",
+  "status": "done",
+  "merge_sha": "a31f03209d3232cfceef667dc61e57ecd68307a7",
+  "handoff_sha": "a31f03209d3232cfceef667dc61e57ecd68307a7",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T07:34:22+08:00",
+    "head_sha": "67fbb4b",
+    "notes": "EXT-01-FIX merged. EXT-01-001/002 resolved with correction records and timestamp checks; known historical residual remains.",
+    "merge_sha": "a31f03209d3232cfceef667dc61e57ecd68307a7",
+    "result_sha": "a31f03209d3232cfceef667dc61e57ecd68307a7"
+  }
+}

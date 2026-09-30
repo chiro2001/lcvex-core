@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-013",
+  "candidate_sha": "d181a6d16b3466100244ddafab85cac6ef62d0ee",
+  "head_sha": "d181a6d16b3466100244ddafab85cac6ef62d0ee",
+  "merge_sha": "",
+  "toolchain": {
+    "python": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "make": "GNU Make 4.4.1",
+    "cpu_binding": "0-5",
+    "memory_limit_mb": 8192
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_path": "../qemu/build/qemu-system-aarch64",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_path": "qemu/VERSION",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_source_path": "qemu/plugins/lcvex_difftest.c",
+    "plugin_source_sha256": "8e9a8ba9ef4fce3044423db6faf09532fbda5c92bbf1f4fa204d66c239d452a2",
+    "note": "QEMU/plugin 仅只读构建/检查；未修改外部 fork。"
+  },
+  "rtl": {
+    "filelist_path": "rtl/filelist.f",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "core_tb_sha256": "dfb6922dcf74b6e42111febd25fed9e598854307d22716382e8fdec67a11b95f",
+    "backpressure_tb_sha256": "941bf76429fc67d552ad218b6de444020837e420a7906079eb29c208a2ba2baf"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-toolcheck-001",
+      "source_sha": "d181a6d",
+      "runner_role": "luna-monitor-agent",
+      "level": "L0",
+      "command": "taskset -c 0-5 bash scripts/toolcheck.sh",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 3.0,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/T-20260826-013/logs/toolcheck.log",
+      "log_sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9"
+    },
+    {
+      "run_id": "owner-l1-make-test-001",
+      "source_sha": "d181a6d",
+      "runner_role": "luna-monitor-agent",
+      "level": "L1",
+      "command": "VERILATOR_JOBS=6 taskset -c 0-5 make test",
+      "cpuset": "0-5",
+      "cpu_count": 6,
+      "wall_seconds": 14.0,
+      "exit_code": 2,
+      "result": "fail",
+      "first_failure": {
+        "stage": "sim-sv-backpressure",
+        "tool": "verilator --binary --timing --assert -Wall -j 6",
+        "source": "tb/sv/lcvex_commit_backpressure_tb.sv:68:16",
+        "message": "PINMISSING: lcvex_soc_tb dut 缺少 difftest_restore_ssbs、difftest_restore_uao、difftest_restore_tco；Exiting due to 3 warning(s)",
+        "reference_not_modified": true,
+        "core_tb_smoke": "pass"
+      },
+      "log": "build/T-20260826-013/logs/make-test.log",
+      "log_sha256": "c9498e966e6843228d9530d9b705a0f4359e36aea147f5b8f9ea75af0cd994c8"
+    },
+    {
+      "run_id": "owner-l1-coverage-001",
+      "level": "L1",
+      "command": "taskset -c 0-5 make coverage",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    },
+    {
+      "run_id": "owner-l2-difftest-001",
+      "level": "L2",
+      "command": "taskset -c 0-5 make difftest difftest-hazard p4c p5a p6-lse p6-wfi",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    },
+    {
+      "run_id": "owner-l3-gate-d-001",
+      "level": "L3",
+      "command": "taskset -c 0-5 bash sim/difftest/run_gate_d.sh",
+      "result": "not_run",
+      "reason": "make test 首个真实失败后立即停止。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "toolcheck-log",
+      "path": "build/T-20260826-013/logs/toolcheck.log",
+      "sha256": "ef332f5dbf5109fbea389668aceadb1fb8557eb4f6d948f148ddbc5db05218c9",
+      "bytes": 291,
+      "status": "pass"
+    },
+    {
+      "id": "make-test-first-failure-log",
+      "path": "build/T-20260826-013/logs/make-test.log",
+      "sha256": "c9498e966e6843228d9530d9b705a0f4359e36aea147f5b8f9ea75af0cd994c8",
+      "bytes": 17196,
+      "status": "preserved"
+    }
+  ],
+  "known_limits": [
+    "T-012 仅修正 lcvex_core_tb 的 restore pins；core SV smoke 已通过，但 backpressure testbench 仍有相同 PINMISSING warning-as-error。",
+    "按首个真实失败立即停止，coverage、L2 定向差分和 run_gate_d 未执行；本 evidence 不能宣称 Gate D 通过。",
+    "未启动 Linux 长跑或额外重型 QEMU 作业，也未修改 active/TASKS/PROJECT_STATUS/ROADMAP。"
+  ]
+}

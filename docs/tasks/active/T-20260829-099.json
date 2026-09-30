@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-099",
+  "label": "GateD-F",
+  "parent": "T-20260828-072",
+  "title": "F 单核候选 Gate D 全量复跑（B 线/checkpoint v4 后）",
+  "kind": "integration-gate-d-single-core",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+  "head_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+  "verified_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+  "branch": "verify/T-20260829-099-gate-d",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099",
+  "scope": "在当前 feature/p7-final（B 线完成 + checkpoint v4 合入后）运行 bash sim/difftest/run_gate_d.sh --parallel，采集 make test、锁步、Gate C/P5a/P4b、随机、coverage、baremetal-C 等结果；不修改 RTL、不启动 Quartus。",
+  "writes": [
+    "build/**",
+    "docs/tasks/evidence/T-20260829-099.json",
+    "docs/handoffs/T-20260829-099-gate-d.md"
+  ],
+  "reads": [
+    "sim/difftest/**",
+    "rtl/**",
+    "tb/**",
+    "docs/PROJECT_STATUS.md"
+  ],
+  "validation": {
+    "l0": [
+      "run_gate_d.sh --parallel 退出码 0"
+    ],
+    "l1": [
+      "各 step PASS 清单与失败详情",
+      "最终 head SHA"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "当前候选 Gate D 全绿或明确记录失败项/阻塞；不拼接跨 SHA 结果。",
+  "next": "若 Gate D 全绿，作为 F 单核候选；若失败，由集成者派发修复。",
+  "resource": {
+    "cpu": 4,
+    "memory_mb": 16384,
+    "disk_mb": 12288,
+    "timeout_s": 10800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 180,
+    "extension_increment_minutes": 60,
+    "max_minutes": 600,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T13:06:00+0800",
+  "updated_at": "2026-08-29T13:50:20+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T13:06:00+0800",
+    "agent_name": "gate_d_single_core",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099"
+  },
+  "known_limits": [
+    "不启动 Quartus；不修改 RTL/QEMU checkpoint。",
+    "Gate D 为本地门禁，不代表 CI/main 晋级。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-099-gate-d.md",
+  "evidence": "docs/tasks/evidence/T-20260829-099.json",
+  "merge_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+  "integrator_review": {
+    "received_at": "2026-08-29T13:50:20+0800",
+    "status": "accepted",
+    "head_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+    "result_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+    "notes": "F single-core local Gate D PASS 13/13 on verified_sha 3dcffe0. Evidence/handoff were delivered directly on feature/p7-final at 64ec6eb (13:50:20), so that commit is the task result/merge head. First RED at 9dc3c50 was fixed by Makefile -Wno-fatal/-Wno-UNUSEDPARAM and planner affinity parsing. Corrected by T-20260830-025; old values preserved in correction record."
+  },
+  "correction_record": {
+    "source": "T-20260829-114 / T-20260830-025",
+    "old_created_at": "2026-08-29T14:40:00+0800",
+    "old_updated_at": "2026-08-29T14:40:00+0800",
+    "old_dispatch_sent_at": "2026-08-29T14:40:00+0800",
+    "old_integrator_review_received_at": "2026-08-29T14:00:00+0800",
+    "old_merge_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+    "correct_created_at": "2026-08-29T13:06:00+0800",
+    "correct_updated_at": "2026-08-29T13:50:20+0800",
+    "correct_dispatch_sent_at": "2026-08-29T13:06:00+0800",
+    "correct_integrator_review_received_at": "2026-08-29T13:50:20+0800",
+    "correct_head_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+    "correct_merge_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+    "verified_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+    "evidence": "docs/handoffs/T-20260829-114-aud-09.md; docs/tasks/evidence/T-20260829-114.json; docs/handoffs/T-20260830-025-ext-01-fix.md"
+  }
+}

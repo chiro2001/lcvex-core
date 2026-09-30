@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-086",
+  "state": "done",
+  "base_sha": "c1273235028a54f2d8213a9c8ca0040ff0def609",
+  "head_sha": "c4931b0a40298cbe35296051c7096f991b6b2b9f",
+  "merge_sha": "8bea8de66e17cff80419f1a9efa47accc5ac32af",
+  "branch": "feature/T-20260829-086-c2-dualcore-msi",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-086",
+  "sent_at": "2026-08-29T06:24:00+0800",
+  "received_at": "2026-08-29T06:46:00+0800",
+  "reported_at": "2026-08-29T10:39:30+08:00",
+  "owner": "T-20260829-086-c2-owner",
+  "model": "dsh-default",
+  "label": "C2",
+  "title": "双核共享 L2 目录式 MSI（模块级）",
+  "scope": "共享 L2 上游目录 I/S/M、ReadShared/ReadUnique/Upgrade/WriteBack/Clean/Clean+Invalidate/Invalidate/Bypass、每核 probe、dirty owner 唯一、PoC fault/abort 回滚、round-robin 单事务；保持 C1 壳层文件不变和 CORE_COUNT=1 可编译。",
+  "files": [
+    "rtl/lcvex_cluster_pkg.sv",
+    "rtl/lcvex_l2_cluster.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "tb/sv/lcvex_c2_cluster_tb.sv",
+    "tb/sv/lcvex_c2_l1_msi_tb.sv",
+    "tb/sv/lcvex_c2_dualcore_tb.sv",
+    "docs/handoffs/T-20260829-086-c2-dualcore-msi.md",
+    "docs/tasks/evidence/T-20260829-086.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "daeb76665f47479199bf975b2992304f933de4c3",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 whitespace 错误。"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "daeb76665f47479199bf975b2992304f933de4c3",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-086.json",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON 合法。"
+    },
+    {
+      "run_id": "owner-l1-001",
+      "source_sha": "daeb76665f47479199bf975b2992304f933de4c3",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing --top-module lcvex_l2_cluster -GCORE_COUNT=2 -GMEM_LINES=16 rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "C2 cluster CORE_COUNT=2 lint/elaboration 通过。"
+    },
+    {
+      "run_id": "owner-l1-002",
+      "source_sha": "daeb76665f47479199bf975b2992304f933de4c3",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing --top-module lcvex_l2_cluster -GCORE_COUNT=1 -GMEM_LINES=16 rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "C2 cluster CORE_COUNT=1 elaboration 通过（新增参数化模块不破坏单核编译）。"
+    },
+    {
+      "run_id": "owner-l1-003",
+      "source_sha": "daeb76665f47479199bf975b2992304f933de4c3",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "TMPDIR=<worktree>/build_tmp verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_c2_cluster_tb -Mdir obj_c2 -o lcvex_c2_cluster_tb rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv tb/sv/lcvex_c2_cluster_tb.sv -Wno-fatal -Wno-PROCASSINIT -Wno-MULTIDRIVEN -Wno-UNUSEDPARAM && ./obj_c2/lcvex_c2_cluster_tb",
+      "seed": null,
+      "wall_seconds": 7,
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "定向 SV TB 通过：LCVEX_C2_CLUSTER_TB PASS。覆盖 I/S/M 迁移、Upgrade 失效、dirty owner 数据传递、WriteBack/Clean、bypass、PoC writeback fault 不产生新 M、reset 清目录。"
+    },
+    {
+      "run_id": "owner-l1-004",
+      "source_sha": "e36cf4a27f08b6607460bf4c8d01fca2afd4199d",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert --top-module lcvex_c2_l1_msi_tb rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_l1_coherence.sv tb/sv/lcvex_c2_l1_msi_tb.sv",
+      "seed": null,
+      "wall_seconds": 10,
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_L1_MSI_TB PASS：L1+cluster 系统边界，dirty owner 数据跨核传递、失效 refill、bypass PoC。"
+    },
+    {
+      "run_id": "owner-l1-005",
+      "source_sha": "e36cf4a27f08b6607460bf4c8d01fca2afd4199d",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert --top-module lcvex_c2_dualcore_tb -f rtl/filelist.f rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv tb/sv/lcvex_c2_dualcore_tb.sv",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "真实双核 message passing 已通过（O0 build）。"
+    },
+    {
+      "run_id": "owner-l1-006",
+      "source_sha": "a5375d5282dc06a75d585b40c6f42491aea3b877",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "cd build/c2_dual_o0 && ./lcvex_c2_dualcore_tb",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "真实双核 message passing TB PASS：core0/core1 均读到 flag=0x5a，无 fault，共享 coherent 内存同步完成。"
+    },
+    {
+      "run_id": "owner-l1-007",
+      "source_sha": "c4931b0a40298cbe35296051c7096f991b6b2b9f",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_c2_dualcore_tb -Mdir build/c2_dual_default ... (default optimization, no -O0)",
+      "seed": null,
+      "wall_seconds": 226,
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "默认优化构建成功并 LCVEX_C2_DUALCORE_TB PASS；FP scalar Verilator 优化修复已 cherry-pick。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "rtl/lcvex_l2_cluster.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-086-c2-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_l2_cluster.sv"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "rtl/lcvex_cluster_pkg.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-086-c2-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_cluster_pkg.sv"
+    },
+    {
+      "id": "artifact-003",
+      "uri": "tb/sv/lcvex_c2_cluster_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-086-c2-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_cluster_tb.sv"
+    }
+  ],
+  "known_limits": [
+    "真实双核 message passing 已通过；CAS/LDXR-STXR、store/load buffering、DMB/DSB/ISB、DC clean+IC invalidate+ISB、reset/fault 指令级证据仍待补。",
+    "未修改 lcvex_core.sv；COHERENCE_ENABLE=0 保持 C1 私有 RAM 路径。",
+    "目录表为有限 MEM_LINES 行索引；未实现 E/O、ACE/CHI、coherent DMA、4 核、TLB shootdown、Linux SMP、完整 ARM memory model。"
+  ],
+  "next": "补 CAS/LDXR-STXR、store/load buffering、barrier、DC clean+IC invalidate+ISB、reset/fault 指令级定向，并记录完整双核证据。",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "reported_at",
+        "old": "2026-08-29T10:40:00+0800",
+        "new": "2026-08-29T10:39:30+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "8bea8de",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "active",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "90a5aa58cfb9672979d89dbffd5788d0bcea76de",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "c4931b0a40298cbe35296051c7096f991b6b2b9f",
+        "reason": "set explicit result head from evidence head_sha"
+      },
+      {
+        "field": "merge_sha",
+        "old": "8bea8de",
+        "new": "8bea8de66e17cff80419f1a9efa47accc5ac32af",
+        "reason": "expand to full merge SHA"
+      }
+    ]
+  },
+  "handoff_sha": "90a5aa58cfb9672979d89dbffd5788d0bcea76de",
+  "integrator_review": {
+    "received_at": "2026-08-29T10:46:46+08:00",
+    "status": "accepted",
+    "head_sha": "90a5aa58cfb9672979d89dbffd5788d0bcea76de",
+    "implementation_sha": "a5375d5",
+    "notes": "C2 core MSI + coherent L1 wired; T-092 remainder directed tests merged. All known C2 directed slices now PASS: atomic fail/ok, maint/barrier, reset/fault plus dualcore and L1+MSI regressions. Known follow-ups: CORE_COUNT=1 full regression and running-reset-restart hardening remain external to C2 close.",
+    "merge_sha": "8bea8de",
+    "result_sha": "c4931b0a40298cbe35296051c7096f991b6b2b9f"
+  }
+}

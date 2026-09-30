@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-079",
+  "state": "done",
+  "base_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+  "head_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+  "merge_sha": "267c4fd6c072a41721d71be5d03978bf5e81ab69",
+  "branch": "feature/T-20260829-079-c1-dualcore-shell",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-079",
+  "sent_at": "2026-08-29T02:26:00+0800",
+  "received_at": "2026-08-29T04:32:17+0800",
+  "reported_at": "2026-08-29T06:18:00+0800",
+  "owner": "T-20260829-079-c1-owner",
+  "model": "dsh-default",
+  "label": "C1",
+  "title": "双核壳层（不含 coherence）",
+  "scope": "参数化复制 core/本地状态，独立 start/stop/reset、core_id/MPIDR、IRQ/timer/event、WFI/WFE、per-core commit 记录；使用每核私有 RAM + mem_arb 直连（cache 旁路），明确不做 coherence；保持 CORE_COUNT=1 兼容。",
+  "files": [
+    "rtl/lcvex_cluster_pkg.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "tb/sv/lcvex_cluster_tb.sv",
+    "sim/cocotb/test_lcvex_cluster.py",
+    "scripts/mc_shell_check.sh",
+    "docs/handoffs/T-20260829-079-c1-dualcore-shell.md",
+    "docs/tasks/evidence/T-20260829-079.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 whitespace 错误。"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-079.json",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON 合法。"
+    },
+    {
+      "run_id": "owner-l1-001",
+      "source_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing --top-module lcvex_cluster_top -GCORE_COUNT=1 rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv rtl/lcvex_mem_ram.sv rtl/lcvex_mem_arb.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv -Wno-fatal",
+      "seed": null,
+      "wall_seconds": 208,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "CORE_COUNT=1 最终直接私有 RAM shell 实际 elaboration 通过；未修改现有单核顶层/filelist/Makefile。"
+    },
+    {
+      "run_id": "owner-l1-002",
+      "source_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing --top-module lcvex_cluster_top rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv rtl/lcvex_mem_ram.sv rtl/lcvex_mem_arb.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv -Wno-fatal",
+      "seed": null,
+      "wall_seconds": 605,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "CORE_COUNT=2 最终直接私有 RAM shell 实际 elaboration 通过（16 modules / 99.0 MB generated）。"
+    },
+    {
+      "run_id": "owner-l1-003",
+      "source_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "cd /home/chiro/projects/mycpu/lcvex-wt-T-20260829-079/build/mc_cluster_tb_fix6 && ./lcvex_cluster_tb",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "定向 SV TB 通过：LCVEX_C1_SHELL_TB PASS；覆盖 core0/core1 first commit、独立 start/stop/reset、WFI/WFE、event/IRQ wake、per-core vcpu_seq reset、MC envelope。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "rtl/lcvex_core_wrap.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-079-c1-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_core_wrap.sv"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "rtl/lcvex_cluster_top.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-079-c1-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_cluster_top.sv"
+    },
+    {
+      "id": "artifact-003",
+      "uri": "tb/sv/lcvex_cluster_tb.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-079-c1-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_cluster_tb.sv"
+    }
+  ],
+  "known_limits": [
+    "C1 使用每核私有 RAM + lcvex_mem_arb 直连，cache 旁路，无共享内存/目录/MSI。",
+    "lcvex_core.sv 未修改：MPIDR_EL1 读值仍为单核硬编码，wrapper 只对外暴露 per-core mpidr 输出。",
+    "lcvex_core.sv 无公开 event/WFI 输出；C1 用 difftest_wait_release 和提交编码做壳层级 event/WFI 观测。",
+    "start/stop 为时钟门控冻结，不是 PSCI/架构电源状态。",
+    "未运行完整 Gate D；只做本任务 L0/L1。",
+    "修复方向：C1 directed TB 对每核使用独立 reset+足够等待后再 start；已确认整体 PASS。"
+  ],
+  "next": "集成者 review；若接受则按计划进入 C2 或先补 reference-model/litmus 多核回放。",
+  "handoff_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+  "integrator_review": {
+    "received_at": "2026-08-29T06:19:00+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "a0d1396dfede81072721b2c2e6d65fdacf03dc4a",
+    "implementation_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+    "notes": "C1 修复后定向 TB 实跑 PASS（exit 0）：双核独立启动/commit/WFI/event/IRQ/reset/envelope 全部通过。已知限制保留：MPIDR 核内仍单核硬编码、无共享内存/MSI、非 PSCI。",
+    "merge_sha": "267c4fd6c072a41721d71be5d03978bf5e81ab69",
+    "result_sha": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "267c4fd6c072a41721d71be5d03978bf5e81ab69",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "b4859c58432c4fd9aa4f612d4a23cf6304b82b49",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

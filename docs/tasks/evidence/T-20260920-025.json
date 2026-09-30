@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-025",
+  "label": "B25-LOGIC-IMM-REPAIR-GATE-D",
+  "state": "done",
+  "acceptance_status": "complete-release-mode-gate-d-pass",
+  "candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+  "candidate_tree_sha": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-025-gate",
+  "detached": true,
+  "owner": "gate_t025",
+  "timestamps": {
+    "started_at": "2026-09-20T14:56:38+08:00",
+    "finished_at": "2026-09-20T15:08:55+08:00",
+    "elapsed_seconds": 737
+  },
+  "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-025 gate_t025 -- bash sim/difftest/run_gate_d.sh",
+  "identity": {
+    "pre_head": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+    "post_head": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+    "pre_tree": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+    "post_tree": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+    "pre_status": "clean detached HEAD",
+    "post_status": "clean detached HEAD"
+  },
+  "result": {
+    "outer_exit": 0,
+    "final_marker": "PASS: Gate D 系统回归全部通过",
+    "skip_flags": false,
+    "assertions_disabled": false,
+    "reference_or_expected_modified": false
+  },
+  "groups": {
+    "make_test": "PASS; unit plus SVA",
+    "coverage": {
+      "result": "PASS",
+      "coverage_points": 8760,
+      "merged_dat_sha256": "5842d7316b279b12328e875eb81409441f878743133f1523b6ad94e53927960c"
+    },
+    "m2_4b_4c": "PASS; base 40/40, cache 40/40",
+    "delay2_cache": "PASS; 32 directed plus random smoke 3000 commits",
+    "p5a_hardening": "PASS; 26/26",
+    "gate_c": "PASS; 7/7",
+    "p5a_mmu": "PASS; 3/3",
+    "p4b": "PASS; 5/5",
+    "random": {
+      "seed_1_commits": 100002,
+      "seed_2_commits": 100002,
+      "seed_3_commits": 100002,
+      "trace_sha256": {
+        "seed_1": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e",
+        "seed_2": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768",
+        "seed_3": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"
+      }
+    },
+    "instruction_coverage": {
+      "expected_hit": "62/62",
+      "observed_families": 63,
+      "total_random_commits": 300006
+    },
+    "baremetal": {
+      "image_bytes": 1104,
+      "image_sha256": "ed2f093617883206c3e56614b41f6942fa08985067bb82ad8b93972347964fc2",
+      "lockstep_commits": 200,
+      "result": "PASS"
+    }
+  },
+  "tools": {
+    "verilator": "5.050 2026-07-01",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "qemu": "11.1.0",
+    "qemu_fork_sha": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "plugin_sha256": "49ca9e97e4dbeb54526867b28bf32e5e10e2082c762d3a1277ea00572dc78a7d",
+    "plugin_source_sha256": "b5adf6c888ab318e19c27d5a407cfbba5d7ec8763f301cf49065df8475e75595",
+    "protocol_header_sha256": "af62b3d8e4dd4625d958aef222303a97f3828b6c5cf8fb5d76c20ce94868b6b1",
+    "protocol_python_sha256": "655d82b4e0ee2da35edbe0751c18ffff803b9e92b09d206d7f5cd5b5dd195412",
+    "coordinator_sha256": {
+      "base": "a7704f5ae057cbb9938ca5097efda660abade838bbc0267f04e85c912ada40ae",
+      "l1_dl2": "d1451d18264c80208a5b1f65f9073ba9cdd8f79f2268cb9e47c7c7ef1dce5333",
+      "delay2": "7502d613780c73d1d4d7159b3c2dc7d7665af6eec3af8454be862fecb50d1bdc"
+    }
+  },
+  "artifacts": {
+    "gate_log": {
+      "path": "build/agents/T-20260920-025/gate-d.log",
+      "bytes": 437278,
+      "sha256": "adf657003d73a394162645e9a1dff3c000a04ae438d0d06f5ebc599a1658ac4f"
+    },
+    "run_meta": {
+      "path": "build/agents/T-20260920-025/run-meta.txt",
+      "sha256": "dc8df57810ca47a298e5d58910a6a4b80797687554a6e4cdc01a6f94fb975858"
+    }
+  },
+  "resource_and_safety": {
+    "local_heavy_locked": true,
+    "final_local": "FREE",
+    "final_gamepc": "FREE",
+    "gamepc_quartus_jtag_board_used": false,
+    "flash_jic_epcq": false,
+    "reset_power": false,
+    "unknown_process_stopped": false
+  },
+  "handoff": "docs/handoffs/T-20260920-025-b25-logic-imm-repair-gate-d.md",
+  "next": "Derive T-20260920-026 as the exact one-line no-FP board profile from candidate c31b3aea; then run a fresh physical flow from no prior database."
+}

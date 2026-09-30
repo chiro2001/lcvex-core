@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-011",
+  "label": "R17-FP-ACC-CONTROL-CUT",
+  "title": "Cut core pipeline control and register-index fanout into FP accumulation",
+  "kind": "rtl-timing-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-accepted-partial-physical",
+  "assigned_owner": "codex-r17-fp-acc-cut",
+  "agent_type": "rtl-implementation",
+  "model_selection": "spawn_agent/followup_task omits model; user-confirmed default gpt-5.6-luna[max]",
+  "depends_on": [
+    "T-20260905-009"
+  ],
+  "dependency_override": "Speculative timing implementation starts from the repaired T-009 candidate while its broad functional validation is still running; this lane may not integrate until T-009 is done and requires new post-integration physical evidence.",
+  "base_sha": "4816285977748596d3ede6b72ac1e8cc5c4cd3ff",
+  "pre_translation_guard_candidate_sha": "b9b1121ffc2c8fff0da9f752a4172159e8d95e62",
+  "required_integration_base_sha": "6ef67db4aa61769113c23ec4577f6b901b3f0043",
+  "rtl_equivalent_pre_t012_sha": "32622b4d153bad7ca55b1a02c91b213fe6729bf5",
+  "timing_evidence_commit": "46181b25e677ef42324ef4e8081a2731c7da3c68",
+  "branch": "timing/T-20260905-011-r17-fp-acc-control-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-011",
+  "cone_id": "R17-CORE-PIPE-FP-ACC",
+  "timing_paths": {
+    "exmem_valid": {"count_top50": 18, "slack_range_ns": [-4.767, -4.685], "logic_levels": 27},
+    "memwb_wb_rd": {"count_top50": 3, "slack_ns": -4.706, "logic_levels": 27},
+    "exmem_wb_rd": {"count_top50": 3, "slack_ns": -4.698, "logic_levels": 27},
+    "endpoint": "fp_exec.acc*"
+  },
+  "scope": "Remove the shared exmem_valid/exmem_wb_rd/memwb_wb_rd -> decode -> sys_commit_ready -> fp_rsp_ready control cone from the FP transaction accumulator clock enable. The preferred local cut is to retain acc/acc_flags after the TX_DONE response handshake, because the held response is already independent and the next accepted request clears both accumulators in TX_IDLE. Preserve exact response hold, request ownership, scalar/NEON FMA operand_c, tag, single outstanding transaction, kill/reset, and commit ordering.",
+  "writes": [
+    "rtl/lcvex_neon_fp.sv",
+    "sim/cocotb/test_p7_3_neon_fp.py",
+    "docs/handoffs/T-20260905-011-r17-fp-acc-control-cut.md",
+    "docs/tasks/evidence/T-20260905-011.json"
+  ],
+  "write_regions": [
+    "rtl/lcvex_neon_fp.sv::lcvex_fp_exec TX_DONE accumulator cleanup only",
+    "sim/cocotb/test_p7_3_neon_fp.py::response backpressure and consecutive transaction checks"
+  ],
+  "forbidden_regions": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "MMU/fetch/maintenance/IRQ control",
+    "rtl/lcvex_pkg.sv public interfaces unless the integrator first approves",
+    "QEMU/QSF/SDC",
+    "false paths, assertion disable, or reference-result changes"
+  ],
+  "latency_budget": {
+    "fp_request_accept": 0,
+    "fp_slot_latency": 0,
+    "non_fp_pipeline": 0,
+    "commit_order": 0
+  },
+  "pre_batch_validation": [
+    "git diff --check",
+    "static request/ownership/hazard/reset/kill/hold review only while the T-009 heavy queue is occupied"
+  ],
+  "batch_acceptance_tests": [
+    "FP exec directed SV and Cocotb including FMA operand_c and response backpressure",
+    "core backpressure and V RAW dependency tests",
+    "P7-1/P7-3/P7-4/P7-5 SV+Cocotb and strict lockstep matrices",
+    "affected IRQ/fault/restore tests for transaction cancellation"
+  ],
+  "acceptance": "TX_DONE response ready no longer drives acc/acc_flags write enable, so the reported 27-level control cone has no accumulator endpoint. The stale accumulator is non-architectural, remains ignored in TX_IDLE, and is cleared on the next request acceptance as well as reset/kill. Backpressure cannot duplicate, lose, or expose a younger FP effect. The owner stops after implementation, directed test updates, and static review; integration and all simulation/physical claims require the batch integrator and new physical reports.",
+  "created_at": "2026-09-05T09:25:14+08:00",
+  "updated_at": "2026-09-05T19:48:39+08:00",
+  "merge_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "integration_evidence": "docs/tasks/evidence/T-20260905-013.json",
+  "physical_evidence": "docs/tasks/evidence/T-20260905-014.json",
+  "review": {
+    "status": "accepted_partial_physical",
+    "summary": "TX_DONE cleanup change passed exact-SHA functional validation and the old cone left global top-50; broad core-control-to-acc/flags paths remain nonzero and are carried into T-018."
+  },
+  "implementation_head": "2d0d43e",
+  "test_head": "4cbc5ae",
+  "documentation_head": "ecf492d342f990cc6a3b5aec49dd3dacf990372a",
+  "review_result": {
+    "status": "accepted_for_candidate",
+    "reported_at": "2026-09-05T10:17:02+08:00",
+    "notes": "Independent review accepted the local TX_DONE accumulator-enable cut after the directed test established both MEM/WB and EX/MEM occupancy. Full joint simulation and new physical STA remain pending."
+  },
+  "board_policy": "No assembler, bitstream generation, JTAG, programming, power-on, or board test without explicit user permission."
+}

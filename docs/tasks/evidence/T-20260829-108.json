@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-108",
+  "base_sha": "a0e70d48a580886c634b1e88d2cff61605754552",
+  "head_sha": "a0e70d48a580886c634b1e88d2cff61605754552",
+  "merge_sha": "88b894b30e17b94ee1e0a9287412391ddd972957",
+  "candidate_status": "pass-local",
+  "agent": {
+    "role": "audit-action-owner",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-108",
+    "branch": "feature/T-20260829-108-aud-03-gate-d-core1",
+    "note": "按用户指定基于 a0e70d4 验证；后续主线 de3000b 仅为任务派单文档。未修改 RTL/tb/QEMU/checkpoint，未启动 Quartus。"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "aarch64_objcopy": "GNU objcopy (GNU Binutils) 2.47"
+  },
+  "resource": {
+    "memory_cgroup_limit_mb": 16384,
+    "memory_swap": 0,
+    "verilator_jobs": 1,
+    "makeflags": "-j1",
+    "mode": "serial-equivalent (no --parallel), one heavy build at a time",
+    "gate_d_observed_peak_rss_bytes": 3522342912,
+    "gate_d_observed_peak_rss_mb": 3359,
+    "core1_lint_allocated_mb": 382
+  },
+  "runs": [
+    {
+      "run_id": "aud03-gate-d-full",
+      "source_sha": "a0e70d48a580886c634b1e88d2cff61605754552",
+      "runner_role": "owner",
+      "level": "L3",
+      "command": "systemd-run --user --scope --unit=aud03-gate-d-rerun -p MemoryMax=16G -p MemorySwapMax=0 -p MemoryAccounting=yes bash -c 'time env VERILATOR_JOBS=1 MAKEFLAGS=-j1 bash sim/difftest/run_gate_d.sh'",
+      "seed": [
+        1,
+        2,
+        3
+      ],
+      "started_at": "2026-08-30T00:17:52+08:00",
+      "finished_at": "2026-08-30T00:51:53+08:00",
+      "wall_seconds": 1158,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 3359,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/gate_d_T-108-rerun.log",
+      "log_sha256": "9d30ee4a43c6e5a5f74fbad675dc53a52af9326afbe4d24e3d4c2d38524fb778",
+      "detail": "13/13 steps PASS; wall 19m18.207s; cgroup MemoryMax=16G, MemorySwapMax=0."
+    },
+    {
+      "run_id": "aud03-core1-lint",
+      "source_sha": "a0e70d48a580886c634b1e88d2cff61605754552",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope --unit=aud03-core1 -p MemoryMax=16G -p MemorySwapMax=0 -p MemoryAccounting=yes bash -c 'time conda run --no-capture-output -n lcvex verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_cluster_top -GCORE_COUNT=1 rtl/lcvex_pkg.sv ... rtl/lcvex_cluster_top.sv -Wno-fatal'",
+      "wall_seconds": 36,
+      "cpu_count": 1,
+      "peak_rss_mb": 382,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/core_count_1_lint.log",
+      "log_sha256": "4bab822727b6c3531299756299c02d89a23d344cab0b74169f27ec86e1cb8c6a",
+      "detail": "CORE_COUNT=1 cluster lint/elaboration PASS; Verilator wall 34.363s; total wall 35.753s."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "gate-d-log",
+      "uri": "build/gate_d_T-108-rerun.log",
+      "sha256": "9d30ee4a43c6e5a5f74fbad675dc53a52af9326afbe4d24e3d4c2d38524fb778",
+      "bytes": 176910,
+      "owner": "aud03",
+      "retain_until": "task review complete",
+      "reproduce": "see run command"
+    },
+    {
+      "id": "core1-lint-log",
+      "uri": "build/core_count_1_lint.log",
+      "sha256": "4bab822727b6c3531299756299c02d89a23d344cab0b74169f27ec86e1cb8c6a",
+      "bytes": 436,
+      "owner": "aud03",
+      "retain_until": "task review complete",
+      "reproduce": "see run command"
+    }
+  ],
+  "known_limits": [
+    "按 -j1/一次一个重型构建要求，使用等价串行 Gate D，未用 --parallel 多测试并发。",
+    "首次后台尝试在 make coverage 期间因外部 PTY 会话异常中断；未计为通过，setsid 重跑完整 PASS。",
+    "CORE_COUNT=1 验证为 cluster lint/elaboration；无专用 Makefile target。",
+    "未修改 RTL/tb/QEMU/checkpoint；未启动 Quartus；不替代 CI/多核/板级门禁。"
+  ],
+  "state": "done",
+  "integrator_review": {
+    "received_at": "2026-08-30T00:54:23+08:00",
+    "status": "accepted",
+    "head_sha": "75be48b6f076e5bfae06bb601656a000c3af7517",
+    "notes": "AUD-03 merged. Gate D PASS 13/13 (wall 19m18s, cgroup peak ~3.28GiB), CORE_COUNT=1 cluster lint PASS (35.7s).",
+    "merge_sha": "88b894b30e17b94ee1e0a9287412391ddd972957",
+    "result_sha": "a0e70d48a580886c634b1e88d2cff61605754552"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "88b894b30e17b94ee1e0a9287412391ddd972957",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "a0e70d48a580886c634b1e88d2cff61605754552",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  }
+}

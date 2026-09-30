@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-049",
+  "parent": "T-20260920-039",
+  "label": "B25-COREMARK-UART-BACKPRESSURE",
+  "title": "Prevent CoreMark summary loss under JTAG-UART TX FIFO backpressure",
+  "kind": "firmware-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-and-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-042", "T-20260920-046"],
+  "base_sha": "30500395",
+  "branch": "fix/T-20260920-049-b25-coremark-uart-backpressure",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-049",
+  "writes": [
+    "fpga/catapult_a10/boot/boot.S",
+    "fpga/catapult_a10/boot/README.md",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv",
+    "docs/handoffs/T-20260920-049-b25-coremark-uart-backpressure.md",
+    "docs/tasks/evidence/T-20260920-049.json"
+  ],
+  "reads": ["T-042 CoreMark firmware and host parser", "T-046 board transcript", "T-044 physical source identity"],
+  "scope": "Keep the BRAM monitor's JTAG-UART TX wait finite while allowing a connected slow host to drain a 64-byte FIFO; add a paced-drain vendor-timing SoC regression for complete CoreMark v output.",
+  "acceptance": "The exact CMSELF record reaches the host parser under paced 64-byte FIFO drain with zero TX drops; existing startup, t, DDR m, RXDBG/RXPATH/RXCPU, and CoreMark checksum regressions remain green. No score is reported unless full c raw output passes the strict parser.",
+  "forbidden_regions": ["CoreMark algorithm or expected CRC change", "host-wall-time score", "DDR dependency for BRAM test", "Quartus/JTAG/board/Flash/reset/power"],
+  "verification": {
+    "L0": ["content-addressed ELF/BIN/HEX/MIF rebuild", "host CoreMark formatting/parser suite"],
+    "L1": ["behavioral and vendor-timed SoC smoke with paced TX drain"],
+    "board": "Not authorized by this task; new firmware payload needs a later physical/SOF/board transaction."
+  },
+  "result": {
+    "implementation_commit": "c11c8e834d23a73e72c465c6214d41d334e5c0ac",
+    "integration_commit": "5b33c451317442f385dd828ece8c3bf829289d14",
+    "status": "PASS_LOCAL",
+    "boot_bin_sha256": "241b0ce4dface8c4a9db782b63e4ada8674f5c8b51c00f228a795e98fc1aedab",
+    "boot_mif_sha256": "0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f",
+    "vendor_timing_paced_uart": "PASS complete strict CMSELF transcript with one TX pop per 65536 logic cycles"
+  },
+  "created_at": "2026-09-27T16:05:00+08:00",
+  "updated_at": "2026-09-27T17:55:00+08:00"
+}

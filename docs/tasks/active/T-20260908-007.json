@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-007",
+  "label": "B25-QUARTUS-SYNTHESIS-SELECTOR",
+  "title": "Select the intended synthesis-only M20K implementations in Quartus",
+  "kind": "fpga-build-contract-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-local-selector-oracle-union",
+  "assigned_owner": "b25_physical",
+  "depends_on": [],
+  "follows_from": "T-20260908-006",
+  "base_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "branch": "fix/T-20260908-007-b25-quartus-synthesis-selector",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-007",
+  "scope": "Repair the Quartus project build contract so synthesis selects the existing SYNTHESIS branches: the explicit boot/cache altera_syncram implementations, boot MIF path and synthesis-safe assertion exclusions. Prefer the smallest QSF-level fix proven by the successful a10-linux-riscv reference; do not change behavioral RTL semantics merely to silence Error 19544.",
+  "writes": [
+    "fpga/catapult_a10/quartus/catapult_a10.qsf::global macro/build-contract assignments only",
+    "fpga/catapult_a10/tools/check_platform.py::exact SYNTHESIS macro policy only",
+    "fpga/catapult_a10/tools/check_skeleton.py::required SYNTHESIS macro anchor only",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/skeleton_manifest.json::check_skeleton.py hash/bytes only",
+    "fpga/catapult_a10/SHA256SUMS",
+    "one new task-specific static contract checker/test only if needed",
+    "docs/tasks/evidence/T-20260908-007.json",
+    "docs/handoffs/T-20260908-007-b25-quartus-synthesis-selector.md",
+    "build/agents/T-20260908-007/** ignored artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260908-006.json",
+    "rtl/lcvex_bram_boot.sv",
+    "rtl/lcvex_cache_data_ram.sv",
+    "rtl/lcvex_fp_scalar.sv synthesis conditionals",
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/hw/quartus/vex_soc_ddr/vex_soc_ddr.qsf"
+  ],
+  "validation": [
+    "Prove Quartus receives exactly one SYNTHESIS macro assignment and the successful reference uses the same assignment form.",
+    "Preprocess/elaborate enough of the platform to prove lcvex_bram_boot_behav is excluded, lcvex_bram_boot_altsyncram and cache M20K branches are selected, and boot init image resolves to ../boot/build/boot.mif.",
+    "Run platform/skeleton/SHA manifest closure and the existing BRAM/cache focused Verilator tests without defining SYNTHESIS.",
+    "Do not run remote Quartus in this task; one fresh integration physical rerun follows after review and merge."
+  ],
+  "acceptance": "The checked-in Quartus project deterministically selects the intended synthesis branches while simulation retains the behavioral branches; manifests/hashes and focused tests pass with no RTL/QEMU semantic change.",
+  "resource": {
+    "lock": "local-if-heavy",
+    "policy": "Acquire resource-lock run local for any heavy build; task-local TMPDIR/build output; return 75 means wait."
+  },
+  "forbidden_regions": [
+    "RTL semantic changes unless integrator explicitly expands the task after T-008 review",
+    "QEMU/reference/golden/test expectation changes",
+    "GamePC/Quartus/assembler/SOF/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T23:24:08+08:00",
+  "updated_at": "2026-09-09T01:16:31+08:00",
+  "result_head": "6902608ce802466ded07fc98369d4faf77d85602",
+  "result_evidence": "docs/tasks/evidence/T-20260908-007.json",
+  "integrated_head": "ca7f92ac",
+  "followup_tasks": ["T-20260908-010", "T-20260908-011", "T-20260909-001"],
+  "integrator_scope_review": {
+    "status": "accepted-hermetic-selector-merged",
+    "note": "The derived skeleton_manifest hash/bytes update is accepted. The permanent checker is hermetic by default; external reference comparison is opt-in only. The independent BRAM oracle runner and platform/selector/skeleton/SHA union pass on merged source 56d49ee0.",
+    "local_union_at": "2026-09-09T01:16:31+08:00",
+    "local_union_source_sha": "56d49ee0cb7a6b673db4801534445c790970f5b7",
+    "local_union": "make b25-bram-init-test PASS; selector/platform/skeleton/SHA PASS; registry 84 entries consistent"
+  },
+  "review_dependency": {
+    "task": "T-20260908-008",
+    "decision": "approve-with-conditions",
+    "required_changes": "Allow exactly one active `set_global_assignment -name VERILOG_MACRO SYNTHESIS`, reject every other/duplicate macro, require the anchor in skeleton closure, keep standalone BRAM wrapper out of QSF, and regenerate aliases/MIF only in the later fresh physical candidate."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-08T23:26:27+08:00",
+    "agent_name": "b25_physical",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "005a8984be951479a878b1c55740c90fe37ca7b6"
+  }
+}

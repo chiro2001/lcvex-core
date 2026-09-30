@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260910-002",
+  "label": "T013-EVIDENCE-PROVENANCE-CORRECTION",
+  "state": "done",
+  "acceptance_status": "pass-documentary-correction-only",
+  "partial": false,
+  "base_sha": "5702905425dfd149b791a7895a88ea453f8ad5a5",
+  "correction_head": "ff1811c7ea09a2a4e45fec3e0bdf654059923e6f",
+  "branch": "verify/T-20260910-002-t013-evidence-correction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260910-002",
+  "owner": "root",
+  "timestamps": {
+    "initial_dispatch_sent_at": "2026-09-10T00:45:02+08:00",
+    "main_takeover_received_at": "2026-09-10T09:52:50+08:00",
+    "reported_at": "2026-09-10T09:59:33+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "takeover": {
+    "original_owner": "t013_evidence_correction",
+    "reason": "subagent platform usage limit",
+    "checkpoint_preserved": "partial identity fields in docs/tasks/evidence/T-20260909-013.json"
+  },
+  "corrections": [
+    "separated measured candidate SHA/tree from the owner evidence commit and integration commit",
+    "recorded candidate manifest, generated EMIF SDC and boot oracle path/size/hash identity",
+    "corrected data_delay_summary.tsv size from 5134 to 5320 bytes while preserving its already-correct SHA-256 and all 20/20 PASS results",
+    "added sizes to every top-level artifact reference and verified all cited size/hash pairs",
+    "classified raw t007_summary task/source headers as reused v1 contract lineage rather than T-013 measurement identity",
+    "recorded final-acceptance-summary metastability omission and made the standard STA report the explicit authoritative source",
+    "verified TMS duplicate names directly from raw T-011/T-013 reports; endpoint-diff JSON agrees and remains diagnostic-only",
+    "corrected the handoff header so candidate, owner evidence and integration commits cannot be conflated"
+  ],
+  "validation": [
+    {
+      "id": "json-and-diff",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260909-013.json; git diff --check",
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "id": "artifact-reference-audit",
+      "command": "enumerate every path+sha256 object in corrected T-013 evidence and recompute size/hash from the designated T-013 worktree",
+      "checked": 25,
+      "mismatches": 0,
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "id": "raw-tms-duplicate-audit",
+      "command": "compare endpoint-diff TMS old/new-only rows with T-011 and T-013 raw fast UCP reports",
+      "result": "PASS; old state[13]+hub_mode[0], fresh state[15]"
+    },
+    {
+      "id": "timestamp-audit",
+      "command": "python3 scripts/check_task_timestamps.py --scope live --json, filtered to the two corrected T-013 documents",
+      "issues": 0,
+      "exit_code": 0,
+      "result": "PASS; repository-wide command still reports unrelated historical pre-existing records"
+    }
+  ],
+  "measured_results_changed": false,
+  "t013_state_after_correction": "blocked-ucp-cardinality-drift",
+  "subsequent_resolution": {
+    "at": "2026-09-10T10:53:13+08:00",
+    "task": "T-20260910-001",
+    "integration_head": "2e7974db34b075f66dc9430de641c470e8b22d7b",
+    "result": "v2 invariant actual T-013 export/check PASS; T-013 finalized done"
+  },
+  "write_boundary": {
+    "tracked": [
+      "docs/tasks/evidence/T-20260909-013.json",
+      "docs/handoffs/T-20260909-013-b25-final-fresh-physical.md",
+      "docs/tasks/evidence/T-20260910-002.json",
+      "docs/handoffs/T-20260910-002-t013-evidence-provenance-correction.md"
+    ],
+    "rtl_sdc_qsf_policy_modified": false,
+    "gamepc_quartus_network_dut": false
+  },
+  "handoff": "docs/handoffs/T-20260910-002-t013-evidence-provenance-correction.md"
+}

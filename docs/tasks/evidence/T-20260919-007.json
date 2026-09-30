@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260919-007",
+  "label": "B25-NOFP-BOARD-INTERACTION",
+  "state": "blocked-board-rx",
+  "acceptance_status": "volatile-config-pass-boot-ready-pass-rx-functional-blocked-golden-output-control-pass",
+  "partial": true,
+  "source_sha": "a64d2a4f6c41fc80e09132e8a915cd631ab5ffc5",
+  "branch": "verify/T-20260919-007-b25-nofp-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-007",
+  "owner": "root",
+  "timestamps": {
+    "candidate_program_started_at": "2026-09-20T00:10:28.8470858+08:00",
+    "candidate_program_finished_at": "2026-09-20T00:11:14.0716936+08:00",
+    "first_console_started_at": "2026-09-20T00:11:42.496714+08:00",
+    "reference_file_retry_started_at": "2026-09-20T00:32:33.9385269+08:00",
+    "final_golden_program_started_at": "2026-09-20T01:01:05.7508651+08:00",
+    "final_golden_console_finished_at": "2026-09-20T01:07:53.031268+08:00",
+    "reported_at": "2026-09-20T01:09:42+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "scope": "Quartus/JTAG volatile FPGA configuration and JTAG-UART device testing",
+    "excluded": [
+      "JIC/EPCQ/Flash write or erase",
+      "power cycle",
+      "board-level or SoC reset",
+      "stopping pre-existing or unknown processes"
+    ]
+  },
+  "candidate": {
+    "sof": {
+      "path": "D:/Projects/fpga-altra/lcvex/build/T-20260919-006-b25-nofp-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842110,
+      "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7",
+      "quartus_checksum": "0x31426358"
+    },
+    "volatile_configuration": {
+      "result": "pass",
+      "programmer_pid": 66928,
+      "owned_server_pid": 49476,
+      "programmer_exit_code": 0,
+      "wall_seconds": 45.215,
+      "configuration_success": true,
+      "operation_success": true,
+      "checksum_match": true,
+      "jtag_id_match": true,
+      "device_jtag_id": "0x02E060DD",
+      "owned_server_stopped": true,
+      "result_sha256": "6ede4913259137c9be5760016d98e2ef23d87e0dacf0812aae7822d773694b75",
+      "programmer_stdout_sha256": "50b31314d504d1364287968eb4a4ba3bd7da973cb92d8c30144ccd66f3d4a238"
+    },
+    "first_console": {
+      "connected": true,
+      "transcript": ["LCVEX25 BOOT", "CAL-WAIT", "DDR-FAIL", "READY"],
+      "status_response": false,
+      "pong": false,
+      "echo": false,
+      "result_sha256": "040d192184426cb7cbb5bd3fdd1582d00b3ad57205e901f78804a64469ff5663",
+      "stdout_sha256": "96e87aa175a22646840b11ba41a010c9326acc939af9cd1de86e991d0c0765fe",
+      "events_sha256": "c4ff9e0b356c57e3062f5fb5a9ccff6536a7a1ad9e0366c68160cb522fe62db9"
+    },
+    "reference_file_input_retry": {
+      "method": "the same Start-Process RedirectStandardInput ordinary-file mechanism as a10-linux-riscv/build/console_tx.ps1",
+      "input_hex": "3f0a700a5a0a",
+      "input_sha256": "97988febf896c6066ca994f07cc7d349f0f5a7b25b2813982889431e8a11fced",
+      "connected": true,
+      "terminal_exit_code": 0,
+      "natural_timeout_exit": true,
+      "status_response": false,
+      "pong": false,
+      "echo": false,
+      "result_sha256": "aadf46eb665aee101def2ea532f2093fae62434cad6ab1f4b26c50fa9181b297",
+      "stdout_sha256": "49b0be3887c8a051c644d57ec0e1b71e7c201b0aa4316a0134be9cef46444163"
+    },
+    "functional_result": "fail-after-boot-ready-at-host-to-target-interaction"
+  },
+  "golden_control": {
+    "sof": {
+      "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "quartus_checksum": "0x31510BB6"
+    },
+    "current_run": {
+      "volatile_configurations": 3,
+      "final_programmer_pid": 28620,
+      "final_owned_server_pid": 48720,
+      "final_programmer_exit_code": 0,
+      "configuration_success": true,
+      "operation_success": true,
+      "checksum_match": true,
+      "jtag_id_match": true,
+      "console_connected": true,
+      "opensbi_v1_9": true,
+      "linux_7_2_0": true,
+      "prompt_within_360_seconds": false,
+      "input_marker_sent": false,
+      "interpretation": "positive control for volatile programming, board clock/power and JTAG-UART target-to-host output only; the no-reset scope did not reach a shell, so this run neither proves nor disproves host-to-target input",
+      "programmer_stdout_sha256": "8a3286c167c99a3017b12acb9d31ae66bbb846d363c90efa9c5e45f1044c5c87",
+      "console_result_sha256": "41ea043c89685e287b3b3dc21120b0d46af6f83ab2713388f9620005acd4aa71",
+      "console_stdout_sha256": "40e5d6af90ba69692143e9fe848673957201e2c0063388a042482b7925f5c2e5",
+      "wrapper_result_sha256": "2c385970a071b5f06bdf148cd493ff6de839c7ee1e2df14ac4d4a1b8f366034e"
+    },
+    "historical_input_control": {
+      "reference": "D:/Projects/fpga-altra/a10-linux-riscv/build/console_tx.ps1 and console_tx.txt",
+      "script_sha256": "92ec97b08dcf303255262dcdedc4283869d16c5456bf0b15b78efd594f5ef669",
+      "transcript_sha256": "182d7175dd85a992f1f9b0a631aaa411b4a155c4a11674b4ca6efb14395c3988",
+      "marker": "SIM_TTY_OK012345",
+      "result": "same board/cable/tool ordinary-file stdin historically produced command echo, command output and a new vex prompt",
+      "limitation": "historical evidence is not substituted for a current golden input run"
+    },
+    "final_board_state": "golden SOF running"
+  },
+  "standard_server_behavior": {
+    "pid": 5640,
+    "preserved": true,
+    "observation": "after a terminal session exits, later nios2-terminal attempts can report no matching JTAG UART even while jtagconfig still sees device 0x02E060DD; waiting 12 minutes did not recover it",
+    "classification": "second-session enumeration failures are host-server state and are not used as evidence of candidate RTL failure",
+    "mitigation_used": "only first terminal sessions immediately after a new volatile configuration were treated as output evidence; the server was never stopped or restarted"
+  },
+  "local_diagnostics": [
+    {
+      "name": "registered vendor timing-equivalent bridge probe",
+      "result": "VENDOR_UART_TIMING_TB PASS",
+      "scope": "generated waitrequest phase, registered read_0/RVALID and showahead-OFF FIFO-q timing at the isolated bridge",
+      "source_sha256": "91f3323e3303a7d7a35a16fff42a94fd62c4e709d888592a084173134b1060ec",
+      "run_log_sha256": "c0fba83a465f5e6a635f1e725375296686efc8b2b3693413525956f8f2179b36"
+    },
+    {
+      "name": "exact generated IP control logic with forced RX boundary",
+      "result": "VENDOR_IP_FORCED_RX_TB PASS",
+      "scope": "unmodified Quartus 21.4 generated waitrequest/read_0/rvalid logic plus current bridge; test-only force supplies one RX byte at the FIFO boundary",
+      "source_sha256": "ec17fc60a34f9817476525e59d10b9507c58ad27b0b0dad00bf8bcc083cea825",
+      "run_log_sha256": "e5e5acaf5f20b4065e260eef52815d00c9dab312b18a313516e64586ca40bdf4"
+    }
+  ],
+  "classification": {
+    "proved": [
+      "the corrected synthesis M20K path executes from PC=0 through the complete startup transcript and reaches READY on hardware",
+      "the exact T-006 SOF was accepted with the expected checksum and JTAG ID",
+      "the candidate JTAG-UART target-to-host path works",
+      "three independent host-input mechanisms produced no candidate status/PONG/echo, including the exact historically successful ordinary-file redirection mechanism"
+    ],
+    "not_proved": [
+      "whether the host byte enters the candidate RX FIFO",
+      "whether the candidate CPU pops a byte but observes a stale DATA response",
+      "a current golden host-to-target control, because golden did not reach its shell without a forbidden reset action",
+      "an RTL defect in the isolated bridge; both local vendor-timing probes pass"
+    ],
+    "next_hypothesis": "the missing coverage is full-SoC behavior with the generated IP's registered read timing and a long empty-poll interval before RX injection; only a reproducing test may justify an RTL change"
+  },
+  "artifacts": {
+    "root": "build/agents/T-20260919-007/remote-evidence-v12/runtime",
+    "program_result": "program-result.json",
+    "first_console_result": "console-result.json",
+    "reference_file_result": "console-v6-result.json",
+    "final_golden_result": "golden-v12-result.json",
+    "final_golden_console_result": "golden-v12-console-result.json"
+  },
+  "safety_and_resources": {
+    "volatile_sof_configurations": 4,
+    "candidate_configurations": 1,
+    "golden_configurations": 3,
+    "persistent_flash_action": false,
+    "jic_epcq_action": false,
+    "board_or_soc_reset_action": false,
+    "power_action": false,
+    "unknown_or_preexisting_process_stopped": false,
+    "preexisting_standard_server_preserved": true,
+    "task_owned_servers_stopped": true,
+    "residual_programmer_or_terminal": false,
+    "port_1310_released": true,
+    "all_gamepc_actions_held_resource_lock": true,
+    "final_resource_status": "local held by pypto-x/u-ops-registry-batch4; gamepc FREE"
+  },
+  "blockers": [
+    "The corrected candidate reaches READY but does not return status/PONG/echo for host input.",
+    "Existing focused/behavioral tests do not reproduce the hardware RX failure, and the two added ignored vendor-timing probes pass; changing RTL now would be speculative."
+  ],
+  "handoff": "docs/handoffs/T-20260919-007-b25-nofp-board-interaction.md",
+  "next": "Close this board task as partial/blocked and register a separate vendor-faithful full-SoC JTAG-RX reproduction task. If that task proves a defect, implement the minimal RTL fix, rerun affected L0-L2/Gate D/fresh physical/assembler, and repeat volatile board acceptance."
+}

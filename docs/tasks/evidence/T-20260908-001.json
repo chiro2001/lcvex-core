@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-001",
+  "label": "B25-QUARTUS-SV-COMPAT",
+  "state": "done-local-focused-followup",
+  "acceptance_status": "pass-all-affected-controls-explicit-physical-rerun-pending",
+  "partial": true,
+  "task_json_declared_base_sha": "004b62c19cf2ff4dfd0fb721332fc3a651ed7b99",
+  "dispatch_base_sha": "8316a1b8b94010ea31cf791e441e3f065197e841",
+  "base_sha": "8316a1b8b94010ea31cf791e441e3f065197e841",
+  "head_sha": "839ecbecadfa81d8243adeaa31df193943b2ca11",
+  "branch": "fix/T-20260908-001-b25-quartus-sv-compat",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-001",
+  "owner": "b25_physical",
+  "timestamps": {
+    "sent_at": "2026-09-08T11:23:14+08:00",
+    "received_at": "2026-09-08T11:23:14+08:00",
+    "implementation_started_at": "2026-09-08T11:29:00+08:00",
+    "local_lock_acquired_at": "2026-09-08T11:35:02+08:00",
+    "focused_finished_at": "2026-09-08T11:39:01+08:00",
+    "implementation_committed_at": "2026-09-08T11:41:15+08:00",
+    "followup_sent_at": "2026-09-08T11:46:43+08:00",
+    "followup_received_at": "2026-09-08T11:46:43+08:00",
+    "followup_finished_at": "2026-09-08T11:58:10+08:00",
+    "followup_implementation_committed_at": "2026-09-08T11:59:20+08:00",
+    "reported_at": "2026-09-08T12:02:15+08:00"
+  },
+  "implementation": {
+    "files": ["rtl/lcvex_fp_scalar.sv", "rtl/lcvex_neon_fp.sv", "tb/sv/lcvex_fp_scalar_tb.sv", "tb/sv/lcvex_fp_scalar_p7_4_tb.sv", "tb/sv/lcvex_fp_scalar_p7_5_tb.sv"],
+    "diff_stat": "17 insertions, 6 deletions relative to dispatch base",
+    "rtl_sha256": "c30396fef6f3bc55fef912a9d1e6ee807efb8a85eb72870763d63df4487521e4",
+    "commit": ["c868d900e6f6d88cc3f77828a34f04daea9d5048", "839ecbecadfa81d8243adeaa31df193943b2ca11"],
+    "caller_source_hashes": {
+      "rtl/lcvex_neon_fp.sv": "32a6d6948135240482274ac2a8111337cfbfc8ee9063dd2e37ff3d253963abee",
+      "tb/sv/lcvex_fp_scalar_tb.sv": "ef6d197518bc8cbd9d425829393d851f3d72c324360e374797037d65b70c8838",
+      "tb/sv/lcvex_fp_scalar_p7_4_tb.sv": "bc0e4b049fe5c07514cd003b67d7717a18424796ecb7dbcca0814fac9d19a3d8",
+      "tb/sv/lcvex_fp_scalar_p7_5_tb.sv": "7217b902a4978c68f5dcb46210d74483c9af06ed1addacfa76d0acccfb819dbf"
+    },
+    "summary": [
+      "Removed lcvex_fp_scalar iter_kill/iter_pause declaration initializers.",
+      "Removed lcvex_fp_divider kill/pause declaration initializers.",
+      "Explicitly connected kill=0 and pause=0 on legacy div_lo/div_hi instances.",
+      "Explicitly connected iter_kill=0 and iter_pause=0 on the four legacy FP_ITER=0 callers in the expanded write regions.",
+      "Preserved iter_divider iter_kill/iter_pause connections and all FSM/state/latency logic."
+    ],
+    "declaration_initializer_count": 0,
+    "public_ports_changed": false,
+    "state_enum_changed": false,
+    "reset_kill_pause_logic_changed": false,
+    "latency_logic_changed": false
+  },
+  "instance_audit": {
+    "runner": "build/agents/T-20260908-001/audit_iter_ports.py",
+    "artifact": "build/agents/T-20260908-001/instance-audit-followup.json",
+    "artifact_sha256": "f8e2196cf4d624d5e44032c2f5ac7d9830ef75dda53f56288c17aab503360304",
+    "exit_code": 0,
+    "scalar_count": 11,
+    "scalar_instances": [
+      {"file": "rtl/lcvex_neon_fp.sv", "line": 124, "instance": "scalar_lane", "FP_ITER": 0, "iter_kill": "1'b0", "iter_pause": "1'b0"},
+      {"file": "rtl/lcvex_neon_fp.sv", "line": 441, "instance": "scalar_unit", "FP_ITER": 1, "iter_kill": "kill", "iter_pause": "1'b0"},
+      {"file": "tb/sv/lcvex_fp_exec_tb.sv", "line": 53, "instance": "valid_drop_scalar", "FP_ITER": 1, "iter_kill": "iter_kill", "iter_pause": "iter_pause"},
+      {"file": "tb/sv/lcvex_fp_scalar_p7_4_tb.sv", "line": 32, "instance": "dut", "FP_ITER": 0, "iter_kill": "1'b0", "iter_pause": "1'b0"},
+      {"file": "tb/sv/lcvex_fp_scalar_p7_5_tb.sv", "line": 35, "instance": "dut", "FP_ITER": 0, "iter_kill": "1'b0", "iter_pause": "1'b0"},
+      {"file": "tb/sv/lcvex_fp_scalar_r18_tb.sv", "line": 92, "instance": "dut", "FP_ITER": 1, "iter_kill": "iter_kill", "iter_pause": "iter_pause"},
+      {"file": "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv", "line": 46, "instance": "dut", "FP_ITER": 1, "iter_kill": "iter_kill", "iter_pause": "iter_pause"},
+      {"file": "tb/sv/lcvex_fp_scalar_r20_route_tb.sv", "line": 50, "instance": "dut", "FP_ITER": 1, "iter_kill": "iter_kill", "iter_pause": "iter_pause"},
+      {"file": "tb/sv/lcvex_fp_scalar_r21_fma_cut_tb.sv", "line": 47, "instance": "dut", "FP_ITER": 1, "iter_kill": "iter_kill", "iter_pause": "iter_pause"},
+      {"file": "tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv", "line": 96, "instance": "dut", "FP_ITER": 1, "iter_kill": "iter_kill", "iter_pause": "iter_pause"},
+      {"file": "tb/sv/lcvex_fp_scalar_tb.sv", "line": 32, "instance": "dut", "FP_ITER": 0, "iter_kill": "1'b0", "iter_pause": "1'b0"}
+    ],
+    "divider_count": 3,
+    "divider_instances": [
+      {"file": "rtl/lcvex_fp_scalar.sv", "line": 4717, "instance": "div_lo", "kill": "1'b0", "pause": "1'b0"},
+      {"file": "rtl/lcvex_fp_scalar.sv", "line": 4731, "instance": "div_hi", "kill": "1'b0", "pause": "1'b0"},
+      {"file": "rtl/lcvex_fp_scalar.sv", "line": 5066, "instance": "it_divider", "kill": "iter_kill", "pause": "iter_pause"}
+    ],
+    "interpretation": "All 11 scalar instances and all 3 divider instances now explicitly connect the affected controls. Legacy FP_ITER=0 callers are tied to 1'b0 even though g_iter is not elaborated."
+  },
+  "tests": [
+    {
+      "id": "scalar_base",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 71.328,
+      "log": "build/agents/T-20260908-001/focused/scalar_base.log",
+      "log_sha256": "b2b0e77458b834f77b0164b292b39094fbd4a3889a23eee18251a628188ebd18",
+      "known_warnings": "8 PINMISSING occurrences for non-iterative legacy instance pins"
+    },
+    {
+      "id": "r18_iter",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_r18_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 111.824,
+      "log": "build/agents/T-20260908-001/focused/r18_iter.log",
+      "log_sha256": "e380fdeb18df8678c1fa6bea7a1ade2db64b709c307e690c5d08146649f260d8"
+    },
+    {
+      "id": "r20_route",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_r20_route_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 109.840,
+      "log": "build/agents/T-20260908-001/focused/r20_route.log",
+      "log_sha256": "e25b379184e7a0690506b07f035cee9bacaa8eccb137789d1878f1d93c332083",
+      "known_warnings": "pre-existing MULTIDRIVEN probe warning"
+    },
+    {
+      "id": "r20_pack",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_r20_pack_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 110.121,
+      "log": "build/agents/T-20260908-001/focused/r20_pack.log",
+      "log_sha256": "ac24f5533cfd8a98a5cc4f5a6ce972577232fa44711bda0a6f3fc291790ff69b"
+    },
+    {
+      "id": "r21_iter_round",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_r21_iter_round_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 121.320,
+      "log": "build/agents/T-20260908-001/focused/r21_iter_round.log",
+      "log_sha256": "c81af4291b051a7c6a93cd91d2a474c72a5cbb72d71f10535228a0a882cc520e"
+    },
+    {
+      "id": "r21_fma_cut",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_r21_fma_cut_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 112.070,
+      "log": "build/agents/T-20260908-001/focused/r21_fma_cut.log",
+      "log_sha256": "b0dab0e66c33b6f336cc1cd9cecfb2aa79eda7b0cc453d2fc257eb9ba9242760"
+    },
+    {
+      "id": "fp_exec_directed",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 187.961,
+      "log": "build/agents/T-20260908-001/focused/fp_exec_directed.log",
+      "log_sha256": "130156ac6c8863b38a4c793b09af2e5f136ee5813ec211008e89ebcf1e080e48",
+      "known_warnings": "4 legacy scalar_lane PINMISSING plus pre-existing PINCONNECTEMPTY/VARHIDDEN/SYNCASYNCNET"
+    }
+  ],
+  "followup_tests": [
+    {
+      "id": "scalar_base_followup",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 71.332,
+      "control_pinmissing": 0,
+      "output_pinmissing": 4,
+      "log": "build/agents/T-20260908-001/followup/scalar_base.log",
+      "log_sha256": "d995210e7d3cfaff1ee0b8cf6b7273c722cf52d2e9dbc88a7f7ac6a8a1d423b2"
+    },
+    {
+      "id": "p7_4_scalar_followup",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_p7_4_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 71.703,
+      "control_pinmissing": 0,
+      "output_pinmissing": 4,
+      "log": "build/agents/T-20260908-001/followup/p7_4_scalar.log",
+      "log_sha256": "dbe1ee0de3ca9a8748f8301dc84ee9dffe909842c8c27a67c8f23273e28fe097"
+    },
+    {
+      "id": "p7_5_scalar_followup",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_p7_5_tb ...",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 171.160,
+      "control_pinmissing": 0,
+      "output_pinmissing": 4,
+      "log": "build/agents/T-20260908-001/followup/p7_5_scalar.log",
+      "log_sha256": "3c6797656b77221aabe97e77018882c0d1004d43bd9364d09eb09a4f85aa1f15"
+    },
+    {
+      "id": "fp_exec_directed_followup",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only/--binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv",
+      "lint_exit": 0,
+      "build_exit": 0,
+      "runtime_exit": 0,
+      "allocated_mb_max": 187.977,
+      "control_pinmissing": 0,
+      "log": "build/agents/T-20260908-001/followup/fp_exec_directed.log",
+      "log_sha256": "8db4bba8fafe4cc80a804c75d8e77c261fcbf25a785728b5ee858fe9ce731be2"
+    }
+  ],
+  "resource": {
+    "lock_command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260908-001 b25_physical --min-local-available-mib 8192 --meta stage=focused_verilator --meta source_sha=8316a1b8b94010ea31cf791e441e3f065197e841 -- systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- bash build/agents/T-20260908-001/run_focused.sh",
+    "lock_return_75_before_acquire": true,
+    "lock_wait_reason": "T-20260908-002/b25_gate_d held local before final acquisition",
+    "systemd_scope": "MemoryMax=16G MemorySwapMax=0",
+    "verilator_jobs": 1,
+    "systemd_memory_peak": "2.3G",
+    "resource_journal": "build/agents/T-20260908-001/focused-resource-journal.log",
+    "resource_journal_sha256": "fdb06595cf8a264d31e87d9a2a622f8d2866f08d5aab583ccd7955d2ec4b954d",
+    "final_status": "local FREE; gamepc FREE",
+    "final_status_log": "build/agents/T-20260908-001/final-resource-status.log",
+    "final_status_log_sha256": "2f560ea96f09ba0cdf30dfb747da5eb34dbb47860765b1c93f44713a85fc4f5f",
+    "followup_lock_command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260908-001 b25_physical --min-local-available-mib 8192 --meta stage=affected_followup --meta source_sha=839ecbecadfa81d8243adeaa31df193943b2ca11 -- systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- bash build/agents/T-20260908-001/run_affected_followup.sh",
+    "followup_systemd_memory_peak": "1.6G",
+    "followup_resource_journal": "build/agents/T-20260908-001/affected-followup-resource-journal.log",
+    "followup_resource_journal_sha256": "a000ed75e25cff8852c004edff8c8277da8e79f82a7ec311f82522bf7e9a3b6d",
+    "followup_final_status_log": "build/agents/T-20260908-001/final-resource-status-followup.log",
+    "followup_final_status_log_sha256": "2f560ea96f09ba0cdf30dfb747da5eb34dbb47860765b1c93f44713a85fc4f5f"
+  },
+  "policy": {
+    "active_task_json_modified": false,
+    "tasks_snapshot_modified": false,
+    "project_status_modified": false,
+    "roadmap_modified": false,
+    "rtl_outside_expanded_followup_regions_modified": false,
+    "expanded_followup_write_regions": [
+      "rtl/lcvex_neon_fp.sv::FP_ITER=0 scalar_lane instantiation only",
+      "tb/sv/lcvex_fp_scalar_tb.sv::dut port connections only",
+      "tb/sv/lcvex_fp_scalar_p7_4_tb.sv::dut port connections only",
+      "tb/sv/lcvex_fp_scalar_p7_5_tb.sv::dut port connections only"
+    ],
+    "qemu_modified": false,
+    "reference_or_expectation_modified": false,
+    "assertions_disabled": false,
+    "gamepc_or_quartus_used": false,
+    "assembler_or_sof": false,
+    "jtag_board_flash": false,
+    "physical_rerun": "pending integration candidate"
+  },
+  "risks": [
+    "Legacy FP_ITER=0 callers are now explicitly tied to 1'b0; only their unconsumed iter_busy/iter_done output pins remain intentionally unconnected in focused scalar TBs.",
+    "Physical Quartus synthesis/fitter/STA must be rerun once on the merged candidate; this task only proves local Verilator behavior and Quartus initializer removal statically."
+  ],
+  "handoff": "docs/handoffs/T-20260908-001-b25-quartus-sv-compat.md"
+}

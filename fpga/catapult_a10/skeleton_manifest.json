@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-062",
+  "scope": "T-20260928-002 25 MHz Linux boot candidate layered on the frozen 50-file Catapult A10 vendor provenance payload",
+  "top_level_entity": "lcvex_catapult_a10_top",
+  "project_revision": "catapult_a10",
+  "files": [
+    {
+      "path": "rtl/lcvex_catapult_a10_top.sv",
+      "role": "top-level-platform-shell",
+      "sha256": "2afee0cfbd82b7d559f50b36f565e554fab7ea12aa8d395d55de825845ad8167",
+      "bytes": 12827
+    },
+    {
+      "path": "rtl/lcvex_catapult_a10_reset_gate.sv",
+      "role": "platform-reset-calibration-gate",
+      "sha256": "0d7b5732231bb919bd3e1011d21348f107b0843b35df6e48439fb21e294c7c33",
+      "bytes": 3759
+    },
+    {
+      "path": "tb/sv/lcvex_catapult_a10_stub.sv",
+      "role": "offline-lint-interface-stub",
+      "sha256": "15a94b502df3449a3d988e3c1ace3e357a64bab8ec97c01dc0bfa96214538c7d",
+      "bytes": 3384
+    },
+    {
+      "path": "tools/check_skeleton.py",
+      "role": "skeleton-offline-checker",
+      "sha256": "27eef8fcfe74a8bdd2dacbe15046d0af5e46ce299bb8e733ed6fb759f1c9ca24",
+      "bytes": 9722
+    },
+    {
+      "path": "tools/lint_platform.sh",
+      "role": "offline-lint-entrypoint",
+      "sha256": "010e1bfff27db177be4e51a54a638cde173780a1f44dcf9a76df03719762299b",
+      "bytes": 2173
+    },
+    {
+      "path": "tools/lint_soc.sh",
+      "role": "soc-rtl-lint-entrypoint",
+      "sha256": "19430cfef2fdd4a2622a1a635a274f36695e86fec601bac34c5266e76f32c4aa",
+      "bytes": 1527
+    }
+  ],
+  "interface_boundaries": {
+    "clocks": {
+      "clk_u59_hz": 100000000,
+      "logic_domain_hz": 25000000,
+      "logic_divider": "sys_clk_25",
+      "logic_divide_by": 4,
+      "clk_y3_hz": 266666667,
+      "emif_user_clk_hz": 266666750
+    },
+    "emif": {
+      "qsys_instance": "emif",
+      "black_box": "qsys/ddr4_bot/Qsys/Qsys_bb.v",
+      "avalon_data_bits": 512,
+      "avalon_byteenable_bits": 64,
+      "avalon_address_bits": 25,
+      "avalon_burstcount_bits": 7,
+      "status": "local_cal_success/local_cal_fail"
+    },
+    "console": {
+      "module": "jtag_uart_only_jtag_uart",
+      "avalon_slave": "B25 polling SoC master wiring (DATA/CONTROL)"
+    },
+    "flash": {
+      "module": "sfl_sys",
+      "avalon_csr": "B5 SoC master wiring",
+      "avalon_mem": "CPU read-only Flash aperture via the Catapult SoC EPCQ Avalon bridge"
+    },
+    "boot_bram_window": {
+      "base": "0x00000000",
+      "size_bytes": 65536,
+      "stack": "[0x0000F000,0x00010000)",
+      "physical_image": "boot/build/linux-loader/linux_loader.mif (generated, ignored, opt-in checked)"
+    },
+    "ddr_window": {
+      "base": "0x40000000",
+      "size_bytes": 134217728,
+      "basis": "B25 diagnostic window; not a DDR stability claim"
+    }
+  },
+  "anchors": {
+    "qsf": [
+      "TOP_LEVEL_ENTITY lcvex_catapult_a10_top",
+      "SYSTEMVERILOG_FILE \"../rtl/lcvex_catapult_a10_top.sv\"",
+      "SYSTEMVERILOG_FILE \"../rtl/lcvex_catapult_a10_reset_gate.sv\"",
+      "QSYS_FILE \"../qsys/ddr4_bot/Qsys.qsys\"",
+      "IP_FILE \"../qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot.ip\"",
+      "MIF_FILE \"../boot/build/linux-loader/linux_loader.mif\"",
+    "QIP_FILE \"../flash/sfl/sfl_sys.qip\"",
+    "VERILOG_FILE \"../flash/sfl/ip/sfl_sys/clk/synth/clk.v\"",
+    "VERILOG_FILE \"../jtag_uart/jtag_uart_std.v\""
+    ],
+    "sdc": [
+      "create_clock -period 10.000 -name clk_u59",
+      "create_generated_clock -name sys_clk_25",
+      "divide_by 4",
+      "get_pins {sys_clk_25|q}",
+      "create_clock -period 3.750 -name clk_y3",
+    "set_false_path -from [get_registers -nowarn {emif|emif_bot|*}]",
+    "cal_success_sync_q[0]",
+    "set_false_path -to [get_ports {leds[*]}]"
+    ]
+  },
+  "toolchain": {
+    "quartus": "Quartus Prime Pro 21.4 Build 67",
+    "required_for_regeneration": [
+      "ip-generate",
+      "qsys-generate"
+    ],
+    "required_for_compile_sta": [
+      "quartus_sh"
+    ],
+    "offline_lint": [
+      "verilator"
+    ]
+  },
+  "known_limits": [
+    "Quartus/Qsys tools are not present in this offline environment; B25 fresh compile/STA is delegated to T-20260907-042 on GamePC.",
+    "SFL/EPCQ generated sources referenced by flash/sfl/sfl_sys.qip are committed under flash/sfl/ip/sfl_sys and were validated by the T-064 real full compile/STA run.",
+    "B25 wires the Catapult SoC (core + I/D-L1 + 64-set/1-way L2 + AXI4 + EMIF adapter + initialized 64 KiB BRAM) to polling JTAG-UART and EPCQ CSR; EPCQ MEM remains reserved.",
+    "Generated linux_loader.mif is an ignored physical input, not vendor provenance; --require-boot-image checks WIDTH/DEPTH, complete records and byte equality to linux_loader.bin.",
+    "The current candidate has no fresh Quartus synthesis/fitter/STA/assembler or board evidence; physical signoff must use the exact frozen candidate, loader MIF, Linux payload and 25 MHz timing constraints."
+  ]
+}

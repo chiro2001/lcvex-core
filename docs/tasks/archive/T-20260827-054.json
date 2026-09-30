@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-054",
+  "title": "B2-EMIF AXI4 到 512-bit Avalon-MM 适配与 CDC",
+  "kind": "axi4-avalon-cdc-adapter",
+  "priority": "high",
+  "assigned_owner": "b2-emif-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现平台适配层的 AXI4 Full 128-bit 到 512-bit Avalon-MM 宽度聚合、CDC 和 calibration gate 模块级闭环；不实现 Cache/L2/CPU/SoC、B0 厂商输入修改或 Quartus 工程",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "若 AXI4/Avalon 宽度聚合、异步 FIFO 或 calibration/error 边界出现架构歧义，再补充一次边界拆解；不扩大写集"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审 task JSON、AXI4/B0 冻结 profile、目标 diff 和独立验证结果；检查 4-beat→512-bit 聚合、byteenable、waitrequest/readdatavalid、CDC/reset/calibration/error，不提供逐行实现"
+  },
+  "review_record": {
+    "agent_id": "01a03f97-61c8-7e53-b0d8-fbfc6a7abdf4",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T03:45:55+08:00",
+    "received_at": "2026-08-27T03:46:26+08:00",
+    "reported_at": "2026-08-27T03:46:26+08:00",
+    "elapsed_seconds": 31,
+    "status": "go",
+    "resolution_commit": "24ec887",
+    "blocking_before_acceptance": [
+      "保持 Qsys addressUnits=WORDS、64B Avalon word、128MiB窗口和明确的 AXI→Avalon 地址公式。",
+      "跨64B事务返回本地 DECERR；Qsys 无 error/response 时正常后端映射 OKAY，本地错误映射 DECERR。",
+      "waitrequest_n 低时保持 payload，双域 reset flush inflight，cal_fail 粘滞且不发 Avalon。"
+    ],
+    "boundary": "允许 owner 只实现 T-054 通用 RTL 与独立 SV/Cocotb L0/L1；不修改 B0 目录、不接 Cache/L2/CPU/SoC。"
+  },
+  "design_contract": {
+    "address": {
+      "avalon_address_units": "WORDS",
+      "avalon_word_bytes": 64,
+      "axi_base_addr": "0x40000000",
+      "axi_window_bytes": 134217728,
+      "formula": "avalon_address = (axi_addr - 0x40000000) >> 6",
+      "range": "offset 0..0x07ffffff maps to Avalon word 0..0x1fffff; outside window returns local DECERR"
+    },
+    "boundary": {
+      "supported": "AXI INCR LEN<=3, SIZE<=4, each beat and complete burst remain within one 64B line",
+      "canonical": "aligned 64B/4-beat request maps beat0 to Avalon writedata[127:0]/byteenable[15:0] and beat3 to [511:384]/[63:48]",
+      "narrow_wstrb": "each beat WSTRB is shifted by (axi_addr & 0x3f) into the 64-bit Avalon byteenable",
+      "cross_line": "any beat or burst crossing a 64B boundary is rejected with local DECERR; B2 does not silently split it"
+    },
+    "error": {
+      "backend": "Qsys Avalon interface has no error/response port; an accepted backend read/write that returns normally maps to AXI OKAY",
+      "local": "address/window, unsupported burst, calibration failure, FIFO/reset protocol failure map to AXI DECERR; BFM must not invent an EMIF error port"
+    },
+    "reset": {
+      "assertion": "cpu and EMIF domains independently asynchronous-assert and synchronously release",
+      "inflight": "reset flushes both CDC queues and all in-flight state; no stale B/R or Avalon request is emitted after release; an in-flight transaction is reset-aborted and upstream restarts it",
+      "invariant": "no old response/data may cross a reset boundary"
+    },
+    "calibration": {
+      "normal": "cal_success=1 and cal_fail=0 enables acceptance",
+      "not_ready": "cal_success=0 and cal_fail=0 backpressures new AXI requests",
+      "fail": "cal_fail latches until reset, accepts new requests only into a local DECERR response path, and never issues Avalon traffic",
+      "post_accept_fail": "a failure after acceptance is treated as reset-class abort; no stale response is permitted"
+    },
+    "avalon_handshake": {
+      "waitrequest_n": "active-low; hold read/write/address/writedata/byteenable/burstcount while low; accept only when high",
+      "read": "accepted read waits independently for readdatavalid before producing AXI RVALID"
+    }
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "一次简明适配协议审核只报告阻断风险；仅在接口契约、写集或验收证据实质变化时重审",
+    "required_sequence": "一次 Sol 方向审查后允许 owner 实现；平台/Cache 对接前必须闭合阻断项"
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "extend_when": "owner 在自然 checkpoint 带时间戳报告新增模块/测试证据、写集稳定且剩余工作可界定",
+    "control": "集成者根据 reported_at - dispatch_sent_at 动态延长；不因等待窗口到期中断 owner",
+    "progress_report_fields": [
+      "sent_at",
+      "received_at",
+      "reported_at",
+      "elapsed_seconds",
+      "files",
+      "tests",
+      "blockers",
+      "remaining_minutes",
+      "extension_request"
+    ]
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "仅在预算允许时监控双时钟 SV/Cocotb BFM、随机 waitrequest 和 calibration/error 回归；Quartus/板级测试由集成者队列执行"
+  },
+  "disabled_profiles": [
+    "deepseek-v4-flash[max]"
+  ],
+  "phase": "done",
+  "execution": {
+    "agent_id": "01a03fac-f468-75d0-92f7-b6f101aa3897",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T04:04:06+08:00",
+    "budget_minutes": 60,
+    "budget_history": [
+      {
+        "from_minutes": 30,
+        "to_minutes": 45,
+        "increment_minutes": 15,
+        "approved_at": "2026-08-27T04:34:56+08:00",
+        "reason": "checkpoint 已观察到 4 个 RTL、BFM/TB、Cocotb 入口/测试齐备，属于稳定有效进展",
+        "basis": "scheduler checkpoint 2026-08-27T04:34:18+08:00；owner reported_at 尚未提供"
+      },
+      {
+        "from_minutes": 45,
+        "to_minutes": 60,
+        "increment_minutes": 15,
+        "approved_at": "2026-08-27T04:47:22+08:00",
+        "reason": "checkpoint 已观察到 8 个代码/测试文件齐备，仅剩文档、handoff/evidence 和提交，属于稳定有效进展",
+        "basis": "scheduler checkpoint 2026-08-27T04:46:48+08:00；owner reported_at 尚未提供"
+      }
+    ],
+    "budget_exhausted_at": "2026-08-27T04:54:27+08:00",
+    "budget_policy": "initial=30m; extension=+15m by timestamped progress; max=60m"
+  },
+  "owner_handoff": {
+    "state": "review",
+    "implementation_commit": "b028f449c47d21ae933d8c5fe967c03fbb995e90",
+    "evidence_commit": "671f7786b5f40e730a574c70257748c3963f516c",
+    "handoff": "docs/handoffs/T-20260827-054-b2-emif.md",
+    "evidence": "docs/tasks/evidence/T-20260827-054.json",
+    "scope_accepted_for_integration": "B2 generic AXI4 Full 128-bit to 512-bit Avalon-MM adapter, async FIFO, calibration gate and independent SV/Cocotb L0/L1",
+    "scope_remaining": "clean FPGA-line merge and integrator L0/L1 rerun; B0 exact Quartus/Qsys, B3 Cache/L2 and board gates remain later"
+  },
+  "integration": {
+    "status": "pass_l0_l1",
+    "strategy": "在 feature/fpga-catapult-a10 上按 B2 owner commit 顺序 cherry-pick，复跑独立 SV/Cocotb L0/L1；不写 B0 平台目录",
+    "source_sha": "e6f0dfb005770c19089f6dfe15753d6940a5d1a2",
+    "code_merge_sha": "e6f0dfb005770c19089f6dfe15753d6940a5d1a2",
+    "evidence_merge_sha": "94725bf3c8452c471d76c4c637f33bdd21cf8884",
+    "merge_sha": "94725bf3c8452c471d76c4c637f33bdd21cf8884",
+    "validated_scope": "clean feature/fpga-catapult-a10 B0+B1+B2 lineage and B2 L0/L1",
+    "remaining_scope": "B3 Cache/L2、CPU/SoC connection、B0 exact Quartus/Qsys、STA and board gates"
+  },
+  "progress_reports": [
+    {
+      "type": "scheduler_checkpoint",
+      "observed_at": "2026-08-27T04:34:18+08:00",
+      "sent_at": "2026-08-27T04:34:56+08:00",
+      "received_at": null,
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 1812,
+      "actual_elapsed_seconds": null,
+      "files": [
+        "rtl/lcvex_async_fifo.sv",
+        "rtl/lcvex_axi4_avalon_pkg.sv",
+        "rtl/lcvex_axi4_avalon_adapter.sv",
+        "rtl/lcvex_calibration_gate.sv",
+        "tb/sv/lcvex_axi4_avalon_bfm.sv",
+        "tb/sv/lcvex_axi4_avalon_tb.sv",
+        "sim/cocotb/Makefile.axi4_avalon",
+        "sim/cocotb/test_axi4_avalon.py"
+      ],
+      "tests": "尚未收到 owner test report",
+      "blockers": "尚未收到 owner blocker report",
+      "remaining_minutes": 15,
+      "extension_request": "integrator_approved_plus_15",
+      "measurement": "只记录 scheduler 观察，不替代 owner reported_at"
+    },
+    {
+      "type": "scheduler_checkpoint",
+      "observed_at": "2026-08-27T04:46:48+08:00",
+      "sent_at": "2026-08-27T04:47:22+08:00",
+      "received_at": null,
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 2562,
+      "actual_elapsed_seconds": null,
+      "files": [
+        "rtl/lcvex_async_fifo.sv",
+        "rtl/lcvex_axi4_avalon_pkg.sv",
+        "rtl/lcvex_axi4_avalon_adapter.sv",
+        "rtl/lcvex_calibration_gate.sv",
+        "tb/sv/lcvex_axi4_avalon_bfm.sv",
+        "tb/sv/lcvex_axi4_avalon_tb.sv",
+        "sim/cocotb/Makefile.axi4_avalon",
+        "sim/cocotb/test_axi4_avalon.py"
+      ],
+      "tests": "尚未收到 owner test report",
+      "blockers": "尚未收到 owner blocker report",
+      "remaining_minutes": 15,
+      "extension_request": "integrator_approved_plus_15_to_max",
+      "measurement": "只记录 scheduler 观察，不替代 owner reported_at"
+    },
+    {
+      "type": "scheduler_budget_cap",
+      "observed_at": "2026-08-27T04:53:51+08:00",
+      "sent_at": "2026-08-27T04:54:27+08:00",
+      "received_at": null,
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 2985,
+      "actual_elapsed_seconds": null,
+      "files": [
+        "rtl/lcvex_async_fifo.sv",
+        "rtl/lcvex_axi4_avalon_pkg.sv",
+        "rtl/lcvex_axi4_avalon_adapter.sv",
+        "rtl/lcvex_calibration_gate.sv",
+        "tb/sv/lcvex_axi4_avalon_bfm.sv",
+        "tb/sv/lcvex_axi4_avalon_tb.sv",
+        "sim/cocotb/Makefile.axi4_avalon",
+        "sim/cocotb/test_axi4_avalon.py"
+      ],
+      "tests": "尚未收到 owner test report",
+      "blockers": "未提交 docs/handoff/evidence/commit；不再批准预算延长",
+      "remaining_minutes": 0,
+      "extension_request": "not_approved_budget_cap",
+      "measurement": "只记录 scheduler 观察，不替代 owner reported_at"
+    },
+    {
+      "type": "owner_final",
+      "sent_at": "2026-08-27T04:54:27+08:00",
+      "received_at": "2026-08-27T04:59:00+08:00",
+      "reported_at": "2026-08-27T04:59:00+08:00",
+      "elapsed_seconds": 3294,
+      "actual_elapsed_seconds": 3294,
+      "files": [
+        "rtl/lcvex_async_fifo.sv",
+        "rtl/lcvex_axi4_avalon_pkg.sv",
+        "rtl/lcvex_axi4_avalon_adapter.sv",
+        "rtl/lcvex_calibration_gate.sv",
+        "tb/sv/lcvex_axi4_avalon_bfm.sv",
+        "tb/sv/lcvex_axi4_avalon_tb.sv",
+        "sim/cocotb/Makefile.axi4_avalon",
+        "sim/cocotb/test_axi4_avalon.py",
+        "docs/AXI4_AVALON_ADAPTER.md",
+        "docs/handoffs/T-20260827-054-b2-emif.md",
+        "docs/tasks/evidence/T-20260827-054.json"
+      ],
+      "tests": "SV Verilator/SVA PASS；Cocotb 3/3 PASS；JSON/diff-check PASS",
+      "blockers": "none；Quartus/板级验证不在本任务范围",
+      "remaining_minutes": 5,
+      "extension_request": "none",
+      "measurement": "owner 提供 reported_at 与 elapsed_seconds，按 dispatch_sent_at=2026-08-27T04:04:06+08:00 计算"
+    }
+  ],
+  "parent": "T-20260827-050",
+  "depends_on": [
+    "T-20260827-050",
+    "T-20260827-053"
+  ],
+  "writes": [
+    "rtl/lcvex_axi4_avalon_pkg.sv",
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "rtl/lcvex_async_fifo.sv",
+    "rtl/lcvex_calibration_gate.sv",
+    "tb/sv/lcvex_axi4_avalon_bfm.sv",
+    "tb/sv/lcvex_axi4_avalon_tb.sv",
+    "sim/cocotb/Makefile.axi4_avalon",
+    "sim/cocotb/test_axi4_avalon.py",
+    "docs/AXI4_AVALON_ADAPTER.md",
+    "docs/handoffs/T-20260827-054-b2-emif.md",
+    "docs/tasks/evidence/T-20260827-054.json"
+  ],
+  "reads": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/decisions/ADR-20260827-003-p7-fpga-parallel-axi4.md",
+    "rtl/lcvex_axi4_pkg.sv",
+    "rtl/lcvex_axi4_master.sv",
+    "rtl/lcvex_axi4_sva.sv",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/qsys/ddr4_bot/Qsys/Qsys_bb.v",
+    "fpga/catapult_a10/tools/check_platform.py"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/AXI4_PROFILE.md"
+  ],
+  "base_sha": "6200343f4f9610ebf5670f002f66b2eb5b65c298",
+  "branch": "feature/T-20260827-054-b2-emif",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-054",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "新增/修改 JSON 通过 python3 -m json.tool；git diff --check",
+      "AXI4 128-bit/4-beat 到 Avalon 512-bit/byteenable 映射、single outstanding 和禁止平台越界静态检查"
+    ],
+    "l1": [
+      "独立 Verilator SV BFM/SVA：AW/W 独立握手、4-beat 聚合、waitrequest/readdatavalid、byteenable、错误、reset 和 calibration gate",
+      "独立 Cocotb 双时钟随机压力：CDC 延迟、随机 waitrequest、读写返回、复位中止、calibration success/fail 与无丢失/重复"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": [
+      "记录双时钟随机 BFM seed、频率比和失败事务现场"
+    ]
+  },
+  "acceptance": "建立平台适配层模块级闭环：接收 B1 的 AMBA AXI4 Full 128-bit 请求，将 64B/4-beat line 正确聚合为 512-bit Avalon-MM 事务，保留窄访问/WSTRB 到 64-bit byteenable 的语义，处理 waitrequest、readdatavalid、响应错误、reset 和 calibration gate；通过独立 SV/Cocotb 双时钟随机验证并提供 CDC/状态断言。不得修改 B0 fpga/catapult_a10 输入、引入厂商 IP、接入 CPU/Cache/L2/SoC、修改 filelist/顶层 Makefile 或宣称 Quartus/板级通过。",
+  "created_at": "2026-08-27T03:40:00+08:00",
+  "updated_at": "2026-08-27T05:10:46+08:00",
+  "commits": [
+    "b028f449c47d21ae933d8c5fe967c03fbb995e90",
+    "671f7786b5f40e730a574c70257748c3963f516c"
+  ],
+  "handoff": "docs/handoffs/T-20260827-054-b2-emif.md",
+  "evidence": "docs/tasks/evidence/T-20260827-054.json",
+  "known_limits": [
+    "phase=done 表示 B2 通用 AXI4→Avalon/CDC/calibration 模块级 L0/L1 已在 clean FPGA line 验收；不表示真实 Qsys/EMIF、Cache/L2 或板级完成。",
+    "只做通用/仿真适配层；B0 exact Quartus/Qsys regenerate、厂商 IP 校准、STA 和板测仍后置。",
+    "不实现 Cache/L2 write-back、一致性、CPU/SoC 接线或 Gate F-MEM。",
+    "B2 不写 fpga/catapult_a10/，避免与尚未解除外部工具阻断的 B0 写集重叠。"
+  ],
+  "next": "T-054 已完成并归档；B2 新模块写集已释放。后续按 B3/L2 计划继续，B0 工具阻断仍单独保留。",
+  "archived_at": "2026-08-27T05:10:46+08:00"
+}
+

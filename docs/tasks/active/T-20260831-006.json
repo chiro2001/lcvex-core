@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-006",
+  "label": "PE-F1A-NEXTSETTLE",
+  "parent": "T-20260830-033",
+  "title": "F1a system next-fetch outcome 退休栅栏修正",
+  "kind": "frontend-protocol-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-next-settled",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260831-004", "T-20260830-046", "T-20260830-045"],
+  "supersedes": "T-20260831-005",
+  "base_sha": "87d26890f75e69b4cf74cd75925094aa1bc8a86f",
+  "base_selection": "包含 T-005 诊断 checkpoint 134d5c2、blocked/cancelled 审计链与本任务 ready JSON；功能 RTL 仍是 c141/48c3 稳定内容。",
+  "branch": "feature/T-20260831-006-f1a-next-settled",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-006",
+  "scope": "T-005 证明 F1a hard_sys_fetch_fault 中 0x44000ffc 的 MSR SCTLR_EL1 在 cycle 115 已提交，而匹配 0x44001000/FSC=0x07 的 fault outcome 到 cycle 142 才进入 FIFO。根因收窄为 fetch_next_settled 错把 matching fetch_pending/fetch_translated 当成“下一取指结果已确定”，使已有 sys_commit_ready 退休栅栏过早解除。本任务仅修正 F1a system next-fetch outcome settled 语义：pending request 或仅完成地址翻译不得视为 settled；只有 current-epoch 匹配 target 的 FIFO entry（正常或 fault）或明确 matching fetch_faulted context 才允许 ID-level system commit。fault 继续复用既有 sys_fetch_merge，不新增 synthetic packet、response UID、QEMU 或公共 ABI。",
+  "planning_guidance": {
+    "root_cause_gate": [
+      "在 2baa063 上用 T-005 MMU probe 显式打印 d.next_pc/fetch_pc_r/fetch_pending/fetch_translated/fetch_fifo_has_target/fetch_faulted/fetch_next_settled/sys_commit/sys_fetch_merge；pre-fix 必须证明 settled=1 仅因 pending/translated，且 sys commit 早于 fault。",
+      "核对 0x44000ffc 编码为 MSR SCTLR_EL1，本路径是 ID-level sys_commit_ready，不是通用 MEM/WB retirement 问题。",
+      "对 MMU-off branch->invalid 地址做负对照：已有 fetch_merge_wb 合并 IABT 不得回归；standalone reset-PC fault 无 older PRE，不属本次 step packet 修复。"
+    ],
+    "implementation_boundary": [
+      "F1a fetch_next_settled 不得以 fetch_pending 或 fetch_translated 单独为 true；fetch_translated 只说明 PA 已定，IMEM 仍可 fault。",
+      "正常 outcome 以 fetch_fifo_has_target 证明 target PC/current epoch 已有 FIFO entry；fault outcome 以 matching fetch_faulted/fetch_pc_r 或 fault FIFO entry 证明。",
+      "settled 组合逻辑不得依赖 commit_fire、sys_commit、fetch_fifo_pop/space、stall_if 或被它反向控制的信号，避免组合环。",
+      "fault outcome 到达后仅让原 MSR/ERET/系统指令通过 sys_fetch_merge 提交，保留原指令架构效果并携带 IABT/ESR/FAR/exception next_pc。",
+      "不修改 FIFO 容量、通用 commit packet、QEMU PRE/COMMIT 顺序、mem_req_t/mem_rsp_t 或 F1b/F3 UID。"
+    ],
+    "invariants": [
+      "栅栏等待期间 sys IFID metadata、target PC、fetch context 与 fault FSC 稳定；commit_ready=0 时不更新架构状态。",
+      "fault merge 只提交一次，younger FIFO/IFID/in-flight 清除，epoch 只增加一次。",
+      "T-046 memwb_committed_r 不变；T-004 WB-empty ready-low IFID/FIFO 原子转移不变；FIFO-off 逐周期语义不变。",
+      "branch/ERET/MSR/maintenance/TLBI/IRQ/WFI 优先级和 stale quarantine 不回归；wrong-path fault 仍只 drop。"
+    ],
+    "stop_conditions": [
+      "删除 pending/translated settled 后 fetch outcome 无法自主推进，形成 system/fetch 永久环等待",
+      "hard_sys_fetch_fault 中 QEMU 仍先给出普通 MSR COMMIT，无法与 RTL sys_fetch_merge 一一对应",
+      "first-trace 显示相同 epoch/PC 下 response 无法由现有单 context 分辨，或必须改 pkg/MMU/arbiter/QEMU/ABI",
+      "feature-off、T-046、T-004、system/branch/IRQ/maintenance 任一定向回归失败"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_f1a.sh",
+    "docs/F1A_FETCH_NEXT_SETTLED_FIX.md",
+    "docs/handoffs/T-20260831-006-f1a-next-settled.md",
+    "docs/tasks/evidence/T-20260831-006.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/DIFFTEST.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/F1A_COMMIT_READY_HOLD_FIX.md",
+    "docs/handoffs/T-20260831-005-f1a-fault-head.md",
+    "docs/tasks/evidence/T-20260831-005.json",
+    "qemu/plugins/lcvex_difftest.c",
+    "sim/difftest/lockstep_coordinator.cc"
+  ],
+  "validation": {
+    "l0": [
+      "pre-fix settled/pending/sys_commit/fault first-trace 根因门",
+      "post-fix MMU d0/d2 fault probe：MSR 等 fault outcome 后以 sys_fetch_merge 单次提交",
+      "SVA：pending/translated 不能单独解除栅栏，等待期 system/fetch context 稳定，merge 后单次 flush/epoch bump"
+    ],
+    "l1": [
+      "SV/Cocotb delay0/1/2，MMU normal system target/fault target，commit_ready drop/recover，FIFO count 0/1/2",
+      "feature-off system/fetch-fault、T-046 duplicate、T-004 ready-hold、branch/ERET/MSR/TLBI/IC/IRQ/WFI 定向回归"
+    ],
+    "l2": [
+      "hard_sys_fetch_fault 和 hard_neon_fetch_fault 在 base/cache/delay2 严格 step lockstep",
+      "比较 PRE/COMMIT seq、MSR PC/insn/effect、exception next_pc/EC/ESR/FAR、GPR/SP/NZCV/store；QEMU/plugin 不修改"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "pre-fix 证明 F1a pending/translated 误解除 system next-fetch 栅栏；post-fix 匹配正常 FIFO target 才允许普通 system commit，匹配 fault outcome 只通过既有 sys_fetch_merge 单次合并 IABT，无死锁/组合环/重复提交；feature-off、T-046、T-004 不回归，hard_sys_fetch_fault/hard_neon_fetch_fault base/cache/delay2 strict lockstep 全绿。不宣称 standalone reset-PC IABT、通用 H-01 UID、F1b/F1c/Gate D/Linux。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 8192, "timeout_s": 3600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 60, "extension_increment_minutes": 60, "max_minutes": 180, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {
+    "status": "released",
+    "reason": "最终 SHA 的 d0/d2/FIFO-off SV、feature-off backpressure 与 base/cache/delay2 strict lockstep 全部通过",
+    "reserved_at": "2026-08-31T12:54:04+08:00",
+    "released_at": "2026-08-31T20:09:39+08:00",
+    "rule": "一次一个 MemoryMax=15G/MemorySwapMax=0/CPUQuota=50%/-j1 作业"
+  },
+  "created_at": "2026-08-31T12:54:04+08:00",
+  "updated_at": "2026-08-31T20:13:47+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T12:56:30+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "agent_reuse_note": "复用已交付 T-005 诊断 checkpoint 的 gpt-5.6-luna(max) agent；T-005 已 cancelled 且写锁释放，当前只持有 T-006。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-006"
+  },
+  "handoff": "docs/handoffs/T-20260831-006-f1a-next-settled.md",
+  "evidence": "docs/tasks/evidence/T-20260831-006.json",
+  "merge_sha": "48f8e7de1f897bc50611f8edb586e270016db731",
+  "merged_at": "2026-08-31T20:13:47+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-31T15:11:05+08:00",
+    "accepted_at": "2026-08-31T20:13:47+08:00",
+    "status": "accepted_next_fetch_outcome_fence",
+    "owner_partial_tip": "16a549d4737dedbf2ddb50b4ac94c33a68b8b523",
+    "owner_context_correction_tip": "cc3325c5ca97f7bff72eb5678ac223f8e6190dd3",
+    "owner_disable_correction_tip": "ec2388a8985187743e68863da8d8ba8004f30aa8",
+    "checks": [
+      "两次独立 blocking review 分别发现旧 context outcome 误复用/MSR 写效果丢失和 SCTLR.M=0 旧 fault 误合并，均已由独立 correction 闭合",
+      "最终 d0/d2/FIFO-off --assert binary 重建，MMU fault、H04、T046 duplicate、SCTLR-disable old-fault 和 feature-off system backpressure 通过",
+      "hard_sys_fetch_fault 25/25 与 hard_neon_fetch_fault 20/20 在 base/cache/delay2 六案 strict lockstep 全绿",
+      "所有重型作业串行且使用 MemoryMax=15G/MemorySwapMax=0/CPUQuota=50%/-j1，峰值不超过 4.7G，swap=0"
+    ],
+    "notes": "未扩大到 UID/QEMU/plugin/公共 ABI。d2 old-fault 首轮因定向镜像未触发 old_fault 前件而失败，修正 MUL 位置后 d0/d2 均真实覆盖并通过；首次 6-case 编排因 ${cfg} 被工具层提前处理而未启动 DUT/QEMU，改用 $cfg 后全绿。"
+  },
+  "known_limits": [
+    "standalone reset-PC fetch fault 没有 older PRE/COMMIT，不在本 step packet 修复内。",
+    "不修改 response UID/age、QEMU/plugin/comparator 或公共 memory ABI。",
+    "不运行完整 F1c、Gate D、Linux、Quartus/上板。"
+  ],
+  "next": "独立登记完整 196-row F1c；同时以 48f8e7d 为稳定 core SHA 重建 A10 resource candidate，Quartus 仍受资源门和重型队列约束。"
+}

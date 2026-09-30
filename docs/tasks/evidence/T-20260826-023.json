@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-023",
+  "base_sha": "5234b12b87ac4e630101c5ade34feb6e2fdae8c9",
+  "head_sha": "5234b12b87ac4e630101c5ade34feb6e2fdae8c9",
+  "merge_sha": "e27164f",
+  "toolchain": {"environment": "conda:lcvex", "python": "3.12.14", "verilator": "5.050 2026-07-01 rev conda-forge build 0"},
+  "runs": [
+    {
+      "run_id": "owner-l0-resource-zero-001",
+      "level": "L0",
+      "command": "SPECS=dummy bash scripts/run_lockstep_parallel.sh --reserve-slots=6",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "exit_code": 75,
+      "result": "pass",
+      "summary": "资源 planner 返回 parallel=0 时 runner 明确报告资源不足并退出 75，不再除零。",
+      "log": "build/agents/resource-zero.log",
+      "log_sha256": "a225bf14e2ab079955f2a71d204c611191b4a4048a26c643b0fdfc34181c4785"
+    },
+    {
+      "run_id": "owner-l1-fresh-m2-001",
+      "level": "L1",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 ONLY=hard_dit bash sim/difftest/run_m2_4b.sh",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 30.809,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "fresh worktree 自动创建 build/difftest；hard_dit base/cache 各 32 条通过。",
+      "log": "build/agents/fresh-m2.log",
+      "log_sha256": "c016a0853953be2bb5091b285686c3ec935c89ec0050ed90fd43b47bd531397c"
+    },
+    {
+      "run_id": "owner-l0-shell-001",
+      "level": "L0",
+      "command": "bash -n scripts/run_lockstep_parallel.sh sim/difftest/run_gate_d.sh sim/difftest/run_m2_4b.sh sim/difftest/run_p5a_hardening.sh sim/difftest/run_p5a.sh sim/difftest/run_gate_c.sh sim/difftest/run_p4b.sh",
+      "cpuset": "2",
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "known_limits": ["修复后需在 T-022 新 candidate SHA 上重跑完整 Gate D；本任务不宣称 Gate D 通过。"]
+}

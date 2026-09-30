@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-008",
+  "base_sha": "0719af397c1470b8689223327b58fac56b61faf4",
+  "head_sha": "3815958",
+  "merge_sha": "3815958",
+  "review": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "scope": "ROADMAP/PROJECT_STATUS/T-006/T-007 evidence/MULTI_AGENT_WORKFLOW",
+    "result": "Gate E 尚未充分；需同 SHA Gate D/CI/early-boot/EL0 判据；P7 入口顺序已定义"
+  },
+  "candidate_evidence": {
+    "strict_linux_global_last": 16509999,
+    "t006_evidence": "docs/tasks/evidence/T-20260826-006.json",
+    "t007_evidence": "docs/tasks/evidence/T-20260826-007.json",
+    "qemu_release": "11.1.0",
+    "gate_d_same_sha": false,
+    "trusted_ci_same_sha": false,
+    "early_boot_freeze": false,
+    "el0_init_stability": false
+  },
+  "runs": [
+    {
+      "run_id": "review-l0-doc-crosscheck-001",
+      "source_sha": "0719af3",
+      "runner_role": "sol-review",
+      "level": "L0",
+      "command": "文档/JSON/strict Linux evidence 只读交叉检查",
+      "seed": null,
+      "wall_seconds": 0.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "artifacts": [],
+  "known_limits": [
+    "本任务未启动 Gate D、CI、Linux 长跑或 P7 实现。",
+    "T-006/T-007 长窗口只能作为候选 evidence，不构成 Gate E 通过。"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-003",
+  "label": "R16-FP-ROUNDPACK-CUT",
+  "title": "Split FP pp_pre round-pack from slot result",
+  "kind": "rtl-timing-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-and-joint-validated",
+  "assigned_owner": "codex-r16-fp-roundpack",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "batch_parent": "T-20260905-002",
+  "depends_on": [
+    "T-20260902-058"
+  ],
+  "dependency_override": "Consumes accepted_blocked T-058 timing evidence.",
+  "base_sha": "1ccbb3baed633c9c64e7a078df4cad4ece69a2a5",
+  "branch": "timing/T-20260905-003-r16-fp-roundpack-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-003",
+  "cone_id": "R16-FP-PPPRE-ROUNDPACK-SLOTRES",
+  "timing_paths": {"count_top50": 28, "slack_range_ns": [-2.675, -2.633], "logic_levels": 54},
+  "scope": "在 lcvex_fp_scalar g_iter 内把普通 finite pp_pre 的 round_pack p1/p2 变成真实 IT_PREP->IT_PACK 寄存边界，切断 pp_pre.sig 到 fp_exec.slot_result_r 的 54-level 共享锥；保持 T-056 IT_ALIGN/IT_ADD、special priority、FPCR/FPSR、slot/response/commit 语义。",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "docs/handoffs/T-20260905-003-r16-fp-roundpack-cut.md",
+    "docs/tasks/evidence/T-20260905-003.json"
+  ],
+  "write_regions": [
+    "rtl/lcvex_fp_scalar.sv::function round_pack_p1",
+    "rtl/lcvex_fp_scalar.sv::g_iter.it_state_t/IT_PREP/new_IT_PACK",
+    "rtl/lcvex_fp_scalar.sv::g_iter.pack_mid/pack_mid_lo/pack_mid_hi",
+    "rtl/lcvex_fp_scalar.sv::g_iter reset/kill/valid-drop/output",
+    "tb/sv/lcvex_fp_exec_tb.sv::latency/reset/kill/valid-drop probes"
+  ],
+  "forbidden_regions": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv public types",
+    "T-056 IT_ALIGN/IT_ADD/add_mid boundary",
+    "QEMU/QSF/SDC"
+  ],
+  "latency_budget": {"scalar_roundpack_ops_per_slot": 1, "neon_total": "plus one cycle per slot", "non_roundpack_ops": 0},
+  "pre_batch_validation": [
+    "git diff --check",
+    "manual compile-structure review only; do not run heavy Verilator/QEMU before batch merge"
+  ],
+  "batch_acceptance_tests": [
+    "make compile and lcvex_fp_exec_tb",
+    "complete P7-1/P7-3/P7-4/P7-5 SV+Cocotb",
+    "P7-1/P7-4/P7-5 base/edge/rounding/sequence strict lockstep and the existing P7-3 p7-3-neon-fp base target"
+  ],
+  "acceptance": "round_pack p1 accepts ordinary lead_valid=0 input and registers complete mantissa/GRS/special/flags/format state; only IT_PACK may assert iter_done. New state/registers reset and kill to zero/IDLE, valid-drop produces no result, held response unchanged. No add_mid bypass, false_path, assertion disable or reference change. Owner stops at review after static checks; task becomes done only after batch candidate full joint validation.",
+  "created_at": "2026-09-05T02:33:51+08:00",
+  "updated_at": "2026-09-05T03:44:32+08:00",
+  "handoff": "docs/handoffs/T-20260905-003-r16-fp-roundpack-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260905-003.json",
+  "head_sha": "884ff234906f1b5d995dc4a7c208ee7f429cced1",
+  "implementation_head": "a0f33602a1e13ce4f4b33c0fc9ae6d052f4d7b10",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "next": "consume the Round16 physical report and re-rank paths",
+  "review_result": {
+    "status": "accepted_for_batch",
+    "reported_at": "2026-09-05T03:40:04+08:00",
+    "notes": "fallback scan, IT_PREP/IT_PACK split, pause/kill/reset contract and exact P7-3 base-only acceptance are closed; functional validation remains pending on batch candidate"
+  },
+  "dispatch": {
+    "sent_at": "2026-09-05T02:38:19+08:00",
+    "agent_name": "/root/r16_fp_roundpack_cut",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-003",
+    "branch": "timing/T-20260905-003-r16-fp-roundpack-cut"
+  }
+}

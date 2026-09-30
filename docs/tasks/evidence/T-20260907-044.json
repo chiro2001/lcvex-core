@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-044",
+  "label": "B25-BOARD-INTERACTION",
+  "state": "blocked-board-functional",
+  "acceptance_status": "volatile-configuration-pass-console-functional-fail-golden-control-pass",
+  "partial": true,
+  "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "execution_head_sha": "8eab1d0aff2c6e8d9887dfffb86854df54b549f7",
+  "branch": "verify/T-20260907-044-b25-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-044",
+  "owner": "root",
+  "authorization": {
+    "user_response": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "authorized_at": "2026-09-19T20:02:42+08:00",
+    "authorized_scope": "Configure the frozen T-043 SOF into FPGA volatile SRAM, then use JTAG-MPSSE nios2-terminal for boot, status, PING/PONG and printable-character echo testing.",
+    "excluded": [
+      "JIC/EPCQ/Flash write or erase",
+      "power cycle",
+      "board-level reset",
+      "unrecorded process termination or broad jtagserver kill"
+    ]
+  },
+  "timestamps": {
+    "preflight_at": "2026-09-19T20:18:23.2602198+08:00",
+    "first_program_started_at": "2026-09-19T20:28:30.9645601+08:00",
+    "first_program_quartus_finished_at": "2026-09-19T20:29:16+08:00",
+    "first_console_started_at": "2026-09-19T20:32:03.556797+08:00",
+    "historical_replay_started_at": "2026-09-19T20:41:17.6172745+08:00",
+    "historical_replay_finished_at": "2026-09-19T20:42:39.7361226+08:00",
+    "golden_program_started_at": "2026-09-19T20:45:15.1115124+08:00",
+    "golden_program_finished_at": "2026-09-19T20:45:59.5237781+08:00",
+    "reported_at": "2026-09-19T21:31:59+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "preflight": {
+    "result": "pass",
+    "host": "GAMEPC",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "physical_total_mib": 63092.3,
+    "physical_free_mib": 40067.8,
+    "disk_d_free_bytes": 78964146176,
+    "busy_process_count": 0,
+    "preexisting_jtagserver": {
+      "pid": 5640,
+      "path": "D:/Software/intelFPGA_pro/21.4/quartus/bin64/jtagserver.exe",
+      "preserved": true
+    },
+    "jtag_chain": {
+      "cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+      "jtag_id": "0x02E060DD",
+      "device_text": "10AT115S(1|2)"
+    },
+    "target_sof_identity_match": true,
+    "known_good_sof_identity_match": true,
+    "log": {
+      "path": "build/agents/T-20260907-044/runtime/preflight-restored.lock.log",
+      "sha256": "809446caaceb017e1f034711926e53acbed2b41c324df4b2df9a3ea592f4408c"
+    }
+  },
+  "programming_path": {
+    "server_source": "D:/Projects/fpga-altra/jtag-30mhz",
+    "server_command": "jtagserver.exe --foreground --no-config --port 1310 --port-file port.txt",
+    "frequency_hz": 15000000,
+    "client_environment": [
+      "QUARTUS_JTAG_CLIENT_CONFIG=<task-server>/client.conf",
+      "QUARTUS_JTAG_CLIENT_NO_LOCAL_SERVER=1"
+    ],
+    "programming_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310",
+    "console_cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "console_device": 1,
+    "console_instance": 0,
+    "server_identity": {
+      "jtagserver_sha256": "72562a0193aa2b4c0b6332256453f9f337ac61fb18cdac8895f30706228314ee",
+      "custom_driver_sha256": "b7fe801ae91c50bd7ea159ea905d732a0b13ada9f7791b85384a6dc8167092f6",
+      "client_config_sha256": "850870f8867409ed2917275f1150192eb36d66b3abf5f2ea00f74c09eb62bdeb",
+      "frequency_config_sha256": "36580939ab36d1b38a3a118c54b49529484b352b00d004f94fe0f7c8445f15ef"
+    }
+  },
+  "candidate": {
+    "sof": {
+      "path": "D:/Projects/fpga-altra/lcvex/build/T-20260907-043-b25-sof-package/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842093,
+      "sha256": "032c82dd88f99c5e19b845d199e6ef6d205e4be6b62c8171a2f9370a0032920b",
+      "quartus_checksum": "0x33878BC3"
+    },
+    "first_configuration": {
+      "programmer_pid": 65068,
+      "owned_server_pid": 3452,
+      "quartus_elapsed": "00:00:45",
+      "configuration_succeeded": true,
+      "operation_succeeded": true,
+      "errors": 0,
+      "warnings": 0,
+      "jtag_id_match": true,
+      "checksum_match": true,
+      "monitor_process_exit_code": null,
+      "monitor_note": "The PowerShell wrapper observed a null ExitCode and initially emitted program-failure.json. Quartus stdout independently and unambiguously records Configuration succeeded, Successfully performed operation(s), processing end, 0 errors and 0 warnings; no rerun was performed solely to repair the wrapper field.",
+      "owned_server_stopped": true
+    },
+    "first_console_interaction": {
+      "connected": true,
+      "sent_hex": ["3f", "70", "5a"],
+      "boot_marker": false,
+      "ready_marker": false,
+      "status_response": false,
+      "pong": false,
+      "echo": false,
+      "interpretation": "The JTAG-UART instance exists and is attachable, but the B25 monitor produced no byte and consumed no observable command."
+    },
+    "historical_compatible_replay": {
+      "purpose": "Repeat the full historical successful sequence with a second volatile configuration and immediate console attachment.",
+      "programmer_pid": 63540,
+      "programmer_exit_code": 0,
+      "owned_server_pid": 66544,
+      "owned_server_stopped": true,
+      "configuration_succeeded": true,
+      "operation_succeeded": true,
+      "errors": 0,
+      "warnings": 0,
+      "seconds_program_end_to_console_start": 2.0492911,
+      "console_pid": 37844,
+      "console_exit_code": 0,
+      "connected": true,
+      "boot_marker": false,
+      "ready_marker": false,
+      "status_response": false,
+      "pong": false,
+      "echo": false,
+      "result": "fail-board-functional"
+    }
+  },
+  "golden_control": {
+    "sof": {
+      "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "quartus_checksum": "0x31510BB6"
+    },
+    "programmer_pid": 64752,
+    "owned_server_pid": 45192,
+    "programmer_exit_code": 0,
+    "quartus_elapsed": "00:00:44",
+    "configuration_succeeded": true,
+    "operation_succeeded": true,
+    "errors": 0,
+    "warnings": 0,
+    "owned_server_stopped": true,
+    "script_terminal_stage": "not_run-because-empty-byte-array-became-null",
+    "script_failure_classification": "test-runner bug after successful configuration, not a board or programmer failure",
+    "direct_terminal": {
+      "connected": true,
+      "opensbi_v1_9": true,
+      "linux_7_2_0": true,
+      "run_init_seen_within_capture": false,
+      "fatal_marker_seen": false,
+      "result": "positive-control-pass-for-board-clock-power-programming-and-jtag-uart-output"
+    },
+    "final_board_state": "golden SOF running"
+  },
+  "artifacts": {
+    "authoritative_candidate_result": {
+      "path": "build/agents/T-20260907-044/remote-evidence/runtime/immediate-result.json",
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260907-044-b25-board-interaction/runtime/immediate-result.json",
+      "bytes": 3514,
+      "sha256": "f1d094bdaf370bcf5be722dd9ff0569ce799d17cffea4679d5d66455ffb579df"
+    },
+    "candidate_programmer_stdout": {
+      "path": "build/agents/T-20260907-044/remote-evidence/runtime/immediate-quartus_pgm.stdout.log",
+      "bytes": 2378,
+      "sha256": "4791a23b5a2f53e29fdf551afaf700469ac6562a392de9fd568d378fefc1586c"
+    },
+    "candidate_console_stdout": {
+      "path": "build/agents/T-20260907-044/remote-evidence/runtime/immediate-console.stdout.log",
+      "bytes": 281,
+      "sha256": "49b0be3887c8a051c644d57ec0e1b71e7c201b0aa4316a0134be9cef46444163"
+    },
+    "first_console_result": {
+      "path": "build/agents/T-20260907-044/remote-evidence/runtime/console-result.json",
+      "bytes": 1686,
+      "sha256": "091aa2bd2ad569bc53ac1f5603f659ed164f4d5bb90af7f897c58a73e9c49e34"
+    },
+    "golden_programmer_stdout": {
+      "path": "build/agents/T-20260907-044/remote-evidence/runtime/golden-control-quartus_pgm.stdout.log",
+      "bytes": 2268,
+      "sha256": "391e2d451325c28e3d25e453bec4349c86b9f29fb7d9c10766798c90d639fece"
+    },
+    "golden_console_direct": {
+      "path": "build/agents/T-20260907-044/runtime/golden-console-direct.lock.log",
+      "bytes": 20053,
+      "sha256": "7c3c2b6ad4cc66e92841d4af0ee17ffeb59991c888c0416d30438fff2a503ddb"
+    },
+    "historical_replay_log": {
+      "path": "build/agents/T-20260907-044/runtime/immediate-replay.lock.log",
+      "bytes": 1840,
+      "sha256": "0208ef2808249b6b25c819d47b29a65251bd1d80b9d53a99d8ffa53ae0db4da9"
+    }
+  },
+  "classification": {
+    "external_path": [
+      "The board, power, clocking needed by the known-good design, FTDI transport, custom programming server, Quartus programmer and direct JTAG-UART receive path are operational.",
+      "The candidate SOF was accepted twice with the frozen checksum and expected JTAG ID.",
+      "The failure is not explained by a late terminal start, forced terminal termination, pipe input, custom-server retention or an invalid SOF download."
+    ],
+    "candidate_failure": "B25 fabric functional failure before the first monitor byte; exact internal stage is not observed by T-044.",
+    "next_hypothesis": {
+      "confidence": "high but not yet proven",
+      "description": "The synthesis-only altera_syncram wrapper captures req_q on the same edge that the synchronous M20K accepts a new address, so the first PC=0 fetch can return stale/power-up data. The behavioral RAM model does not reproduce this latency.",
+      "location": "rtl/lcvex_bram_boot.sv::lcvex_bram_boot_altsyncram",
+      "required_proof": "A vendor-faithful synchronous-RAM test must fail on the old wrapper, pass after an explicit pending/capture stage, and verify the first PC=0 word and debug-port offset alignment."
+    }
+  },
+  "safety_and_scope": {
+    "volatile_sof_configurations": 3,
+    "candidate_configurations": 2,
+    "golden_control_configurations": 1,
+    "persistent_flash_action": false,
+    "jic_epcq_action": false,
+    "board_reset_action": false,
+    "power_action": false,
+    "unknown_process_stopped": false,
+    "preexisting_standard_server_preserved": true,
+    "task_owned_servers_stopped": true,
+    "port_1310_released": true,
+    "residual_programmer_or_terminal": false,
+    "resource_lock_final": "gamepc FREE"
+  },
+  "known_limitations": [
+    "The golden direct terminal capture reached OpenSBI and Linux but its short capture did not reach Run /init; it is used only as a positive control for the external programming/console path.",
+    "T-044 does not prove the M20K hypothesis; it narrows the failure to the B25 design and motivates a separate RTL/test task.",
+    "The board currently runs the golden SOF, not the failed B25 candidate."
+  ],
+  "blockers": [
+    "The frozen B25 candidate does not emit LCVEX25 BOOT or respond to polling serial commands after a proven-successful volatile configuration.",
+    "A corrected RTL candidate must pass local validation and a fresh physical flow before another board attempt."
+  ],
+  "handoff": "docs/handoffs/T-20260907-044-b25-board-interaction.md",
+  "next": "Close T-044 as a partial blocked board gate, then register a new task for explicit M20K read-response alignment and vendor-faithful regression. Do not reprogram the old B25 SOF."
+}

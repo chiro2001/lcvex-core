@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-007",
+  "base_sha": "3c63600c94437482bca4a563e309cb7018002742",
+  "head_sha": "b8873f3",
+  "merge_sha": "fb12ca4",
+  "toolchain": {
+    "python_conda": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "environment": "conda:lcvex",
+    "python_host": "3.12.10",
+    "bash_syntax": "pass"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97"
+  },
+  "rtl": {
+    "source_sha": "3c63600c94437482bca4a563e309cb7018002742",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "coordinator_nofp_sha256": "1e13bb09406427bf371038b0ae11728f42be8f33fabe513ab147a8fa977fb4d0",
+    "coordinator_kernel_sha256": "fb5d9e23cff5643025f35950623f8cd4074c08b18e750cfd14160f330b0421d8"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-preflight-001",
+      "source_sha": "3c63600",
+      "runner_role": "integrator-takeover",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/difftest/checkpoint.py sim/difftest/checkpoint_resume_manifest_smoke.py; python3 sim/difftest/checkpoint_resume_manifest_smoke.py; bash -n sim/difftest/run_lockstep_resume.sh; checkpoint.read_manifest(T-006 lite/main strict children)",
+      "seed": null,
+      "wall_seconds": 4.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l2-lite-deep-001",
+      "source_sha": "3c63600",
+      "runner_role": "integrator-takeover",
+      "level": "L2",
+      "command": "CHAIN=T-006/lite-11m/chain RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 PIN=0 strict resume",
+      "seed": null,
+      "wall_seconds": 271.0,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": 270,
+      "disk_delta_mb": 2.5,
+      "exit_code": 0,
+      "result": "pass",
+      "manifest_sha256": "940bc245b4f4075734d73baff07db71206f06e45e5ab252792c3c57c6fa2441b",
+      "manifest_tsv_sha256": "103a5a112305d918308cb121af42176b1f9d72387c4eebf1490e50cb7d09603f",
+      "parent_manifest_sha256": "a7ce6093e6e55a5d48207b4078522bbf746d984543bd8912372656c6fa76514c",
+      "parent_local_seq": 4999999,
+      "parent_global_seq": 11509999,
+      "global_seq_offset": 11510000,
+      "local_artifact_range_inclusive": [499999, 4999999],
+      "global_artifact_range_inclusive": [12009999, 16509999],
+      "entries": 10,
+      "chain_bytes": 3813373,
+      "restore_ram_sha256": "19f1e8d9903b22712f9452914f05643d74281b54baa8269819a4b502f143b166"
+    },
+    {
+      "run_id": "owner-l2-main-deep-001",
+      "source_sha": "3c63600",
+      "runner_role": "integrator-takeover",
+      "level": "L2",
+      "command": "CHAIN=T-006/main-11m/chain RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 PIN=1 strict resume",
+      "seed": null,
+      "wall_seconds": 304.0,
+      "cpu_count": 1,
+      "cpuset": "1",
+      "peak_rss_mb": 270,
+      "disk_delta_mb": 14.0,
+      "exit_code": 0,
+      "result": "pass",
+      "manifest_sha256": "b5ec7dae81609df49bb6a66c529ecc880b0d274d7974f1661a1ffcced4ab6849",
+      "manifest_tsv_sha256": "473ee4e3404b31f9c4e8c096a97f4d245865b39acd27d4333297b6c70e159f31",
+      "parent_manifest_sha256": "010f199002de1f35e4d08d3c88059fe375a662e57c1d6bcd13ef81776576759e",
+      "parent_local_seq": 4999999,
+      "parent_global_seq": 11509999,
+      "global_seq_offset": 11510000,
+      "local_artifact_range_inclusive": [499999, 4999999],
+      "global_artifact_range_inclusive": [12009999, 16509999],
+      "entries": 10,
+      "chain_bytes": 13694744,
+      "restore_ram_sha256": "8f07445c13efa98bfd5b9097226464ee060cc57b6dd960eb62c0f615276e0713"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "lite-16m-strict-child",
+      "path": "build/tmp/T-20260826-007/lite-16m/chain",
+      "manifest_sha256": "940bc245b4f4075734d73baff07db71206f06e45e5ab252792c3c57c6fa2441b",
+      "manifest_tsv_sha256": "103a5a112305d918308cb121af42176b1f9d72387c4eebf1490e50cb7d09603f",
+      "status": "complete",
+      "entries": 10,
+      "local_last": 4999999,
+      "global_last": 16509999,
+      "bytes": 3813373
+    },
+    {
+      "id": "main-16m-strict-child",
+      "path": "build/tmp/T-20260826-007/main-16m/chain",
+      "manifest_sha256": "b5ec7dae81609df49bb6a66c529ecc880b0d274d7974f1661a1ffcced4ab6849",
+      "manifest_tsv_sha256": "473ee4e3404b31f9c4e8c096a97f4d245865b39acd27d4333297b6c70e159f31",
+      "status": "complete",
+      "entries": 10,
+      "local_last": 4999999,
+      "global_last": 16509999,
+      "bytes": 13694744
+    },
+    {
+      "id": "lite-main-restore-ram-fixtures",
+      "path": "build/tmp/T-20260826-007/{lite-16m,main-16m}/restored-ram.bin",
+      "status": "read_manifest+restore-ram pass",
+      "note": "128 MiB diagnostic outputs retained outside Git"
+    }
+  ],
+  "known_limits": [
+    "两线各从 T-006 global=11,509,999 strict child 继续 5M，global 保存点到 16,509,999；没有首个 mismatch/PSCI/WFI 失败。",
+    "未把当前窗口直接标为 Gate E；仍需冻结候选 Gate D、稳定 early boot/用户态条件和阶段门文档。",
+    "plugin/coordinator/filelist/QEMU/source SHA 已单独记录；checkpoint manifest 本身只绑定运行输入和 QEMU，不把 RTL binary 写入 guest 状态。"
+  ]
+}

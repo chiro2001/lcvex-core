@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-050",
+  "state": "done",
+  "acceptance_status": "full-gate-d-pass-on-uart-backpressure-fixed-candidate",
+  "base_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "branch": "verify/T-20260920-050-b25-coremark-uart-gate-d",
+  "task_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-050",
+  "gate_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-050-gate",
+  "gate_detached": true,
+  "gate_result": {
+    "outer_exit": 0,
+    "final_marker": "PASS: Gate D 系统回归全部通过",
+    "green_markers": 152,
+    "red_markers": 0,
+    "skip_flags": false,
+    "assertions_disabled": false,
+    "reference_or_expected_modified": false,
+    "coverage": 8760,
+    "m2_base_cache": [40, 40],
+    "delay2": 32,
+    "p5a_hardening": 26,
+    "gate_c": 7,
+    "p5a_mmu": 3,
+    "random_commits_per_seed": 100002,
+    "random_seed_count": 3,
+    "isa_coverage": "62/62",
+    "random_total_commits": 300006,
+    "baremetal_commits": 200
+  },
+  "payload": {
+    "boot_bin_bytes": 20448,
+    "boot_bin_sha256": "241b0ce4dface8c4a9db782b63e4ada8674f5c8b51c00f228a795e98fc1aedab",
+    "boot_hex_sha256": "93cbacda0b8d22864534da5f62ec8f6161ff69ede9eca10e0df2638e995709ab",
+    "boot_mif_sha256": "0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f",
+    "build_manifest_sha256": "d9a087765da1839ed4a2847132999e8755807300f06c015b6f5bae4cd632cd3a",
+    "bss_end": "0x58f8",
+    "l0_payload_cmp_against_t049": true
+  },
+  "affected_l0_l2": {
+    "source_tree_sha256": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+    "source_tree_matches_candidate_tree": true,
+    "t049_l0": "PASS reproducible image, host CoreMark/parser, image checker",
+    "t049_l2_behavioral_soc": "PASS full t and CoreMark v transcript/parser, CAL-OK/WAIT/FAIL",
+    "t049_l2_vendor_timing_soc": "PASS full t and CoreMark v transcript/parser, 262144 empty polls, 2359306 commits",
+    "paced_tx_host_drain_logic_cycles": 65536
+  },
+  "artifacts": {
+    "gate_log": {
+      "path": "build/agents/T-20260920-050/gate-d.log",
+      "bytes": 410388,
+      "sha256": "8acb603bd7ea6b47c9f7ab6583c48d0c84166cb0200f594fbd9df6be4ed91d5e"
+    },
+    "l0_log": {
+      "path": "build/agents/T-20260920-050/l0-verification.log",
+      "bytes": 10725,
+      "sha256": "713e8890cf70ec232f10a8f2b326162fc2c0de26dfa786cc4c46e4a63fe3f2d1"
+    }
+  },
+  "resource": {
+    "lock": "local",
+    "min_local_available_mib": 8192,
+    "cpu_policy": "adaptive",
+    "hard_memory_cap": false,
+    "lock_after_run": "FREE"
+  },
+  "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-050 root --min-local-available-mib 8192 --meta stage=full_gate_d --meta candidate=5b33c451317442f385dd828ece8c3bf829289d14 --meta cpu_policy=adaptive --meta memory_policy=exclusive-no-hard-cap -- bash -c 'set -o pipefail; bash sim/difftest/run_gate_d.sh --parallel 2>&1 | tee build/agents/T-20260920-050/gate-d.log'",
+  "safety": {
+    "quartus": false,
+    "jtag": false,
+    "board": false,
+    "flash_epcq": false,
+    "reset_power": false,
+    "unknown_process_stopped": false
+  },
+  "known_limits": [
+    "Gate D does not measure CoreMark; the complete c-mode ten-second target run still requires a valid board transaction.",
+    "The corrected MIF has not yet been through fresh physical signoff or assembler."
+  ],
+  "next": "T-20260920-051: fresh Quartus physical using the T-049 exact MIF on candidate 5b33c451"
+}

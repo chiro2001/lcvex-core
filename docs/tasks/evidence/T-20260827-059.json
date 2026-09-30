@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-059",
+  "state": "done",
+  "base_sha": "23c364ecd39770c116747374652ec53b56f2c47c",
+  "implementation_head": "ab3f90f",
+  "verification_head": "ee03c05",
+  "head_sha": "072cf12",
+  "docs_head": "3010879",
+  "merge_sha": "072cf12",
+  "branch": "feature/T-20260827-059-p7-2-neon-int",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-059",
+  "scope": "P7-2 受限 Advanced SIMD/Q 128-bit raw 整数 move、bitwise、add/sub、compare、非饱和立即 shift 和单 Q unsigned-offset load/store；复用 V0-V31、FPEN、commit/backpressure 与 scalar memory。",
+  "excluded": [
+    "完整 Advanced SIMD/NEON、P7-3 FP、SVE",
+    "饱和、narrow、widen、permute、table、across-lane、crypto",
+    "structured/lane/replicate/pair 多寄存器访存",
+    "Cache、L1/L2、AXI4、EMIF、FPGA/上板和 QEMU fork 修改"
+  ],
+  "owner_dispatch": {
+    "sent_at": "2026-08-27T15:11:22+08:00",
+    "received_at": "2026-08-27T15:12:27+08:00",
+    "reported_at": "2026-08-27T16:50:31+08:00",
+    "elapsed_seconds": 5949,
+    "timezone": "Asia/Shanghai",
+    "elapsed_basis": "reported_at - dispatch_sent_at",
+    "continue": true
+  },
+  "progress": [
+    {
+      "sent_at": "2026-08-27T15:11:22+08:00",
+      "received_at": "2026-08-27T15:12:27+08:00",
+      "reported_at": "2026-08-27T15:21:18+08:00",
+      "elapsed_seconds": 596,
+      "state": "active",
+      "summary": "完成协议/RTL接口核对并开始 NEON 编码与执行单元。"
+    },
+    {
+      "sent_at": "2026-08-27T15:42:45+08:00",
+      "received_at": "2026-08-27T15:42:45+08:00",
+      "reported_at": "2026-08-27T15:45:17+08:00",
+      "elapsed_seconds": 2035,
+      "state": "active",
+      "summary": "实现/基础 SV+Cocotb/生成器完成，接受 +15 分钟继续验证。"
+    },
+    {
+      "sent_at": "2026-08-27T16:12:31+08:00",
+      "received_at": "2026-08-27T16:12:31+08:00",
+      "reported_at": "2026-08-27T16:13:07+08:00",
+      "elapsed_seconds": 3705,
+      "state": "active",
+      "summary": "完成 WnR、fetch merge、跨单元 hazard 和 UDEF 风险修复并进入回归。"
+    },
+    {
+      "sent_at": "2026-08-27T16:42:05+08:00",
+      "received_at": "2026-08-27T16:43:50+08:00",
+      "reported_at": "2026-08-27T16:50:31+08:00",
+      "elapsed_seconds": 5949,
+      "state": "review-preparation",
+      "summary": "保留 fault-BFM assertion failure 为真实 expected-reject，完成最终回归与证据准备。"
+    }
+  ],
+  "files": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/filelist.f",
+    "sim/cocotb/Makefile",
+    "sim/cocotb/Makefile.p7_2_neon",
+    "sim/cocotb/test_p7_2_neon.py",
+    "sim/difftest/test_program.py",
+    "tb/sv/lcvex_neon_int_tb.sv",
+    "Makefile",
+    "docs/P7-2_NEON_INT.md",
+    "docs/handoffs/T-20260827-059-p7-2-neon-int.md"
+  ],
+  "file_sha256": {
+    "rtl/filelist.f": "908b286215b36f9d710dc535476e66ca3d23dc48163066df8dffc2cd71c9bf50",
+    "rtl/lcvex_neon_int.sv": "ff35aeef35a5119d27d66c29d0f65b811dd0537d165ab5e73120d02b7bc810ae",
+    "sim/cocotb/test_p7_2_neon.py": "0a19decbbef7777ba2312434c857b5cd0abe9996273161c8f4a25b3c1d864161",
+    "sim/difftest/test_program.py": "02837e45e1db0b4563d0a8862197b5e01b03f0b8c3d5d117ca4945a21e133325",
+    "docs/P7-2_NEON_INT.md": "8623e585df720758ea9e374ce6dccfaf4462f96aeeb7d110e95e69a5716e270f"
+  },
+  "toolchain": {
+    "verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "ninja": "1.13.0.git.kitware.jobserver-pipe-1",
+    "qemu_release": "11.1.0",
+    "qemu_profile": "cortex-a76,cntfrq=1000000000,has_el3=false,has_el2=false",
+    "qemu_icount": "shift=0,align=off,sleep=off"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches_sha256": "320328f8baac2d9f1714e7aa87097e9ee8ff4bb257688b3e0447db5d88389fdc",
+    "binary_sha256": "f0accfb67c2b4b79e39e40768b3c522a5f960515424839d90654d514c31f3aca",
+    "plugin_sha256": "01101b295d9d2e6e946f693899e62631a2dfd1be1715a8a000e4232356f414d6",
+    "source_changes": "none"
+  },
+  "rtl_filelist_sha256": "908b286215b36f9d710dc535476e66ca3d23dc48163066df8dffc2cd71c9bf50",
+  "runs": [
+    {
+      "run_id": "owner-l0-syntax-001",
+      "level": "L0",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "git diff --check ab3f90f^..ab3f90f && git diff --check ee03c05^..ee03c05 && PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile sim/difftest/test_program.py sim/cocotb/test_p7_2_neon.py && bash -n sim/difftest/run_lockstep_step.sh && python3 -m json.tool /home/chiro/projects/mycpu/lcvex/docs/tasks/active/T-20260827-059.json >/dev/null",
+      "exit_code": 0,
+      "result": "pass",
+      "artifact": "build/agents/T-20260827-059/final/l0-syntax-clean.ee03c05.log",
+      "artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "run_id": "owner-l1-core-lint-002",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator -Wall core lint/elaboration，包含 NEON module、decode、core 和 filelist。"
+    },
+    {
+      "run_id": "owner-l1-neon-sv-003",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make sim-sv-p7-2-neon",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "独立 raw-bit SV TB：move/bitwise/add-sub/compare/SHL/SSHR/USHR/SSRA/USRA。",
+      "log": "build/agents/T-20260827-059/final/l0-l1-ee03c05.log",
+      "log_sha256": "e7311ea27e63b2fe76b0a120391ed20fe75bc2434485b338708248de2ca423d4"
+    },
+    {
+      "run_id": "owner-l1-existing-sv-004",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make sim-sv sim-sv-backpressure",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "既有 scalar core 与 commit/system backpressure regression 通过。",
+      "log": "build/agents/T-20260827-059/final/sv-regression.log",
+      "log_sha256": "e17655d24fa936096ed2a8fc824dff0e225750684384f2b9e4d625441de4bc27"
+    },
+    {
+      "run_id": "owner-l1-cocotb-compliant-005",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make sim-cocotb-p7-2-neon P7_NEON_SIM_BUILD=sim_build_p7_2_neon_final3",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "assertion-enabled compliant slave：8/8；Q store 一个 commit/two 8B stores、WnR、跨单元 hazard、UDEF、backpressure。",
+      "log": "build/agents/T-20260827-059/final/cocotb-ee03c05.log",
+      "log_sha256": "506e09f4a8624b13cef940412dc6f1efe0ae0eab8daedea71cd9f8540c41a844"
+    },
+    {
+      "run_id": "owner-l1-cocotb-delay2-006",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make sim-cocotb-p7-2-neon P7_NEON_MEM_DELAY_MODE=2 P7_NEON_SIM_BUILD=sim_build_p7_2_neon_d2_ee03c05",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "随机 0..4 周期下游延迟，assertion-enabled Cocotb 8/8。",
+      "log": "build/agents/T-20260827-059/final/cocotb-delay2-ee03c05.log",
+      "log_sha256": "e9e50b60eb6ed6647a8c19f25d34691f0470d426375b548e6c916593d92160c3"
+    },
+    {
+      "run_id": "owner-l1-fault-bfm-007",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make sim-sv-p7-2-neon-fault-bfm",
+      "exit_code": 2,
+      "program_exit_code": 1,
+      "result": "expected_reject",
+      "gate": false,
+      "summary": "故意让第二段 response fault；first accept 已发生，assertion-enabled SVA 在 lcvex_core.sv:3529 拒绝。此项是非法下游契约负测，不是 pass。",
+      "log": "build/agents/T-20260827-059/fault-bfm-assert.log",
+      "log_sha256": "6cdd43bb163a69f39b06fc0c8024b0786d65feba61918824b31d569dfa06ef74"
+    },
+    {
+      "run_id": "owner-l1-cocotb-early-fault-008",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make sim-cocotb-p7-2-neon P7_NEON_SIM_BUILD=sim_build_p7_2_neon_final3",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "固定 SoC BFM 对齐/窗口 fault 在 first request 前拒绝；STR Q WnR=1、FSC=0x21/0x10、无 mem/mem2。"
+    },
+    {
+      "run_id": "owner-l2-neon-int-009",
+      "level": "L2",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_int.bin MAX_INSNS=31 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator PLUGIN=$PWD/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=$PWD/build/agents/T-20260827-059/final/l2-neon-int/step.sock DUMP=$PWD/build/agents/T-20260827-059/final/l2-neon-int/fail.txt COORD_LOG=$PWD/build/agents/T-20260827-059/final/l2-neon-int/coord.log QEMU_LOG=$PWD/build/agents/T-20260827-059/final/l2-neon-int/qemu.log bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cortex-A76 FP_NEON=required strict lockstep 31 条。",
+      "artifact": "build/difftest/hard_neon_int.bin",
+      "artifact_sha256": "5fa1a1107f4d3857c7b3169f74657d79b8dca8be2ffa8304c234d96c5d61a84d",
+      "log": "build/agents/T-20260827-059/final/l2-neon-int/run.log",
+      "log_sha256": "f6ce9f8b7574e43bbe16e8c8ca94fed6168afe547a3e09d3ccbafe8c50eaef74"
+    },
+    {
+      "run_id": "owner-l2-neon-fetch-merge-010",
+      "level": "L2",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_fetch_fault.bin MAX_INSNS=20 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator PLUGIN=$PWD/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=$PWD/build/agents/T-20260827-059/final/l2-neon-fetch-fault/step.sock DUMP=$PWD/build/agents/T-20260827-059/final/l2-neon-fetch-fault/fail.txt COORD_LOG=$PWD/build/agents/T-20260827-059/final/l2-neon-fetch-fault/coord.log QEMU_LOG=$PWD/build/agents/T-20260827-059/final/l2-neon-fetch-fault/qemu.log bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "STR Q 位于映射页末、下一条取指 IABT；20 条 required lockstep 通过，mem2 保留且 IABT WnR=0。",
+      "artifact": "build/difftest/hard_neon_fetch_fault.bin",
+      "artifact_sha256": "b0f80713a25f460e8ae6e750b883beeacfb2c6d3d67fbd671edd65ccaa2802c3",
+      "log": "build/agents/T-20260827-059/final/l2-neon-fetch-fault/run.log",
+      "log_sha256": "8bb65edf4dbb4f3f6c0f551b6131ddb234db475516be4597e127efdce66fc308"
+    },
+    {
+      "run_id": "owner-l2-p7-1-regression-011",
+      "level": "L2",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "make p7-1-fp-scalar p7-1-fp-scalar-edge p7-1-fp-scalar-rounding p7-1-fp-scalar-sequence",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-1 A76 required 28/38/18/388 条全通过；用于确认 scalar decoder/hazard 不回退。",
+      "log": "build/agents/T-20260827-059/final/p7-1-regression-ee03c05.log",
+      "log_sha256": "3c1fde65dd7f4d1dbc15c42cd8d57b09a0e8a1c34e63eea48498d5749a9ecc64"
+    },
+    {
+      "run_id": "owner-l2-p6-regression-012",
+      "level": "L2",
+      "runner_role": "owner",
+      "source_sha": "ee03c05",
+      "command": "MAX_INSNS=40 make lockstep",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P6 scalar 40 条 required-compatible lockstep 通过。",
+      "log": "build/agents/T-20260827-059/final/p6-scalar-40-ee03c05.log",
+      "log_sha256": "771ab4c0ba40d5da053e462d83135b304265d38f26a0688a560b937eaa388197"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "hard-neon-int",
+      "uri": "build/difftest/hard_neon_int.bin",
+      "sha256": "5fa1a1107f4d3857c7b3169f74657d79b8dca8be2ffa8304c234d96c5d61a84d",
+      "reproduce": "conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;test_program.build_hard_neon_int_program(\"build/difftest/hard_neon_int.bin\")'"
+    },
+    {
+      "id": "hard-neon-fetch-fault",
+      "uri": "build/difftest/hard_neon_fetch_fault.bin",
+      "sha256": "b0f80713a25f460e8ae6e750b883beeacfb2c6d3d67fbd671edd65ccaa2802c3",
+      "reproduce": "conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;test_program.build_hard_neon_fetch_fault_program(\"build/difftest/hard_neon_fetch_fault.bin\")'"
+    },
+    {
+      "id": "p7-1-regression-images",
+      "uri": "build/difftest/hard_fp_scalar*.bin",
+      "sha256": {
+        "hard_fp_scalar.bin": "ff2d734a20ce9c12e4251835f262c73b67285ab75340332da06c82ab9b02d7ac",
+        "hard_fp_scalar_edge.bin": "9c474da1840c48920721cd321db22a62d0b388ab731a3c1878a4a407af01567a",
+        "hard_fp_scalar_rounding.bin": "6de9a803f1fe04cc5d59bfafee0681f58802c0a3a78c66ab42def64da89f8a3e",
+        "hard_fp_scalar_sequence.bin": "e6b9ff49b3443b6378e8c8424cba3fcfe7f420b6fc0460508774de9d8fa8514f"
+      }
+    }
+  ],
+  "commit_chain": [
+    {
+      "sha": "ab3f90f",
+      "message": "neon: add P7-2 Q integer execution"
+    },
+    {
+      "sha": "ee03c05",
+      "message": "verify: add P7-2 NEON tests and fault contract probes"
+    },
+    {
+      "sha": "3010879",
+      "message": "docs: record P7-2 NEON handoff"
+    }
+  ],
+  "contract": {
+    "compliant_path": "完整 16B preflight 后，slave 对 Q store 两个 8B response 均不得 fault；assertion-enabled SoC/Cocotb 和 SVA 通过，一个 commit 携带 mem/mem2。",
+    "illegal_path": "faulting BFM 在 first accept 后注入 second response fault；assertion-enabled binary exit=1，result=expected_reject，保留日志，不计入 pass。",
+    "rollback": "当前普通 mem_req accept 即有写副作用，未实现 prepare/commit/abort；不宣称任意 fault 原子性。"
+  },
+  "integration": {
+    "runner_role": "root-integrator",
+    "line": "feature/p7-fp-neon",
+    "source_sha": "072cf12",
+    "merge_sha": "072cf12",
+    "status": "pass_l0_l2",
+    "timezone": "Asia/Shanghai",
+    "validated": "2026-08-27 合并 SHA 复跑 compile、SV NEON/raw、SV scalar/backpressure、Cocotb 8/8 普通与 MEM_DELAY_MODE=2 8/8、NEON lockstep 31、fetch-fault 20、P7-1 28/38/18/388、P6 scalar 40；fault-BFM 以预期 exit=2 返回并保持 SVA assertion。",
+    "runs": [
+      {
+        "observed_at": "2026-08-27T20:57:17+08:00",
+        "level": "L0/L1",
+        "command": "make compile",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "observed_at": "2026-08-27T20:57:24+08:00",
+        "level": "L1",
+        "command": "make sim-sv-p7-2-neon",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "observed_at": "2026-08-27T20:57:38+08:00",
+        "level": "L1",
+        "command": "make sim-sv sim-sv-backpressure",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "observed_at": "2026-08-27T20:58:14+08:00",
+        "level": "L1",
+        "command": "make sim-cocotb-p7-2-neon P7_NEON_SIM_BUILD=sim_build_p7_2_neon_merge072cf12",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "TESTS=8 PASS=8 FAIL=0 SKIP=0"
+      },
+      {
+        "observed_at": "2026-08-27T20:59:02+08:00",
+        "level": "L1",
+        "command": "make sim-cocotb-p7-2-neon P7_NEON_MEM_DELAY_MODE=2 P7_NEON_SIM_BUILD=sim_build_p7_2_neon_delay2_merge072cf12",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "TESTS=8 PASS=8 FAIL=0 SKIP=0"
+      },
+      {
+        "observed_at": "2026-08-27T20:59:51+08:00",
+        "level": "L2",
+        "command": "make p7-2-neon-int p7-2-neon-fetch-fault",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "NEON 31 条、STR Q+IABT fetch-fault 20 条 strict lockstep"
+      },
+      {
+        "observed_at": "2026-08-27T21:00:14+08:00",
+        "level": "L2",
+        "command": "make p7-1-fp-scalar p7-1-fp-scalar-edge p7-1-fp-scalar-rounding p7-1-fp-scalar-sequence",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P7-1 A76 required 28/38/18/388 条"
+      },
+      {
+        "observed_at": "2026-08-27T21:00:30+08:00",
+        "level": "L2",
+        "command": "MAX_INSNS=40 make lockstep",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P6 scalar 40 条"
+      },
+      {
+        "observed_at": "2026-08-27T21:00:43+08:00",
+        "level": "L1",
+        "command": "make sim-sv-p7-2-neon-fault-bfm",
+        "exit_code": 2,
+        "program_exit_code": 1,
+        "result": "expected_reject",
+        "gate": false,
+        "summary": "assertion-enabled fault-BFM 在 first accept 后注入 second response fault；SVA 保持开启并拒绝非法下游契约。"
+      }
+    ]
+  },
+  "known_limits": [
+    "任务已在合并 SHA 072cf12 通过要求的 L0-L2；后续 Gate D/Gate F 仍由阶段门统一执行。",
+    "Q store 原子性只在完整窗口预检且下游不再 fault 的显式契约下成立；任意第二段 fault rollback 不在本任务支持范围，若后续下游允许该 fault，须另开事务任务。",
+    "P7-2 未接 Cache/AXI4/EMIF/FPGA，不代表上板或 Gate-F 已完成。"
+  ],
+  "blockers": [],
+  "next": "任务归档为 done；若未来下游允许第二段 fault，另开 prepare/commit/abort 事务任务。"
+}

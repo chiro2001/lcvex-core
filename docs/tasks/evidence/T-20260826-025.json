@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-025",
+  "base_sha": "fcfcbc50f06b321dd0eb2568b884b86cab0d5dfc",
+  "head_sha": "fcfcbc50f06b321dd0eb2568b884b86cab0d5dfc",
+  "merge_sha": null,
+  "candidate_status": "cancelled-provenance",
+  "toolchain": {"environment": "conda:lcvex", "python": "3.12.14", "verilator": "5.050 2026-07-01 rev conda-forge build 0"},
+  "qemu": {"release": "11.1.0", "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6", "parent_plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97", "run_plugin_sha256": "c2ba661085653abc3906dc51a3f714f84755074f54c7cf5eb070297211570bb1"},
+  "resource": {"lite_coordinator_qemu_cpu": 2, "main_coordinator_qemu_cpu": 3, "policy": "本轮使用旧 PIN 同核；后续 T-026 拆分 pin，最多允许 75%"},
+  "runs": [
+    {"run_id": "owner-l4-lite-22m-001", "level": "L4", "command": "PIN=2 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 lite resume", "exit_code": 1, "result": "provenance-fail-after-lockstep", "summary": "5M 条逐指令均 OK，child manifest 发布时发现 plugin hash c2ba... 与 T-007 parent 绑定 33f... 不匹配；不得作为可恢复证据。", "chain": "build/tmp/T-20260826-025/lite-22m/chain", "log": "build/agents/T-20260826-025/lite.log", "log_sha256": "ceef872f689cf20b294eea772c21adf83aebac26cd1587852ab2a74690c93dad"},
+    {"run_id": "owner-l4-main-22m-001", "level": "L4", "command": "PIN=3 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 main resume", "exit_code": 1, "result": "provenance-fail-after-lockstep", "summary": "5M 条逐指令均 OK，child manifest 发布时发现 plugin hash c2ba... 与 T-007 parent 绑定 33f... 不匹配；不得作为可恢复证据。", "chain": "build/tmp/T-20260826-025/main-22m/chain", "log": "build/agents/T-20260826-025/main.log", "log_sha256": "a94aab00892fa2be7c030863fdef28ebb5e19807136f15bce4a1bc38062971f7"},
+    {"run_id": "owner-l0-plugin-preflight-001", "level": "L0", "command": "make -C qemu/plugins", "exit_code": 0, "result": "pass", "summary": "生成了本地 plugin，但其构建产物 hash 与 parent 绑定不同；该差异被 provenance 校验正确拒绝。", "log": "build/agents/T-20260826-025/build-plugin.log", "log_sha256": "4e91f67b20735c7ae4289dc0ffac4f78c73e9d6fd55489885f7334d33f10f300"}
+  ],
+  "artifacts": [
+    {"id": "lite-invalid-child", "path": "build/tmp/T-20260826-025/lite-22m/chain", "status": "do-not-reuse", "reason": "plugin provenance mismatch"},
+    {"id": "main-invalid-child", "path": "build/tmp/T-20260826-025/main-22m/chain", "status": "do-not-reuse", "reason": "plugin provenance mismatch"}
+  ],
+  "known_limits": ["本轮不计入 Linux Gate E；T-027 必须使用 T-007 parent 绑定的原始 plugin、拆分 pin 和全新 child 链。"]
+}

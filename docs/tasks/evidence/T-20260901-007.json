@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260901-007",
+  "label": "GATE-D-CACHE-PERF-ELAB-FIX",
+  "state": "done",
+  "partial": false,
+  "base_sha": "2f17d401e8d85847eaa80dc0a492aa3cd9c6643f",
+  "head_sha": "6a31cfe338e488a9201611e4564fc949ace43789",
+  "final_report_tip": "e0eb79995907e7904592f454e151fa5d45d6b9b1",
+  "merge_sha": "a2680009749d7ee7b4f79220ba5d69a5996ad296",
+  "content_sha": "6a31cfe338e488a9201611e4564fc949ace43789",
+  "merge_sha": "",
+  "branch": "verify/T-20260901-007-cache-perf-elab-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-007",
+  "owner": "luna-cache-perf-elaboration-fix",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "sent_at": "2026-09-01T08:31:42+08:00",
+  "received_at": "2026-09-01T08:31:42+08:00",
+  "reported_at": "2026-09-01T09:32:53+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-09-01T08:31:42+08:00",
+    "sent_at": "2026-09-01T08:31:42+08:00",
+    "received_at": "2026-09-01T08:31:42+08:00",
+    "reported_at": "2026-09-01T09:32:53+08:00",
+    "received_at_basis": "任务 dispatch 指定的真实 sent_at；owner 在该 worktree 开始执行"
+  },
+  "scope": "移除 lcvex_soc_tb 对 conditional-generate cache 内部 hit/state/d_req_* 的层次窥探；以纯组合 perf_hit/perf_refill_beat 端口和顶层握手重接性能观测；增加 0/0/0、1/1/1 clean lint/elab、counter smoke、cache TB、Cocotb backpressure 与 random seed=1 验证。不改 cache 功能、协议、默认参数、counter 定义、断言、reference、F1a d2 性能。",
+  "files_written": [
+    "rtl/lcvex_l1_d.sv",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_l1_d_tb.sv",
+    "tb/sv/lcvex_l1_i_tb.sv",
+    "tb/sv/lcvex_l2_tb.sv",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/CACHE_PERF_OBSERVABILITY_ELABORATION_FIX.md",
+    "docs/handoffs/T-20260901-007-cache-perf-elab-fix.md",
+    "docs/tasks/evidence/T-20260901-007.json"
+  ],
+  "implementation": {
+    "root_cause": "cache-off generate 裁剪 il1/dl1/l2 后，lcvex_soc_tb 仍引用其实例 hit/state/d_req_valid/d_req_ready，Verilator 5.050 报 42 个 dotted-reference/missing-module errors。",
+    "fix": "三个 cache 模块导出纯组合 perf_hit/perf_refill_beat；SoC 显式接线，cache downstream 计数使用现有 arb/l2_req 顶层 valid/ready，关闭分支显式置零；其它实例接本地 sink。",
+    "perf_hit": "当前上游地址 valid/tag 命中视图；SoC 仅在既有 valid/ready、读、非 bypass、MAINT_NONE 条件下资格化。",
+    "perf_refill_beat": "S_REFILL && d_req_valid && d_req_ready；无寄存器、无 reset state、无架构/提交影响。",
+    "functional_boundary": "不改变 cache FSM、内存请求/响应协议、默认参数、性能计数定义、断言或参考结果。"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.4",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "rtl_filelist_sha256": "23e27cb9249c08be6e5d11fd8daa0d315d9859dc12b459473ed8f39dea92f46e",
+    "qemu": {
+      "release": "11.1.0 (existing build)",
+      "binary": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+      "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+      "plugin": "qemu/plugins/lcvex_difftest.so",
+      "plugin_sha256": "1a2dc152fb31c7a3afdeeb1201aa27949c1a3654b9ab783d06a58c24bc184755",
+      "modified": false
+    },
+    "resource_wrapper": {
+      "command_prefix": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1",
+      "memory_max": "15G",
+      "memory_swap_max": "0",
+      "cpu_quota": "50%",
+      "makeflags": "-j1",
+      "verilator_jobs": 1,
+      "scope_policy": "all heavy Verilator/Cocotb/random jobs were run one at a time"
+    }
+  },
+  "implementation_file_sha256": {
+    "rtl/lcvex_l1_d.sv": "6596daa86da8354a4b456301b0b911d21f38e14f68a3dde45bf6c231ffcbfa1e",
+    "rtl/lcvex_l1_i.sv": "76b1276b3cea3637d27aa10f3bff69bd472e97a38b6aaf9a5eb69769b3fcc2b3",
+    "rtl/lcvex_l2.sv": "2ac54aa357f04b8456cac86275308423b1dbb2dccb3154671e5049a54752d03a",
+    "rtl/lcvex_catapult_soc_coh.sv": "b601d4e239eaf8dc265fddaa60b9a6073269cee581f3dc9ea0fb243564561f76",
+    "tb/sv/lcvex_soc_tb.sv": "06468a594d0643df04e7a3f12fc1cf437dcdc42a77af259c4121191576c84c9a",
+    "Makefile": "f03f475d97491cdc8e738690920732c0a665ed7fcf7c4bebbdbc664bbfee2637",
+    "scripts/test_registry.json": "e0810be064cc61c88d1b9b73a8d37ab038ebb014668cc8d68ad6206d1cda73c6",
+    "docs/CACHE_PERF_OBSERVABILITY_ELABORATION_FIX.md": "b1cf491e2e308a8c48037cbbc8be03cd29e21701bfdd16caa46aff4ccd1d53ba"
+  },
+  "validation": [
+    {
+      "id": "owner-registry-check",
+      "level": "L0",
+      "command": "python3 scripts/test_registry.py --check --check-consistency",
+      "result": "PASS: registry 校验 66 项；Makefile/runner 最小一致性通过",
+      "exit_code": 0
+    },
+    {
+      "id": "owner-cache-elab-r2",
+      "level": "L0",
+      "command": "make cache-perf-elab",
+      "result": "PASS: 独立 0/0/0 与 1/1/1 Verilator lint/elaboration",
+      "exit_code": 0,
+      "verilator_allocated_mb": {"off": 395.898, "on": 398.602}
+    },
+    {
+      "id": "owner-cache-perf-smoke-r2",
+      "level": "L0/L1",
+      "command": "make CACHE_PERF_SMOKE_DIR=build/agents/T-20260901-007/cache_perf_smoke cache-perf-smoke",
+      "result": "PASS: off 全部 cache counter=0；on 三层 hit/refill/downstream 均非零；两个 digest 相同",
+      "exit_code": 0,
+      "workload": "mem_ldst",
+      "compile_flags": "-O2 -DLDS_SIZE=4096 -DLDS_ITERS=64 -DLDS_PAIR_ITERS=32",
+      "max_cycles": 2000000,
+      "off": {
+        "status": "pass",
+        "returncode": 0,
+        "cycles": 15787,
+        "retired_insn": 4235,
+        "commit_digest": "795a8310adec1991",
+        "memory_digest": "22485f7424f2523e",
+        "cache": {
+          "il1": {"upstream": 0, "hit": 0, "miss": 0, "refill_beat": 0, "downstream": 0},
+          "dl1": {"upstream": 0, "read_hit": 0, "read_miss": 0, "write": 0, "refill_beat": 0, "downstream": 0},
+          "l2": {"upstream": 0, "read_hit": 0, "read_miss": 0, "write": 0, "refill_beat": 0, "downstream": 0}
+        },
+        "json_sha256": "388401003e31f0116a17fd335754d847b8260d42718e38168935b74471e19c75"
+      },
+      "on": {
+        "status": "pass",
+        "returncode": 0,
+        "cycles": 19561,
+        "retired_insn": 4235,
+        "commit_digest": "795a8310adec1991",
+        "memory_digest": "22485f7424f2523e",
+        "cache": {
+          "il1": {"upstream": 4236, "hit": 4228, "miss": 8, "refill_beat": 71, "downstream": 71},
+          "dl1": {"upstream": 1103, "read_hit": 315, "read_miss": 12, "write": 776, "refill_beat": 96, "downstream": 872},
+          "l2": {"upstream": 943, "read_hit": 147, "read_miss": 20, "write": 776, "refill_beat": 168, "downstream": 944}
+        },
+        "json_sha256": "a389d8bd5d701f48c6be7a0c6113ad5a74614323e22578cfa796bcb57c5d4943"
+      },
+      "runner_build_allocated_mb": {"off": 1043.492, "on": 1045.418},
+      "runner_rss_mb": {"off": 136.434, "on": 136.406}
+    },
+    {
+      "id": "owner-cache-tb-r2",
+      "level": "L1",
+      "command": "make sim-sv-l1d sim-sv-l1i sim-sv-l2",
+      "result": "PASS: lcvex_l1_d_tb、lcvex_l1_i_tb、lcvex_l2_tb 全部通过",
+      "exit_code": 0,
+      "verilator_allocated_mb": {"l1d": 57.594, "l1i": 57.613, "l2": 57.605}
+    },
+    {
+      "id": "owner-cocotb-backpressure",
+      "level": "L1",
+      "command": "make sim-cocotb-backpressure",
+      "result": "PASS: test_backpressure_hold 与 test_system_commit_backpressure 2/2",
+      "exit_code": 0,
+      "verilator_allocated_mb": 974.336,
+      "simulation_seconds": 1.88
+    },
+    {
+      "id": "owner-random-seed1",
+      "level": "L2",
+      "command": "make difftest-random SEED=1 LENGTH=100000",
+      "result": "PASS: 100002 条指令与 QEMU 完全一致；Cocotb 1/1",
+      "exit_code": 0,
+      "seed": 1,
+      "length": 100000,
+      "commit_count": 100002,
+      "simulation_seconds": 37.60,
+      "verilator_allocated_mb": 974.336,
+      "trace": {
+        "path": "build/difftest/random_1.trace",
+        "bytes": 3937845,
+        "sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e"
+      },
+      "results_xml": {
+        "path": "build/difftest/random_1_results.xml",
+        "bytes": 400,
+        "sha256": "527fcf8de14051ccbb19615ae1d8ae77518abb06605681c689511ad9bd7a8204"
+      },
+      "known_warning": "QEMU plugin existing QEMU_PLUGIN_MEM_VALUE_U128 switch warning; no mismatch"
+    }
+  ],
+  "resource_runs": {
+    "elab": {"scope": "lcvex-t20260901-007-elab.scope", "result": "success"},
+    "cache_tb": {"scope": "lcvex-t20260901-007-cache-tb-r2.scope", "result": "success"},
+    "cache_perf_smoke": {"scope": "lcvex-t20260901-007-cache-perf-smoke-r2.scope", "result": "success"},
+    "cocotb_backpressure": {"scope": "lcvex-t20260901-007-cocotb-bp.scope", "result": "success"},
+    "random_seed1": {"scope": "lcvex-t20260901-007-random1.scope", "result": "success"}
+  },
+  "artifacts": {
+    "cache_perf_off_json": "build/agents/T-20260901-007/cache_perf_smoke/off.json",
+    "cache_perf_on_json": "build/agents/T-20260901-007/cache_perf_smoke/on.json",
+    "random_trace": "build/difftest/random_1.trace",
+    "random_results_xml": "build/difftest/random_1_results.xml",
+    "git_tracked": false,
+    "policy": "生成的 runner/build/trace/log 不加入 Git；hash 记录于本 evidence"
+  },
+  "known_limits": [
+    "不运行完整 Gate D、Linux、Quartus/FPGA；集成者在新冻结 candidate 上安排。",
+    "不处理 F1a nocache_d2 性能 cycle guard 回退。",
+    "首次 cache-perf-smoke 因用户覆盖的嵌套 -Mdir 父目录未创建而失败，补 mkdir -p 后重跑通过；该失败不涉及 RTL。",
+    "evidence/handoff 文档提交后的最终 tip 不自引用；head_sha 表示技术实现提交，最终 correction tip 由 owner 报告。"
+  ]
+}

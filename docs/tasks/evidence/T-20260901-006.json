@@ -1,0 +1,1451 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260901-006",
+  "label": "PE-F1G-D2-PERF-AUDIT",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "static_counter_diagnosis_complete_dynamic_probe_required",
+  "base_sha": "aa60cfec24ca880841257ccc80e96f8138caf023",
+  "head_sha": "aa60cfec24ca880841257ccc80e96f8138caf023",
+  "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+  "report_tip": "6800b194dd88c0640c0166f9b154f05b4e3a34ce",
+  "merge_sha": "46baab67e5d07b1696b3ee67d572bfcb70b83a5e",
+  "branch": "review/T-20260901-006-f1a-d2-performance",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-006",
+  "owner": "luna-f1a-d2-performance-audit",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-01T07:14:38+08:00",
+    "received_at": "2026-09-01T07:14:38+08:00",
+    "reported_at": "2026-09-01T07:21:34+08:00"
+  },
+  "scope": "只读诊断 T-004 v2 中 nocache_d2/alu_latency、ctrl_branch、mem_seq 的 F1a cycle guard 回退；不启动动态工具。",
+  "writes": [
+    "docs/F1A_D2_PERFORMANCE_REGRESSION_DIAGNOSIS.md",
+    "docs/handoffs/T-20260901-006-f1a-d2-performance.md",
+    "docs/tasks/evidence/T-20260901-006.json"
+  ],
+  "files_not_modified": [
+    "rtl/**",
+    "tb/**",
+    "sim/microbench/**",
+    "scripts/**",
+    "baremetal/**",
+    "QEMU fork",
+    "reference results",
+    "thresholds"
+  ],
+  "source_artifact": {
+    "json_path": "docs/evidence/artifacts/T-20260901-004/f1f_v2_matrix.json",
+    "json_bytes": 1356853,
+    "json_sha256": "7a166c9e2104dc0c060ee2f3aaa9d2cc09fecc8ac757b8ff69f84948c0937e2a",
+    "csv_path": "docs/evidence/artifacts/T-20260901-004/f1f_v2_matrix.csv",
+    "csv_bytes": 81251,
+    "csv_sha256": "f71d0b4e05758d389101cce689cdd97c4e6adde316ff57f6248670a9064d74af",
+    "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+    "schema": "lcvex-perf-matrix-f1c-v1",
+    "commit_digest_schema": "lcvex-commit-digest-v2-active-payload"
+  },
+  "independent_audit": {
+    "method": "Python stdlib read-only parse；重算 JSON/CSV row/pair key、schema/status、strict fields，以及每个 F1a-F0 nested counter delta。",
+    "commands": [
+      "sha256sum docs/evidence/artifacts/T-20260901-004/f1f_v2_matrix.json docs/evidence/artifacts/T-20260901-004/f1f_v2_matrix.csv",
+      "python3 - <<'PY'（读取 artifact，重算 row/pair/schema/hash/strict/counter delta；无输出写入）"
+    ],
+    "json_rows": 196,
+    "csv_rows": 196,
+    "pair_keys_equal": true,
+    "schema_rows": {
+      "lcvex-commit-digest-v2-active-payload": 196
+    },
+    "status_rows": {
+      "pass": 196
+    },
+    "strict_equal_pairs": 98,
+    "strict_total_pairs": 98,
+    "target_source_image_same": {
+      "alu_latency": true,
+      "ctrl_branch": true,
+      "mem_seq": true
+    },
+    "dynamic_execution_started": false
+  },
+  "target_pairs": [
+    {
+      "pair": "nocache_d2/alu_latency",
+      "source_sha256": "d00d69d960ef17cb63daa75ddefc021162c4d8ed2d12fa0546499f2226eb927e",
+      "image_sha256": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+      "measurement_source_sha_f0": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+      "measurement_source_sha_f1a": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+      "f0": {
+        "name": "alu_latency",
+        "config": "nocache_d2_f0",
+        "source_sha256": "d00d69d960ef17cb63daa75ddefc021162c4d8ed2d12fa0546499f2226eb927e",
+        "image_sha256": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+        "cycles": 5795747,
+        "retired_insn": 750049,
+        "ipc": 0.129414,
+        "stall_cycles": {
+          "stall_if": 59,
+          "fetch_wait": 4795687,
+          "branch_flush": 250011,
+          "mem_stall": 63,
+          "ptw_stall": 0,
+          "muldiv_stall": 0,
+          "load_use": 0,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 750050,
+          "dmem": 6,
+          "ptw": 0,
+          "arb": 750056,
+          "l2": 750056,
+          "delay_router": 750055,
+          "ram": 750055
+        },
+        "responses": {
+          "imem": 750050,
+          "dmem": 6,
+          "ptw": 0,
+          "arb": 750056,
+          "l2": 750056,
+          "delay_router": 750056,
+          "ram": 750056
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        },
+        "fetch_fifo": {
+          "enable": 0,
+          "epoch_final": 0,
+          "epoch_bumps": 0,
+          "occupancy_max": 0,
+          "peak_signal_max": 0,
+          "push": 0,
+          "pop": 0,
+          "flush": 0,
+          "stale_drop": 0,
+          "stale_drain_cycles": 0,
+          "overflow": 0
+        },
+        "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+        "commit_digest_valid": true,
+        "stable_digest": {
+          "schema": "lcvex-commit-digest-v2-active-payload",
+          "commit_packet": "ab7d672bf0489762",
+          "memory_side_effect": "0dd7f555d8ef95bf",
+          "committed_memory_effects": 4
+        },
+        "commit_digest": "ab7d672bf0489762",
+        "memory_digest": "0dd7f555d8ef95bf",
+        "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+        "status": "pass",
+        "params": {
+          "BASE_CONFIG": "nocache_d2",
+          "I_L1": "0",
+          "D_L1": "0",
+          "L2": "0",
+          "MEM_DELAY_MODE": "2",
+          "FETCH_FIFO_ENABLE": "0",
+          "FETCH_FIFO_DEPTH": "2",
+          "FIFO_VARIANT": "f0"
+        },
+        "max_cycles": 10000000,
+        "returncode": 0
+      },
+      "f1a": {
+        "name": "alu_latency",
+        "config": "nocache_d2_f1a",
+        "source_sha256": "d00d69d960ef17cb63daa75ddefc021162c4d8ed2d12fa0546499f2226eb927e",
+        "image_sha256": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+        "cycles": 6219933,
+        "retired_insn": 750049,
+        "ipc": 0.120588,
+        "stall_cycles": {
+          "stall_if": 1054958,
+          "fetch_wait": 5219828,
+          "branch_flush": 250011,
+          "mem_stall": 58,
+          "ptw_stall": 0,
+          "muldiv_stall": 0,
+          "load_use": 0,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 1000059,
+          "dmem": 6,
+          "ptw": 0,
+          "arb": 1000065,
+          "l2": 1000065,
+          "delay_router": 1000064,
+          "ram": 1000064
+        },
+        "responses": {
+          "imem": 1000059,
+          "dmem": 6,
+          "ptw": 0,
+          "arb": 1000065,
+          "l2": 1000065,
+          "delay_router": 1000065,
+          "ram": 1000065
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        },
+        "fetch_fifo": {
+          "enable": 1,
+          "epoch_final": 155,
+          "epoch_bumps": 250011,
+          "occupancy_max": 1,
+          "peak_signal_max": 1,
+          "push": 750050,
+          "pop": 750050,
+          "flush": 250011,
+          "stale_drop": 250009,
+          "stale_drain_cycles": 1054904,
+          "overflow": 0
+        },
+        "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+        "commit_digest_valid": true,
+        "stable_digest": {
+          "schema": "lcvex-commit-digest-v2-active-payload",
+          "commit_packet": "ab7d672bf0489762",
+          "memory_side_effect": "0dd7f555d8ef95bf",
+          "committed_memory_effects": 4
+        },
+        "commit_digest": "ab7d672bf0489762",
+        "memory_digest": "0dd7f555d8ef95bf",
+        "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+        "status": "pass",
+        "params": {
+          "BASE_CONFIG": "nocache_d2",
+          "I_L1": "0",
+          "D_L1": "0",
+          "L2": "0",
+          "MEM_DELAY_MODE": "2",
+          "FETCH_FIFO_ENABLE": "1",
+          "FETCH_FIFO_DEPTH": "2",
+          "FIFO_VARIANT": "f1a"
+        },
+        "max_cycles": 10000000,
+        "returncode": 0
+      },
+      "delta": {
+        "cycles": 424186,
+        "retired_insn": 0,
+        "ipc": -0.008826,
+        "stall_cycles": {
+          "stall_if": 1054899,
+          "fetch_wait": 424141,
+          "branch_flush": 0,
+          "mem_stall": -5,
+          "ptw_stall": 0,
+          "muldiv_stall": 0,
+          "load_use": 0,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 250009,
+          "dmem": 0,
+          "ptw": 0,
+          "arb": 250009,
+          "l2": 250009,
+          "delay_router": 250009,
+          "ram": 250009
+        },
+        "responses": {
+          "imem": 250009,
+          "dmem": 0,
+          "ptw": 0,
+          "arb": 250009,
+          "l2": 250009,
+          "delay_router": 250009,
+          "ram": 250009
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        }
+      },
+      "guard": {
+        "formula": "f1a_cycles <= f0_cycles*1.02+64",
+        "limit": 5911725.94,
+        "increase_percent": 7.3189185104180705,
+        "pass": false
+      },
+      "fifo_observation": {
+        "f0_all_zero_and_disabled": true,
+        "f0": {
+          "enable": 0,
+          "epoch_final": 0,
+          "epoch_bumps": 0,
+          "occupancy_max": 0,
+          "peak_signal_max": 0,
+          "push": 0,
+          "pop": 0,
+          "flush": 0,
+          "stale_drop": 0,
+          "stale_drain_cycles": 0,
+          "overflow": 0
+        },
+        "f1a": {
+          "enable": 1,
+          "epoch_final": 155,
+          "epoch_bumps": 250011,
+          "occupancy_max": 1,
+          "peak_signal_max": 1,
+          "push": 750050,
+          "pop": 750050,
+          "flush": 250011,
+          "stale_drop": 250009,
+          "stale_drain_cycles": 1054904,
+          "overflow": 0
+        },
+        "push_ge_pop": true,
+        "occupancy_le_2": true,
+        "overflow_zero": true,
+        "epoch_bumps_equal_flush": true
+      }
+    },
+    {
+      "pair": "nocache_d2/ctrl_branch",
+      "source_sha256": "a18fb8c97ccd4b3c10b1452bb735e488fc9481b1a6e52ab630299e2881c9196d",
+      "image_sha256": "e193e924e846b0102cf58740dace1021d476fb6cdf56c732ec6d4a00a4f42890",
+      "measurement_source_sha_f0": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+      "measurement_source_sha_f1a": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+      "f0": {
+        "name": "ctrl_branch",
+        "config": "nocache_d2_f0",
+        "source_sha256": "a18fb8c97ccd4b3c10b1452bb735e488fc9481b1a6e52ab630299e2881c9196d",
+        "image_sha256": "e193e924e846b0102cf58740dace1021d476fb6cdf56c732ec6d4a00a4f42890",
+        "cycles": 5172730,
+        "retired_insn": 690074,
+        "ipc": 0.133406,
+        "stall_cycles": {
+          "stall_if": 210189,
+          "fetch_wait": 4262645,
+          "branch_flush": 220011,
+          "mem_stall": 230203,
+          "ptw_stall": 0,
+          "muldiv_stall": 0,
+          "load_use": 0,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 690075,
+          "dmem": 20023,
+          "ptw": 0,
+          "arb": 710098,
+          "l2": 710098,
+          "delay_router": 710097,
+          "ram": 710097
+        },
+        "responses": {
+          "imem": 690075,
+          "dmem": 20023,
+          "ptw": 0,
+          "arb": 710098,
+          "l2": 710098,
+          "delay_router": 710098,
+          "ram": 710098
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        },
+        "fetch_fifo": {
+          "enable": 0,
+          "epoch_final": 0,
+          "epoch_bumps": 0,
+          "occupancy_max": 0,
+          "peak_signal_max": 0,
+          "push": 0,
+          "pop": 0,
+          "flush": 0,
+          "stale_drop": 0,
+          "stale_drain_cycles": 0,
+          "overflow": 0
+        },
+        "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+        "commit_digest_valid": true,
+        "stable_digest": {
+          "schema": "lcvex-commit-digest-v2-active-payload",
+          "commit_packet": "a555baec3f932af5",
+          "memory_side_effect": "0617c8083a02b214",
+          "committed_memory_effects": 13
+        },
+        "commit_digest": "a555baec3f932af5",
+        "memory_digest": "0617c8083a02b214",
+        "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+        "status": "pass",
+        "params": {
+          "BASE_CONFIG": "nocache_d2",
+          "I_L1": "0",
+          "D_L1": "0",
+          "L2": "0",
+          "MEM_DELAY_MODE": "2",
+          "FETCH_FIFO_ENABLE": "0",
+          "FETCH_FIFO_DEPTH": "2",
+          "FIFO_VARIANT": "f0"
+        },
+        "max_cycles": 10000000,
+        "returncode": 0
+      },
+      "f1a": {
+        "name": "ctrl_branch",
+        "config": "nocache_d2_f1a",
+        "source_sha256": "a18fb8c97ccd4b3c10b1452bb735e488fc9481b1a6e52ab630299e2881c9196d",
+        "image_sha256": "e193e924e846b0102cf58740dace1021d476fb6cdf56c732ec6d4a00a4f42890",
+        "cycles": 5749229,
+        "retired_insn": 690074,
+        "ipc": 0.120029,
+        "stall_cycles": {
+          "stall_if": 1094376,
+          "fetch_wait": 4691372,
+          "branch_flush": 220011,
+          "mem_stall": 212572,
+          "ptw_stall": 0,
+          "muldiv_stall": 0,
+          "load_use": 0,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 910081,
+          "dmem": 20023,
+          "ptw": 0,
+          "arb": 930104,
+          "l2": 930104,
+          "delay_router": 930103,
+          "ram": 930103
+        },
+        "responses": {
+          "imem": 910081,
+          "dmem": 20023,
+          "ptw": 0,
+          "arb": 930104,
+          "l2": 930104,
+          "delay_router": 930104,
+          "ram": 930104
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        },
+        "fetch_fifo": {
+          "enable": 1,
+          "epoch_final": 107,
+          "epoch_bumps": 220011,
+          "occupancy_max": 1,
+          "peak_signal_max": 1,
+          "push": 690075,
+          "pop": 690075,
+          "flush": 220011,
+          "stale_drop": 220006,
+          "stale_drain_cycles": 901818,
+          "overflow": 0
+        },
+        "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+        "commit_digest_valid": true,
+        "stable_digest": {
+          "schema": "lcvex-commit-digest-v2-active-payload",
+          "commit_packet": "a555baec3f932af5",
+          "memory_side_effect": "0617c8083a02b214",
+          "committed_memory_effects": 13
+        },
+        "commit_digest": "a555baec3f932af5",
+        "memory_digest": "0617c8083a02b214",
+        "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+        "status": "pass",
+        "params": {
+          "BASE_CONFIG": "nocache_d2",
+          "I_L1": "0",
+          "D_L1": "0",
+          "L2": "0",
+          "MEM_DELAY_MODE": "2",
+          "FETCH_FIFO_ENABLE": "1",
+          "FETCH_FIFO_DEPTH": "2",
+          "FIFO_VARIANT": "f1a"
+        },
+        "max_cycles": 10000000,
+        "returncode": 0
+      },
+      "delta": {
+        "cycles": 576499,
+        "retired_insn": 0,
+        "ipc": -0.013377,
+        "stall_cycles": {
+          "stall_if": 884187,
+          "fetch_wait": 428727,
+          "branch_flush": 0,
+          "mem_stall": -17631,
+          "ptw_stall": 0,
+          "muldiv_stall": 0,
+          "load_use": 0,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 220006,
+          "dmem": 0,
+          "ptw": 0,
+          "arb": 220006,
+          "l2": 220006,
+          "delay_router": 220006,
+          "ram": 220006
+        },
+        "responses": {
+          "imem": 220006,
+          "dmem": 0,
+          "ptw": 0,
+          "arb": 220006,
+          "l2": 220006,
+          "delay_router": 220006,
+          "ram": 220006
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        }
+      },
+      "guard": {
+        "formula": "f1a_cycles <= f0_cycles*1.02+64",
+        "limit": 5276248.6,
+        "increase_percent": 11.144966004411597,
+        "pass": false
+      },
+      "fifo_observation": {
+        "f0_all_zero_and_disabled": true,
+        "f0": {
+          "enable": 0,
+          "epoch_final": 0,
+          "epoch_bumps": 0,
+          "occupancy_max": 0,
+          "peak_signal_max": 0,
+          "push": 0,
+          "pop": 0,
+          "flush": 0,
+          "stale_drop": 0,
+          "stale_drain_cycles": 0,
+          "overflow": 0
+        },
+        "f1a": {
+          "enable": 1,
+          "epoch_final": 107,
+          "epoch_bumps": 220011,
+          "occupancy_max": 1,
+          "peak_signal_max": 1,
+          "push": 690075,
+          "pop": 690075,
+          "flush": 220011,
+          "stale_drop": 220006,
+          "stale_drain_cycles": 901818,
+          "overflow": 0
+        },
+        "push_ge_pop": true,
+        "occupancy_le_2": true,
+        "overflow_zero": true,
+        "epoch_bumps_equal_flush": true
+      }
+    },
+    {
+      "pair": "nocache_d2/mem_seq",
+      "source_sha256": "d6ade66219fbd1a2675f6ece2ceed6e5543c8a882fc471f00ade8b318297efb3",
+      "image_sha256": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527",
+      "measurement_source_sha_f0": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+      "measurement_source_sha_f1a": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+      "f0": {
+        "name": "mem_seq",
+        "config": "nocache_d2_f0",
+        "source_sha256": "d6ade66219fbd1a2675f6ece2ceed6e5543c8a882fc471f00ade8b318297efb3",
+        "image_sha256": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527",
+        "cycles": 7273882,
+        "retired_insn": 803657,
+        "ipc": 0.110485,
+        "stall_cycles": {
+          "stall_if": 2302267,
+          "fetch_wait": 6298101,
+          "branch_flush": 172124,
+          "mem_stall": 2531444,
+          "ptw_stall": 0,
+          "muldiv_stall": 252,
+          "load_use": 9,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 803658,
+          "dmem": 229437,
+          "ptw": 0,
+          "arb": 1033095,
+          "l2": 1033095,
+          "delay_router": 1033094,
+          "ram": 1033094
+        },
+        "responses": {
+          "imem": 803658,
+          "dmem": 229437,
+          "ptw": 0,
+          "arb": 1033095,
+          "l2": 1033095,
+          "delay_router": 1033095,
+          "ram": 1033095
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        },
+        "fetch_fifo": {
+          "enable": 0,
+          "epoch_final": 0,
+          "epoch_bumps": 0,
+          "occupancy_max": 0,
+          "peak_signal_max": 0,
+          "push": 0,
+          "pop": 0,
+          "flush": 0,
+          "stale_drop": 0,
+          "stale_drain_cycles": 0,
+          "overflow": 0
+        },
+        "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+        "commit_digest_valid": true,
+        "stable_digest": {
+          "schema": "lcvex-commit-digest-v2-active-payload",
+          "commit_packet": "46e5ead18aa77a80",
+          "memory_side_effect": "6b40dea7a6ade5c3",
+          "committed_memory_effects": 114714
+        },
+        "commit_digest": "46e5ead18aa77a80",
+        "memory_digest": "6b40dea7a6ade5c3",
+        "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+        "status": "pass",
+        "params": {
+          "BASE_CONFIG": "nocache_d2",
+          "I_L1": "0",
+          "D_L1": "0",
+          "L2": "0",
+          "MEM_DELAY_MODE": "2",
+          "FETCH_FIFO_ENABLE": "0",
+          "FETCH_FIFO_DEPTH": "2",
+          "FIFO_VARIANT": "f0"
+        },
+        "max_cycles": 10000000,
+        "returncode": 0
+      },
+      "f1a": {
+        "name": "mem_seq",
+        "config": "nocache_d2_f1a",
+        "source_sha256": "d6ade66219fbd1a2675f6ece2ceed6e5543c8a882fc471f00ade8b318297efb3",
+        "image_sha256": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527",
+        "cycles": 7456315,
+        "retired_insn": 803657,
+        "ipc": 0.107782,
+        "stall_cycles": {
+          "stall_if": 2771202,
+          "fetch_wait": 4878616,
+          "branch_flush": 172124,
+          "mem_stall": 2322945,
+          "ptw_stall": 0,
+          "muldiv_stall": 252,
+          "load_use": 14,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 975759,
+          "dmem": 229437,
+          "ptw": 0,
+          "arb": 1205196,
+          "l2": 1205196,
+          "delay_router": 1205195,
+          "ram": 1205195
+        },
+        "responses": {
+          "imem": 975759,
+          "dmem": 229437,
+          "ptw": 0,
+          "arb": 1205196,
+          "l2": 1205196,
+          "delay_router": 1205196,
+          "ram": 1205196
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        },
+        "fetch_fifo": {
+          "enable": 1,
+          "epoch_final": 92,
+          "epoch_bumps": 172124,
+          "occupancy_max": 2,
+          "peak_signal_max": 2,
+          "push": 803658,
+          "pop": 803658,
+          "flush": 172124,
+          "stale_drop": 172101,
+          "stale_drain_cycles": 677434,
+          "overflow": 0
+        },
+        "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+        "commit_digest_valid": true,
+        "stable_digest": {
+          "schema": "lcvex-commit-digest-v2-active-payload",
+          "commit_packet": "46e5ead18aa77a80",
+          "memory_side_effect": "6b40dea7a6ade5c3",
+          "committed_memory_effects": 114714
+        },
+        "commit_digest": "46e5ead18aa77a80",
+        "memory_digest": "6b40dea7a6ade5c3",
+        "measurement_source_sha": "3816c95a92692e336b2c2063d9d7ef7f998d6b0f",
+        "status": "pass",
+        "params": {
+          "BASE_CONFIG": "nocache_d2",
+          "I_L1": "0",
+          "D_L1": "0",
+          "L2": "0",
+          "MEM_DELAY_MODE": "2",
+          "FETCH_FIFO_ENABLE": "1",
+          "FETCH_FIFO_DEPTH": "2",
+          "FIFO_VARIANT": "f1a"
+        },
+        "max_cycles": 10000000,
+        "returncode": 0
+      },
+      "delta": {
+        "cycles": 182433,
+        "retired_insn": 0,
+        "ipc": -0.002703,
+        "stall_cycles": {
+          "stall_if": 468935,
+          "fetch_wait": -1419485,
+          "branch_flush": 0,
+          "mem_stall": -208499,
+          "ptw_stall": 0,
+          "muldiv_stall": 0,
+          "load_use": 5,
+          "wb_stall": 0
+        },
+        "requests": {
+          "imem": 172101,
+          "dmem": 0,
+          "ptw": 0,
+          "arb": 172101,
+          "l2": 172101,
+          "delay_router": 172101,
+          "ram": 172101
+        },
+        "responses": {
+          "imem": 172101,
+          "dmem": 0,
+          "ptw": 0,
+          "arb": 172101,
+          "l2": 172101,
+          "delay_router": 172101,
+          "ram": 172101
+        },
+        "cache": {
+          "il1": {
+            "upstream": 0,
+            "hit": 0,
+            "miss": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "dl1": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          },
+          "l2": {
+            "upstream": 0,
+            "read_hit": 0,
+            "read_miss": 0,
+            "write": 0,
+            "refill_beat": 0,
+            "downstream": 0
+          }
+        }
+      },
+      "guard": {
+        "formula": "f1a_cycles <= f0_cycles*1.02+64",
+        "limit": 7419423.64,
+        "increase_percent": 2.508055533482671,
+        "pass": false
+      },
+      "fifo_observation": {
+        "f0_all_zero_and_disabled": true,
+        "f0": {
+          "enable": 0,
+          "epoch_final": 0,
+          "epoch_bumps": 0,
+          "occupancy_max": 0,
+          "peak_signal_max": 0,
+          "push": 0,
+          "pop": 0,
+          "flush": 0,
+          "stale_drop": 0,
+          "stale_drain_cycles": 0,
+          "overflow": 0
+        },
+        "f1a": {
+          "enable": 1,
+          "epoch_final": 92,
+          "epoch_bumps": 172124,
+          "occupancy_max": 2,
+          "peak_signal_max": 2,
+          "push": 803658,
+          "pop": 803658,
+          "flush": 172124,
+          "stale_drop": 172101,
+          "stale_drain_cycles": 677434,
+          "overflow": 0
+        },
+        "push_ge_pop": true,
+        "occupancy_le_2": true,
+        "overflow_zero": true,
+        "epoch_bumps_equal_flush": true
+      }
+    }
+  ],
+  "same_workload_delay_comparison": [
+    {
+      "workload": "alu_latency",
+      "delay": 0,
+      "f0_cycles": 2500171,
+      "f1a_cycles": 2000136,
+      "delta_cycles": -500035,
+      "increase_percent": -20.000031997811348,
+      "delta_imem_requests": 250009,
+      "f1a_stale_drop": 250007,
+      "f1a_stale_drain_cycles": 0,
+      "delta_stall_if": 5,
+      "delta_fetch_wait": -500052,
+      "delta_branch_flush": 0,
+      "guard_pass": true
+    },
+    {
+      "workload": "alu_latency",
+      "delay": 1,
+      "f0_cycles": 4000283,
+      "f1a_cycles": 4000264,
+      "delta_cycles": -19,
+      "increase_percent": -0.000474966396127474,
+      "delta_imem_requests": 250009,
+      "f1a_stale_drop": 250009,
+      "f1a_stale_drain_cycles": 500018,
+      "delta_stall_if": 500014,
+      "delta_fetch_wait": -47,
+      "delta_branch_flush": 0,
+      "guard_pass": true
+    },
+    {
+      "workload": "alu_latency",
+      "delay": 2,
+      "f0_cycles": 5795747,
+      "f1a_cycles": 6219933,
+      "delta_cycles": 424186,
+      "increase_percent": 7.3189185104180705,
+      "delta_imem_requests": 250009,
+      "f1a_stale_drop": 250009,
+      "f1a_stale_drain_cycles": 1054904,
+      "delta_stall_if": 1054899,
+      "delta_fetch_wait": 424141,
+      "delta_branch_flush": 0,
+      "guard_pass": false
+    },
+    {
+      "workload": "ctrl_branch",
+      "delay": 0,
+      "f0_cycles": 2330280,
+      "f1a_cycles": 1860231,
+      "delta_cycles": -470049,
+      "increase_percent": -20.171352798805295,
+      "delta_imem_requests": 200008,
+      "f1a_stale_drop": 200004,
+      "f1a_stale_drain_cycles": 0,
+      "delta_stall_if": 20018,
+      "delta_fetch_wait": -530112,
+      "delta_branch_flush": 0,
+      "guard_pass": true
+    },
+    {
+      "workload": "ctrl_branch",
+      "delay": 1,
+      "f0_cycles": 3750476,
+      "f1a_cycles": 3740433,
+      "delta_cycles": -10043,
+      "increase_percent": -0.26777934320870206,
+      "delta_imem_requests": 220006,
+      "f1a_stale_drop": 220006,
+      "f1a_stale_drain_cycles": 440012,
+      "delta_stall_if": 420001,
+      "delta_fetch_wait": -110149,
+      "delta_branch_flush": 0,
+      "guard_pass": true
+    },
+    {
+      "workload": "ctrl_branch",
+      "delay": 2,
+      "f0_cycles": 5172730,
+      "f1a_cycles": 5749229,
+      "delta_cycles": 576499,
+      "increase_percent": 11.144966004411597,
+      "delta_imem_requests": 220006,
+      "f1a_stale_drop": 220006,
+      "f1a_stale_drain_cycles": 901818,
+      "delta_stall_if": 884187,
+      "delta_fetch_wait": 428727,
+      "delta_branch_flush": 0,
+      "guard_pass": false
+    },
+    {
+      "workload": "mem_seq",
+      "delay": 0,
+      "f0_cycles": 3042223,
+      "f1a_cycles": 2582793,
+      "delta_cycles": -459430,
+      "increase_percent": -15.101785766526648,
+      "delta_imem_requests": 114801,
+      "f1a_stale_drop": 114778,
+      "f1a_stale_drain_cycles": 0,
+      "delta_stall_if": 286794,
+      "delta_fetch_wait": -1147983,
+      "delta_branch_flush": 0,
+      "guard_pass": true
+    },
+    {
+      "workload": "mem_seq",
+      "delay": 1,
+      "f0_cycles": 5108405,
+      "f1a_cycles": 5050468,
+      "delta_cycles": -57937,
+      "increase_percent": -1.1341504833700538,
+      "delta_imem_requests": 172101,
+      "f1a_stale_drop": 172101,
+      "f1a_stale_drain_cycles": 344202,
+      "delta_stall_if": 172113,
+      "delta_fetch_wait": -1205348,
+      "delta_branch_flush": 0,
+      "guard_pass": true
+    },
+    {
+      "workload": "mem_seq",
+      "delay": 2,
+      "f0_cycles": 7273882,
+      "f1a_cycles": 7456315,
+      "delta_cycles": 182433,
+      "increase_percent": 2.508055533482671,
+      "delta_imem_requests": 172101,
+      "f1a_stale_drop": 172101,
+      "f1a_stale_drain_cycles": 677434,
+      "delta_stall_if": 468935,
+      "delta_fetch_wait": -1419485,
+      "delta_branch_flush": 0,
+      "guard_pass": false
+    }
+  ],
+  "nocache_d2_cross_workload": [
+    {
+      "workload": "alu_ilp",
+      "f0_cycles": 5791747,
+      "f1a_cycles": 5722497,
+      "delta_cycles": -69250,
+      "increase_percent": -1.1956668687358063,
+      "guard_pass": true,
+      "delta_stall_if": 506377,
+      "delta_fetch_wait": -69294,
+      "delta_mem_stall": 1,
+      "delta_imem_requests": 120007,
+      "f1a_stale_drop": 120007,
+      "f1a_stale_drain_cycles": 506376
+    },
+    {
+      "workload": "alu_latency",
+      "f0_cycles": 5795747,
+      "f1a_cycles": 6219933,
+      "delta_cycles": 424186,
+      "increase_percent": 7.3189185104180705,
+      "guard_pass": false,
+      "delta_stall_if": 1054899,
+      "delta_fetch_wait": 424141,
+      "delta_mem_stall": -5,
+      "delta_imem_requests": 250009,
+      "f1a_stale_drop": 250009,
+      "f1a_stale_drain_cycles": 1054904
+    },
+    {
+      "workload": "ctrl_branch",
+      "f0_cycles": 5172730,
+      "f1a_cycles": 5749229,
+      "delta_cycles": 576499,
+      "increase_percent": 11.144966004411597,
+      "guard_pass": false,
+      "delta_stall_if": 884187,
+      "delta_fetch_wait": 428727,
+      "delta_mem_stall": -17631,
+      "delta_imem_requests": 220006,
+      "f1a_stale_drop": 220006,
+      "f1a_stale_drain_cycles": 901818
+    },
+    {
+      "workload": "fp_fp16",
+      "f0_cycles": 597568,
+      "f1a_cycles": 561074,
+      "delta_cycles": -36494,
+      "increase_percent": -6.107087394237978,
+      "guard_pass": true,
+      "delta_stall_if": 34552,
+      "delta_fetch_wait": -36533,
+      "delta_mem_stall": -10,
+      "delta_imem_requests": 8192,
+      "f1a_stale_drop": 8192,
+      "f1a_stale_drain_cycles": 34562
+    },
+    {
+      "workload": "fp_scalar",
+      "f0_cycles": 507274,
+      "f1a_cycles": 502773,
+      "delta_cycles": -4501,
+      "increase_percent": -0.8872916806301919,
+      "guard_pass": true,
+      "delta_stall_if": 51918,
+      "delta_fetch_wait": -20382,
+      "delta_mem_stall": -12,
+      "delta_imem_requests": 12339,
+      "f1a_stale_drop": 12339,
+      "f1a_stale_drain_cycles": 51930
+    },
+    {
+      "workload": "kernel_crc",
+      "f0_cycles": 426973,
+      "f1a_cycles": 398793,
+      "delta_cycles": -28180,
+      "increase_percent": -6.599948942907397,
+      "guard_pass": true,
+      "delta_stall_if": 7238,
+      "delta_fetch_wait": -61469,
+      "delta_mem_stall": -2395,
+      "delta_imem_requests": 2566,
+      "f1a_stale_drop": 2566,
+      "f1a_stale_drain_cycles": 9633
+    },
+    {
+      "workload": "kernel_hash",
+      "f0_cycles": 83266,
+      "f1a_cycles": 77314,
+      "delta_cycles": -5952,
+      "increase_percent": -7.148175725986597,
+      "guard_pass": true,
+      "delta_stall_if": 2190,
+      "delta_fetch_wait": -38337,
+      "delta_mem_stall": -1649,
+      "delta_imem_requests": 1299,
+      "f1a_stale_drop": 1299,
+      "f1a_stale_drain_cycles": 3839
+    },
+    {
+      "workload": "kernel_matmul",
+      "f0_cycles": 805114,
+      "f1a_cycles": 764813,
+      "delta_cycles": -40301,
+      "increase_percent": -5.005626532391686,
+      "guard_pass": true,
+      "delta_stall_if": 21513,
+      "delta_fetch_wait": -336007,
+      "delta_mem_stall": -4670,
+      "delta_imem_requests": 8966,
+      "f1a_stale_drop": 8966,
+      "f1a_stale_drain_cycles": 26183
+    },
+    {
+      "workload": "kernel_sort",
+      "f0_cycles": 614262,
+      "f1a_cycles": 572372,
+      "delta_cycles": -41890,
+      "increase_percent": -6.819565592532177,
+      "guard_pass": true,
+      "delta_stall_if": -10081,
+      "delta_fetch_wait": -153111,
+      "delta_mem_stall": -39396,
+      "delta_imem_requests": 8590,
+      "f1a_stale_drop": 8590,
+      "f1a_stale_drain_cycles": 29315
+    },
+    {
+      "workload": "mem_ldst",
+      "f0_cycles": 2686449,
+      "f1a_cycles": 2618154,
+      "delta_cycles": -68295,
+      "increase_percent": -2.542203481249784,
+      "guard_pass": true,
+      "delta_stall_if": 103671,
+      "delta_fetch_wait": -595737,
+      "delta_mem_stall": -66314,
+      "delta_imem_requests": 38917,
+      "f1a_stale_drop": 38917,
+      "f1a_stale_drain_cycles": 169985
+    },
+    {
+      "workload": "mem_random",
+      "f0_cycles": 6131621,
+      "f1a_cycles": 5965367,
+      "delta_cycles": -166254,
+      "increase_percent": -2.71142003069009,
+      "guard_pass": true,
+      "delta_stall_if": 229459,
+      "delta_fetch_wait": -2712389,
+      "delta_mem_stall": -187443,
+      "delta_imem_requests": 106501,
+      "f1a_stale_drop": 106501,
+      "f1a_stale_drain_cycles": 416902
+    },
+    {
+      "workload": "mem_seq",
+      "f0_cycles": 7273882,
+      "f1a_cycles": 7456315,
+      "delta_cycles": 182433,
+      "increase_percent": 2.508055533482671,
+      "guard_pass": false,
+      "delta_stall_if": 468935,
+      "delta_fetch_wait": -1419485,
+      "delta_mem_stall": -208499,
+      "delta_imem_requests": 172101,
+      "f1a_stale_drop": 172101,
+      "f1a_stale_drain_cycles": 677434
+    },
+    {
+      "workload": "muldiv",
+      "f0_cycles": 910270,
+      "f1a_cycles": 892703,
+      "delta_cycles": -17567,
+      "increase_percent": -1.9298669625495732,
+      "guard_pass": true,
+      "delta_stall_if": 30165,
+      "delta_fetch_wait": -671861,
+      "delta_mem_stall": -2,
+      "delta_imem_requests": 12009,
+      "f1a_stale_drop": 8013,
+      "f1a_stale_drain_cycles": 30167
+    },
+    {
+      "workload": "neon_vect",
+      "f0_cycles": 524132,
+      "f1a_cycles": 534493,
+      "delta_cycles": 10361,
+      "increase_percent": 1.9767921058054079,
+      "guard_pass": true,
+      "delta_stall_if": 43114,
+      "delta_fetch_wait": -44129,
+      "delta_mem_stall": -2280,
+      "delta_imem_requests": 10745,
+      "f1a_stale_drop": 10745,
+      "f1a_stale_drain_cycles": 45394
+    }
+  ],
+  "static_review": {
+    "rtl_files": [
+      {
+        "path": "rtl/lcvex_core.sv",
+        "ranges": [
+          "831-880",
+          "882-903",
+          "1810-1819",
+          "1830-1864",
+          "2040-2149",
+          "4306-4322"
+        ],
+        "observations": [
+          "FIFO active only with enable=1 and depth=2",
+          "kill flushes FIFO and bumps epoch",
+          "stale drain blocks new fetch/MMU issue",
+          "current response requires current epoch",
+          "stall_id includes stale drain",
+          "flush has priority over push/pop"
+        ]
+      },
+      {
+        "path": "rtl/lcvex_mem_delay.sv",
+        "ranges": [
+          "50-70",
+          "74-109"
+        ],
+        "observations": [
+          "mode2 delay is deterministic LFSR 0..4",
+          "single outstanding request/response pending gates req_ready"
+        ]
+      },
+      {
+        "path": "sim/microbench/microbench_runner.cc",
+        "ranges": [
+          "602-616",
+          "625-690",
+          "814-841"
+        ],
+        "observations": [
+          "stall and handshake counters are per-cycle observation predicates",
+          "FIFO counters sample read-only top ports"
+        ]
+      }
+    ],
+    "sva_not_rerun": true,
+    "evidence_level": "aggregate_counter_and_static_correlation_only",
+    "causality_proven": false,
+    "same_root_cause_judgment": "alu_latency/ctrl_branch are a shared front-end wait amplification subclass; mem_seq has different wait/memory overlap and cannot be asserted fully same-origin."
+  },
+  "dynamic_probe_plan": {
+    "rows": [
+      "nocache_d2_f0/alu_latency",
+      "nocache_d2_f1a/alu_latency",
+      "nocache_d2_f0/ctrl_branch",
+      "nocache_d2_f1a/ctrl_branch",
+      "nocache_d2_f0/mem_seq",
+      "nocache_d2_f1a/mem_seq"
+    ],
+    "signals": [
+      "commit packet + commit_ready",
+      "stall_if/fetch_wait/branch_flush/mem_stall/ptw_stall",
+      "if_pc/fetch_pc_r/fetch_pending/fetch_translated/fetch_trans_busy",
+      "fetch_epoch/FIFO occupancy peak push pop flush/stale drain drop",
+      "fetch_stale_mmu/fetch_stale_imem",
+      "imem/dmem/arb/L2/delay-router/RAM valid-ready handshakes",
+      "delay req_pending/rsp_pending/delay_cnt/LFSR"
+    ],
+    "stop_conditions": [
+      "first commit field mismatch by seq",
+      "FIFO occupancy>2 or overflow",
+      "single-outstanding handshake violation",
+      "timeout/error",
+      "resource budget violation"
+    ],
+    "success_condition": "six rows complete with no commit mismatch and retained bounded event timeline",
+    "minimum_write_set": [
+      "tb/sv/lcvex_soc_tb.sv read-only delay probe ports",
+      "sim/microbench/microbench_runner.cc bounded event output and early-stop checks"
+    ],
+    "reuse": "sim/microbench/perf_runner.py --trace",
+    "not_implemented_in_this_task": true
+  },
+  "resource_estimate": {
+    "status": "estimate_only",
+    "cpu": 1,
+    "cpu_quota": "<=50%",
+    "memory_max_mb": 2048,
+    "disk_artifact_mb": 512,
+    "wall_minutes_upper_bound": 30,
+    "serial_runner_rebuilds": 2,
+    "serial_rows": 6,
+    "own_worktree_required": true,
+    "reuse_other_builds": false
+  },
+  "validation": [
+    {
+      "level": "L0",
+      "test": "archive JSON/CSV hash/schema/key/strict audit",
+      "result": "pass; 196 rows/98 pairs, schema 196/196, strict 98/98"
+    },
+    {
+      "level": "L0",
+      "test": "target nested counter delta recomputation",
+      "result": "pass; stalls, requests/responses, cache and FIFO values retained for all three d2 pairs"
+    },
+    {
+      "level": "L0",
+      "test": "cross-config/workload comparison",
+      "result": "pass; nocache d0/d1/d2 target table and all 14 nocache_d2 workloads recorded"
+    },
+    {
+      "level": "static",
+      "test": "RTL path review",
+      "result": "pass; fetch FIFO/epoch/stale quarantine and mode2 delay path cited; no functional change"
+    }
+  ],
+  "not_run": [
+    "Verilator",
+    "QEMU",
+    "Gate D",
+    "Linux",
+    "Quartus/FPGA",
+    "dynamic six-row probe",
+    "SVA rerun"
+  ],
+  "known_limits": [
+    "aggregate stall predicates overlap and are not additive cycle decomposition",
+    "epoch_final is modulo-8-bit final value; epoch_bumps is the cumulative observation",
+    "mode2 LFSR is reproducible but F0/F1a schedule can sample different phases",
+    "no per-cycle/per-request trace exists in T-004 matrix"
+  ],
+  "conclusion": "T-004 strict architecture 98/98 and FIFO bounds remain valid; cycle guard is 95/98 with exactly three nocache_d2 failures. Evidence points to FIFO stale-quarantine/delay2 backpressure interaction, but does not prove a single RTL cause; F1a default and performance signoff remain blocked."
+}

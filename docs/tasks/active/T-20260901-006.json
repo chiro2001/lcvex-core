@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-006",
+  "label": "PE-F1G-D2-PERF-AUDIT",
+  "parent": "T-20260830-033",
+  "title": "F1a nocache delay2 三项性能护栏回退只读诊断",
+  "kind": "performance-static-diagnosis",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-d2-performance-audit",
+  "agent_type": "read-only-performance-analysis",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260901-004"],
+  "base_sha": "aa60cfec24ca880841257ccc80e96f8138caf023",
+  "branch": "review/T-20260901-006-f1a-d2-performance",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-006",
+  "scope": "只读分析 T-004 中 nocache_d2/alu_latency、ctrl_branch、mem_seq 三项 F1a cycle guard 回退，使用已归档 196-row JSON/CSV 的周期、stall、fetch、FIFO、cache/request counters，并静态审阅取指 FIFO/epoch/stale-drain 与 MEM_DELAY_MODE=2 路径。不得修改 RTL、runner、workload、比较器、阈值或参考结果，不启动 Verilator/QEMU/Gate/Linux/Quartus。",
+  "planning_guidance": {
+    "comparison": [
+      "逐项分解 F1a-F0 cycles、stall_if、fetch_wait、branch_flush、mem_stall、ptw_stall、requests/responses、FIFO flush/stale drop/drain；标出能解释和不能解释的差额。",
+      "横向比较同 workload 的 nocache d0/d1/d2 与相邻通过 workload，区分固定 delay2 交互、分支密度、访存密度和测量噪声；本矩阵确定性执行，不用无证据的噪声解释回退。",
+      "审阅 RTL 中 fetch FIFO pop/refill、epoch bump、stale quarantine 和 memory backpressure 组合，定位最可能的额外气泡路径。"
+    ],
+    "output": [
+      "给出三项是否同源、最小动态 probe、预期可观测信号和单一最小后继写集；不在本任务实现。",
+      "不得把 98/98 架构正确性与 95/98 性能护栏混为一谈，也不得降低 2%+64 阈值。"
+    ]
+  },
+  "writes": [
+    "docs/F1A_D2_PERFORMANCE_REGRESSION_DIAGNOSIS.md",
+    "docs/handoffs/T-20260901-006-f1a-d2-performance.md",
+    "docs/tasks/evidence/T-20260901-006.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/PERFORMANCE_F1F_V2_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-004/f1f_v2_matrix.json", "docs/evidence/artifacts/T-20260901-004/f1f_v2_matrix.csv",
+    "docs/tasks/evidence/T-20260901-004.json", "rtl/lcvex_core.sv", "tb/sv/lcvex_soc_tb.sv", "sim/microbench/**"
+  ],
+  "validation": {
+    "l0": ["三项及对照组 counter delta 独立重算；JSON/CSV/source/schema/hash audit"],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "基于归档 counters 和 RTL 静态路径给出可审计的差额分解、同源判断和最小动态 probe；明确证据边界，不把相关性写成已证实因果。",
+  "resource": {"cpu": 1, "memory_mb": 2048, "disk_mb": 512, "timeout_s": 1800, "allocation_ratio": 0.1},
+  "budget_policy": {"initial_minutes": 30, "extension_increment_minutes": 30, "max_minutes": 90, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "not_required", "rule": "只读审计；禁止启动任何构建/仿真/综合"},
+  "created_at": "2026-09-01T07:13:27+08:00",
+  "updated_at": "2026-09-01T07:35:22+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T07:14:38+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-20260901-002 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-006。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-006"
+  },
+  "handoff": "docs/handoffs/T-20260901-006-f1a-d2-performance.md",
+  "evidence": "docs/tasks/evidence/T-20260901-006.json",
+  "merge_sha": "46baab67e5d07b1696b3ee67d572bfcb70b83a5e",
+  "merged_at": "2026-09-01T07:35:16+08:00",
+  "integrator_review": {
+    "received_at": "2026-09-01T07:35:03+08:00",
+    "accepted_at": "2026-09-01T07:35:22+08:00",
+    "status": "accepted_static_d2_performance_diagnosis",
+    "owner_report_tip": "6800b194dd88c0640c0166f9b154f05b4e3a34ce",
+    "checks": [
+      "独立 counter 重算保持 3 个 guard failure、98/98 架构等价和 2%+64 阈值不变",
+      "请求增量只在取指路径，dmem/PTW/cache delta 排除；delay2 stale-drain/backpressure 为强相关而非已证实因果",
+      "alu_latency/ctrl_branch 的 fetch_wait 同向增加，mem_seq 的 fetch_wait/mem_stall 下降，报告未伪称三项完全同源",
+      "未启动 Verilator/QEMU/Gate/Linux/Quartus，写集仅含约定报告/handoff/evidence"
+    ]
+  },
+  "known_limits": ["不产生动态性能复测或 RTL 修复证据。", "F1a 默认开关继续为 0。"],
+  "next": "等待标准 Gate D 结果；随后登记 nocache_d2 三 workload、F0/F1a 共 6 行的有界事件 probe。"
+}

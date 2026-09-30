@@ -1,0 +1,57 @@
+%Warning-UNSIGNED: rtl/lcvex_mmu.sv:170:24: Comparison is constant due to unsigned arithmetic
+                                          : ... note: In instance 'lcvex_catapult_soc_top.core.mmu'
+  170 |     pa_in_window = (pa >= SRAM_BASE && pa < SRAM_TOP) ||
+      |                        ^~
+                   ... For warning description see https://verilator.org/warn/UNSIGNED?v=5.050
+                   ... Use "/* verilator lint_off UNSIGNED */" and lint_on around source to disable this message.
+%Warning-UNSIGNED: rtl/lcvex_mmu.sv:181:24: Comparison is constant due to unsigned arithmetic
+                                          : ... note: In instance 'lcvex_catapult_soc_top.core.mmu'
+  181 |                    (pa >= SRAM_BASE && pa < SRAM_TOP);
+      |                        ^~
+%Warning-UNSIGNED: rtl/lcvex_decode.sv:123:13: Comparison is constant due to unsigned arithmetic
+                                             : ... note: In instance 'lcvex_catapult_soc_top.core.decode'
+  123 |         ((a >= SRAM_BASE) && (a <= (SRAM_TOP - 64'd16))) ||
+      |             ^~
+%Warning-UNSIGNED: rtl/lcvex_decode.sv:135:13: Comparison is constant due to unsigned arithmetic
+                                             : ... note: In instance 'lcvex_catapult_soc_top.core.decode'
+  135 |         ((a >= SRAM_BASE) && (a <= (SRAM_TOP - 64'd16))) ||
+      |             ^~
+%Warning-UNSIGNED: rtl/lcvex_decode.sv:2839:20: Comparison is constant due to unsigned arithmetic
+                                              : ... note: In instance 'lcvex_catapult_soc_top.core.decode'
+ 2839 |         (d.next_pc < SRAM_BASE || d.next_pc >= SRAM_TOP)) begin
+      |                    ^
+%Warning-UNSIGNED: rtl/lcvex_decode.sv:2846:33: Comparison is constant due to unsigned arithmetic
+                                              : ... note: In instance 'lcvex_catapult_soc_top.core.decode'
+ 2846 |     end else if (!mmu_en && (pc < SRAM_BASE || pc >= SRAM_TOP)) begin
+      |                                 ^
+%Warning-UNSIGNED: rtl/lcvex_decode.sv:2896:32: Comparison is constant due to unsigned arithmetic
+                                              : ... note: In instance 'lcvex_catapult_soc_top.core.decode'
+ 2896 |                  !((d.mem_addr >= SRAM_BASE && d.mem_addr < SRAM_TOP) ||
+      |                                ^~
+%Warning-UNSIGNED: rtl/lcvex_mem_router.sv:86:11: Comparison is constant due to unsigned arithmetic
+                                                : ... note: In instance 'lcvex_catapult_soc_top.router'
+   86 |     if (a >= SRAM_BASE && a < SRAM_TOP) begin
+      |           ^~
+%Warning-UNSIGNED: rtl/lcvex_core.sv:167:13: Comparison is constant due to unsigned arithmetic
+                                           : ... note: In instance 'lcvex_catapult_soc_top.core'
+  167 |         ((a >= SRAM_BASE) && (a <= (SRAM_TOP - 64'd8))) ||
+      |             ^~
+%Warning-UNSIGNED: rtl/lcvex_core.sv:1166:21: Comparison is constant due to unsigned arithmetic
+                                            : ... note: In instance 'lcvex_catapult_soc_top.core'
+ 1166 |            (elr_el1 < SRAM_BASE || elr_el1 >= SRAM_TOP))
+      |                     ^
+%Warning-UNSIGNED: rtl/lcvex_core.sv:2724:44: Comparison is constant due to unsigned arithmetic
+                                            : ... note: In instance 'lcvex_catapult_soc_top.core'
+ 2724 |           end else if (!mmu_en && (elr_el1 < SRAM_BASE || elr_el1 >= SRAM_TOP)) begin
+      |                                            ^
+%Warning-MULTIDRIVEN: rtl/lcvex_bram_boot.sv:38:15: Signal has multiple driving blocks with different clocking: 'lcvex_catapult_soc_top.bram.mem'
+                      rtl/lcvex_bram_boot.sv:118:15: ... Location of first driving block
+  118 |               mem[req.addr[AW-1:0] + AW'(i)] <= req.wdata[i*8 +: 8];
+      |               ^~~
+                      rtl/lcvex_bram_boot.sv:92:11: ... Location of other driving block
+   92 |           mem[prog_addr[AW-1:0] + AW'(i)] <= prog_wdata[i*8 +: 8];
+      |           ^~~
+                      ... For warning description see https://verilator.org/warn/MULTIDRIVEN?v=5.050
+                      ... Use "/* verilator lint_off MULTIDRIVEN */" and lint_on around source to disable this message.
+%Error: Exiting due to 12 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --lint-only --top-module lcvex_catapult_soc_top -f fpga/catapult_a10/tb/filelist_soc.f` failed. (See above for error)

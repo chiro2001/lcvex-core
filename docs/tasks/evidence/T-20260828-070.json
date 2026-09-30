@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260828-070",
+  "state": "finalized",
+  "base_sha": "c9cdc5d9780fc2296275e4366a365073711e9032",
+  "head_sha": "121d8b9bbd3579ca9e466ee9efac009552a5fec9",
+  "merge_sha": "e40f119e0c129a743c296187b9911a0741600d25",
+  "owner": "dsh-pilot-template-routing",
+  "model": "deepseek-v4-flash",
+  "reasoning_effort": "max",
+  "timezone": "Asia/Shanghai",
+  "reported_at": "2026-08-28T21:50:09+08:00",
+  "scope": "docs/tasks/TEMPLATE.json 模型路由字段与 docs/MULTI_AGENT_WORKFLOW.md 2.1 节对齐：两处 model_selection 改为省略 model=deepseek-v4-flash[max]；删除矛盾字段 disabled_profiles；复核 complex_planner/review/agent_type 无需改动。",
+  "files": [
+    "docs/tasks/TEMPLATE.json",
+    "docs/handoffs/T-20260828-070-dsh-workflow-pilot.md",
+    "docs/tasks/evidence/T-20260828-070.json"
+  ],
+  "toolchain": {
+    "python": "3.12.x"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/TEMPLATE.json",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "TEMPLATE.json 为合法 JSON。"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 whitespace 错误。"
+    },
+    {
+      "run_id": "owner-l0-003",
+      "source_sha": "",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "grep -n \"luna\" docs/tasks/TEMPLATE.json",
+      "seed": null,
+      "exit_code": 1,
+      "result": "pass",
+      "summary": "无输出：旧默认通道 gpt-5.6-luna[max] 引用已清除（grep exit 1 = 无匹配，符合预期）。"
+    },
+    {
+      "run_id": "owner-l0-004",
+      "source_sha": "",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "人工复核 model/model_selection/disabled_profiles 与 MULTI_AGENT_WORKFLOW.md 2.1 节表 + 路由规则第 1 条",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无矛盾：省略 model ≡ deepseek-v4-flash[max]；complex_planner=gpt-5.6-terra[xhigh]，review=gpt-5.6-sol[high]，均与表一致。"
+    },
+    {
+      "run_id": "integrator-l0-001",
+      "source_sha": "e40f119e0c129a743c296187b9911a0741600d25",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/TEMPLATE.json docs/tasks/evidence/T-20260828-070.json",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "合并 SHA 上 TEMPLATE/evidence 均合法 JSON。"
+    },
+    {
+      "run_id": "integrator-l0-002",
+      "source_sha": "e40f119e0c129a743c296187b9911a0741600d25",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "git diff --check <merge>..HEAD 范围 + grep -c luna docs/tasks/TEMPLATE.json",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "diff --check 无 whitespace 错误；grep -c luna = 0；cherry-pick 无冲突。"
+    }
+  ],
+  "artifacts": [],
+  "known_limits": [
+    "仅 L0 校验：文档改动不涉及 RTL/构建，无需 L1-L4。",
+    "archive 任务中的旧 disabled_profiles / gpt-5.6-luna[max] 记录为历史事实未改写。",
+    "head_sha/merge_sha 已由集成者在合并 SHA e40f119 复跑后补全定稿。"
+  ],
+  "integration_review": {
+    "reviewed_at": "2026-08-28T22:05:00+08:00",
+    "reviewer": "root-integrator",
+    "method": "cherry-pick 121d8b9 -> feature/p7-final",
+    "conflict": "none",
+    "scope_check": "最终 diff 仅 3 文件：TEMPLATE.json（5 行模型路由字段）、handoff、evidence；未触碰 active/archive 任务、TASKS.md、PROJECT_STATUS.md、ROADMAP.md、QEMU fork、RTL、Makefile",
+    "conclusion": "合并 SHA L0 复跑全绿，写集边界核对通过，同意进入归档"
+  }
+}

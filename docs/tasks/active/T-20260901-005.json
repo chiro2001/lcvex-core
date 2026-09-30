@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-005",
+  "label": "FINAL-GATED-F1F",
+  "title": "F1F strict 98/98 后冻结候选标准完整 Gate D",
+  "kind": "integration-gate",
+  "priority": "critical",
+  "phase": "cancelled",
+  "dispatch_status": "superseded",
+  "assigned_owner": "root-integrator",
+  "agent_type": "primary-integrator",
+  "model": "current-primary-session",
+  "reasoning_effort": "current-session",
+  "depends_on": ["T-20260901-004"],
+  "base_sha": "aa60cfec24ca880841257ccc80e96f8138caf023",
+  "branch": "detached",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-005-gate",
+  "scope": "按用户明确授权，在冻结 candidate SHA aa60cfe 的 detached gate worktree 运行标准完整本地 Gate D：make test、coverage、M2/R1/cache/delay2、P5a hardening、Gate C/P5a/P4b、随机 3×100k、覆盖记账和 baremetal-C。标准 Gate D 使用仓库默认 FETCH_FIFO_ENABLE=0；不宣称 F1a-on Gate D，不运行 Linux/nightly/Quartus，不修改源码、测试、参考结果或断言。",
+  "planning_guidance": {
+    "freeze": [
+      "detached worktree 必须 clean 且 HEAD 固定 aa60cfec24ca880841257ccc80e96f8138caf023；结束时再次核对。",
+      "QEMU release/patch/plugin 和所有输入按 Gate 脚本现有 provenance；不切换 QEMU master、不修改 patch。"
+    ],
+    "execution": [
+      "使用 bash sim/difftest/run_gate_d.sh --parallel，不使用 --skip-baremetal。",
+      "整个 Gate 置于 systemd-run --user scope：MemoryMax=15G、MemorySwapMax=0、CPUQuota=50%，MAKEFLAGS=-j1、VERILATOR_JOBS=1。",
+      "完整日志和 journal 摘要存仓库外 `/home/chiro/projects/mycpu/lcvex-artifacts/T-20260901-005/`，不写系统 /tmp，不停止或干预其他进程。"
+    ],
+    "acceptance": [
+      "Gate D 脚本 exit 0、全部 step green；任何红项原样保留，不重写预期或关闭断言。",
+      "记录 source SHA、命令、scope、wall/CPU/MemoryPeak/swap、log SHA256、关键子项计数和无孤儿进程检查。"
+    ]
+  },
+  "writes": [
+    "docs/GATE_D_F1F_RESULTS.md",
+    "docs/handoffs/T-20260901-005-gate-d-f1f.md",
+    "docs/tasks/evidence/T-20260901-005.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/PERFORMANCE_F1F_V2_RESULTS.md",
+    "sim/difftest/run_gate_d.sh", "Makefile", "rtl/**", "tb/**", "sim/**", "scripts/**", "baremetal/**"
+  ],
+  "validation": {
+    "l0": [],
+    "l1": [],
+    "l2": [],
+    "l3": ["bash sim/difftest/run_gate_d.sh --parallel"],
+    "l4": []
+  },
+  "acceptance": "冻结 SHA 的标准 Gate D 全绿且证据可审计即可完成；该结果验证默认 F0 主线，不解除 F1a 三项性能护栏，也不替代 CI/Linux/FPGA。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 24576, "timeout_s": 21600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 120, "extension_increment_minutes": 120, "max_minutes": 720, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-09-01T07:14:38+08:00", "released_at": "2026-09-01T08:26:52+08:00", "reason": "串行 Gate D exit 1；cache-off testbench elaboration 为首因，随机/coverage 为级联失败；scope 已退出且无孤儿进程", "rule": "本地唯一重型任务；15G/no-swap/50%-CPU/-j1；不与性能 runner/Linux/Quartus 并发"},
+  "created_at": "2026-09-01T07:13:27+08:00",
+  "updated_at": "2026-09-01T11:05:07+08:00",
+  "dispatch": {
+    "started_at": "2026-09-01T08:05:30+08:00",
+    "owner": "root-integrator",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-005-gate",
+    "artifact_root": "/home/chiro/projects/mycpu/lcvex-artifacts/T-20260901-005",
+    "unit": "lcvex-t20260901-005-gate-d-serial.scope",
+    "mode": "serial"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "started_at": "2026-09-01T07:14:38+08:00",
+      "stopped_at": "2026-09-01T08:05:30+08:00",
+      "unit": "lcvex-t20260901-005-gate-d.scope",
+      "mode": "parallel",
+      "result": "aborted_by_integrator_after_irrecoverable_planner_red",
+      "reason": "run_lockstep_parallel planner 在全机 loadavg 下等待 600s 后 parallel=0，首个 Gate step 已记录资源调度失败；第二批再次进入同类等待。仅终止本任务 own scope，未触碰其他进程。",
+      "log": "/home/chiro/projects/mycpu/lcvex-artifacts/T-20260901-005/gate_d_parallel_aborted.log",
+      "log_sha256": "2526093d11a25f118699c8f358ca6212181540c9cb023305b5a19df113eca5f0",
+      "exit_code": 130
+    },
+    {
+      "attempt": 2,
+      "started_at": "2026-09-01T08:05:30+08:00",
+      "finished_at": "2026-09-01T08:26:52+08:00",
+      "unit": "lcvex-t20260901-005-gate-d-serial.scope",
+      "mode": "serial",
+      "status": "failed",
+      "exit_code": 1,
+      "wall_seconds": 1241.087,
+      "cpu_seconds": 620.510,
+      "memory_peak": "4.7G",
+      "log": "/home/chiro/projects/mycpu/lcvex-artifacts/T-20260901-005/gate_d_serial.log",
+      "log_sha256": "dd531ff64ebc8ac2657385e31e922abab6bb343ab097ae56d5a8a6a959adc526"
+    }
+  ],
+  "handoff": "docs/handoffs/T-20260901-005-gate-d-f1f.md",
+  "evidence": "docs/tasks/evidence/T-20260901-005.json",
+  "failure": {
+    "root_cause": "默认 I/D-L1/L2 关闭时，tb/sv/lcvex_soc_tb.sv 的性能 counter 在参数 generate 内直接层次引用已裁剪的 dl1/il1/l2 实例，Verilator 报 42 个 missing-module errors。",
+    "failed_steps": ["make test（单元 + SVA）", "随机回归（seed 1~3 × 100k）", "指令覆盖记账（random trace 缺失级联）"],
+    "green_summary": "coverage、M2/R1 base+cache、delay2、P5a hardening、Gate C、P5a、P4b、baremetal-C 200 均 green；日志共 148 个 OK(green)。"
+  },
+  "superseded_by": "T-20260901-008",
+  "resolution": "T-20260901-007 修复 cache-off elaboration；T-20260901-008 在新冻结 SHA 4cf2137 的全新 detached worktree 完整串行 Gate D exit 0。T-005 原失败证据保持不改写。",
+  "known_limits": ["Gate D 未通过，不能用其它绿色 step 替代。", "标准 Gate D 为默认 F0，不是 F1a-on Gate D；不运行 Linux、可信 CI、Quartus 或板测。"],
+  "next": "由 T-20260901-008 的通过证据取代本失败尝试；本任务不重开。"
+}

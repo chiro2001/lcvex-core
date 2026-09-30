@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-011",
+  "label": "PE-F1J-FULL-MATRIX",
+  "parent": "T-20260830-033",
+  "title": "F1a 控制流取指修复后完整 196 行回归",
+  "kind": "performance-integration-matrix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted",
+  "assigned_owner": "luna-f1a-full-matrix",
+  "agent_type": "long-running-verification-and-evidence",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260901-010"],
+  "base_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b",
+  "branch": "verify/T-20260901-011-f1a-full-matrix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-011",
+  "scope": "在冻结 source SHA f0edcd2528c01520eb4e4922266a7913c5c7539b 上，完整运行 14 workloads × 7 cache/delay bases × F0/F1a=196 canonical rows，统一 max_cycles=10000000。目标是确认 T-010 控制流 fence 没有在其它 workload/config 引入架构差异、FIFO/epoch 越界或新的性能护栏失败，并闭合原 nocache_d2 三项回退。不得修改 RTL、runner、workload、QEMU/reference、commit digest schema、2%+64 阈值或默认 FETCH_FIFO_ENABLE=0；不运行 Gate D、Linux、Quartus 或上板。",
+  "planning_guidance": {
+    "provenance": [
+      "入口固定为 python3 scripts/run_perf_matrix.py --configs all --workloads all --max-cycles 10000000；从本任务 own worktree 的 clean f0edcd2 构建，不访问 T-004/T-009/T-010 build。",
+      "所有 196 row 的 sha/git_sha/measurement_source_sha 必须唯一且等于 f0edcd2528c01520eb4e4922266a7913c5c7539b；每个 F0/F1a pair 的 image/source/tool/max_cycles 与除 FIFO 外参数必须一致。",
+      "commit digest schema 必须统一为 lcvex-commit-digest-v2-active-payload；缺失、legacy、混合 schema 或 invalid digest 直接失败。诊断 probe schema v2 不替代 commit digest，本矩阵默认无需为 196 行开启 probe。"
+    ],
+    "execution": [
+      "整个矩阵放入单一 systemd user scope：MemoryMax=15G、MemorySwapMax=0、CPUQuota=50%，环境 MAKEFLAGS=-j1、VERILATOR_JOBS=1；禁止脚本外并行、--parallel、Gate/Linux/Quartus 并发。",
+      "按 T-004 的 canonical config/workload 顺序从头运行；不筛掉失败、不改 timeout、不用其它 SHA 的绿色行拼接。完整日志/build 留 own worktree，Git 只提交紧凑 JSON/CSV、报告、handoff/evidence。",
+      "启动前确认无其它重型 Verilator/Gate/Quartus scope；不停止、暂停、降优先级或抢占任何现有进程。若资源门不满足，报告并等待，不私自提高限制。"
+    ],
+    "acceptance_checks": [
+      "196 rows 完整、无重复/缺失，全部 status=pass；98 pairs 全部 retired、commit digest、memory digest/effects 严格相同。",
+      "所有 F1a rows occupancy/peak<=2、overflow=0、push>=pop；任何 epoch/FIFO assertion 或 timeout 原样失败。",
+      "所有 98 pairs 满足 cycles_f1a <= cycles_f0*1.02+64；重点核对 alu_latency/ctrl_branch/mem_seq 的 nocache_d2 与 T-010 六行一致，并列出相对 T-004 的 guard 状态变化。",
+      "若任何正确性或性能门失败，F1a 保持默认关闭并输出精确 pair 索引；本任务不修代码。只有 196/196、98/98、98/98 guard 和 FIFO 门全部通过才建议进入默认启用决策。"
+    ]
+  },
+  "writes": [
+    "docs/PERFORMANCE_F1J_FULL_MATRIX_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-011/f1j_full_matrix.json",
+    "docs/evidence/artifacts/T-20260901-011/f1j_full_matrix.csv",
+    "docs/handoffs/T-20260901-011-f1a-full-matrix.md",
+    "docs/tasks/evidence/T-20260901-011.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/F1A_CONTROL_FLOW_FETCH_FENCE_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-010/f1a_control_flow_fence_summary.json",
+    "docs/tasks/evidence/T-20260901-010.json",
+    "docs/PERFORMANCE_F1F_V2_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-004/f1f_v2_matrix.json",
+    "docs/tasks/evidence/T-20260901-004.json",
+    "scripts/run_perf_matrix.py",
+    "sim/microbench/**",
+    "rtl/**",
+    "baremetal/perf/**"
+  ],
+  "validation": {
+    "l0": ["source tree clean；registry/Python/JSON/CSV consistency；artifact hashes；git diff --check"],
+    "l1": ["14 workload images 与 14 F0/F1a config runners 在 own worktree 串行重建"],
+    "l2": ["196-row/98-pair 10M 完整矩阵；strict architecture、FIFO bounds、98 个 2%+64 guard"],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "冻结 SHA 的 196 canonical rows/98 unique pairs 完整且 provenance 唯一；196/196 pass、98/98 strict architecture equivalent、所有 F1a FIFO bounds 合法、98/98 性能 guard 通过。任一失败原样保留并继续关闭 F1a。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 24576, "timeout_s": 21600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 240, "extension_increment_minutes": 120, "max_minutes": 600, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-09-01T16:32:45+08:00", "released_at": "2026-09-01T20:14:46+08:00", "reason": "唯一 matrix scope 完成且 inactive；196/196 rows、98/98 strict、98/98 guard、FIFO bounds 全通过", "preflight": "无 Verilator/microbench/matrix/Gate/Quartus 进程或 scope；29GiB RAM、15GiB available；不停止或调整现有进程", "rule": "本地唯一重型任务；MemoryMax=15G、MemorySwapMax=0、CPUQuota=50%、MAKEFLAGS=-j1、VERILATOR_JOBS=1；不得与 Gate/Linux/Quartus/其他 Verilator 并发"},
+  "created_at": "2026-09-01T16:31:16+08:00",
+  "updated_at": "2026-09-01T20:25:30+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T16:32:45+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-20260901-010 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-011。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-011"
+  },
+  "handoff": "docs/handoffs/T-20260901-011-f1a-full-matrix.md",
+  "evidence": "docs/tasks/evidence/T-20260901-011.json",
+  "merge_sha": "18a8e1abfca25d7bc9bdb622aae61aa87110aea2",
+  "integrator_review": {
+    "accepted_at": "2026-09-01T20:25:30+08:00",
+    "status": "accepted_full_matrix_all_gates_pass",
+    "owner_tip": "21e9d85ed706740293bec03244ea2f4fdb72120c",
+    "independent_review": {
+      "model": "gpt-5.6-luna(max)",
+      "reported_at": "2026-09-01T20:25:05+08:00",
+      "result": "pass_no_blockers"
+    },
+    "checks": [
+      "JSON/CSV 为 14 configs × 14 workloads、196 unique rows；CSV 44 列加 196 数据行并逐行对应",
+      "196/196 status pass 且 returncode=0；所有 sha/git_sha/measurement_source_sha 为 f0edcd2，active-payload digest schema/valid 统一",
+      "98/98 pair strict retired/commit/memory/effects、image/source/non-FIFO provenance 和 2%+64 guard 全通过",
+      "F1a occupancy/peak 最大 2/2、overflow=0、无 push<pop；总 push-pop 71 且每行差额不超过 depth=2 的完成边界",
+      "T-010 三项周期完全一致；T-004 的 3 个 guard failure 全部闭合",
+      "artifact SHA256 018dc721.../796bbd43... 匹配；唯一 scope wall 12329.890s、CPU 6164.976s、峰值 5.6G，15G/no-swap/50%-CPU/-j1",
+      "合并 SHA 上 JSON/CSV、Python、registry 68 项及 Makefile/runner 一致性、diff 检查全绿"
+    ],
+    "boundary": "矩阵支持进入 F1a 默认启用候选，但不替代默认-on Gate D、多核/FPGA L0、Linux、Quartus 或板测。"
+  },
+  "known_limits": ["Verilator cycle guard 不是 A10/Fmax 证据。", "本任务不运行 Gate D、Linux、QEMU lockstep、Quartus 或板测。"],
+  "next": "登记 F1a 默认启用候选；传播参数并运行默认-on Gate D、多核/FPGA L0，全部通过后再更新阶段状态。"
+}

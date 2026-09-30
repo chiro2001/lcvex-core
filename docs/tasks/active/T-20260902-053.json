@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-053",
+  "label": "FP-P5-RERUN-ROUND14",
+  "title": "FP-P5 round14 on combined T-051 and T-052 candidate",
+  "kind": "verify-fpga-physical",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-fp-p5-rerun14",
+  "agent_type": "remote-quartus-full-flow",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-051",
+    "T-20260902-052"
+  ],
+  "base_sha": "2a74712beaafdbda843cec4e9539a2d9cb1da51a",
+  "branch": "verify/T-20260902-053-fp-p5-rerun-round14",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-053",
+  "scope": "在包含 T-051 precise IRQ/MMU abort 与 T-052 FP response/alignment/divider kill 的冻结合并 SHA 上，以 T-049 同一 full-FP QSF/SDC/IP 和隔离兼容补丁重跑 synthesis -> fitter -> signoff STA；检查旧 response-ready、ap_pre->pp_pre、operand_c 路径是否离开 top-N，并决定是否满足 assembler/SOF 门。",
+  "reads": [
+    "docs/handoffs/T-20260902-049-fp-p5-rerun-round13.md",
+    "docs/tasks/evidence/T-20260902-049.json",
+    "docs/handoffs/T-20260902-051-irq-young-squash.md",
+    "docs/tasks/evidence/T-20260902-051.json",
+    "docs/handoffs/T-20260902-052-fp-rsp-preround-cut.md",
+    "docs/tasks/evidence/T-20260902-052.json",
+    "fpga/catapult_a10/**",
+    "rtl/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-053-fp-p5-rerun-round14.md",
+    "docs/tasks/evidence/T-20260902-053.json",
+    "build/agents/T-20260902-053/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-053-probe\\**"
+  ],
+  "remote": {
+    "host": "192.168.101.5",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-053-probe",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG"
+  },
+  "validation": {
+    "l0": [
+      "远端只读预检、EDA 互斥、资源与 source/QSF/SDC/IP SHA256 manifest"
+    ],
+    "l1": [
+      "full-FP synthesis、fitter、signoff STA",
+      "setup/hold/recovery/removal top-N、EMIF 定向、DDR/Metastability 报告"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "同一隔离 source/QSF/SDC 完成 physical flow，记录资源、Fmax、所有最差 slack/TNS/endpoints/top-N 和 T-049 目标路径 presence。仅当 setup/hold/recovery/removal/min-pulse 全非负且 DDR/Metastability Pass 才运行 assembler 并保存 SOF/hash；否则禁止 assembler/SOF 并给出下一修复路径。不得修改 RTL/QSF/SDC、使用 false_path、读取 license、停止非 EDA 进程、删除未知文件、编程/JTAG/上板。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 43200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 180,
+    "extension_increment_minutes": 60,
+    "max_minutes": 720,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T19:32:53+08:00",
+  "updated_at": "2026-09-04T21:18:27+08:00",
+  "known_limits": [
+    "正式 RTL 不做 Quartus 端口默认值修改；远端只沿用已记录的 lcvex_fp_scalar.sv 隔离兼容补丁",
+    "若远端 probe 已存在、EDA 冲突或资源不足，安全阻断，不抢占、不删除",
+    "本任务只做 physical/assembler 门，不修改 QEMU 或执行板级编程"
+  ],
+  "handoff": "docs/handoffs/T-20260902-053-fp-p5-rerun-round14.md",
+  "evidence": "docs/tasks/evidence/T-20260902-053.json",
+  "head_sha": "67db6986f9dff75749d92d43292bd13c96048232",
+  "merge_sha": "ea18544c1de84d22f1d271cbb28399d1989491f1",
+  "next": "若全绿并生成 SOF，进入 Gate F-BOARD 候选；若 setup 仍红，按新 top-N 登记下一切级",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-04T21:17:38+08:00",
+    "merged_at": "2026-09-04T21:18:27+08:00",
+    "recorded_at": "2026-09-04T21:18:27+08:00",
+    "notes": "Synthesis/fitter completed; only sys_clk_50 setup failed at -2.578 ns. New top-1 is add_align_hi to pp_pre_hi (67 levels). All non-setup timing categories, DDR and Metastability pass; assembler/SOF correctly not run."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-04T19:35:47+08:00",
+    "agent_name": "/root/t053_fp_p5_round14",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-053",
+    "branch": "verify/T-20260902-053-fp-p5-rerun-round14"
+  }
+}

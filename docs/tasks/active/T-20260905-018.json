@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-018",
+  "label": "R18-FP-ACC-KILL-CUT",
+  "title": "Remove core kill controls from non-architectural FP accumulators",
+  "kind": "rtl-timing-optimization",
+  "priority": "high",
+  "phase": "active",
+  "dispatch_status": "assigned",
+  "assigned_owner": "codex-r18-fp-acc",
+  "agent_type": "rtl-implementation",
+  "depends_on": ["T-20260905-013", "T-20260905-014"],
+  "base_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "branch": "timing/T-20260905-018-r18-fp-acc-kill-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-018",
+  "timing_source": {
+    "task": "T-20260905-014",
+    "cones": [
+      {"name": "exmem_valid -> acc", "worst_slack_ns": -0.410, "violated_paths": 50, "logic_levels": 26},
+      {"name": "exmem_valid -> acc_flags", "worst_slack_ns": -0.259, "violated_paths": 50, "logic_levels": 26},
+      {"name": "exmem_wb_rd -> acc", "worst_slack_ns": -0.054, "violated_paths": 24, "logic_levels": 26}
+    ]
+  },
+  "scope": "Eliminate core kill/reset-mux feedback into the non-architectural acc/acc_flags D enables where safe. Reset must retain deterministic zero; kill may retain dead internal payload only if state/request ownership is cleared and every later request acceptance reinitializes accumulators before any slot observes them. Add direct wrapper assertions/tests for kill during TX_RUN/TX_SLOT/TX_DONE followed by clean reissue. Preserve rsp/architectural state and all kill semantics.",
+  "writes": [
+    "rtl/lcvex_neon_fp.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "docs/tasks/evidence/T-20260905-018.json",
+    "docs/handoffs/T-20260905-018-r18-fp-acc-kill-cut.md",
+    "build/agents/T-20260905-018/**"
+  ],
+  "forbidden_regions": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "QEMU/plugin/reference results",
+    "QSF/SDC/timing exceptions",
+    "assembler/bitstream/JTAG/board actions"
+  ],
+  "validation": [
+    "direct wrapper kill/reissue at TX_RUN, TX_SLOT and TX_DONE",
+    "new request acceptance proves accumulator zero before first slot",
+    "held response and reset still deterministic",
+    "P7-3/P7-4/P7-5 vector regressions after integration"
+  ],
+  "acceptance": "Core control inputs no longer drive acc/acc_flags solely to clear dead payload on kill; reset and the next accepted request provide the required initialization; no killed transaction can leak into a later response. Physical zero-path or improvement is claimed only from the next STA.",
+  "resource": "Owner may edit and run only lightweight/static checks initially. Heavy Verilator/QEMU is serialized by the integrator; CPU<=50%, MemoryMax=16G, MemorySwapMax=0, VERILATOR_JOBS=1.",
+  "created_at": "2026-09-05T19:46:11+08:00",
+  "updated_at": "2026-09-05T19:46:11+08:00",
+  "board_policy": "No Quartus assembler, bitstream, JTAG, programming, power-on or board test without explicit user permission."
+}

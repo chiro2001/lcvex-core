@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-049",
+  "state": "done-local-validation",
+  "acceptance_status": "finite-jtag-uart-backpressure-and-paced-host-smoke-pass",
+  "base_sha": "30500395",
+  "branch": "fix/T-20260920-049-b25-coremark-uart-backpressure",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-049",
+  "root_cause": {
+    "file": "fpga/catapult_a10/boot/boot.S",
+    "old_behavior": "uart_putc polls CONTROL.WSPACE 64 times then drops the byte",
+    "board_evidence": "T-046 transcript contained CMSELF PASS then truncated the summary at state=000 before telemetry resumed",
+    "host_model_gap": "existing SoC UART smoke drained one byte every logic cycle"
+  },
+  "implementation": {
+    "file": "fpga/catapult_a10/boot/boot.S",
+    "uart_tx_wait_limit_iterations": 1048576,
+    "finite_timeout_preserved": true,
+    "coremark_algorithm_changed": false,
+    "crc_seed_or_score_math_changed": false,
+    "files": [
+      "fpga/catapult_a10/boot/boot.S",
+      "fpga/catapult_a10/boot/README.md",
+      "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv"
+    ]
+  },
+  "payload": {
+    "bytes": 20448,
+    "bss_end": "0x58f8",
+    "bram_bytes": 65536,
+    "boot_bin_sha256": "241b0ce4dface8c4a9db782b63e4ada8674f5c8b51c00f228a795e98fc1aedab",
+    "boot_hex_sha256": "93cbacda0b8d22864534da5f62ec8f6161ff69ede9eca10e0df2638e995709ab",
+    "boot_mif_sha256": "0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f",
+    "build_manifest_sha256": "d9a087765da1839ed4a2847132999e8755807300f06c015b6f5bae4cd632cd3a",
+    "reproducible_build": true
+  },
+  "verification": {
+    "resource_lock": "local",
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-049 root --min-local-available-mib 8192 --meta stage=firmware_image_and_paced_uart_soc_validation_rerun1 --meta cpu_policy=adaptive --meta memory_policy=no-hard-cap -- bash build/agents/T-20260920-049/run_local_verification.sh",
+    "l0": {
+      "status": "PASS",
+      "reproducible_build": "PASS",
+      "host_test": "PASS correctness=8679CF21 selfcheck=PASS full_math=PASS",
+      "strict_parser": "7/7 PASS",
+      "image_checker": "PASS upstream_files=8 image_end=0x58f8",
+      "log_sha256": "55762ee239f08886bbd26bd8d59740571cb4bcc9ba3e0919ad66432f95c7ba8b"
+    },
+    "soc_behavioral": {
+      "status": "PASS",
+      "coremark_self_transcript_complete": true,
+      "microbench_parser": "PASS",
+      "selfcheck_parser": "PASS",
+      "all_calibration_scenarios": "PASS",
+      "smoke_log_sha256": "b6e8a1aa9a5193927f6fff5be4fca6ba5eca5b02dd05a9173900a2549d10cafb",
+      "driver_log_sha256": "0fb2b13390a18dc62110521c9260957ca0b3c2dc295323ef7c1bff741d98d288"
+    },
+    "soc_vendor_timing": {
+      "status": "PASS",
+      "jtag_model": "Quartus 21.4 registered vendor timing",
+      "host_drain_period_logic_cycles": 65536,
+      "host_drain_interval_ms_at_25mhz": 2.62144,
+      "coremark_self_transcript_complete": true,
+      "transcript": "CMSELF PASS seed=0000E9F5 list=0000E714 matrix=00001FD7 state=00008E3A final=0000E714 iterations=1 cycles=1479468 score=INVALID",
+      "microbench_parser": "PASS",
+      "selfcheck_parser": "PASS",
+      "long_vendor_empty_polls": 262144,
+      "vendor_commits": 2359306,
+      "smoke_log_sha256": "92ca3ca02d4adf3df447bce2f82aec09a7ec34f71ab8f5c0d9101d7c56216286",
+      "driver_log_sha256": "74e49b8c5f40b1a6ed1f4766e4dc90564d85f7aa6164c5013116b9b2d9c2cc8c"
+    }
+  },
+  "initial_test_harness_issue": {
+    "description": "first rerun held ju_tx_pop low after the first modeled cycle in both modes; fixed so behavioral mode drains every cycle and vendor mode uses the paced period",
+    "firmware_failure": false,
+    "final_verification_rerun": "full local verification driver passed"
+  },
+  "safety": {
+    "quartus": false,
+    "jtag": false,
+    "board": false,
+    "flash_epcq": false,
+    "reset_power": false,
+    "unknown_process_stopped": false,
+    "local_lock_after_run": "FREE"
+  },
+  "known_limits": [
+    "The complete c-mode ten-second target benchmark was not run in RTL simulation; no CoreMark score is claimed.",
+    "The new MIF has not undergone fresh Gate D, physical signoff, assembler or board acceptance.",
+    "T-048 found the GamePC FTDI device absent; the board stage needs the cable to enumerate before a new transaction."
+  ],
+  "next": "Integrate the firmware fix, run the required frozen-candidate Gate D and fresh physical flow for the new MIF, assemble one SOF, then run a new one-shot board t/v/c transaction after the GamePC cable is present.",
+  "handoff": "docs/handoffs/T-20260920-049-b25-coremark-uart-backpressure.md"
+}

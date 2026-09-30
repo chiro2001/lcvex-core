@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-023",
+  "label": "R19-TIMING-BATCH",
+  "state": "local-validation-complete-physical-pending",
+  "partial": true,
+  "base_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "candidate_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "branch": "batch/T-20260905-023-r19",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-023",
+  "members": [
+    {
+      "task": "T-20260905-021",
+      "owner_implementation": "9eab7d1eab2d9558bf85ede487f15af32279715b",
+      "merged_implementation": "1f28092e",
+      "result": "accepted-local"
+    },
+    {
+      "task": "T-20260905-022",
+      "owner_implementation": "d237ca4cab48813e7d5101207eaaf7275a958e62",
+      "merged_implementation": "fbf1e72a",
+      "result": "accepted-local"
+    }
+  ],
+  "integration_commits": [
+    {
+      "sha": "143d9da7",
+      "summary": "correct the focused scan test header after owner Verilator execution"
+    },
+    {
+      "sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+      "summary": "add response-hold owner, no-reissue and tag-continuity assertions"
+    }
+  ],
+  "independent_reviews": {
+    "T-20260905-021": {
+      "result": "pass-no-p0-p1",
+      "summary": "Direct bypass, blocked capture, held consume and same-edge kill/reset were reviewed cycle by cycle; no combinational loop was found.",
+      "residual_risk": "Necessary fp_tx_kill input to the wrapper may remain a replacement TX_DONE control path and requires fresh directional STA."
+    },
+    "T-20260905-022": {
+      "result": "pass-no-blocker",
+      "summary": "All 256 indices, multi-hot highest priority, zero/special/predecoded bypass and 4-state behavior were reviewed.",
+      "residual_risk": "Quadrant priority and the selected-group 16:1 mux may become a replacement physical hotspot."
+    }
+  },
+  "implementation": {
+    "summary": "Insert a one-entry wrapper-to-core FP response elastic boundary and replace round_pack_scan's descending 256-bit loop with a fixed hierarchical leading-one encoder without changing FP state latency.",
+    "source_sha256": {
+      "rtl/lcvex_core.sv": "f27a5e6570171ccb0028d8945659fa92624d950810b030ef19cc1b9f45075434",
+      "rtl/lcvex_fp_scalar.sv": "9c821e3cfc60c031c803b3791989fe01532b681e91eef4d82a0f690ff8c693d0",
+      "tb/sv/lcvex_core_tb.sv": "b7f5c93aa02dd3cb90afd84aedc71f37cfc45f24ab6e44b31b18fe5d7eb8f98b",
+      "tb/sv/lcvex_fp_scalar_r18_tb.sv": "e7bf96a1f86e0e6a7025a56619fb0b5a3ed29079ce7d781677c3e788bf20b92b",
+      "sim/cocotb/test_core_syskill.py": "f7b8977185d8448c5734e0070e68ed69e576200090c4921b725251b3cf90d089"
+    },
+    "invariants": {
+      "architectural_commit_only": true,
+      "state_enum_or_latency_changed": false,
+      "round_pack_p2_changed": false,
+      "false_path_added": false,
+      "assertion_disabled": false,
+      "reference_result_modified": false
+    }
+  },
+  "local_validation": {
+    "resource": "one heavy queue, taskset CPU 0, MemoryMax=16G, MemorySwapMax=0, VERILATOR_JOBS=1",
+    "focused": {
+      "result": "pass",
+      "command": "VERILATOR_JOBS=1 make sim-sv-fp-scalar-r18 sim-sv-fp-exec-directed sim-sv-core-syskill sim-cocotb-core-syskill",
+      "log": "build/agents/T-20260905-023/1c566325/focused/all.log",
+      "bytes": 94389,
+      "sha256": "08672b72e1efd5a76cbfa2fd85539be2d69dbf7ad049ae414af39609c21f480f",
+      "summary": "registry 80; exhaustive balanced scan; FP wrapper scalar/NEON/iterative and kill/reissue; core response hold, system-after-FP and FCVT RAW; standalone Cocotb"
+    },
+    "l0_l1": {
+      "result": "pass",
+      "command": "single make queue: compile, core/backpressure/FIFO/MMU, IRQ-young and IRQ-atomic matrices, FP/NEON P7-1 through P7-5 SV+Cocotb, muldiv",
+      "log": "build/agents/T-20260905-023/1c566325/l0-l1/all.log",
+      "bytes": 619731,
+      "sha256": "91f392857ac60b819a6c47fea269d092570cf42ce43fff31034fdf8e46c72a9b",
+      "natural_fp_data_mmu_overlap": {
+        "blocked_cycles": 3,
+        "data_issues": 1,
+        "consume": 1,
+        "exmem_captures": 1,
+        "fp_commits": 1,
+        "load_commits": 1
+      },
+      "irq_young": "FIFO off/on x delay 0/2 all pass including held FP response squash and natural PTW quarantine",
+      "semantic_image_sha256": "42b5b256fee8d5be1d78dba376cdfe42a868a15478f687352139a581572a21ef"
+    },
+    "expected_fail": {
+      "result": "pass-expected-fail",
+      "command": "VERILATOR_JOBS=1 make sim-sv-p7-2-neon-fault-bfm",
+      "outer_exit_code": 2,
+      "program_exit_code": 1,
+      "assertion": "rtl/lcvex_core.sv:4817 Q-store second-half response fault",
+      "wrapper_log": "build/agents/T-20260905-023/1c566325/expected-fail/wrapper.log",
+      "wrapper_sha256": "d5daa591be4b50225dead5ef0f967d9d153c615334fb4bace63c9ceb330d97bc",
+      "assert_log": "build/agents/T-20260827-059/fault-bfm-assert.log",
+      "assert_sha256": "02297d18bd832c0fa554e82a685322c57e8a48007ec1d07461035f7ac4447faa"
+    },
+    "l2": {
+      "result": "pass",
+      "scope": "affected strict D+E union; not full Gate D or the previous A-F matrix",
+      "strict_commit_total": 1155,
+      "batch_d": {
+        "tests": "NEON integer 31 plus NEON fetch-fault 20",
+        "strict_commits": 51,
+        "log": "build/agents/T-20260905-023/1c566325/l2/batch-d.log",
+        "sha256": "b72128baba8d37fe78f86b437e0c711b6517f7308c8e346d3959be46997c97e0"
+      },
+      "batch_e": {
+        "tests": "13 scalar/NEON FP base, edge, rounding and deterministic sequence images",
+        "strict_commits": 1104,
+        "log": "build/agents/T-20260905-023/1c566325/l2/batch-e.log",
+        "sha256": "b47fd3fb4ccf147dca3756b0ded3123f618a66b3a1d6c45a90a7b4ab4aa650e1"
+      }
+    }
+  },
+  "tools": {
+    "qemu": "QEMU 11.1.0 (v11.1.0-dirty)",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "coordinator_sha256": "e4f16fd1621555d4549ca9762d1c8751a44b6e329803db9de894429678350c42",
+    "plugin_sha256": "8687b80b5cfa7008978622ec8a5b250f171fc6a4a496a186f94b7996f1022297"
+  },
+  "physical_validation": {
+    "status": "pending-fresh-R19-probe",
+    "r18_task": "T-20260905-020",
+    "r18_status": "remote candidate synced, synthesis not started because VRChat/SteamVR interactive CPU load remains material",
+    "last_remote_snapshot": {
+      "captured_at": "2026-09-05T23:57:46+08:00",
+      "free_physical_mb": 27243.4,
+      "eda_count": 0,
+      "cpu_counter_percent": [36.2, 33.4, 30.6, 30.5, 29.2],
+      "manifest": "52/52 pass",
+      "forbidden_artifact_count": 0
+    },
+    "baseline": {
+      "task": "T-20260905-014",
+      "fmax_mhz": 43.0,
+      "setup_slack_ns": -3.256,
+      "tns_ns": -21736.217,
+      "failing_endpoints": 18309
+    },
+    "required_queries": [
+      "idex_valid/core kill/control -> fp_exec.state.TX_DONE",
+      "core backpressure -> fp_rsp_hold_valid D",
+      "pp_pre -> pack_scan",
+      "pack_scan -> pack_pre",
+      "pack_pre -> pack_mid",
+      "pack_mid -> slot_result_r",
+      "global top-50/top-N replacement clusters and resource delta"
+    ]
+  },
+  "decision": {
+    "local_functional": "accepted",
+    "timing_improvement": "not-claimed-until-fresh-STA",
+    "timing_closure": false,
+    "next": "Create an exact-R19 physical task and keep both remote Quartus work and all board actions gated."
+  },
+  "policy": {
+    "full_gate_d_run": false,
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "quartus_or_assembler_started": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false
+  },
+  "completed_local_at": "2026-09-06T00:02:27+08:00",
+  "handoff": "docs/handoffs/T-20260905-023-r19-timing-batch.md"
+}

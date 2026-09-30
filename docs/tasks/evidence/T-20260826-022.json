@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-022",
+  "base_sha": "c391b501734676b155f1b625b2fdc23df035391c",
+  "head_sha": "c391b501734676b155f1b625b2fdc23df035391c",
+  "merge_sha": null,
+  "candidate_status": "cancelled-infra",
+  "toolchain": {"environment": "conda:lcvex", "python": "3.12.14", "verilator": "5.050 2026-07-01 rev conda-forge build 0"},
+  "resource": {"cpuset": "0-4", "cpu_count": 5, "policy": "local 50% planner", "memory_budget_note": "no memory exhaustion observed"},
+  "runs": [
+    {
+      "run_id": "owner-l3-gate-d-001",
+      "level": "L3",
+      "command": "taskset -c 0-4 env VERILATOR_JOBS=5 bash sim/difftest/run_gate_d.sh --parallel",
+      "exit_code": 1,
+      "result": "infra-fail",
+      "summary": "make test、coverage、随机 trace/coverage 记账和 baremetal-C 通过；M2/delay2/P5a 并行批次失败于 fresh build/difftest 未创建和 planner parallel=0 除零，未观察到 RTL/QEMU mismatch。",
+      "log": "build/agents/T-20260826-022/gate-d.log",
+      "log_sha256": "df4fac2e0a7b8116d9df416cc25d6379c06b7fa91a842cbaa0acdb71978ceb1b",
+      "failures": ["run_m2_4b generation FileNotFoundError build/difftest", "run_lockstep_parallel planner parallel=0 -> i % 0", "P5a-Hardening parallel inherits same planner failure"]
+    }
+  ],
+  "known_limits": ["该 candidate 未满足 Gate D acceptance；T-023 修复后需以新 SHA 重新创建 candidate，不能复用本轮红结果或旧 green 记录。"]
+}

@@ -1,0 +1,4 @@
+l2-16 rc=1 wall=0.067s
+l2-256 rc=1 wall=0.120s
+l2-1024 rc=1 wall=0.290s
+l2-1024-assert rc=1 wall=1.390s

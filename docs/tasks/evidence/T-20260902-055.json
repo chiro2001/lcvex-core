@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-055",
+  "state": "done",
+  "partial": false,
+  "base_sha": "c2fd2c7e6ea5b09491ee76f9dbe73586a87848e9",
+  "head_sha": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+  "merge_sha": "f5f85de70c958a1fc741788bc7d5c7cce5a30a75",
+  "branch": "infra/T-20260902-055-stxr-irq-mon-we",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-055",
+  "sent_at": "2026-09-04T22:29:35+08:00",
+  "received_at": "2026-09-04T22:29:35+08:00",
+  "reported_at": "2026-09-05T00:01:33+08:00",
+  "files": "qemu/plugins/lcvex_difftest.c; qemu/plugins/lcvex_protocol.py; sim/difftest/run_p6_irq_atomic_overlap.sh; sim/difftest/run_p6_stxr_irq_mon_we.sh; sim/difftest/run_stxr_irq_mon_we_probe.sh; sim/difftest/stxr_irq_mon_we_fixture.py; Makefile; scripts/test_registry.json",
+  "scope": "STXR same-COMMIT ordinary IRQ monitor sidecar；同步异常未退休边界；WFI ASYNC 与 LDXR/CLREX/exclusive 回归",
+  "implementation": {
+    "commit": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+    "previous_commit": "6316c51e239bcf952f962cde136eb4e3d14c3de5",
+    "summary": "保存 exception kind=1/2 并仅对 kind=2 异步 IRQ/FIQ 应用当前已退休指令的 monitor effect；同步异常仍保持 mon_we=0；Python COMMIT 镜像补齐 mon_data2 并修正为 560B；T-055 生成逻辑迁移到 IRQ fixture，T-054 CASP-match probe 期望修正为 stores=2",
+    "protocol": {
+      "pre_commit_go_ack_order": "runner 使用现有严格 socket：PRE(N)->GO(N)->COMMIT(N)->ACK(N)->PRE(N+1)",
+      "commit_bytes_c": 560,
+      "commit_bytes_python": 560,
+      "monitor_exception_kind": {
+        "1": "同步异常，当前指令未退休，不更新 monitor",
+        "2": "异步 IRQ/FIQ，当前指令已退休，应用 monitor effect",
+        "wfi_async": "独立 ASYNC，mon_we/store_count=0"
+      }
+    }
+  },
+  "source_hashes": {
+    "qemu/plugins/lcvex_difftest.c": "b5adf6c888ab318e19c27d5a407cfbba5d7ec8763f301cf49065df8475e75595",
+    "qemu/plugins/lcvex_protocol.py": "655d82b4e0ee2da35edbe0751c18ffff803b9e92b09d206d7f5cd5b5dd195412",
+    "sim/difftest/test_program.py": "8a66d0c4ce1ce9bec3e833cf4ca4faf54f4ee3eb8ba157134896aaf9401ab897",
+    "sim/difftest/run_p6_irq_atomic_overlap.sh": "eb084e34ef852068bc2f084d1f036b9e5587dd32e5785dfc3f06d06f4819bf67",
+    "sim/difftest/run_p6_stxr_irq_mon_we.sh": "b3eef9a3bf1321dc9dde110f56c29833824019f088b1ead834e2197ab1706fca",
+    "sim/difftest/run_stxr_irq_mon_we_probe.sh": "a23129e75f45e908603803d9926e3b5c4cafb37dd545b94280700aef9e3c3808",
+    "sim/difftest/stxr_irq_mon_we_fixture.py": "9acf657dbb84d8b026546763b324710a4272d3083a5657e56a5ffa34baa80e6c",
+    "Makefile": "ae2592c770f9412ef1c44d35b1a34d64623d24966f06c9e3a8c246846da1b10c",
+    "scripts/test_registry.json": "fc8285682b8c41e530cacd1954d1de4309935820fa38742511f93b3f30d95673"
+  },
+  "resource_policy": {
+    "heavy_verilator_wrapper": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0",
+    "verilator_jobs": 1,
+    "qemu_version": "11.1.0",
+    "qemu_binary": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+    "qemu_binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "plugin_sha256": "71b216075523687c493a2528eedc3746a7a5dbeff94b7a6ff78fb29ae6805665",
+    "qemu_fork_modified": false,
+    "coordinator_modified": false,
+    "rtl_modified": false
+  },
+  "runs": [
+    {
+      "run_id": "same-commit-baseline-success",
+      "stage": "L2",
+      "command": "env IMAGE=build/difftest/t055-stxr-success-d12.bin MAX_INSNS=40 COORD=.../T-054/build/verilator_lockstep/lockstep_coordinator PLUGIN=qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "fail_expected_pre_fix",
+      "exit_code": 1,
+      "started_at": "2026-09-04T22:34:43+08:00",
+      "finished_at": "2026-09-04T22:34:44+08:00",
+      "failure": "seq=28 same-COMMIT STXR IRQ：DUT mon_we=1，旧 plugin QEMU mon_we=0；exc_code=0x40 与 store tuple 均一致",
+      "artifact": "build/tmp/t055-repro/d12.fail",
+      "artifact_sha256": "49f688258f68390c7364d90ec99a73a19b60d7ba050aaf0b18278119bc224929"
+    },
+    {
+      "run_id": "same-commit-baseline-fail",
+      "stage": "L2",
+      "command": "env IMAGE=build/difftest/t055-stxr-fail-d9.bin MAX_INSNS=38 COORD=.../T-054/build/verilator_lockstep/lockstep_coordinator PLUGIN=qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "fail_expected_pre_fix",
+      "exit_code": 1,
+      "started_at": "2026-09-04T22:35:25+08:00",
+      "finished_at": "2026-09-04T22:35:26+08:00",
+      "failure": "seq=25 same-COMMIT STXR fail：DUT mon_we=1，旧 plugin QEMU mon_we=0",
+      "artifact": "build/tmp/t055-repro/f9.fail",
+      "artifact_sha256": "cd374944635ba3b88a9719893ace4019e79978031ed5f8bcb085cee62d18ff3b"
+    },
+    {
+      "run_id": "protocol-fixture",
+      "stage": "L0",
+      "command": "python3 sim/difftest/stxr_irq_mon_we_fixture.py",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+      "seed": "none",
+      "started_at": "2026-09-04T23:10:01+08:00",
+      "finished_at": "2026-09-04T23:10:01+08:00",
+      "checks": "COMMIT/ASYNC exact framing；C/Python 560B；mon_data2、store_count、STXR success/fail、sync DABT、WFI ASYNC 字段"
+    },
+    {
+      "run_id": "plugin-build-syntax-hash",
+      "stage": "L0",
+      "command": "make -C qemu/plugins; cc -fsyntax-only -Wall -Wextra -fPIC -I/home/chiro/projects/mycpu/qemu/include/plugins $(pkg-config --cflags glib-2.0) qemu/plugins/lcvex_difftest.c; python3 -m py_compile qemu/plugins/lcvex_protocol.py sim/difftest/stxr_irq_mon_we_fixture.py",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+      "seed": "none",
+      "started_at": "2026-09-04T23:08:03+08:00",
+      "finished_at": "2026-09-04T23:08:04+08:00",
+      "plugin_sha256": "71b216075523687c493a2528eedc3746a7a5dbeff94b7a6ff78fb29ae6805665",
+      "known_warning": "既有 vcpu_mem 未处理 QEMU_PLUGIN_MEM_VALUE_U128 -Wswitch warning；非本改动引入"
+    },
+    {
+      "run_id": "registry-and-runner-syntax",
+      "stage": "L0",
+      "command": "python3 scripts/test_registry.py --check --check-consistency; python3 -m json.tool scripts/test_registry.json; bash -n sim/difftest/run_p6_stxr_irq_mon_we.sh sim/difftest/run_stxr_irq_mon_we_probe.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+      "seed": "none",
+      "started_at": "2026-09-04T23:03:50+08:00",
+      "finished_at": "2026-09-04T23:03:51+08:00",
+      "checks": "73 registry entries；Makefile/runner consistency；JSON、shell syntax、git diff check"
+    },
+    {
+      "run_id": "same-commit-and-sync-fix",
+      "stage": "L2",
+      "command": "RUN_T054=0 RUN_REGRESSIONS=0 QEMU_BIN=... COORD_BASE=.../T-054/build/verilator_lockstep/lockstep_coordinator COORD_DELAY2=.../T-054/build/verilator_lockstep_d2/lockstep_coordinator PLUGIN=qemu/plugins/lcvex_difftest.so RUN_ROOT=build/tmp/t55-final-same bash sim/difftest/run_p6_stxr_irq_mon_we.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T23:08:20+08:00",
+      "finished_at": "2026-09-04T23:08:32+08:00",
+      "matrix": "same-COMMIT STXR success/fail base+delay2；sync STXR DABT；IABT；protocol fixture",
+      "packets": {
+        "success": "base/delay2 seq=28 pc=0x44000070 next=0x44010280 exc=1 mon_we=1 mon_valid=0 stores=1",
+        "fail": "base/delay2 seq=25 pc=0x44000064 next=0x44010280 exc=1 mon_we=1 mon_valid=0 stores=0",
+        "sync_dabt": "seq=17 pc=0x44000044 next=0x44010200 exc=1 mon_we=0",
+        "iabt": "seq=11 pc=0x44000ffc next=0x44010200 exc=1 mon_we=0"
+      }
+    },
+    {
+      "run_id": "wfi-async-and-regressions",
+      "stage": "L2",
+      "command": "RUN_T054=0 RUN_REGRESSIONS=1 ... bash sim/difftest/run_p6_stxr_irq_mon_we.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T23:08:20+08:00",
+      "finished_at": "2026-09-04T23:08:43+08:00",
+      "checks": "独立 WFI peer waits=1 async=1，ASYNC exc_code=0x40 mon_we=0 stores=0；hard_irq、hard_irq_daif、hard_wfi_timer_irq base/delay2、hard_exclusive、hard_lse、hard_lse128、hard_esr_far"
+    },
+    {
+      "run_id": "t054-direct-base-delay2",
+      "stage": "L2",
+      "command": "RUN_T054=1 RUN_REGRESSIONS=0 ... bash sim/difftest/run_p6_stxr_irq_mon_we.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T23:08:20+08:00",
+      "finished_at": "2026-09-04T23:09:30+08:00",
+      "checks": "T-054 CASP match/mismatch、STXR delay13、DC ZVA base/delay2 严格 coordinator；PRE/GO/COMMIT/ACK seq 连续；实际 CASP match IRQ packet store_count=2 由 C coordinator 比较"
+    },
+    {
+      "run_id": "make-final",
+      "stage": "L0-L2",
+      "command": "VERILATOR_JOBS=1 make p6-stxr-irq-mon-we",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T23:05:00+08:00",
+      "finished_at": "2026-09-04T23:12:07+08:00",
+      "checks": "base/delay2 coordinator fresh build + T-055 full runner；外层 systemd cgroup MemoryMax=16G/Swap=0；runner final marker pass",
+      "artifact": "build/tmp/t55-make-final.log",
+      "artifact_sha256": "f222730977d4e0ebe696939173bbfef1016f91d2505daf7b280e2c8ea705a3fb"
+    },
+    {
+      "run_id": "corrective-scope-light-checks",
+      "stage": "L0",
+      "command": "git diff c2fd2c7e6ea5b09491ee76f9dbe73586a87848e9 -- sim/difftest/test_program.py; python3 scripts/test_registry.py --check --check-consistency; bash -n sim/difftest/run_p6_irq_atomic_overlap.sh sim/difftest/run_p6_stxr_irq_mon_we.sh sim/difftest/run_stxr_irq_mon_we_probe.sh; python3 -m py_compile qemu/plugins/lcvex_protocol.py sim/difftest/stxr_irq_mon_we_fixture.py sim/difftest/test_program.py",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T23:42:58+08:00",
+      "finished_at": "2026-09-04T23:43:10+08:00",
+      "checks": "test_program 相对任务 base 无 diff；registry 73 项/一致性；IRQ shell/Python syntax"
+    },
+    {
+      "run_id": "make-final-corrective-rerun",
+      "stage": "L0-L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make p6-stxr-irq-mon-we'",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+      "seed": "none",
+      "started_at": "2026-09-04T23:51:47+08:00",
+      "finished_at": "2026-09-04T23:52:34+08:00",
+      "checks": "corrective HEAD d159617；plugin、两个 coordinator 增量/受限构建；T-055 full runner final marker PASS；same-COMMIT/WFI/hard/T-054 direct base-delay2 全部 PASS",
+      "artifact": "build/tmp/t55-make-rerun.log",
+      "artifact_sha256": "86c192259d1c5e28d8a809168a0acf8a084b78ddeb2ab8bcc8f61ffeab340873"
+    },
+    {
+      "run_id": "t054-companion-final",
+      "stage": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=qemu/plugins/lcvex_difftest.so COORD_BASE=build/verilator_lockstep/lockstep_coordinator COORD_DELAY2=build/verilator_lockstep_d2/lockstep_coordinator RUN_ROOT=build/tmp/t54-final bash sim/difftest/run_p6_irq_atomic_overlap.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+      "seed": "none",
+      "started_at": "2026-09-04T23:53:04+08:00",
+      "finished_at": "2026-09-04T23:53:55+08:00",
+      "checks": "base/delay2 5/5 probe+strict+trace；CASP match probe base/delay2 均 irq_stores=2；STXR delay13 与 DC ZVA 均 PASS",
+      "artifact": "build/tmp/t54-final.log",
+      "artifact_sha256": "f2445e3a70f8068552bb8d54b21c9772ab64f69c2e36d1f72c3af06b4340573d",
+      "caspmatch_probe_logs": {
+        "base": "build/tmp/t54-final/base-casp_match.probe.log",
+        "delay2": "build/tmp/t54-final/delay2-casp_match.probe.log"
+      }
+    },
+    {
+      "run_id": "t054-sv-fifo-matrix-final",
+      "stage": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- sh -c 'VERILATOR_JOBS=1 make sim-sv-irq-atomic-overlap'",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "d15961752a6ecc53837ba51aa599ca3bb2c628d9",
+      "seed": "none",
+      "started_at": "2026-09-04T23:54:21+08:00",
+      "finished_at": "2026-09-04T23:57:36+08:00",
+      "checks": "FIFO off/on × MEM_DELAY_MODE 0/2；重点 fifo_off_delay0 与 fifo_on_delay2 均 CASP/STXR/DC-ZVA PASS",
+      "artifact": "build/tmp/t54-sv-final.log",
+      "artifact_sha256": "681c51742971afacf6b266a061c92d7d4d2fcb70f4a4e25c1a9aa8dd7da29dfe"
+    },
+    {
+      "run_id": "integrator-merged-sha-final",
+      "stage": "integrator-L0-L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- bash -lc 'set -euo pipefail; export VERILATOR_JOBS=1; make p6-stxr-irq-mon-we; make p6-irq-atomic-overlap'",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "f5f85de70c958a1fc741788bc7d5c7cce5a30a75",
+      "seed": "none",
+      "started_at": "2026-09-05T00:08:43+08:00",
+      "finished_at": "2026-09-05T00:11:14+08:00",
+      "checks": "T-055 protocol fixture; same-COMMIT STXR success/fail base+delay2 mon_we=1; synchronous DABT/IABT mon_we=0; WFI ASYNC no effects; hard IRQ/DAIF/WFI/exclusive/LSE/LSE128; embedded T-054 strict matrix; canonical T-054 CASP/STXR/DC ZVA base/delay2 10/10 PASS",
+      "artifacts": [
+        {"uri": "build/tmp/t055-integrator-f5f85de/p6-stxr-irq-mon-we.log", "sha256": "3f3eaf05a49a7f2b157eb8bfa3a7686e5af57b8aa76cc1465374ac9c39f62fc7"},
+        {"uri": "build/tmp/t055-integrator-f5f85de/p6-irq-atomic-overlap.log", "sha256": "edfe429c31dd9d3dbc09439540f0b94445d23e55f31e6e9f87ba0bfa0e117e3f"}
+      ],
+      "resource": {"memory_limit": "16G", "swap_limit": "0", "verilator_jobs": 1}
+    }
+  ],
+  "known_limits": [
+    "qemu/plugins/lcvex_protocol.py 修正前为 552B，导致 monitor 后字段错位；当前已与 C 端 560B 对齐",
+    "sim/difftest/run_p6_irq_atomic_overlap.sh 已修正 CASP-match IRQ stores=2；canonical T-054 QEMU companion 与 SV FIFO off/on x delay0/2 已实际退出0",
+    "QEMU fork、QEMU binary、coordinator、RTL 和 reference results 均未修改"
+  ],
+  "policy": {
+    "qemu_modified": false,
+    "qemu_fork_modified": false,
+    "plugin_modified": true,
+    "coordinator_modified": false,
+    "reference_results_modified": false,
+    "assertions_disabled": false,
+    "irq_delayed_to_avoid_failure": false,
+    "monitor_comparison_disabled": false,
+    "fields_skipped": false,
+    "synthetic_commit_fire": false,
+    "synthetic_stage_metadata": false,
+    "ordinary_irq_same_commit": true,
+    "wfi_async_separate": true,
+    "test_program_unchanged_from_base": true,
+    "sv_fifo_matrix": "fifo_off_delay0/fifo_on_delay0/fifo_off_delay2/fifo_on_delay2 all pass",
+    "verilator_cgroup": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0",
+    "verilator_jobs": 1
+  },
+  "artifacts": [
+    {"id": "baseline-same-commit-success", "uri": "build/tmp/t055-repro/d12.fail", "sha256": "49f688258f68390c7364d90ec99a73a19b60d7ba050aaf0b18278119bc224929"},
+    {"id": "baseline-same-commit-fail", "uri": "build/tmp/t055-repro/f9.fail", "sha256": "cd374944635ba3b88a9719893ace4019e79978031ed5f8bcb085cee62d18ff3b"},
+    {"id": "make-final-log", "uri": "build/tmp/t55-make-final.log", "sha256": "f222730977d4e0ebe696939173bbfef1016f91d2505daf7b280e2c8ea705a3fb"},
+    {"id": "make-corrective-rerun-log", "uri": "build/tmp/t55-make-rerun.log", "sha256": "86c192259d1c5e28d8a809168a0acf8a084b78ddeb2ab8bcc8f61ffeab340873"},
+    {"id": "t054-companion-final-log", "uri": "build/tmp/t54-final.log", "sha256": "f2445e3a70f8068552bb8d54b21c9772ab64f69c2e36d1f72c3af06b4340573d"},
+    {"id": "t054-sv-fifo-final-log", "uri": "build/tmp/t54-sv-final.log", "sha256": "681c51742971afacf6b266a061c92d7d4d2fcb70f4a4e25c1a9aa8dd7da29dfe"},
+    {"id": "plugin", "uri": "qemu/plugins/lcvex_difftest.so", "sha256": "71b216075523687c493a2528eedc3746a7a5dbeff94b7a6ff78fb29ae6805665"},
+    {"id": "handoff", "uri": "docs/handoffs/T-20260902-055-stxr-irq-mon-we.md"},
+    {"id": "integrator-p6-stxr-log", "uri": "build/tmp/t055-integrator-f5f85de/p6-stxr-irq-mon-we.log", "sha256": "3f3eaf05a49a7f2b157eb8bfa3a7686e5af57b8aa76cc1465374ac9c39f62fc7"},
+    {"id": "integrator-t054-companion-log", "uri": "build/tmp/t055-integrator-f5f85de/p6-irq-atomic-overlap.log", "sha256": "edfe429c31dd9d3dbc09439540f0b94445d23e55f31e6e9f87ba0bfa0e117e3f"}
+  ],
+  "handoff": "docs/handoffs/T-20260902-055-stxr-irq-mon-we.md",
+  "integrator_validation": {
+    "recorded_at": "2026-09-05T00:11:24+08:00",
+    "source_sha": "f5f85de70c958a1fc741788bc7d5c7cce5a30a75",
+    "p6_stxr_irq_mon_we": "pass",
+    "t054_canonical_base_delay2": "10/10 pass",
+    "result": "pass"
+  },
+  "next": "done"
+}

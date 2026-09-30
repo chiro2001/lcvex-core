@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-030",
+  "state": "effective",
+  "partial": false,
+  "base_sha": "f4a24a69a40c6b7a477ca2120f367455b31d115f",
+  "head_sha": null,
+  "branch": "feature/T-20260830-030-fpga-g3",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-030",
+  "scope": "A10 Qsys/debug fabric and original-path copy experiments using G2 explicit altsyncram BRAM shim.",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030",
+    "copy_root": "D:\\Projects\\fpga-altra\\lcvex_bu_T30",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "original_modified": false,
+    "license_read": false,
+    "full_real_b5_flow_started": false
+  },
+  "runs": [
+    {
+      "run_id": "soc-bu-altsync-baseline-rerun",
+      "variant": "SoC-only blackbox + explicit altsyncram shim",
+      "result": "pass",
+      "command": "quartus_syn soc_bu_altsync_16k",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-029\\projects\\soc_bu_altsync_16k",
+      "wall_s": 8,
+      "peak_pm_mb": 618.9,
+      "peak_ws_mb": 696.6,
+      "peak_vm_mb": 749,
+      "errors": 0,
+      "warnings": 10876,
+      "timestamp": "2026-08-30T10:16:21+08:00",
+      "summary": "G2 SoC-only black-box baseline re-confirmed: 8s, 0.62GB peak PM."
+    },
+    {
+      "run_id": "a10-altsync-first-flow",
+      "variant": "real A10 blackbox top + explicit altsyncram shim, before experimental SDC fix",
+      "result": "synthesis_pass_fitter_sdc_error",
+      "command": "quartus_sh --flow compile a10_top_altsync -c a10_top_altsync",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_altsync",
+      "wall_s": 239,
+      "peak_pm_mb": 5151.6,
+      "peak_ws_mb": 5530.8,
+      "errors": 4,
+      "warnings": 10889,
+      "timestamp": "2026-08-30T10:16:44+08:00",
+      "summary": "Synthesis passed in 2m38s; fitter failed on get_clocks/get_registers -quiet SDC syntax and automatic periphery placement. The alt_sld_fab_0 generation no longer blocked synthesis."
+    },
+    {
+      "run_id": "a10-altsync-fitter-fix",
+      "variant": "real A10 blackbox top + shim, SDC -quiet -> -nowarn",
+      "result": "pass",
+      "command": "quartus_sh --flow compile a10_top_altsync -c a10_top_altsync -start fitter -end fitter",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_altsync",
+      "wall_s": 254,
+      "peak_pm_mb": 9753.9,
+      "peak_ws_mb": 8239.3,
+      "errors": 0,
+      "warnings": 22,
+      "timestamp": "2026-08-30T10:23:40+08:00",
+      "summary": "Fitter successful; fit summary ALMs=4561, registers=9302, block mem=175616 bits, RAM blocks=60, PLLs=3."
+    },
+    {
+      "run_id": "a10-altsync-sta-signoff",
+      "variant": "real A10 blackbox top + shim",
+      "result": "pass",
+      "command": "quartus_sh --flow compile a10_top_altsync -c a10_top_altsync -start sta_signoff -end sta_signoff",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_altsync",
+      "wall_s": 20,
+      "peak_pm_mb": 2302.7,
+      "peak_ws_mb": 2376.7,
+      "errors": 0,
+      "timestamp": "2026-08-30T10:48:35+08:00",
+      "summary": "STA signoff successful; all listed setup/hold/recovery/removal/min-pulse slacks positive."
+    },
+    {
+      "run_id": "a10-altsync-assembler",
+      "variant": "real A10 blackbox top + shim",
+      "result": "pass",
+      "command": "quartus_sh --flow compile a10_top_altsync -c a10_top_altsync -start assembler -end assembler",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_altsync",
+      "wall_s": 46,
+      "peak_pm_mb": 6605.8,
+      "peak_ws_mb": 6543.7,
+      "errors": 0,
+      "timestamp": "2026-08-30T10:49:02+08:00",
+      "summary": "Assembler successful; generated a10_top_altsync.sof 36842136 bytes, SHA256 0466F1A5E7DBFB13A0645331DCEF3014DA327389E1F17EA9914F850AF3082334."
+    },
+    {
+      "run_id": "a10-behav-control",
+      "variant": "real A10 blackbox top + behavioral lcvex_bram_boot (control)",
+      "result": "blocked_oomish_killed",
+      "command": "quartus_sh --flow compile a10_top_behav -c a10_top_behav -start ipgenerate -end synthesis",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_behav",
+      "wall_s": 327,
+      "peak_pm_mb": 21704.6,
+      "peak_ws_mb": 21065.7,
+      "timestamp": "2026-08-30T10:28:24+08:00",
+      "summary": "Killed by monitor; no synthesis report. Behavioral BRAM still causes the A10 elaboration/synthesis resource explosion, while the shim passes."
+    },
+    {
+      "run_id": "origcopy-ipgenerate",
+      "variant": "full original lcvex tree copy non-build -> lcvex_bu_T30",
+      "result": "pass",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end ipgenerate",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex_bu_T30\\quartus",
+      "wall_s": 8,
+      "peak_vm_mb": 320,
+      "errors": 0,
+      "warnings": 0,
+      "timestamp": "2026-08-30T10:35:01+08:00",
+      "summary": "Path-copied project ipgenerate passes."
+    },
+    {
+      "run_id": "origcopy-fitter-only",
+      "variant": "full original copy, original qdb preserved",
+      "result": "fail_cannot_load_synthesized_db",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start fitter -end fitter",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex_bu_T30\\quartus",
+      "wall_s": 8,
+      "peak_pm_mb": 367.8,
+      "peak_ws_mb": 455.6,
+      "exit_code": 3,
+      "timestamp": "2026-08-30T10:34:37+08:00",
+      "summary": "Exact error: Error (16546): Cannot load synthesized database - ensure all earlier stages of the compiler have completed."
+    },
+    {
+      "run_id": "origcopy-full-synthesis",
+      "variant": "full original real A10 synthesis from path copy",
+      "result": "blocked_memory_killed",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start synthesis -end synthesis",
+      "project_dir": "D:\\Projects\\fpga-altra\\lcvex_bu_T30\\quartus",
+      "wall_s": 670,
+      "peak_pm_mb": 45589.5,
+      "peak_ws_mb": 44163.9,
+      "timestamp": "2026-08-30T10:36:55+08:00",
+      "summary": "Killed by 45GB monitor during real full synthesis; no synthesis report. Shows original-path copy alone does not solve the resource/DB problem."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-030-fpga-g3.md",
+      "owner": "T-20260830-030",
+      "reproduce": "cat docs/handoffs/T-20260830-030-fpga-g3.md"
+    },
+    {
+      "id": "a10-top-altsync-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_altsync",
+      "owner": "T-20260830-030",
+      "reproduce": "A10 blackbox + G2 altsyncram shim project; synthesis/fitter/STA/assembler outputs under output_files"
+    },
+    {
+      "id": "a10-top-altsync-sof",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_altsync\\output_files\\a10_top_altsync.sof",
+      "sha256": "0466f1a5e7dbfb13a0645331dcef3014da327389e1f17ea9914f850af3082334",
+      "bytes": 36842136,
+      "owner": "T-20260830-030",
+      "reproduce": "Experimental A10 blackbox+shim SOF (not full LCVEX SoC)"
+    },
+    {
+      "id": "a10-behav-control-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\projects\\a10_top_behav",
+      "owner": "T-20260830-030",
+      "reproduce": "Behavioral BRAM control, killed at 21.7GB/5m27s"
+    },
+    {
+      "id": "orig-copy-tree",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex_bu_T30",
+      "owner": "T-20260830-030",
+      "reproduce": "Non-build copy of full original lcvex tree; ipgenerate pass, fitter and full synthesis still fail"
+    },
+    {
+      "id": "monitor-script",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-030\\run_flow_monitor.ps1",
+      "owner": "T-20260830-030",
+      "reproduce": "Quartus flow monitor used to record PM/WS samples"
+    }
+  ],
+  "known_limits": [
+    "A10+shim success is on black-box stubs (core/coh/AXI replaced by T-16 stubs), not full LCVEX SoC RTL.",
+    "No full B5 real-RTL full flow was started; the experimental stub flow did run to assembler and produced SOF.",
+    "Original formal QSF/SDC/RTL not modified; experimental SDC fixed only in isolated copy.",
+    "Path copy only included non-build source tree; build is experiment output and was not copied.",
+    "No license contents read."
+  ],
+  "blocker": {
+    "status": "partial_resolved",
+    "details": "alt_sld_fab no longer blocks A10 blackbox synthesis when explicit altsyncram BRAM shim is used, and fitter/STA/assembler pass. Original full-B5 real RTL full synthesis and original path-copy fitter-only remain blocked.",
+    "needs": "Integrate explicit BRAM wrapper into main RTL; swap stubs back to real core/coh/AXI or use QDB partitions to validate full B5."
+  }
+}

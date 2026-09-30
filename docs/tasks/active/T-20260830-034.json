@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-034",
+  "label": "PE-A",
+  "parent": "T-20260830-033",
+  "title": "core/cache/总线外部性能静态审计与优化规划",
+  "kind": "performance-audit-plan",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "f9b26ef339ce0e400b2fb40db195270f6132af2a",
+  "branch": "feature/T-20260830-034-pe-audit-plan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-034",
+  "scope": "对当前 LCVEX 进行只读/静态性能审计：核心流水线（取指/译码/执行/访存/提交、是否有 stall）、cache（L1I/L1D/L2 命中/替换/填充/写回、在线与 MSI 目录）、总线（mem_router/axi4/avalon/AXI、仲裁、beat 宽度、outstanding 限制）、多核路径（仲裁、单 outstanding、probe 串行）。产出可执行优化方向：是否更深流水级、顺序多发射、more outstanding 访存、cache 多 bank/流水化、总线加宽/异步 FIFO、分支预测/取指宽度等；给出优先级、收益方向、风险、改动范围、需新增验证，并与现有 P-line 测量 baseline 对应。",
+  "writes": [
+    "docs/PERFORMANCE_ENHANCEMENT_PLAN.md",
+    "docs/handoffs/T-20260830-034-pe-audit-plan.md",
+    "docs/tasks/evidence/T-20260830-034.json"
+  ],
+  "reads": [
+    "rtl/**",
+    "tb/**",
+    "sim/**",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/C4_DUALCORE_BASELINE.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/C3_FOURCORE_PREWORK.md",
+    "docs/C4_SCALE_PREWORK.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "交付可审阅的 PERFORMANCE_ENHANCEMENT_PLAN.md",
+      "列出量化/可验证的候选而不是空泛口号"
+    ],
+    "l1": [
+      "与现有 P-line 14 个 workload 的测量方法/局限对应"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "完成 core/cache/bus 性能审计与优化规划，输出优先级、预估影响、风险、回退/回归策略；不实现 RTL。",
+  "next": "根据审计结果拆 PE-1/PE-2/PE-3 实施任务。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.3
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T11:26:20+08:00",
+  "updated_at": "2026-08-30T19:21:22+08:00",
+  "known_limits": [
+    "只读/静态审计，不修改 RTL；不宣称性能收益已实现。",
+    "不引入 SVE/ACE/CHI；不破坏单核/多核回归。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-034-pe-audit-plan.md",
+  "evidence": "docs/tasks/evidence/T-20260830-034.json",
+  "merge_sha": "f7d30027e016ffa9482079df2657003882ec7c37",
+  "merged_at": "2026-08-30T11:33:22+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T19:21:22+08:00",
+    "status": "accepted",
+    "owner_head_sha": "03a99725f8e323b5b9f0fb44bb9008451934b741",
+    "checks": [
+      "PE-A plan, handoff and evidence were integrated by f7d3002",
+      "T-035 independent plan, final enhancement plan/roadmap and F0 baseline subsequently consumed the audit"
+    ],
+    "notes": "Historical audit task was delivered and integrated; stale active ledger reconciled without claiming performance implementation."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {"path": "created_at", "old": "2026-08-30T22:00:00+0800", "new": "2026-08-30T11:26:20+08:00", "basis": "registration_commit"},
+      {"path": "updated_at", "old": "2026-08-30T22:00:00+0800", "new": "2026-08-30T19:21:22+08:00", "basis": "ledger_reconciliation"}
+    ],
+    "note": "Preserve old planned timestamps and normalize to actual commit/reconciliation times."
+  }
+}

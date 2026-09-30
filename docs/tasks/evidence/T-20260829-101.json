@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-101",
+  "state": "done",
+  "base_sha": "20e98a1",
+  "head_sha": "20e98a1b444eaebefcd63faac8401770863d9ce5",
+  "merge_sha": "6fd554aa08d76b2d6e05f309cbe7175ab94a501a",
+  "branch": "feature/T-20260829-101-t067-synth-opt",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-067",
+  "scope": "T-067 Quartus 77GB Synthesis OOM 根因调研：standalone quartz_syn / 缩减综合工程分析 B5 SoC 哪个 RTL 层次消耗最大；验证关闭 FP/NEON、去掉 EMIF/平台 IP 的效果；不启动完整 B5 full flow",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-29T16:30:00+08:00",
+    "soc_only_start": "2026-08-29T16:44:03+08:00",
+    "soc_only_stop": "2026-08-29T16:49:00+08:00",
+    "soc_nofp_start": "2026-08-29T16:56:02+08:00",
+    "soc_nofp_stop": "2026-08-29T17:00:00+08:00",
+    "core_only_start": "2026-08-29T16:50:42+08:00",
+    "core_only_end": "2026-08-29T16:52:16+08:00",
+    "core_nofp_start": "2026-08-29T17:02:32+08:00",
+    "core_nofp_end": "2026-08-29T17:04:09+08:00",
+    "decode_only_start": "2026-08-29T17:01:30+08:00",
+    "decode_only_end": "2026-08-29T17:02:03+08:00",
+    "documents_written_at": "2026-08-29T17:08:16+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101",
+    "note": "所有实验均在 build/T-20260829-101 下创建独立 QSF/QPF/副本，未修改原始 catapult_a10.qsf/sdc/qpf/RTL；远端 RTL 为 T-067 后的 B5 兼容版本（lcvex_fp_scalar unique case -> if/else）。"
+  },
+  "toolchain": {
+    "quartus_syn": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+      "version": "Quartus Prime Pro 21.4 Build 67",
+      "mode": "standalone: quartus_syn --read_settings_files=on --write_settings_files=off <project> -c <revision>"
+    }
+  },
+  "experiments": [
+    {
+      "run_id": "t101-soc-only-001",
+      "project": "soc_only",
+      "top": "lcvex_catapult_soc_top",
+      "files": "B5 SoC RTL (core+cache+AXI+SoC) only; no Qsys EMIF/SFL/JTAG-IP/wrapper",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off soc_only -c soc_only",
+      "exit_code": null,
+      "result": "blocked_hang",
+      "summary": "约 4-5 分钟 quartus_syn PM 达到 70.00 GB、WS 45.53 GB，CPU 停滞，未完成 synthesis；证明 OOM 热点在 core/cache/SoC，而不是 EMIF/平台 IP",
+      "peak_pm_gb": 70.0,
+      "peak_ws_gb": 45.53,
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\soc_only\\syn.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\soc_only\\syn.err.log"
+    },
+    {
+      "run_id": "t101-soc-nofp-002",
+      "project": "soc_nofp",
+      "top": "lcvex_catapult_soc_top",
+      "files": "same as soc_only, but independent copy of lcvex_catapult_soc_top.sv with A64_FP_SIMD default = 0",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off soc_nofp -c soc_nofp",
+      "exit_code": null,
+      "result": "blocked_hang",
+      "summary": "同样约 4-5 分钟 PM 达到 70.00 GB 并停滞；关闭 A64_FP_SIMD 没有降低内存，说明 FP/NEON 单元并非本次 OOM 主因（且核心仍无条件实例化 FP/NEON 模块）",
+      "peak_pm_gb": 70.0,
+      "peak_ws_gb": 47.79,
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\soc_nofp\\syn.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\soc_nofp\\syn.err.log"
+    },
+    {
+      "run_id": "t101-core-only-003",
+      "project": "core_only",
+      "top": "lcvex_core",
+      "files": "core + decode + mmu + fp/neon + alu/muldiv/regfile",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off core_only -c core_only",
+      "exit_code": 3,
+      "result": "fail",
+      "summary": "快速失败：lpm_divide megafunction LPM_WIDTHN > 64 (lcvex_fp_scalar.sv line 507/508)，峰内存仅 1.9GB；这是一个独立的 Quartus 除法宽度限制，非 OOM",
+      "peak_pm_gb": 1.9,
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\core_only\\syn.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\core_only\\syn.err.log"
+    },
+    {
+      "run_id": "t101-core-nofp-004",
+      "project": "core_nofp",
+      "top": "lcvex_core",
+      "files": "same as core_only, but independent copy of lcvex_core.sv with A64_FP_SIMD default = 0",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off core_nofp -c core_nofp",
+      "exit_code": 3,
+      "result": "fail",
+      "summary": "仍因 lpm_divide LPM_WIDTHN > 64 失败；证明当前 RTL 中 A64_FP_SIMD=0 并未真正消除 FP/NEON 实例，无法以此降低 Quartus 内存",
+      "peak_pm_gb": 1.9,
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\core_nofp\\syn.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\core_nofp\\syn.err.log"
+    },
+    {
+      "run_id": "t101-decode-only-005",
+      "project": "decode_only",
+      "top": "lcvex_decode",
+      "files": "lcvex_pkg.sv + lcvex_decode.sv only",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off decode_only -c decode_only",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "成功完成 standalone synthesis：0 errors / 96 warnings，用时 33s，峰值虚拟内存 682MB；实现 24,284 device resources，7,890 input pins，1,724 output pins，14,667 logic cells，3 DSP。说明 decode 单模块不是 77GB OOM 主因",
+      "peak_vm_mb": 682,
+      "resources": {
+        "device_resources": 24284,
+        "input_pins": 7890,
+        "output_pins": 1724,
+        "logic_cells": 14667,
+        "dsp_elements": 3
+      },
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\decode_only\\syn.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\decode_only\\syn.err.log"
+    }
+  ],
+  "conclusions": [
+    "去掉 Qsys EMIF/SFL/JTAG-IP/board wrapper 后，独立 soc_only 仍在约 4-5 分钟达到 70GB 私有内存并停滞，因此 77GB OOM 的热点在 B5 SoC 内部 RTL（core/cache/AXI/SoC 层次），不是平台 IP/DDR/EMIF。",
+    "A64_FP_SIMD=0 的独立副本没有降低内存（仍 70GB），且 core_nofp 仍因 lpm_divide 报错；当前 RTL 中 A64_FP_SIMD 参数没有真正 gate 掉 FP/NEON 实例，不能作为有效内存优化。",
+    "单独 lcvex_decode 可完成 synthesis，峰值内存仅 682MB，说明 decode 不是 OOM 主因。",
+    "lcvex_fp_scalar 中存在超过 64-bit 的除法，导致 standalone core 级 Quartus 报 lpm_divide LPM_WIDTHN > 64；这可能是后续需要修复的独立综合兼容问题。",
+    "真正热点尚未细化到单个模块；最可能集中在 lcvex_core 的整体展开、cache（L1/L2/coherence）、MMU 或 AXI bridge 的组合逻辑/内存阵列。"
+  ],
+  "recommendations": [
+    "下一步做逐模块 standalone synthesis：lcvex_mmu、lcvex_l2_wb、lcvex_l1_d_wb、lcvex_l1_i、lcvex_catapult_soc_coh、lcvex_catapult_soc_axi、lcvex_axi4_avalon_adapter，记录每模块峰值内存/逻辑单元。",
+    "对 lcvex_fp_scalar 的 >64-bit 除法先做 Quartus 兼容改写（例如限制除法宽度或使用迭代/查找表），否则 core 级独立综合无法通过。",
+    "若需继续压缩综合规模，考虑在实验副本中真正 generate-gate FP/NEON 实例（A64_FP_SIMD=0 时移除 fp_scalar/neon_*），并验证是否降低内存。",
+    "考虑 Quartus partition/incremental compile、将 core/SoC 拆成多个 partition，或提高远端物理内存/页文件以支撑 80GB+ 峰值。",
+    "在没有稳定通过 Synthesis 的缩减设计前，不建议重启完整 B5 full flow。"
+  ],
+  "artifacts": [
+    {
+      "id": "exp-soc-only-qsf",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\soc_only\\soc_only.qsf",
+      "sha256": null,
+      "bytes": 3192,
+      "owner": "T-20260829-101"
+    },
+    {
+      "id": "exp-soc-only-log",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\soc_only\\syn.log",
+      "sha256": null,
+      "bytes": 5212,
+      "owner": "T-20260829-101"
+    },
+    {
+      "id": "exp-soc-nofp-log",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\soc_nofp\\syn.log",
+      "sha256": null,
+      "bytes": 5212,
+      "owner": "T-20260829-101"
+    },
+    {
+      "id": "exp-core-only-log",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\core_only\\syn.log",
+      "sha256": null,
+      "bytes": 12973,
+      "owner": "T-20260829-101"
+    },
+    {
+      "id": "exp-core-nofp-log",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\core_nofp\\syn.log",
+      "sha256": null,
+      "bytes": 13158,
+      "owner": "T-20260829-101"
+    },
+    {
+      "id": "exp-decode-only-log",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-101\\decode_only\\syn.log",
+      "sha256": null,
+      "bytes": 10555,
+      "owner": "T-20260829-101"
+    }
+  ],
+  "known_limits": [
+    "未启动完整 B5 full flow；继续 full flow 需等缩减设计稳定通过 Synthesis 或内存/工具链调整。",
+    "实验使用 T-067 B5 兼容 RTL（非 feature/p7-final 完整源，后者有 Quartus 语法不兼容），远端 RTL 哈希同步记录在 T-067 evidence。",
+    "soc_only/soc_nofp 在达到 70GB 后被手动停止，未写到最终 OOM 服务请求；完整 B5 已记录 77GB OOM。",
+    "未读取/复制 license 文件。"
+  ],
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.documents_written_at",
+        "old": "2026-08-29T17:10:00+08:00",
+        "new": "2026-08-29T17:08:16+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "6fd554aa08d76b2d6e05f309cbe7175ab94a501a",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "6fd554aa08d76b2d6e05f309cbe7175ab94a501a",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "20e98a1b444eaebefcd63faac8401770863d9ce5",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "handoff_sha": "6fd554aa08d76b2d6e05f309cbe7175ab94a501a",
+  "integrator_review": {
+    "received_at": "2026-08-29T18:20:00+0800",
+    "status": "accepted",
+    "head_sha": "2ef20a6ea30fe065ed5138cb52bbbd93457786c2",
+    "notes": "T-101 synth OOM investigation accepted: soc_only/soc_nofp both ~70GB OOM -> hotspot in B5 SoC RTL, not EMIF; A64_FP_SIMD=0 does not gate FP/NEON; decode_only passes 33s/682MB; core_only fails on lpm_divide >64 in fp_scalar. No full B5 flow restarted.",
+    "merge_sha": "6fd554aa08d76b2d6e05f309cbe7175ab94a501a",
+    "result_sha": "20e98a1b444eaebefcd63faac8401770863d9ce5"
+  }
+}

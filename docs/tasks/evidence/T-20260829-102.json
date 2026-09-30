@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-102",
+  "state": "done",
+  "partial": true,
+  "base_sha": "d9f65dc",
+  "head_sha": "d9f65dcb57ce2b02d6c360cef21bd112d8e3e0691",
+  "merge_sha": "5e40de2059a15231a6e72dd724883aac9a4e4abb",
+  "branch": "feature/T-20260829-102-t067-module-synth",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-067",
+  "scope": "T-067 模块级 standalone Quartus synthesis 收窄热点；尝试 fp_scalar lpm_divide 规避；评估 generate 门控/partition 方向",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-29T19:00:00+08:00",
+    "module_suite_start": "2026-08-29T19:24:04+08:00",
+    "l2_wb_stopped": "2026-08-29T20:02:00+08:00",
+    "fpfix_start": "2026-08-29T20:00:00+08:00",
+    "fpfix_stopped": "2026-08-29T20:10:00+08:00",
+    "documents_written_at": "2026-08-29T20:03:51+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102",
+    "note": "实验 QSF/QPF/副本均在 build/T-20260829-102；未修改原始 catapult_a10 QSF/SDC/QPF/RTL；RTL 为 T-067 B5 兼容版本。"
+  },
+  "module_experiments": [
+    {
+      "run_id": "t102-mmu-001",
+      "project": "mmu",
+      "top": "lcvex_mmu",
+      "result": "pass",
+      "exit_code": 0,
+      "elapsed": "4.1s",
+      "peak_vm_mb": 597,
+      "device_resources": 2387,
+      "logic_cells": 1762,
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\mmu\\syn.log"
+    },
+    {
+      "run_id": "t102-l1i-002",
+      "project": "l1_i",
+      "top": "lcvex_l1_i",
+      "result": "pass",
+      "exit_code": 0,
+      "elapsed": "33.4s",
+      "peak_vm_mb": 1264,
+      "device_resources": 49950,
+      "logic_cells": 49526,
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\l1_i\\syn.log"
+    },
+    {
+      "run_id": "t102-l1d-003",
+      "project": "l1_d_wb",
+      "top": "lcvex_l1_d_wb",
+      "result": "pass",
+      "exit_code": 0,
+      "elapsed": "4m24s",
+      "peak_vm_mb": 3640,
+      "device_resources": 183986,
+      "logic_cells": 182885,
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\l1_d_wb\\syn.log"
+    },
+    {
+      "run_id": "t102-l2wb-004",
+      "project": "l2_wb",
+      "top": "lcvex_l2_wb",
+      "result": "not_completed_in_window",
+      "exit_code": null,
+      "elapsed": ">37 min",
+      "summary": "运行超过37分钟未完成；qdb 已产生约 190MB names.hdb、183MB rtlv_netlist.cdb、183MB sgate_netlist.cdb，说明 L2 writeback 单独就能生成巨大 netlist，是强烈热点；已停止以保存现场。",
+      "peak_observed_gb": "见 qdb 大小；进程 PM 约 14GB（并行子进程）",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\l2_wb\\syn.log",
+      "qdb_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\l2_wb\\qdb"
+    },
+    {
+      "run_id": "t102-fpfix-005",
+      "project": "fp_scalar_divfix",
+      "top": "lcvex_fp_scalar",
+      "result": "not_completed",
+      "exit_code": null,
+      "elapsed": ">6 min",
+      "summary": "实验副本将 256-bit / 和 % 替换为组合 restoring long division；避免了 lpm_divide 报错，但 standalone synthesis 6 分钟未完成且 CPU 持续升高，说明朴素 256-bit restoring divider 不是实用解；需要多周期/分块除法或改数据结构。",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\fp_scalar_divfix\\syn.log",
+      "source_copy": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\fp_scalar_divfix\\lcvex_fp_scalar_divfix.sv"
+    }
+  ],
+  "reference": {
+    "decode": {
+      "run_id": "t101-decode",
+      "device_resources": 24284,
+      "logic_cells": 14667,
+      "peak_vm_mb": 682,
+      "elapsed": "33s"
+    }
+  },
+  "hotspot_table": "按已测量数据排序：l1_d_wb 182,885 LC / 3.64GB VM / 4m24s；l1_i 49,526 LC / 1.26GB VM / 33s；decode 14,667 LC / 682MB / 33s；mmu 1,762 LC / 597MB / 4.1s。L2_wb 未完成但 qdb 单模块已产生约 190MB netlist，预计是主要 OOM 贡献者。",
+  "conclusions": [
+    "L1 D writeback 单独合成就有 182,885 logic cells，并且需要 4m24s / 3.64GB VM，是已验证的重型模块。",
+    "L2 writeback 单独合成超过 37 分钟且 qdb netlist 达到约 190MB，强烈指向它是 70GB OOM 的核心贡献者之一；需要再优化或 partition。",
+    "L1 I、decode、mmu 相对轻。",
+    "朴素 256-bit restoring divider 能绕过 lpm_divide 错误，但合成时间不可接受，需要多周期/查表/降宽设计。",
+    "A64_FP_SIMD 参数未真正 gate FP/NEON 实例（T-101），因此不能作为当前内存优化手段。"
+  ],
+  "recommendations": [
+    "优先优化/分区 L2 writeback：参数化降低 SETS/WAYS、使用 Quartus partition 将 L1D/L2 隔离，或把组合逻辑改多周期/减少每周期比较。",
+    "fp_scalar 除法改为多周期或按 64-bit 分块的 restorer/Newton 迭代，避免 256-bit 组合 long division。",
+    "在实验副本中真正用 generate/generate if 将 fp_scalar/neon_* 从 core 中移除（A64_FP_SIMD=0）并测量；当前参数无效。",
+    "评估 Quartus incremental/partition compile：将 core、L1D、L2 分为独立 partition，可能把单次 Synthesis 内存峰值拆小。",
+    "在以上任一缩减设计稳定通过 Synthesis 前，不重启完整 B5 full flow。"
+  ],
+  "artifacts": [
+    {
+      "id": "t102-module-qsf-dir",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260829-102"
+    },
+    {
+      "id": "t102-l2-qdb",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\l2_wb\\qdb",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260829-102"
+    },
+    {
+      "id": "t102-fpfix-source",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260829-102\\fp_scalar_divfix\\lcvex_fp_scalar_divfix.sv",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260829-102"
+    }
+  ],
+  "known_limits": [
+    "由于 L2_wb 和 fpfix 长时间未完成，模块套件只完成 3/14 个模块，剩余模块未跑。",
+    "fpfix 未验证语义正确性；只是合成实验，不能视为已修复。",
+    "generate 门控实验和 partition 实验尚未实际测量，仅给方向。",
+    "未启动完整 B5 full flow；未读取 license；未修改原始工程/QSF/SDC。"
+  ],
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.documents_written_at",
+        "old": "2026-08-29T20:15:00+08:00",
+        "new": "2026-08-29T20:03:51+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "5e40de2059a15231a6e72dd724883aac9a4e4abb",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "9a9a4cdf5af066799c45bc9376a3396f142dd18d",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "d9f65dcb57ce2b02d6c360cef21bd112d8e3e0691",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "handoff_sha": "9a9a4cdf5af066799c45bc9376a3396f142dd18d",
+  "integrator_review": {
+    "received_at": "2026-08-29T20:00:00+0800",
+    "status": "accepted_partial",
+    "head_sha": "9a9a4cdf5af066799c45bc9376a3396f142dd18d",
+    "notes": "T-102 partial accepted: hotspot table (l1_d_wb 182k LC/3.64GB; l2_wb >37min/qdb ~190MB strong hotspot; mmu/l1_i/decode light); fp_scalar naive 256-bit restoring divider not viable; A64_FP_SIMD still not gating. Remaining modules suite, L2 optimization, true FP/NEON generate gate, partition continue in T-103.",
+    "merge_sha": "5e40de2059a15231a6e72dd724883aac9a4e4abb",
+    "result_sha": "d9f65dcb57ce2b02d6c360cef21bd112d8e3e0691"
+  }
+}

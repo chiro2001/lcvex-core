@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-005",
+  "label": "B25-RX-PHYSICAL-OBSERVABILITY",
+  "title": "Add self-reporting physical JTAG-UART RX observability to the B25 monitor",
+  "kind": "rtl-firmware-diagnostic",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-local-observability-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-001", "T-20260920-004"],
+  "triggered_by": "Vendor-timed Avalon/bridge/monitor simulation passes while the corrected board candidate still fails after explicit standard-server rescans",
+  "base_sha": "078d65e7e01273a222555ccc29b922fdbf18bafc",
+  "branch": "fix/T-20260920-005-b25-rx-physical-observability",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-005",
+  "writes": [
+    "rtl/lcvex_catapult_soc_top.sv::lcvex_catapult_soc_jtag_uart counters, status wiring and lcvex_catapult_soc_status decode",
+    "rtl/lcvex_catapult_soc_pkg.sv::PLAT_STATUS observation register definitions",
+    "fpga/catapult_a10/boot/boot.S::automatic RXDBG telemetry",
+    "fpga/catapult_a10/boot/README.md",
+    "tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+    "tb/sv/lcvex_catapult_soc_status_tb.sv",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv",
+    "fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh",
+    "related direct module test instantiations only as required by the new ports",
+    "scripts/test_registry.json only if a new stable test entry is added",
+    "build/agents/T-20260920-005/** ignored validation artifacts",
+    "docs/tasks/evidence/T-20260920-005.json",
+    "docs/handoffs/T-20260920-005-b25-rx-physical-observability.md"
+  ],
+  "scope": "Count completed JTAG DATA reads in the production bridge; count and latch DATA.RVALID/last-byte observations; expose them through read-only PLAT_STATUS offsets without changing the public SoC top ports. The BRAM monitor emits RXDBG <read_count_hex> <event_word_hex> immediately after READY and periodically every 0x40000 empty polls, so a terminal can distinguish CPU-alive/polling, no-Avalon-RX, and observed-byte cases without receiving a command.",
+  "register_contract": {
+    "0x09003000": "Existing calibration/version status, unchanged",
+    "0x09003008": "32-bit wrapping completed JTAG DATA-read count",
+    "0x09003010": "bits31:16 wrapping RVALID count, bit8 RX-seen sticky, bits7:0 last received byte; other bits zero",
+    "reset": "All new counters, sticky state and last byte reset to zero with logic rst_n",
+    "update": "Only on the bridge cycle that completes an accepted DATA read; RVALID fields update only when captured readdata[15] is one"
+  },
+  "acceptance": {
+    "focused": "Icarus and Verilator prove reset values, empty-read counting, exactly-once RVALID counting, last-byte/sticky behavior, wrap behavior and no CONTROL/write side effects under behavioral and vendor timing.",
+    "status": "Directed status-register tests prove +0/+8/+0x10 decode, read-only behavior, response stability under backpressure and unchanged calibration bits/version.",
+    "monitor": "Built ELF/HEX/MIF stay coherent; simulation observes the exact startup RXDBG zero snapshot, periodic telemetry after 0x40000 empty polls, and unchanged PONG/status/echo semantics.",
+    "regression": "Behavioral and vendor-timed full-SoC, affected L0-L2, synthesis selector and registry checks pass; assertions and expected command behavior are not relaxed.",
+    "release": "A separate integration task must run Gate D. Only then may a fresh physical/assembler/volatile-board chain be registered."
+  },
+  "resource": "Static/Icarus work is light. Verilator full-SoC and affected heavy suites acquire local; any later Quartus stage acquires gamepc in a separate task. This task itself performs no Quartus or board action.",
+  "forbidden_regions": [
+    "vendor-generated JTAG-UART HDL",
+    "JTAG address alias or RISC-V/VexRiscv workaround",
+    "host/server behavior changes",
+    "assertion disable or command-response relaxation",
+    "Quartus, assembler, JTAG, Flash, reset or power actions"
+  ],
+  "created_at": "2026-09-20T02:38:00+08:00",
+  "updated_at": "2026-09-20T03:16:55+08:00",
+  "result": {
+    "status": "done-local-observability-pass",
+    "partial": false,
+    "implementation_sha": "8f25c8e1bca0e082dd4281ae2822b566316b644a",
+    "integration_sha": "85992f53c850091a466836e7fd4424dde6000484",
+    "focused": "Vendor/behavioral bridge and status Icarus/Verilator PASS",
+    "vendor_full_soc": "PASS; 262,144 empty reads, 2,359,302 commits, periodic/dynamic RXDBG and PONG/status/echo",
+    "behavioral_full_soc": "PASS for CAL-OK/CAL-WAIT/CAL-FAIL",
+    "bram_oracle": "PASS; 13/13 negative faults plus task-TMPDIR Verilator heavy run",
+    "evidence": "docs/tasks/evidence/T-20260920-005.json",
+    "handoff": "docs/handoffs/T-20260920-005-b25-rx-physical-observability.md",
+    "next": "T-20260920-006 complete Gate D on frozen integration SHA 85992f53."
+  }
+}

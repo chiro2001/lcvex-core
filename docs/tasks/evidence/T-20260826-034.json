@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-034",
+  "base_sha": "e4e86db",
+  "head_sha": "e4e86db",
+  "candidate_status": "pass-local",
+  "qemu": {
+    "release": "11.1.0",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "plugin_sha256": "63ee07c95da5b7a1bb16eca40949823c2f0a49ccb49611be5017071f60687eea"
+  },
+  "rtl": {
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "coordinator_nofp_sha256": "7d68a96fe3d6f32d6582efb5d556e958a656bc111484ef0a7a1a485c404e7f18"
+  },
+  "inputs": {
+    "image_sha256": "2f61daa1af93fe64ed1be43c31d6ca6535818a5850750597cbafbf9166a46543",
+    "dtb_sha256": "0d1ac83292963e99d5e127b5ec8ebe4fb5027d4cbed9320cb0527540e7131941",
+    "qemu_cpu": "max,has_el3=false,has_el2=false,vfp=off,neon=off,vfp-d32=off",
+    "machine": "virt,gic-version=2,dtb-randomness=off,memory-backend=lcvexram",
+    "icount": "shift=0,align=off,sleep=off",
+    "kernel_append": "console=ttyAMA0,115200 earlycon=pl011,0x09000000 rdinit=/init nokaslr panic=-1"
+  },
+  "run": {
+    "run_id": "owner-l4-current-sha-lite-fresh-root-001",
+    "level": "L4",
+    "command": "KERNEL=1 MAX_INSNS=35000000 CKPT_EVERY=500000 COORD_PIN=6 QEMU_PIN=7 run_lockstep_step.sh",
+    "cpuset": "6,7",
+    "mapping": {"coordinator": 6, "qemu": 7},
+    "exit_code": 0,
+    "result": "pass",
+    "commits": 35000000,
+    "first_seq": 0,
+    "last_seq": 34999999,
+    "manifest_sha256": "712a9015d70964441a2823b3d3572a7e8882e5ecbb745b820854ccb4f28539be",
+    "manifest_tsv_sha256": "9f4147056439ec82b395b715fef0f4803c6bcd88ff0ef548730a82c2ddb12b61",
+    "artifact_entries": 490,
+    "checkpoint_entries": 70,
+    "artifact_global_range": "499999..34999999",
+    "chain": "build/tmp/T-20260826-034/fresh-root/chain",
+    "coord_log": "build/agents/T-20260826-034/coord.log",
+    "qemu_log": "build/agents/T-20260826-034/qemu.log"
+  },
+  "markers": [
+    "Run /init as init process",
+    "LCVEX linux-lite /init ready"
+  ],
+  "known_limits": [
+    "这是 lite no-FP 用户态证据；main 线仍是无 initrd 的 early-boot 证据。",
+    "CI 新 run 32949011243 尚未结束；Gate E 仍需 CI/QEMU patch replay 和统一审计。"
+  ]
+}

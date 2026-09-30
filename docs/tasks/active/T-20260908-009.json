@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-009",
+  "label": "B25-QUARTUS-PREFLIGHT-SCAN",
+  "title": "Scan the corrected candidate for further Quartus 21.4 elaboration blockers",
+  "kind": "read-only-synthesis-preflight",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "accepted-with-read-scope-deviation",
+  "assigned_owner": "b25_emif_resilience_impl",
+  "depends_on": [],
+  "follows_from": "T-20260908-006",
+  "base_sha": "bdb764a5bd7bb0b5b74f9918e8aa6b86994318a7",
+  "branch": "verify/T-20260908-009-b25-quartus-preflight-scan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-009",
+  "scope": "Statically scan the exact QSF-reachable source set for additional high-confidence Quartus Prime Pro 21.4 elaboration blockers after the SYNTHESIS selector fix: declaration initializers, asynchronous-edge always_ff ordering, duplicate conditional modules, unsupported constructs and missing vendor primitive selection. This is prioritization, not implementation.",
+  "writes": [
+    "docs/tasks/evidence/T-20260908-009.json",
+    "docs/handoffs/T-20260908-009-b25-quartus-preflight-scan.md",
+    "build/agents/T-20260908-009/** ignored scan artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260907-042.json",
+    "docs/tasks/evidence/T-20260908-006.json",
+    "fpga/catapult_a10/quartus/catapult_a10.qsf reachable source set",
+    "Quartus 21.4 errors/warnings preserved in T-042/T-006 logs"
+  ],
+  "validation": [
+    "Build an exact reachable-file list from the QSF and scan only that set.",
+    "Classify findings as blocker/high-risk/benign with file:line and why Quartus 21.4 is implicated.",
+    "Prove Error 19544 disappears structurally when the intended SYNTHESIS branch is selected, without claiming a Quartus PASS.",
+    "Do not edit source and do not run remote Quartus or other heavy work."
+  ],
+  "acceptance": "A bounded prioritized blocker list identifies whether another local fix should join the same candidate before the next single fresh physical rerun.",
+  "resource": "Read-only/light only; no local/gamepc heavy job.",
+  "forbidden_regions": [
+    "any tracked RTL/QSF/manifest/test modification",
+    "GamePC/Quartus/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T23:24:08+08:00",
+  "updated_at": "2026-09-08T23:53:50+08:00",
+  "result_head": "c147cea24627c95ade67bcea44b83982aefaf85b",
+  "result_evidence": "docs/tasks/evidence/T-20260908-009.json",
+  "integrated_head": "a47f38c0",
+  "integrator_review": {
+    "status": "accepted-technical-conclusion-with-disclosed-read-only-scope-deviation",
+    "reviewed_at": "2026-09-08T23:53:50+08:00",
+    "summary": "No additional high-confidence elaboration blocker after the hypothetical SYNTHESIS selector; one cross-worktree QSF read occurred, was disclosed, and was removed as an acceptance input."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-08T23:26:27+08:00",
+    "agent_name": "b25_emif_resilience_impl",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "005a8984be951479a878b1c55740c90fe37ca7b6"
+  }
+}

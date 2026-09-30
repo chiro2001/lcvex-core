@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-015",
+  "title": "Gate D candidate 全量回归（T-014 集成后）",
+  "kind": "gate-regression",
+  "priority": "high",
+  "assigned_owner": "luna-monitor-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只读运行同一冻结 SHA 的本地 Gate D；不修改 RTL/QEMU；记录资源和首个真实失败",
+  "phase": "cancelled",
+  "parent": "T-20260826-014",
+  "depends_on": ["T-20260826-014"],
+  "writes": [
+    "docs/tasks/evidence/T-20260826-015.json",
+    "docs/handoffs/T-20260826-015-gate-d.md"
+  ],
+  "reads": [
+    "sim/difftest/run_gate_d.sh",
+    "scripts/ci-fast.sh",
+    "scripts/ci-difftest.sh",
+    "scripts/test_planner.sh",
+    "docs/ROADMAP.md",
+    "docs/PROJECT_STATUS.md"
+  ],
+  "context_docs": ["docs/MULTI_AGENT_WORKFLOW.md", "docs/VERIFICATION.md"],
+  "base_sha": "a9514e8",
+  "branch": "verify/T-20260826-015-gate-d-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-015",
+  "resource": {
+    "cpu": 6,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 10800,
+    "cpus": [0, 1, 2, 3, 4, 5],
+    "initial_ratio": 0.50,
+    "escalation_ratio": 0.75,
+    "escalation_rule": "仅资源确有必要时升至 9 个物理核/可用内存的 75%，并写入 evidence"
+  },
+  "validation": {
+    "l0": ["scripts/toolcheck.sh + candidate SHA/hash"],
+    "l1": ["make test", "make coverage"],
+    "l2": ["make difftest", "make difftest-hazard", "make p4c", "make p5a", "make p6-lse", "make p6-wfi"],
+    "l3": ["bash sim/difftest/run_gate_d.sh --parallel"],
+    "l4": [],
+    "seeds": [1, 2, 3, 4, 5]
+  },
+  "acceptance": "同一冻结 SHA 上 Gate D 全量及子项通过，或在首个真实失败处分类并保留现场；不得复用历史 SHA 的绿色记录，CI 暂不作为本地完成前置。",
+  "created_at": "2026-08-26T20:15:00+08:00",
+  "updated_at": "2026-08-26T20:25:00+08:00",
+  "commits": ["1314076", "4c9f512"],
+  "handoff": "docs/handoffs/T-20260826-015-gate-d.md",
+  "evidence": "docs/tasks/evidence/T-20260826-015.json",
+  "known_limits": ["Gate D 通过仍不等于 Gate E；Linux 长跑和 P7 暂停。"],
+  "next": "CRC cin PINMISSING 已取证并取消；T-016 修复后从新 candidate 重新运行 Gate D。"
+}

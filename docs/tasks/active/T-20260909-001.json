@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-001",
+  "label": "B25-BRAM-NONCIRCULAR-ORACLE",
+  "title": "Replace the stale reset-word constant with an ELF-derived BRAM image oracle",
+  "kind": "test-contract-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-merged-union",
+  "assigned_owner": "b25_gate_d",
+  "depends_on": ["T-20260908-010", "T-20260908-011"],
+  "follows_from": "T-20260908-007",
+  "base_sha": "5e89563ba5e6577d6f81df5f08a19769fcada2ef",
+  "branch": "fix/T-20260909-001-b25-bram-noncircular-oracle",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-001",
+  "scope": "Implement the approved non-circular BRAM initialization oracle. Parse the AArch64 ELF load image/symbols independently, structurally validate the reset LDR-literal target and MOV SP,X0, cross-check complete BIN/HEX/MIF content and zero padding, generate a hash-bound expected byte image, and make lcvex_bram_init25_tb consume that expected image instead of a layout-dependent 64-bit constant.",
+  "writes": [
+    "fpga/catapult_a10/boot/check_image_contract.py (new)",
+    "fpga/catapult_a10/tools/run_bram_init25_test.sh (new)",
+    "tb/sv/lcvex_bram_init25_tb.sv::expected-image parameter/load and reset/debug checks only",
+    "docs/tasks/evidence/T-20260909-001.json",
+    "docs/handoffs/T-20260909-001-b25-bram-noncircular-oracle.md",
+    "build/agents/T-20260909-001/** and fpga/catapult_a10/boot/build/** ignored generated artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260908-010.json",
+    "docs/tasks/evidence/T-20260908-011.json",
+    "boot.S, boot.ld, build.sh, bin_to_mif.py",
+    "lcvex_bram_boot behavioral model and existing T-039/T-007 tests"
+  ],
+  "validation": [
+    "Positive: current ELF/BIN/HEX/MIF produce an independent 64 KiB expected image; LDR X0 literal resolves to __stack_top=0x10000 and instruction 1 is MOV SP,X0; updated TB passes and retains 0xFFFC/0xFFFF/0x10000 boundary checks.",
+    "Cross-artifact: exact ELF PT_LOAD derived bytes equal BIN and HEX; MIF is WIDTH=64 DEPTH=8192 with 8192 records and correct little-endian bytes plus zero padding.",
+    "Negative: missing/wrong path, reset-byte/imm19/MOV mutation, byte/word reversal, HEX/BIN mismatch, MIF lane/record mismatch, nonzero padding and stale expected hash each fail at the intended layer.",
+    "Runner must treat TB FAIL text as failure even if simulation exits 0; compile/run heavy work under local resource-lock with task-local TMPDIR."
+  ],
+  "acceptance": "The test no longer hardcodes a link-dependent imm19, derives no expected data from DUT/HEX/MIF, detects the fault-injection matrix, and passes the current authoritative 0x9100001f58001700 image without weakening boundary/byte-lane checks.",
+  "resource": {
+    "lock": "local-for-verilator",
+    "min_local_available_mib": 8192,
+    "policy": "Boot/checker-only work may be light; every Verilator build/run uses resource-lock run local, task-local TMPDIR, bounded jobs; return 75 means wait."
+  },
+  "integration_note": "Owner must not edit shared Makefile/scripts/test_registry.json. Integrator registers the new runner after acceptance and reruns it on the combined T-007+T-20260909-001 candidate.",
+  "forbidden_regions": [
+    "RTL, QSF, firmware source/linker/build.sh/bin_to_mif semantics",
+    "shared Makefile/test registry/task/status files",
+    "QEMU/reference/golden changes or expectation suppression",
+    "GamePC/Quartus/assembler/SOF/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-09T00:26:06+08:00",
+  "updated_at": "2026-09-09T01:16:31+08:00",
+  "result_head": "0bddec5eb36d9ebf2360b14275867a707c9a6d15",
+  "result_evidence": "docs/tasks/evidence/T-20260909-001.json",
+  "integrated_head": "56d49ee0cb7a6b673db4801534445c790970f5b7",
+  "integrator_validation": {
+    "run_at": "2026-09-09T01:16:31+08:00",
+    "source_sha": "56d49ee0cb7a6b673db4801534445c790970f5b7",
+    "runner": "make b25-bram-init-test",
+    "result": "PASS including 13/13 negative injections and BRAM_INIT25_TB PASS",
+    "platform_union": "selector/platform/skeleton/SHA PASS",
+    "registry": "PASS 84 entries and Makefile/runner consistency"
+  },
+  "dispatch": {
+    "sent_at": "2026-09-09T00:28:09+08:00",
+    "agent_name": "b25_gate_d",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "32286cdf835d948881fdb6b578515629243f929d"
+  }
+}

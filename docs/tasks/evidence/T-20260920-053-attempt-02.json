@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-053",
+  "attempt": 2,
+  "state": "done",
+  "acceptance_status": "pass-bram-microbench-coremark-score-and-exact-golden-with-terminal-presentation-deviation",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "branch": "verify/T-20260920-053-b25-coremark-uart-board",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-053",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-053-b25-coremark-uart-board",
+  "started_at": "2026-09-27T21:12:32+08:00",
+  "board_finished_at": "2026-09-27T21:35:28+08:00",
+  "finished_at": "2026-09-27T22:17:07+08:00",
+  "contract": {
+    "contract_id": "t053-b25-coremark-uart-fixed",
+    "sha256": "8945536a2755b121bb996193e737a228bbe814c9670efcec17c3af0af5932d11",
+    "initial_chain_policy": "user_attested_flash_boot",
+    "initial_state_attestation": "user_confirmed_flash_boot_vexriscv_linux",
+    "candidate": {
+      "bytes": 36842099,
+      "sha256": "39c2945466804036366a6306125323b585bef097aded7e8fff494d60a3ea2def",
+      "checksum": "0x31585D80",
+      "design_hash": "48917DD6FD70C4420BD5765A206DACBB"
+    },
+    "golden": {
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F"
+    },
+    "terminal_bytes_once_each": ["74", "76", "63"],
+    "candidate_program_budget": 1,
+    "terminal_sessions_budget": 1,
+    "golden_program_budget": 1
+  },
+  "preflight": {
+    "present_ftdi_0403_6014_count": 2,
+    "candidate_and_golden_file_identity": "PASS",
+    "reported_standard_server_design_hash": "BD13E12CD20E8B71E260",
+    "design_hash_is_live_identity": false,
+    "initial_policy": "user_attested_flash_boot",
+    "user_initial_state_attestation": "Flash-loaded VexRiscv/Linux reference confirmed by user",
+    "external_read_only_gate": "PASS",
+    "remote_runner_freshness": "PASS",
+    "remote_ast": "PASS; parse failures=0",
+    "remote_seal": "PASS; checked files=12",
+    "runner_preflight": "PASS",
+    "eda_conflicts": 0,
+    "port_1310_listeners": 0,
+    "standard_jtagserver_pid": 5640
+  },
+  "candidate_program": {
+    "result": "PASS",
+    "invocations": 1,
+    "pid": 32432,
+    "exit_code": 0,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "checksum": "0x31585D80",
+    "jtag_id": "0x02E060DD",
+    "owned_server_stopped": true,
+    "standard_server_preserved": true,
+    "program_result_sha256": "64c11010adf01adf3dd4a4c1078fe22b0078341d56ec612316d2f714c4f5862e",
+    "stdout_sha256": "4e4f8eaf96888bffc4396bc5c6fa7c1a1f5de41f29e7c63ec4fbcd9a6bf0a6e0"
+  },
+  "terminal": {
+    "sessions": 1,
+    "remote_exit_code": 0,
+    "connected": true,
+    "startup": ["LCVEX25 BOOT", "CAL-WAIT", "DDR-FAIL", "READY", "RXDBG 00000000 00000000"],
+    "input_events": [
+      {"command": "t", "byte_hex": "74", "attempts": 1, "result": "MBPASS 24 8679CF21"},
+      {"command": "v", "byte_hex": "76", "attempts": 1, "result": "CMSELF PASS", "crc": ["E9F5", "E714", "1FD7", "8E3A"], "final_crc": "E714", "iterations": 1, "cycles": 1479468, "score": "INVALID"},
+      {"command": "c", "byte_hex": "63", "sent_once": true, "firmware_output": "CMRESULT VALID", "direct_response_regex": "timeout due to 120-column console redraw", "retry": false}
+    ],
+    "transcript": {
+      "path": "build/agents/T-20260920-053/run-attested-flash-baseline/coremark-final/direct-terminal-coremark-final-terminal.typescript",
+      "bytes": 92694,
+      "sha256": "ae3c5b4171e3f85d1845672da614062ae78e7c2331ea072a2dce6336358c8d45"
+    },
+    "direct_terminal_result_sha256": "d4e556cd652f3534254bb036b774a17458b23f42a35940718972ac69e2865af3",
+    "full_coremark_fields_present_in_raw_capture": true
+  },
+  "microbench": {"status": "PASS", "tests": 24, "signature": "8679CF21"},
+  "coremark_full": {
+    "parser_task": "T-20260920-055",
+    "parser_result": "VALID",
+    "mode": "all",
+    "iterations": 300,
+    "cycles": 442800996,
+    "hz": 25000000,
+    "target_elapsed_seconds": 17.71203984,
+    "coremark_per_second_x1000": 16937,
+    "coremark_per_mhz_x1000": 677,
+    "seed_crc": "E9F5",
+    "list_crc": "E714",
+    "matrix_crc": "1FD7",
+    "state_crc": "8E3A",
+    "final_crc": "5275",
+    "raw_report": {
+      "size": 666,
+      "ticks": 442800996,
+      "seconds": 17,
+      "iterations_per_second": 17,
+      "compiler": "aarch64-linux-gnu-gcc 16.1.0",
+      "memory_location": "64KiB M20K BRAM",
+      "validation_marker": "Correct operation validated. See readme.txt for run and reporting rules."
+    },
+    "raw_crosscheck": "PASS",
+    "terminal_normalization": "verified CSI 29;120 H redraw of duplicate right-margin character only; original transcript unchanged",
+    "parser_log_sha256": "e4a1d466e640787a7095a9eb84cf2ea4d9d656ae53582da6ceee043b05b8b29e"
+  },
+  "golden_restore": {
+    "result": "PASS",
+    "invocations": 1,
+    "pid": 71972,
+    "exit_code": 0,
+    "checksum": "0x31510BB6",
+    "jtag_id": "0x02E060DD",
+    "design_hash": "193DE4BC8A30F3ED5F1F",
+    "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "owned_server_stopped": true,
+    "standard_server_preserved": true,
+    "program_result_sha256": "5cabc900f8079b7f18174146517c600e5d372ce1516f880d5704faf1f3cfe7ea",
+    "stdout_sha256": "51cda8ba0a666a0643fa7e8c61115ded062a57d9eec950cfb4e1ba14298ccfba",
+    "postflight_result": "PASS",
+    "postflight_result_sha256": "ffd89e59004d4428bf22fac991821cc9980e05aa710855953297aa8766eeb5ef",
+    "postflight_log_sha256": "974e5e94577ddb61f0a6a90b7d6edd7809f12dc40effc60497e2c2bf80b375dd"
+  },
+  "resource": {
+    "lock": "gamepc",
+    "single_uninterrupted_window": true,
+    "lock_after_run": "FREE",
+    "standard_server_pid_preserved": 5640,
+    "post_busy_count": 0,
+    "post_port1310_count": 0
+  },
+  "safety": {
+    "candidate_programmer_invocations": 1,
+    "terminal_sessions": 1,
+    "golden_programmer_invocations": 1,
+    "flash_epcq_actions": 0,
+    "reset_power_actions": 0,
+    "standard_or_unknown_process_stops": 0,
+    "task_owned_server_stops": 2,
+    "retries": 0,
+    "m_command_in_this_session": 0
+  },
+  "known_limits": [
+    "run_board_once/direct_terminal returned status 1 because the full c response regex did not tolerate the Windows 120-column ConHost right-margin redraw. The immutable terminal transcript contains complete CMRESULT and upstream output; T-055's strict parser handled only the verified duplicate redraw and rechecked every field/score.",
+    "Startup included DDR-FAIL. The successful workload reports 64KiB M20K BRAM and does not depend on DDR; this is not a DDR/Cache stress or Linux acceptance. No m command was sent in the one-shot t/v/c session."
+  ],
+  "artifacts": {
+    "board_runner_summary": "build/agents/T-20260920-053/run-attested-flash-baseline/coremark-final/summary.txt",
+    "board_runner_status": 1,
+    "candidate_marker_sha256": "0be9c201ff5efbf8b4681637ac48f0ae72ad8463c23f429cae1c1f5374b467c5",
+    "golden_marker_sha256": "7bd0c5a32b0b395364b9c5434a6cde37a798605a169ffde5fa314f7081991e62",
+    "parser_normalization_log_sha256": "e4a1d466e640787a7095a9eb84cf2ea4d9d656ae53582da6ceee043b05b8b29e"
+  },
+  "handoff": "docs/handoffs/T-20260920-053-b25-coremark-uart-board-result.md"
+}

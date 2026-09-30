@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-099",
+  "state": "done",
+  "base_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+  "source_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+  "head_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+  "handoff_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+  "merge_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+  "sent_at": "2026-08-29T13:06:00+0800",
+  "received_at": "2026-08-29T13:06:00+0800",
+  "reported_at": "2026-08-29T13:50:20+0800",
+  "candidate_status": "pass-local",
+  "agent": {
+    "role": "gate-runner",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099",
+    "branch": "detached@feature/p7-final",
+    "note": "按用户指定从 feature/p7-final @ 3dcffe0 复跑；未修改 RTL/QEMU/checkpoint，未启动 Quartus，未向主分支提交。另有 8de6b76 仅更新任务 active JSON。"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary": {
+      "path": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+      "sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e"
+    },
+    "plugin": {
+      "path": "qemu/plugins/lcvex_difftest.so",
+      "sha256": "287daacdf51e42c15bfb42d20df413cad190746667d725096e5fade694e2b500"
+    },
+    "plugin_source_sha256": "fb24cc183a497d8a3615283e0b74e095e82856105d86d354e6b3354326f9cb13"
+  },
+  "rtl_filelist_sha256": "404108df9586747b6993e490fdda9d223112c0513041926f59d65cda499154c8",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.x (conda env lcvex)"
+  },
+  "resource": {
+    "note": "未显式 taskset；系统 12 逻辑核。并行 planner 在 M2 阶段曾因 cpu_free=0 等待，随后获得槽位并完成；本轮全部并行批次通过。"
+  },
+  "runs": [
+    {
+      "run_id": "gate-d-f-001-old-red",
+      "source_sha": "9dc3c508135f5905a71b21eff830ba3876fde625",
+      "runner_role": "gate-runner",
+      "level": "L3",
+      "command": "bash sim/difftest/run_gate_d.sh --parallel",
+      "seed": [1, 2, 3],
+      "started_at": "2026-08-29T13:06:00+0800",
+      "finished_at": "2026-08-29T13:18:40+0800",
+      "wall_seconds": 760,
+      "exit_code": 1,
+      "result": "fail",
+      "log": "build/gate_d_T-099.log",
+      "log_sha256": "700fb2a1fadd0d7d891d192cbba740d6d48e4f4afb04d70da9bc8568ee3003e0",
+      "failure": "root-caused by Verilator -Wall fatal UNUSEDPARAM and planner no cpus; recorded for history only."
+    },
+    {
+      "run_id": "gate-d-f-002-pass",
+      "source_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+      "runner_role": "gate-runner",
+      "level": "L3",
+      "command": "bash sim/difftest/run_gate_d.sh --parallel",
+      "seed": [1, 2, 3],
+      "started_at": "2026-08-29T13:25:00+0800",
+      "finished_at": "2026-08-29T13:46:40+0800",
+      "wall_seconds": 1300,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/gate_d_T-099-rerun.log",
+      "log_sha256": "c3ef8e5c765f2dec64dd908772b9b9ca74032dd8251e6ea3decb8c802afa3279"
+    }
+  ],
+  "results": {
+    "make_test": { "result": "pass", "detail": "all SV TB, Cocotb, encoder checks passed" },
+    "coverage": { "result": "pass", "detail": "merged.dat generated" },
+    "m2_4b_4c": { "result": "pass", "detail": "base/cache each 40 parallel lockstep cases, all pass" },
+    "delay2_build": { "result": "pass", "detail": "lockstep-build-l1dl2-delay2 succeeded" },
+    "random_smoke_regen": { "result": "pass", "detail": "random_smoke.bin regenerated" },
+    "delay2_parallel": { "result": "pass", "detail": "32 parallel lockstep cases all pass" },
+    "p5a_hardening": { "result": "pass", "detail": "26 parallel lockstep cases all pass" },
+    "gate_c": { "result": "pass", "detail": "7 groups all QEMU-consistent" },
+    "p5a_mmu": { "result": "pass", "detail": "3 groups all QEMU-consistent" },
+    "p4b": { "result": "pass", "detail": "5 groups all QEMU-consistent" },
+    "random": { "result": "pass", "detail": "seed 1/2/3 x 100000 all pass" },
+    "instruction_coverage": { "result": "pass", "detail": "expected coverage set fully hit" },
+    "baremetal_c": { "result": "pass", "detail": "200 instructions QEMU-consistent" },
+    "overall": {
+      "pass_steps": 13,
+      "fail_steps": 0,
+      "total_steps": 13,
+      "summary": "PASS: Gate D 系统回归全部通过"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "gate-d-pass-log",
+      "uri": "build/gate_d_T-099-rerun.log",
+      "persisted_uri": "docs/evidence/artifacts/T-20260829-099/gate-d-pass.log.txt",
+      "sha256": "c3ef8e5c765f2dec64dd908772b9b9ca74032dd8251e6ea3decb8c802afa3279",
+      "bytes": 339567,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "bash sim/difftest/run_gate_d.sh --parallel > build/gate_d_T-099-rerun.log 2>&1"
+    },
+    {
+      "id": "gate-d-old-fail-log",
+      "uri": "build/gate_d_T-099.log",
+      "persisted_uri": "docs/evidence/artifacts/T-20260829-099/gate-d-fail.log.txt",
+      "sha256": "700fb2a1fadd0d7d891d192cbba740d6d48e4f4afb04d70da9bc8568ee3003e0",
+      "bytes": 92486,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "bash sim/difftest/run_gate_d.sh --parallel > build/gate_d_T-099.log 2>&1"
+    },
+    {
+      "id": "random-traces",
+      "uri": "build/difftest/random_{1,2,3}.trace",
+      "persisted_uri": "docs/evidence/artifacts/T-20260829-099/random-trace-excerpts.txt (full traces in artifact store)",
+      "sha256": [
+        "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e",
+        "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768",
+        "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"
+      ],
+      "owner": "gate-d-t099",
+      "retain_until": "artifact-store/rebuild",
+      "reproduce": "make difftest-random-multi"
+    },
+    {
+      "id": "random-1-results",
+      "uri": "docs/evidence/artifacts/T-20260829-099/random_1_results.xml",
+      "sha256": "6a4605002dfc7cd477b8857922000373aa7b738537bd53751be0987b4d51a492",
+      "bytes": 401,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "git show 0086858:docs/evidence/artifacts/T-20260829-099/random_1_results.xml | sha256sum"
+    },
+    {
+      "id": "random-2-results",
+      "uri": "docs/evidence/artifacts/T-20260829-099/random_2_results.xml",
+      "sha256": "cc99f8ac4f41a172c6cc6a51d22f617a8b30714af7b19ff33a2dc7d2a595dbfc",
+      "bytes": 401,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "git show 0086858:docs/evidence/artifacts/T-20260829-099/random_2_results.xml | sha256sum"
+    },
+    {
+      "id": "random-3-results",
+      "uri": "docs/evidence/artifacts/T-20260829-099/random_3_results.xml",
+      "sha256": "89d455b3cee89eb7de7129451810d2df8d0cc9b2f30b7907af2e23c9779f3bbc",
+      "bytes": 400,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "git show 0086858:docs/evidence/artifacts/T-20260829-099/random_3_results.xml | sha256sum"
+    },
+    {
+      "id": "coverage-merged",
+      "uri": "build/coverage/merged.dat",
+      "persisted_uri": "docs/evidence/artifacts/T-20260829-099/insn_map.txt (coverage DB in artifact store)",
+      "sha256": "6e14afc91dc3d47bd3a5aa26d87a9d9d3750023f423d8f7652b2c7467eacfeab",
+      "bytes": 3157568,
+      "owner": "gate-d-t099",
+      "retain_until": "artifact-store/rebuild",
+      "reproduce": "make coverage"
+    },
+    {
+      "id": "coverage-insn-map",
+      "uri": "docs/evidence/artifacts/T-20260829-099/insn_map.txt",
+      "sha256": "f4a2fcbade7de4451433253f35601aa219bc131dc5a05f0403e663065e2faf2c",
+      "bytes": 1274,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "git show 0086858:docs/evidence/artifacts/T-20260829-099/insn_map.txt | sha256sum"
+    },
+    {
+      "id": "lockstep-coordinator-base",
+      "uri": "build/verilator_lockstep/lockstep_coordinator",
+      "persisted_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/lockstep_coordinator_base",
+      "sha256": "38d84dc9ea5c51e77155e887fb07f6e5e5f86ecd4cfec415a31da21d3e34a095",
+      "owner": "gate-d-t099",
+      "retain_until": "artifact-store/rebuild",
+      "reproduce": "make lockstep-build"
+    },
+    {
+      "id": "lockstep-coordinator-l1dl2",
+      "uri": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+      "persisted_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/lockstep_coordinator_l1dl2",
+      "sha256": "94c7b439e26eba28d85a5b8f3bbd49fe8531ca192ac31cd79b430671bebb3662",
+      "owner": "gate-d-t099",
+      "retain_until": "artifact-store/rebuild",
+      "reproduce": "make lockstep-build-l1dl2"
+    },
+    {
+      "id": "lockstep-coordinator-l1dl2-delay2",
+      "uri": "build/verilator_lockstep_l1dl2_d2/lockstep_coordinator",
+      "persisted_uri": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-099/lockstep_coordinator_l1dl2_d2",
+      "sha256": "3af917576d9d6c7d938d7db2e83af25f1a5d93a8edac0a2fde8bc6f6ac4dfee0",
+      "owner": "gate-d-t099",
+      "retain_until": "artifact-store/rebuild",
+      "reproduce": "make lockstep-build-l1dl2-delay2"
+    },
+    {
+      "id": "coord-step-log",
+      "uri": "docs/evidence/artifacts/T-20260829-099/step-coord.log.txt",
+      "sha256": "54e5e3efbe10918befbbed5512f4fd4afb84a39b109eeda52366b4274e0ae31f",
+      "bytes": 13232,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "git show 0086858:docs/evidence/artifacts/T-20260829-099/step-coord.log.txt | sha256sum"
+    },
+    {
+      "id": "qemu-step-log",
+      "uri": "docs/evidence/artifacts/T-20260829-099/step-qemu.log.txt",
+      "sha256": "208b9320855dcddb31ddd95d8356d26861c791136615aafb78cd2c058ab00c24",
+      "bytes": 70,
+      "owner": "gate-d-t099",
+      "retain_until": "repository-history",
+      "reproduce": "git show 0086858:docs/evidence/artifacts/T-20260829-099/step-qemu.log.txt | sha256sum"
+    }
+  ],
+  "integrator_review": {
+    "status": "accepted",
+    "result_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+    "head_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+    "merge_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+    "received_at": "2026-08-29T13:50:20+0800",
+    "notes": "T-099 finalized by T-20260830-025. Verified source is 3dcffe0; evidence/handoff landed directly at 64ec6eb. Artifact hashes and persisted URIs are documented above and in docs/evidence/artifacts/T-20260829-099/manifest.json."
+  },
+  "correction_record": {
+    "source": "T-20260829-114 / T-20260830-025",
+    "old_values_preserved": true,
+    "old_head_sha": "3dcffe0e6ddd7946c0bf560ca36778c6a1531f28",
+    "old_merge_sha": "",
+    "old_state": "review",
+    "old_reported_at": null,
+    "correct_head_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+    "correct_merge_sha": "64ec6eb5554942a900351433d107f4dd178172c9",
+    "correct_state": "done",
+    "correct_reported_at": "2026-08-29T13:50:20+0800",
+    "references": [
+      "docs/handoffs/T-20260829-114-aud-09.md",
+      "docs/tasks/evidence/T-20260829-114.json",
+      "docs/evidence/artifacts/T-20260829-099/manifest.json",
+      "docs/handoffs/T-20260830-025-ext-01-fix.md",
+      "docs/tasks/evidence/T-20260830-025.json"
+    ],
+    "notes": "Historical handoff T-20260829-099-gate-d.md is not rewritten. The run times were already correct; only task ledger timestamps/head/merge identity were corrected."
+  },
+  "known_limits": [
+    "本地 Gate D 全绿；不替代 CI，也不替代 Gate E 长跑/Linux 验证。",
+    "未修改 RTL/QEMU/checkpoint 协议；未运行 Quartus；未向 feature/p7-final 提交任何代码（证据/台账提交除外）。",
+    "完整日志、trace、覆盖率、协调器和裸机镜像仅位于 worktree/artifact store，不进入 Git。",
+    "大产物依赖 artifact store 或按 recorded commands 重建。"
+  ]
+}

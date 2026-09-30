@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-011",
+  "base_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+  "head_sha": "a3ce76b8746f97a332c266405c533b78fbd30f0f",
+  "merge_sha": "a3ce76b8746f97a332c266405c533b78fbd30f0f",
+  "toolchain": {
+    "aarch64_linux_gnu_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "qemu_aarch64": "qemu-aarch64 version 11.0.3",
+    "git": "git version 2.55.0"
+  },
+  "qemu": {
+    "release": "not used for performance measurement",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": null,
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "64047b9525dde133d556c479c8c1896a903fd528",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": 0.02,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "64047b9525dde133d556c479c8c1896a903fd528",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -I baremetal -c baremetal/perf/t_alu_latency.c baremetal/perf/t_alu_ilp.c baremetal/perf/t_ctrl_branch.c baremetal/perf/t_muldiv.c",
+      "seed": null,
+      "wall_seconds": 0.15,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Each file compiled separately with the same flags; all four objects produced."
+    },
+    {
+      "run_id": "owner-l0-003",
+      "source_sha": "64047b9525dde133d556c479c8c1896a903fd528",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "Link the four run_test_* entries with a temporary user-mode _start and run qemu-aarch64 /tmp/perf_user.elf; exit code 0",
+      "seed": null,
+      "wall_seconds": 0.18,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "note": "Functional sanity only; user-mode QEMU is not a cycle-accurate performance measurement."
+    }
+  ],
+  "artifacts": [],
+  "known_limits": [
+    "未运行重型 Verilator、QEMU 锁步或 Gate D；本任务只交付 workload 源码与文档。",
+    "未启动 Quartus；未修改 RTL/scripts/Makefile/microbench_main。",
+    "未引入 SVE；所有函数均为 AArch64 scalar integer/control-flow。",
+    "cycle/JSON 报告依赖 P-INFRA（T-20260830-010）接入；这些函数不是 A10/Fmax 签核。"
+  ],
+  "status": "done",
+  "state": "done",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:04:20+08:00",
+    "head_sha": "ddf039ca6c560c72639863d454517d7e1d46df9b",
+    "notes": "P-ALU merged via cherry-pick. Four integer/control perf workloads added; cross-compile and qemu-aarch64 sanity pass.",
+    "merge_sha": "a3ce76b8746f97a332c266405c533b78fbd30f0f",
+    "result_sha": "a3ce76b8746f97a332c266405c533b78fbd30f0f"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "a3ce76b8746f97a332c266405c533b78fbd30f0f",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "a3ce76b8746f97a332c266405c533b78fbd30f0f",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

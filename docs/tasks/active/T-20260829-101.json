@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-101",
+  "label": "T067-synth-opt",
+  "parent": "T-20260828-067",
+  "title": "T-067 综合优化/standalone Quartus synthesis 调研与 OOM 定位",
+  "kind": "fpga-synth-oom-investigation",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "20e98a1b444eaebefcd63faac8401770863d9ce5",
+  "branch": "feature/T-20260829-101-t067-synth-opt",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-101",
+  "scope": "对 T-067 B5 SoC Quartus Synthesis 77GB OOM 做 standalone synthesis/综合优化调研：定位内存热点模块/IP，验证缩减/分区/standalone quartus_syn 方案，产出可执行建议。不自动重跑完整 full flow，除非某局部实验稳定通过 Synthesis。禁止修改原始 catapult_a10.qsf/sdc/qpf/RTL 源码，除非独立实验副本并明确记录；禁止读取/复制 license；禁止删除未知用户文件。",
+  "writes": [
+    "docs/handoffs/T-20260829-101-t067-synth-opt.md",
+    "docs/tasks/evidence/T-20260829-101.json",
+    "fpga/quartus-synth-diag/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/build/T-20260829-101/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260828-067-b5-fullflow-rerun.md",
+    "docs/tasks/evidence/T-20260828-067.json",
+    "fpga/catapult_a10/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+    "ssh://192.168.101.5/D:/Software/intelFPGA_pro/21.4"
+  ],
+  "validation": {
+    "l0": [
+      "远端 standalone synth 或局部编译实验有日志/命令/内存记录",
+      "OOM 热点模块或至少候选清单明确"
+    ],
+    "l1": [
+      "至少一个缩减/分区方案有可行性判断或实验结果"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付 T-067 Synthesis OOM 定位报告和可执行优化建议；如某缩减实验能稳定通过 synthesis，给出脚本/副本/复现路径。",
+  "next": "根据结果决定是否在满足内存/范围条件下重跑 B5 full flow。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T16:42:59+08:00",
+  "updated_at": "2026-08-29T16:42:59+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T16:42:59+08:00",
+    "agent_name": "t067_synth_opt",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-101"
+  },
+  "known_limits": [
+    "不自动重跑完整 B5 full flow，除非局部实验稳定通过 Synthesis。",
+    "远端只做允许写集内实验；不修改原始工程/RTL。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-101-t067-synth-opt.md",
+  "evidence": "docs/tasks/evidence/T-20260829-101.json",
+  "merge_sha": "6fd554aa08d76b2d6e05f309cbe7175ab94a501a",
+  "merged_at": "2026-08-29T18:20:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-29T18:20:00+0800",
+    "status": "accepted",
+    "head_sha": "2ef20a6ea30fe065ed5138cb52bbbd93457786c2",
+    "notes": "T-101 synth OOM investigation accepted: soc_only/soc_nofp both ~70GB OOM -> hotspot in B5 SoC RTL, not EMIF; A64_FP_SIMD=0 does not gate FP/NEON; decode_only passes 33s/682MB; core_only fails on lpm_divide >64 in fp_scalar. No full B5 flow restarted."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T17:30:00+0800",
+        "new": "2026-08-29T16:42:59+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T17:30:00+0800",
+        "new": "2026-08-29T16:42:59+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T17:30:00+0800",
+        "new": "2026-08-29T16:42:59+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "20e98a1b444eaebefcd63faac8401770863d9ce5",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "20e98a1b444eaebefcd63faac8401770863d9ce5"
+}

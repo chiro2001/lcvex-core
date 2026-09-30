@@ -1,0 +1,31 @@
+{
+  "name": "mem_random",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "8565c7ba935c6b9588fa72e66a5fb7333c23e64fabbec19de9ca387efa153725",
+  "source_sha256": "8565c7ba935c6b9588fa72e66a5fb7333c23e64fabbec19de9ca387efa153725",
+  "image_hash": "587353343730b0048d3c5fb51f3427d0720bf16b47bcc867790019daf049739e",
+  "image_sha256": "587353343730b0048d3c5fb51f3427d0720bf16b47bcc867790019daf049739e",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 3907778,
+  "wall_sec": 23.284076,
+  "rss_kb": 139492,
+  "rss": 136.223,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_mem_random.bin",
+    "--name",
+    "mem_random",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: mem_random (3907778 cycles)\n",
+  "runner_stderr": ""
+}

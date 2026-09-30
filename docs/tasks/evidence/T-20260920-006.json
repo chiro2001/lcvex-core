@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-006",
+  "label": "B25-RX-OBSERVABILITY-GATE-D",
+  "state": "done",
+  "acceptance_status": "complete-release-mode-gate-d-pass",
+  "partial": false,
+  "candidate_sha": "85992f53c850091a466836e7fd4424dde6000484",
+  "candidate_tree_sha": "dd41ba4d9a1a97d819f9356697f28aa89326d64f",
+  "branch": "verify/T-20260920-006-b25-rx-observability-gate-d",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-006",
+  "owner": "root",
+  "timestamps": {
+    "started_at": "2026-09-20T03:39:37+08:00",
+    "finished_at": "2026-09-20T03:54:58+08:00",
+    "wall_seconds": 921,
+    "timezone": "Asia/Shanghai"
+  },
+  "run": {
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-006 root --min-local-available-mib 8192 --meta stage=gate_d --meta source_sha=85992f53c850091a466836e7fd4424dde6000484 --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=gate-d-parallel -- bash -lc 'set -o pipefail; env VERILATOR_JOBS=1 bash sim/difftest/run_gate_d.sh --parallel 2>&1 | tee build/agents/T-20260920-006/gate-d.lock.log'",
+    "exit_code": 0,
+    "result": "PASS: Gate D 系统回归全部通过",
+    "assertions_enabled": true,
+    "comparisons_enabled": true,
+    "skip_baremetal": false,
+    "verilator_jobs": 1,
+    "parallel_runner": true,
+    "log": {
+      "path": "build/agents/T-20260920-006/gate-d.lock.log",
+      "bytes": 352705,
+      "sha256": "9b6f7ea92c7423dd5d05b26bb1d15d36ee15d5c45804ec7597aac638324b9810"
+    }
+  },
+  "results": {
+    "make_test": "PASS",
+    "coverage": {
+      "result": "PASS",
+      "covered_points": 8760,
+      "artifact": {
+        "path": "build/coverage/merged.dat",
+        "bytes": 3196159,
+        "sha256": "5842d7316b279b12328e875eb81409441f878743133f1523b6ad94e53927960c"
+      }
+    },
+    "m2_r1": {
+      "base": 40,
+      "cache": 40,
+      "result": "PASS"
+    },
+    "delay2_cache": {
+      "tests_including_random_smoke": 32,
+      "result": "PASS"
+    },
+    "p5a_hardening": {
+      "tests": 26,
+      "result": "PASS"
+    },
+    "gate_c": {
+      "groups": 7,
+      "result": "PASS"
+    },
+    "p5a_mmu": {
+      "groups": 3,
+      "result": "PASS"
+    },
+    "p4b": {
+      "groups": 5,
+      "result": "PASS"
+    },
+    "random": {
+      "seeds": [1, 2, 3],
+      "requested_length": 100000,
+      "rtl_qemu_commits_each": 100002,
+      "result": "PASS",
+      "traces": [
+        {"path": "build/difftest/random_1.trace", "bytes": 3937845, "sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e"},
+        {"path": "build/difftest/random_2.trace", "bytes": 3948075, "sha256": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768"},
+        {"path": "build/difftest/random_3.trace", "bytes": 3947467, "sha256": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"}
+      ]
+    },
+    "instruction_coverage": {
+      "expected_hit": "62/62",
+      "observed_families": 63,
+      "commits": 300006,
+      "result": "PASS"
+    },
+    "baremetal_c": {
+      "image_bytes": 1104,
+      "image_sha256": "ed2f093617883206c3e56614b41f6942fa08985067bb82ad8b93972347964fc2",
+      "commits": 200,
+      "result": "PASS"
+    },
+    "orphan_process_check": {
+      "task_owned_qemu_or_coordinator": 0,
+      "result": "PASS"
+    }
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu": {
+      "release": "11.1.0",
+      "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+      "source_state": "expected local difftest fork modifications present",
+      "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+      "plugin_sha256": "39c75f479f7a3b5a801223196ddcdd46c723c9454c08164e62f5a9db685127d8"
+    },
+    "rtl_filelist_sha256": "23e27cb9249c08be6e5d11fd8daa0d315d9859dc12b459473ed8f39dea92f46e",
+    "coordinators": {
+      "base": "f9f4b09682c9d38259ab1cbd4e74de899a2f2d574d33a82f76d7965658e1ceea",
+      "l1dl2": "761d314dbe05c70ea09b32961af474e0989985b96efc5740eaa30c4d87e60c02",
+      "l1dl2_delay2": "f8f341242803ccfd7293da037a332a67af433659aae5119b0bbd0e37d6179ca4"
+    }
+  },
+  "resource_lock": {
+    "resource": "local",
+    "admission_min_available_mib": 8192,
+    "memory_policy": "exclusive-no-hard-cap",
+    "cpu_policy": "gate-d-parallel",
+    "released_after_exit": true,
+    "postflight_observation": "local was subsequently acquired by unrelated pypto-x/verify-0051-ops-batch3-r3; gamepc FREE"
+  },
+  "safety_and_scope": {
+    "tracked_source_modified_by_gate": false,
+    "assertion_or_comparison_disabled": false,
+    "expected_result_modified": false,
+    "qemu_source_modified_by_gate": false,
+    "gamepc_or_quartus_used": false,
+    "assembler_or_jtag_board_flash_reset_power": false
+  },
+  "handoff": "docs/handoffs/T-20260920-006-b25-rx-observability-gate-d.md",
+  "next": "Register a fresh no-FP physical task for synthesis, fitter, STA, UCP and custom reports on candidate 85992f53, followed only after acceptance by assembler and one instrumented volatile board test."
+}

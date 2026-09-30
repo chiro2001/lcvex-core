@@ -1,0 +1,6 @@
+# A1 generic synth script for lcvex_axi4_master. Run from fpga/opensynth/:
+#   yosys -s lcvex_axi4_master.ys
+read_verilog -sv generated/lcvex_axi4_master_flat.v
+synth -top lcvex_axi4_master -lut 4
+write_verilog -noattr -noexpr netlist.v
+stat -json

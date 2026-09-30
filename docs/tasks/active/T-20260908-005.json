@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-005",
+  "label": "B25-GATE-D-RERUN",
+  "title": "Run full Gate D on the corrected B25 candidate",
+  "kind": "candidate-gate-validation",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "gate-d-green",
+  "assigned_owner": "codex-integrator",
+  "depends_on": [
+    "T-20260907-037",
+    "T-20260908-001",
+    "T-20260908-002",
+    "T-20260908-004"
+  ],
+  "source_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+  "batch_candidate_sha": "3ffd0c119f691ab0aef98984cddf1ba0c5ab208a",
+  "branch": "verify/T-20260908-005-b25-gate-d-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-005",
+  "scope": "在包含 T-001/T-002/T-004 的同一 B25 候选上，执行完整 Gate D：make test、缓存/MMU/异常定向、随机 seed 1/2/3 × 100k、覆盖记账和 baremetal-C；保留所有断言和 QEMU 严格差分。",
+  "writes": [
+    "build/agents/T-20260908-005/** ignored logs and runtime artifacts",
+    "docs/tasks/evidence/T-20260908-005.json",
+    "docs/handoffs/T-20260908-005-b25-gate-d-rerun.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260907-046.json",
+    "docs/tasks/evidence/T-20260908-001.json",
+    "docs/tasks/evidence/T-20260908-002.json",
+    "docs/tasks/evidence/T-20260908-004.json",
+    "sim/difftest/run_gate_d.sh"
+  ],
+  "validation": [
+    "Confirm the detached worktree is exactly the registered candidate and QEMU/plugin/tool hashes are recorded.",
+    "Run env VERILATOR_JOBS=1 make test and bash sim/difftest/run_gate_d.sh --parallel under one local resource lock.",
+    "Require random_1/random_2/random_3 traces before coverage; record every step, first failure, elapsed/RSS and artifact hashes.",
+    "Do not use GamePC, Quartus, assembler, SOF, JTAG, programming, power or board actions."
+  ],
+  "acceptance": "The corrected candidate completes the full Gate D suite with no disabled assertions/reference comparisons and all three random traces present; otherwise preserve the first failure and keep the board gate blocked.",
+  "resource": {
+    "lock": "local",
+    "min_local_available_mib": 8192,
+    "verilator_jobs": 1,
+    "policy": "Acquire local for the entire make test + Gate D run; use task-local TMPDIR/build roots; return 75 means wait."
+  },
+  "forbidden_regions": [
+    "RTL/QEMU/reference/golden/test expectation changes",
+    "shared writable QEMU build outside the serialized plugin build",
+    "GamePC/Quartus/JTAG/assembler/SOF/board/Flash actions"
+  ],
+  "created_at": "2026-09-08T12:38:30+08:00",
+  "updated_at": "2026-09-08T12:55:43+08:00",
+  "result_head": "55429451850d43c15d2ca6fa2c165cb8a15ca9c2",
+  "result_evidence": "docs/tasks/evidence/T-20260908-005.json",
+  "completed_at": "2026-09-08T12:52:30+08:00",
+  "integrator_review": {
+    "status": "accepted-gate-d-green",
+    "reviewed_at": "2026-09-08T12:55:43+08:00",
+    "candidate_sha": "90627b58721b463242d6276a1db9d5e72c68ad66",
+    "summary": "make test、40/40 M2/R1、32/32 delay2、26/26 P5a、Gate C 7/7、P5a MMU 3/3、P4b 5/5、random 3x100k/300006、coverage 62/62、baremetal-C 200 全部通过。",
+    "next": "T-042 fresh 25 MHz synthesis/fitter/STA；板级 JTAG/console 只有在有效镜像和明确授权后执行。"
+  },
+  "merge_sha": "fc7f02d4ac66836f3ad28fdd3c3c20fe8a11c214",
+  "dispatch": {
+    "sent_at": "2026-09-08T12:38:30+08:00",
+    "agent_name": "codex-integrator",
+    "model_argument_omitted": true
+  },
+  "correction_record": {
+    "recorded_at": "2026-09-08T13:14:54+08:00",
+    "issue": "The self-owned validation ledger recorded created_at/dispatch.sent_at as 12:38:30, eleven seconds after the actual run started at 12:38:19 and later than the carrying registration commit timestamp 12:37:32.",
+    "preserved_old_values": {
+      "created_at": "2026-09-08T12:38:30+08:00",
+      "dispatch.sent_at": "2026-09-08T12:38:30+08:00"
+    },
+    "authoritative_observed_order": {
+      "registration_commit_at": "2026-09-08T12:37:32+08:00",
+      "run_started_at": "2026-09-08T12:38:19+08:00",
+      "run_finished_at": "2026-09-08T12:52:30+08:00",
+      "result_commit_at": "2026-09-08T12:55:06+08:00"
+    },
+    "impact": "Metadata ordering defect only; candidate SHA, resource-lock log, Gate D log hash and all PASS results remain unchanged. Frozen handoff/evidence are not rewritten."
+  }
+}

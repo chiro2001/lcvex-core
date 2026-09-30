@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-055",
+  "state": "done",
+  "acceptance_status": "pass-strict-parser-on-real-t053-terminal-capture",
+  "base_sha": "6e4b595060ede58971089e4407656194710e5e1e",
+  "branch": "fix/T-20260920-055-coremark-terminal-wrap-parser",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-055",
+  "source_transcript": {
+    "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-053/build/agents/T-20260920-053/run-attested-flash-baseline/coremark-final/direct-terminal-coremark-final-terminal.typescript",
+    "bytes": 92694,
+    "sha256": "ae3c5b4171e3f85d1845672da614062ae78e7c2331ea072a2dce6336358c8d45"
+  },
+  "observed_wrap": {
+    "compact_record_prefix_bytes": 120,
+    "terminal_control": "CSI 29;120 H",
+    "redrawn_edge_character": "6",
+    "matches_previous_record_last_character": true,
+    "normalization": "drop only the verified cursor redraw and join the following hz/score tail to CMRESULT"
+  },
+  "parser_result": {
+    "status": "VALID",
+    "mode": "full",
+    "iterations": 300,
+    "cycles": 442800996,
+    "hz": 25000000,
+    "coremark_per_second_x1000": 16937,
+    "coremark_per_mhz_x1000": 677,
+    "crc": {"seed": 59893, "list": 59156, "matrix": 8151, "state": 36410, "final": 21109},
+    "upstream_raw_crosscheck": "PASS",
+    "compiler_version": "aarch64-linux-gnu-gcc 16.1.0",
+    "terminal_capture_normalization": "windows_right_margin_redraw"
+  },
+  "other_commands": {
+    "microbench": {"status": "PASS", "count": 24, "signature": "8679CF21"},
+    "coremark_selfcheck": {"status": "PASS", "seed": "E9F5", "list": "E714", "matrix": "1FD7", "state": "8E3A", "final": "E714", "iterations": 1, "cycles": 1479468, "score": "INVALID"}
+  },
+  "board_runner_observation": {
+    "runner_status": 1,
+    "direct_terminal_result": "FAIL_TIMEOUT_WAITING_FOR_FULL_CMRESULT_REGEX",
+    "reason": "Windows ConHost wrapped/redrew the compact record at column 120; the full CMRESULT and upstream report are nevertheless present in the immutable terminal capture and pass strict normalized parsing.",
+    "retry": false,
+    "golden_restore_and_postflight": "PASS; exact golden hash/checksum and UART/PHY chain verified"
+  },
+  "validation": {
+    "command": "python3 fpga/catapult_a10/tools/test_parse_microbench.py",
+    "status": "PASS",
+    "tests": "9/9",
+    "real_transcript_command": "python3 fpga/catapult_a10/tools/parse_microbench.py --mode all --input <T053 direct-terminal transcript>",
+    "real_transcript_status": "MICROBENCH_PARSE_PASS mode=all",
+    "parser_log_sha256": "e4a1d466e640787a7095a9eb84cf2ea4d9d656ae53582da6ceee043b05b8b29e"
+  },
+  "clean_build_l0": {
+    "command": "LCVEX_MICROBENCH_TEST_DIR=build/agents/T-20260920-055/l0 bash fpga/catapult_a10/tools/run_microbench_tests.sh",
+    "resource_lock": "local",
+    "status": "LCVEX_B25_MICROBENCH_L0_PASS",
+    "builds": 2,
+    "artifacts_byte_identical": true,
+    "boot_elf_sha256": "712f0951ab50e9434a053517bb27fb835326925926e9c8b86d20fe72114a7bdd",
+    "boot_bin_sha256": "241b0ce4dface8c4a9db782b63e4ada8674f5c8b51c00f228a795e98fc1aedab",
+    "boot_hex_sha256": "93cbacda0b8d22864534da5f62ec8f6161ff69ede9eca10e0df2638e995709ab",
+    "boot_mif_sha256": "0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f",
+    "manifest_sha256": "d9a087765da1839ed4a2847132999e8755807300f06c015b6f5bae4cd632cd3a",
+    "host_oracle": "PASS correctness=8679CF21 selfcheck=PASS full_math=PASS",
+    "parser_positive_negative_matrix": "PASS",
+    "image_contract": "PASS upstream_files=8 image_end=0x58f8"
+  },
+  "resource": {"local_lock": "FREE", "remote_access": 0, "gamepc_lock": "not used", "board_actions": 0},
+  "known_limits": [
+    "This offline parser correction does not alter the already executed T-053 direct-terminal response matcher or retroactively change its runner status.",
+    "No candidate/terminal/golden retry was attempted; the original T-053 transaction budgets remain consumed exactly once."
+  ],
+  "handoff": "docs/handoffs/T-20260920-055-coremark-terminal-wrap-parser.md"
+}

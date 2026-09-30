@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-006",
+  "label": "F1A-DEFAULT-ON-GATED",
+  "title": "F1a 默认-on 完整本地 Gate D",
+  "kind": "final-regression",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "reported",
+  "assigned_owner": "dsh-gate-d-f1a-on",
+  "agent_type": "gate-d-run",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-005"
+  ],
+  "base_sha": "335d75a4c6a49760fe55b0b744477456b26a5847",
+  "branch": "verify/T-20260902-006-f1a-default-on-gated",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-006",
+  "scope": "在 F1a 默认-on（FETCH_FIFO_ENABLE=1）的当前合并 SHA 上运行完整本地 Gate D：make test、run_gate_d.sh 全量、CORE_COUNT=1/l2_cluster lint 等，确认默认-on 不引入回归。",
+  "reads": [
+    "Makefile",
+    "sim/difftest/**",
+    "scripts/**",
+    "docs/PERFORMANCE_F1J_FULL_MATRIX_RESULTS.md",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-006-f1a-default-on-gated.md",
+    "docs/tasks/evidence/T-20260902-006.json"
+  ],
+  "validation": {
+    "l0": [
+      "make test PASS"
+    ],
+    "l1": [],
+    "l2": [
+      "Gate D 全量 PASS"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "默认-on 合并 SHA 上 Gate D 全绿；若失败保留日志与失败现场，不伪报。",
+  "resource": {
+    "cpu": 4,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T13:04:00+08:00",
+  "updated_at": "2026-09-02T14:48:15+08:00",
+  "known_limits": [
+    "重型本地任务一次一个；使用 cgroup/VERILATOR_JOBS=1；不跑 Quartus/上板"
+  ],
+  "handoff": "docs/handoffs/T-20260902-006-f1a-default-on-gated.md",
+  "evidence": "docs/tasks/evidence/T-20260902-006.json",
+  "next": "全绿后同步文档并重同步 FPGA candidate",
+  "dispatch": {
+    "sent_at": "2026-09-02T13:05:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-006",
+    "branch": "verify/T-20260902-006-f1a-default-on-gated"
+  },
+  "head_sha": "21d7284a55cfd9b0c1002fd08beab1b20f83daa9",
+  "merge_sha": "1635369c0bc58af9a81822ee8d2269378e1fbbf6",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-02T14:45:40+08:00",
+    "merged_at": "2026-09-02T14:48:15+08:00",
+    "recorded_at": "2026-09-02T14:48:15+08:00",
+    "notes": "默认-on Gate D 证据已合入；结果为 blocked：9 个 F1a-on 定向锁步失败（timer/RNDR off-by-one、ADC/SBC/NGC、post-index load/store）。需后续修复任务，不能默认-on。"
+  }
+}

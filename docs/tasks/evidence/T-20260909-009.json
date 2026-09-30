@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-009",
+  "label": "B25-CDC-DATA-DELAY-SDC-CLOSURE",
+  "state": "done",
+  "acceptance_status": "pass-sdc-checker-fault-matrix-sv-cocotb",
+  "partial": false,
+  "base_sha": "fcb61cb9ebff2f389f43b0f0a3973d9314176779",
+  "head_sha": "e03c6430e354247057ae243d6cd724e54add0ded",
+  "implementation_head_sha": "e03c6430e354247057ae243d6cd724e54add0ded",
+  "branch": "fix/T-20260909-009-b25-cdc-data-delay-sdc",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-009",
+  "owner": "b25_cdc_data_delay_sdc",
+  "timestamps": {
+    "sent_at": "2026-09-09T12:48:32+08:00",
+    "received_at": "2026-09-09T12:48:32+08:00",
+    "reported_at": "2026-09-09T13:07:30+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "registration": {
+    "task_file": "docs/tasks/active/T-20260909-009.json",
+    "checkout_registration_gap": true,
+    "reason": "checked base predates the dispatch registration; the active task record was not present in this worktree and was not modified"
+  },
+  "objective": "在四组 3-bit Gray pointer 与 T-045 1-bit poison CDC crossing 上以 Quartus 21.4 支持的 set_data_delay 保留 2.000 ns 独立 datapath bound，同时保留对应 full set_false_path，并提供 hermetic fail-closed checker。",
+  "exact_change": {
+    "sdc": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "sdc_sha256": "9bb048e964d96331a5e6df26d6231531357e1bab496d9d5d9beb92388196accd",
+    "implementation_commit": "e03c6430e354247057ae243d6cd724e54add0ded",
+    "old_active_set_max_delay_count": 5,
+    "new_active_set_max_delay_count": 0,
+    "new_active_set_data_delay_count": 5,
+    "full_false_paths_retained": 5,
+    "bound_ns": 2.0,
+    "pairs": [
+      {
+        "label": "request_wr",
+        "source": "*request_fifo|wr_ptr_gray_q*",
+        "target": "*request_fifo|wr_ptr_gray_rd1_q*",
+        "width": 3,
+        "region": "section 3"
+      },
+      {
+        "label": "request_rd",
+        "source": "*request_fifo|rd_ptr_gray_q*",
+        "target": "*request_fifo|rd_ptr_gray_wr1_q*",
+        "width": 3,
+        "region": "section 3"
+      },
+      {
+        "label": "response_rd",
+        "source": "*response_fifo|rd_ptr_gray_q*",
+        "target": "*response_fifo|rd_ptr_gray_wr1_q*",
+        "width": 3,
+        "region": "section 3"
+      },
+      {
+        "label": "response_wr",
+        "source": "*response_fifo|wr_ptr_gray_q*",
+        "target": "*response_fifo|wr_ptr_gray_rd1_q*",
+        "width": 3,
+        "region": "section 3"
+      },
+      {
+        "label": "poison",
+        "source": "*emif_adapter|emif_poisoned_q*",
+        "target": "*emif_adapter|emif_poisoned_cpu_meta_q*",
+        "width": 1,
+        "region": "section 4c"
+      }
+    ],
+    "diff_summary": {
+      "sdc_lines_added": 10,
+      "sdc_lines_removed": 10,
+      "other_sdc_regions_changed": false,
+      "section_3b_changed": false,
+      "all_values_remain_2.000": true,
+      "exact_diff_artifact": "build/agents/T-20260909-009/implementation.diff",
+      "exact_diff_sha256": "61d906545d0a949d90280b3fc65a3e21a36753a64e8b92d8f049cd1959571700"
+    }
+  },
+  "checker": {
+    "path": "fpga/catapult_a10/tools/check_cdc_data_delay_sdc.py",
+    "sha256": "c0cbc15e5bb8c5b002b41f8a4051979e5a83f320b0f5580e75752161870a1690",
+    "hermetic": true,
+    "external_quartus_or_database": false,
+    "command": "python3 fpga/catapult_a10/tools/check_cdc_data_delay_sdc.py --fault-matrix",
+    "exit_code": 0,
+    "status": "PASS",
+    "active_command_counts": {
+      "set_false_path": 40,
+      "set_data_delay": 5,
+      "set_max_delay": 0
+    },
+    "pair_counts": {
+      "request_wr": {"full_false": 1, "data_delay": 1},
+      "request_rd": {"full_false": 1, "data_delay": 1},
+      "response_rd": {"full_false": 1, "data_delay": 1},
+      "response_wr": {"full_false": 1, "data_delay": 1},
+      "poison": {"full_false": 1, "data_delay": 1}
+    },
+    "fault_matrix": {
+      "missing_data_delay": "caught",
+      "duplicate_data_delay": "caught",
+      "broad_data_delay": "caught",
+      "wrong_data_delay_value": "caught",
+      "unsupported_data_delay_option": "caught",
+      "legacy_set_max_delay": "caught",
+      "missing_full_false_path": "caught",
+      "duplicate_full_false_path": "caught",
+      "broad_full_false_path": "caught",
+      "hold_only_false_path": "caught"
+    },
+    "faults_total": 10,
+    "faults_caught": 10,
+    "result_artifact": "build/agents/T-20260909-009/checker/fault-matrix.json",
+    "result_artifact_sha256": "00ddb55c961b336791ffe54bbb5303ee2ca0ed7c48820a56a32cc5d1ec7e6c7d"
+  },
+  "validation": [
+    {
+      "run_id": "final-sv-reset-timeout",
+      "level": "L1_SV",
+      "source_sha": "e03c6430e354247057ae243d6cd724e54add0ded",
+      "command": "resource-lock run local mycpu T-20260909-009 b25_cdc_data_delay --min-local-available-mib 4096 --meta stage=cdc-sv-reset-timeout-final-cgroup --meta source_sha=fcb61cb9ebff2f389f43b0f0a3973d9314176779 --meta verilator_jobs=1 --meta memory_max=16G -- bash -lc 'systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p MemoryAccounting=yes --setenv=PATH=/home/chiro/miniforge3/envs/lcvex/bin:/usr/local/bin:/usr/bin:/bin --setenv=TMPDIR=<task-local>/build/agents/T-20260909-009/sv/tmp --working-directory=<worktree> -- /usr/bin/busybox time -v verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_axi4_avalon_tb -Mdir <task-local>/build/agents/T-20260909-009/sv/obj_dir -o lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv && run binary under the same scope",
+      "seed": "BFM_SEED default 0x000b2054",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PASS: B2 AXI4/Avalon SV regression writes=0 reads=0; Verilator finished at 3us",
+      "build_log": "build/agents/T-20260909-009/sv/build-final.log",
+      "build_log_sha256": "d181abd23deab94d51f74abe921e1e69d0d8466fc87846d4b0dd160f6e8da9bf",
+      "run_log": "build/agents/T-20260909-009/sv/run-final.log",
+      "run_log_sha256": "9bd090e2843897415ba150e51a2c30af2b0bea64896e15cf2e83c8f0366a31a8",
+      "peak_rss_kib_build": 1485520,
+      "peak_rss_kib_run_wrapper": 22080,
+      "memory_limit": "MemoryMax=16G, MemorySwapMax=0"
+    },
+    {
+      "run_id": "final-cocotb-reset-timeout",
+      "level": "L1_Cocotb",
+      "source_sha": "e03c6430e354247057ae243d6cd724e54add0ded",
+      "command": "resource-lock run local mycpu T-20260909-009 b25_cdc_data_delay --min-local-available-mib 4096 --meta stage=cdc-cocotb-reset-timeout-final-cgroup-retry --meta source_sha=fcb61cb9ebff2f389f43b0f0a3973d9314176779 --meta verilator_jobs=1 --meta memory_max=16G -- bash -lc 'systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p MemoryAccounting=yes --setenv=TMPDIR=<task-local>/build/agents/T-20260909-009/cocotb/tmp --working-directory=<worktree> -- /usr/bin/busybox time -v /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.axi4_avalon SIM=verilator TOPLEVEL=lcvex_axi4_avalon_cocotb_tb COCOTB_TEST_MODULES=test_axi4_avalon SIM_BUILD=<task-local>/build/agents/T-20260909-009/cocotb SEED=0x00b2054'",
+      "seed": "0x00b2054",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "7/7 tests passed; simulation finished at 4616.01ns: mapping/CDC, calibration DECERR, reset flush, bounded timeout/late drain, partial AW/W reset, stalled command reset, EMIF-only reset/response hold",
+      "log": "build/agents/T-20260909-009/cocotb/cocotb-final.log",
+      "log_sha256": "2e971fab02a2576d68d061ae98b8f2e538a7b8c7b2f3e621932e3f15ef123d2b",
+      "peak_rss_kib": 232304,
+      "memory_limit": "MemoryMax=16G, MemorySwapMax=0"
+    },
+    {
+      "run_id": "checker-python-diff",
+      "level": "L0_static",
+      "source_sha": "e03c6430e354247057ae243d6cd724e54add0ded",
+      "command": "python3 -m py_compile fpga/catapult_a10/tools/check_cdc_data_delay_sdc.py && python3 fpga/catapult_a10/tools/check_cdc_data_delay_sdc.py --fault-matrix && git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "syntax, exact SDC contract and 10/10 deterministic fault cases passed"
+    }
+  ],
+  "transient_runs": [
+    {
+      "stage": "initial-sv",
+      "exit_code": 127,
+      "wrapper_exit_observed": 139,
+      "accepted": false,
+      "reason": "shell PATH lacked the lcvex environment; verilator was not started"
+    },
+    {
+      "stage": "initial-cocotb-relative-tmpdir",
+      "exit_code": 0,
+      "accepted": false,
+      "reason": "functional 7/7 passed but make -C resolved relative TMPDIR incorrectly and fell back to /tmp; rerun used absolute task-local TMPDIR"
+    },
+    {
+      "stage": "cocotb-cgroup-path",
+      "exit_code": 127,
+      "wrapper_exit_observed": 139,
+      "accepted": false,
+      "reason": "scope PATH omitted /home/chiro/miniforge3/bin/conda; no simulation started"
+    }
+  ],
+  "resource_lock": {
+    "resource": "local",
+    "all_final_heavy_runs_locked": true,
+    "min_local_available_mib": 4096,
+    "verilator_jobs": 1,
+    "cgroup": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p MemoryAccounting=yes",
+    "task_local_tmpdirs": [
+      "build/agents/T-20260909-009/sv/tmp",
+      "build/agents/T-20260909-009/cocotb/tmp"
+    ],
+    "return_75_wait": false,
+    "return_75_reason": "local was FREE for final runs; no queue wait was needed",
+    "final_status": "local FREE; gamepc FREE"
+  },
+  "command_paths": {
+    "repo": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-009",
+    "sv_tmpdir": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-009/build/agents/T-20260909-009/sv/tmp",
+    "sv_sim_build": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-009/build/agents/T-20260909-009/sv/obj_dir",
+    "cocotb_tmpdir": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-009/build/agents/T-20260909-009/cocotb/tmp",
+    "cocotb_sim_build": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-009/build/agents/T-20260909-009/cocotb"
+  },
+  "policy": {
+    "sdc_modified": true,
+    "checker_added": true,
+    "rtl_modified": false,
+    "qsf_modified": false,
+    "manifest_modified": false,
+    "registry_modified": false,
+    "active_task_json_modified": false,
+    "tasks_status_modified": false,
+    "project_status_modified": false,
+    "roadmap_modified": false,
+    "section_3b_modified": false,
+    "qemu_modified": false,
+    "gamepc_or_quartus_used": false,
+    "assembler_or_jtag_or_board_or_flash_used": false,
+    "build_artifacts_ignored": true,
+    "assertions_disabled": false
+  },
+  "known_limits": [
+    "本任务没有运行 Quartus/TimeQuest、四 corner post-fit、GamePC 或 QDB；set_data_delay 的 Quartus 21.4 语义和 +0.984 ns 最差 data slack 来自 T-20260909-006 G1 loaded-DB 证据，需由 batch 集成者在新 candidate 上复跑物理门。",
+    "hermetic checker 验证 checked-in SDC 的命令形状和 fail-closed fault matrix，不宣称 fitted netlist collection 非空或 path slack；物理验证仍需检查五对 source/target cardinality、Complete false paths 和独立 data-delay report。",
+    "SV/Cocotb 验证复用了既有 endpoint/adapter tests；本任务没有修改 RTL 或 test source，未增加独立板级 EMIF 行为覆盖。"
+  ],
+  "artifacts": {
+    "implementation_diff": "build/agents/T-20260909-009/implementation.diff",
+    "checker_result": "build/agents/T-20260909-009/checker/fault-matrix.json",
+    "sv_build_log": "build/agents/T-20260909-009/sv/build-final.log",
+    "sv_run_log": "build/agents/T-20260909-009/sv/run-final.log",
+    "cocotb_log": "build/agents/T-20260909-009/cocotb/cocotb-final.log",
+    "ignored_only": true
+  },
+  "handoff": "docs/handoffs/T-20260909-009-b25-cdc-data-delay-sdc.md",
+  "correction": {
+    "corrected_at": "2026-09-09T13:12:04+08:00",
+    "reason": "aligned the handoff filename with the registered task path; implementation and validation evidence unchanged",
+    "previous_handoff": "docs/handoffs/T-20260909-009-b25-cdc-data-delay-sdc-closure.md",
+    "new_handoff": "docs/handoffs/T-20260909-009-b25-cdc-data-delay-sdc.md"
+  }
+}

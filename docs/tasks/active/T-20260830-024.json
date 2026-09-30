@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-024",
+  "label": "STATUS-SYNC",
+  "parent": "",
+  "title": "项目状态/路线图/候选总结同步",
+  "kind": "project-status-update",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "e76539fd4c5772c425d57588e7de16b93bc3bc67",
+  "branch": "feature/T-20260830-024-status-sync",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-024",
+  "scope": "更新 PROJECT_STATUS/ROADMAP/audit 状态，汇总当前本地 Gate D 全绿、C3/C4/性能/审计完成、FPGA F3/F4 blocked、T-067 未解除；形成当前集成候选说明。",
+  "writes": [
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md",
+    "docs/audit/**",
+    "docs/handoffs/T-20260830-024-status-sync.md",
+    "docs/tasks/evidence/T-20260830-024.json"
+  ],
+  "reads": [
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md",
+    "docs/tasks/TASKS.md",
+    "docs/PERFORMANCE_SNAPSHOT.md",
+    "docs/audit/**"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "关键状态引用一致"
+    ],
+    "l1": [
+      "文档可审阅"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付当前状态快照/候选总结，明确外部阻塞。",
+  "next": "作为后续发布/继续工作依据。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 2048,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 90,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T07:08:30+08:00",
+  "updated_at": "2026-08-30T07:08:30+08:00",
+  "known_limits": [
+    "不宣称 A10/Fmax/板级/CI 完成；外部阻塞如实记录。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-024-status-sync.md",
+  "evidence": "docs/tasks/evidence/T-20260830-024.json",
+  "merge_sha": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+  "merged_at": "2026-08-30T07:19:22+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T07:19:22+08:00",
+    "head_sha": "6d79b87",
+    "notes": "STATUS-SYNC merged. Updated PROJECT_STATUS/ROADMAP/audit to current local green status and external FPGA blocker."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T14:20:00+0800",
+        "new": "2026-08-30T07:08:30+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T14:20:00+0800",
+        "new": "2026-08-30T07:08:30+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T15:30:00+0800",
+        "new": "2026-08-30T07:19:22+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T15:30:00+0800",
+        "new": "2026-08-30T07:19:22+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0"
+}

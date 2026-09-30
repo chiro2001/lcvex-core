@@ -1,0 +1,31 @@
+{
+  "name": "neon_vect",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "b00f958db05360706cce3762dcaaf2f3b4a34d58cb60e8bc5c272400276827eb",
+  "source_sha256": "b00f958db05360706cce3762dcaaf2f3b4a34d58cb60e8bc5c272400276827eb",
+  "image_hash": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+  "image_sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 227526,
+  "wall_sec": 3.211844,
+  "rss_kb": 140408,
+  "rss": 137.117,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_neon_vect.bin",
+    "--name",
+    "neon_vect",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: neon_vect (227526 cycles)\n",
+  "runner_stderr": ""
+}

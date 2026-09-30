@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-004",
+  "label": "QUARTUS-FP-NEON-COMPAT",
+  "title": "修复 Quartus 21.4 elaboration 兼容错误：fp_scalar 非定常 loop 与 NEON out-of-range",
+  "kind": "fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fpga-rtl-fix",
+  "agent_type": "rtl-fix-and-lint",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-001"
+  ],
+  "base_sha": "732aa5691134b2aaef64b50c570da2b7ad001497",
+  "branch": "fix/T-20260902-004-quartus-fp-neon-compat",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-004",
+  "scope": "修复 T-20260902-001 暴露的 Quartus Prime Pro 21.4 elaboration 兼容错误：(1) rtl/lcvex_fp_scalar.sv 中非定常 loop count 超限（约 line 353）；(2) rtl/lcvex_neon_int.sv set_lane 默认 64-bit 分支 index out-of-range；(3) rtl/lcvex_neon_fp.sv is_double 分支 i*64 对 i>=2 out-of-range。保持 RTL 功能语义不变，Verilator lint/现有 FP/NEON 测试全绿。",
+  "reads": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "docs/FPGA_A10_RESOURCE_GATE_REEVAL.md",
+    "docs/tasks/evidence/T-20260902-001.json",
+    "Makefile"
+  ],
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "docs/handoffs/T-20260902-004-quartus-fp-neon-compat.md",
+    "docs/tasks/evidence/T-20260902-004.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile（RTL lint）PASS",
+      "FP/NEON 相关 SV/Cocotb 定向测试 PASS"
+    ],
+    "l1": [
+      "git diff --check",
+      "Quartus 兼容性静态自查：不再有非定常 loop/out-of-range"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "修复后本地 Verilator lint 与现有 FP/NEON 回归全绿；不改变架构状态/提交协议；产出 handoff/evidence。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T03:04:00+08:00",
+  "updated_at": "2026-09-02T08:59:40+08:00",
+  "known_limits": [
+    "不修改 Quartus 工程/QSF；不运行远端 full synthesis（本任务只修 RTL 并本地验证）；不引入功能变化"
+  ],
+  "handoff": "docs/handoffs/T-20260902-004-quartus-fp-neon-compat.md",
+  "evidence": "docs/tasks/evidence/T-20260902-004.json",
+  "next": "修复合入后重跑真实 full-FP synthesis，再进入 fitter/STA/SOF",
+  "dispatch": {
+    "sent_at": "2026-09-02T03:04:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-004",
+    "branch": "fix/T-20260902-004-quartus-fp-neon-compat",
+    "resumed_at": "2026-09-02T08:18:53+08:00"
+  },
+  "head_sha": "7805d8d3a21872e402ad1f163bed8101ebf268f6",
+  "merge_sha": "922d4f82f88b2871e2baee4252a0de8e12df1e0e",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T08:57:59+08:00",
+    "merged_at": "2026-09-02T08:59:40+08:00",
+    "recorded_at": "2026-09-02T08:59:40+08:00",
+    "notes": "Quartus FP/NEON compat fixes merged; make compile and sim-sv-fp-scalar pass at merge SHA; known unrelated P7-2 cocotb failure recorded, not in scope"
+  }
+}

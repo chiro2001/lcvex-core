@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-047",
+  "base_sha": "4071ed356cfc0ec6109e61250d80831e19e6d2ba",
+  "head_sha": "2f938af694bcc0f9038795419ea232368a8d79a0",
+  "merge_sha": "b918eb7e386ef038d48ebbfae5bf7376693fe2ac",
+  "candidate_status": "pass-local",
+  "change": {
+    "implementation_commit": "2f938af694bcc0f9038795419ea232368a8d79a0",
+    "make_target": "checkpoint-sctlr-mask-smoke",
+    "fixture": "hard_sctlr_pauth 在 seq=2 的 MSR SCTLR_EL1 提交后捕获；arch sidecar 断言 pc=0x44000008、insn=0xd5181000、next_pc=0x4400000c，镜像同地址断言 MRS x1, SCTLR_EL1=0xd5381001",
+    "original_qemu_state": {
+      "sctlr_el1": "0x00c50838",
+      "sys_version": "LCVXSYS3",
+      "next_pc": "0x000000004400000c"
+    },
+    "dirty_dut_sys_copy": {
+      "method": "先复制原 .dev.sys.gz；按实际 header/长度选择 checkpoint.SYS_STATE、SYS_STATE_V2 或 SYS_STATE_V3 解包、仅修改 q[9]/SCTLR_EL1、再使用同一 struct 重包",
+      "or_mask": "0xc8002000",
+      "sctlr_el1": "0xc8c52838"
+    },
+    "restore_boundary": "QEMU -incoming 只读取 original.dev 与原 RAM；DUT 不传 --restore-arch，仅传脏 sys 副本（timer/gic 保持原 sidecar）；恢复窗口严格锁步 MRS SCTLR 和其后 MOVZ 两条提交。",
+    "manifest_integrity": "capture 的 finalized manifest.json 与 manifest.tsv 在脏化前记录 SHA256；结束时逐字节 SHA256 相同且 grep 断言不引用 dirty sys 路径。脏副本从不写 manifest。",
+    "scratch": "所有 capture 链、128 MiB 展开 RAM、QEMU incoming vmstate、脏 sys 副本、socket 和日志位于自动清理的 build/tmp/t047.XXXXXX；最终无 t047 目录和相关子进程残留。",
+    "source_file_sha256": {
+      "Makefile": "ccb9f87515f8dac1f96cc4a5e49272742c90248097a6bd23000cf80479082d1f",
+      "sim/difftest/checkpoint_sctlr_mask_smoke.sh": "31332397f0d0498d29a8dacd401d3a21b2d48072c31f2c78efc18852ee4ce8b3"
+    }
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "plugin_sha256": "af308b418a04191832d5198839ebdba1a2bd3ddcc0381aee250fdc22e1610300"
+  },
+  "rtl": {
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "coordinator": "build/verilator_lockstep/lockstep_coordinator"
+  },
+  "toolchain": {
+    "python": "Python 3.12.14",
+    "verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0"
+  },
+  "resource": {
+    "cpuset": [0, 1],
+    "cpu_count": 2,
+    "memory_limit_mb": 4096,
+    "verilator_jobs": 2,
+    "allocation_ratio": 0.5
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-fresh-build-parent-001",
+      "source_sha": "4071ed356cfc0ec6109e61250d80831e19e6d2ba",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-sctlr-mask-smoke",
+      "exit_code": 2,
+      "result": "infra-fail",
+      "summary": "fresh worktree 不存在 build/ 父目录；既有 lockstep-build 的 -Mdir build/verilator_lockstep 不创建父目录，Verilator 报 Can't write file: build/verilator_lockstep/Vlcvex_soc_tb__Syms__Slow.cpp。磁盘可用 78 GiB，非并发、权限、生成器或 RTL/QEMU 失败。"
+    },
+    {
+      "run_id": "owner-l0-static-wiring-002",
+      "source_sha": "2f938af694bcc0f9038795419ea232368a8d79a0",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash -n sim/difftest/checkpoint_sctlr_mask_smoke.sh && make -n checkpoint-sctlr-mask-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260826-047/static-wiring.log",
+      "log_sha256": "53ee0606d2a21685faeb84fbc17c73b6123eb47be461ae51dbd82a583a7b1670"
+    },
+    {
+      "run_id": "owner-l2-sctlr-dirty-003",
+      "source_sha": "2f938af694bcc0f9038795419ea232368a8d79a0",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-sctlr-mask-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVXSYS3 原值 0x00c50838；只向 DUT 副本注入 0xc8002000 后为 0xc8c52838；seq=2 arch MSR 0xd5181000 @ 0x44000008，next_pc=0x4400000c 且镜像 MRS=0xd5381001；QEMU 原 vmstate/RAM/sys 和 finalized manifest 字节不变；恢复后 MRS 与 MOVZ 两条提交严格锁步。",
+      "log": "build/agents/T-20260826-047/sctlr-mask-final.log",
+      "log_sha256": "d5a07882fb278052acd2a64584f5c55db019a39e774218bbe90795d759ef83d7"
+    },
+    {
+      "run_id": "owner-l2-sys-v2-v3-004",
+      "source_sha": "2f938af694bcc0f9038795419ea232368a8d79a0",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-sys-smoke checkpoint-sys-v3-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "sys v2 侧 zcr=14/smcr=14/csselr=11 后联合恢复 4 条通过；LCVXSYS3 的 PMUSERENR/TCR2/PIRE0/exclusive monitor 后联合恢复 5 条通过。路径改动仅限新 smoke 的私有 scratch，但仍在实现提交 SHA 上复跑。",
+      "log": "build/agents/T-20260826-047/sys-v2-v3-final.log",
+      "log_sha256": "aded4e6ac47a3d08e8a80633a54f1c66eedac5aab503fb9d0a528d64dbd93f88"
+    }
+  ],
+  "integration_validation": {
+    "source_sha": "b918eb7e386ef038d48ebbfae5bf7376693fe2ac",
+    "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-sctlr-mask-smoke checkpoint-sys-smoke checkpoint-sys-v3-smoke",
+    "exit_code": 0,
+    "result": "pass",
+    "summary": "集成 SHA 上再次证明精确 MSR/MRS 捕获边界、0x00c50838→0xc8c52838 的仅 DUT 脏 sidecar 恢复、原 QEMU 状态与 finalized manifest 不变；既有 SYS v2/v3 联合恢复同步通过。",
+    "log": "build/agents/T-20260826-047/integration.log",
+    "log_sha256": "b4edf3c264fa5ed9450c28ea95a1a4382515f763a87445b14b04fa585fd8db0e",
+    "log_bytes": 3387,
+    "qemu_plugin_sha256": "385f64b166c7441a8dbfb3afdc442de2053eaea799166cd6aee0683efb929ae2",
+    "coordinator_sha256": "57162e233f5c98f6d9f29fc0e7aa73401c03255bc730943be448ee4ff705589b"
+  },
+  "review": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "scope": "只读检查 capture 序号、QEMU incoming 与 DUT 脏 sys 边界、sidecar struct 注入、manifest 完整性和验收断言",
+    "result": "未发现核心恢复逻辑阻断问题",
+    "follow_up_applied": "按评审补充 arch sidecar 的 MSR pc/insn/next_pc 断言、镜像 MRS 编码断言，以及 finalized manifest.json/manifest.tsv SHA256 与 dirty path 非引用断言。"
+  },
+  "artifacts": [
+    {
+      "id": "implementation-commit",
+      "uri": "git:2f938af694bcc0f9038795419ea232368a8d79a0",
+      "sha256": "",
+      "bytes": 0,
+      "owner": "sctlr-dirty-t047-terra",
+      "retain_until": "merge",
+      "reproduce": "git show 2f938af694bcc0f9038795419ea232368a8d79a0"
+    },
+    {
+      "id": "owner-validation-log",
+      "uri": "build/agents/T-20260826-047/sctlr-mask-final.log",
+      "sha256": "d5a07882fb278052acd2a64584f5c55db019a39e774218bbe90795d759ef83d7",
+      "bytes": 1892,
+      "owner": "sctlr-dirty-t047-terra",
+      "retain_until": "merge",
+      "reproduce": "taskset -c 0-1 env VERILATOR_JOBS=2 make checkpoint-sctlr-mask-smoke"
+    }
+  ],
+  "known_limits": [
+    "只验证当前 ARMv8.2/P6 标量目标对未实现 PAuth enable 位的 restore 写掩码；不实现 PAuth 指令、密钥或签名语义。",
+    "fixture 是故意篡改的测试输入；dirty sidecar 和 capture 链只在自动清理 scratch 中存在，不能作为发布 checkpoint 或 manifest artifact。",
+    "未运行 Gate D、Linux 长跑或 QEMU patch 重放；任务要求的 L0-L2 已在合并 SHA 复跑通过。"
+  ]
+}

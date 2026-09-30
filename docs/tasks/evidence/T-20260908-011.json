@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-011",
+  "label": "B25-BRAM-INIT-TEST-CONTRACT-REVIEW",
+  "state": "done",
+  "acceptance_status": "approve-with-conditions-recommended-non-circular-oracle",
+  "partial": false,
+  "base_sha": "8f8faac30119c1db734a2ecd0394b4aad24e881b",
+  "head_sha": "8f8faac30119c1db734a2ecd0394b4aad24e881b",
+  "branch": "verify/T-20260908-011-b25-bram-init-test-contract-review",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-011",
+  "owner": "b25_emif_resilience_impl",
+  "sent_at": "2026-09-09T00:01:15+08:00",
+  "received_at": "2026-09-09T00:01:15+08:00",
+  "reported_at": "2026-09-09T00:09:45+08:00",
+  "timezone": "Asia/Shanghai",
+  "objective": "评审 B25 BRAM init TB 的 reset-vector oracle，使 LDR literal imm19 随 link layout 变化而可验证，同时保留镜像、字节序、64-bit packing、跨 artifact 一致性、zero-fill 与 0x10000 边界覆盖。",
+  "review_scope": {
+    "reviewed_files": {
+      "tb/sv/lcvex_bram_init25_tb.sv": "3f7b0153a037e2aae42ddfed6558f37e8bd3ca60febc2472dcd40397c9268328",
+      "fpga/catapult_a10/boot/boot.S": "5bc1bf0f08d14890307229c450c46508a0f8e44af8fcd15df343413d134b8443",
+      "fpga/catapult_a10/boot/boot.ld": "8633c608b75f2a2ed0f4e64414bf3f93f26d745415399592005726e43d14abb9",
+      "fpga/catapult_a10/boot/bin_to_mif.py": "2ebbf3968c495e96e3fcc51a02d51dafc2ea47b5ac9c76898d9d4681387bd67f",
+      "fpga/catapult_a10/boot/build.sh": "3410974f09765982b8566fa143ea4f64732a6d7d14a4328120d6ea96e78bdc2d",
+      "rtl/lcvex_bram_boot.sv": "7a3c4ae2328dbd81cd55ff5265e538db4ff312582ff9bfbee49bd9d3f837bf00",
+      "fpga/catapult_a10/quartus/catapult_a10.qsf": "c82f9a7d6e9473d37ea8adcde125e3f327b3ccb8714fde7d4507d65963c42ba8"
+    },
+    "tracked_source_modified": false,
+    "test_modified": false,
+    "qsf_modified": false,
+    "active_task_modified": false,
+    "tasks_status_modified": false,
+    "project_status_modified": false,
+    "roadmap_modified": false,
+    "t010_worktree_accessed": false,
+    "heavy_or_external_action": false
+  },
+  "current_tb_assessment": {
+    "reset_vector_oracle": {
+      "location": "tb/sv/lcvex_bram_init25_tb.sv:112-116",
+      "current_check": "value == 64'h9100_001f_5800_17c0",
+      "meaning": "The debug word is eight little-endian bytes: LDR X0 literal word 0x580017c0 followed by ADD/MOV SP,X0 word 0x9100001f.",
+      "problem": "0x580017c0 contains an imm19-derived PC-relative offset. Any link/layout movement of the literal pool changes the whole 64-bit constant even if the reset semantics remain correct.",
+      "decision": "Reject as the long-term oracle; retain only as a temporary smoke diagnostic if labeled non-authoritative."
+    },
+    "coverage_gaps": {
+      "wrong_or_missing_image": "partial: a wrong first word fails the constant, but missing/wrong path and full-image hash are not explicit and simulator $readmemh diagnostics are not a contract",
+      "byte_order": "partial: only bytes 0..7 are indirectly checked",
+      "byte_lane_and_64bit_packing": "missing: no full BIN/HEX/MIF word/lane cross-check",
+      "hex_bin_mif_identity": "missing: TB consumes HEX only and never reads BIN/MIF",
+      "zero_fill": "partial: one debug read at 0xF000 is checked, not all padding/stack words",
+      "exclusive_top_boundary": "present: 0xFFFC/0xFFFF accepted and 0x10000 faults; cross-boundary matrix is incomplete",
+      "dut_independence": "current constant is not derived from DUT/debug, but a future oracle must explicitly reject using DUT output to generate expected data"
+    }
+  },
+  "approach_comparison": [
+    {
+      "approach": "direct constant update",
+      "verdict": "reject",
+      "strength": "minimal edit and immediate smoke coverage",
+      "weakness": "freezes link-dependent imm19 and only observes one word; does not prove HEX/BIN/MIF or zero-fill"
+    },
+    {
+      "approach": "generated include/parameter",
+      "verdict": "conditional convenience only",
+      "strength": "layout changes can be reflected automatically if generated from ELF",
+      "weakness": "stale include/build-cache risk; if generated from boot.hex or boot.mif it is circular and cannot detect a common wrong image",
+      "condition": "may carry derived expected fields, but must be hash-bound and never be the sole oracle"
+    },
+    {
+      "approach": "TB runtime read of independent expected file",
+      "verdict": "recommend as TB consumer",
+      "strength": "avoids compile-time hardcoding and allows a fresh expected artifact per image",
+      "weakness": "independence is false if expected file is copied from DUT HEX/MIF; requires a manifest/hash gate and explicit missing-file failure"
+    },
+    {
+      "approach": "structural decode plus cross-artifact checker",
+      "verdict": "recommend as authoritative oracle producer",
+      "strength": "decodes ELF/load bytes and LDR imm19 semantics, then checks complete BIN/HEX/MIF byte/lane/zero-fill identity",
+      "weakness": "more implementation work, but the check is deterministic and reusable for physical MIF provenance",
+      "recommended_composition": "Use this approach to generate/hash an independent expected image; let TB runtime-load that file and retain boundary requests."
+    }
+  ],
+  "recommended_contract": {
+    "oracle_source": "boot.elf load segments and symbols, parsed independently from DUT debug output and not by rereading boot.hex/boot.mif as the expected source",
+    "structural_checks": [
+      "Require ELF AArch64 entry _start=0 and load bytes within the 64 KiB BRAM image window.",
+      "Decode word 0 as 64-bit LDR-literal with Rt=X0; extract imm19, sign-extend the PC-relative byte offset, resolve the literal target in the ELF image, and require the loaded literal value equals symbol __stack_top (0x10000). Do not compare a fixed imm19 or fixed 64-bit reset word.",
+      "Decode word 1 structurally as ADD-immediate alias MOV SP,X0 with sf=1, Rn=X0, Rd=SP, shift=0 and imm12=0; do not rely on the first word's layout.",
+      "Generate a separate expected byte image from the independently parsed ELF load segments, padded to exactly 0x10000 bytes."
+    ],
+    "cross_artifact_checks": [
+      "boot.bin equals the ELF-derived load image and does not exceed 0x10000 bytes.",
+      "boot.hex parses to exactly the same bytes as boot.bin; missing, empty, malformed or extra bytes fail.",
+      "boot.mif has WIDTH=64, DEPTH=8192, exactly 8192 explicit records, and little-endian word bytes equal boot.bin plus zero padding.",
+      "Hash ELF/BIN/HEX/MIF, expected file and source SHA in one manifest before compiling the TB."
+    ],
+    "tb_consumer": "Add an expected-image path/parameter and runtime-read the independently generated expected bytes; assemble expected debug words from expected_mem[addr+i] rather than a hardcoded 64-bit reset constant.",
+    "non_circularity_rule": "Never generate expected bytes by reading lcvex_bram_boot.dbg_rdata or by copying the DUT's HEX/MIF; a checker must fail when the expected file is missing or hash-mismatched."
+  },
+  "fault_injection_matrix": [
+    {"mutation": "missing boot.hex / wrong path", "expected_detection": "pre-TB manifest/path gate fails; TB must not pass on zero-filled fallback", "layer": "checker + TB setup"},
+    {"mutation": "flip byte 0 or byte 4 of reset image", "expected_detection": "ELF/BIN/expected comparison or runtime debug word mismatch", "layer": "cross-artifact + TB"},
+    {"mutation": "change LDR imm19 while retaining instruction class", "expected_detection": "structural target/literal-to-__stack_top check fails", "layer": "structural oracle"},
+    {"mutation": "change second ADD/MOV SP instruction", "expected_detection": "structural ADD-immediate field check and expected bytes fail", "layer": "structural oracle + TB"},
+    {"mutation": "reverse first 8 bytes or swap the two 32-bit words", "expected_detection": "ELF/BIN/HEX byte equality and first debug word fail", "layer": "cross-artifact + TB"},
+    {"mutation": "swap bytes inside each 64-bit MIF word", "expected_detection": "MIF little-endian repack comparison fails", "layer": "MIF checker"},
+    {"mutation": "HEX differs from BIN by one byte/extra line", "expected_detection": "exact byte-count/content comparison fails", "layer": "HEX/BIN checker"},
+    {"mutation": "MIF differs from BIN by one lane/record", "expected_detection": "all 8192 word records are compared and fail", "layer": "MIF/BIN checker"},
+    {"mutation": "set a nonzero byte in zero-fill or stack range", "expected_detection": "full padded expected image comparison and stack-range check fail", "layer": "cross-artifact + TB"},
+    {"mutation": "BRAM boundary off by one", "expected_detection": "0xFFFC/0xFFFF with in-range strobes pass; 0x10000 and cross-boundary accesses fault", "layer": "TB boundary matrix"},
+    {"mutation": "debug byte-lane/address rotation", "expected_detection": "multiple aligned debug words (0,8,0xF000) compared against expected image", "layer": "TB + expected image"},
+    {"mutation": "stale/mutated expected file", "expected_detection": "manifest/source/hash gate rejects before simulation", "layer": "checker/runner"}
+  ],
+  "t007_followup": {
+    "approve_block": "approve T-007 only with this bounded build-contract scope; the BRAM oracle review is a separate test-contract change",
+    "minimum_write_set": [
+      "fpga/catapult_a10/quartus/catapult_a10.qsf: add exactly one global VERILOG_MACRO SYNTHESIS assignment",
+      "fpga/catapult_a10/platform_manifest.json: add/refresh the macro contract anchor if required by its checker",
+      "fpga/catapult_a10/SHA256SUMS: recompute only affected payload hashes",
+      "one static checker assertion requiring exactly one active SYNTHESIS macro and preserving the MIF/QSF anchor",
+      "T-007 evidence/handoff"
+    ],
+    "forbidden_for_t007": [
+      "tb/sv/lcvex_bram_init25_tb.sv oracle changes",
+      "RTL semantic changes to suppress Error 19544",
+      "copying DUT/debug output into an expected file",
+      "other macros such as C_ALIAS_ENABLE or FLASH_DIAG",
+      "Quartus/JTAG/board actions in the selector task"
+    ],
+    "validation_after_merge": "platform/skeleton/hash checker plus the existing BRAM/cache focused Verilator tests without SYNTHESIS; then one fresh physical synthesis on the merged candidate, without claiming Quartus PASS from this review"
+  },
+  "validation": {
+    "performed": [
+      "git status --short --branch; git rev-parse HEAD",
+      "nl -ba tb/sv/lcvex_bram_init25_tb.sv; nl -ba boot.S/boot.ld/bin_to_mif.py/build.sh",
+      "read-only rg for BRAM init, MIF/HEX/BIN, reset-vector and test registration",
+      "sha256sum of reviewed files and prior T-006/T-008 evidence"
+    ],
+    "build_or_external_runs": false,
+    "resource_lock": "not acquired: read-only contract review",
+    "t010_worktree": "not read; dispatch facts treated as out of scope/unverified"
+  },
+  "artifacts": {
+    "reviewed_t006_evidence_sha256": "d07e94bad9a9321546285a46e4ff9b536ead81b5ab3fad04ceff401a8ae1f4a5",
+    "reviewed_t008_evidence_sha256": "5429c332f1c8fcc2feea49df68204162f5a0829aeb009daa21c1892950c7f358"
+  },
+  "blockers": [],
+  "next": "Create a separate implementation task for the ELF-structural/cross-artifact oracle and TB runtime expected-file contract; do not weaken the test by only changing c0 to 00 or by hardcoding another reset word.",
+  "handoff": "docs/handoffs/T-20260908-011-b25-bram-init-test-contract-review.md"
+}

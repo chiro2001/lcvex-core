@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-034",
+  "label": "R21-FMA-ALIGN-CUT",
+  "state": "implementation-complete-light-validation",
+  "acceptance_status": "pending-merged-candidate-heavy-validation",
+  "task_base_sha": "edaaca5bc3296aaf89f161a079ee09868b50b0b5",
+  "functional_base_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "dispatch_head_sha": "a699e6db",
+  "branch": "timing/T-20260906-034-r21-fma-align",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-034",
+  "owner": "r21_fma_cut",
+  "cone_id": "r20-ap-pre-to-pp-pre-fma",
+  "implementation": {
+    "summary": "IT_MUL now captures exponent-dependent FMA product/addend sticky alignment into private fma_align payloads; IT_FMA performs the remaining wide compare/add/sub and enters the existing IT_PREP round/pack route.",
+    "latency_policy": "FMA only gains one explicit cycle; FMUL, ADD/SUB, conversions, DIV/SQRT and shared pack states are unchanged.",
+    "boundary": "real register boundary: IT_MUL -> fma_align{,_lo,_hi} -> IT_FMA",
+    "special_handling": "NaN/SNaN/DN, Inf, Inf-times-zero, zero, FZ and exact-cancellation decisions are carried through the private FMA payload without changing raw-bit rules.",
+    "architecture_state": "No architectural state, public ports, latency tables, QEMU, QSF or SDC changed."
+  },
+  "validation": [
+    {
+      "stage": "rtl_focused_lint",
+      "started_at": "2026-09-06T19:24:52+08:00",
+      "finished_at": "2026-09-06T19:24:54+08:00",
+      "result": "pass",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_fp_scalar_r21_fma_cut_tb -f rtl/filelist.f tb/sv/lcvex_fp_scalar_r21_fma_cut_tb.sv",
+      "log": "build/agents/T-20260906-034/runtime/r21_fma_cut_lint.log",
+      "log_sha256": "98401c92f8131d5b132529e34c05b8540984733965b2423c88c3b808ca249cb1"
+    },
+    {
+      "stage": "r21_fma_cut_tb",
+      "started_at": "2026-09-06T19:25:55+08:00",
+      "finished_at": "2026-09-06T19:25:55+08:00",
+      "result": "pass",
+      "command": "build/agents/T-20260906-034/r21_fma_cut_obj4/Vlcvex_fp_scalar_r21_fma_cut_tb",
+      "log": "build/agents/T-20260906-034/runtime/r21_fma_cut_tb_final.log",
+      "log_sha256": "f4c819fffcab0fd3b28c7371a24c6db02fea64e61bb56c312f29a8a77eb4c13f",
+      "coverage": "four FMA sign variants in S; normal S/D and paired H; S/D/H subnormal; S FZ/IDC and inexact/IXC; QNaN/SNaN/DN; Inf-times-zero; exact cancellation under RN/RM; IT_FMA pause, valid-drop, kill, reset and exactly-once result window"
+    },
+    {
+      "stage": "r20_route_regression",
+      "started_at": "2026-09-06T19:25:01+08:00",
+      "finished_at": "2026-09-06T19:25:01+08:00",
+      "result": "pass",
+      "command": "build/agents/T-20260906-034/r20_route_regression/Vlcvex_fp_scalar_r20_route_tb",
+      "log": "build/agents/T-20260906-034/runtime/r20_route_regression.log",
+      "log_sha256": "09a6a19fd4d95f357653b37eca4b14c23f1a155c92ce39ae8cc517f141a1648c",
+      "scope": "R20 non-half route closure plus existing half ADD/FMA and pause/kill/reset/valid-drop probes"
+    }
+  ],
+  "source_hashes": {
+    "rtl/lcvex_fp_scalar.sv": "b38c4022153b39ebe518ed9d8aac59c1df0ca961f7984bf79ae83b738305fed3",
+    "tb/sv/lcvex_fp_scalar_r21_fma_cut_tb.sv": "07c4e7434d192add542fbfb0ec0fb378cd0250633aa3fdfe7d1b2f18a91f0bab"
+  },
+  "policy": {
+    "writes_within_registered_regions": true,
+    "reference_result_modified": false,
+    "assertion_disabled": false,
+    "heavy_jobs_started": false,
+    "resource_lock_required": false,
+    "gamepc_used": false,
+    "assembler_or_board_actions": false
+  },
+  "risks": [
+    "Merged candidate must update the shared FMA latency expectations and run the required L0-L2 suite; this lane intentionally did not touch shared latency tables or registry.",
+    "Quartus/STA timing improvement and post-fit path ordering remain unmeasured until the integration lane submits the candidate to the physical queue."
+  ],
+  "timestamps": {
+    "created_at": "2026-09-06T19:26:25+08:00",
+    "reported_at": "2026-09-06T19:26:25+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260906-034-r21-fma-cut.md"
+}

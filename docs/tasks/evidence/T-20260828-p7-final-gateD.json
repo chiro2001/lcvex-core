@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "task": "T-20260828-p7-final-gateD",
+  "title": "feature/p7-final 跨线整合冻结候选完整 Gate D（P7-5 + FPGA Cache/AXI4/SoC）",
+  "frozen_sha": "78771bf",
+  "branch": "feature/p7-final",
+  "gate_worktree": "/home/chiro/projects/mycpu/lcvex-gate-p7-final",
+  "run_at": "2026-08-28T18:48~19:29+08:00",
+  "commander": "root-integrator (bash sim/difftest/run_gate_d.sh --parallel)",
+  "result": "ALL_GREEN",
+  "integration": {
+    "base_sha": "c76cc28d",
+    "p7_line_head": "e90930b",
+    "fpga_line_head": "344a824",
+    "merge_sha": "78771bf",
+    "summary": "merge FPGA AXI4/写回Cache/单核一致性/SoC/Boot 线到 P7 线；共享 RTL 以 P7 线（含 P7-5 FP16）为主，带 FPGA 独有 AXI4/L1-WB/L2-WB/probe/coherence/soc_top/bram_boot",
+    "post_merge_verified": [
+      "make compile exit 0 (44 modules)",
+      "make test (P0) 全绿",
+      "P7-5 FP16 lockstep 102 条 QEMU 一致"
+    ]
+  },
+  "stages": [
+    {
+      "stage": "make test（单元 + SVA）",
+      "result": "pass"
+    },
+    {
+      "stage": "M2/R1 定向锁步（base + 全缓存）",
+      "result": "pass",
+      "note": "40 项并行"
+    },
+    {
+      "stage": "Gate C 异常/EL0-EL1（7 组）",
+      "result": "pass"
+    },
+    {
+      "stage": "P5a MMU 数据翻译（3 组）",
+      "result": "pass"
+    },
+    {
+      "stage": "P4b 异常/系统指令",
+      "result": "pass"
+    },
+    {
+      "stage": "随机回归 seed 1~3 × 100k",
+      "result": "pass",
+      "note": "每轮 100002/100003 条 QEMU 一致"
+    },
+    {
+      "stage": "指令覆盖记账 random ↔ ISA_SCOPE",
+      "result": "pass"
+    },
+    {
+      "stage": "baremetal-C 锁步",
+      "result": "pass",
+      "note": "200 条 QEMU 一致"
+    }
+  ],
+  "meaning": "跨线整合（P7 FP/NEON 全量 + Catapult A10 Cache/AXI4/SoC/Boot）在同一 SHA 通过完整 Gate D，作为 Gate-F ISA 与 Gate F-MEM 候选的组合基础。",
+  "not_in_scope": [
+    "远端 full flow/STA（T-067，宿主 blocked）",
+    "Gate F-BOARD（需物理板）",
+    "可信 CI/main 晋级",
+    "Linux/nightly 长验证"
+  ],
+  "next": "T-067 宿主恢复后跑远端 full flow；随后在同一 feature/p7-final SHA 推进 Gate F-ISA/F-MEM 正式验收与 CI/main 晋级。"
+}

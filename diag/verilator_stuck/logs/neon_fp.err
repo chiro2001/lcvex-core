@@ -1,0 +1,14 @@
+%Error-MODMISSING: rtl/lcvex_neon_fp.sv:101:7: Cannot find file containing module: 'lcvex_fp_scalar'
+  101 |       lcvex_fp_scalar scalar_lane (
+      |       ^~~~~~~~~~~~~~~
+                   ... For error description see https://verilator.org/warn/MODMISSING?v=5.050
+                   ... This may be because there's no search path specified with -I<dir>.
+                   ... Looked in:
+                        lcvex_fp_scalar
+                        lcvex_fp_scalar.v
+                        lcvex_fp_scalar.sv
+                        obj_dir/lcvex_fp_scalar
+                        obj_dir/lcvex_fp_scalar.v
+                        obj_dir/lcvex_fp_scalar.sv
+                   ... With current working directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-090'
+%Error: Exiting due to 1 error(s)

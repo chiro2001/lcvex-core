@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-117",
+  "state": "done",
+  "base_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+  "head_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+  "merge_sha": "9dfa4f0139f1dcc08fffa724ff32f171e5bd7354",
+  "branch": "feature/T-20260829-117-aud-12",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-117",
+  "owner": "audit-action-dsv",
+  "model": "dsh-default",
+  "label": "AUD-12",
+  "title": "checkpoint v4 QEMU/DUT joint restore with CONTEXTIDR_EL1 alignment",
+  "audit_ref": "DYN-03 / external AUD-12",
+  "scope": "Verify LCVXSYS4 checkpoint v4 joint restore: QEMU incoming + DUT restore + non-zero CONTEXTIDR_EL1 alignment; run existing checkpoint smokes; record head SHA, commands, PASS/FAIL, risks.",
+  "files": [
+    "docs/handoffs/T-20260829-117-aud-12.md",
+    "docs/tasks/evidence/T-20260829-117.json"
+  ],
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12",
+    "make": "GNU Make"
+  },
+  "resource": {
+    "memory_cgroup_limit_mb": 16384,
+    "memory_swap": 0,
+    "verilator_jobs": 1,
+    "makeflags": "-j1",
+    "heavy_build_wall_seconds": 280,
+    "heavy_build_rc": 0,
+    "one_heavy_at_a_time": true
+  },
+  "runs": [
+    {
+      "run_id": "aud12-lockstep-build-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --unit=aud12-lockstep-build2 -p MemoryMax=16G -p MemorySwapMax=0 -p MemoryAccounting=yes --working-directory=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-117 /bin/bash -c 'make VERILATOR_JOBS=1 MAKEFLAGS=-j1 lockstep-build'",
+      "wall_seconds": 280,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12-lockstep-build.log",
+      "log_sha256": "2154c9bb855a77d6574d126566522b20df57a00033b99c0d29073f23a9f1c3e3",
+      "summary": "Verilator lockstep coordinator rebuilt from current bd6f1ba; RC=0, cgroup MemoryMax=16G/MemorySwapMax=0."
+    },
+    {
+      "run_id": "aud12-v4-joint-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "bash build/aud12/run_checkpoint_sys_v4_joint.sh",
+      "wall_seconds": null,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/v4_joint.log",
+      "log_sha256": "2b23d97ac3b7e95fa08a5b53ca60b6bd1b76432d2af7b8085466e61317e434a0",
+      "summary": "LCVXSYS4 sidecar contextidr_el1=0x56781234; QEMU -incoming + DUT restore; 4-instruction lockstep PASS; QEMU VMState and DUT sidecar both preserve CONTEXTIDR_EL1."
+    },
+    {
+      "run_id": "aud12-checkpoint-dut-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 checkpoint-dut-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-dut-smoke.log",
+      "log_sha256": "11dacad5f5c64e6fa5ae62252f674a3eb9557c48ec00e340a740aa1dc3310c2e",
+      "summary": "PASS: DUT checkpoint restore smoke split=10 count=10"
+    },
+    {
+      "run_id": "aud12-checkpoint-timer-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "make VERILATOR_JOBS=1 checkpoint-timer-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-timer-smoke.log",
+      "log_sha256": "0dd281caaeea148c652b47fbe47087632fa381aa4bd0bd3d0762891d2c34d243",
+      "summary": "Generic Timer checkpoint QEMU/DUT joint restore PASS."
+    },
+    {
+      "run_id": "aud12-checkpoint-sys-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "make VERILATOR_JOBS=1 checkpoint-sys-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-sys-smoke.log",
+      "log_sha256": "c07d89c75ca8d1b4431fc3bcefcd40f47f0b9f34b0815cb4ccb35f7f636c9d41",
+      "summary": "sys sidecar v2/v3 compatibility joint restore PASS (ZCR/SMCR/CSSELR)."
+    },
+    {
+      "run_id": "aud12-checkpoint-sys-v3-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "make VERILATOR_JOBS=1 checkpoint-sys-v3-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-sys-v3-smoke.log",
+      "log_sha256": "fc1434d35391502477edb7a8d6a49dd113170ca7d6734545a8283840d73c3079",
+      "summary": "LCVXSYS3 PMUSERENR/TCR2/PIRE0/exclusive joint restore PASS."
+    },
+    {
+      "run_id": "aud12-checkpoint-gic-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "make VERILATOR_JOBS=1 checkpoint-gic-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-gic-smoke.log",
+      "log_sha256": "573f374bfc96aad2240ce750d820d507dd201e5c296b9ec54bc76333a8c8d458",
+      "summary": "GIC checkpoint QEMU/DUT joint restore PASS."
+    },
+    {
+      "run_id": "aud12-checkpoint-mmio-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L2",
+      "command": "make VERILATOR_JOBS=1 checkpoint-mmio-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-mmio-smoke.log",
+      "log_sha256": "f336b7e37d31414e9e6dc8db25ebe17f39baa864d2268ce30dc1643ad33d7685",
+      "summary": "C++ MMIO PL031 checkpoint QEMU/DUT joint restore PASS."
+    },
+    {
+      "run_id": "aud12-manifest-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 checkpoint-manifest-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-manifest-smoke.log",
+      "log_sha256": "9ecefb1f7e4da6d944be87fc8065a4ba47f48f33ccc74aef74cf4e998b1460f6",
+      "summary": "checkpoint manifest input/chain/artifact SHA256 PASS."
+    },
+    {
+      "run_id": "aud12-resume-manifest-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 checkpoint-resume-manifest-smoke",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-resume-manifest-smoke.log",
+      "log_sha256": "0f8f59524768b2344136dd4a60bb70e688e7c396236bfd19cdbc4e01dc705910",
+      "summary": "resume checkpoint pending/complete/parent hash/global seq/tamper fixture PASS."
+    },
+    {
+      "run_id": "aud12-v4-struct-001",
+      "source_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 sim/difftest/checkpoint_v4_struct_smoke.py",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/aud12/checkpoint-v4-struct-smoke.log",
+      "log_sha256": "b37e17d136587d5462309c511436e3d91a8cb6460b32a720b7c18e9f6ec98aa5",
+      "summary": "LCVXSYS4 struct roundtrip and v3 legacy length parsing PASS."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "aud12-handoff",
+      "owner": "T-20260829-117",
+      "uri": "docs/handoffs/T-20260829-117-aud-12.md",
+      "reproduce": "cat docs/handoffs/T-20260829-117-aud-12.md",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "3bfd2fe917bf00d065405d62f090a89c59f8eff6ee7b8bd5f3176026992a5aa9"
+    },
+    {
+      "id": "aud12-evidence",
+      "owner": "T-20260829-117",
+      "uri": "docs/tasks/evidence/T-20260829-117.json",
+      "reproduce": "cat docs/tasks/evidence/T-20260829-117.json",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "5da75ee6d3f6256fb2f9dfe4863cfa04499d7095b5a5112ea8793b6faa4d39d5"
+    }
+  ],
+  "known_limits": [
+    "This is a targeted checkpoint v4 joint-restore smoke, not Gate D, Linux long-run, or full system-register matrix.",
+    "CONTEXTIDR_EL1 verified with a single non-zero value 0x56781234; no randomized/full-width boundary matrix.",
+    "Temporary joint script and build logs are in the worktree build/ directory (gitignored), not committed.",
+    "No QEMU/checkpoint protocol or RTL changes were needed; no sidecar version/field gaps found.",
+    "Other parallel task environments may still run independent heavy builds; this task performed one heavy Verilator build at a time under cgroup <16GiB."
+  ],
+  "next": "Integrator review; optionally merge docs and run a broader checkpoint/Linux regression if needed.",
+  "status": "done",
+  "correction_record": {
+    "artifact_hash_fixes": [
+      {
+        "artifact": "aud12-handoff",
+        "uri": "docs/handoffs/T-20260829-117-aud-12.md",
+        "sha256": "3bfd2fe917bf00d065405d62f090a89c59f8eff6ee7b8bd5f3176026992a5aa9",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "aud12-evidence",
+        "uri": "docs/tasks/evidence/T-20260829-117.json",
+        "sha256": "5da75ee6d3f6256fb2f9dfe4863cfa04499d7095b5a5112ea8793b6faa4d39d5",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ],
+    "evidence_finalization": [
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T06:30:30+08:00",
+    "head_sha": "9e94bed",
+    "notes": "AUD-12 merged. Checkpoint v4 joint restore PASS; CONTEXTIDR 0x56781234 matches QEMU/DUT; smoke suite all PASS.",
+    "merge_sha": "9dfa4f0139f1dcc08fffa724ff32f171e5bd7354",
+    "result_sha": "bd6f1ba0a5602c99cb19b12e2e4277fec0e1d0f7"
+  }
+}

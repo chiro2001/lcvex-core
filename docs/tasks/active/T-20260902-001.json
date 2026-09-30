@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-001",
+  "label": "A10-RESOURCE-GATE-REEVAL",
+  "title": "Catapult A10 分阶段综合资源探针与门限重评估",
+  "kind": "verify-fpga-resource",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-a10-resource-gate-reeval",
+  "agent_type": "remote-quartus-resource-probe",
+  "model": "deepseek-v4-flash",
+  "model_selection": "用户指定 deepseek-v4-flash(max)；本次对话后续默认",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260831-008",
+    "T-20260830-038"
+  ],
+  "base_sha": "73897911a81aa8a8833a4d6d457f3e27a01e3c29",
+  "branch": "verify/T-20260902-001-a10-resource-gate-reeval",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-001",
+  "scope": "在集成者已同步的远端 candidate 根 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-002\\candidate（candidate_source_commit=73897911a81aa8a8833a4d6d457f3e27a01e3c29，manifest 已回读校验通过）上，分阶段运行 Quartus synthesis，重新评估资源门限。不再把历史 35GB 先验门作为一票否决：按阶段实测峰值并逐阶段决策。用户判断：综合问题解决后，fit/STA/SOF 应在当前内存容量和时间窗口内逐步完成。",
+  "planning_guidance": {
+    "provenance": [
+      "远端 host=192.168.101.5 (GAMEPC)，shell 用 pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand；ssh user=chiro。只读预检先确认 candidate 根存在、资源快照、无 EDA 进程、不停止 jtagserver/SlimeVR 等非 EDA 进程。",
+      "参考历史资源数据：G4 真实 SoC synthesis PASS（2770s，峰值 PM=13538.9MB / WS=12675.5MB / VM=13665MB，fitter incomplete_killed）见 docs/tasks/evidence/T-20260830-032.json；G5 L1D/L2 standalone M20K synthesis PASS（VM 751/819MB）见 docs/tasks/evidence/T-20260830-038.json；T-101 decode_only 33s/682MB PASS。",
+      "综合必须在 candidate 根内新建隔离工作目录（例如 build/T-20260902-002/candidate/research/* 或远端新 build/T-20260902-001-probe/*），不得写原工程/旧 build/未知文件，不得删除任何文件。"
+    ],
+    "execution": [
+      "阶段 A：decode-only 或最小可综合子集 synthesis，参考 T-101 方法，记录 wall/峰值/exit/errors。",
+      "阶段 B：L1D/L2 standalone synthesis（G5 M20K wrapper 后重测），记录 wall/峰值/资源估计。",
+      "阶段 C：真实 SoC synthesis：优先 quartus_sh --flow compile catapult_a10 -c catapult_a10 -start ipgenerate -end synthesis；若 Qsys/IP regenerate 行为与 G4 不同，记录并保守处理。用 PowerShell 后台采样 quartus_syn 的 PrivateMemory/WorkingSet 峰值；若接近系统剩余安全余量（物理空闲+pagefile 可用再扣 20% 安全带）则停止阶段 C 并记录，不强行。",
+      "每阶段前后做资源快照（物理空闲、pagefile、D 盘、EDA 进程）。不读取 license 内容；不运行 fit/STA/assembler/SOF/JIC/编程；不触碰 JTAG。"
+    ],
+    "acceptance_checks": [
+      "输出按阶段资源表（wall_s、峰值 PM/WS/VM MB、exit、errors/warnings、ALM/BRAM/regs 估计）与前后快照。",
+      "给出重新评估后的门限模型：综合各子阶段峰值、可外推的 fit/STA/asm 峰值窗口、当前 host 可安全执行的阶段边界，以及仍需外部资源介入的明确条件。",
+      "证据落 docs/tasks/evidence/T-20260902-001.json + handoff + docs/FPGA_A10_RESOURCE_GATE_REEVAL.md；若阶段 C 未执行或中断，必须记录原因与已取得数据，不得伪造成功。"
+    ]
+  },
+  "writes": [
+    "docs/FPGA_A10_RESOURCE_GATE_REEVAL.md",
+    "docs/handoffs/T-20260902-001-a10-resource-gate-reeval.md",
+    "docs/tasks/evidence/T-20260902-001.json",
+    "build/agents/T-20260902-001/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-001-probe\\**"
+  ],
+  "reads": [
+    "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "docs/FPGA_A10_POSTFIX_CANDIDATE_SYNC.md",
+    "docs/tasks/evidence/T-20260830-032.json",
+    "docs/tasks/evidence/T-20260830-038.json",
+    "docs/tasks/evidence/T-20260829-101.json",
+    "docs/tasks/evidence/T-20260830-005.json",
+    "fpga/catapult_a10/tools/partition_template.qsf",
+    "fpga/catapult_a10/quartus/catapult_a10.qsf",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "validation": {
+    "l0": [
+      "远端只读 preflight；candidate manifest 与本地一致；前后资源快照"
+    ],
+    "l1": [
+      "阶段 A/B 可复现命令与资源数据；阶段 C 若运行则记录完整日志"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "分阶段实测数据完整、门限模型可审计；任何阶段未跑/中断均如实记录。不产出 SOF/JIC/编程结果。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "created_at": "2026-09-02T00:00:00+08:00",
+  "updated_at": "2026-09-02T03:03:00+08:00",
+  "known_limits": [
+    "真实 full synthesis 历史峰值 75-77GB 仍可能超出当前 host；本任务只做分阶段探针并逐阶段决策。",
+    "不运行 fit/STA/SOF/编程；JTAG identity 未闭合前禁止编程。",
+    "不停止其他进程、不删除文件、不读取 license 内容。"
+  ],
+  "next": "依据门限模型决定是否进入 fit/STA/SOF 与最终 candidate 重同步",
+  "dispatch": {
+    "sent_at": "2026-09-02T01:29:20+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-001",
+    "branch": "verify/T-20260902-001-a10-resource-gate-reeval"
+  },
+  "head_sha": "30036dde14f7a82d614c9887badfac8e8bb8684a",
+  "merge_sha": "9bde1d250c598310ff8d9b4026ae1031e8e1be1f",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T03:02:31+08:00",
+    "merged_at": "2026-09-02T03:03:00+08:00",
+    "recorded_at": "2026-09-02T03:03:00+08:00",
+    "notes": "资源探针证据已合入；门限模型接受。真实 full-FP synthesis 未完成，阻断为 RTL Quartus 兼容错误（fp_scalar loop/NEON out-of-range），需下个 RTL 修复任务后再重跑 full-FP synthesis/fit/STA/SOF"
+  }
+}

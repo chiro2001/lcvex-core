@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-055",
+  "label": "STXR-IRQ-MON-WE",
+  "title": "Fix QEMU plugin monitor effect for STXR with same-COMMIT IRQ",
+  "kind": "difftest-protocol-regression",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-stxr-irq-mon-we",
+  "agent_type": "protocol-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "派发时省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-054"
+  ],
+  "base_sha": "c2fd2c7e6ea5b09491ee76f9dbe73586a87848e9",
+  "branch": "infra/T-20260902-055-stxr-irq-mon-we",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-055",
+  "scope": "修复 T-054 发现的 difftest 协议缺口：STXR 正常退休且同一 COMMIT 携带 EXC_IRQ=0x40 时，QEMU plugin 的 monitor effect 不应仅因异常码抑制 mon_we；保持 PRE/COMMIT/seq 一一对应、同步异常与普通 IRQ 的监视器语义。",
+  "reads": [
+    "docs/handoffs/T-20260902-054-irq-atomic-overlap.md",
+    "docs/tasks/evidence/T-20260902-054.json",
+    "qemu/plugins/**",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/**irq*",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "qemu/plugins/**",
+    "sim/difftest/**irq*",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/handoffs/T-20260902-055-stxr-irq-mon-we.md",
+    "docs/tasks/evidence/T-20260902-055.json"
+  ],
+  "validation": {
+    "l0": [
+      "plugin rebuild and protocol fixture"
+    ],
+    "l1": [
+      "same-COMMIT STXR success/fail plus IRQ monitor sidecar contract"
+    ],
+    "l2": [
+      "T-054 minimal failure replay becomes strict PASS; ordinary IRQ/STXR/LDXR/CLREX regressions remain green"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "用 T-054 保存的 same-COMMIT STXR IRQ 失败现场复现并修复 mon_we；不能通过延后 IRQ、关闭 monitor 比较或修改参考结果规避。同步异常、普通 IRQ、WFI ASYNC、STXR success/fail、exclusive monitor commit 语义均有定向覆盖。QEMU fork 不修改；只修改仓内 plugin/runner，plugin 构建全局串行。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 10800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T21:19:19+08:00",
+  "updated_at": "2026-09-05T00:11:24+08:00",
+  "known_limits": [
+    "等待 T-054 done 后才创建 worktree/派发，避免其只读 plugin 基线与本任务写入/构建冲突",
+    "不修改外部 QEMU fork、QEMU binary 或 reference architectural results"
+  ],
+  "handoff": "docs/handoffs/T-20260902-055-stxr-irq-mon-we.md",
+  "evidence": "docs/tasks/evidence/T-20260902-055.json",
+  "head_sha": "8c129a5eac82af92478494e73529ca7a6a3704ea",
+  "merge_sha": "f5f85de70c958a1fc741788bc7d5c7cce5a30a75",
+  "next": "已完成；后续协议修改继续保持 560B ABI、kind=1/2 与 T-054/T-055 回归",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-05T00:06:35+08:00",
+    "merged_at": "2026-09-05T00:07:37+08:00",
+    "recorded_at": "2026-09-05T00:11:24+08:00",
+    "merge_sha": "f5f85de70c958a1fc741788bc7d5c7cce5a30a75",
+    "notes": "Final read-only review found no blockers and confirmed the complete five-commit integration order. On the merged SHA, p6-stxr-irq-mon-we passed, followed by the canonical T-054 CASP/STXR/DC ZVA strict base/delay2 matrix at 10/10 PASS."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-04T22:29:35+08:00",
+    "agent_name": "/root/t055_stxr_irq_mon_we",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-055",
+    "branch": "infra/T-20260902-055-stxr-irq-mon-we"
+  },
+  "review_dispatch": {
+    "sent_at": "2026-09-04T22:29:35+08:00",
+    "agent_name": "/root/t055_protocol_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-shared-snapshot",
+    "received_at": "2026-09-04T22:29:35+08:00",
+    "reported_at": "2026-09-04T22:47:33+08:00",
+    "status": "conditional_go",
+    "blockers": [
+      "Pass the take_exception kind=2 retired-asynchronous classification into monitor-effect handling; do not use exc_code alone, and keep kind=1 synchronous non-retirement suppressed",
+      "Fix qemu/plugins/lcvex_protocol.py COMMIT mirror from 552 to the C wire 560 bytes including mon_data2 before using fixtures for acceptance",
+      "Preserve fetch-fault merge/ERET exceptions, WFI ASYNC separation and strict PRE/GO/COMMIT/ACK sequencing"
+    ],
+    "final_review": {
+      "sent_at": "2026-09-05T00:02:59+08:00",
+      "received_at": "2026-09-05T00:02:59+08:00",
+      "reported_at": "2026-09-05T00:06:35+08:00",
+      "head_sha": "8c129a5eac82af92478494e73529ca7a6a3704ea",
+      "code_blockers": "none",
+      "test_blockers": "none",
+      "notes": "Final diff stays within the registered writes; test_program.py is unchanged from base. kind=1/2 monitor semantics, 560B ABI, WFI ASYNC, synchronous DABT/IABT, CASP irq_stores=2, complete make, T-054 companion and SV FIFO matrix evidence were accepted."
+    }
+  }
+}

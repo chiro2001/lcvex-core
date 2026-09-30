@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-114",
+  "label": "AUD-09",
+  "parent": "",
+  "title": "任务时间戳单调性/事件时间字段",
+  "kind": "external-audit-action",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "5be2a1df42c76baaca3ff70391c2dbceea6c82ef",
+  "branch": "feature/T-20260829-114-aud-09",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-114",
+  "scope": "定义事件时间与回填时间；增加 review>=dispatch、run>=dispatch 校验。",
+  "writes": [
+    "docs/handoffs/T-20260829-114-aud-09.md",
+    "docs/tasks/evidence/T-20260829-114.json"
+  ],
+  "reads": [
+    "docs/audit/external-results/findings.md",
+    "docs/audit/external-results/action-items.md"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "necessary evidence/handoff recorded"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 2048,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.3
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T23:30:00+0800",
+  "updated_at": "2026-08-29T23:30:00+0800",
+  "known_limits": [
+    "所有重型 Verilator 必须 cgroup <16GiB。",
+    "不引入 SVE/POST-V82。",
+    "外部审计结果不作为唯一完成证据。"
+  ],
+  "handoff": "docs/handoffs/aud-09.md",
+  "evidence": "docs/tasks/evidence/T-20260829-114.json",
+  "merge_sha": "24f5363770227c3e5bae9bf36919b217e7d213e0",
+  "merged_at": "2026-08-30T00:10:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-30T00:10:00+0800",
+    "status": "accepted",
+    "head_sha": "d96c08d4a4c370c6474873b557b4050c0506fbdc",
+    "notes": "AUD-09 merged. New check_task_timestamps.py with live/all scope, T-099/T-104 corrections, remaining 103 errors/49 warnings in live scope recorded for follow-up."
+  },
+  "head_sha": "75465d4d826f51bdca484283c83c2b01c58c4143",
+  "correction_record": {
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "75465d4d826f51bdca484283c83c2b01c58c4143",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  }
+}

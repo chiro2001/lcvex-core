@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-084",
+  "label": "B2b",
+  "parent": "T-20260828-072",
+  "title": "B2b FP/向量转换、舍入、异常与 FPCR 访问闭合",
+  "kind": "isa-fp-convert-round-exception",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "76a5b5c6d44b87773f10d9a3e05d4198288adfd7",
+  "branch": "feature/T-20260829-084-b2b-fp-convert-round",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-084",
+  "scope": "依据 docs/V82_PROFILE_MANIFEST.md 的 V82-SELECTED-EXT，补齐已声明但尚未闭合的 FP/向量转换、舍入/舍入模式、异常 enable/flag、FPCR 访问矩阵；先定义 QEMU 与 ARM ARM oracle 差异，四种 rounding、NaN/Inf/subnormal、trap/flag、checkpoint restore 全覆盖。",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_decode.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-084-b2b-fp-convert-round.md",
+    "docs/tasks/evidence/T-20260829-084.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-0_FP_STATE.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-2_NEON_INT.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/P7-5_FP16_SQRT_MINMAX_ROUND.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_decode.sv",
+    "sim/cocotb/**",
+    "sim/difftest/**"
+  ],
+  "validation": {
+    "l0": [
+      "raw-bit 转换/舍入/异常定向；负测/保留编码"
+    ],
+    "l1": [
+      "SV + Cocotb：four rounding modes、NaN/Inf/subnormal、trap/flag、FPCR 访问"
+    ],
+    "l2": [
+      "P7 定向 QEMU lockstep 受影响子集（集成者合并后跑）"
+    ],
+    "l3": []
+  },
+  "acceptance": "至少一个或多个 V82-SELECTED-EXT 转换/舍入/异常 row 闭合并提供 L0/L1 证据；未实现行明确 blocked/deferred；不修改 core/pkg/filelist/Makefile/QEMU；不把 shim 当实现。",
+  "next": "B2b 通过后进入 B2c 向量访存或 B3 系统/维护。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T03:48:20+08:00",
+  "updated_at": "2026-08-29T05:11:54+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T03:48:20+08:00",
+    "agent_name": "b2b_fp_convert_round",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-084"
+  },
+  "known_limits": [
+    "不处理 SVE/SME、完整 FP exception enable trap（若未批准）、MOPS/MTE/PAuth/Crypto。",
+    "不修改 rtl/lcvex_core.sv、rtl/lcvex_pkg.sv、rtl/filelist.f、Makefile、QEMU；共享集成由后续波次处理。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-084-b2b-fp-convert-round.md",
+  "evidence": "docs/tasks/evidence/T-20260829-084.json",
+  "merge_sha": "54ab298f33a767a940a7e63a57f1d18e2c7a75ac",
+  "merged_at": "2026-08-29T05:11:54+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T05:11:30+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "1b7a025a8c04c7c199652ada17f71dfca490113b",
+    "implementation_sha": "8c5f57cee489620a93d25bd52cb98b6303503cf6",
+    "notes": "B2b 为证据闭合：现有转换/舍入/FPCR/FPEN 行已实现，完整 FP exception enable/trap 保持 POST-V82-DEFERRED；无新 RTL。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T03:52:00+0800",
+        "new": "2026-08-29T03:48:20+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T05:12:00+0800",
+        "new": "2026-08-29T05:11:54+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T03:52:00+0800",
+        "new": "2026-08-29T03:48:20+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T05:12:00+0800",
+        "new": "2026-08-29T05:11:54+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "8c5f57cee489620a93d25bd52cb98b6303503cf6",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "8c5f57cee489620a93d25bd52cb98b6303503cf6"
+}

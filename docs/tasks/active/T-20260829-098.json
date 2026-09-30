@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-098",
+  "label": "B5",
+  "parent": "T-20260828-072",
+  "title": "B5：V82 non-SVE profile freeze 与候选冻结",
+  "kind": "core-isa-b5-profile-freeze",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "62192862bfb51fbc32cd0ee45ef1c1f5a0bde444",
+  "branch": "feature/T-20260829-098-b5-profile-freeze",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-098",
+  "scope": "在 B4 之后冻结 V82-BASE+V82-SELECTED-EXT：更新 profile manifest 支持/后置清单，锁定 QEMU/config/hash，生成 row->证据映射，复核 B3/B4 覆盖，执行 CORE_COUNT=1 与兼容性检查，交付 B5 候选 freeze handoff/evidence。",
+  "writes": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_SCOPE.md",
+    "docs/handoffs/T-20260829-098-b5-profile-freeze.md",
+    "docs/tasks/evidence/T-20260829-098.json",
+    "scripts/**",
+    "build/coverage/**"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_GAPS.md",
+    "docs/handoffs/T-20260829-093-b3-remainder.md",
+    "docs/handoffs/T-20260829-096-b3-contextidr-probe.md",
+    "docs/handoffs/T-20260829-094-b4-coverage-closure.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "make compile 默认优化通过",
+      "profile manifest 可机检、支持/后置无未知"
+    ],
+    "l1": [
+      "B3/B4 覆盖映射齐全",
+      "CORE_COUNT=1 回归通过（至少 make test 子集）"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "V82 non-SVE profile 冻结候选，附 clean SHA、支持/后置清单、证据映射和未跑项；明确指出 Gate D/T-097 是否仍待集成者/全局串行。",
+  "next": "B5 freeze 后由集成者安排 Gate D/F-ISA/F-MEM 复跑；T-097 checkpoint sidecar v4 仍为独立全局串行。",
+  "resource": {
+    "cpu": 3,
+    "memory_mb": 12288,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T12:42:04+08:00",
+  "updated_at": "2026-08-29T12:42:04+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T12:42:04+08:00",
+    "agent_name": "b5_profile_freeze",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-098"
+  },
+  "known_limits": [
+    "不启动 Quartus；不引入 SVE/POST-V82；不使用 -O0。",
+    "禁止直接修改 QEMU/checkpoint；T-097 负责。",
+    "不跨 SHA 拼接 Gate 结果。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-098-b5-profile-freeze.md",
+  "evidence": "docs/tasks/evidence/T-20260829-098.json",
+  "merge_sha": "3681e6e821c60250d810b648f7c65cbe1c17d5b2",
+  "merged_at": "2026-08-29T12:47:43+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T12:47:43+08:00",
+    "status": "accepted",
+    "head_sha": "6a53705b69cd9eda417258676608585c63658da8",
+    "notes": "B5 V82 profile freeze merged. Manifest 117 rows validated; make compile/check_encoders pass; profile matrix generated. Not claimed as Gate D; remaining: T-097, Gate D, full make test, Linux long window."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T13:40:00+0800",
+        "new": "2026-08-29T12:42:04+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T13:40:00+0800",
+        "new": "2026-08-29T12:42:04+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T13:40:00+0800",
+        "new": "2026-08-29T12:42:04+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T14:00:00+0800",
+        "new": "2026-08-29T12:47:43+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T14:00:00+0800",
+        "new": "2026-08-29T12:47:43+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "2ea2ca19ec08e723eec468ad69dfec68678d1ed3",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "2ea2ca19ec08e723eec468ad69dfec68678d1ed3"
+}

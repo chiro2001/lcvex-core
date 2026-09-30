@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-048",
+  "state": "review",
+  "partial": false,
+  "base_sha": "b928c7779116fb6103773f6fa0fcff0de104ff00",
+  "head_sha": "d219d17",
+  "merge_sha": "84d9bf77b22174c0e9121194bd73d2211454a1ec",
+  "branch": "fix/T-20260902-048-core-fp-operand-c-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-048",
+  "scope": "Cut the core ID/EX and EX/MEM FP/NEON V forwarding cone into idex_d.neon_fp_operand_c and preserve precise RAW, load-use, FIFO, kill, backpressure, and commit semantics.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_core.sv",
+      "sim/cocotb/test_p7_4_fma_convert.py",
+      "scripts/test_registry.json"
+    ],
+    "summary": "fpv now uses architectural FP state plus MEM/WB registered V results only; v_id_reads combines scalar FP and NEON readers, including FMLA/FMLS Vd addend, and ex_id_v_hazard/exmem_v_hazard gate stall_id, flush_id, and fetch_fifo_pop.",
+    "commit": "d219d17"
+  },
+  "resource_policy": {
+    "heavy_verilator_wrapper": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0",
+    "verilator_jobs": 1,
+    "quartus_run": false,
+    "assembler_sof_run": false
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator core lint/elaboration; cgroup memory policy applied."
+    },
+    {
+      "run_id": "sim-sv-core-smoke",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv sim-sv-backpressure sim-sv-fetch-fifo",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": [
+        "lcvex_core_tb",
+        "lcvex_commit_backpressure_tb",
+        "lcvex_fetch_fifo_tb"
+      ],
+      "notes": "Core smoke, commit valid/ready atomicity, FIFO bounds/flush/epoch/delayed-response/backpressure all pass."
+    },
+    {
+      "run_id": "sim-sv-neon-fp",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "P7-3 NEON FP raw unit."
+    },
+    {
+      "run_id": "sim-sv-fma-convert",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "P7-4 scalar and NEON FMA/conversion raw units."
+    },
+    {
+      "run_id": "cocotb-p7-1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "5/5",
+      "notes": "P7-1 scalar FP pipeline, FPEN trap, load fault, backpressure, and unsupported encodings."
+    },
+    {
+      "run_id": "cocotb-p7-2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-p7-2-neon",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "10/10",
+      "notes": "Includes scalar/NEON cross-unit V hazards, Q load/store, LD1R, fault, and commit backpressure."
+    },
+    {
+      "run_id": "cocotb-p7-3-fifo-on",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "4/4",
+      "notes": "F1a FIFO enabled (default), P7-3 pipeline/trap/backpressure/UDEF."
+    },
+    {
+      "run_id": "cocotb-p7-3-delay2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 P7_NEON_FP_MEM_DELAY_MODE=2 P7_NEON_FP_SIM_BUILD=sim_build_t048_p7_3_delay2 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "4/4",
+      "notes": "Random/delayed memory response path; FP/NEON load-use and FIFO behavior remain correct."
+    },
+    {
+      "run_id": "cocotb-p7-3-fifo-off",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.p7_3_neon_fp VERILATOR_JOBS=1 SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_p7_3_neon_fp MEM_DELAY_MODE=0 SIM_BUILD=sim_build_t048_p7_3_fifo_off EXTRA_ARGS=-GFETCH_FIFO_ENABLE=0",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "4/4",
+      "notes": "Legacy FIFO-off elaboration/execution; IF/ID PC/token path remains functional."
+    },
+    {
+      "run_id": "cocotb-p7-4",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "6/6",
+      "notes": "Includes test_p7_4_operand_c_back_to_back_raw: scalar FMA and NEON FMLA self-RAW operand_c checks."
+    },
+    {
+      "run_id": "l2-p7-1-sequence",
+      "command": "mkdir -p build/verilator_lockstep && systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-1-fp-scalar-sequence",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "388/388",
+      "notes": "A76 required scalar FP lockstep; the explicit mkdir only bootstraps the ignored generated build directory."
+    },
+    {
+      "run_id": "l2-p7-3-neon-fp",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "48/48",
+      "notes": "A76 required NEON FP lockstep."
+    },
+    {
+      "run_id": "l2-p7-4-fma-convert",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "94/94",
+      "notes": "A76 required FMA/conversion lockstep."
+    },
+    {
+      "run_id": "l2-p7-4-sequence",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-4-fma-convert-sequence",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "142/142",
+      "notes": "FMA/conversion scalar and vector sequence, including vector load-to-FMLA dependency."
+    },
+    {
+      "run_id": "l2-p7-5-sequence",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-5-fp16-sqrt-minmax-round-sequence",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "66/66",
+      "notes": "P7-5 sequence regression for FP/NEON state and sticky flags."
+    },
+    {
+      "run_id": "registry-check",
+      "command": "make test-registry-check",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Registry format and Makefile/runner consistency pass (68 entries)."
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "l2-bootstrap-missing-generated-dir",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-1-fp-scalar-sequence",
+      "result": "environment_blocked_then_retried",
+      "exit_code": 2,
+      "notes": "Fresh worktree had no ignored build/verilator_lockstep directory; Verilator reported Can't write file. After mkdir -p build/verilator_lockstep, the identical cgroup-wrapped target passed as l2-p7-1-sequence."
+    }
+  ],
+  "integrator_validation": {
+    "source_sha": "84d9bf77b22174c0e9121194bd73d2211454a1ec",
+    "recorded_at": "2026-09-04T13:48:46+08:00",
+    "resource_policy": "All Verilator builds/runs used systemd-run --user --scope with MemoryMax=16G, MemorySwapMax=0 and VERILATOR_JOBS=1; jobs ran serially.",
+    "runs": [
+      {
+        "run_id": "integrator-compile",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+        "result": "pass",
+        "exit_code": 0
+      },
+      {
+        "run_id": "integrator-cocotb-p7-4",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "6/6 including operand_c back-to-back RAW"
+      },
+      {
+        "run_id": "integrator-l2-p7-1-sequence",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-1-fp-scalar-sequence",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "388/388 QEMU lockstep"
+      },
+      {
+        "run_id": "integrator-l2-p7-3-neon-fp",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-3-neon-fp",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "48/48 QEMU lockstep"
+      },
+      {
+        "run_id": "integrator-registry-check",
+        "command": "make test-registry-check",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "68 registry entries and Makefile/runner consistency"
+      }
+    ]
+  },
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/signoff STA",
+    "FPGA assembler/SOF/programming"
+  ],
+  "known_limits": [
+    "Physical timing improvement is not measured locally; T-047 top-1 must be rechecked by FP-P5 rerun round13 on the merged SHA.",
+    "Existing irq_taken young ID/EX/EXMEM clearing risk was not changed or claimed covered; track it as an independent regression task.",
+    "Removing ID/EX and EX/MEM V forwarding adds RAW bubbles until MEM/WB or architectural FP state is visible."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-04T13:07:00+08:00",
+    "received_at": "2026-09-04T13:07:10+08:00",
+    "reported_at": "2026-09-04T13:31:21+08:00"
+  },
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-048-core-fp-operand-c-cut.md"
+    },
+    {
+      "id": "implementation-commit",
+      "sha": "d219d17"
+    }
+  ]
+}

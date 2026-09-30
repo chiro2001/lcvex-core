@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "T-20260919-006",
+  "label": "B25-NOFP-VOLATILE-SOF-PACKAGE",
+  "title": "Generate and freeze one volatile SOF from the accepted no-FP fitted database",
+  "kind": "assembler-package",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "quartus-assembler-success-and-volatile-sof-frozen",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260919-002", "T-20260919-004", "T-20260919-005"],
+  "registration_sha": "0a65f9d2f5a73fe2b0483b5ad3f6d5c3de94c61a",
+  "physical_candidate_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+  "physical_candidate_tree_sha": "d5baa6b05f5f8824236c816980ab6e6d48578594",
+  "branch": "verify/T-20260919-006-b25-nofp-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-006",
+  "remote_source": "D:/Projects/fpga-altra/lcvex/build/T-20260919-004-b25-nofp-fresh-physical/fpga/catapult_a10",
+  "remote_target": "D:/Projects/fpga-altra/lcvex/build/T-20260919-006-b25-nofp-volatile-sof/fpga/catapult_a10",
+  "writes": [
+    "build/agents/T-20260919-006/** ignored logs/reports/SOF artifact",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260919-006-b25-nofp-volatile-sof/** task-owned remote clone",
+    "docs/tasks/evidence/T-20260919-006.json",
+    "docs/handoffs/T-20260919-006-b25-nofp-volatile-sof.md"
+  ],
+  "scope": "Hash-audit the accepted T-004 post-STA project, clone it into a new task-owned directory, invoke Quartus assembler exactly once, and freeze the resulting catapult_a10.sof plus reports. No programmer, terminal or board access occurs in this task.",
+  "validation": {
+    "preflight": "No EDA/programmer/terminal process; T-004 fit/STA reports and source identities match accepted hashes; source contains no configuration artifact; sufficient disk headroom.",
+    "clone": "Source and clone pre-assembler manifests are identical and source remains immutable.",
+    "assembler": "Quartus Prime Assembler Successful, 0 errors; exactly one catapult_a10.sof; assembler report identifies final root_partition/auto_fab_0 snapshots.",
+    "postflight": "No POF/JIC/RBF/JBC/SVF/JAM; only assembler report/index/runlog allowlist may change in the clone database; final/partitioned/synthesized fitted payload is unchanged."
+  },
+  "acceptance": "One content-addressed volatile SOF is produced from an isolated clone of the exact accepted T-004 physical project, with source immutability and fitted-database payload closure proven. Any identity or unexpected database/config-format change fails closed.",
+  "resource": "Every GamePC operation acquires gamepc; one foreground assembler invocation; no local heavy work.",
+  "authorization": "The user explicitly authorized Quartus/JTAG programming and device tests. This task uses only the assembler subset and makes no board state change.",
+  "forbidden_regions": [
+    "source T-004 physical project writes",
+    "synthesis, fitter or STA rerun",
+    "POF/JIC/EPCQ/Flash/RBF/JBC/SVF/JAM generation",
+    "quartus_pgm, JTAG, nios2-terminal, board reset/power",
+    "stopping unknown or pre-existing processes"
+  ],
+  "created_at": "2026-09-19T23:54:41+08:00",
+  "updated_at": "2026-09-20T00:04:13+08:00",
+  "sof": {"bytes": 36842110, "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7", "quartus_checksum": "0x31426358"},
+  "evidence": "docs/tasks/evidence/T-20260919-006.json",
+  "handoff": "docs/handoffs/T-20260919-006-b25-nofp-volatile-sof.md",
+  "next_after_acceptance": "T-20260919-007 may configure this exact SOF into volatile FPGA SRAM and run the resident-monitor console protocol."
+}

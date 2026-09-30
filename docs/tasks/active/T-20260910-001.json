@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "T-20260910-001",
+  "label": "B25-UCP-INVARIANT-WAIVER-V2",
+  "title": "Replace unstable raw fitter duplicate counts with a fail-closed normalized UCP invariant contract",
+  "kind": "physical-waiver-policy-infrastructure",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-and-revalidated",
+  "assigned_owner": "root",
+  "depends_on": [],
+  "base_sha": "5702905425dfd149b791a7895a88ea453f8ad5a5",
+  "branch": "infra/T-20260910-001-b25-ucp-invariant-v2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260910-001",
+  "writes": [
+    "fpga/catapult_a10/physical_waivers_invariant.json",
+    "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py",
+    "fpga/catapult_a10/tools/check_physical_waiver_invariants.py",
+    "fpga/catapult_a10/tools/run_physical_waiver_invariant_fixture.py",
+    "docs/tasks/evidence/T-20260910-001.json",
+    "docs/handoffs/T-20260910-001-b25-ucp-invariant-waiver-v2.md",
+    "build/agents/T-20260910-001/** ignored validation output"
+  ],
+  "reads": [
+    "T-010 v1 policy/checker and T-012 exporter; these remain byte-for-byte unchanged",
+    "docs/tasks/evidence/T-20260909-011.json and its designated raw UCP/reset reports",
+    "docs/tasks/evidence/T-20260909-013.json and /home/chiro/projects/mycpu/lcvex-wt-T-20260909-013/build/agents/T-20260909-013/acceptance/remote/** read-only",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-013/build/agents/T-20260909-013/prep/ucp-endpoint-diff.json as non-authoritative diagnostic only"
+  ],
+  "scope": "Add a separate v2 policy/exporter/checker that preserves v1 history while accepting fitter-only terminal ~DUPLICATE selection changes. Compare complete normalized endpoint membership, not only counts. Keep contract lineage, fresh candidate identity, constraint hashes, tool/device and report-only provenance distinct.",
+  "validation": [
+    "Prove normalized TDI/TMS/TDO endpoint sets are exactly 25/35/4 and reset endpoints exactly 624 with family counts 606/4/13/1; store canonical full-membership digests or equivalent complete membership contract.",
+    "Allow only a terminal ~DUPLICATE marker on an internal endpoint that has an identical unmarked base row in the same report; reject alternate suffixes, marker placement, missing base, repeated duplicate and duplicate-field drift.",
+    "Require exact two unconstrained clocks, exact port names/directions, empty UCP clock fields, exact allowed hierarchy classification for every normalized member, empty clock_constraints/exceptions, and no reset false-path or JTAG create_clock/period.",
+    "Require fast/slow UCP normalized-set equality and four recovery/removal normalized-set equality; raw header/summary/detail counts must be internally consistent, all violations zero and detailed worst slack strictly positive.",
+    "Run the same v2 policy on complete T-011 raw reports (63/627) and one complete T-013 fresh report set (61/626); both must pass without synthesizing rows or mixing snapshots.",
+    "Add negative fixtures for functional endpoint deletion/replacement, hierarchy substitution, cross-corner/check drift, bad clocks, count/detail mismatch, negative detailed slack, provenance/hash drift and every illegal duplicate form.",
+    "Run py_compile, fixture matrix, actual T-011 export/check and actual T-013 export/check, then git diff --check."
+  ],
+  "acceptance": "One reviewed v2 invariant policy accepts both historically frozen and fresh fitter duplicate selections while still rejecting any functional endpoint, hierarchy, constraint, timing or provenance drift; v1 files and semantics remain unchanged.",
+  "resource": "Local light only; no resource lock, GamePC, Quartus, network or DUT action.",
+  "forbidden_regions": [
+    "existing fpga/catapult_a10/physical_waivers.json or v1 checker/exporter/fixture files",
+    "RTL, SDC, QSF, manifests, source.lock or SHA256SUMS",
+    "T-013 evidence/handoff, task/status/roadmap ledgers",
+    "GamePC, Quartus, assembler, bitstreams, JTAG, board, reset/power or Flash"
+  ],
+  "created_at": "2026-09-10T00:43:05+08:00",
+  "updated_at": "2026-09-10T10:53:13+08:00",
+  "result": {
+    "implementation_head": "c908140f95dc373de67b044513697fb4122ae7b2",
+    "source_evidence_head": "f703b3a8",
+    "integration_head": "2e7974db34b075f66dc9430de641c470e8b22d7b",
+    "evidence": "docs/tasks/evidence/T-20260910-001.json",
+    "handoff": "docs/handoffs/T-20260910-001-b25-ucp-invariant-waiver-v2.md",
+    "integration_validation": {
+      "fixture": "2/2 positive PASS; 27/27 negative rejected",
+      "actual_t011": "export/check PASS; normalized UCP input/reset 60/624",
+      "actual_t013": "export/check PASS; normalized UCP input/reset 60/624",
+      "matrix_sha256": "6067ac2b38c2663e23923b3c3ffc65cbd8a123c682b95bc92d42aa6ce56d59c9"
+    }
+  },
+  "takeover": {
+    "at": "2026-09-10T09:52:50+08:00",
+    "reason": "subagent platform usage limit",
+    "preserved_checkpoint": "untracked fpga/catapult_a10/physical_waivers_invariant.json",
+    "new_owner": "root"
+  },
+  "dispatch": {
+    "sent_at": "2026-09-10T00:45:02+08:00",
+    "agent_name": "b25_ucp_invariant_v2",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "a8da936e"
+  }
+}

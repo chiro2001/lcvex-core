@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260831-003",
+  "label": "FPGA-G6-SYNC",
+  "state": "review",
+  "partial": false,
+  "owner": "luna-a10-candidate-sync",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "base_sha": "19d266a7dcffe43de7e0fdcc7057f8881be6a47f",
+  "head_sha": "19d266a7dcffe43de7e0fdcc7057f8881be6a47f",
+  "content_sha": "56c42f3e9df6a3d2f8be1cde4ff71a9ad1dfaa47bea6455beea7ae6b4cfe7ed4",
+  "merge_sha": "",
+  "branch": "infra/T-20260831-003-a10-candidate-sync",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-003",
+  "files": [
+    "docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md",
+    "docs/handoffs/T-20260831-003-a10-candidate-sync.md",
+    "docs/tasks/evidence/T-20260831-003.json",
+    "remote:D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260831-003\\candidate\\**"
+  ],
+  "tests": "metadata/static-only + local/remote hash closure + resource/process safety",
+  "dispatch_sent_at": "2026-08-31T02:27:13+08:00",
+  "sent_at": "2026-08-31T02:27:13+08:00",
+  "received_at": "2026-08-31T02:29:13+08:00",
+  "reported_at": "2026-08-31T02:59:27+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-08-31T02:27:13+08:00",
+    "received_at": "2026-08-31T02:29:13+08:00",
+    "reported_at": "2026-08-31T02:59:27+08:00",
+    "local_validation": {
+      "started_at": "2026-08-31T02:29:13+08:00",
+      "finished_at": "2026-08-31T02:29:13+08:00"
+    },
+    "remote_pre_snapshot": "2026-08-31T02:37:43.7904693+08:00",
+    "remote_post_snapshot": "2026-08-31T02:52:09.6608939+08:00",
+    "remote_closure_probe": "2026-08-31T02:58:04.7339704+08:00",
+    "remote_qsf_probe": "unknown; command event timestamp not retained",
+    "remote_key_probe": "unknown; command event timestamp not retained",
+    "transfer": "unknown; scp event timestamps not retained"
+  },
+  "scope": "将 candidate commit 19d266a 的 repo-relative RTL/platform closure 同步到远端全新隔离根；不运行 EDA、不读取 license、不改变旧工程或旧 build。",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive",
+    "write_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260831-003\\candidate",
+    "write_root_posix_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260831-003/candidate",
+    "write_root_collision_pre": false,
+    "write_root_created": true,
+    "write_root_collision_post": false,
+    "writes_outside_root": false,
+    "old_project_or_build_modified": false,
+    "license_content_read": false
+  },
+  "local_manifest": {
+    "path": "build/agents/T-20260831-003/candidate/candidate_manifest.json",
+    "sidecar": "build/agents/T-20260831-003/candidate/candidate_manifest.sha256",
+    "candidate_commit": "19d266a7dcffe43de7e0fdcc7057f8881be6a47f",
+    "tracked_closure_roots": ["rtl", "fpga/catapult_a10"],
+    "tracked_file_count": 121,
+    "tracked_total_bytes": 2730112,
+    "derived_alias_file_count": 29,
+    "file_count": 150,
+    "total_bytes": 3476191,
+    "qsf_reference_count": 49,
+    "qsf_missing_before_alias_count": 29,
+    "qsf_missing_after_alias_count": 0,
+    "canonical_sha256": "ea5c72e4944980492e38587897edffa2efd2c89872191d703e5666d9dd216521",
+    "manifest_file_sha256": "f17df639c0b33eb55f46d76801f51215b88ba8a4f181066cb3035af27ec55e59",
+    "manifest_bytes": 58311,
+    "sidecar_sha256": "7d459a41314490950db7d366f7f26b8963b1596e05ad7cacbe2c3934f8f099bd7",
+    "sidecar_bytes": 90,
+    "manifest_self_binding": "canonical JSON with manifest_binding.canonical_sha256 blank; full file bound by sidecar"
+  },
+  "qsf_relative_aliases": [
+    {"qsf_reference": "../../rtl/lcvex_pkg.sv", "source_path": "rtl/lcvex_pkg.sv", "alias_path": "fpga/rtl/lcvex_pkg.sv"},
+    {"qsf_reference": "../../rtl/lcvex_fp_state.sv", "source_path": "rtl/lcvex_fp_state.sv", "alias_path": "fpga/rtl/lcvex_fp_state.sv"},
+    {"qsf_reference": "../../rtl/lcvex_fp_scalar.sv", "source_path": "rtl/lcvex_fp_scalar.sv", "alias_path": "fpga/rtl/lcvex_fp_scalar.sv"},
+    {"qsf_reference": "../../rtl/lcvex_neon_fp.sv", "source_path": "rtl/lcvex_neon_fp.sv", "alias_path": "fpga/rtl/lcvex_neon_fp.sv"},
+    {"qsf_reference": "../../rtl/lcvex_neon_int.sv", "source_path": "rtl/lcvex_neon_int.sv", "alias_path": "fpga/rtl/lcvex_neon_int.sv"},
+    {"qsf_reference": "../../rtl/lcvex_regfile.sv", "source_path": "rtl/lcvex_regfile.sv", "alias_path": "fpga/rtl/lcvex_regfile.sv"},
+    {"qsf_reference": "../../rtl/lcvex_alu.sv", "source_path": "rtl/lcvex_alu.sv", "alias_path": "fpga/rtl/lcvex_alu.sv"},
+    {"qsf_reference": "../../rtl/lcvex_muldiv.sv", "source_path": "rtl/lcvex_muldiv.sv", "alias_path": "fpga/rtl/lcvex_muldiv.sv"},
+    {"qsf_reference": "../../rtl/lcvex_mem_arb.sv", "source_path": "rtl/lcvex_mem_arb.sv", "alias_path": "fpga/rtl/lcvex_mem_arb.sv"},
+    {"qsf_reference": "../../rtl/lcvex_l1_i.sv", "source_path": "rtl/lcvex_l1_i.sv", "alias_path": "fpga/rtl/lcvex_l1_i.sv"},
+    {"qsf_reference": "../../rtl/lcvex_cache_data_ram.sv", "source_path": "rtl/lcvex_cache_data_ram.sv", "alias_path": "fpga/rtl/lcvex_cache_data_ram.sv"},
+    {"qsf_reference": "../../rtl/lcvex_l1_d_wb.sv", "source_path": "rtl/lcvex_l1_d_wb.sv", "alias_path": "fpga/rtl/lcvex_l1_d_wb.sv"},
+    {"qsf_reference": "../../rtl/lcvex_l2_wb.sv", "source_path": "rtl/lcvex_l2_wb.sv", "alias_path": "fpga/rtl/lcvex_l2_wb.sv"},
+    {"qsf_reference": "../../rtl/lcvex_l2_probe.sv", "source_path": "rtl/lcvex_l2_probe.sv", "alias_path": "fpga/rtl/lcvex_l2_probe.sv"},
+    {"qsf_reference": "../../rtl/lcvex_decode.sv", "source_path": "rtl/lcvex_decode.sv", "alias_path": "fpga/rtl/lcvex_decode.sv"},
+    {"qsf_reference": "../../rtl/lcvex_mmu.sv", "source_path": "rtl/lcvex_mmu.sv", "alias_path": "fpga/rtl/lcvex_mmu.sv"},
+    {"qsf_reference": "../../rtl/lcvex_core.sv", "source_path": "rtl/lcvex_core.sv", "alias_path": "fpga/rtl/lcvex_core.sv"},
+    {"qsf_reference": "../../rtl/lcvex_axi4_pkg.sv", "source_path": "rtl/lcvex_axi4_pkg.sv", "alias_path": "fpga/rtl/lcvex_axi4_pkg.sv"},
+    {"qsf_reference": "../../rtl/lcvex_axi4_avalon_pkg.sv", "source_path": "rtl/lcvex_axi4_avalon_pkg.sv", "alias_path": "fpga/rtl/lcvex_axi4_avalon_pkg.sv"},
+    {"qsf_reference": "../../rtl/lcvex_async_fifo.sv", "source_path": "rtl/lcvex_async_fifo.sv", "alias_path": "fpga/rtl/lcvex_async_fifo.sv"},
+    {"qsf_reference": "../../rtl/lcvex_calibration_gate.sv", "source_path": "rtl/lcvex_calibration_gate.sv", "alias_path": "fpga/rtl/lcvex_calibration_gate.sv"},
+    {"qsf_reference": "../../rtl/lcvex_axi4_master.sv", "source_path": "rtl/lcvex_axi4_master.sv", "alias_path": "fpga/rtl/lcvex_axi4_master.sv"},
+    {"qsf_reference": "../../rtl/lcvex_axi4_avalon_adapter.sv", "source_path": "rtl/lcvex_axi4_avalon_adapter.sv", "alias_path": "fpga/rtl/lcvex_axi4_avalon_adapter.sv"},
+    {"qsf_reference": "../../rtl/lcvex_mem_router.sv", "source_path": "rtl/lcvex_mem_router.sv", "alias_path": "fpga/rtl/lcvex_mem_router.sv"},
+    {"qsf_reference": "../../rtl/lcvex_catapult_soc_pkg.sv", "source_path": "rtl/lcvex_catapult_soc_pkg.sv", "alias_path": "fpga/rtl/lcvex_catapult_soc_pkg.sv"},
+    {"qsf_reference": "../../rtl/lcvex_bram_boot.sv", "source_path": "rtl/lcvex_bram_boot.sv", "alias_path": "fpga/rtl/lcvex_bram_boot.sv"},
+    {"qsf_reference": "../../rtl/lcvex_catapult_soc_axi.sv", "source_path": "rtl/lcvex_catapult_soc_axi.sv", "alias_path": "fpga/rtl/lcvex_catapult_soc_axi.sv"},
+    {"qsf_reference": "../../rtl/lcvex_catapult_soc_coh.sv", "source_path": "rtl/lcvex_catapult_soc_coh.sv", "alias_path": "fpga/rtl/lcvex_catapult_soc_coh.sv"},
+    {"qsf_reference": "../../rtl/lcvex_catapult_soc_top.sv", "source_path": "rtl/lcvex_catapult_soc_top.sv", "alias_path": "fpga/rtl/lcvex_catapult_soc_top.sv"}
+  ],
+  "quartus_entries": {
+    "qpf": {"path": "fpga/catapult_a10/quartus/catapult_a10.qpf", "bytes": 34, "sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd"},
+    "qsf": {"path": "fpga/catapult_a10/quartus/catapult_a10.qsf", "bytes": 13647, "sha256": "78032dc5634dc08bf15e916fb70e9f2f6ddefd6b2dd5d59600b3c4c3a236f19d"},
+    "sdc": {"path": "fpga/catapult_a10/quartus/catapult_a10.sdc", "bytes": 5656, "sha256": "caf847755a8c42f2e88ea09e434888938ad4382193400593ddcc986f26154a8c"}
+  },
+  "key_hashes_local_and_remote": {
+    "fpga/catapult_a10/platform_manifest.json": {"bytes": 22448, "sha256": "8f27533fd27930b9023778c00e23642f0f9080075878b3af6b133db6a99b9a11"},
+    "fpga/catapult_a10/source.lock": {"bytes": 8803, "sha256": "2a2ca8107cb1713fbf558415911c4100a96244d9cfeb19091ecd0e8c6ea66629"},
+    "fpga/catapult_a10/SHA256SUMS": {"bytes": 5453, "sha256": "551549acf944400cb756006f591e944cbf76214c18e3bccf6b25c02c9278e21c"},
+    "fpga/catapult_a10/skeleton_manifest.json": {"bytes": 4189, "sha256": "f97a0f723c0d573cf1b8624322e958ee4853e1e39dee221c773dfd599deb7ec0"},
+    "fpga/catapult_a10/quartus/catapult_a10.qpf": {"bytes": 34, "sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd"},
+    "fpga/catapult_a10/quartus/catapult_a10.qsf": {"bytes": 13647, "sha256": "78032dc5634dc08bf15e916fb70e9f2f6ddefd6b2dd5d59600b3c4c3a236f19d"},
+    "fpga/catapult_a10/quartus/catapult_a10.sdc": {"bytes": 5656, "sha256": "caf847755a8c42f2e88ea09e434888938ad4382193400593ddcc986f26154a8c"},
+    "fpga/catapult_a10/qsys/ddr4_bot/Qsys.qsys": {"bytes": 163013, "sha256": "3da27e815b3f89dd89129a856794ad1da8f4cfe4d5b7b8aee7d525ab4bc79ca6"},
+    "fpga/catapult_a10/qsys/ddr4_bot/Qsys/Qsys_bb.v": {"bytes": 3161, "sha256": "91076193c924b44691a78fa34c47442e234a9b6a206a34f2a1bd74aad029ae50"},
+    "fpga/catapult_a10/flash/sfl/ip/sfl_sys/epcq.ip": {"bytes": 112173, "sha256": "63e8f8b0e160cd085fd5bfa9a3af1acac064ac342fc128149f36db2a213c8364"},
+    "fpga/catapult_a10/flash/sfl/synth/sfl_sys.v": {"bytes": 3970, "sha256": "904f53f0fcbb940d91d41179768411983a47ebfd8d0c511e59804b04cd015e21"},
+    "rtl/filelist.f": {"bytes": 1109, "sha256": "23e27cb9249c08be6e5d11fd8daa0d315d9859dc12b459473ed8f39dea92f46e"},
+    "rtl/lcvex_catapult_soc_top.sv": {"bytes": 33252, "sha256": "a04a25c348dbb234383ba28f6196fbe905bcba25bc40b47139e5a0a9568eca43"}
+  },
+  "snapshots": {
+    "pre_sync": {
+      "timestamp": "2026-08-31T02:37:43.7904693+08:00",
+      "root_exists": false,
+      "root_child_count": 0,
+      "eda_process_count": 0,
+      "eda_processes": [],
+      "java_process_count": 1,
+      "java_process": {"pid": 18104, "path": "C:\\Program Files (x86)\\SlimeVR Server\\jre\\bin\\java.exe", "command": "slimevr.jar run", "classification": "non-EDA"},
+      "physical_total_mb": 63092.3,
+      "physical_free_mb": 38031.0,
+      "pagefile_allocated_mb": 12800.0,
+      "pagefile_current_mb": 363.0,
+      "pagefile_peak_mb": 363.0,
+      "d_free_gb": 100.29,
+      "d_used_gb": 574.97
+    },
+    "post_sync": {
+      "timestamp": "2026-08-31T02:52:09.6608939+08:00",
+      "root_exists": true,
+      "root_child_count": 185,
+      "eda_process_count": 0,
+      "eda_processes": [],
+      "java_process_count": 1,
+      "java_process": {"pid": 18104, "path": "C:\\Program Files (x86)\\SlimeVR Server\\jre\\bin\\java.exe", "command": "slimevr.jar run", "classification": "non-EDA"},
+      "physical_total_mb": 63092.3,
+      "physical_free_mb": 37548.9,
+      "pagefile_allocated_mb": 12800.0,
+      "pagefile_current_mb": 379.0,
+      "pagefile_peak_mb": 379.0,
+      "d_free_gb": 100.04,
+      "d_used_gb": 575.21
+    }
+  },
+  "remote_closure": {
+    "root_total_file_count": 152,
+    "closure_file_count": 150,
+    "manifest_file_count": 150,
+    "manifest_total_bytes": 3476191,
+    "actual_total_bytes": 3476191,
+    "file_set_match": true,
+    "missing_count": 0,
+    "hash_bytes_mismatch_count": 0,
+    "manifest_file_sha256": "f17df639c0b33eb55f46d76801f51215b88ba8a4f181066cb3035af27ec55e59",
+    "manifest_sidecar_match": true,
+    "candidate_commit": "19d266a7dcffe43de7e0fdcc7057f8881be6a47f",
+    "qsf_reference_count": 49,
+    "qsf_missing_count": 0,
+    "excluded_hits": 0
+  },
+  "remote_manifest": {
+    "path": "D:/Projects/fpga-altra/lcvex/build/T-20260831-003/candidate/candidate_manifest.json",
+    "file_sha256": "f17df639c0b33eb55f46d76801f51215b88ba8a4f181066cb3035af27ec55e59",
+    "canonical_sha256": "ea5c72e4944980492e38587897edffa2efd2c89872191d703e5666d9dd216521",
+    "bytes": 58311,
+    "sidecar_sha256": "7d459a41314490950db7d366f7f26b8963b1596e05ad7cacbe2c3934f8f099bd7",
+    "sidecar_match": true
+  },
+  "runs": [
+    {
+      "run_id": "local-worktree-001",
+      "level": "L0",
+      "command": "git status --short --branch; git rev-parse HEAD; git branch --show-current",
+      "exit_code": 0,
+      "result": "clean; HEAD=19d266a7dcffe43de7e0fdcc7057f8881be6a47f; branch=infra/T-20260831-003-a10-candidate-sync"
+    },
+    {
+      "run_id": "local-platform-offline-002",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+      "exit_code": 0,
+      "result": "PLATFORM_CHECK_PASS files=50 strict_source=OFF"
+    },
+    {
+      "run_id": "local-platform-strict-003",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py --strict-source --source-repo /home/chiro/projects/a10-linux-riscv --source-commit 3db828e74651fda377a33d84f2a2ca0e69901d72",
+      "exit_code": 0,
+      "result": "PLATFORM_CHECK_PASS files=50 strict_source=PASS"
+    },
+    {
+      "run_id": "local-target-sums-004",
+      "level": "L0",
+      "command": "(cd fpga/catapult_a10 && sha256sum -c SHA256SUMS)",
+      "exit_code": 0,
+      "result": "50/50 OK"
+    },
+    {
+      "run_id": "local-skeleton-005",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_skeleton.py",
+      "exit_code": 0,
+      "result": "SKELETON_CHECK_PASS files=6; TOOLCHAIN_MISSING quartus_sh,ip-generate,qsys-generate"
+    },
+    {
+      "run_id": "local-manifest-006",
+      "level": "L0",
+      "command": "git archive --format=tar HEAD rtl fpga/catapult_a10; generate candidate_manifest.json + candidate_manifest.sha256; verify canonical binding and all file hashes",
+      "exit_code": 0,
+      "result": "tracked=121 aliases=29 files=150 total_bytes=3476191 canonical_binding=PASS; manifest_file_sha256=f17df639c0b33eb55f46d76801f51215b88ba8a4f181066cb3035af27ec55e59"
+    },
+    {
+      "run_id": "remote-pre-collision-007",
+      "level": "L0",
+      "command": "ssh ... pwsh -EncodedCommand <Test-Path/Get-ChildItem candidate root + resource/process snapshot>",
+      "exit_code": 0,
+      "result": "root absent/empty; EDA=0; non-EDA SlimeVR java PID 18104; resource snapshot recorded"
+    },
+    {
+      "run_id": "remote-create-root-008",
+      "level": "L0",
+      "command": "ssh ... pwsh -EncodedCommand <create candidate root only if absent or empty; assert empty>",
+      "exit_code": 0,
+      "result": "CANDIDATE_ROOT_CREATED; CANDIDATE_ROOT_EMPTY"
+    },
+    {
+      "run_id": "remote-transfer-sources-009",
+      "level": "L0",
+      "command": "scp -o BatchMode=yes -o ConnectTimeout=10 -r build/agents/T-20260831-003/candidate/rtl build/agents/T-20260831-003/candidate/fpga 192.168.101.5:D:/Projects/fpga-altra/lcvex/build/T-20260831-003/candidate/",
+      "exit_code": 0,
+      "result": "source directory transfer complete"
+    },
+    {
+      "run_id": "remote-transfer-manifest-010",
+      "level": "L0",
+      "command": "scp -o BatchMode=yes -o ConnectTimeout=10 build/agents/T-20260831-003/candidate/candidate_manifest.json build/agents/T-20260831-003/candidate/candidate_manifest.sha256 192.168.101.5:D:/Projects/fpga-altra/lcvex/build/T-20260831-003/candidate/",
+      "exit_code": 0,
+      "result": "manifest and sidecar transfer complete"
+    },
+    {
+      "run_id": "remote-closure-011",
+      "level": "L0",
+      "command": "ssh ... pwsh -EncodedCommand <Get-ChildItem/Get-FileHash each manifest entry + manifest sidecar>",
+      "exit_code": 0,
+      "result": "REMOTE_CLOSURE closure_files=150 manifest_files=150 actual_bytes=3476191 set_match=True missing=0 hash_bytes_bad=0 sidecar_match=True candidate_commit=19d266a"
+    },
+    {
+      "run_id": "remote-qsf-012",
+      "level": "L0",
+      "command": "ssh ... pwsh -EncodedCommand <parse QSF file assignments and Test-Path each reference>",
+      "exit_code": 0,
+      "result": "REMOTE_QSF refs=49 missing=0"
+    },
+    {
+      "run_id": "remote-key-hashes-013",
+      "level": "L0",
+      "command": "ssh ... pwsh -EncodedCommand <Get-FileHash/Get-Item key platform/source/skeleton/QPF/QSF/SDC/Qsys/SFL/RTL paths>",
+      "exit_code": 0,
+      "result": "all listed key hashes/bytes equal local values"
+    },
+    {
+      "run_id": "remote-post-snapshot-014",
+      "level": "L0",
+      "command": "ssh ... pwsh -EncodedCommand <post-sync resource/process snapshot>",
+      "exit_code": 0,
+      "result": "root exists; EDA=0; resource/process snapshot recorded"
+    },
+    {
+      "run_id": "json-diff-015",
+      "level": "L0",
+      "command": "jq -e . docs/tasks/evidence/T-20260831-003.json; git diff --check",
+      "exit_code": 0,
+      "result": "metadata JSON/whitespace check pass"
+    }
+  ],
+  "non_actions": [
+    "未运行 quartus_sh/quartus_syn/quartus_fit/quartus_sta/quartus_asm/qsys/vsim/questa/quartus_pgm 或任何生成器",
+    "未读取 license 内容，未生成 SOF/JIC，未编程或操作板卡",
+    "未覆盖、删除或修改远端原工程/旧 build/旧日志/旧 DB",
+    "未停止、暂停、降优先级、抢占或改变任何远端进程；未修改 pagefile/system 配置",
+    "未修改本地 source/payload；build staging manifest/report 不进入 Git"
+  ],
+  "blockers": [
+    "full synthesis 仍受前序资源门阻断；本 candidate 仅供约 35 GB 以内 reduced/partition 实验",
+    "Quartus/Qsys 工具未在本环境运行；skeleton checker 仅报告 TOOLCHAIN_MISSING",
+    "candidate 不是最终 release；后续 core/H-04/H-03 或 QSF 路径变化必须重新同步"
+  ],
+  "risks": [
+    "29 个 fpga/rtl alias 是 candidate-only 路径兼容物料；若 QSF 路径修正，应移除 alias 并从新 commit 重建",
+    "远端资源在同步前后下降但 EDA 进程始终为 0；资源快照不代表 full synthesis 可行",
+    "JTAG device identity、DDR calibration、fit/STA/assembler、SOF 和 board test 均未验证"
+  ],
+  "next": "集成者复核 remote/local manifest 后，另立 <=35GB reduced/partition synthesis；任何实现或路径变更后从新 SHA 创建全新 candidate。",
+  "artifacts": [
+    {"id": "sync-doc", "uri": "docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md", "sha256": "56c42f3e9df6a3d2f8be1cde4ff71a9ad1dfaa47bea6455beea7ae6b4cfe7ed4", "bytes": 7199, "reproduce": "sha256sum docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md"},
+    {"id": "handoff", "uri": "docs/handoffs/T-20260831-003-a10-candidate-sync.md", "sha256": "436465a89ab9cc0a0b5ea11d5e4584e5bb4cea770da606adb4435dab702f7e65", "bytes": 3664, "reproduce": "sha256sum docs/handoffs/T-20260831-003-a10-candidate-sync.md"},
+    {"id": "evidence", "uri": "docs/tasks/evidence/T-20260831-003.json", "sha256": "self-referential; bind via final Git tip", "bytes": null, "reproduce": "jq -e . docs/tasks/evidence/T-20260831-003.json"},
+    {"id": "local-manifest", "uri": "build/agents/T-20260831-003/candidate/candidate_manifest.json", "sha256": "f17df639c0b33eb55f46d76801f51215b88ba8a4f181066cb3035af27ec55e59", "bytes": 58311, "reproduce": "sha256sum build/agents/T-20260831-003/candidate/candidate_manifest.json"},
+    {"id": "local-manifest-sidecar", "uri": "build/agents/T-20260831-003/candidate/candidate_manifest.sha256", "sha256": "7d459a41314490950db7d366f7f26b8963b1596e05ad7cacbe2c3934f8f099bd", "bytes": 90, "reproduce": "sha256sum build/agents/T-20260831-003/candidate/candidate_manifest.sha256"}
+  ],
+  "head_semantics": "head_sha/candidate_commit bind the frozen 19d266a source candidate; the final documentation commit tip is reported separately in FINAL to avoid evidence self-reference.",
+  "integrator_review": {
+    "received_at": "2026-08-31T03:14:13+08:00",
+    "recorded_at": "2026-08-31T03:15:13+08:00",
+    "merge_sha": "765cc3d3ca46be327523c5d46d2b26d11a4df62b",
+    "status": "accepted_remote_candidate_sync",
+    "commands": [
+      {
+        "command": "git diff --check 19d266a..e11e754; git diff --quiet 19d266a..e11e754 -- rtl fpga/catapult_a10",
+        "result": "pass; report branch only adds the three declared documentation/evidence files"
+      },
+      {
+        "command": "sha256sum -c candidate_manifest.sha256; verify every manifest entry bytes/SHA-256 and cmp all qsf_relative_aliases",
+        "result": "PASS; 150 entries and 29/29 aliases"
+      },
+      {
+        "command": "compare git ls-tree -r 19d266a -- rtl fpga/catapult_a10 with non-derived manifest paths",
+        "result": "tracked_set=PASS git=121 manifest=121 aliases=29"
+      },
+      {
+        "command": "independent post-reboot SSH read-only closure/QSF/alias/resource/EDA probe",
+        "result": "PASS at 2026-08-31T03:14:13+08:00; 150/150, 3476191 bytes, mismatch=0, QSF=49/49, aliases=29/29, EDA=0, physical_free=38142 MB, pagefile allocated/current/peak=12800/384/384 MB, D free=100.01 GB"
+      }
+    ],
+    "reviewer": {
+      "agent": "t042_checkpoint_protocol_luna",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "max",
+      "mode": "independent read-only post-reboot acceptance"
+    },
+    "decision": "接受 19d candidate 的远端隔离同步与 hash closure；因物理空闲低于 40960 MB，Quartus reduced/partition 执行继续 WAIT，full synthesis 保持 BLOCKED。"
+  }
+}

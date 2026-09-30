@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-076",
+  "state": "done",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "head_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+  "merge_sha": "b7a48f3ccfdde3391d8e3b099d371cb1203a9dfd",
+  "branch": "feature/T-20260829-076-c0-cluster-contract",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-076",
+  "sent_at": "2026-08-29T01:47:44+0800",
+  "received_at": "2026-08-29T01:52:30+0800",
+  "reported_at": "2026-08-29T01:53:00+0800",
+  "owner": "T-20260829-076-c0-owner",
+  "model": "dsh-default",
+  "label": "C0",
+  "title": "多核 cluster/一致性契约设计",
+  "scope": "设计 core wrapper、reset/start/stop/quiesce、core_id/MPIDR、每核 irq/timer、提交和内存请求接口；定义共享 L2 目录式 MSI、仲裁/回滚、dirty owner、probe/失效、Upgrade、ReadShared/ReadUnique；保持 CORE_COUNT=1 兼容并复用 probe/abort/drain。",
+  "files": [
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/handoffs/T-20260829-076-c0-cluster-contract.md",
+    "docs/tasks/evidence/T-20260829-076.json"
+  ],
+  "toolchain": {
+    "git": "git"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 whitespace 错误。"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-076.json",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON 合法。"
+    },
+    {
+      "run_id": "owner-l0-003",
+      "source_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --stat HEAD~1 -- rtl qemu sim/difftest docs/COMMIT_PACKET.md docs/DIFFTEST.md",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "本次实现提交只新增设计文档；RTL/QEMU/commit 协议路径无改动。"
+    },
+    {
+      "run_id": "owner-l0-004",
+      "source_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --name-only HEAD~1 && test -f docs/MULTICORE_CLUSTER_CONTRACT.md",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "允许写集边界：设计文档存在，仅文档类文件。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "docs/MULTICORE_CLUSTER_CONTRACT.md",
+      "sha256": "adbdf969c5d12390caf85ceb9c0b9c103d666b22fae797c7c22dd272ad19c40e",
+      "bytes": 0,
+      "owner": "T-20260829-076-c0-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show 039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6:docs/MULTICORE_CLUSTER_CONTRACT.md"
+    }
+  ],
+  "known_limits": [
+    "纯设计文档任务，未运行 RTL 编译或 L1-L4；后续 C1/C2 实现时按其验收套餐执行。",
+    "合约中的 SystemVerilog 信号/结构为草案，最终以 I0 批准后 C1/C2 冻结的 RTL 接口为准。",
+    "完整 ARM memory model、Linux SMP、coherent DMA、ACE/CHI 均不在本任务范围。"
+  ],
+  "next": "等待 I0 批准；批准后进入 D0 多核差分可行性和 C1 双核壳层。",
+  "integrator_review": {
+    "received_at": "2026-08-29T01:54:00+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "ecb363faf97d1c14dc029f8b705423cb18985b4f",
+    "implementation_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+    "notes": "C0 设计文档完整，包含 core wrapper、目录 MSI、CORE_COUNT=1 兼容、reset/backpressure/kill/SVA、C1/C2/C3 边界和 12 项 I0 问题。待与 B0/D0/A0 一同进入 G1/I0；不合并 RTL。",
+    "merge_sha": "b7a48f3ccfdde3391d8e3b099d371cb1203a9dfd",
+    "result_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "b7a48f3ccfdde3391d8e3b099d371cb1203a9dfd",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

@@ -1,0 +1,15 @@
+Running as unit: t022-core1-cluster.scope; invocation ID: 935d0bd94c8542ecad7a52c64c458c39
+- V e r i l a t i o n   R e p o r t: Verilator 5.050 2026-07-01 rev conda-forge build 0
+- Verilator: Built from 3.643 MB sources in 20 modules, into 45.130 MB in 19 C++ files needing 0.000 MB
+- Verilator: Walltime 24.903 s (elab=0.094, cvt=24.142, bld=0.000); cpu 24.781 s on 1 threads; allocated 385.281 MB
+
+===== LCXEX MEASURE =====
+rc=0
+wall_s=25.751
+cgroup=/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/t022-core1-cluster.scope
+memory.max=16106127360
+memory.swap.max=0
+memory.peak_before_bytes=2453504
+memory.peak_bytes=422805504
+memory.current_bytes=2359296
+=========================

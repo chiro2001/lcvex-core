@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-041",
+  "label": "B25-JTAG-PREFLIGHT",
+  "state": "done",
+  "acceptance_status": "read-only-identity-console-and-recovery-manifest-complete",
+  "partial": false,
+  "base_sha": "689959472faf59844fb486834fad27f8fedb2ca6",
+  "branch": "verify/T-20260907-041-b25-jtag-preflight",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-041",
+  "owner": "codex-integrator",
+  "timestamps": {
+    "sent_at": "2026-09-07T03:09:38+08:00",
+    "received_at": "2026-09-07T03:09:38+08:00",
+    "identity_observed_at": "2026-09-07T03:14:01.1299046+08:00",
+    "known_good_hashed_at": "2026-09-07T03:14:29.8574375+08:00",
+    "reported_at": "2026-09-07T03:14:43+08:00"
+  },
+  "resource_lock": {
+    "resource": "gamepc",
+    "all_remote_access_locked": true,
+    "final_status": "gamepc FREE",
+    "remote_heavy_or_quartus_stage_started": false
+  },
+  "target": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "qsf_device": "10AX115N4F40E3SG",
+    "qsf_sha256": "78032dc5634dc08bf15e916fb70e9f2f6ddefd6b2dd5d59600b3c4c3a236f19d",
+    "jtag_id": "0x02E060DD",
+    "jtag_device_text": "10AT115S(1|2)",
+    "identity_match": true
+  },
+  "observed_cables": [
+    {
+      "index": 1,
+      "name": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+      "device": 1,
+      "instance": 0,
+      "role": "console",
+      "user_confirmed": true
+    },
+    {
+      "index": 2,
+      "name": "Microsoft Catapult (64) [USB-0]",
+      "role": "vendor-visible board cable",
+      "device_id": "0x02E060DD"
+    }
+  ],
+  "programming_path": {
+    "reference_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310",
+    "current_enumeration": "not active because the custom task-owned server was intentionally not started",
+    "successful_reference_log": "D:/Projects/fpga-altra/a10-linux-riscv/build/burn_golden_accept.log",
+    "jtag_frequency_hz": 15000000,
+    "authorization": "deferred; this task did not run quartus_pgm or start/stop a server"
+  },
+  "known_good_recovery": {
+    "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+    "bytes": 36844906,
+    "sha256": "290AB3CFB18CFD6EE47E5A2BC9324E63882DE51D0AE5AC6C2688D7D6A2385F92",
+    "reference_quartus_checksum": "0x31510BB6",
+    "fresh_clone_copy": "missing at the historical _fresh_hw_test path; the frozen dist/golden SOF is present and hashed"
+  },
+  "reference_repo": {
+    "path": "D:/Projects/fpga-altra/a10-linux-riscv",
+    "head": "b2ffcc9bf132fdcf5eced40139c768ff619c29e0",
+    "status_count": 0,
+    "status_warning": "git emitted a pre-existing excludes/path warning after reporting a clean worktree"
+  },
+  "reference_evidence_sha256": {
+    "burn_golden_accept.log": "669BDD6CFF0052FB0ADF4DAFA38C6AD00EF5E3D58DA8A36D90A02F72AB82F9DA",
+    "burn_freshclone.log": "932E504C2630544BA5787EC41FD2DADF562574EA619A7885FE8C51955062FDCF",
+    "accept_term.txt": "61488001F3C7C55EA320CEF9C5493C111D386BE70ADA493B039706C68ACC8FBE",
+    "accept_freshclone.txt": "61488001F3C7C55EA320CEF9C5493C111D386BE70ADA493B039706C68ACC8FBE",
+    "console_probe.txt": "FCC165A5B76CECD689DE787E70DC37EF209072FE56ED715D7657532A5B65128E",
+    "console_tx.txt": "182D7175DD85A992F1F9B0A631AAA411B4A155C4A11674B4CA6EFB14395C3988"
+  },
+  "runs": [
+    {
+      "name": "wrong-ssh-alias",
+      "result": "failed-before-remote-command",
+      "detail": "the gamepc alias routed to 198.18.0.30 and closed the connection; no remote command ran"
+    },
+    {
+      "name": "direct-route-raw-command",
+      "result": "failed-before-script",
+      "log": "build/agents/T-20260907-041/runtime/read_only_preflight.log",
+      "log_sha256": "abf50dcac33fdda1a677ba4d0346ca57b524cc046315625f9078b11b15286979",
+      "detail": "Windows SSH command parsing dropped the script-block quoting and printed pwsh usage; no JTAG command ran"
+    },
+    {
+      "name": "encoded-read-only-preflight",
+      "result": "pass",
+      "log": "build/agents/T-20260907-041/runtime/read_only_preflight_encoded.log",
+      "log_sha256": "58d174ee33b76ad020cd09a7db3c5023498108942582865a98fc0b40f3dffc7a"
+    },
+    {
+      "name": "known-good-sof-hash",
+      "result": "pass",
+      "log": "build/agents/T-20260907-041/runtime/known_good_hash.log",
+      "log_sha256": "354067c6a25ba2723c01fc3be6320856761e0b2f2a6214bd8f4768980219c336"
+    }
+  ],
+  "policy": {
+    "jtagserver_observed": "PID 5476 at the Quartus 21.4 bin64 path",
+    "process_started_or_stopped": false,
+    "terminal_started": false,
+    "terminal_input": false,
+    "quartus_pgm": false,
+    "assembler": false,
+    "sof_or_persistent_programming": false,
+    "reset_power_or_board_state_change": false
+  },
+  "remaining_gates": [
+    "T-037 implementation and validation",
+    "T-042 25 MHz synthesis/fitter/STA",
+    "explicit T-043 assembler authorization",
+    "explicit volatile FPGA programming authorization; current user authorization covers console attachment and serial interaction only",
+    "start and stop only the future task-owned MBFTDI server before programming"
+  ],
+  "handoff": "docs/handoffs/T-20260907-041-b25-jtag-preflight.md"
+}

@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-074",
+  "state": "done",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "head_sha": "42622212067c6939f972eda1c8bd40f2d6b51e4c",
+  "branch": "feature/T-20260829-074-a0-toolchain-capability",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-074",
+  "captured_at": "2026-08-29T02:15:53+0800",
+  "reported_at": "2026-08-29T02:15:53+0800",
+  "tools": {
+    "verilator_project": "5.050 (conda-forge/lcvex)",
+    "verilator_oss": "5.051 devel v5.050-281-g1ad9acd22",
+    "yosys_oss": "0.68+136 (git c30457480-dirty)",
+    "yosys_system": "0.66-1 Arch extra",
+    "nextpnr_ecp5": "nextpnr-0.11.1-18-gdec04b3b",
+    "iverilog_oss": "14.0 devel s20260301-391-g64f13540a",
+    "iverilog_system": "13.0-1 Arch extra",
+    "sv2v": "unavailable",
+    "vpr": "9.0.0-dev+unkown (vtr 9.0.0-1 Arch extra)",
+    "oss_cad_suite_tarball": {
+      "url": "https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-08-28/oss-cad-suite-linux-x64-20260828.tgz",
+      "sha256": "a7f1b795aa10271ff8a0f96de0e5ee77ac9df86b71808cbe506159cb8117eed1"
+    }
+  },
+  "inputs": {
+    "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60",
+    "rtl/lcvex_core.sv": "331b11adc1f4e191dcbdc3f59cf54203c48faa1efee46d3d9d34c59a0186a31e",
+    "rtl/lcvex_axi4_master.sv": "0fdaf8e151a1136e0641f8fc073757a1b9c7bc3b5a5248ca71f5b76171892fe2",
+    "rtl/lcvex_l2.sv": "b879bed0e925823d24b0f5493751bba6824fc4560d7f3941370e0dd468866422",
+    "rtl/lcvex_catapult_soc_top.sv": "f8082f8a0c28af6dc2af5f87972df5b8e1c6f74ebd65f8f6df43f6c3f23f0ff3",
+    "rtl/filelist.f": "a28a62a38dcaba3f3752b01f9ba8cbb7b6d7ec81170aaac304bb5a6844fbb63c",
+    "fpga/catapult_a10/tb/filelist_soc.f": "6008d3a14aba77b15c7c09e8a59419def6f7f491f0ef76f7dd136aeca23dae8d",
+    "fpga/opensynth/examples/minimal_counter.sv": "04ce2be24e939a96aef4f8e65d69f02f14d75b9a16e5c5d2686fdd85bb6edbdb",
+    "fpga/opensynth/examples/sv_pkg_struct.sv": "dcc509af4d2bfadb55c2eee750ec4780ff928f266af68ab94ca8a421fcffd20d",
+    "fpga/opensynth/examples/sv_features.sv": "95e4c054921c814f3182d7ee443958d8a8df5911d746618320ddc2937a50abd6"
+  },
+  "passed": [
+    {
+      "cmd": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module minimal_counter -Wall fpga/opensynth/examples/minimal_counter.sv",
+      "exit": 0,
+      "note": "minimal SV sample"
+    },
+    {
+      "cmd": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module pkg_struct_sample fpga/opensynth/examples/sv_pkg_struct.sv",
+      "exit": 0,
+      "note": "package + packed struct sample (no -Wall)"
+    },
+    {
+      "cmd": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module feature_sample fpga/opensynth/examples/sv_features.sv",
+      "exit": 0,
+      "note": "package + struct + interface + modport sample (no -Wall)"
+    },
+    {
+      "cmd": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module lcvex_axi4_master rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv",
+      "exit": 0,
+      "note": "real LCVEX AXI4 master"
+    },
+    {
+      "cmd": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module lcvex_l2 rtl/lcvex_pkg.sv rtl/lcvex_l2.sv",
+      "exit": 0,
+      "note": "real LCVEX L2 cache module"
+    },
+    {
+      "cmd": "oss yosys -q -p 'read_verilog -sv fpga/opensynth/examples/minimal_counter.sv; synth_ecp5 -json /tmp/minimal_ecp5.json'",
+      "exit": 0,
+      "note": "plain SV subset to ECP5 JSON"
+    },
+    {
+      "cmd": "oss nextpnr-ecp5 --json /tmp/minimal_ecp5.json --85k --package CABGA381 --seed 1 --lpf-allow-unconstrained --report /tmp/minimal_report.json --write /tmp/minimal_routed.json",
+      "exit": 0,
+      "note": "ECP5 LFE5U-85F pack/place/route smoke; Fmax report ~371.20 MHz; ECP5 only"
+    },
+    {
+      "cmd": "iverilog -g2012 -s pkg_struct_sample -o /tmp/pkg_ivl.vvp fpga/opensynth/examples/sv_pkg_struct.sv",
+      "exit": 0,
+      "note": "Icarus can consume package/struct"
+    },
+    {
+      "cmd": "iverilog -g2012 -s lcvex_axi4_master -o /tmp/axi_ivl.vvp rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv",
+      "exit": 0,
+      "note": "Icarus can compile axi4_master"
+    },
+    {
+      "cmd": "conda run --no-capture-output -n lcvex verilator --lint-only -Wall --top-module lcvex_core -f rtl/filelist.f",
+      "exit": 0,
+      "note": "full core lint in A0 worktree; walltime 551.606s, 44 modules"
+    }
+  ],
+  "failed": [
+    {
+      "cmd": "yosys read_verilog -sv fpga/opensynth/examples/sv_pkg_struct.sv; hierarchy -top pkg_struct_sample",
+      "exit": 1,
+      "failure": "syntax error, unexpected TOK_IMPORT at line 20",
+      "fallback": "Verilator for SV parse; sv2v/flatten for Yosys"
+    },
+    {
+      "cmd": "yosys read_verilog -sv fpga/opensynth/examples/sv_features.sv; hierarchy -top feature_sample",
+      "exit": 1,
+      "failure": "line 32 syntax error: unexpected TOK_ID, expecting ')' or ',' or '=' (interface/modport port)",
+      "fallback": "Verilator parse; not used in current LCVEX rtl"
+    },
+    {
+      "cmd": "iverilog -g2012 -s feature_sample fpga/opensynth/examples/sv_features.sv",
+      "exit": 2,
+      "failure": "interface/modport syntax error",
+      "fallback": "not a blocker for LCVEX RTL (no interface in rtl/)"
+    },
+    {
+      "cmd": "yosys read_verilog -sv rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv; hierarchy -top lcvex_axi4_master",
+      "exit": 1,
+      "failure": "unexpected TOK_IMPORT at line 91",
+      "fallback": "A1 needs sv2v/flatten or Verilog-only proxy"
+    },
+    {
+      "cmd": "yosys read_verilog -sv rtl/lcvex_pkg.sv rtl/lcvex_l2.sv; hierarchy -top lcvex_l2",
+      "exit": 1,
+      "failure": "unexpected TOK_IMPORT at line 38",
+      "fallback": "A1 needs sv2v/flatten or Verilog-only proxy"
+    },
+    {
+      "cmd": "yosys read_verilog -sv rtl/lcvex_pkg.sv rtl/lcvex_core.sv; hierarchy -top lcvex_core",
+      "exit": 1,
+      "failure": "unexpected '[' at line 42 (unpacked array port); package/import also later blockers",
+      "fallback": "A1 needs flattening/scripted view; do not modify core RTL"
+    },
+    {
+      "cmd": "iverilog -g2012 -s lcvex_core rtl/lcvex_pkg.sv rtl/lcvex_core.sv",
+      "exit": 48,
+      "failure": "inside expressions not supported, SVA concurrent assertions not supported, further syntax errors",
+      "fallback": "Use Verilator, not Icarus, for core parsing"
+    },
+    {
+      "cmd": "iverilog -g2012 -s lcvex_l2 rtl/lcvex_pkg.sv rtl/lcvex_l2.sv",
+      "exit": 7,
+      "failure": "SVA concurrent assertions / property_spec errors",
+      "fallback": "Use Verilator for l2 parsing"
+    },
+    {
+      "cmd": "yay -S --noconfirm --needed sv2v",
+      "exit": 1,
+      "failure": "AUR source requires GHC/Haskell deps; TUNA mirror returned HTTP 404 for haskell-* package files",
+      "fallback": "No sv2v available; use Verilator or generated flattening; revisit in A1"
+    },
+    {
+      "cmd": "conda run --no-capture-output -n lcvex verilator --lint-only --top-module lcvex_catapult_soc_top -f fpga/catapult_a10/tb/filelist_soc.f",
+      "exit": 1,
+      "failure": "Verilator elaborated SoC hierarchy; exited due 12 warnings (UNSIGNED and MULTIDRIVEN in lcvex_bram_boot.sv), not parser failure.",
+      "fallback": "Warnings need lint cleanup or -Wno-fatal for open-synth proxy; no RTL semantic change allowed."
+    }
+  ],
+  "files": [
+    "fpga/opensynth/toolchain.lock",
+    "fpga/opensynth/capability.json",
+    "fpga/opensynth/README.md",
+    "fpga/opensynth/examples/minimal_counter.sv",
+    "fpga/opensynth/examples/sv_pkg_struct.sv",
+    "fpga/opensynth/examples/sv_features.sv",
+    "fpga/opensynth/scripts/run_a0.sh",
+    "fpga/opensynth/scripts/collect_hashes.sh",
+    "fpga/opensynth/logs/*.log",
+    "docs/handoffs/T-20260829-074-a0-toolchain-capability.md",
+    "fpga/opensynth/artifacts/*"
+  ],
+  "blockers": [
+    "sv2v unavailable in this environment; direct Yosys path for package/struct/interface LCVEX RTL is blocked.",
+    "No Arria 10 device pack or timing model in Yosys/nextpnr; only ECP5 proxy smoke performed.",
+    "Full Verilator core/SoC lint are heavy; A0 relied on module-level real RTL proofs and reports project make compile as long-running."
+  ],
+  "known_limits": [
+    "nextpnr ECP5 result is not an A10 signoff and does not unblock T-067.",
+    "A0 does not run Quartus, Qsys regeneration, or real FPGA flow.",
+    "VPR was installed but not exercised with a complete VTR flow."
+  ],
+  "next": "A1 核心/Cache generic synth：先解决 sv2v 或生成式扁平视图；否则只能以 Verilator 结构和模块级分析作为降级代理，并对 nextpnr 仅作 ECP5 proxy。",
+  "received_at": "2026-08-29T01:52:00+08:00",
+  "tests_summary": "verilator-lint minimal/sample/real-module PASS; yosys plain-SV synth PASS; yosys real-RTL FAIL at SV features; iverilog sample PASS, real core/l2 FAIL; nextpnr ECP5 minimal smoke PASS; sv2v install FAIL",
+  "merge_sha": "27db8fffb3f85736cee140878d0d68a6feb63191",
+  "integrator_review": {
+    "received_at": "2026-08-29T02:16:50+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "314c3eb9517efb59758bf1a0cfdee94c89abb29d",
+    "implementation_sha": "42622212067c6939f972eda1c8bd40f2d6b51e4c",
+    "notes": "A0 完成：Verilator 可消费当前 SV/真实模块；Yosys 直接读 RTL 因 package/import/interface/unpacked-array 失败；sv2v 不可用；nextpnr-ecp5 仅最小 ECP5 smoke。A1 采用生成式扁平视图 fallback。",
+    "merge_sha": "27db8fffb3f85736cee140878d0d68a6feb63191",
+    "result_sha": "42622212067c6939f972eda1c8bd40f2d6b51e4c"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "27db8fffb3f85736cee140878d0d68a6feb63191",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "42622212067c6939f972eda1c8bd40f2d6b51e4c",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

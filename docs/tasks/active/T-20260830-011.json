@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-011",
+  "label": "P-ALU",
+  "parent": "T-20260830-009",
+  "title": "整数/控制流性能 workload",
+  "kind": "perf-integer",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "6559336cf63d548bd3e183590236ee6afa0998e2",
+  "branch": "feature/t-20260830-011-p-alu",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-011",
+  "scope": "性能验证 workload/基础设施，按 docs/PERFORMANCE_WORKLOAD_PLAN.md 执行；不把小基准伪装成架构/Fmax 签核。",
+  "writes": [
+    "baremetal/perf/t_alu_*.c",
+    "baremetal/perf/t_ctrl_*.c",
+    "docs/handoffs/T-20260830-011-perf-alu.md",
+    "docs/tasks/evidence/T-20260830-011.json"
+  ],
+  "reads": [
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "baremetal/**",
+    "sim/microbench/**",
+    "scripts/build-microbench.sh",
+    "Makefile"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "可构建/可运行或提供可运行方案"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可复现的性能 workload/基础设施，记录 cycle/参数/SHA；明确不替代 A10/Fmax。",
+  "next": "由集成者合入并按 P-line 计划进行串行实测。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T02:52:27+08:00",
+  "updated_at": "2026-08-30T02:52:27+08:00",
+  "known_limits": [
+    "不启动 Quartus；本地重型 Verilator 需 cgroup <16GiB、VERILATOR_JOBS=1；与 C3/FPGA 重型构建串行。",
+    "不把性能代理数据写成架构/Fmax 签核。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-011-p-alu.md",
+  "evidence": "docs/tasks/evidence/T-20260830-011.json",
+  "merge_sha": "a3ce76b8746f97a332c266405c533b78fbd30f0f",
+  "merged_at": "2026-08-30T03:04:20+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:04:20+08:00",
+    "head_sha": "ddf039ca6c560c72639863d454517d7e1d46df9b",
+    "notes": "P-ALU merged via cherry-pick. Four integer/control perf workloads added; cross-compile and qemu-aarch64 sanity pass."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T06:00:00+0800",
+        "new": "2026-08-30T02:52:27+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T06:00:00+0800",
+        "new": "2026-08-30T02:52:27+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T07:40:00+0800",
+        "new": "2026-08-30T03:04:20+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T07:40:00+0800",
+        "new": "2026-08-30T03:04:20+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "a3ce76b8746f97a332c266405c533b78fbd30f0f",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "a3ce76b8746f97a332c266405c533b78fbd30f0f"
+}

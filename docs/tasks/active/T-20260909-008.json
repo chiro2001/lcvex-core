@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-008",
+  "label": "B25-FIFO-PAYLOAD-SDC-CLOSURE",
+  "title": "Close omitted response FIFO payload CDC endpoint exceptions",
+  "kind": "sdc-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-in-T-20260909-011-overlay-pass",
+  "assigned_owner": "b25_fifo_payload_sdc",
+  "depends_on": ["T-20260909-005"],
+  "base_sha": "fcb61cb9ebff2f389f43b0f0a3973d9314176779",
+  "batch_parent": "T-20260909-011",
+  "branch": "fix/T-20260909-008-b25-fifo-payload-sdc",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-008",
+  "write_regions": [
+    "fpga/catapult_a10/quartus/catapult_a10.sdc::section 3b FIFO memory payload exceptions only",
+    "fpga/catapult_a10/tools/check_fifo_payload_sdc.py (new)",
+    "docs/tasks/evidence/T-20260909-008.json",
+    "docs/handoffs/T-20260909-008-b25-fifo-payload-sdc.md",
+    "build/agents/T-20260909-008/** ignored artifacts"
+  ],
+  "scope": "Add only the three audited response_fifo memory payload endpoint exceptions for txn_local_q, read_len_q and read_beat_q. Preserve existing request/read_line/response_code cuts and do not broaden to the whole adapter. Add a hermetic static checker/fault matrix for exact patterns.",
+  "validation": [
+    "Require exactly one cut for each justified request/response endpoint family and reject broad adapter/global wildcards, missing or duplicate cuts.",
+    "Run adapter SV/Cocotb/SVA focused tests under local resource-lock; no RTL delta or reference change.",
+    "Do not run Quartus or touch the fitted DB; the batch validates merged SDC on an isolated clone."
+  ],
+  "acceptance": "Three missing endpoint families are precisely covered, broad/synchronizer-path cuts are rejected, and focused functional tests remain green.",
+  "resource": "Heavy local tests use resource-lock local with task-local TMPDIR; no GamePC.",
+  "forbidden_regions": [
+    "SDC outside section 3b, RTL/QSF/manifest/shared registry changes",
+    "broad response_fifo memory to whole-adapter exception",
+    "Quartus/remote/assembler/JTAG/board/Flash actions",
+    "another worktree"
+  ],
+  "created_at": "2026-09-09T12:42:02+08:00",
+  "updated_at": "2026-09-09T14:26:32+08:00",
+  "result_head": "dd6c344d285e7982a4f0b57587dafab12a0df653",
+  "result_evidence": "docs/tasks/evidence/T-20260909-008.json",
+  "integrated_head": "4618c17f85a3a84f28824a9d5964d8600c3d966d",
+  "integrator_review": {
+    "status": "accepted",
+    "reviewed_at": "2026-09-09T14:26:32+08:00",
+    "decision": "Six exact FIFO payload families pass static fault checks and disappear from fitted hold analysis; remaining hold WNS is +0.018 ns."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-09T12:48:32+08:00",
+    "agent_name": "b25_fifo_payload_sdc",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "d6a1c4268e642270272f4dab7c5fc19ce9c0ca1c"
+  }
+}

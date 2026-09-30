@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-094",
+  "label": "B4",
+  "parent": "T-20260828-072",
+  "title": "B4：编译器和覆盖闭合（baremetal-C / 反汇编 / 随机交叉覆盖）",
+  "kind": "core-isa-b4-coverage-closure",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "scope": "在 B3 关闭后执行 B4：baremetal-C -O0/-O2/-Os 编译差异、反汇编 gap、随机/定向交叉覆盖、reserved/unsupported negative 集；不把 Linux 动态窗口推导成静态全覆盖；失败保存 ELF/反汇编/seed/状态。",
+  "writes": [
+    "sim/**",
+    "tb/**",
+    "docs/handoffs/T-20260829-094-b4-coverage-closure.md",
+    "docs/tasks/evidence/T-20260829-094.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_GAPS.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "docs/handoffs/T-20260829-093-b3-remainder.md"
+  ],
+  "validation": {
+    "l0": [
+      "make compile 默认优化通过",
+      "baremetal-C 多优化级别样本可运行"
+    ],
+    "l1": [
+      "覆盖表可机检，profile 行命中率/未命中清单明确"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可重复的 B4 覆盖闭合报告与证据；明确剩余 post-V82/SVE 后置项。",
+  "next": "完成 B4 后进入 B5 profile freeze。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T11:30:00+0800",
+  "updated_at": "2026-08-29T11:30:00+0800",
+  "known_limits": [
+    "依赖 B3 关闭；不引入 SVE。",
+    "不宣称动态 Linux 窗口等价静态全覆盖。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-094-b4-coverage-closure.md",
+  "evidence": "docs/tasks/evidence/T-20260829-094.json",
+  "base_sha": "fcd952090994359861c85d001c07bfe560133e35",
+  "branch": "feature/T-20260829-094-b4-coverage-closure",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-094",
+  "dispatch": {
+    "sent_at": "2026-08-29T12:17:55+08:00",
+    "agent_name": "b4_coverage_closure",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-094"
+  },
+  "merge_sha": "8949234f764bfbd9d6e89cd1cb80b3b4710690f8",
+  "merged_at": "2026-08-29T12:41:00+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T12:41:00+08:00",
+    "status": "accepted",
+    "head_sha": "7e31f0bf74c11578f83629ac1d047dc9355033e",
+    "notes": "B4 coverage closure merged. Scripts py_compile OK; b4_baremetal_cov.py runs in owner worktree: O0=37, O2=44, Os=42, all=47 supported families, no unknown aliases. Random coverage per report: expected_hit 62/62, PASS."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T13:10:00+0800",
+        "new": "2026-08-29T12:17:55+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T13:30:00+0800",
+        "new": "2026-08-29T12:41:00+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T13:30:00+0800",
+        "new": "2026-08-29T12:41:00+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "3d74040c8df054b2659af53c889017c588d56db3",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "3d74040c8df054b2659af53c889017c588d56db3"
+}

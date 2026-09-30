@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-005",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "merged_candidate_joint_pass",
+  "base_sha": "8383cb05808393cc2ad391af261089321d0e2288",
+  "dispatch_sha": "38d01b996ee8bee362bf49240870a684eb0f6f2e",
+  "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+  "head_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "branch": "fix/T-20260905-005-maint-at-fifo-deadlock",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-005",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-05T04:52:00+08:00",
+    "received_at": "2026-09-05T04:52:01+08:00",
+    "reported_at": "2026-09-05T05:10:05+08:00",
+    "source_commit_at": "2026-09-05T05:08:24+08:00"
+  },
+  "scope": "解除 FIFO-on 下 SYS_MAINT AT/maintenance MS_DONE 与 next-fetch settled 的 owner 循环等待；保持 AT 数据翻译、PAR_EL1 commit、epoch/quarantine、异常与顺序提交。",
+  "implementation": {
+    "commit": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+    "files": [
+      "rtl/lcvex_core.sv"
+    ],
+    "summary": "新增 maint_imem_owner；MMU-on maintenance 仅在 MS_DONE 交还普通 fetch，其他维护态、MMU-off owner、settled/epoch/fault/commit 条件不变。",
+    "sva": "MS_DONE 且 next-fetch 未 settled 时，maintenance 不得继续拥有 FIFO-on IMEM。",
+    "forbidden_unchanged": [
+      "rtl/lcvex_muldiv.sv",
+      "rtl/lcvex_fp_scalar.sv",
+      "Round16 PA2 derivation",
+      "QEMU fork/plugin source",
+      "QSF/SDC",
+      "JTAG/SOF/board actions"
+    ]
+  },
+  "root_cause": {
+    "instruction": "AT S1E1R",
+    "pc": "0x44000030",
+    "insn": "0xd5087800",
+    "signature": "FIFO-on fetch_translated=1/fetch_next_settled=0 with no FIFO target; sys_at_id=1/sys_hold=1/sys_commit_ready=0; pipeline empty; MMU idle.",
+    "mechanism": "fetch_imem_req_valid and imem_req mux remained owned by sys_maint_at_id after maintenance translation/completion, so normal next-PC IMEM request could not push the FIFO; sys_commit_ready required the missing FIFO target."
+  },
+  "artifacts": {
+    "pre_fix": [
+      {
+        "id": "hard-maint-v82-mmu-bin",
+        "uri": "build/agents/T-20260905-005/pre-fix/hard_maint_v82_mmu.bin",
+        "sha256": "7db91b8da0e1913bd93303ab071b9657bdd6fc171666efb2562d1f050d24c0cf",
+        "bytes": 90112,
+        "source_sha": "8383cb05808393cc2ad391af261089321d0e2288"
+      },
+      {
+        "id": "pre-fix-step-fail",
+        "uri": "build/agents/T-20260905-005/pre-fix/step_fail.txt",
+        "sha256": "fe497178a945bd4a4c636a16e97fd20fe7338120168d96a758347f02a0f8e2f9",
+        "summary": "seq=12 AT S1E1R timeout and full pipeline/fetch/MMU signature"
+      },
+      {
+        "id": "pre-fix-step-coord",
+        "uri": "build/agents/T-20260905-005/pre-fix/step_coord.log",
+        "sha256": "c6f10079206edd79bed19b2087d499fb1ed148b8b36f4fe1ffe1a271524b59a0"
+      },
+      {
+        "id": "pre-fix-step-qemu",
+        "uri": "build/agents/T-20260905-005/pre-fix/step_qemu.log",
+        "sha256": "dd0a95ebb7b7bcf90ed14a2919d3f01eff9929d0968f242fd4fb215d16312bb3"
+      }
+    ],
+    "post_fix": [
+      {
+        "id": "qemu-plugin",
+        "uri": "qemu/plugins/lcvex_difftest.so",
+        "sha256": "2bae0ec96cf8c7133c40ee5f16f16caf8946e7789308ef8c5bfdf2630b04742b",
+        "note": "仅按任务要求重建，未修改 QEMU source/fork。"
+      },
+      {
+        "id": "base-coordinator",
+        "uri": "build/verilator_lockstep/lockstep_coordinator",
+        "sha256": "6ce49e63734e50220cbae0a92614f0f65c6c1284c82014f53473dfa2321b1c8e",
+        "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e"
+      },
+      {
+        "id": "cache-coordinator",
+        "uri": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+        "sha256": "3f4e53935e07be10c503d6576a27d95242904f82df46f3d5cdb4ecbd80f400dc",
+        "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e"
+      },
+      {
+        "id": "hard-maint-v82-bin",
+        "uri": "build/difftest/hard_maint_v82.bin",
+        "sha256": "45c092382d0e2785c060a26a1e19ff5ef36378a25d91c1ab7b44ae7a2551f5e1",
+        "bytes": 76
+      },
+      {
+        "id": "hard-maint-v82-mmu-bin",
+        "uri": "build/difftest/hard_maint_v82_mmu.bin",
+        "sha256": "7db91b8da0e1913bd93303ab071b9657bdd6fc171666efb2562d1f050d24c0cf",
+        "bytes": 90112
+      },
+      {
+        "id": "hard-maint-v82-el0-bin",
+        "uri": "build/difftest/hard_maint_v82_el0.bin",
+        "sha256": "05f48c6a36b38f5cd0ab436748a2a14b6abb6cb316b2d08d054af511236b6b40",
+        "bytes": 67072
+      }
+    ]
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12 conda lcvex",
+    "qemu": "11.1.0 fixed release",
+    "resource_policy": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0; VERILATOR_JOBS=1; all heavy jobs serialized"
+  },
+  "runs": [
+    {
+      "run_id": "pre-fix-base-coordinator",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "8383cb05808393cc2ad391af261089321d0e2288",
+      "command": "mkdir -p build/difftest; make -C qemu/plugins; systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make lockstep-build",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "base coordinator built before RTL modification; plugin rebuilt as required"
+    },
+    {
+      "run_id": "pre-fix-p6-maint-v82",
+      "runner_role": "owner",
+      "level": "L2",
+      "source_sha": "8383cb05808393cc2ad391af261089321d0e2288",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make p6-maint-v82",
+      "result": "fail_expected_pre_fix",
+      "exit_code": 2,
+      "artifact": "build/agents/T-20260905-005/pre-fix/step_fail.txt",
+      "artifact_sha256": "fe497178a945bd4a4c636a16e97fd20fe7338120168d96a758347f02a0f8e2f9",
+      "notes": "MMU-off 19/19 x2 pass; MMU-on fails at seq=12 AT S1E1R; pre-fix step_fail/coord/qemu and image were copied before RTL modification"
+    },
+    {
+      "run_id": "post-fix-compile",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make compile",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-005/post-compile-final.log",
+      "artifact_sha256": "81081490dcfa77a8e116ff6f12cd69ad57b7181b86d46ea22c7229bec82be09e"
+    },
+    {
+      "run_id": "post-fix-core-smoke",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make sim-sv",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-005/post-sim-sv-final.log",
+      "artifact_sha256": "9145342609b90700b21620fc7f967cdd5f90f41d0817d689c3dbe5e8eb46efac"
+    },
+    {
+      "run_id": "post-fix-fetch-fifo",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make sim-sv-fetch-fifo",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-005/post-fetch-fifo-final.log",
+      "artifact_sha256": "389c7fdb7fd3c5adfcd3c77377c4aec20d3a806328f72b28257047dbb6ddeadd"
+    },
+    {
+      "run_id": "post-fix-mmu",
+      "runner_role": "owner",
+      "level": "L1",
+      "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make sim-sv-mmu",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-005/post-mmu-final.log",
+      "artifact_sha256": "2893b524600d3f98a8654d4ea3556a33ab55033acb3ca628e2d806ddce3cf3f9"
+    },
+    {
+      "run_id": "post-fix-p6-maint-v82",
+      "runner_role": "owner",
+      "level": "L2",
+      "source_sha": "5af738f946cb84ae7a46a8c26e0fce3f9d1b986e",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env VERILATOR_JOBS=1 make p6-maint-v82",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-005/post-p6-maint-v82-r2.log",
+      "artifact_sha256": "a6cca60ceee9c3e90a9e3099004a479d8c9e2e7dbc6dea793ccfb10d9ba91c5f",
+      "tests": "hard_maint_v82 base/cache 19/19 each; hard_maint_v82_mmu base/cache 30/30 each; hard_maint_v82_el0 base/cache 24/24 each"
+    }
+  ],
+  "acceptance": {
+    "pre_fix_reproduction": "pass: exact seq=12 signature captured before edit",
+    "post_fix_hard_maint_v82": "pass: 19/19 base+cache",
+    "post_fix_hard_maint_v82_mmu": "pass: 30/30 base+cache",
+    "post_fix_hard_maint_v82_el0": "pass: 24/24 base+cache",
+    "par_commit": "unchanged path; AT PAR_EL1 update remains pending until sys_commit",
+    "single_commit": "unchanged sys_commit/commit packet path; no synthetic commit",
+    "global_relaxation": "none; only MMU-on MS_DONE maintenance owner handoff"
+  },
+  "not_run": [
+    "Cocotb",
+    "full Gate D/L3",
+    "Quartus synthesis/fitter/signoff STA",
+    "assembler/SOF/JTAG/board actions"
+  ],
+  "known_limits": [
+    "Owner result is review only; integrator must rerun the complete T-20260905-002 candidate L0-L2 union.",
+    "No claim for unrelated fault-head/H-01 or future maintenance protocol expansion."
+  ],
+  "handoff": "docs/handoffs/T-20260905-005-maint-at-fifo-deadlock.md",
+  "integrator_validation": "PASS; merged candidate maintenance six-window and complete Round16 L0-L2 union are recorded in T-20260905-002 evidence.",
+  "next": "Closed; retain pre-fix and merged-candidate evidence."
+}

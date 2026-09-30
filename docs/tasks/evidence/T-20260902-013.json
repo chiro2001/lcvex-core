@@ -1,0 +1,446 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-013",
+  "state": "done",
+  "partial": true,
+  "base_sha": "8aa10fe4c5aa37e23b9d75a695e137e018a9d473",
+  "head_sha": "215623dc9395a67edd4280ab500d53b21efb228c",
+  "branch": "verify/T-20260902-013-fp-p0-baseline",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-013",
+  "scope": "FP-P0 baseline: current SHA P7 recheck, resource decomposition (no-FP/scalar/4-lane NEON/full-FP), workload cycles, FP issue/busy/rsp-wait and op/format counters.",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "jobs": "VERILATOR_JOBS=1 for local"
+  },
+  "runs": [
+    {
+      "run_id": "sv-p7-1-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "summary": "P7-1 FP scalar raw-bit directed vectors PASS"
+    },
+    {
+      "run_id": "sv-p7-2-neon-int",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-2-neon",
+      "result": "pass",
+      "summary": "P7-2 NEON integer raw-bit unit PASS"
+    },
+    {
+      "run_id": "sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "summary": "P7-3 NEON FP raw unit PASS"
+    },
+    {
+      "run_id": "sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "summary": "P7-4 scalar and NEON FMA/conversion raw-bit vectors PASS"
+    },
+    {
+      "run_id": "sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "summary": "P7-5 scalar FP16/sqrt/minmax/frint/fcvt and NEON FP16 raw-bit vectors PASS"
+    },
+    {
+      "run_id": "cocotb-p7-2-attempt",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-2-neon",
+      "result": "interrupted_sigterm",
+      "summary": "Cocotb/Verilator build terminated with SIGTERM 143 during concurrent heavy jobs; no new test result. Historical T-004/T-008/T-010 evidence remains: 9/10 PASS, one SQADD decode overlap.",
+      "exit_code": 143
+    },
+    {
+      "run_id": "perf-fp-scalar",
+      "runner": "build/microbench_runner/microbench_runner_fp",
+      "image": "build/microbench/perf_fp_scalar.bin",
+      "image_sha256": "49fb782bb39c54c13ec9d34b1c028a749347fbc86c1a0b1a36aeca8e9fb5ac70",
+      "result": "pass",
+      "cycles": 173026,
+      "retired_insn": 65963,
+      "ipc": 0.381232,
+      "commit_digest": "b0efde5ed79308a1",
+      "memory_digest": "4078dabba91c60f0",
+      "fp": {
+        "fp_issue": 41102,
+        "fp_busy_cycles": 16384,
+        "fp_rsp_wait_cycles": 16384,
+        "scalar": {
+          "issued": 41102,
+          "add": 10296,
+          "sub": 10240,
+          "mul": 10240,
+          "fma": 10240,
+          "div": 64,
+          "cmp": 0,
+          "convert": 0,
+          "sqrt_rint": 0,
+          "other": 0,
+          "mov": 22,
+          "h": 0,
+          "s": 20551,
+          "d": 20551
+        },
+        "vector": {
+          "issued": 0
+        }
+      }
+    },
+    {
+      "run_id": "perf-fp-fp16",
+      "runner": "build/microbench_runner/microbench_runner_fp",
+      "image": "build/microbench/perf_fp_fp16.bin",
+      "image_sha256": "e868b221ba0f6d069e08fd29e26aeed380346c54c140ceae23725d2cd4feb98f",
+      "result": "pass",
+      "cycles": 180441,
+      "retired_insn": 82013,
+      "ipc": 0.454514,
+      "commit_digest": "34d6e3bf9d8ba016",
+      "memory_digest": "a8dddf1e0170212e",
+      "fp": {
+        "fp_issue": 65568,
+        "fp_busy_cycles": 0,
+        "fp_rsp_wait_cycles": 0,
+        "scalar": {
+          "issued": 65568,
+          "add": 16412,
+          "sub": 16384,
+          "mul": 16384,
+          "fma": 16384,
+          "div": 0,
+          "cmp": 0,
+          "convert": 0,
+          "sqrt_rint": 0,
+          "other": 0,
+          "mov": 4,
+          "h": 65568,
+          "s": 0,
+          "d": 0
+        },
+        "vector": {
+          "issued": 0
+        }
+      }
+    },
+    {
+      "run_id": "perf-neon-vect",
+      "runner": "build/microbench_runner/microbench_runner_fp",
+      "image": "build/microbench/perf_neon_vect.bin",
+      "image_sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+      "result": "pass",
+      "cycles": 175737,
+      "retired_insn": 66721,
+      "ipc": 0.379664,
+      "commit_digest": "5c1d4f0a0f31cfe7",
+      "memory_digest": "3ba6dea5f6c76128",
+      "fp": {
+        "fp_issue": 36891,
+        "fp_busy_cycles": 0,
+        "fp_rsp_wait_cycles": 0,
+        "scalar": {
+          "issued": 0
+        },
+        "vector": {
+          "issued": 36891,
+          "add": 12315,
+          "sub": 0,
+          "mul": 12288,
+          "fma": 12288,
+          "compare": 0,
+          "convert": 0,
+          "minmax": 0,
+          "sqrt_rint": 0,
+          "other": 0,
+          "h": 0,
+          "s": 24594,
+          "d": 12297
+        }
+      }
+    },
+    {
+      "run_id": "perf-neon-fp-chain",
+      "runner": "build/microbench_runner/microbench_runner_fp",
+      "image": "build/agents/T-20260902-013/mb/neon_fp_chain.bin",
+      "image_sha256": "b0cc5b7afb9cee0d4931fc0d5e4f3f0c08cffc866d363cdc86359aabeda6dcc2",
+      "result": "pass",
+      "cycles": 98801,
+      "retired_insn": 40062,
+      "ipc": 0.405482,
+      "commit_digest": "5430ce7e72a5abbe",
+      "memory_digest": "512ed6e8e438217c",
+      "fp": {
+        "fp_issue": 21516,
+        "fp_busy_cycles": 0,
+        "fp_rsp_wait_cycles": 0,
+        "scalar": {
+          "issued": 0
+        },
+        "vector": {
+          "issued": 21516,
+          "add": 11276,
+          "sub": 0,
+          "mul": 0,
+          "fma": 10240,
+          "compare": 0,
+          "convert": 0,
+          "minmax": 0,
+          "sqrt_rint": 0,
+          "other": 0,
+          "h": 1024,
+          "s": 10246,
+          "d": 10246
+        }
+      }
+    },
+    {
+      "run_id": "perf-scalar-fp16-chain",
+      "runner": "build/microbench_runner/microbench_runner_fp",
+      "image": "build/agents/T-20260902-013/mb/scalar_fp16_chain.bin",
+      "image_sha256": "3895c9f0a70278e5262a8d70041f083250073212d6d46a52a1492efe105a43d7",
+      "result": "pass",
+      "cycles": 94334,
+      "retired_insn": 36911,
+      "ipc": 0.39128,
+      "commit_digest": "462f53b72db0d747",
+      "memory_digest": "4ec3f784806ef1ba",
+      "fp": {
+        "fp_issue": 16392,
+        "fp_busy_cycles": 0,
+        "fp_rsp_wait_cycles": 0,
+        "scalar": {
+          "issued": 16392,
+          "add": 10243,
+          "sub": 2048,
+          "mul": 2048,
+          "fma": 2048,
+          "div": 0,
+          "cmp": 0,
+          "convert": 0,
+          "sqrt_rint": 0,
+          "other": 0,
+          "mov": 5,
+          "h": 16392,
+          "s": 0,
+          "d": 0
+        },
+        "vector": {
+          "issued": 0
+        }
+      }
+    }
+  ],
+  "resource": {
+    "device_alms": 427200,
+    "nofp": {
+      "source": "T-20260902-001 remote probe real_a10_nofp",
+      "alms": 81552,
+      "combinational_aluts": 90956,
+      "dedicated_logic_registers": 78917,
+      "dsp_blocks": 21,
+      "block_memory_bits": 247276,
+      "io_pins": 144,
+      "max_fanout_node": "sys_clk_div2",
+      "max_fanout": 71283,
+      "total_fanout": 794659,
+      "wall_s": 361.994,
+      "peak_private_mb": 2570.8,
+      "peak_working_set_mb": 2562.9,
+      "peak_virtual_mb": 7575.6
+    },
+    "scalar_standalone": {
+      "source": "T-20260830-008/flow fp_scalar (historical)",
+      "alms": 93216,
+      "combinational_aluts": 138582,
+      "dedicated_logic_registers": 782,
+      "dsp_blocks": 33,
+      "block_memory_bits": 0,
+      "io_pins": 478,
+      "max_fanout_node": "is_double",
+      "max_fanout": 1464,
+      "total_fanout": 637124,
+      "wall_s": 875,
+      "peak_virtual_mb": 2368,
+      "note": "flow elapsed 00:14:35; T-008 observation peak_pm_mb ~1420"
+    },
+    "neon_fp_from_full": {
+      "source": "T-20260902-010 full-FP hierarchy root_partition",
+      "combinational_aluts_total": 470056,
+      "combinational_aluts_own": 5277,
+      "dedicated_logic_registers_total": 0,
+      "dsp_blocks_total": 132,
+      "lanes": {
+        "lane0": {
+          "combinational_aluts": 117646,
+          "dsp": 33
+        },
+        "lane1": {
+          "combinational_aluts": 118230,
+          "dsp": 33
+        },
+        "lane2": {
+          "combinational_aluts": 114366,
+          "dsp": 33
+        },
+        "lane3": {
+          "combinational_aluts": 114537,
+          "dsp": 33
+        }
+      },
+      "status": "standalone Quartus run in remote T-20260902-013-probe/neon_fp, no final summary yet"
+    },
+    "fullfp": {
+      "source": "T-20260902-010 remote probe real_a10_full_fp",
+      "alms": 482334,
+      "combinational_aluts": 720722,
+      "dedicated_logic_registers": 80925,
+      "dsp_blocks": 186,
+      "block_memory_bits": 247276,
+      "io_pins": 144,
+      "max_fanout_node": "sys_clk_div2",
+      "max_fanout": 73291,
+      "total_fanout": 3513505,
+      "wall_s": 7374.84,
+      "peak_private_mb": 12533.1,
+      "peak_working_set_mb": 12152.4,
+      "peak_virtual_mb": 17537.0,
+      "alm_utilization_pct": 112.91
+    },
+    "hierarchy_full": [
+      {
+        "path": "soc",
+        "alut": 716279,
+        "registers": 71920,
+        "dsp": 186
+      },
+      {
+        "path": "soc|core",
+        "alut": 664210,
+        "registers": 20168,
+        "dsp": 177
+      },
+      {
+        "path": "soc|core|alu",
+        "alut": 5131,
+        "registers": 0,
+        "dsp": 0
+      },
+      {
+        "path": "soc|core|decode",
+        "alut": 14830,
+        "registers": 0,
+        "dsp": 3
+      },
+      {
+        "path": "soc|core|muldiv",
+        "alut": 1269,
+        "registers": 717,
+        "dsp": 9
+      },
+      {
+        "path": "soc|core|mmu",
+        "alut": 3740,
+        "registers": 5972,
+        "dsp": 0
+      },
+      {
+        "path": "soc|core|fp_state",
+        "alut": 68,
+        "registers": 4177,
+        "dsp": 0
+      },
+      {
+        "path": "soc|core|g_fp_simd_enabled.fp_scalar",
+        "alut": 135071,
+        "registers": 782,
+        "dsp": 33
+      },
+      {
+        "path": "soc|core|g_fp_simd_enabled.neon_fp",
+        "alut": 470056,
+        "registers": 0,
+        "dsp": 132
+      },
+      {
+        "path": "soc|core|g_fp_simd_enabled.neon_int",
+        "alut": 8529,
+        "registers": 0,
+        "dsp": 0
+      }
+    ],
+    "hierarchy_nofp_core": {
+      "path": "soc|core",
+      "alut": 32177,
+      "registers": 18160,
+      "dsp": 12
+    }
+  },
+  "artifacts": [
+    {
+      "id": "baseline-doc",
+      "uri": "docs/FP_NEON_PIPELINE_BASELINE.md"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-013-fp-p0-baseline.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-013.json"
+    },
+    {
+      "id": "syn-full-fp",
+      "uri": "build/agents/T-20260902-013/syn/full_fp.syn.rpt",
+      "sha256": "d38f1236627a96873c5ad03a52701008ccf0cc764d9ddb113b3a899e6ee1d97e"
+    },
+    {
+      "id": "syn-nofp",
+      "uri": "build/agents/T-20260902-013/syn/nofp.syn.rpt"
+    },
+    {
+      "id": "syn-scalar",
+      "uri": "build/agents/T-20260902-013/syn/fp_scalar.syn.rpt"
+    },
+    {
+      "id": "remote-neon-standalone",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-013-probe\\neon_fp",
+      "status": "running/no-final-report"
+    },
+    {
+      "id": "custom-neon-chain-src",
+      "uri": "build/agents/T-20260902-013/neon_fp_chain.c"
+    },
+    {
+      "id": "custom-scalar-fp16-src",
+      "uri": "build/agents/T-20260902-013/scalar_fp16_chain.c"
+    },
+    {
+      "id": "custom-fp-runner-src",
+      "uri": "build/agents/T-20260902-013/custom_runner.cc"
+    }
+  ],
+  "known_limits": [
+    "Full-FP and no-FP reports are historical remote anchors, not current SHA precise reruns; FP RTL SHA matches current, rtl/lcvex_core.sv has T-009 delta.",
+    "4-lane NEON FP standalone final report not obtained; full-FP hierarchy used as substitute.",
+    "No fitter/STA/assembler/SOF run.",
+    "Cocotb P7-2 rerun was interrupted; known red remains historical and assigned to T-20260902-014.",
+    "T-20260902-014 active JSON not found in this worktree; only branch pointer exists.",
+    "fp_issue/fp_rsp_wait are derived counters, not new RTL ports."
+  ],
+  "next": "Integrator confirm/register T-20260902-014; backfill neon standalone report if available; start FP-P1 transaction design.",
+  "timestamps": {
+    "sent_at": "2026-09-03T00:53:00+08:00",
+    "received_at": "2026-09-03T01:05:00+08:00",
+    "reported_at": "2026-09-03T01:12:26+08:00"
+  },
+  "merge_sha": "6119691528453aea2e2f957b92808e52d7ddd896",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T01:12:26+08:00",
+    "merged_at": "2026-09-03T01:13:05+08:00",
+    "recorded_at": "2026-09-03T01:13:05+08:00",
+    "notes": "FP-P0 baseline accepted; T-014 closed P7-2 red item"
+  }
+}

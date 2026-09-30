@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-020",
+  "label": "FP-P3T-REGISTER-CUTS",
+  "title": "FP-P3T：fp_exec/scalar_unit 定向寄存器切级",
+  "kind": "feature",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p3t",
+  "agent_type": "rtl-pipeline-cut",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-019"
+  ],
+  "base_sha": "87e7e0b047e1e80bd2f1f192fd3f1dbf3b2bd4be",
+  "branch": "feature/T-20260902-020-fp-p3t-register-cuts",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-020",
+  "scope": "按 T-20260902-019 STA 结果，对 `fp_exec`/`scalar_unit` 的 unpack/align/add/sub/shift/compare/round/pack 组合链做定向寄存器切级，消除 sys_clk_50 setup -319ns 的最差路径；更新/固定 transaction latency 表并保持 raw-bit/提交顺序不变。",
+  "reads": [
+    "docs/handoffs/T-20260902-019-fp-p5-physical.md",
+    "docs/tasks/evidence/T-20260902-019.json",
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/FP_NEON_PIPELINE_BASELINE.md",
+    "docs/FP_NEON_PIPELINE_PPA.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "Makefile",
+    "sim/**",
+    "tb/**"
+  ],
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-020-fp-p3t-register-cuts.md",
+    "docs/tasks/evidence/T-20260902-020.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "lcvex_fp_exec_tb 更新 latency 后 PASS"
+    ],
+    "l1": [
+      "P7 SV/Cocotb 全绿"
+    ],
+    "l2": [
+      "A76 required lockstep 或等价 L2 子集 PASS"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "寄存器切级后本地功能全绿；latency 表更新并被测试检查；无 raw-bit/commit 语义变化。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T07:02:00+08:00",
+  "updated_at": "2026-09-03T07:29:30+08:00",
+  "known_limits": [
+    "不运行 Quartus fit/STA（由 FP-P5 rerun）；不改变指令矩阵/raw-bit 语义"
+  ],
+  "handoff": "docs/handoffs/T-20260902-020-fp-p3t-register-cuts.md",
+  "evidence": "docs/tasks/evidence/T-20260902-020.json",
+  "next": "FP-P5 rerun synthesis/fit/STA",
+  "dispatch": {
+    "sent_at": "2026-09-03T07:03:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-020",
+    "branch": "feature/T-20260902-020-fp-p3t-register-cuts"
+  },
+  "head_sha": "a9589f3b261964b2e1be91483a0f08e2682db84d",
+  "merge_sha": "02d9ad2c12e7027c8887b653a26065fd7e838621",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T07:28:00+08:00",
+    "merged_at": "2026-09-03T07:29:30+08:00",
+    "recorded_at": "2026-09-03T07:29:30+08:00",
+    "notes": "FP-P3T register cuts merged; compile passes. Next FP-P5 rerun with SDC fix."
+  }
+}

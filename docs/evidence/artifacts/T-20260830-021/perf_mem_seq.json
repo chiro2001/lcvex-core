@@ -1,0 +1,31 @@
+{
+  "name": "mem_seq",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "d8a830459e5d4b5842a6ff644f64d5322c0add2de5d859b53a63ac2b5eb86b9a",
+  "source_sha256": "d8a830459e5d4b5842a6ff644f64d5322c0add2de5d859b53a63ac2b5eb86b9a",
+  "image_hash": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527",
+  "image_sha256": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 3042223,
+  "wall_sec": 18.495764,
+  "rss_kb": 139312,
+  "rss": 136.047,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_mem_seq.bin",
+    "--name",
+    "mem_seq",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: mem_seq (3042223 cycles)\n",
+  "runner_stderr": ""
+}

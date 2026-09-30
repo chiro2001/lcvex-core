@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-073",
+  "title": "多核演进线：2核→4核→8/16/32核（C 线）",
+  "kind": "parallel-line",
+  "priority": "high",
+  "phase": "active",
+  "assigned_owner": "root-integrator (proposed; child owners TBD)",
+  "base_sha": "95ee3e5b74152331b369ba1ee5e1fac4d4a32e75",
+  "functional_baseline_sha": "78771bf",
+  "plan": "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+  "branch": "feature/T-20260828-073-multicore",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-073",
+  "children": [
+    "C0",
+    "D0",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6"
+  ],
+  "scope": "在 CORE_COUNT=1 兼容锚点上，实现共享 L2 目录式 MSI 多核：2核功能、4核正确性、8/16/32核规模/资源/有限 smoke；不与 F 单核发布捆绑，后置 Linux SMP。",
+  "acceptance": "见 v2 计划 C0-C6 和 D0 退出条件；单核全回归不变；2核 MSI/litmus、4核压力、规模报告有可重放证据。",
+  "known_limits": [
+    "不引入 ACE/CHI",
+    "QEMU 多核差分先做 D0 可行性，要求逐核退休语义",
+    "8/16/32 核只报规模/参数化结果，不宣称完整架构合规"
+  ],
+  "dispatch_status": "not_dispatched"
+}

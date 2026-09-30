@@ -1,0 +1,493 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-046",
+  "label": "PE-F1A-FIX",
+  "state": "review",
+  "partial": false,
+  "base_sha": "c7081f4ba790ba9bf81d48d7acbc083828529055",
+  "head_sha": "c86329e46da5d2adec261ec4c235a214866b1075",
+  "content_sha": "c86329e46da5d2adec261ec4c235a214866b1075",
+  "merge_sha": "",
+  "branch": "feature/T-20260830-046-f1a-duplicate-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046",
+  "owner": "luna-f1a-duplicate-fix",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "sent_at": "2026-08-30T23:03:19+08:00",
+  "received_at": "2026-08-30T23:04:06+08:00",
+  "reported_at": "2026-08-31T02:15:20+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-08-30T23:03:19+08:00",
+    "sent_at": "2026-08-30T23:03:19+08:00",
+    "received_at": "2026-08-30T23:04:06+08:00",
+    "reported_at": "2026-08-31T02:15:20+08:00",
+    "received_at_basis": "harness task_started event at 2026-08-30T15:04:06Z; agent acknowledgement at 23:04:14+08:00"
+  },
+  "scope": "修复 F1a FIFO-on 在 younger dmem stall 下的 duplicate retirement；增加非架构 token/SVA、SV/Cocotb 定向检查、最小 strict-lockstep 镜像和验证证据。不修改公共内存 ABI、Makefile、I-L1/MMU/arbiter、SoC TB、baremetal、QEMU 或参考结果；不扩大到 H-03/H-04/F1b。",
+  "files_written": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_f1a.sh",
+    "docs/F1A_DUPLICATE_RETIREMENT_FIX.md",
+    "docs/handoffs/T-20260830-046-f1a-duplicate-fix.md",
+    "docs/tasks/evidence/T-20260830-046.json"
+  ],
+  "content_provenance": {
+    "technical_content_commit": "c86329e46da5d2adec261ec4c235a214866b1075",
+    "file_sha256": {
+      "rtl/lcvex_core.sv": "a82bd5d007d3fc2d798d2ac8be23dded6dac2f2a355789766cf8f657029c3b97",
+      "tb/sv/lcvex_fetch_fifo_tb.sv": "8ba840b460f46caa06a211a73b6281b3a8919cf4fb44b4e2b484a7ec9af7275f",
+      "sim/cocotb/test_fetch_fifo.py": "62872e91de2dcbbdd39c477916db03720c7bcbaedaa48da9ab8127a58d1aa78c",
+      "sim/difftest/test_program.py": "5ccaf7a57a6024f3f579a9e81b3a9daa7c077b1f21dc97b50b785ab4f2f7ef58",
+      "sim/difftest/run_f1a.sh": "b7a076eec41b5d54fbf4582e08d01002871ecc834ce98dd4d96302a8d6f54493",
+      "docs/F1A_DUPLICATE_RETIREMENT_FIX.md": "b2c99c8ffa0dbc397edbe227b1ea8aa15e646ac81e9d2bd65748f6a13b341bfc",
+      "docs/handoffs/T-20260830-046-f1a-duplicate-fix.md": "86d63c5e086b768f3e3d9bf3788bfcbf76a9915d9f86b072ca78b557c3f60baa",
+      "docs/tasks/evidence/T-20260830-046.json": "self-referential; 由 correction tip 绑定"
+    },
+    "evidence_hash_note": "evidence 自身不能稳定嵌入自身 SHA256；其余 7 个文件提供实际内容 hash，最终 correction tip 由 FINAL 报告。"
+  },
+  "head_semantics": {
+    "head_sha": "c86329e46da5d2adec261ec4c235a214866b1075",
+    "content_sha": "c86329e46da5d2adec261ec4c235a214866b1075",
+    "meaning": "首次交付的技术内容提交；不指向本次 metadata correction tip",
+    "correction_tip": "由本 follow-up FINAL 报告，避免 evidence 自引用"
+  },
+  "implementation": {
+    "root_cause": "普通 commit 分支只在 data translation/fetch walk/data_mmu_issue 时设置 memwb_committed_r，遗漏 FIFO-on 路径 younger dmem_pending；MEM/WB 在访存事务期间保持有效，导致同一 token 连续 commit。",
+    "fix": "仅当 FETCH_FIFO_ENABLE=1 且 commit_fire 与 dmem_pending 同拍时置 memwb_committed_r；新 MEM/WB 条目、flush、restore 和 reset 清零。",
+    "non_arch_state": "IFID/IDEX/EXMEM/MEMWB/commit 的 epoch/seq token 和 transfer fire 仅用于诊断/SVA，不进入 commit packet 或架构状态。",
+    "directed_window": "ldr; ALU; ldr：后一条 load 在 EX/MEM 等待时，前一条 ALU 在 MEM/WB 只允许提交一次。"
+  },
+  "diagnostic_reproduction": {
+    "workload": "mem_seq",
+    "cycles": 1000,
+    "pre_fix_f0": {
+      "retired": 261,
+      "trace_sha256": "e3b4aba26e838291ad5a87776a65c95fc2044631b869d2fd371329f5c4122901"
+    },
+    "pre_fix_f1a": {
+      "retired": 319,
+      "trace_sha256": "2715fd538a9e44a12b32935ef8ab5fb184ccdfedf0466c938e07de50be9f1c82"
+    },
+    "probe_sha256": "333592b815f5dd589888dcaa64c120a0bb5efb195772458b434e8e09e6d010d9",
+    "signature": "cycle 47/48 同一 MEM/WB token (epoch=3, seq=17, PC=0x44000104) 连续 commit；cycle 43 FIFO head token (3,18,0x44000108) 单次 pop，流水级各只转移一次。",
+    "resource_wrapper": {
+      "outer_command_prefix": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1",
+      "inner_commands": [
+        "python3 sim/microbench/perf_runner.py --runner build/microbench_runner_prefix_f0/microbench_runner --image build/microbench/perf_mem_seq.bin --name mem_seq --max-cycles 1000 --git-sha c7081f4ba790ba9bf81d48d7acbc083828529055 --measurement-source-sha c7081f4ba790ba9bf81d48d7acbc083828529055 --param BASE_CONFIG=nocache_d0 --param I_L1=0 --param D_L1=0 --param L2=0 --param MEM_DELAY_MODE=0 --param FETCH_FIFO_ENABLE=0 --param FETCH_FIFO_DEPTH=2 --param FIFO_VARIANT=f0 --trace build/agents/T-20260830-046/pre_fix/mem_f0.jsonl --out build/agents/T-20260830-046/pre_fix/mem_f0.json",
+        "python3 sim/microbench/perf_runner.py --runner build/microbench_runner_prefix_f1a/microbench_runner --image build/microbench/perf_mem_seq.bin --name mem_seq --max-cycles 1000 --git-sha c7081f4ba790ba9bf81d48d7acbc083828529055 --measurement-source-sha c7081f4ba790ba9bf81d48d7acbc083828529055 --param BASE_CONFIG=nocache_d0 --param I_L1=0 --param D_L1=0 --param L2=0 --param MEM_DELAY_MODE=0 --param FETCH_FIFO_ENABLE=1 --param FETCH_FIFO_DEPTH=2 --param FIFO_VARIANT=f1a --trace build/agents/T-20260830-046/pre_fix/mem_f1a.jsonl --out build/agents/T-20260830-046/pre_fix/mem_f1a.json"
+      ],
+      "command_record": {"session_file":"/home/chiro/.codex/sessions/2026/08/30/rollout-2026-08-30T16-16-05-01a051bd-737c-7493-83a9-bb32505d61e1.jsonl","recorded_verbatim":true},
+      "scope_unit": "transient scope not retained in journal",
+      "invocation_id": null,
+      "limits": {"MemoryMax":"15G","MemorySwapMax":"0","CPUQuota":"未设置"},
+      "coverage": "pre-fix f0/f1a runner build and 1000-cycle trace/probe"
+    }
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "qemu": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+    "qemu_version_file": "qemu/VERSION"
+  },
+  "resources": {
+    "provenance_policy": "以下仅记录实际命令；未在 outer wrapper 中出现的限制不作合规声称。",
+    "post_fix_wait_wrapper": {
+      "outer_template": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% followed by the per-test command recorded in tests[*]",
+      "memory_max": "15G",
+      "cpu_quota": "50%",
+      "memory_swap_max": "未设置；systemd 默认 infinity，不能声称 swap=0",
+      "scope_type": "transient service",
+      "jobs": "inner command 使用 MAKEFLAGS=-j1 或 VERILATOR_JOBS=1（按命令实际记录）"
+    },
+    "post_fix_wait_units": [
+      {"unit":"run-p2106148-i27277133.service","invocation_id":"55e50be0db554f25948a96f5d2159446","coverage":"F1a Cocotb build/run","observed_peak":"189.1M"},
+      {"unit":"run-p2116966-i27265237.service","invocation_id":"dbf51814a5b74ccc80d9a9851ce12786","coverage":"feature-off SV backpressure build/run","observed_peak":"3.2G"},
+      {"unit":"run-p2144803-i27305779.service","invocation_id":"e188350026514d14a790f395fa038f64","coverage":"post-fix f0 microbench runner build","observed_peak":"4.6G"},
+      {"unit":"run-p2181755-i27361559.service","invocation_id":"2affbf70acc145c49d0c7475ce050fbc","coverage":"post-fix f1a microbench runner build","observed_peak":"4.6G"},
+      {"unit":"run-p2246501-i27393558.service","invocation_id":"e29fb2543a9f494ba092dfe47681c3d0","coverage":"F1a base coordinator build","observed_peak":"4.7G"},
+      {"unit":"run-p2294024-i27472715.service","invocation_id":"c62403cbeccd493baf1c73c734b97a10","coverage":"F1a cache coordinator build","observed_peak":"4.7G"},
+      {"unit":"run-p2336582-i27513326.service","invocation_id":"5437470b78564d45a8553f7eee40dcef","coverage":"F1a delay2 coordinator build","observed_peak":"4.7G"},
+      {"unit":"run-p2372032-i27524021.service","invocation_id":"5e33676aa3b346fab7eb2753853ffc1e","coverage":"F1a strict-lockstep matrix","observed_peak":"169.2M"},
+      {"unit":"run-p2459077-i27621407.service","invocation_id":"7c61d31d6fe84468a72ca0c060c597fb","coverage":"feature-off Cocotb core Verilator build (first link attempt)","observed_peak":"1.2G"},
+      {"unit":"run-p2508182-i27693349.service","invocation_id":"cbdf1787f8de42fb9dc27c5507ff581b","coverage":"feature-off Cocotb core conda link recovery (VPI replay failed before PYGPI fix)","observed_peak":"159.1M"},
+      {"unit":"run-p2511372-i27670551.service","invocation_id":"8c16e75c1b1e4cdbb9cfcce9d1a0eb88","coverage":"feature-off Cocotb core Vtop replay without PYGPI (expected environment failure)","observed_peak":"165.6M"},
+      {"unit":"run-p2514724-i27670803.service","invocation_id":"36e594ba7dcc4d8ba2ba196c09057abf","coverage":"feature-off Cocotb core final Vtop run","observed_peak":"156.1M"}
+    ],
+    "post_fix_perf_run": {
+      "outer_command_prefix": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /bin/bash -c",
+      "shell_batch_record": {"session_file":"/home/chiro/.codex/sessions/2026/08/30/rollout-2026-08-30T16-16-05-01a051bd-737c-7493-83a9-bb32505d61e1.jsonl","line_1_based":7292,"recorded_verbatim":true},
+      "unit": "run-p2230850-i27396280.service (journal retains completion/peak only)",
+      "invocation_id": null,
+      "memory_max": "15G",
+      "cpu_quota": "50%",
+      "memory_swap_max": "未设置/default infinity",
+      "observed_peak": "991.2M",
+      "note": "service invocation id 未在现有 journal 保留，故不补写；六个 inner runner 均在该 outer service 内串行执行。"
+    },
+    "historical_scoped_wrapper": {
+      "outer_template": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 followed by the recorded diagnostic command",
+      "memory_max": "15G",
+      "memory_swap_max": "0",
+      "cpu_quota": "未设置",
+      "scope_unit": "transient scope 名称/invocation 未由现有日志保留",
+      "coverage": "pre-fix runner/probe 与 post-fix SVA build 的 session-recorded runs"
+    },
+    "unbounded_or_unknown": [
+      {"coverage":"post-fix SV smoke binary replay 与 post-fix SVA probe replay","outer_command":"无 systemd wrapper；直接 shell command + tee","limits":"unbounded/unknown；不声称 MemoryMax/Swap/CPU 合规"},
+      {"coverage":"feature-off SV backpressure binary replay","outer_command":"无 systemd wrapper；直接 shell command + tee（build 另有受限 service）","limits":"unbounded/unknown"},
+      {"coverage":"make compile lint 与 workload image generation","outer_command":"直接 conda/shell command","limits":"unbounded/unknown；轻量命令，不纳入重型资源合规统计"}
+    ],
+    "lockstep_queue": "执行顺序由单个 systemd service/人工队列串行化；未把未设置的 swap/CPU 限制补写为已设置。"
+  },
+  "tests": [
+    {
+      "run_id": "static-python-shell",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/cocotb/test_fetch_fifo.py sim/difftest/test_program.py && bash -n sim/difftest/run_f1a.sh && git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sv-f1a-sva-build",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260830-046/obj_dir_fix_sva -o lcvex_fetch_fifo_tb -GMEM_DELAY_MODE=0 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+      "result": "pass",
+      "artifact": "build/agents/T-20260830-046/obj_dir_fix_sva/lcvex_fetch_fifo_tb",
+      "resource_wrapper": {
+        "outer_command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260830-046/obj_dir_fix_sva -o lcvex_fetch_fifo_tb -GMEM_DELAY_MODE=0 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+        "scope_unit": "transient scope not retained in journal",
+        "invocation_id": null,
+        "limits": {"MemoryMax":"15G","MemorySwapMax":"0","CPUQuota":"未设置"}
+      }
+    },
+    {
+      "run_id": "sv-f1a-smoke",
+      "level": "L1",
+      "command": "build/agents/T-20260830-046/obj_dir_fix_sva/lcvex_fetch_fifo_tb",
+      "result": "pass: 3 commits",
+      "log": {
+        "path": "build/agents/T-20260830-046/post_fix/sv_smoke.log",
+        "sha256": "28463569f01129c8c82ab96dce071e1cdd1c99926f33dcc8f83552b2fa306f47"
+      },
+      "resource_wrapper": {
+        "outer_command": "无；直接执行 build/agents/T-20260830-046/obj_dir_fix_sva/lcvex_fetch_fifo_tb 并 tee 日志",
+        "scope_unit": null,
+        "invocation_id": null,
+        "limits": "unbounded/unknown"
+      }
+    },
+    {
+      "run_id": "sv-f1a-sva-probe",
+      "level": "L1/L2",
+      "command": "build/agents/T-20260830-046/obj_dir_fix_sva/lcvex_fetch_fifo_tb +PROBE_HEX=build/agents/T-20260830-046/mem_seq.hex +PROBE_WORDS=589",
+      "result": "pass: no token duplicate; commit under dmem_pending retains marker",
+      "log": {
+        "path": "build/agents/T-20260830-046/post_fix/probe_sva.log",
+        "sha256": "891dd0dcb353f2685f3a376ecb4f5f68f52bcdff47c374920b0c78182ca438da"
+      },
+      "window": "cycle 47 commit PC=0x44000104 seq=17 has memwb_committed=1; cycle 48 commit_valid=0",
+      "resource_wrapper": {
+        "outer_command": "无；直接执行 build/agents/T-20260830-046/obj_dir_fix_sva/lcvex_fetch_fifo_tb +PROBE_HEX=... 并 tee 日志",
+        "scope_unit": null,
+        "invocation_id": null,
+        "limits": "unbounded/unknown"
+      }
+    },
+    {
+      "run_id": "cocotb-f1a",
+      "level": "L1/L2",
+      "command": "make -C sim/cocotb -f Makefile.fetch_fifo SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_fetch_fifo SIM_BUILD=build/agents/T-20260830-046/cocotb_fix MAKEFLAGS=-j1",
+      "result": "pass: FIFO occupancy 0/1/2 range, token/transfer uniqueness, dmem hold and reset",
+      "log": {
+        "path": "build/agents/T-20260830-046/post_fix/cocotb_pass.log",
+        "sha256": "fb269a7b7fef82896dbd5d30c05597a8a9252cbe318cf87cefaa170e794bb64a"
+      },
+      "resource_wrapper": {
+        "outer_command": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.fetch_fifo SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_fetch_fifo SIM_BUILD=build/agents/T-20260830-046/cocotb_fix MAKEFLAGS=-j1",
+        "scope_unit": "run-p2106148-i27277133.service",
+        "invocation_id": "55e50be0db554f25948a96f5d2159446",
+        "limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+        "observed_peak": "189.1M"
+      }
+    },
+    {
+      "run_id": "feature-off-sv-backpressure",
+      "level": "L1/L2",
+      "command": "make VERILATOR_JOBS=1 sim-sv-backpressure",
+      "result": "pass: ordinary and system MSR commit backpressure",
+      "log": {
+        "path": "build/agents/T-20260830-046/post_fix/sv_backpressure_run.log",
+        "sha256": "3afc96ace3d6468a1c6caa8b12117feb85755bfb8651c6116104c9e60711ff57"
+      },
+      "resource_wrapper": {
+        "build_outer_command": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 sim-sv-backpressure",
+        "build_scope_unit": "run-p2116966-i27265237.service",
+        "build_invocation_id": "dbf51814a5b74ccc80d9a9851ce12786",
+        "build_limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+        "build_observed_peak": "3.2G",
+        "replay_outer_command": "无；直接执行 obj_dir_bp/lcvex_commit_backpressure_tb 并 tee 日志",
+        "replay_limits": "unbounded/unknown"
+      }
+    },
+    {
+      "run_id": "feature-off-cocotb-core",
+      "level": "L2",
+      "command": "PYGPI_PYTHON_BIN=/home/chiro/miniforge3/envs/lcvex/bin/python3.12 QEMU_TRACE=/home/chiro/projects/mycpu/lcvex/build/difftest/rtl.trace PROGRAM_BIN=/home/chiro/projects/mycpu/lcvex/build/difftest/p2.bin COCOTB_TEST_MODULES=test_lcvex_core COCOTB_TOPLEVEL=lcvex_soc_tb TOPLEVEL_LANG=verilog PYTHONPATH=sim/cocotb build/agents/T-20260830-046/cocotb_core_off_direct/Vtop --timing --assert (Verilator -GFETCH_FIFO_ENABLE=0 -GFETCH_FIFO_DEPTH=2 -GFETCH_EPOCH_W=8 -GMEM_DELAY_MODE=0)",
+      "result": "pass: 33 条指令与 QEMU 一致",
+      "log": {
+        "path": "build/agents/T-20260830-046/post_fix/cocotb_core_off_direct_pass.log",
+        "sha256": "80a39dd5ec34864f44cf9fb2f7c5c622983415c71cd587ab0308e5271013f277"
+      },
+      "resource_wrapper": {
+        "build_outer_command_prefix": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /bin/bash -c",
+        "build_command_record": {"session_file":"/home/chiro/.codex/sessions/2026/08/30/rollout-2026-08-30T16-16-05-01a051bd-737c-7493-83a9-bb32505d61e1.jsonl","line_1_based":8305,"recorded_verbatim":true},
+        "build_scope_unit": "run-p2459077-i27621407.service",
+        "build_invocation_id": "7c61d31d6fe84468a72ca0c060c597fb",
+        "build_limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+        "build_observed_peak": "1.2G",
+        "link_recovery_outer_command_prefix": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /bin/bash -c",
+        "link_recovery_command_record": {"session_file":"/home/chiro/.codex/sessions/2026/08/30/rollout-2026-08-30T16-16-05-01a051bd-737c-7493-83a9-bb32505d61e1.jsonl","line_1_based":8456,"recorded_verbatim":true},
+        "link_recovery_scope_unit": "run-p2508182-i27693349.service",
+        "link_recovery_invocation_id": "cbdf1787f8de42fb9dc27c5507ff581b",
+        "link_recovery_limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+        "final_run_outer_command": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /bin/bash -c 'PYGPI_PYTHON_BIN=/home/chiro/miniforge3/envs/lcvex/bin/python3.12 QEMU_TRACE=/home/chiro/projects/mycpu/lcvex/build/difftest/rtl.trace PROGRAM_BIN=/home/chiro/projects/mycpu/lcvex/build/difftest/p2.bin COCOTB_TEST_MODULES=test_lcvex_core COCOTB_TOPLEVEL=lcvex_soc_tb TOPLEVEL_LANG=verilog PYTHONPATH=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046/sim/cocotb /home/chiro/projects/mycpu/lcvex-wt-T-20260830-046/build/agents/T-20260830-046/cocotb_core_off_direct/Vtop --timing --assert'",
+        "final_run_scope_unit": "run-p2514724-i27670803.service",
+        "final_run_invocation_id": "36e594ba7dcc4d8ba2ba196c09057abf",
+        "final_run_limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+        "final_run_observed_peak": "156.1M"
+      }
+    },
+    {
+      "run_id": "post-fix-microbench-trace-batch",
+      "level": "L1/L2",
+      "command": "six explicit post-fix f0/f1a microbench_runner invocations for alu_latency/fp_scalar/mem_seq; exact shell batch is recorded in session line 7292",
+      "result": "pass: all six runners pass and three trace comparisons equal",
+      "resource_wrapper": {
+        "outer_command_prefix": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /bin/bash -c",
+        "shell_batch_record": {"session_file":"/home/chiro/.codex/sessions/2026/08/30/rollout-2026-08-30T16-16-05-01a051bd-737c-7493-83a9-bb32505d61e1.jsonl","line_1_based":7292,"recorded_verbatim":true},
+        "scope_unit": "run-p2230850-i27396280.service",
+        "invocation_id": null,
+        "limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+        "observed_peak": "991.2M",
+        "invocation_note": "journal 没有保留该 service invocation ID，未伪造。"
+      }
+    },
+    {
+      "run_id": "feature-off-lint",
+      "level": "L0/L1",
+      "command": "make compile",
+      "result": "pass",
+      "resource_wrapper": {
+        "outer_command": "无；直接 conda run make compile",
+        "scope_unit": null,
+        "invocation_id": null,
+        "limits": "unbounded/unknown; lightweight lint only"
+      }
+    }
+  ],
+  "post_fix_perf": {
+    "config": "nocache_d0",
+    "parameters": {
+      "I_L1": 0,
+      "D_L1": 0,
+      "L2": 0,
+      "MEM_DELAY_MODE": 0,
+      "FETCH_FIFO_DEPTH": 2
+    },
+    "resource_wrapper": {
+      "outer_command_prefix": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /bin/bash -c",
+      "shell_batch_record": {"session_file":"/home/chiro/.codex/sessions/2026/08/30/rollout-2026-08-30T16-16-05-01a051bd-737c-7493-83a9-bb32505d61e1.jsonl","line_1_based":7292,"recorded_verbatim":true},
+      "scope_unit": "run-p2230850-i27396280.service",
+      "invocation_id": null,
+      "limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+      "observed_peak": "991.2M",
+      "invocation_note": "journal 保留该 service 的 completion/peak，但未保留 invocation ID；不伪造。"
+    },
+    "runners": {
+      "f0": {
+        "path": "build/microbench_runner_postfix_f0/microbench_runner",
+        "sha256": "526cd59da38281755a6bbc085934fdf13618d98c22179dbc5f670f5f4f939380",
+        "build_resource_wrapper": {
+          "outer_command": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 PERF_RUNNER_DIR=build/microbench_runner_postfix_f0 PERF_I_L1=0 PERF_D_L1=0 PERF_L2=0 PERF_MEM_DELAY_MODE=0 PERF_FETCH_FIFO_ENABLE=0 microbench-build-config",
+          "scope_unit": "run-p2144803-i27305779.service",
+          "invocation_id": "e188350026514d14a790f395fa038f64",
+          "limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+          "observed_peak": "4.6G"
+        }
+      },
+      "f1a": {
+        "path": "build/microbench_runner_postfix_f1a/microbench_runner",
+        "sha256": "f0e3b77eeb28eb9971a9ee7982c533e247339c69580407c994405e43f022080b",
+        "build_resource_wrapper": {
+          "outer_command": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 PERF_RUNNER_DIR=build/microbench_runner_postfix_f1a PERF_I_L1=0 PERF_D_L1=0 PERF_L2=0 PERF_MEM_DELAY_MODE=0 PERF_FETCH_FIFO_ENABLE=1 microbench-build-config",
+          "scope_unit": "run-p2181755-i27361559.service",
+          "invocation_id": "2affbf70acc145c49d0c7475ce050fbc",
+          "limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+          "observed_peak": "4.6G"
+        }
+      }
+    },
+    "images": {
+      "alu_latency": {
+        "sha256": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+        "source_sha256": "30d2ef74f7061346b6abbae656eff50e490f3"
+      },
+      "fp_scalar": {
+        "sha256": "49fb782bb39c54c13ec9d34b1c028a749347fbc86c1a0b1a36aeca8e9fb5ac70",
+        "source_sha256": "01d8124e7e69917227b2ac615c373583bcf2e00db89b10e905d78e2879052039"
+      },
+      "mem_seq": {
+        "sha256": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527",
+        "source_sha256": "01f52347582bb256f284835595eaed3b1710ab89ab2e2da33815a0e624fb2846"
+      }
+    },
+    "results": [
+      {"workload":"alu_latency","f0":{"status":"pass","cycles":2500171,"retired":750049,"commit_digest":"e02f90ea8089a4f1","memory_digest":"0dd7f555d8ef95bf"},"f1a":{"status":"pass","cycles":2000136,"retired":750049,"commit_digest":"e02f90ea8089a4f1","memory_digest":"0dd7f555d8ef95bf"},"comparison":"equal","comparison_sha256":"45ea458f458ec5817195ee5071af25080ad81e091696d8453d2d723c0a8c5151"},
+      {"workload":"fp_scalar","f0":{"status":"pass","cycles":226593,"retired":65963,"commit_digest":"78dbdb2d365390ea","memory_digest":"4078dabba91c60f0"},"f1a":{"status":"pass","cycles":172989,"retired":65963,"commit_digest":"78dbdb2d365390ea","memory_digest":"4078dabba91c60f0"},"comparison":"equal","comparison_sha256":"7a18b7d448dbfd53e1a625e68b41e9905f66e4dabbe5e00ad97ea1a36e3cd5c1"},
+      {"workload":"mem_seq","f0":{"status":"pass","cycles":3042223,"retired":803657,"commit_digest":"826084b57439f54a","memory_digest":"6b40dea7a6ade5c3"},"f1a":{"status":"pass","cycles":2582793,"retired":803657,"commit_digest":"826084b57439f54a","memory_digest":"6b40dea7a6ade5c3"},"comparison":"equal","comparison_sha256":"2673e57475b0836e4dad9822f31bfbd4424c8c1a487b60703d05827acb847275"}
+    ],
+    "trace_sha256": {
+      "alu_latency_f0": "5024c86e14f112b3110f78e9f480cec47d873cb549475e0ec2c45925c4ee42cb",
+      "alu_latency_f1a": "9d25ccd42cf3fb516871d539a8e6a833dfe177ea0a54045f61c2d0eb4c806c9d",
+      "fp_scalar_f0": "c8bf23f94ec34f08b7337c6bdfa5e08bc50ac160f97b3bae445c10880ff885b9",
+      "fp_scalar_f1a": "d2c36cc29c6e71828a3f87ea80223fe61fcdfa5b3b473001dde8989290872b4c",
+      "mem_seq_f0": "a64a58ae1e5fe9872a21a9e6217f167f8e66d36df479d55bd5c063d9edf63070",
+      "mem_seq_f1a": "79be3d385076bf96ab41e7203a77cdda1ebff40f02b10a668e1166875ec59234"
+    }
+  },
+  "strict_lockstep": {
+    "qemu_plugin_sha256": "d237d65484fea73d5d212b8e395a0efba97807828e5bbdfdb2f476da2a48f1a1",
+    "coordinators": {
+      "base": {"path":"build/verilator_lockstep_f1a/lockstep_coordinator","sha256":"ecbe39fb31607658c6dde189b21813660159013dc8fea0817db0ce542594117f"},
+      "cache": {"path":"build/verilator_lockstep_f1a_cache/lockstep_coordinator","sha256":"d0bbf2bdb689306d706ee58f3b7941f59ca3bc0c8658beb2800c5b52fe38f5a2"},
+      "delay2": {"path":"build/verilator_lockstep_f1a_delay2/lockstep_coordinator","sha256":"d094b911ce8a3896c47de7fbdae131055598adfd7d465ff3f2bfff845b3eee21"}
+    },
+    "coordinator_build_resources": [
+      {"unit":"run-p2246501-i27393558.service","invocation_id":"e29fb2543a9f494ba092dfe47681c3d0","outer_command":"systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 lockstep-build-f1a","limits":{"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},"observed_peak":"4.7G"},
+      {"unit":"run-p2294024-i27472715.service","invocation_id":"c62403cbeccd493baf1c73c734b97a10","outer_command":"systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 lockstep-build-f1a-cache","limits":{"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},"observed_peak":"4.7G"},
+      {"unit":"run-p2336582-i27513326.service","invocation_id":"5437470b78564d45a8553f7eee40dcef","outer_command":"systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 lockstep-build-f1a-delay2","limits":{"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},"observed_peak":"4.7G"}
+    ],
+    "command": "F1A_BUILD_DIR=build/f1a COORD_BASE=build/verilator_lockstep_f1a/lockstep_coordinator COORD_CACHE=build/verilator_lockstep_f1a_cache/lockstep_coordinator COORD_DELAY2=build/verilator_lockstep_f1a_delay2/lockstep_coordinator MAX_INSNS=32 bash sim/difftest/run_f1a.sh",
+    "images": [
+      "hard_fetch_epoch",
+      "hard_fetch_duplicate",
+      "hard_fetch_4k",
+      "hard_fetch_line",
+      "hard_fetch_reset"
+    ],
+    "configurations": ["base", "cache", "delay2"],
+    "cases": 15,
+    "result": "pass: 每 case 32/32 commit OK，无 FAIL/mismatch/timeout",
+    "run_resource_wrapper": {
+      "outer_command": "systemd-run --user --wait -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046 -p MemoryMax=15G -p CPUQuota=50% /bin/bash -c 'F1A_BUILD_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046/build/f1a COORD_BASE=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046/build/verilator_lockstep_f1a/lockstep_coordinator COORD_CACHE=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046/build/verilator_lockstep_f1a_cache/lockstep_coordinator COORD_DELAY2=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-046/build/verilator_lockstep_f1a_delay2/lockstep_coordinator MAX_INSNS=32 bash sim/difftest/run_f1a.sh'",
+      "scope_unit": "run-p2372032-i27524021.service",
+      "invocation_id": "5e33676aa3b346fab7eb2753853ffc1e",
+      "limits": {"MemoryMax":"15G","MemorySwapMax":"未设置/default infinity","CPUQuota":"50%"},
+      "observed_peak": "169.2M"
+    },
+    "directed_image": {
+      "path": "build/f1a/hard_fetch_duplicate.bin",
+      "bytes": 40,
+      "sha256": "4f46b3c5733f207babd13f0dc8f2da90f55282f672ffa7f14ef1d1443c44583d"
+    },
+    "log_sha256": {
+      "hard_fetch_duplicate_base": "fd88ac42af083d081ea58c798849f8a70135125d964f5afed29874c1f9fef4c3",
+      "hard_fetch_duplicate_cache": "0965cc299d77c891533353176abf284726fd364e13ac13a2fa944a58c2d6ef5d",
+      "hard_fetch_duplicate_delay2": "4624c3a3bec692d0e75cb5be24c3206fdaf3d6ab87f8e7a7eb75388fb47e74cc"
+    }
+  },
+  "validation": {
+    "tests_run": true,
+    "build_run": true,
+    "simulation_run": true,
+    "cocotb_run": true,
+    "qemu_run": true,
+    "generator_run": true,
+    "verilator_run": true,
+    "feature_on": true,
+    "feature_off_regression": true,
+    "microbench_arch_trace_equal": true,
+    "strict_lockstep_matrix": true,
+    "git_diff_check": true,
+    "json_parse": true,
+    "write_set_check": true
+  },
+  "blockers": [],
+  "risks": [
+    "本任务只修复已确认的 MEM/WB committed-marker gap；FIFO fault-head/H-03、独立 commit-ready gap/H-04 和 F1b 多 outstanding/early-restart 仍不在范围。",
+    "Cocotb 随机 delay2 的 commit 采样不保证每次都落在同一 dmem_pending 边沿；精确同拍性质由 SV SVA/probe 覆盖。",
+    "完整 trace、波形、RAM 和 checkpoint 仅保存在 build/agents 或 build/f1a，不进 Git。",
+    "部分 post-fix binary replay 和轻量 lint 没有 systemd wrapper，已明确标为 unbounded/unknown；不能把它们当作 15G/no-swap 合规运行。"
+  ],
+  "correction_record": {
+    "type": "metadata-only",
+    "scope": "只修正 owner/model/dispatch-receive timestamps、resource wrapper provenance、8-file hash map 和 handoff metadata；禁止重跑，禁止修改 RTL/TB/sim/脚本/build artifact。",
+    "pre_correction_tip": "f1b7180fb82815b95d8a5b7b68de5437efa69e10",
+    "old_values": {
+      "owner": "codex-f1a-duplicate-fix",
+      "model": "gpt-5",
+      "sent_at": "2026-08-30T23:40:00+08:00",
+      "received_at": "2026-08-30T23:40:00+08:00",
+      "reported_at": "2026-08-31T01:47:00+08:00"
+    },
+    "authoritative_values": {
+      "owner": "luna-f1a-duplicate-fix",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "max",
+      "dispatch_sent_at": "2026-08-30T23:03:19+08:00",
+      "received_at": "2026-08-30T23:04:06+08:00",
+      "received_at_basis": "harness task_started event; agent acknowledgement at 2026-08-30T23:04:14+08:00"
+    },
+    "head_semantics": "head_sha/content_sha intentionally remain c86329e technical content commit; correction tip is reported in FINAL and not embedded to avoid evidence self-reference.",
+    "resource_basis": "session command records plus systemd journal unit/invocation/peak records; missing MemorySwapMax is recorded as default infinity, and direct replays are recorded as unbounded/unknown.",
+    "followup_sent_at": "2026-08-31T01:49:49+08:00",
+    "followup_reported_at": "2026-08-31T02:15:20+08:00"
+  },
+  "integrator_review": {
+    "received_at": "2026-08-31T02:20:27+08:00",
+    "merge_sha": "0ac83754d1000c9f4c66408eda97831fac407ed3",
+    "combined_validation_sha": "ea21c0da415571672c8b7fe6f2b76e23139292a1",
+    "status": "accepted_duplicate_fix",
+    "independent_builds": [
+      {
+        "config": "MEM_DELAY_MODE=2",
+        "command": "mkdir -p build/integrator_t046 && systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/integrator_t046/obj_dir -o lcvex_fetch_fifo_tb -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+        "result": "pass",
+        "wall_seconds": 375.693,
+        "allocated_mb": 733.332
+      },
+      {
+        "config": "MEM_DELAY_MODE=0",
+        "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -GMEM_DELAY_MODE=0 -Mdir build/integrator_t046/obj_dir_d0 -o lcvex_fetch_fifo_tb -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+        "result": "pass",
+        "wall_seconds": 366.711,
+        "allocated_mb": 733.648,
+        "binary_sha256": "a3ad9fdec07db04e8904249665904f7d5bb8ce1f81587ea850ed678d3e03fb10"
+      }
+    ],
+    "failed_attempts": [
+      "initial scope exited 127 because bare verilator was absent from PATH; no compilation occurred",
+      "second attempt reached Verilator but exited 1 because nested -Mdir parent did not exist; disk had 135GB free；successful command created isolated parent explicitly"
+    ],
+    "merge_probe": {
+      "command": "systemd-run --quiet --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- build/integrator_t046/obj_dir_d0/lcvex_fetch_fifo_tb +PROBE_HEX=build/integrator_t046/mem_seq.hex +PROBE_WORDS=589",
+      "result": "pass",
+      "log_sha256": "96e91364d6570b88efc0e0a863617bcbe259973b69afeb27a1af58fe16d3680f",
+      "signature": "cycle46 older WB token=3/17 with younger dmem_pending；cycle47 commits once and marker=1；cycle48 commit_valid=0 while marker remains 1"
+    },
+    "merge_lockstep": {
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so F1A_BUILD_DIR=build/integrator_t046/f1a_merge COORD_BASE=<owner-base> COORD_CACHE=<owner-cache> COORD_DELAY2=<owner-delay2> MAX_INSNS=32 bash sim/difftest/run_f1a.sh",
+      "result": "pass",
+      "cases": 15,
+      "matrix": "hard_fetch_epoch/duplicate/4k/line/reset x base/cache/delay2；每 case 32/32 commit OK"
+    },
+    "decision": "验收 duplicate retirement 修复与非架构 token/SVA；默认 FETCH_FIFO_ENABLE 仍为 0，不宣称 H-03/H-04/F1b 或完整性能签核。"
+  },
+  "conclusion": "MEM/WB duplicate retirement 已在最小定向镜像、SV SVA、Cocotb、feature-off 回归、三 workload 架构 trace 和 F1a base/cache/delay2 strict lockstep 中通过 post-fix 验证；任务可交付 review。",
+  "next": "由集成者在合并 SHA 复跑任务要求的 L1/L2 子集并完成 Gate D；不修改/宣称 F1b 或 H-03/H-04。"
+}

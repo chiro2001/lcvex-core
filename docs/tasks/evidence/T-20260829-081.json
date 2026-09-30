@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-081",
+  "base_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+  "head_sha": "9377f43ae8ee327a55d12d8fb89bd65d313d6706",
+  "metadata": {
+    "branch": "feature/T-20260829-081-a2-soc-stub",
+    "received_at": "2026-08-29T02:52:00+0800",
+    "reported_at": "2026-08-29T02:59:34+0800",
+    "sent_at": "2026-08-29T02:52:00+0800",
+    "state": "review",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-081"
+  },
+  "artifacts": [
+    {
+      "bytes": 12373,
+      "id": "tieoff-wrapper",
+      "owner": "T-20260829-081",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a2.py",
+      "retain_until": "task-review",
+      "sha256": "e1ade1e7941224c36cf4f396717ad8c7a2fff822da3ba798d003f17c8f8f5f58",
+      "uri": "fpga/opensynth/rtl/lcvex_catapult_soc_tieoff.sv"
+    },
+    {
+      "bytes": 8592,
+      "id": "boundary-stub",
+      "owner": "T-20260829-081",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a2.py",
+      "retain_until": "task-review",
+      "sha256": "2437cb499783e2c8b810ba821a4b7534735fe74a10483b65780a5a840fd63766",
+      "uri": "fpga/opensynth/rtl/lcvex_catapult_soc_stub_top.v"
+    },
+    {
+      "bytes": 963,
+      "id": "tieoff-filelist",
+      "owner": "T-20260829-081",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a2.py",
+      "retain_until": "task-review",
+      "sha256": "373b07554ad563ab3b5ccdfc0b092341b26348eb72aff350ec1068faca7061c9",
+      "uri": "fpga/opensynth/filelist_soc_tieoff.f"
+    },
+    {
+      "bytes": 107,
+      "id": "stub-filelist",
+      "owner": "T-20260829-081",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a2.py",
+      "retain_until": "task-review",
+      "sha256": "15f0d8cc5eb897c9a46f725b418e7966169bcd414c3c171d7f5c3f90d9e5c4a7",
+      "uri": "fpga/opensynth/filelist_soc_stub.f"
+    },
+    {
+      "bytes": 339,
+      "id": "stub-ys",
+      "owner": "T-20260829-081",
+      "reproduce": "yosys -s fpga/opensynth/lcvex_catapult_soc_stub.ys",
+      "retain_until": "task-review",
+      "sha256": "7b8cdddcc40958dc09571900dd4aee820cd9bdcf053d183f775ec691f2a7ef7f",
+      "uri": "fpga/opensynth/lcvex_catapult_soc_stub.ys"
+    },
+    {
+      "bytes": 2427,
+      "id": "stub-manifest",
+      "owner": "T-20260829-081",
+      "reproduce": "cat fpga/opensynth/a2_soc_stub_manifest.md",
+      "retain_until": "task-review",
+      "sha256": "d9cb3daa6ba9fb830ffe3e2b0411f3ee2ed4d02647be2f821b64a850735e1072",
+      "uri": "fpga/opensynth/a2_soc_stub_manifest.md"
+    },
+    {
+      "bytes": 5825,
+      "id": "a2-stats",
+      "owner": "T-20260829-081",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a2.py",
+      "retain_until": "task-review",
+      "sha256": "d8c66aac65b0fbdeba99e4c22a3922b59a5b0aaa042a920ca0a670e4c059db6f",
+      "uri": "fpga/opensynth/a2_soc_stub_stats.json"
+    }
+  ],
+  "rtl_filelist_sha256": "a28a62a38dcaba3f3752b01f9ba8cbb7b6d7ec81170aaac304bb5a6844fbb63c",
+  "qemu": {
+    "binary_sha256": "",
+    "commit": "N/A",
+    "patches_sha256": "",
+    "release": "N/A"
+  },
+  "runs": [
+    {
+      "command": "verilator --lint-only --timing --assert -Wno-fatal ... --top-module lcvex_catapult_soc_tieoff_top -f fpga/opensynth/filelist_soc_tieoff.f",
+      "exit_code": 0,
+      "level": "opensynth-soc-elab",
+      "module": "lcvex_catapult_soc_tieoff_top",
+      "result": "pass",
+      "run_id": "owner-verilator-soc-tieoff",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "wall_seconds": 349.622
+    },
+    {
+      "command": "yosys -s build/tmp/opensynth/a2/stub-generic-run-001/synth.ys",
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "num_cells": 0,
+        "num_cells_by_type": {},
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 2627,
+        "num_ports": 109,
+        "num_wire_bits": 2627,
+        "num_wires": 109
+      },
+      "module": "lcvex_catapult_soc_stub_top",
+      "netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+      "result": "pass",
+      "run_id": "owner-stub-generic-run01",
+      "runner_role": "owner",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "wall_seconds": 0.105
+    },
+    {
+      "command": "yosys -s build/tmp/opensynth/a2/stub-generic-run-002/synth.ys",
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "num_cells": 0,
+        "num_cells_by_type": {},
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 2627,
+        "num_ports": 109,
+        "num_wire_bits": 2627,
+        "num_wires": 109
+      },
+      "module": "lcvex_catapult_soc_stub_top",
+      "netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+      "result": "pass",
+      "run_id": "owner-stub-generic-run02",
+      "runner_role": "owner",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "wall_seconds": 0.103
+    },
+    {
+      "command": "/tmp/oss_cad/oss-cad-suite/bin/yosys -p 'read_verilog -sv ...; synth_ecp5 -top lcvex_catapult_soc_stub_top -json build/tmp/opensynth/a2/stub_ecp5.json'",
+      "exit_code": 0,
+      "level": "opensynth-ecp5-synth",
+      "module": "lcvex_catapult_soc_stub_top",
+      "result": "pass",
+      "run_id": "owner-stub-ecp5-synth",
+      "runner_role": "owner",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "wall_seconds": 0.394
+    },
+    {
+      "command": "nextpnr-ecp5 --json build/tmp/opensynth/a2/stub_ecp5.json --85k --package CABGA381 --seed 1 --lpf-allow-unconstrained --report build/tmp/opensynth/a2/stub_ecp5_report.json --write build/tmp/opensynth/a2/stub_ecp5_routed.json",
+      "exit_code": 125,
+      "level": "opensynth-ecp5-pnr",
+      "module": "lcvex_catapult_soc_stub_top",
+      "result": "fail",
+      "run_id": "owner-stub-ecp5-pnr",
+      "runner_role": "owner",
+      "source_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+      "wall_seconds": 0.327,
+      "failure": "Unable to place cell 'dbg_rdata[31]$tr_io', no BELs remaining to implement cell type 'TRELLIS_IO'; 2627 port bits > 365 ECP5 I/O cells."
+    }
+  ],
+  "proxy_results": {
+    "boundary_stub": {
+      "module": "lcvex_catapult_soc_stub_top",
+      "ports": 109,
+      "port_bits": 2627,
+      "generic_cells": 0,
+      "generic_netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+      "stable_across_two_runs": true
+    },
+    "tieoff_wrapper_top": "lcvex_catapult_soc_tieoff_top",
+    "ecp5": {
+      "device": "LFE5U-85F CABGA381",
+      "synth": "pass",
+      "nextpnr": "fail (TRELLIS_IO overflow)",
+      "fmax": "N/A"
+    }
+  },
+  "known_limits": [
+    "ECP5 is only a proxy; it is not Arria 10 and does not replace Quartus/T-067.",
+    "The boundary stub has 109 ports/2627 port bits; nextpnr-ecp5 cannot place all TRELLIS_IO cells on LFE5U-85F.",
+    "Generic 0-cell result is only for the tie-off boundary stub, not the real SoC.",
+    "Yosys cannot parse the real SoC SystemVerilog directly (see A0); no RTL modification made.",
+    "No Fmax or A10 resource claim is made."
+  ],
+  "toolchain": {
+    "nextpnr_ecp5": "nextpnr-0.11.1-18-gdec04b3b",
+    "python": "Python 3.12.10",
+    "verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty)",
+    "yosys_oss": "Yosys 0.68+136 (git sha1 c30457480-dirty)"
+  },
+  "merge_sha": "7c7868cacf9b4f8656947d946d7b597bcc413857",
+  "state": "done",
+  "handoff_sha": "050e0c47d73a6ff971cb673ea77e0fd15981301f",
+  "integrator_review": {
+    "received_at": "2026-08-29T02:59:50+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "050e0c47d73a6ff971cb673ea77e0fd15981301f",
+    "implementation_sha": "9377f43ae8ee327a55d12d8fb89bd65d313d6706",
+    "notes": "A2 完成真实 SoC tie-off Verilator elaboration；Yosys 对边界 stub 双跑稳定；nextpnr-ecp5 因 2627 port bits > 365 I/O 失败，Fmax N/A。",
+    "merge_sha": "7c7868cacf9b4f8656947d946d7b597bcc413857",
+    "result_sha": "9377f43ae8ee327a55d12d8fb89bd65d313d6706"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "7c7868cacf9b4f8656947d946d7b597bcc413857",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "050e0c47d73a6ff971cb673ea77e0fd15981301f",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "9377f43ae8ee327a55d12d8fb89bd65d313d6706",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

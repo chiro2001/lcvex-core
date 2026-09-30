@@ -1,0 +1,7 @@
+rtl/lcvex_l2.sv:120: syntax error
+rtl/lcvex_l2.sv:116: error: Syntax error in continuous assignment
+rtl/lcvex_l2.sv:277: syntax error
+rtl/lcvex_l2.sv:276: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_l2.sv:280: syntax error
+rtl/lcvex_l2.sv:281: error: Malformed statement
+rtl/lcvex_l2.sv:279: error: Error in property_spec of concurrent assertion item.

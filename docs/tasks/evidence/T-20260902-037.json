@@ -1,0 +1,1113 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-037",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "ac6f1154f4bd763024e2b6bdfd4086018c7365b6",
+  "head_sha": "16c1ac7b7f1623e9666cbe832b47c9f024fce15e",
+  "branch": "verify/T-20260902-037-fp-p5-rerun-round7",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-037",
+  "scope": "FP-P5 rerun round7 on merged SHA ac6f115 (T-20260902-036 core next_pc/atomic forwarding cut): full-FP synthesis -> fitter -> signoff STA; assembler/SOF only if all setup/hold/recovery/removal/min-pulse non-negative and DDR pass.",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-037-probe",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-037-probe\\real_a10_full_fp",
+    "project_name": "real_a10_full_fp",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "license_read": false,
+    "non_eda_processes_stopped": false,
+    "files_deleted": false,
+    "programming_jtag_touched": false
+  },
+  "preflight": {
+    "timestamp": "2026-09-04T00:03:00+08:00",
+    "t037_probe_exists": false,
+    "eda_processes": [],
+    "jtagserver_running": true,
+    "jtagserver_pid": 5476,
+    "physical_free_mb": 44558.7,
+    "physical_total_mb": 63092.3,
+    "disk_d_free_gb": 73.1
+  },
+  "source_sync": {
+    "verified": true,
+    "rtl_file_count": 47,
+    "platform_file_count": 2,
+    "project_file_count": 3,
+    "remote_manifest_count": 52,
+    "all_sha256_match": true,
+    "remote_bad_count": 0,
+    "local_manifest_path": "build/agents/T-20260902-037/sync/manifest_t037.json",
+    "local_manifest_sha256": "4f1f9a6f02ec3737f9933a689fddf85b2c00116ab66d2e1085fc60497fd1d5cc",
+    "key_files": {
+      "rtl/lcvex_core.sv": "fdc5571cdb5b8e50001b45789142931941fb45a34d783fa5171e4a4c816b44b8",
+      "rtl/lcvex_decode.sv": "1b01f3c482db2b5e509899740306806e094ee803b6f18dbe5239e80dfa262edf",
+      "rtl/lcvex_pkg.sv": "de43ab7118605baa8e8d5c7a2072bcdd1b20bcc0317c4d04d6d7091090faab6b",
+      "rtl/lcvex_fp_scalar.sv formal": "cc5354f446c24467bbf24152f6b7e240cdf606f7d707100fda1a9eb1d47e20b5",
+      "rtl/lcvex_fp_scalar.sv remote patched": "d3f5f53061fa53862b640fd41a4e0929d524a5dbc56703079f3934b9d53946ac",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "a165866e794d688ab5d99792fdcabf84d78b06701696102375faffa30620a191",
+      "real_a10_full_fp/real_a10_full_fp.qsf": "57d0c2a45498a0fe929c08b1a7f1dad9dbc2e8b7b7c14608c12829f73704d218",
+      "real_a10_full_fp/real_a10_full_fp.sdc": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da"
+    },
+    "patch_note": "Isolated Quartus-compatibility patch applied to remote lcvex_fp_scalar.sv only: removed default values on iter_kill/iter_pause/kill/pause input ports (same as previous FP-P5 rounds). No formal RTL modified."
+  },
+  "runs": [
+    {
+      "run_id": "full-fp-synthesis",
+      "stage": "synthesis",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "result": "pass",
+      "started_at": "2026-09-04T00:08:08.3504104+08:00",
+      "finished_at": "2026-09-04T00:29:25.4107466+08:00",
+      "wall_s": 1277.06,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 221,
+      "critical_warnings": 0,
+      "peak_private_mb": 4917.1,
+      "peak_working_set_mb": 4690.9,
+      "peak_virtual_mb": 9797.9,
+      "samples": 1193,
+      "safety_stopped": false,
+      "resource": {
+        "estimate_alms": 153219,
+        "combinational_aluts": 195240,
+        "dedicated_logic_registers": 84363,
+        "block_memory_bits": 247272,
+        "total_dsp_blocks": 186,
+        "total_plls": 1,
+        "io_pins": 144,
+        "max_fanout_node": "sys_clk_div2",
+        "max_fanout": 76727,
+        "total_fanout": 1317323,
+        "max_lut_depth": 78.4,
+        "average_lut_depth": 23.52
+      },
+      "hierarchy": {
+        "soc_core_alut": 136790,
+        "soc_core_reg": 23603,
+        "soc_core_dsp": 177,
+        "soc_core_mmu_alut": 3669,
+        "soc_core_mmu_reg": 5972,
+        "fp_exec_alut": 78172,
+        "fp_exec_reg": 4024,
+        "fp_exec_dsp": 165,
+        "scalar_unit_alut": 76062,
+        "scalar_unit_reg": 3034,
+        "scalar_unit_dsp": 165,
+        "it_divider_alut": 235,
+        "it_divider_reg": 433,
+        "it_sqrt_alut": 790,
+        "it_sqrt_reg": 390,
+        "neon_int_alut": 8528,
+        "emif_adapter_alut": 20244,
+        "emif_adapter_reg": 2998,
+        "emif_adapter_dsp": 9,
+        "calibration_gate_alut": 3,
+        "calibration_gate_reg": 6
+      },
+      "artifacts": {
+        "real_a10_full_fp.syn.rpt": "9299f2639710d166c914498de4cbaf4d2e88f33d77219d4b47c7bbe22348d8ed",
+        "real_a10_full_fp.syn.summary": "fbefa259c66e22bae098c431164b55ce69730577d17231d6d568cd5fe9b31775",
+        "real_a10_full_fp.syn.smsg": "f63bc8698c3ca42a3e21b278ff9d6134db223fb49cbfab7dc592a20a0b63f006",
+        "real_a10_full_fp.flow.rpt": "ab5a23feaaf0e97e278665883b9b695aee4539087949513d78305c88220dde14"
+      }
+    },
+    {
+      "run_id": "full-fp-fitter",
+      "stage": "fitter",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start fitter -end fitter",
+      "result": "pass",
+      "started_at": "2026-09-04T00:30:16.3208649+08:00",
+      "finished_at": "2026-09-04T00:56:16.8062889+08:00",
+      "wall_s": 1560.485,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 10,
+      "critical_warnings": [
+        "No exact pin location assignment(s) for 9 pins of 130 total pins",
+        "There are 48 unused RX channels in the design",
+        "There are 48 unused TX channels in the design"
+      ],
+      "peak_private_mb": 12492.0,
+      "peak_working_set_mb": 12324.9,
+      "peak_virtual_mb": 20010.3,
+      "samples": 1439,
+      "safety_stopped": false,
+      "resource": {
+        "logic_utilization_alms": 151350,
+        "device_alms": 427200,
+        "logic_utilization_percent": 35.4,
+        "total_registers": 87077,
+        "total_pins": "141 / 826 (17%)",
+        "total_block_memory_bits": "245608 / 55562240 (<1%)",
+        "total_ram_blocks": "121 / 2713 (4%)",
+        "total_dsp_blocks": "186 / 1518 (12%)",
+        "total_plls": "3 / 112 (3%)"
+      },
+      "artifacts": {
+        "real_a10_full_fp.fit.rpt": "80ae0799288ec967571457bed9674fcdf5939663f9626969322e464408462539",
+        "real_a10_full_fp.fit.summary": "262b1eb4f441bada7f297612b1107017f243f677cb157406b2dceba6aab2e387",
+        "real_a10_full_fp.fit.plan.rpt": "3db41494d333d5a0180ce2523f90ea0d53496ef4e663647eb006bacbd2cfb01b",
+        "real_a10_full_fp.fit.place.rpt": "bc3f5a1e2a3745b43e63af5cb44829ff4f396ef10b768f70906a2e9ac5815e3b",
+        "real_a10_full_fp.fit.route.rpt": "b9afb98065e08e896443743258fd59120df44858452569ba5171669df7e71c6d",
+        "real_a10_full_fp.fit.finalize.rpt": "01cf3380b049dc9a7af1e40c89339b84a12f349a6a2ac1220e7039100ec2dca3",
+        "real_a10_full_fp.flow.rpt": "fb3d54fb2f0b0de9bc6d8ebb575b9b94295ea5bdfa39b5eebb447f00d94e961d"
+      }
+    },
+    {
+      "run_id": "full-fp-sta-signoff",
+      "stage": "sta_signoff",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start sta_signoff -end sta_signoff",
+      "result": "fail_timing_closure",
+      "exit_code": 0,
+      "tool_message": "Timing Analyzer successful, 0 errors, 3 warnings, but Timing Closure Summary = Fail (Setup Fail; Hold/Recovery/Removal/Min-Pulse/DDR/Metastability Pass)",
+      "started_at": "2026-09-04T00:58:36.9953293+08:00",
+      "finished_at": "2026-09-04T00:59:14.9396508+08:00",
+      "wall_s": 37.944,
+      "peak_private_mb": 6065.3,
+      "peak_working_set_mb": 5975.4,
+      "peak_virtual_mb": 10921.3,
+      "samples": 34,
+      "safety_stopped": false,
+      "timing": {
+        "closure": "Fail",
+        "setup": {
+          "sys_clk_50": {
+            "slack": -6.207,
+            "tns": -44998.396,
+            "failing_endpoints": 19794,
+            "corner": "Slow 900mV 100C Model"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.251,
+            "tns": 0.0,
+            "corner": "Slow 900mV 100C Model"
+          }
+        },
+        "hold": {
+          "sys_clk_50": {
+            "slack": 0.016,
+            "corner": "Fast 900mV 0C Model"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.014,
+            "corner": "Fast 900mV 0C Model"
+          }
+        },
+        "recovery": {
+          "emif_core_usr_clk": {
+            "slack": 0.51,
+            "corner": "Slow 900mV 100C Model"
+          },
+          "sys_clk_50": {
+            "slack": 2.847,
+            "corner": "Slow 900mV 0C Model"
+          }
+        },
+        "removal": {
+          "worst_any": {
+            "slack": 0.14,
+            "clock": "clk_y3",
+            "corner": "Fast 900mV 0C Model"
+          },
+          "sys_clk_50": {
+            "slack": 0.169,
+            "corner": "Fast 900mV 0C Model"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.224,
+            "corner": "Fast 900mV 0C Model"
+          }
+        },
+        "min_pulse_width": {
+          "slack": 0.12,
+          "result": "Pass"
+        },
+        "ddr": {
+          "result": "Pass"
+        },
+        "metastability": "Pass",
+        "fmax": {
+          "sys_clk_50": "38.16 MHz",
+          "emif_core_usr_clk": "285.8 MHz",
+          "emif_core_cal_master_clk": "186.88 MHz",
+          "emif_core_cal_slave_clk": "329.16 MHz",
+          "clk_y3": "527.7 MHz"
+        }
+      },
+      "custom_top": {
+        "notes": "Quartus STA report_timing -setup/-hold/-recovery/-removal -npaths 10 on final netlist (3_slow_900mv_100c); EMIF setup/to/from reports on 3_slow_900mv_0c.",
+        "setup_top1": {
+          "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+          "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+          "launch_clock": "sys_clk_50",
+          "latch_clock": "sys_clk_50",
+          "sdc_exception": "No SDC Exception on Path",
+          "slack": "-6.207 (VIOLATED)",
+          "data_arrival_time": "34.368",
+          "data_required_time": "28.161"
+        },
+        "setup_top10": [
+          {
+            "slack": -6.207,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.489"
+          },
+          {
+            "slack": -6.161,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.443"
+          },
+          {
+            "slack": -6.16,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.442"
+          },
+          {
+            "slack": -6.15,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.432"
+          },
+          {
+            "slack": -6.143,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.425"
+          },
+          {
+            "slack": -6.133,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.sig[9]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.074",
+            "data_delay": "26.418"
+          },
+          {
+            "slack": -6.107,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.389"
+          },
+          {
+            "slack": -6.104,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.386"
+          },
+          {
+            "slack": -6.103,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.385"
+          },
+          {
+            "slack": -6.099,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_other.pa.exp2[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|slot_result_r[13]",
+            "launch_clock": "sys_clk_50",
+            "latch_clock": "sys_clk_50",
+            "relationship": "20.000",
+            "clock_skew": "-0.077",
+            "data_delay": "26.381"
+          }
+        ],
+        "hold_top1": {
+          "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[0][343]",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[326]",
+          "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "sdc_exception": "No SDC Exception on Path",
+          "slack": "0.080",
+          "data_arrival_time": "2.703",
+          "data_required_time": "2.623"
+        },
+        "hold_top10": [
+          {
+            "slack": 0.08,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[0][343]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[326]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.056",
+            "data_delay": "0.689"
+          },
+          {
+            "slack": 0.081,
+            "from": "emif|emif_bot|emif_bot|cal_slave_component|rst_controller|alt_rst_sync_uq1|altera_reset_synchronizer_int_chain[0]",
+            "to": "emif|emif_bot|emif_bot|cal_slave_component|rst_controller|alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out",
+            "launch_clock": "emif|emif_bot|emif_bot_core_cal_slave_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_cal_slave_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.000",
+            "data_delay": "0.519"
+          },
+          {
+            "slack": 0.082,
+            "from": "sfl_inst|epcq|epcq|asmi_parallel_inst|altera_asmi_parallel_epcq_epcq|wrstage_cntr|auto_generated|dffe2a[1]",
+            "to": "sfl_inst|epcq|epcq|asmi_parallel_inst|altera_asmi_parallel_epcq_epcq|wrstage_cntr|auto_generated|dffe2a[1]",
+            "launch_clock": "sys_clk_50 (INVERTED)",
+            "latch_clock": "sys_clk_50 (INVERTED)",
+            "relationship": "0.000",
+            "clock_skew": "0.000",
+            "data_delay": "0.575"
+          },
+          {
+            "slack": 0.083,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_input_data[3][6]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[222]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.165",
+            "data_delay": "0.627"
+          },
+          {
+            "slack": 0.086,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_input_data[3][1]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[217]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.179",
+            "data_delay": "0.645"
+          },
+          {
+            "slack": 0.087,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pointer_fifo|scfifo_inst|auto_generated|dpfifo|low_addressa[2]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pointer_fifo|scfifo_inst|auto_generated|dpfifo|low_addressa[2]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.000",
+            "data_delay": "0.578"
+          },
+          {
+            "slack": 0.088,
+            "from": "emif|emif_bot|emif_bot|col_if|colmaster|p2b|out_valid",
+            "to": "emif|emif_bot|emif_bot|col_if|colmaster|p2b|out_valid",
+            "launch_clock": "emif|emif_bot|emif_bot_core_cal_master_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_cal_master_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.000",
+            "data_delay": "0.553"
+          },
+          {
+            "slack": 0.088,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[29]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[29]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.053",
+            "data_delay": "0.664"
+          },
+          {
+            "slack": 0.089,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_input_data[3][1]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[217]~DUPLICATE",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.179",
+            "data_delay": "0.645"
+          },
+          {
+            "slack": 0.089,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|wr_data_ptr[2]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|encoder_output_data_ptr[2]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "0.000",
+            "clock_skew": "0.000",
+            "data_delay": "0.561"
+          }
+        ],
+        "recovery_top1": {
+          "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_output_data_byte_enable[0]",
+          "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "sdc_exception": "No SDC Exception on Path",
+          "slack": "0.510",
+          "data_arrival_time": "5.386",
+          "data_required_time": "5.896"
+        },
+        "recovery_top10": [
+          {
+            "slack": 0.51,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_output_data_byte_enable[0]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.093",
+            "data_delay": "2.911"
+          },
+          {
+            "slack": 0.51,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|encoder_output_data_info[0]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.093",
+            "data_delay": "2.911"
+          },
+          {
+            "slack": 0.512,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_output_data_byte_enable[2]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.093",
+            "data_delay": "2.911"
+          },
+          {
+            "slack": 0.513,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|encoder_output_data_info[1]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.093",
+            "data_delay": "2.911"
+          },
+          {
+            "slack": 0.516,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_output_data_byte_enable[10]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.093",
+            "data_delay": "2.911"
+          },
+          {
+            "slack": 0.518,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_output_data_byte_enable[1]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.093",
+            "data_delay": "2.911"
+          },
+          {
+            "slack": 0.556,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_output_data_byte_enable[4]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.093",
+            "data_delay": "2.911"
+          },
+          {
+            "slack": 0.565,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[453]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.107",
+            "data_delay": "2.865"
+          },
+          {
+            "slack": 0.565,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[451]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.107",
+            "data_delay": "2.865"
+          },
+          {
+            "slack": 0.565,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[237]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.107",
+            "data_delay": "2.865"
+          }
+        ],
+        "removal_top1": {
+          "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+          "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[6]",
+          "launch_clock": "clk_y3",
+          "latch_clock": "clk_y3",
+          "sdc_exception": "No SDC Exception on Path",
+          "slack": "0.359",
+          "data_arrival_time": "4.806",
+          "data_required_time": "4.447"
+        },
+        "removal_top10": [
+          {
+            "slack": 0.359,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[6]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.359,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[9]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.362,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[16]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.363,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[7]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.365,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[11]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.365,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[15]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.366,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[0]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.366,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[13]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.367,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[5]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          },
+          {
+            "slack": 0.368,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+            "to": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.cpa_count_to_lock[1]",
+            "launch_clock": "clk_y3",
+            "latch_clock": "clk_y3",
+            "relationship": "0.000",
+            "clock_skew": "0.062",
+            "data_delay": "0.504"
+          }
+        ],
+        "emif_setup_top1": {
+          "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[522]",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|internal_master_wr_data[522]",
+          "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "sdc_exception": "No SDC Exception on Path",
+          "slack": "0.398",
+          "data_arrival_time": "5.992",
+          "data_required_time": "6.390"
+        },
+        "emif_setup_top10": [
+          {
+            "slack": 0.398,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[522]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|internal_master_wr_data[522]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.240",
+            "data_delay": "3.372"
+          },
+          {
+            "slack": 0.425,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[390]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.153",
+            "data_delay": "3.536"
+          },
+          {
+            "slack": 0.425,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[416]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.502"
+          },
+          {
+            "slack": 0.436,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[430]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.490"
+          },
+          {
+            "slack": 0.436,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[384]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.153",
+            "data_delay": "3.529"
+          },
+          {
+            "slack": 0.458,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[401]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.483"
+          },
+          {
+            "slack": 0.476,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[436]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.450"
+          },
+          {
+            "slack": 0.479,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[484]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[385]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.167",
+            "data_delay": "3.463"
+          },
+          {
+            "slack": 0.483,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[484]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[392]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.167",
+            "data_delay": "3.455"
+          },
+          {
+            "slack": 0.483,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[410]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.444"
+          }
+        ],
+        "emif_to_setup_top1": {
+          "from": "emif|emif_bot|emif_bot|arch|arch_inst|io_tiles_wrap_inst|io_tiles_inst|tile_gen[2].lane_gen[1].lane_inst~phy_reg0",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[198]",
+          "launch_clock": "emif|emif_bot|emif_bot_phy_clk_2",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "sdc_exception": "No SDC Exception on Path",
+          "slack": "0.375",
+          "data_arrival_time": "5.463",
+          "data_required_time": "5.838"
+        },
+        "emif_to_setup_top10": [
+          {
+            "slack": 0.375,
+            "from": "emif|emif_bot|emif_bot|arch|arch_inst|io_tiles_wrap_inst|io_tiles_inst|tile_gen[2].lane_gen[1].lane_inst~phy_reg0",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[198]",
+            "launch_clock": "emif|emif_bot|emif_bot_phy_clk_2",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.339",
+            "data_delay": "2.992"
+          },
+          {
+            "slack": 0.398,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[522]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|internal_master_wr_data[522]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.240",
+            "data_delay": "3.372"
+          },
+          {
+            "slack": 0.425,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[390]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.153",
+            "data_delay": "3.536"
+          },
+          {
+            "slack": 0.425,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[416]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.502"
+          },
+          {
+            "slack": 0.436,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[430]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.490"
+          },
+          {
+            "slack": 0.436,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[384]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.153",
+            "data_delay": "3.529"
+          },
+          {
+            "slack": 0.458,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[401]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.483"
+          },
+          {
+            "slack": 0.476,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[436]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.450"
+          },
+          {
+            "slack": 0.479,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[484]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[385]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.167",
+            "data_delay": "3.463"
+          },
+          {
+            "slack": 0.483,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[484]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[392]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.167",
+            "data_delay": "3.455"
+          }
+        ],
+        "emif_from_setup_top1": {
+          "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[522]",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|internal_master_wr_data[522]",
+          "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "sdc_exception": "No SDC Exception on Path",
+          "slack": "0.398",
+          "data_arrival_time": "5.992",
+          "data_required_time": "6.390"
+        },
+        "emif_from_setup_top10": [
+          {
+            "slack": 0.398,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_wr_data[522]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|internal_master_wr_data[522]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.240",
+            "data_delay": "3.372"
+          },
+          {
+            "slack": 0.425,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[390]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.153",
+            "data_delay": "3.536"
+          },
+          {
+            "slack": 0.425,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[416]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.502"
+          },
+          {
+            "slack": 0.436,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[430]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.490"
+          },
+          {
+            "slack": 0.436,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[384]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.153",
+            "data_delay": "3.529"
+          },
+          {
+            "slack": 0.458,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[401]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.483"
+          },
+          {
+            "slack": 0.476,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[436]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.450"
+          },
+          {
+            "slack": 0.479,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[484]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[385]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.167",
+            "data_delay": "3.463"
+          },
+          {
+            "slack": 0.483,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[484]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[392]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.167",
+            "data_delay": "3.455"
+          },
+          {
+            "slack": 0.483,
+            "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[435]",
+            "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[410]",
+            "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+            "relationship": "3.750",
+            "clock_skew": "-0.152",
+            "data_delay": "3.444"
+          }
+        ]
+      },
+      "artifacts": {
+        "real_a10_full_fp.sta.rpt": "c6bd058e194290046b606d5bc731e7bc7e3e9e00c6d93080efa3f4a49acb729c",
+        "real_a10_full_fp.sta.summary": "80f2d2f94c681be8e99fe1719f1a485f4c3854f854a7591f8b85fab9df62bc31",
+        "real_a10_full_fp.flow.rpt": "0190bdfc4b50df529147747aa326de69239e1c0ffdafb709d42438e61b120dcd"
+      }
+    },
+    {
+      "run_id": "custom-sta-report-top",
+      "stage": "sta_custom_top",
+      "command": "quartus_sta -t report_top.tcl",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T00:59:47+08:00",
+      "finished_at": "2026-09-04T01:00:08+08:00",
+      "wall_s": 21,
+      "artifacts": {
+        "t037_setup_top.txt": "a106c7300e5485c94fb79222421c6c643d22b3d21d6e9ee9315c36c57d78da45",
+        "t037_hold_top.txt": "a3cc912f00757edba4fbeed2ea0d63c1f02f1ed22a2372487267ce13b07d393c",
+        "t037_recovery_top.txt": "4ac39cb54be234ede28de05d3e048bcb0264151203cc8b9b12436d12781dc679",
+        "t037_removal_top.txt": "793a3845208afbf433074dfc7d8eebd7ac003e74293243a2ae88643e9983ade1"
+      }
+    },
+    {
+      "run_id": "custom-sta-emif",
+      "stage": "sta_custom_emif",
+      "command": "quartus_sta -t report_emif_setup.tcl; quartus_sta -t report_emif_cross.tcl",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T01:00:48+08:00",
+      "finished_at": "2026-09-04T01:01:39+08:00",
+      "wall_s": 51,
+      "artifacts": {
+        "t037_emif_setup_top.txt": "ab4de2e8a2c72fc4d6e7db9c63d2e81c25a105c5b778fa057e32eb29a1559b30",
+        "t037_emif_to_setup_top.txt": "2ad34f7ee89686a860e8e16ab69fae83d68d910e6887d2fc8b3b7d49a1fe6450",
+        "t037_emif_from_setup_top.txt": "8d0b0fb2c7d4bddca897610558bc4bece1bb4be0c6ba210707c8c31ff98153b5"
+      }
+    }
+  ],
+  "assembler_sof": {
+    "run": false,
+    "reason": "signoff STA setup summary still fails (sys_clk_50 -6.207 ns); task requires all setup/hold/recovery/removal/min-pulse non-negative and DDR pass before assembler/SOF.",
+    "remote_artifacts_check": {
+      "sof": [],
+      "jic": [],
+      "rbf": [],
+      "pof": [],
+      "jbc": [],
+      "checked_at": "2026-09-04T01:02:00+08:00"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-037-fp-p5-rerun-round7.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-037.json"
+    },
+    {
+      "id": "remote-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-037-probe\\real_a10_full_fp"
+    }
+  ],
+  "non_actions": [
+    "assembler/SOF not run (STA setup red)",
+    "programming/JTAG/board not touched",
+    "license not read",
+    "jtagserver not stopped",
+    "remote files not deleted"
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-04T00:02:00+08:00",
+    "received_at": "2026-09-04T00:02:30+08:00",
+    "reported_at": "2026-09-04T01:05:00+08:00"
+  },
+  "merge_sha": "8c8c72b4de480ea47cc1c7f58465a0af9964d2e9",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-04T01:05:00+08:00",
+    "merged_at": "2026-09-04T01:05:30+08:00",
+    "recorded_at": "2026-09-04T01:05:30+08:00",
+    "notes": "FP-P5 rerun round7 blocked and accepted"
+  }
+}

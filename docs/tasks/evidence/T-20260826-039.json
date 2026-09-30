@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-039",
+  "base_sha": "34a822e",
+  "head_sha": "337d700",
+  "candidate_status": "pass-local",
+  "qemu": {
+    "release": "11.1.0",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97"
+  },
+  "rtl": {
+    "coordinator_kernel_sha256": "59a6ce861f3c235a1be825c8c4fcd5c2ea9f85362e8226ee13bcf134a7ab36f0",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb"
+  },
+  "inputs": {
+    "image": "/tmp/Image-t80000",
+    "image_sha256": "5029ac9dd5b14a05ceaf1eb0645c5e0c4c01a000b5c68e37306b134e26bb5c68",
+    "dtb_sha256": "ce3ae0d2f76171d3eee59d3d096d75fcf1d024d68fce9975990eb01e660ac3c9",
+    "qemu_cpu": "max,has_el3=false,has_el2=false",
+    "machine": "virt,gic-version=2,dtb-randomness=off,memory-backend=lcvexram",
+    "icount": "shift=0,align=off,sleep=off",
+    "kernel_append": "console=ttyAMA0,115200 earlycon=pl011,0x09000000 rdinit=/bin/sh nokaslr panic=-1"
+  },
+  "run": {
+    "run_id": "owner-l4-main-current-sha-early-boot-001",
+    "level": "L4",
+    "command": "RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 COORD_PIN=6 QEMU_PIN=7 run_lockstep_resume.sh",
+    "cpuset": "6,7",
+    "mapping": {"coordinator": 6, "qemu": 7},
+    "exit_code": 0,
+    "result": "pass",
+    "commits": 5000000,
+    "parent_global_seq": 16509999,
+    "artifact_global_range": "17009999..21509999",
+    "manifest_sha256": "714347a67d6b456aa20a944ec33bb1a33d50ce1aa9b0c3f055b41daff7413b98",
+    "manifest_tsv_sha256": "8198cb0298e9f1428afe61a76491ada51e47b63a22294a9656eb6e3ca5b364bc",
+    "artifact_entries": 70,
+    "chain": "build/tmp/T-20260826-039/main-early/chain",
+    "coord_log": "build/tmp/main-039/r.JzniTj/coord.log",
+    "qemu_log": "build/tmp/main-039/r.JzniTj/qemu.log",
+    "coord_log_sha256": "a05ced694d5715fe9133f99ee8c26c5b1ac7789c9051f8de5a9cb450c43e1c83",
+    "qemu_log_sha256": "4f5ecc437e8fa07773b752ec54d3dc8ca1f5f0d2ff70ef19ce89a2a31f2c7ba0"
+  },
+  "markers": [
+    "alternatives: applying system-wide alternatives",
+    "devtmpfs: initialized",
+    "arch_timer: cp15 timer(s) running at 1000.00MHz (virt)",
+    "Serial: AMBA PL011 UART driver"
+  ],
+  "known_limits": [
+    "main 使用无 initrd、rdinit=/bin/sh，未进入用户态；lite 的 T-034 负责 /init 用户态证据。",
+    "Gate E 仍需 CI 异步结果及同一 candidate 的统一审计。"
+  ]
+}

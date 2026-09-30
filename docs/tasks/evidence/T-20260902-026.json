@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-026",
+  "state": "done",
+  "partial": false,
+  "base_sha": "87354542f502e1ec74971b5d63435e9590601b89",
+  "head_sha": "eed7f77debcd5b5c2e505aad0663cd545154a357",
+  "branch": "feature/T-20260902-026-fp-shared-dp-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-026",
+  "scope": "FP-SHARED-DP-CUT: break slot/operand mux -> shared scalar add/shift -> accumulator -> response mux in fp_exec/scalar_unit release path; keep single outstanding, ordered commit, raw-bit semantics; update lcvex_fp_exec_tb latency assertions.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "rtl/lcvex_neon_fp.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv"
+    ],
+    "summary": "In the FP_ITER=1 release branch of lcvex_fp_scalar, removed the old full combinational scalar-result computation for all staged operations; only FMOV remains direct combinational. In lcvex_fp_exec, added TX_SLOT and per-slot capture registers (slot_result_r/slot_int_result_r/slot_fpsr_r/slot_cmp_nzcv_r) so accumulator and response construction use a frozen scalar result one cycle after slot_done. This breaks the slot/operand mux -> shared datapath -> accumulator/response mux long combinational cone. Latency assertions updated for the added capture cycle.",
+    "latency_table": {
+      "scalar_arithmetic_fma_fcvt": {
+        "before": 3,
+        "after": 4
+      },
+      "scalar_cmp_minmax_frint_fp_to_int": {
+        "before": 3,
+        "after": 4
+      },
+      "neon_2slot_noniter": {
+        "before": 5,
+        "after": 7
+      },
+      "scalar_fdiv_s": {
+        "before": 258,
+        "after": 259
+      },
+      "scalar_fsqrt_s_d": {
+        "before": 66,
+        "after": 67
+      },
+      "scalar_fsqrt_h": {
+        "before": 67,
+        "after": 68
+      },
+      "scalar_fdiv_h": {
+        "before": 515,
+        "after": 516
+      },
+      "neon_fsqrt_2s": {
+        "before": 131,
+        "after": 133
+      },
+      "special_div_sqrt": {
+        "before": "not asserted",
+        "after": "probe remains 3"
+      }
+    },
+    "semantics": {
+      "raw_bit": "unchanged; staged finish functions still use the same raw-bit helpers",
+      "commit_order": "unchanged; still single outstanding fp_exec transaction and one held response",
+      "fpsr_fpcr": "unchanged; FPCR snapshot at request acceptance, FPSR OR behavior preserved",
+      "kill_reset": "slot_*_r cleared on kill/reset; no ghost response"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator lint-only on lcvex_core with release filelist"
+    },
+    {
+      "run_id": "lcvex_fp_exec_tb",
+      "command": "conda run -n lcvex verilator --binary --timing --assert -j 1 --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir_fp_exec/lcvex_fp_exec_tb",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Includes updated latency assertions (scalar 4, NEON 2S 7, FDIV/FSQRT +1/+2), single issue, held response, kill/reset"
+    },
+    {
+      "run_id": "sim-sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "cocotb-p7-1-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "tests": "5/5"
+    },
+    {
+      "run_id": "cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "tests": "4/4"
+    },
+    {
+      "run_id": "cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "tests": "5/5"
+    },
+    {
+      "run_id": "cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "tests": "8/8"
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/STA (next FP-P5 rerun)",
+    "A76 required L2 lockstep sub-suite"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-026-fp-shared-dp-cut.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-026.json"
+    }
+  ],
+  "known_limits": [
+    "No physical timing run in this task; actual Fmax/slack must be confirmed by next FP-P5 rerun.",
+    "If STA still shows fp_exec top-N, likely next cut is inside finish_pre/round_pack or finish_* (further normalize/round split).",
+    "FP latency increased by one capture cycle per slot; performance impact must be evaluated by FP-P4/perf matrix.",
+    "EMIF/sys CDC hold/recovery negatives remain outside this task (T-20260902-027)."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-03T13:18:30+08:00",
+    "received_at": "2026-09-03T13:21:00+08:00",
+    "reported_at": "2026-09-03T13:35:30+08:00"
+  },
+  "merge_sha": "e9b5d3e46b8f78d28d5811c467b4d73ee8946c72",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T13:35:30+08:00",
+    "merged_at": "2026-09-03T13:37:20+08:00",
+    "recorded_at": "2026-09-03T13:37:20+08:00",
+    "notes": "FP shared datapath cut merged and accepted"
+  }
+}

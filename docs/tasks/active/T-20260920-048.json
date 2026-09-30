@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-048",
+  "parent": "T-20260920-039",
+  "label": "B25-COREMARK-GOLDEN-RECOVERY",
+  "title": "Restore and prove exact golden after the T-046 one-shot restore failure",
+  "kind": "board-recovery",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "closed-one-attempt-cable-not-enumerated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-036", "T-20260920-038", "T-20260920-046"],
+  "base_sha": "1806c86c04396c04166adce838e90208a531395f",
+  "branch": "verify/T-20260920-048-b25-coremark-golden-recovery",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-048",
+  "writes": ["task-owned golden-only recovery artifacts", "docs/handoffs/T-20260920-048-b25-coremark-golden-recovery.md", "docs/tasks/evidence/T-20260920-048.json"],
+  "reads": ["T-036 sealed tools", "T-038/T-047 successful golden-only procedure", "T-046 failed restore evidence"],
+  "scope": "One fresh, sealed golden-only volatile programmer transaction followed by one standard chain enumeration.",
+  "acceptance": "Exactly one golden programmer invocation succeeds and final chain matches golden design/JTAG-ID/UART/PHY.",
+  "forbidden_regions": ["candidate", "terminal", "microbench", "JIC/EPCQ/Flash", "reset", "power cycle", "standard/unknown process stop", "retry"],
+  "resource": "One uninterrupted resource-lock gamepc window.",
+  "dispatch": {
+    "sent_at": "2026-09-21T01:14:00+08:00",
+    "agent_name": "root",
+    "golden_program_budget": 1
+  },
+  "result": {
+    "evidence_commit": "4588c65964db2d7393b48c0ced1db2b1aa004800",
+    "evidence_hash_revision": "a52f2da661472720d9a499ab63323a297000a1a0",
+    "golden_program_attempts": 1,
+    "golden_configuration_count": 0,
+    "ftdi_device_counts": [0, 0],
+    "live_final_identity": "unproven",
+    "retry_allowed": false
+  },
+  "created_at": "2026-09-21T01:14:00+08:00",
+  "updated_at": "2026-09-27T16:45:00+08:00"
+}

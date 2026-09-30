@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-003",
+  "label": "B25-GATE-D-RESIDUAL-TRIAGE",
+  "state": "done",
+  "acceptance_status": "classified-different-root-and-downstream-missing-traces",
+  "partial": false,
+  "task_json_base_sha": "004b62c19cf2ff4dfd0fb721332fc3a651ed7b99",
+  "base_sha": "8316a1b8b94010ea31cf791e441e3f065197e841",
+  "source_sha": "8316a1b8b94010ea31cf791e441e3f065197e841",
+  "branch": "verify/T-20260908-003-b25-gate-d-residual-triage",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-003",
+  "owner": "b25_emif_resilience_impl",
+  "sent_at": "2026-09-08T11:23:14+08:00",
+  "received_at": "2026-09-08T11:23:14+08:00",
+  "reported_at": "2026-09-08T11:45:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "objective": "Classify the T-046 seed-1 random Gate D failure and determine whether missing random_2/random_3 traces are causal downstream artifacts or independent coverage infrastructure failures, without modifying RTL/QEMU/tests/expectations.",
+  "source_context": {
+    "gate_d_task": "T-20260907-046",
+    "gate_d_checked_head": "b0749a63c164a210239366738c43fa03b7e91e36",
+    "gate_d_functional_source": "259188ac33322a74a8911c9c37edc6302f6d6169",
+    "triage_worktree_head": "8316a1b8b94010ea31cf791e441e3f065197e841",
+    "random_program_sha256": "3ff51bbb8631b58a29189fbf9021e5c1efca2b3f102025a04992ad352c8033eb",
+    "tracked_source_untouched": true
+  },
+  "index_interpretation": {
+    "user_referenced_index": 522990,
+    "results_xml_meaning": "Cocotb AssertionError message reports 522990 total recorded differences.",
+    "gate_log_line_meaning": "gate-d.log line 522990 is a later cascaded error at insn[62818], not the first chronological mismatch.",
+    "first_chronological_mismatch_insn_index": 2807,
+    "first_chronological_mismatch_source": "gate-d.log line 1146 and T-046 evidence additional_failures.first_reported_mismatch"
+  },
+  "first_failure": {
+    "seed": 1,
+    "insn_index": 2807,
+    "pc": "0x00000000440044c4",
+    "next_pc": "0x00000000440044c8",
+    "encoding": "0x78377a80",
+    "disassembly": "strh w0, [x20, x23, lsl #1]",
+    "encoding_fields": {
+      "size": 1,
+      "opc": 0,
+      "rn": 20,
+      "rt": 0,
+      "rm": 23,
+      "option": 3,
+      "S": 1,
+      "addressing_mode_bits_11_10": "10",
+      "pre_or_post_index": false,
+      "base_writeback_wb3": false
+    },
+    "pre_state": {
+      "pc": "0x00000000440044c0",
+      "next_pc": "0x00000000440044c4",
+      "x0": "0x0000000000000000",
+      "x1": "0x0000000000000001",
+      "x3": "0xfffffffffffffee6",
+      "x5": "0xffffffffffffa2ca",
+      "x7": "0xfffffffffffff0a3",
+      "x20": "0x0000000044080000",
+      "x21": "0x0000000044080000",
+      "x22": "0x0000000044080000",
+      "x23": "0x0000000000000007",
+      "x24": "0x0000000044080000",
+      "sp": "0xfffffffffffff5c0",
+      "nzcv": "0xa",
+      "full_register_window": "build/agents/T-20260908-003/seed1/trace-window.txt"
+    },
+    "rtl_state": {
+      "commit_pc": "0x00000000440044c4",
+      "commit_next_pc": "0x00000000440044c8",
+      "architectural_x20": "0x0000000044080000",
+      "architectural_x23": "0x0000000000000007",
+      "store_data": "0x0000000000000000",
+      "store_size_bytes": 2,
+      "observed_memory_write": "0x0000000044080000",
+      "observed_memory_write_decimal_from_gate_log": 1141374976,
+      "pipeline_snapshot": "not emitted by the random Cocotb failure path; no pipeline state is inferred beyond the observed commit packet/effect"
+    },
+    "qemu_state": {
+      "commit_pc": "0x00000000440044c4",
+      "commit_next_pc": "0x00000000440044c8",
+      "architectural_x20": "0x0000000044080000",
+      "architectural_x23": "0x0000000000000007",
+      "store_data": "0x0000000000000000",
+      "store_size_bytes": 2,
+      "expected_memory_write": "0x000000004408000e",
+      "expected_memory_write_decimal": 1141374990
+    },
+    "effective_address_check": {
+      "base": "0x44080000",
+      "index": "x23=7",
+      "element_size_shift": 1,
+      "computed_offset": "0xe",
+      "computed_address": "0x4408000e",
+      "rtl_minus_qemu": "RTL omitted the register-offset contribution and wrote at base"
+    },
+    "recent_commits": [
+      "insn[2804] pc=0x440044b8 udiv w1, w7, w5",
+      "insn[2805] pc=0x440044bc sdiv w0, w1, w5",
+      "insn[2806] pc=0x440044c0 mov x23, #7",
+      "insn[2807] pc=0x440044c4 strh w0, [x20, x23, lsl #1] (first mismatch)"
+    ],
+    "controlled_failure_log": "build/agents/T-20260908-003/triage/random-failure-log-window.txt"
+  },
+  "classification": {
+    "root_class": "different-root",
+    "confidence": "high",
+    "same_root_as_T_002": false,
+    "same_root_as_T_002_reason": "T-20260908-002 targets immediate pre-index/post-index base writeback through wb3_extra; T-046 hard_postpre evidence is ldrb w5,[x20,#4]! with x20 DUT=base+5 versus QEMU=base+4.",
+    "random_root": "Register-offset store loses the index-register dependency in decode metadata. The register-offset decoder first assigns d.rs2=rm/d.rs2_en, then the STR path overwrites d.rs2=rt/d.rs2_en, so for rm=x23, rt=x0 the ex_id_gpr_hazard/id_reads path does not stall behind the immediately preceding mov x23,#7. The address expression d.mem_addr=base+off is correct only if the current index value reaches decode.",
+    "source_evidence": {
+      "decode_register_offset": "rtl/lcvex_decode.sv:2432-2440",
+      "decode_store_overwrite": "rtl/lcvex_decode.sv:2442-2446",
+      "hazard_reader": "rtl/lcvex_core.sv:2022-2027",
+      "hazard_consumer": "rtl/lcvex_core.sv:2074-2080",
+      "source_context_artifact": "build/agents/T-20260908-003/triage/source-context.txt",
+      "objdump_artifact": "build/agents/T-20260908-003/triage/random-objdump-window.txt"
+    },
+    "why_not_indeterminate": "The instruction fields, QEMU pre-state, deterministic effective-address calculation, RTL/QEMU memory effects, and exact decode/hazard field overwrite all agree on one direct mechanism; no RTL pipeline snapshot is needed to distinguish this from wb3 base writeback."
+  },
+  "coverage_trace_classification": {
+    "random_1": {
+      "path": "build/agents/T-20260908-003/seed1/random_1.trace.gz",
+      "sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e",
+      "results_xml": "build/agents/T-20260908-003/seed1/random_1_results.xml",
+      "results_xml_sha256": "6917e640e524f141f5311912745f85349bb39f8ca21d54f624bd829b382c08eb",
+      "status": "present; seed=1 failed in Cocotb after first mismatch"
+    },
+    "random_2": {
+      "path": "build/agents/T-20260908-003/seed1/random_2.trace.gz",
+      "status": "missing"
+    },
+    "random_3": {
+      "path": "build/agents/T-20260908-003/seed1/random_3.trace.gz",
+      "status": "missing"
+    },
+    "classification": "downstream-not-run",
+    "independent_infrastructure_failure": false,
+    "control_flow": {
+      "makefile_target": "Makefile:593-596 invokes recursive difftest-random for seed=1, then seed=2, then seed=3 as separate non-ignored recipe lines.",
+      "difftest_recipe": "Makefile:578-588 generates the trace then runs Cocotb; a nonzero seed=1 recursive make stops difftest-random-multi before lines 595-596.",
+      "gate_step_behavior": "sim/difftest/run_gate_d.sh:52-76 records a failed step and continues to the coverage step; this does not make seed=2/3 run.",
+      "coverage_checker_behavior": "scripts/insn_coverage.py:187-192 returns 2 when random_2/random_3 paths do not exist.",
+      "dry_run_artifact": "build/agents/T-20260908-003/triage/random-multi-dryrun-final.txt",
+      "control_flow_artifact": "build/agents/T-20260908-003/triage/coverage-control-flow.txt"
+    },
+    "evidence": "T-046 Gate D summary explicitly says make stopped at seed=1 and seed=2/3 were not executed; no independent generator/tool/IO error is reported."
+  },
+  "validation": [
+    {
+      "run_id": "controlled-trace-window-extraction",
+      "level": "L0-static-readonly",
+      "command": "gzip parse of build/agents/T-20260908-003/seed1/random_1.trace.gz, extraction of commits 2804..2808, derived pre-state/effective address, and read-only source line capture",
+      "exit_code": 0,
+      "elapsed_seconds": 0.20,
+      "max_rss_kib": 448608,
+      "resource_lock": "not acquired: read-only artifact inspection; local was BUSY (T-20260908-001 at inspection)",
+      "artifact": "build/agents/T-20260908-003/triage/controlled-inspection.log",
+      "artifact_sha256": "ddac741f6a2000aa4f20659eaf56439882e246ded4d27f0b8d4bd65902a9f3d3",
+      "time_artifact": "build/agents/T-20260908-003/triage/controlled-inspection.time",
+      "time_artifact_sha256": "10e3d97127afe46c9e506b01a0c6e753760aa03f8af161c8649ac1560defc2f4"
+    },
+    {
+      "run_id": "gate-d-random-multi-control-flow",
+      "level": "L0-static-readonly",
+      "command": "make -n difftest-random-multi",
+      "exit_code": 0,
+      "elapsed_seconds": 0.02,
+      "max_rss_kib": 25200,
+      "resource_lock": "not acquired: dry-run only; no command executed",
+      "artifact": "build/agents/T-20260908-003/triage/random-multi-dryrun-final.txt",
+      "artifact_sha256": "651c7eb464d2b1fa3d8e89533185818c3917c150fd72d5630cc72fce4252f203",
+      "time_artifact": "build/agents/T-20260908-003/triage/random-multi-dryrun-final.time",
+      "time_artifact_sha256": "f7135cbe7e9ba68383aca83bdbe19533bc6ebbc81c9fdbf0816b765d7d113a8e"
+    },
+    {
+      "run_id": "coverage-missing-trace-check",
+      "level": "L0-static-readonly",
+      "command": "python3 scripts/insn_coverage.py --expect random --out build/agents/T-20260908-003/triage/coverage-map.txt build/agents/T-20260908-003/seed1/random_1.trace.gz build/agents/T-20260908-003/seed1/random_2.trace.gz build/agents/T-20260908-003/seed1/random_3.trace.gz",
+      "exit_code": 2,
+      "expected_failure": true,
+      "elapsed_seconds": 0.02,
+      "max_rss_kib": 64224,
+      "resource_lock": "not acquired: read-only missing-input check; no lockstep",
+      "summary": "Only random_2/random_3 missing-path errors; checker did not report an independent generation/format/tool failure.",
+      "artifact": "build/agents/T-20260908-003/triage/coverage-check-final.log",
+      "artifact_sha256": "a996998086076e60cd3917a265e2e96037c226d8bbc4186025c150d595f50b5c",
+      "time_artifact": "build/agents/T-20260908-003/triage/coverage-check-final.time",
+      "time_artifact_sha256": "085d6470a5139eeede9fc600af7c24da319da42047198927011288cd02448cf6"
+    }
+  ],
+  "random_lockstep_rerun": {
+    "performed": false,
+    "reason": "Controlled T-046 trace/result artifacts and direct source/control-flow inspection provide the requested first-failure classification; local resource was occupied by another heavy task, and the task forbids full Gate D.",
+    "resource_status_at_inspection": "local BUSY pid=1276507 project=lcvex task=T-20260908-001 agent=b25_physical",
+    "resource_status_artifact": "build/agents/T-20260908-003/triage/resource-lock-status.txt",
+    "resource_status_sha256": "5589f5fec17feaae4a0e00c359771c28814b45346fded98a99066d08298e6cd1"
+  },
+  "minimum_post_fix_rerun": [
+    "T-20260908-002 first: preserve hard_postpre exact seq=21 reproduction, then run hard_postpre base/cache/delay2 and its focused writeback matrix.",
+    "Separate register-offset hazard fix: add/execute a minimal mov x23,#7 followed by strh w0,[x20,x23,lsl#1] case, checking effective address 0x4408000e and no stale index.",
+    "Random residual minimum: regenerate seed=1 and run enough length to cover insn[2807] (LENGTH=3000 is sufficient for this artifact); after it passes, run seed=1/2/3 LENGTH=100000 for Gate D acceptance and regenerate all three traces before coverage.",
+    "Run scripts/insn_coverage.py --expect random only after random_1.trace, random_2.trace and random_3.trace all exist; then rerun full Gate D integration on the merged fixed SHA."
+  ],
+  "artifacts": {
+    "trace_window": {
+      "path": "build/agents/T-20260908-003/seed1/trace-window.txt",
+      "sha256": "d74bc46c21021938f332d9e0a0ee9f9c7b765237713a26d6acf5cbafe9b62627"
+    },
+    "random_objdump_window": {
+      "path": "build/agents/T-20260908-003/triage/random-objdump-window.txt",
+      "sha256": "d72e9f8db44f69c5d8ec429de9686ddbaa70096a392364c5d1629bf13b468491"
+    },
+    "source_context": {
+      "path": "build/agents/T-20260908-003/triage/source-context.txt",
+      "sha256": "f91457da23f73ff9c002cff7112f722dad5db1f7f968d1626cadbfbb27527ef9"
+    },
+    "coverage_control_flow": {
+      "path": "build/agents/T-20260908-003/triage/coverage-control-flow.txt",
+      "sha256": "17ce79c1a928be925e9014d1bf0db0e830aea4ef034a0e37100c8db79ed81b58"
+    },
+    "random_failure_log_window": {
+      "path": "build/agents/T-20260908-003/triage/random-failure-log-window.txt",
+      "sha256": "6584b93556f2abde2fa39e88a9018767bee922878e69f20d2731c35831cd9211"
+    },
+    "recent_commits": {
+      "path": "build/agents/T-20260908-003/triage/recent-commits.txt",
+      "sha256": "01aa9bea29e1d675b2531c3b11830fdeb27e8d18e5ece9f3c67ee4921ff8180d"
+    }
+  },
+  "policy": {
+    "tracked_rtl_modified": false,
+    "tracked_qemu_modified": false,
+    "reference_modified": false,
+    "test_expectation_modified": false,
+    "active_task_json_modified": false,
+    "full_gate_d_run": false,
+    "gamepc_quartus_jtag_board_flash_used": false,
+    "all_generated_artifacts_under_task_build": true,
+    "system_tmp_used": false
+  },
+  "blockers": [
+    "T-002 pre/post base writeback remains an independent project blocker.",
+    "The random register-offset index hazard identified here requires its own RTL correction before random seed-1 can be expected to pass."
+  ],
+  "risks": [
+    "The random failure path did not emit a full RTL pipeline dump; RTL state is therefore limited to the observed commit/effect fields and the direct decode/hazard source proof.",
+    "A future run must not treat 522990 as the first instruction index; use chronological insn[2807] from the seed-1 artifact."
+  ],
+  "next": "Create a separate register-offset hazard fix task or extend T-002 only with explicit write-set approval; after both roots are fixed, run the minimum random and then full seed1-3/coverage Gate D closure.",
+  "handoff": "docs/handoffs/T-20260908-003-b25-gate-d-residual-triage.md"
+}

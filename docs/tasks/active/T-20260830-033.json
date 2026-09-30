@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-033",
+  "label": "PE",
+  "parent": "",
+  "title": "性能增强线：先审计规划，再按规划实施",
+  "kind": "performance-enhancement-line",
+  "priority": "high",
+  "phase": "active",
+  "dispatch_status": "not_dispatched",
+  "base_sha": "f9b26ef339ce0e400b2fb40db195270f6132af2a",
+  "scope": "建立性能增强线：先对 core、cache、总线做外部/静态性能审计与优化规划，识别可提升 IPC/带宽/延迟的候选方向（更深流水线、顺序多发射、outstanding 访存、cache 读写优化、总线宽度/仲裁、分支与取指等），然后按优先级逐步实施并回归。保持功能/一致性/单核回归锚点不破坏。",
+  "writes": [],
+  "reads": [
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/C4_DUALCORE_BASELINE.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "rtl/**",
+    "tb/**"
+  ],
+  "validation": {
+    "l0": [],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "性能增强线按审计→规划→实施→回归推进；不宣称未实现的性能提升。",
+  "next": "T-046 duplicate retirement 已修复验收；执行 T-20260831-004 H-04 commit-ready/IFID hold，随后单独闭合 H-03 fault-head/IABT。两项完成后重跑完整 F1c。F1b/F3a 既有协议门继续阻塞。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 2048,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T11:26:20+08:00",
+  "updated_at": "2026-08-31T02:23:14+08:00",
+  "coordination_only": true,
+  "write_reservation_note": "父任务只协调路线与 child DAG，不直接持有 docs/rtl/tb/sim 写集；每个实施 child task 单独登记精确写集。",
+  "known_limits": [
+    "不引入架构外/伪性能承诺；不破坏 Gate D/CORE_COUNT=1/多核回归。"
+  ],
+  "handoff": "",
+  "evidence": "",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T22:00:00+0800",
+        "new": "2026-08-30T11:26:20+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T22:00:00+0800",
+        "new": "2026-08-30T15:07:23+08:00",
+        "basis": "current_ledger_update"
+      }
+    ],
+    "note": "保留原计划时间；纠正为实际提交/台账更新时间，避免未来时间并释放父任务占位写集。"
+  }
+}

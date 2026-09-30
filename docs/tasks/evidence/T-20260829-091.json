@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-091",
+  "state": "done",
+  "base_sha": "cb59372",
+  "head_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+  "merge_sha": "5a81f8df5c31c57da86df1b49c5cc0b8b03c9bf1",
+  "branch": "feature/T-20260829-091-fp-scalar-verilator-opt",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-091",
+  "sent_at": "2026-08-29T09:28:00+0800",
+  "received_at": "2026-08-29T09:28:00+0800",
+  "reported_at": "2026-08-29T09:56:04+0800",
+  "owner": "T-20260829-091-fp-scalar-verilator-opt-owner",
+  "model": "dsh-default",
+  "label": "FP-OPT",
+  "title": "FP scalar Verilator default optimization fix",
+  "scope": "Make Verilator default optimization complete for lcvex_fp_scalar/lcvex_core in acceptable time without changing FP/NEON raw-bit semantics.",
+  "files": [
+    "rtl/lcvex_fp_scalar.sv",
+    "docs/handoffs/T-20260829-091-fp-scalar-verilator-opt.md",
+    "docs/tasks/evidence/T-20260829-091.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12",
+    "cpu_note": "12 threads; concurrent external Verilator builds were active during part of the verification"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-fp-default-lint-001",
+      "source_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_fp_scalar rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv",
+      "wall_seconds": 4.804,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Standalone FP scalar default optimization lint completes in 4.804s; baseline was >120s timeout."
+    },
+    {
+      "run_id": "owner-core-default-lint-001",
+      "source_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_core rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv",
+      "wall_seconds": 55.361,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Real single-core default lint completes; previously >8min/not completed."
+    },
+    {
+      "run_id": "owner-make-compile-001",
+      "source_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make compile",
+      "wall_seconds": 37.37,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Project compile target with -Wall filelist passes; Verilator reported Walltime 36.288s."
+    },
+    {
+      "run_id": "owner-sim-sv-fp-scalar-001",
+      "source_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make sim-sv-fp-scalar",
+      "wall_seconds": 8.834,
+      "cpu_count": 6,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-1 FP scalar raw-bit directed SV testbench PASS."
+    },
+    {
+      "run_id": "owner-sim-sv-p7-4-001",
+      "source_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make sim-sv-p7-4-fma-convert",
+      "wall_seconds": 20.941,
+      "cpu_count": 6,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-4 scalar FMA/conversion and NEON FMA/conversion raw-bit SV testbenches PASS."
+    },
+    {
+      "run_id": "owner-sim-sv-p7-5-001",
+      "source_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "wall_seconds": null,
+      "cpu_count": 6,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-5 FP scalar H/sqrt/minmax/frint/fcvt and NEON FP16/sqrt/minmax/frint raw-bit SV testbenches PASS; full build completed in worktree."
+    },
+    {
+      "run_id": "owner-diff-check-001",
+      "source_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace/patch errors."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-rtl-fp-op-dispatch",
+      "owner": "T-20260829-091",
+      "uri": "rtl/lcvex_fp_scalar.sv",
+      "reproduce": "git show 0288e25af607c7f6abb7d7b7e7f0dead47c6cb26:rtl/lcvex_fp_scalar.sv | sed -n '1620,1730p'",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "dda0e922e5def51098695ea13a8c9e20bd6c11f6dcdb23c28ba7243a150df1df"
+    },
+    {
+      "id": "artifact-handoff",
+      "owner": "T-20260829-091",
+      "uri": "docs/handoffs/T-20260829-091-fp-scalar-verilator-opt.md",
+      "reproduce": "cat docs/handoffs/T-20260829-091-fp-scalar-verilator-opt.md",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "db4ea85f5b5336217813151d8cf072bc7bf8c52659f72c9467c2a784587dc2d5"
+    }
+  ],
+  "known_limits": [
+    "No QEMU A76 strict lockstep (L2) was run in this owner round due to concurrent heavy external Verilator jobs and no prebuilt lockstep coordinator in this worktree.",
+    "No full C2 dual-core / B2c SoC / Gate D build was run; only lcvex_core lint and project compile were verified.",
+    "The change replaces the two outer unique case(op) muxes with if/else ladders; it does not narrow the 256-bit FP datapaths or add a multi-cycle/pipelined implementation.",
+    "unique case assertion is no longer active at the FP op dispatch; no existing path is known to depend on it."
+  ],
+  "next": "Integrator reviews and reruns compile/P7 SV raw-bit on merge SHA; optionally run A76 lockstep and full multi-core default build after this fix.",
+  "handoff_sha": "68e318537c85fd440c0a55ca853ee2359a4980c2",
+  "integrator_review": {
+    "received_at": "2026-08-29T09:59:23+08:00",
+    "status": "accepted",
+    "head_sha": "68e3185",
+    "notes": "FP scalar Verilator 默认优化修复已合入：FP op 分派由 unique case 改为 if/else 链；集成者复跑 make compile（默认优化）通过，约 35.6s。未改变 FP raw-bit 语义；后续可减少 -O0 规避。",
+    "merge_sha": "5a81f8d",
+    "result_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "5a81f8d",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "68e318537c85fd440c0a55ca853ee2359a4980c2",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+        "reason": "set explicit result head from evidence head_sha"
+      },
+      {
+        "field": "merge_sha",
+        "old": "5a81f8d",
+        "new": "5a81f8df5c31c57da86df1b49c5cc0b8b03c9bf1",
+        "reason": "expand to full merge SHA"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-rtl-fp-op-dispatch",
+        "uri": "rtl/lcvex_fp_scalar.sv",
+        "sha256": "dda0e922e5def51098695ea13a8c9e20bd6c11f6dcdb23c28ba7243a150df1df",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-handoff",
+        "uri": "docs/handoffs/T-20260829-091-fp-scalar-verilator-opt.md",
+        "sha256": "db4ea85f5b5336217813151d8cf072bc7bf8c52659f72c9467c2a784587dc2d5",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

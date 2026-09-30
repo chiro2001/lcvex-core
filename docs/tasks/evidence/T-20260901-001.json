@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260901-001",
+  "label": "PE-F1D-NEON-DIAG",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "diagnosed_footer_only",
+  "base_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+  "measurement_source_sha": "ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37",
+  "head_sha": "04532d1decee3ce7b824aaa2f6546664b7e5b9be",
+  "merge_sha": "991684eac5e923f2013fe595467a293646b43502",
+  "diagnostic_source_sha": "5f7120ac768f2c5257f7ae1899787829e6065ed9",
+  "comparator_source_sha": "cbd63645441677907caecb99857e01240b8cae47",
+  "branch": "verify/T-20260901-001-f1a-neon-commit-diff",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-001",
+  "owner": "luna-f1a-neon-commit-diagnosis",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-01T00:23:53+08:00",
+    "received_at": "2026-09-01T00:23:53+08:00",
+    "reported_at": "2026-09-01T01:35:27+08:00"
+  },
+  "scope": "在不修改 RTL、QEMU、workload、参考结果或正式比较口径的前提下，复现 T-007 的 neon_vect F0/F1a pass/pass commit-only mismatch，保存首个提交级边界并用代表性 cache 配置确认同源。",
+  "files_written": [
+    "docs/F1A_NEON_COMMIT_DIVERGENCE_DIAGNOSIS.md",
+    "docs/evidence/artifacts/T-20260901-001/first_commit_diff.json",
+    "docs/handoffs/T-20260901-001-f1a-neon-commit-diff.md",
+    "docs/tasks/evidence/T-20260901-001.json"
+  ],
+  "files_not_modified": [
+    "rtl/**",
+    "tb/**",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "scripts/compare_commit_traces.py",
+    "baremetal/perf/t_neon_vect.c",
+    "QEMU fork",
+    "reference results"
+  ],
+  "provenance": {
+    "image": {
+      "path": "build/microbench/perf_neon_vect.bin",
+      "bytes": 1864,
+      "sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf"
+    },
+    "workload_source_bundle_sha256": "217b415cfabe179b66643abc0fe9746fbbf7d033439e65ebabdcac74644c9974",
+    "workload_c_sha256": "4718c1db98de6a038112f14d7c6042a27ef9f021d6500b13a6e569b6af96278b",
+    "same_image_per_pair": true,
+    "same_source_per_pair": true,
+    "same_toolchain_per_pair": true,
+    "same_max_cycles_per_pair": true,
+    "same_non_fifo_parameters_per_pair": true,
+    "source_tree_clean_before_measurement": true,
+    "tracked_measurement_sources_unchanged_after_runs": true,
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cross_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "python": "3.12.10",
+    "perf_cflags": "-O2",
+    "max_cycles": 5000000
+  },
+  "resources": {
+    "memory_max": "15G",
+    "memory_swap_max": "0",
+    "cpu_quota": "50%",
+    "makeflags": "-j1",
+    "verilator_jobs": 1,
+    "heavy_builds_serialized": true,
+    "command_wrapper": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1",
+    "build_allocated_mb": {
+      "nocache_d0_f0": 1043.523,
+      "nocache_d0_f1a": 1044.281,
+      "fullcache_d1_f0": 1045.500,
+      "fullcache_d1_f1a": 1046.215
+    },
+    "run_rss_kb": {
+      "nocache_d0_f0": 140348,
+      "nocache_d0_f1a": 140492,
+      "fullcache_d1_f0": 140364,
+      "fullcache_d1_f1a": 140664
+    }
+  },
+  "commands": {
+    "image_build": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env PERF_ONLY=neon_vect PERF_CFLAGS=-O2 bash scripts/build-microbench.sh build/microbench/perf_neon_vect.bin",
+    "runner_build_template": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 make VERILATOR_JOBS=1 PERF_RUNNER_DIR={runner_dir} PERF_I_L1={I_L1} PERF_D_L1={D_L1} PERF_L2={L2} PERF_MEM_DELAY_MODE={MEM_DELAY_MODE} PERF_FETCH_FIFO_ENABLE={FETCH_FIFO_ENABLE} microbench-build-config > {build_log} 2>&1",
+    "runner_run_template": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 sim/microbench/perf_runner.py --runner {runner} --image build/microbench/perf_neon_vect.bin --name neon_vect --max-cycles 5000000 --git-sha ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37 --measurement-source-sha ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37 --source-sha 217b415cfabe179b66643abc0fe9746fbbf7d033439e65ebabdcac74644c9974 --param BASE_CONFIG={base_config} --param I_L1={I_L1} --param D_L1={D_L1} --param L2={L2} --param MEM_DELAY_MODE={MEM_DELAY_MODE} --param FETCH_FIFO_ENABLE={FETCH_FIFO_ENABLE} --param FETCH_FIFO_DEPTH=2 --param FIFO_VARIANT={FIFO_VARIANT} --trace {trace} --out {report} > {runner_log} 2>&1",
+    "comparator_template": "python3 scripts/compare_commit_traces.py --off {off_trace} --on {on_trace} --out {comparison} --window 4 > {comparison_log} 2>&1",
+    "comparator_self_test": "python3 scripts/compare_commit_traces.py --self-test",
+    "json_validation": "python3 -m json.tool docs/tasks/evidence/T-20260901-001.json && python3 -m json.tool docs/evidence/artifacts/T-20260901-001/first_commit_diff.json"
+  },
+  "runner_builds": [
+    {
+      "config": "nocache_d0_f0",
+      "path": "build/agents/T-20260901-001/runners/nocache_d0_f0/microbench_runner",
+      "bytes": 12786304,
+      "sha256": "e6710ffdf23d05c478162d34ce81d6a844d32910fa0dc9ec20a9e86654dc7dc9",
+      "build_log": "build/agents/T-20260901-001/runners/nocache_d0_f0.build.log",
+      "build_log_sha256": "a0340b021287a18df81cc7499d538f6a773bd7b5290c62490770d63c2e392955"
+    },
+    {
+      "config": "nocache_d0_f1a",
+      "path": "build/agents/T-20260901-001/runners/nocache_d0_f1a/microbench_runner",
+      "bytes": 12803488,
+      "sha256": "894481929aae1bd8f85ab64d624c4baa3d09349e50b40c4ede112c8c31f5b768",
+      "build_log": "build/agents/T-20260901-001/runners/nocache_d0_f1a.build.log",
+      "build_log_sha256": "3e1d2074cde5a174a602b7657ef58e63a03104b8aac87722fa072bf7637387b9"
+    },
+    {
+      "config": "fullcache_d1_f0",
+      "path": "build/agents/T-20260901-001/runners/fullcache_d1_f0/microbench_runner",
+      "bytes": 12862416,
+      "sha256": "337b81205430e8fecaa7badf0dfd08459a3e16bc9d884356683e36b82feb0502",
+      "build_log": "build/agents/T-20260901-001/runners/fullcache_d1_f0.build.log",
+      "build_log_sha256": "abe95dd99cf214edeadb7883d7842e31500f36b1bb2cef25d75ac1cc2aed079b"
+    },
+    {
+      "config": "fullcache_d1_f1a",
+      "path": "build/agents/T-20260901-001/runners/fullcache_d1_f1a/microbench_runner",
+      "bytes": 12883512,
+      "sha256": "2ccb96ec521e3ce995f58d4bb00afc3360dc51710c4f964e2d8a26a591e51885",
+      "build_log": "build/agents/T-20260901-001/runners/fullcache_d1_f1a.build.log",
+      "build_log_sha256": "88a9c1a6635a072253bf680f67f54e4ba723d356b12d4e18cdd4d89509d9114b"
+    }
+  ],
+  "runs": [
+    {
+      "id": "neon_nocache_d0_f0",
+      "config": "nocache_d0",
+      "mode": "f0",
+      "params": {"I_L1": "0", "D_L1": "0", "L2": "0", "MEM_DELAY_MODE": "0", "FETCH_FIFO_ENABLE": "0", "FETCH_FIFO_DEPTH": "2", "FIFO_VARIANT": "f0"},
+      "status": "pass",
+      "returncode": 0,
+      "cycles": 227526,
+      "retired_insn": 66721,
+      "commit_digest": "3caef22144f0b28a",
+      "memory_digest": "3ba6dea5f6c76128",
+      "committed_memory_effects": 4116,
+      "fetch_fifo": {"enable": 0, "epoch_final": 0, "epoch_bumps": 0, "occupancy_max": 0, "peak_signal_max": 0, "push": 0, "pop": 0, "flush": 0, "stale_drop": 0, "stale_drain_cycles": 0, "overflow": 0},
+      "wall_sec": 6.448362,
+      "rss_kb": 140348,
+      "report": "build/agents/T-20260901-001/traces/neon_nocache_d0_f0.json",
+      "report_sha256": "2235975ffae4b516adb7c7fda4fe9ed13fe8093d73dc34708d11716d1ded6357",
+      "report_bytes": 6582,
+      "trace": "build/agents/T-20260901-001/traces/neon_nocache_d0_f0.jsonl",
+      "trace_sha256": "491c06f9f6d434977f1ee94fa694de5acdeb89ce947b97890be3b1024e4ef023",
+      "trace_bytes": 20441709,
+      "runner_log_sha256": "b13e2e1fbed8485d5584715ca61bbcfcea627c1f6c6460f843980f883803d0b8"
+    },
+    {
+      "id": "neon_nocache_d0_f1a",
+      "config": "nocache_d0",
+      "mode": "f1a",
+      "params": {"I_L1": "0", "D_L1": "0", "L2": "0", "MEM_DELAY_MODE": "0", "FETCH_FIFO_ENABLE": "1", "FETCH_FIFO_DEPTH": "2", "FIFO_VARIANT": "f1a"},
+      "status": "pass",
+      "returncode": 0,
+      "cycles": 175716,
+      "retired_insn": 66721,
+      "commit_digest": "3ec03fbc5b7681d0",
+      "memory_digest": "3ba6dea5f6c76128",
+      "committed_memory_effects": 4116,
+      "fetch_fifo": {"enable": 1, "epoch_final": 251, "epoch_bumps": 10747, "occupancy_max": 1, "peak_signal_max": 1, "push": 66724, "pop": 66722, "flush": 10747, "stale_drop": 10745, "stale_drain_cycles": 0, "overflow": 0},
+      "wall_sec": 5.899967,
+      "rss_kb": 140492,
+      "report": "build/agents/T-20260901-001/traces/neon_nocache_d0_f1a.json",
+      "report_sha256": "aca287719a1c3989983990c71e40ebc6343bedb63180e99c556da8b78869081a",
+      "report_bytes": 6633,
+      "trace": "build/agents/T-20260901-001/traces/neon_nocache_d0_f1a.jsonl",
+      "trace_sha256": "3d684cc0d5ad08cf47b124a60773d8d3e1c41fbed389f4697ba94e9027bc0077",
+      "trace_bytes": 20533940,
+      "runner_log_sha256": "b2f964099c6ba61bb60852c24559d9b09706938dbcbcebd2bc4968bc41164078"
+    },
+    {
+      "id": "neon_fullcache_d1_f0",
+      "config": "fullcache_d1",
+      "mode": "f0",
+      "params": {"I_L1": "1", "D_L1": "1", "L2": "1", "MEM_DELAY_MODE": "1", "FETCH_FIFO_ENABLE": "0", "FETCH_FIFO_DEPTH": "2", "FIFO_VARIANT": "f0"},
+      "status": "pass",
+      "returncode": 0,
+      "cycles": 253416,
+      "retired_insn": 66721,
+      "commit_digest": "3caef22144f0b28a",
+      "memory_digest": "3ba6dea5f6c76128",
+      "committed_memory_effects": 4116,
+      "fetch_fifo": {"enable": 0, "epoch_final": 0, "epoch_bumps": 0, "occupancy_max": 0, "peak_signal_max": 0, "push": 0, "pop": 0, "flush": 0, "stale_drop": 0, "stale_drain_cycles": 0, "overflow": 0},
+      "wall_sec": 7.205763,
+      "rss_kb": 140364,
+      "report": "build/agents/T-20260901-001/traces/neon_fullcache_d1_f0.json",
+      "report_sha256": "a7900094b72bb5ca77a15bc5fdb5c0a2192f13322edff3371f2b831c5493b89a",
+      "report_bytes": 6666,
+      "trace": "build/agents/T-20260901-001/traces/neon_fullcache_d1_f0.jsonl",
+      "trace_sha256": "cbbfb6979908f47074b91dc2457de6ae02ba34193932fae9183fbaa1c95269b6",
+      "trace_bytes": 20442063,
+      "runner_log_sha256": "03d100b9275e48928a38001b50b34f04894fadfcd258165e94ed1676aa355bbd"
+    },
+    {
+      "id": "neon_fullcache_d1_f1a",
+      "config": "fullcache_d1",
+      "mode": "f1a",
+      "params": {"I_L1": "1", "D_L1": "1", "L2": "1", "MEM_DELAY_MODE": "1", "FETCH_FIFO_ENABLE": "1", "FETCH_FIFO_DEPTH": "2", "FIFO_VARIANT": "f1a"},
+      "status": "pass",
+      "returncode": 0,
+      "cycles": 200033,
+      "retired_insn": 66721,
+      "commit_digest": "3ec03fbc5b7681d0",
+      "memory_digest": "3ba6dea5f6c76128",
+      "committed_memory_effects": 4116,
+      "fetch_fifo": {"enable": 1, "epoch_final": 251, "epoch_bumps": 10747, "occupancy_max": 1, "peak_signal_max": 1, "push": 66725, "pop": 66722, "flush": 10747, "stale_drop": 10745, "stale_drain_cycles": 96, "overflow": 0},
+      "wall_sec": 6.202304,
+      "rss_kb": 140664,
+      "report": "build/agents/T-20260901-001/traces/neon_fullcache_d1_f1a.json",
+      "report_sha256": "233fb7a3e75b8ff47fd31fd89a21671c08c930bef9b8e63a1f4b722c00755214",
+      "report_bytes": 6718,
+      "trace": "build/agents/T-20260901-001/traces/neon_fullcache_d1_f1a.jsonl",
+      "trace_sha256": "d79a54f2d46c5796f822a4e70262a9cb41e1db4110b73fdcbde89fb0a9d62260",
+      "trace_bytes": 20534513,
+      "runner_log_sha256": "fff0998eff3412d00bb76a5412133851be6c783a6f265e1a76016697aa28cfcc"
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "nocache_d0",
+      "off": "build/agents/T-20260901-001/traces/neon_nocache_d0_f0.jsonl",
+      "on": "build/agents/T-20260901-001/traces/neon_nocache_d0_f1a.jsonl",
+      "out": "docs/evidence/artifacts/T-20260901-001/first_commit_diff.json",
+      "out_sha256": "e8e7ec9c241fa7e781edd39652e8dbb258545956869ea78413ea1c2c608d364d",
+      "status": "mismatch",
+      "category": "termination-boundary",
+      "records_compared": 66721,
+      "first_mismatch": {"off_index": 66721, "on_index": 66721, "off": null, "on": null, "reason": "commit prefix equal but footer architectural summary differs"}
+    },
+    {
+      "id": "fullcache_d1",
+      "off": "build/agents/T-20260901-001/traces/neon_fullcache_d1_f0.jsonl",
+      "on": "build/agents/T-20260901-001/traces/neon_fullcache_d1_f1a.jsonl",
+      "out": "build/agents/T-20260901-001/comparisons/fullcache_d1.json",
+      "out_sha256": "89a7ec0828d7ad8f39b9d5a95c0e6881e1972ef619fdc4bfd5823e8ca530043d",
+      "status": "mismatch",
+      "category": "termination-boundary",
+      "records_compared": 66721,
+      "first_mismatch": {"off_index": 66721, "on_index": 66721, "off": null, "on": null, "reason": "commit prefix equal but footer architectural summary differs"}
+    }
+  ],
+  "independent_audit": {
+    "trace_shape": "每份 1 header + 66721 commit + 1 footer；nonblank=66723；footer 最后且无 trailing record",
+    "seq": "四份均为 1..66721 连续",
+    "architecture_records": "两个 pair 均 66721/66721 相等；比较去除 kind/seq/cycle/fetch",
+    "header_provenance": "两个 pair schema/name/image/source/measurement/max_cycles 及非 FIFO params 相等",
+    "effect_counts_per_side": {"gpr_records": 10798, "sp_records": 1, "nzcv_records": 10752, "vector_records": 43097, "vector_items": 43097, "fpsr_records": 36891, "memory_records": 2060, "memory_effects": 4116, "exception_records": 0, "monitor_records": 0, "fpcr_records": 0},
+    "vector_length_max": 1,
+    "active_canonical_digest": {
+      "algorithm": "FNV-1a byte-wise; offset=1469598103934665603; prime=1099511628211",
+      "inactive_payload": "zeroed; active enable/count and payload preserved",
+      "vector_slot_order": "rd/lo/hi, four slots",
+      "nocache_d0": {"f0": "5c1d4f0a0f31cfe7", "f1a": "5c1d4f0a0f31cfe7", "equal": true},
+      "fullcache_d1": {"f0": "5c1d4f0a0f31cfe7", "f1a": "5c1d4f0a0f31cfe7", "equal": true}
+    },
+    "memory_digest_equal": true,
+    "raw_formal_commit_digest_equal": false
+  },
+  "digest_input_audit": {
+    "source": "sim/microbench/microbench_runner.cc:524-580",
+    "fields": ["retired_insn", "pc", "next_pc", "insn", "gpr/gpr2/gpr3 we/rd/data", "sp we/data", "nzcv we/data", "mem/mem2 we/address/wdata/strb", "exception", "monitor", "vector count/rd/data0..3", "fpcr we/data", "fpsr we/data"],
+    "excluded": ["cycle", "fetch FIFO counters", "wall time", "struct padding", "host byte order"],
+    "trace_writer": "sim/microbench/microbench_runner.cc:362-488 emits only active effects",
+    "observation_boundary": "formal digest hashes inactive payload unconditionally, while trace omits it; raw field cannot be named from this trace",
+    "formal_fields_retained": true
+  },
+  "validation": [
+    {"level": "L0", "command": "conda run --no-capture-output -n lcvex verilator --version; aarch64-linux-gnu-gcc --version; python3 --version", "result": "pass", "exit_code": 0},
+    {"level": "L0", "command": "python3 scripts/compare_commit_traces.py --self-test", "result": "commit trace comparator self-test: PASS (equal/duplicate/skip/effect/wrong-path/termination)", "exit_code": 0},
+    {"level": "L0", "command": "python3 -m json.tool docs/evidence/artifacts/T-20260901-001/first_commit_diff.json", "result": "pass", "exit_code": 0},
+    {"level": "L1", "command": "nocache_d0 F0/F1a neon_vect runner + trace + comparator", "result": "pass/pass runs; mismatch termination-boundary at footer after 66721 equal records", "exit_code": 1, "expected_nonzero": true},
+    {"level": "L2", "command": "fullcache_d1 F0/F1a neon_vect runner + trace + comparator", "result": "pass/pass runs; same footer-only mismatch and digest values", "exit_code": 1, "expected_nonzero": true},
+    {"level": "L0", "command": "independent JSONL shape/seq/header/footer/active-effect audit and canonical active digest recomputation", "result": "pass; both pairs 66721/66721 active records equal; canonical digest 5c1d4f0a0f31cfe7 on both sides", "exit_code": 0},
+    {"level": "L0", "command": "git diff --check; JSON parse; final tracked-source status", "result": "pass; only the four declared task files are pending/committed, tracked measurement sources unchanged", "exit_code": 0}
+  ],
+  "prebuild_expected_failure": {
+    "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 sim/microbench/perf_runner.py --runner build/agents/T-20260901-001/runners/nocache_d0_f1a/microbench_runner --image build/microbench/perf_neon_vect.bin --name neon_vect --max-cycles 5000000 --git-sha ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37 --measurement-source-sha ee3cc52bed9a6265e3ccb6c9198aff63bd62ab37 --source-sha 217b415cfabe179b66643abc0fe9746fbbf7d033439e65ebabdcac74644c9974 --param BASE_CONFIG=nocache_d0 --param I_L1=0 --param D_L1=0 --param L2=0 --param MEM_DELAY_MODE=0 --param FETCH_FIFO_ENABLE=1 --param FETCH_FIFO_DEPTH=2 --param FIFO_VARIANT=f1a --trace build/agents/T-20260901-001/traces/neon_nocache_d0_f1a.jsonl --out build/agents/T-20260901-001/traces/neon_nocache_d0_f1a.json",
+    "status": "expected error",
+    "error": "runner not found",
+    "exit_code": 2,
+    "trace_produced": false,
+    "followup": "先构建 nocache_d0_f1a runner，再以同一命令成功重跑；失败尝试不计入结果"
+  },
+  "artifacts": {
+    "diagnosis_doc": "docs/F1A_NEON_COMMIT_DIVERGENCE_DIAGNOSIS.md",
+    "handoff": "docs/handoffs/T-20260901-001-f1a-neon-commit-diff.md",
+    "first_commit_diff": {"path": "docs/evidence/artifacts/T-20260901-001/first_commit_diff.json", "bytes": 9092, "sha256": "e8e7ec9c241fa7e781edd39652e8dbb258545956869ea78413ea1c2c608d364d"},
+    "fullcache_compare_build_only": {"path": "build/agents/T-20260901-001/comparisons/fullcache_d1.json", "bytes": 9108, "sha256": "89a7ec0828d7ad8f39b9d5a95c0e6881e1972ef619fdc4bfd5823e8ca530043d"},
+    "image_build_log": {"path": "build/agents/T-20260901-001/images/neon_build.log", "bytes": 481, "sha256": "685fc50e026e7a66c3cea3d59893f8171b593de11043783f8fb8b8a9629d5d2b"},
+    "source_file_sha256": {"sim/microbench/microbench_runner.cc": "8a8537be1bd5fb51c04f709a511d072e118a61350fd66eab57f01b457acf2c02", "sim/microbench/perf_runner.py": "37623f06d44ff5b97a890447c500ba9b4edf6c89afd6bb196c25918750640122", "scripts/compare_commit_traces.py": "b8f155ca8bd5a19c57ac344138b79d96983c69dc35fb282f2a609525d17334b8"}
+  },
+  "not_run": ["完整 196-row 矩阵", "Gate D", "Linux 长跑", "Quartus/FPGA", "QEMU 锁步"],
+  "conclusion": "当前没有第一条架构提交差异；正式 footer commit_digest 差异与 trace 未暴露的 inactive payload 摘要边界一致。正式比较仍严格失败，F1a 默认关闭。",
+  "next": "登记 runner-only inactive-payload canonicalization 任务；保留所有架构字段和 active payload，加入 fixture/成对 neon_vect 验证；若仍不能闭合，再新增 opt-in raw-payload trace。"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-007",
+  "label": "B25-RX-OBSERVABILITY-FRESH-PHYSICAL",
+  "title": "Fresh no-FP Quartus physical flow for the B25 RX observability candidate",
+  "kind": "physical-validation",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "fresh-synthesis-fitter-sta-and-custom-physical-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-006", "T-20260920-008", "T-20260920-009"],
+  "base_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+  "base_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+  "branch": "verify/T-20260920-007-b25-rx-observability-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-007",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-007-b25-rx-observability-fresh-physical",
+  "writes": [
+    "build/agents/T-20260920-007/** ignored staging/log/report artifacts",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-007-b25-rx-observability-fresh-physical/** task-owned fresh probe",
+    "docs/tasks/evidence/T-20260920-007.json",
+    "docs/handoffs/T-20260920-007-b25-rx-observability-fresh-physical.md"
+  ],
+  "scope": "Create a byte/hash-bound staging tree from T-20260920-008 profile 05ea2488, the one-line no-FP derivative of exact Gate-D candidate 85992f53, plus its freshly generated 1204-byte boot image/MIF. Create a never-before-used GamePC project and run synthesis -> fitter -> signoff STA plus all established custom FIFO/data-delay/UCP/reset acceptance. Stop before assembler and any configuration artifact.",
+  "profile_boundary": "A64_FP_SIMD=0 scalar bring-up/diagnostic profile only. This validates the instrumented PC=0/JTAG-UART/DDR feedback candidate, not final full-FP release equivalence.",
+  "validation": {
+    "source": "Canonical physical manifest, QSF-relative aliases, platform payload and WIDTH=64 DEPTH=8192 MIF are hash-bound; remote project/database/output paths must be absent before creation.",
+    "synthesis": "Quartus 21.4 success, zero errors, observability RTL and boot MIF elaborated, expected M20K init_file, no stale database.",
+    "fitter": "Fresh fit succeeds; ALM/register/RAM/DSP/PLL inventory and peak memory recorded.",
+    "sta": "sys_clk_25 and global setup/hold/recovery/removal/min-pulse nonnegative; DDR and metastability reports pass.",
+    "custom": "FIFO payload families, data-delay paths and normalized UCP/reset invariants pass on this exact fresh database; source pre/post manifest remains unchanged."
+  },
+  "acceptance": "Fresh synthesis, fitter, STA and every custom physical gate pass with zero timing violations on exact candidate/tree and boot MIF. Any failure blocks assembler and is preserved without patching the remote source tree.",
+  "resource": "Every remote preparation/query/stage acquires gamepc. Use Quartus's existing maximum 16 of 24 processors, no arbitrary 16 GiB cap after acquiring the exclusive lock, and record actual peak memory/fan-out. Return 75 means wait. No local heavy job is required.",
+  "forbidden_regions": [
+    "tracked source/QSF/SDC/RTL/boot changes or task-local patches",
+    "reuse of any previous synthesis/fitter/final database",
+    "assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM generation",
+    "quartus_pgm, JTAG, board reset/power or Flash/EPCQ action",
+    "stopping unknown or pre-existing processes",
+    "claiming full-FP release closure"
+  ],
+  "created_at": "2026-09-20T03:59:19+08:00",
+  "preflight_finding": "At 2026-09-20T04:08:00+08:00 the staging gate correctly rejected 85992f53 because its board-top A64_FP_SIMD default is 1'b1. The prior no-FP profile d00d566d is a deliberate topic derivative and was never merged into the full-FP integration line. No remote root was created and no Quartus stage ran.",
+  "physical_progress": "Fresh synthesis, fitter, signoff STA, overall/FIFO/data-delay and normalized UCP/reset gates all passed; final source input_bad_count=0 and no configuration artifact was generated.",
+  "evidence_head_sha": "25f9825b3d9734d433b9ca17024316c4a656c5f7",
+  "evidence": "docs/tasks/evidence/T-20260920-007.json",
+  "handoff": "docs/handoffs/T-20260920-007-b25-rx-observability-fresh-physical.md",
+  "updated_at": "2026-09-20T05:25:33+08:00"
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-015",
+  "label": "NEON-FETCH-FAULT-FPEN",
+  "title": "Make the NEON page-end fetch-fault workload reach the intended IABT",
+  "kind": "verification-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-accepted",
+  "assigned_owner": "codex-r17-neon-fault-fix",
+  "agent_type": "verification-implementation",
+  "depends_on": [
+    "T-20260905-013"
+  ],
+  "dependency_override": "Discovered while validating T-013 at 0166ede: the historical hard_neon_fetch_fault image exits strict lockstep green after an early FP access trap and therefore does not exercise the intended page-end IABT.",
+  "base_sha": "0166ede4abab06aff35c06159acdde7570cafa6e",
+  "branch": "fix/T-20260905-015-neon-fetch-fault-fpen",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-015",
+  "failure": {
+    "test": "hard_neon_fetch_fault base/cache strict lockstep",
+    "false_green": "20/20 exits zero but seq=10 pc=0x44000028 raises EC=0x7 and never reaches the mapped-page-end STR Q or EC=0x21 IABT",
+    "root_cause": "The image executes NEON MOVI before enabling CPACR_EL1.FPEN and ISB; adding those instructions also changes the absolute branch PC.",
+    "audit_log": "build/agents/T-20260905-013/l2/batch-f-branch-fence.log",
+    "audit_log_sha256": "721002ca554e0358aef1f2de23feafb7770e1bcea278ac082696020d0b5b31b4"
+  },
+  "followup_failure": {
+    "test": "T-015 base strict after FPEN/branch repair",
+    "observed": "seq=18 page-end STR Q reaches the target PC, but QEMU reports EC=0x25 ESR=0x9600004f FAR=0x44002000 while DUT reports EC=0x21 FAR=0x44001000",
+    "root_cause": "L3_id[2] descriptor 0x440024C3 has OA=0x44002000, AF=1, but AP[7:6]=11, which is read-only at EL1; it cannot be the writable Q-store data page",
+    "correction": "Use 0x44002403: preserve OA/AF/AttrIndx/valid bits and set AP[7:6]=00 (EL1 RW, EL0 no access)",
+    "negative_guard": "semantic self-test mutates the corrected descriptor back to 0x440024C3 and requires rejection"
+  },
+  "scope": "Enable FPEN=11 followed by ISB before the first NEON instruction, repair the absolute branch source PC, use a writable EL1 Q-store data descriptor, and strengthen the P7-2 fetch-fault target so a matching 20/20 trace cannot pass unless the intended page-end Q store and EC=0x21 instruction abort are observed. Preserve the image base, page tables, Q-store memory effects, handler, Cortex-A76 required profile, and strict PRE/COMMIT sequencing.",
+  "writes": [
+    "sim/difftest/test_program.py",
+    "Makefile and/or a narrowly scoped semantic checker for p7-2-neon-fetch-fault",
+    "docs/tasks/active/T-20260905-015.json",
+    "docs/tasks/evidence/T-20260905-015.json",
+    "docs/handoffs/T-20260905-015-neon-fetch-fault-fpen.md",
+    "build/agents/T-20260905-015/**"
+  ],
+  "forbidden_regions": [
+    "rtl/**",
+    "QEMU fork/plugin/reference results",
+    "QSF/SDC or remote physical project",
+    "assertion disable or expected-result weakening",
+    "assembler/bitstream/JTAG/programming/board actions"
+  ],
+  "validation": [
+    "lightweight image generation and instruction/layout audit",
+    "p7-2-neon-fetch-fault base strict lockstep with intended EC=0x21 semantic proof",
+    "hard_neon_fetch_fault cache strict lockstep with the same semantic proof",
+    "p7-2-neon-int regression"
+  ],
+  "acceptance": "Both base and cache runs exit zero with 20/20 strict commits and prove that FPEN setup precedes NEON execution, the page-end STR Q commits with both memory records, and the following unmapped fetch produces EC=0x21 rather than EC=0x7. A deliberately old/broken image must be rejected by the new semantic guard. No RTL or QEMU behavior changes.",
+  "resource": "Implementation/static analysis may proceed in the isolated worktree; all Verilator/QEMU validation waits for the integrator's single heavy queue. CPU<=50%, MemoryMax=16G, MemorySwapMax=0, VERILATOR_JOBS=1.",
+  "created_at": "2026-09-05T12:33:48+08:00",
+  "updated_at": "2026-09-05T19:48:39+08:00",
+  "head_sha": "ce3df13",
+  "merge_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "evidence": "docs/tasks/evidence/T-20260905-015.json",
+  "handoff": "docs/handoffs/T-20260905-015-neon-fetch-fault-fpen.md",
+  "review": {
+    "status": "accepted",
+    "summary": "Static negative guards pass; merged candidate base/cache strict 20/20 and semantic EC=0x21 + mem/mem2 proof pass; p7-2-neon-int 31/31."
+  },
+  "board_policy": "No Quartus assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on, or board test without explicit user permission."
+}

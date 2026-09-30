@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-027",
+  "base_sha": "6031796",
+  "head_sha": "6031796",
+  "merge_sha": "153d3a4",
+  "candidate_status": "pass",
+  "toolchain": {"environment": "conda:lcvex", "python": "3.12.14", "verilator": "5.050 2026-07-01 rev conda-forge build 0"},
+  "qemu": {"release": "11.1.0", "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6", "parent_plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97"},
+  "rtl": {"source_sha": "6031796", "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb", "coordinator_kernel_sha256": "f948a6ab7a4a57ff95cda9d005f91e621e384711f3f30667067b2b9ff42f4946", "coordinator_kernel_nofp_sha256": "6919c670ea9db0221ed501d33bc7deac40e301f007ecac40c9798f8207ec8505"},
+  "resource": {"cpus": [2, 3, 4, 5], "cpu_count": 4, "mapping": {"lite_coord": 2, "lite_qemu": 3, "main_coord": 4, "main_qemu": 5}, "ratio_cap": 0.75, "memory_policy": "实际 4 个单线程进程，未强行占满剩余槽位"},
+  "runs": [
+    {"run_id": "owner-l4-lite-22m-split-001", "level": "L4", "command": "COORD_PIN=2 QEMU_PIN=3 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 lite resume", "cpuset": "2,3", "cpu_count": 2, "exit_code": 0, "result": "pass", "summary": "5M 逐指令全部 OK；child finalized，global artifact 范围 17009999..21509999。", "manifest_sha256": "3ebd8091eecdf1ef022a9935f4d69d9b8f05bb746bf17595b884cb3d9b599e93", "manifest_tsv_sha256": "285fb3169436b817074db3bc0e8460b753e8ff17e0c87e4211d26f97d2b4df2e", "chain": "build/tmp/T-20260826-027/lite-22m-split/chain", "log": "build/agents/T-20260826-027/lite.log"},
+    {"run_id": "owner-l4-main-22m-split-001", "level": "L4", "command": "COORD_PIN=4 QEMU_PIN=5 RESUME_SEQ=4999999 MAX_INSNS=5000000 CKPT_EVERY=500000 main resume", "cpuset": "4,5", "cpu_count": 2, "exit_code": 0, "result": "pass", "summary": "5M 逐指令全部 OK；child finalized，global artifact 范围 17009999..21509999。", "manifest_sha256": "c015f2befcbfe9b60a663ca89173fda42e0b0d3a5c538db6b23f381f4d336bdc", "manifest_tsv_sha256": "889ad87067776e1bb97894a7e82d6eedb5707855926a64339010ca7652a19d77", "chain": "build/tmp/T-20260826-027/main-22m-split/chain", "log": "build/agents/T-20260826-027/main.log"}
+  ],
+  "artifacts": [
+    {"id": "lite-child", "path": "build/tmp/T-20260826-027/lite-22m-split/chain", "status": "complete/finalized", "global_last": 21509999},
+    {"id": "main-child", "path": "build/tmp/T-20260826-027/main-22m-split/chain", "status": "complete/finalized", "global_last": 21509999}
+  ],
+  "known_limits": ["该窗口是 Gate E candidate evidence，不单独宣称 Gate E；仍需 early-boot/EL0 稳定判据、可信 CI 和 QEMU patch replay。", "main 输入 /tmp/Image-t80000 仅只读。"]
+}

@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-030",
+  "label": "R20-FINAL-PACK-CUT",
+  "state": "review",
+  "acceptance_status": "local-static-pass-heavy-validation-pending",
+  "partial": true,
+  "task_base_sha": "ef72f312350a682ef19628be6a9ab5e567fa0edf8",
+  "functional_base_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "implementation_head_sha": "this commit",
+  "branch": "timing/T-20260906-030-r20-final-pack",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-030",
+  "owner": "r20_final_pack",
+  "model": "platform-default-confirmed-gpt-5.6-luna-max",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "sent_at": "2026-09-06T11:52:11+08:00",
+    "received_at": "2026-09-06T11:52:11+08:00",
+    "reported_at": "2026-09-06T12:18:03+08:00"
+  },
+  "scope": "在 scalar FP_ITER 私有 FSM 中为 ordinary pack_mid 与 iterative DIV/SQRT finish 的最终 result/flags/done 增加统一 IT_PACK_RESULT 寄存边界；不改变公共接口和前级路由。",
+  "write_set_check": {
+    "allowed": [
+      "rtl/lcvex_fp_scalar.sv::private iter_state_t/pack-result declarations",
+      "rtl/lcvex_fp_scalar.sv::pack-result reset/kill",
+      "rtl/lcvex_fp_scalar.sv::g_iter.IT_PACK and IT_PACK_RESULT",
+      "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv",
+      "docs/tasks/evidence/T-20260906-030.json",
+      "docs/handoffs/T-20260906-030-r20-final-pack.md"
+    ],
+    "forbidden_touched": [],
+    "git_diff_name_only": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv",
+      "docs/tasks/evidence/T-20260906-030.json",
+      "docs/handoffs/T-20260906-030-r20-final-pack.md"
+    ]
+  },
+  "implementation": {
+    "summary": "IT_PACK executes round_pack_p2 into private fp_calc_t result registers and enters IT_PACK_RESULT; only the latter exposes registered result/flags and a one-cycle iter_done window.",
+    "new_state": "IT_PACK_RESULT=4'd13",
+    "private_registers": [
+      "pack_result_r",
+      "pack_result_lo",
+      "pack_result_hi",
+      "pack_result_half_r",
+      "pack_result_valid_r"
+    ],
+    "state_semantics": {
+      "IT_PACK": "valid=1: p2 ordinary pack_mid or iterative it_fin_mid is captured and state advances; valid=0: transaction is discarded with no done.",
+      "IT_PACK_RESULT": "valid=1 and !pause: registered result/flags are visible and iter_done is asserted for one sampling interval; next edge returns IDLE and clears valid marker.",
+      "pause": "state and result payload hold; output result/flags remain stable while iter_done=0.",
+      "valid_drop": "IT_PACK/IT_PACK_RESULT drops return IDLE and prevent stale result commit; final-window drop also cancels while paused.",
+      "kill_reset": "higher priority than pause; state and all final result registers clear to zero."
+    },
+    "architectural_commit": "unchanged; wrapper slot capture remains the sole architectural consumer"
+  },
+  "latency": {
+    "delta_rule": "exactly +1 cycle per shared scalar slot that reaches final round-pack; NEON transaction delta is +slot_count",
+    "iterative_iteration_count_delta": 0,
+    "ordinary_scalar_r18_to_r20": {
+      "FADD/FSUB_S_D_H": [10, 11],
+      "FMUL/FMA": [9, 10],
+      "SCVTF/UCVTF": [8, 9],
+      "FCVT": [7, 8]
+    },
+    "iterative_scalar_r18_to_r20": {
+      "FDIV_S_D": [261, 262],
+      "FDIV_H": [518, 519],
+      "FSQRT_S_D": [69, 70],
+      "FSQRT_H": [70, 71]
+    },
+    "unaffected": ["CMP", "FMIN/FMAX", "FRINT", "FCVTZS/FCVTZU", "FMOV"]
+  },
+  "focused_test": {
+    "source": "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv",
+    "coverage": [
+      "H/S/D ordinary normal/subnormal/FZ/rounding/overflow/flags",
+      "S/D/H iterative DIV/SQRT finish and special/inexact flags",
+      "IT_PACK_RESULT pause/hold/release",
+      "kill/reset/valid-drop replacement",
+      "registered result source and exactly-once done"
+    ]
+  },
+  "validation": {
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    "lightweight_elaboration": {
+      "command": "iverilog -g2012 -Wall -s lcvex_fp_scalar_r20_pack_tb -o /dev/null rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r20_pack_tb.sv",
+      "exit_code": 3,
+      "result": "known-tool-limitation-no-new-syntax-error",
+      "tool": "Icarus Verilog 13.0",
+      "stderr_signature": [
+        "rtl/lcvex_fp_scalar.sv:3290: sorry: inside expressions not supported yet",
+        "rtl/lcvex_fp_scalar.sv:3788: sorry: inside expressions not supported yet",
+        "rtl/lcvex_fp_scalar.sv:4218: sorry: inside expressions not supported yet"
+      ]
+    },
+    "verilator": {
+      "command": "command -v verilator",
+      "result": "unavailable-in-lane-environment",
+      "not_run": true
+    },
+    "heavy_verilator": "not_run-by-scope",
+    "cocotb": "not_run-by-scope",
+    "qemu_lockstep": "not_run-by-scope",
+    "quartus": "not_run-by-scope",
+    "resource_lock": "not_acquired"
+  },
+  "source_hashes_before_commit": {
+    "rtl/lcvex_fp_scalar.sv": "79891a2af5f0a7252d086922c520e6090067f3505974d4083318ce050d3d8f50",
+    "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv": "4f56783b2d078f49c4c359f6d5f27c5a6141c763c0bdfb43dfba46ea562032fe"
+  },
+  "known_risks": [
+    "Existing shared tb/sv/lcvex_fp_exec_tb.sv latency assertions still encode R18 values and are outside this lane write set; integration candidate must update or explicitly revalidate them.",
+    "No merged-SHA functional or physical evidence exists yet; the new p2->result register cone requires fresh post-fit STA.",
+    "Output remains intentionally gated by valid so a dropped transaction cannot commit stale payload."
+  ],
+  "policy": {
+    "public_interface_modified": false,
+    "round_pack_scan_modified": false,
+    "it_arith_or_ap_pre_route_modified": false,
+    "timing_exception_added": false,
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "active_json_modified": false,
+    "qemu_modified": false,
+    "qsf_or_sdc_modified": false,
+    "heavy_job_started": false
+  },
+  "handoff": "docs/handoffs/T-20260906-030-r20-final-pack.md"
+}

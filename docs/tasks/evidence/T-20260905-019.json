@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-019",
+  "label": "R18-TIMING-BATCH",
+  "state": "local-validation-complete-physical-pending",
+  "partial": true,
+  "base_sha": "8d35b6d61669a7b61c8b2fb49e3665bf0e585db4",
+  "source_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+  "branch": "batch/T-20260905-019-r18",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-019",
+  "members": [
+    {"task": "T-20260905-016", "implementation": "c8194730e61ffd7967afa3a4971027ad341e7a14", "result": "accepted-local"},
+    {"task": "T-20260905-017", "implementation": "ebcf674abbbb81b0dac68faf12442c1c48e48d8e", "result": "accepted-local"},
+    {"task": "T-20260905-018", "implementation": "b212520c", "result": "accepted-local"}
+  ],
+  "integration_commits": [
+    {"sha": "e56a09973c06f988c5b2417b414aca0d44366837", "summary": "repair R18 state/latency and T016 focused test assumptions"},
+    {"sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff", "summary": "register three R18 focused Make/registry entries"}
+  ],
+  "implementation": {
+    "rtl": {
+      "rtl/lcvex_core.sv": "9a6d9a1d4ab72024c747cfbfb4ce3fad62968620a7bea620a8f04376ca8c4b7a",
+      "rtl/lcvex_fp_scalar.sv": "0dc20d1885c00dcc5754b1f4a26408d60e6f41cfac6e9a84dca3178756a2c223",
+      "rtl/lcvex_neon_fp.sv": "0c524fd8a6fa4f5ccc2ac740d5c3ea321a3b2428b9fdfc59398a58544d32bcb2"
+    },
+    "summary": "remove sys_commit from fp_tx_kill; split pp_pre through IT_PACK_SCAN; retain dead acc/acc_flags across kill while clearing ownership and reinitializing on the next accepted request",
+    "ordinary_latency": {"FADD_scalar": 10, "FMUL_scalar": 9, "FMADD_scalar": 9, "NEON_FMUL_2S": 17, "NEON_FADD_2S": 19, "NEON_FADD_4S": 37, "FCVT_S_D": 7, "NEON_SCVTF_2S": 15},
+    "iterative_latency_unchanged": {"FDIV_S_D": 261, "FDIV_H": 518, "FSQRT_S_D": 69, "FSQRT_H": 70, "NEON_FSQRT_2S": 137}
+  },
+  "local_validation": {
+    "resource": "one heavy queue; CPUQuota=50%; MemoryMax=16G; MemorySwapMax=0; VERILATOR_JOBS=1",
+    "focused": {
+      "result": "pass",
+      "log": "build/agents/T-20260905-019/50b046b/focused/all.log",
+      "sha256": "6024d1b979a9c142eee5241acf46661f7b2f7a44bf96b0f1b55391cdcd5f3d14",
+      "summary": "registry 80; R18 scalar six probes; full FP wrapper directed including TX_RUN/TX_SLOT/TX_DONE kill; T016 SV and standalone Cocotb"
+    },
+    "maintenance_owner": {
+      "result": "pass",
+      "log": "build/agents/T-20260905-019/50b046b/focused/maint-owner.log",
+      "sha256": "7b1e5b136a31d80af4de08ed5b86380593a565b50c02e33f7ecfd73f367ad1ba",
+      "summary": "FIFO-on delay2 base/cache response-owner probes pass"
+    },
+    "l0_l1": {
+      "result": "pass",
+      "log": "build/agents/T-20260905-019/50b046b/joint-l0-l1.log",
+      "sha256": "15264bb7fd6ac6ccf6522ea702729f9ed00d24046bbe5654bdee2365b64cd940",
+      "summary": "registry/semantic/lint/core/backpressure/FIFO/MMU; IRQ young and atomic 4x matrices; FP/P7-1..P7-5 SV+Cocotb; muldiv; T012 natural overlap blocked_cycles=3 consume=1 exmem_captures=1 fp_commits=1 load_commits=1"
+    },
+    "expected_fail": {
+      "result": "pass_expected_fail",
+      "outer_exit_code": 2,
+      "program_exit_code": 1,
+      "wrapper_log": "build/agents/T-20260905-019/50b046b/expected-fail-p7-2-neon-fault-bfm.log",
+      "wrapper_sha256": "53a891595f970e5820151d011440d418a05d905fcc5c932af205064bd8a1d192",
+      "assert_log": "build/agents/T-20260827-059/fault-bfm-assert.log",
+      "assert_sha256": "4fd5a658c99bcf7587f69749620727f04f58c4cd2837b6630d3db987cf5e4448",
+      "assertion": "rtl/lcvex_core.sv:4765 Q-store second-half response fault"
+    },
+    "l2": [
+      {"batch": "A", "result": "pass", "strict_commits": 203, "log_sha256": "488151fa1ec199552d3b870a6ae8fdcab7df749949eade81ab6110e38ae6322b"},
+      {"batch": "B", "result": "pass", "strict_commits": 586, "log_sha256": "23f7460f1c8260de665461f54e8c815de1bb3909dddfe29a2c8ab127e4d399c9"},
+      {"batch": "C", "result": "pass", "strict_commits": 1286, "log_sha256": "ce2bfc02ace2f566eb3144dfa4ffe6ad40e5426183b93bdd06ffc0693bf92c7c"},
+      {"batch": "D", "result": "pass", "strict_commits": 51, "log_sha256": "3ec800435756796afb8fb3cd7e25a403fa4c85e97e6e5c9f29feea762675c6dc"},
+      {"batch": "E", "result": "pass", "strict_commits": 1104, "log_sha256": "3eb864c3710ea01562f86a028a510376b2f6218f5709ba85ffeec4109ad94570"},
+      {"batch": "F", "result": "pass", "strict_commits": 170, "log_sha256": "95ee2b16a3212d9ad47896a165a3db4ed02afc1fad1624e8805a12180ec947c3"}
+    ],
+    "strict_commit_total": 3400,
+    "neon_fetch_fault_semantic": {
+      "result": "pass_base_cache",
+      "image_sha256": "42b5b256fee8d5be1d78dba376cdfe42a868a15478f687352139a581572a21ef",
+      "summary": "seq18 STR Q @0x44000ffc -> 0x44010200; QEMU EC=0x21; stores=2 at 0x44002000/0x44002008 with size=8; no early FP/data trap"
+    }
+  },
+  "tools": {
+    "qemu": "QEMU 11.1.0 (v11.1.0-dirty)",
+    "qemu_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "plugin_sha256": "928420f78768b5ebcae6a5ace0cd21c31d4e2f0e69041a33a3112309ab07b74a",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0"
+  },
+  "physical_validation": {
+    "status": "pending_fresh_probe",
+    "source_sha": "50b046b69341c13c4b93fffd89e5dda7d81590ff",
+    "baseline": {"task": "T-20260905-014", "fmax_mhz": 43.0, "setup_slack_ns": -3.256, "tns_ns": -21736.217, "failing_endpoints": 18309},
+    "required_queries": ["idex_valid->state.TX_DONE", "pp_pre->pack_scan", "pack_scan->pack_pre", "pack_pre->pack_mid", "core-control->acc/acc_flags", "global top-50/top-N replacement clusters"]
+  },
+  "decision": {
+    "local_functional": "accepted",
+    "timing_improvement": "not_claimed_until_fresh_sta",
+    "timing_closure": false,
+    "next": "T-20260905-020 fresh synthesis/fitter/signoff STA only"
+  },
+  "policy": {"assertions_disabled": false, "reference_results_modified": false, "assembler_or_bitstream": false, "programming_or_jtag": false, "power_on_or_board_test": false},
+  "completed_local_at": "2026-09-05T22:24:39+08:00",
+  "handoff": "docs/handoffs/T-20260905-019-r18-timing-batch.md"
+}

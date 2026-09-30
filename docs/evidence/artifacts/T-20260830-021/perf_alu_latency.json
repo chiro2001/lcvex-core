@@ -1,0 +1,31 @@
+{
+  "name": "alu_latency",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "117d6dae8fc4298b5f76fe66c7765ee4c02e77fa583fafceb26ac7b5f51f545f",
+  "source_sha256": "117d6dae8fc4298b5f76fe66c7765ee4c02e77fa583fafceb26ac7b5f51f545f",
+  "image_hash": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+  "image_sha256": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 2500171,
+  "wall_sec": 15.819829,
+  "rss_kb": 139648,
+  "rss": 136.375,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_alu_latency.bin",
+    "--name",
+    "alu_latency",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: alu_latency (2500171 cycles)\n",
+  "runner_stderr": ""
+}

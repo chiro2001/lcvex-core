@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-031",
+  "label": "B25-LOGIC-IMM-REPAIR-BOARD-CLOSEOUT",
+  "state": "done-functional-fail-golden-rollback-pass",
+  "acceptance_status": "candidate-program-pass-design-hash-unobservable-terminal-skipped-golden-rollback-pass",
+  "partial": true,
+  "base_sha": "4b01d42dfaff0592faf99f91f2f38b53cd53130c",
+  "head_sha": null,
+  "head_sha_note": "Self-referential evidence; final commit SHA is reported in the handoff and agent response.",
+  "branch": "verify/T-20260920-031-b25-logic-imm-repair-board-closeout",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-031-b25-logic-imm-repair-board-closeout",
+  "owner": "board_t031",
+  "received_at": "2026-09-20T17:38:19+08:00",
+  "artifact_sealed_at": "2026-09-20T18:02:35+08:00",
+  "reported_at": "2026-09-20T18:06:22+08:00",
+  "evidence_parent_sha": "13b0bf0d1094f822cb2a497e2c55a392765537fb",
+  "execution": {
+    "locked_commands": [
+      "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-031 board_t031 -- bash build/agents/T-20260920-031/tools/run_final.sh",
+      "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-031 board_t031 -- bash build/agents/T-20260920-031/tools/run_retry.sh",
+      "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-031 board_t031 -- bash build/agents/T-20260920-031/tools/run_retry_v3.sh",
+      "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-031 board_t031 -- bash build/agents/T-20260920-031/tools/run_retry_v4.sh",
+      "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-031 board_t031 -- bash build/agents/T-20260920-031/tools/run_retry_v5.sh"
+    ],
+    "final_tool_hashes": {
+      "preflight.ps1": "337850c8311c8d96891d0a036fbaabad4047c4b301e9deb7da4480d2b44f87a5",
+      "prepare_root.ps1": "f6655f54c73365ce807d454c242022078d0fceb0e4b635b7b0853594736d3e19",
+      "program_sof_v5.ps1": "1083f495899e18927b574edb78036973d8c4fbe11e0edc1a57d6ccdadf2d66d2",
+      "retry_preflight_v5.ps1": "bf08ccbd93692c26dc27d4f46129fca8b4aceafd537e24b8461a4d4e12934221",
+      "postflight.ps1": "a9af7a2c31668818c824d59176117dec95bdcdf99e7ce06301bcf8c832faf888",
+      "direct_terminal.py": "9bdc2c39e9a1097619df1e38edf1406efee3d78529576fcd915dd883f833ffe7",
+      "run_retry_v5.sh": "1e24c130ac7346fd3e0f248c04dc0ec38bdbc3c6ec1d7bbe6a26832e4bc9289"
+    },
+    "final_window": {
+      "started_at": "2026-09-20T17:59:06+08:00",
+      "finished_at": "2026-09-20T18:00:57+08:00",
+      "resource": "gamepc",
+      "status_after": "FREE"
+    },
+    "correction": {
+      "artifact_sealed_at": "2026-09-20T18:02:35+08:00",
+      "reported_at": "2026-09-20T18:06:22+08:00",
+      "hardware_rerun": false,
+      "board_state_unchanged": "golden"
+    },
+    "program_invocation_accounting": {
+      "candidate_program_invocation_count": 3,
+      "candidate_program_transaction_success_count": 3,
+      "candidate_script_exit1_identity_gate_count": 3,
+      "golden_program_invocation_count": 3,
+      "golden_program_transaction_success_count": 3,
+      "golden_script_exit0_count": 2,
+      "golden_script_exit1_identity_gate_count": 1,
+      "transaction_success_definition": "quartus_pgm exit=0 plus tool/configuration/operation/checksum/JTAG-ID markers",
+      "script_exit_definition": "the wrapper's post-program chain-identity gate and cleanup result; exit1 does not negate a separately PASS quartus_pgm transaction",
+      "single_candidate_policy_deviation": true,
+      "single_candidate_policy_note": "The task contract requested one candidate configuration. After two pre-program script defects, retry-v3/v4/v5 made three debugging candidate programmer invocations. All were authorized volatile, held the gamepc lock, stopped only task-owned servers, and ended with golden; this is a process deviation, not candidate functional acceptance."
+    },
+    "program_invocations": {
+      "candidate": [
+        {
+          "run": "retry-v3",
+          "programmer_pid": 68612,
+          "quartus_pgm_exit": 0,
+          "tool_config_operation_checksum_jtagid": "PASS",
+          "wrapper_exit": 1,
+          "wrapper_gate": "post-program final-standard design identity",
+          "log": "build/agents/T-20260920-031/retry-v3/candidate-program.log",
+          "log_sha256": "44f1b1e3dc9ad4764206acd25ced6228b21c55fb0d340666755fdcf4c92eadd0"
+        },
+        {
+          "run": "retry-v4",
+          "programmer_pid": 16584,
+          "quartus_pgm_exit": 0,
+          "tool_config_operation_checksum_jtagid": "PASS",
+          "wrapper_exit": 1,
+          "wrapper_gate": "owned and standard-rescan candidate design identity",
+          "log": "build/agents/T-20260920-031/retry-v4/candidate-program.log",
+          "log_sha256": "2421d62934e1a29c6421ea415ba1ce48b5901f23b96518233bed81c077c8a3f1"
+        },
+        {
+          "run": "retry-v5",
+          "programmer_pid": 25360,
+          "quartus_pgm_exit": 0,
+          "tool_config_operation_checksum_jtagid": "PASS",
+          "wrapper_exit": 1,
+          "wrapper_gate": "owned/standard-while-owned/final-rescan candidate design identity",
+          "log": "build/agents/T-20260920-031/retry-v5/candidate-program.log",
+          "log_sha256": "87200725c7e1340a3d8435f30da3ace2db1079fa3d7ced8a350c0f69bb54dca8"
+        }
+      ],
+      "golden": [
+        {
+          "run": "retry-v3",
+          "programmer_pid": 54960,
+          "quartus_pgm_exit": 0,
+          "tool_config_operation_checksum_jtagid": "PASS",
+          "wrapper_exit": 0,
+          "log": "build/agents/T-20260920-031/retry-v3/golden-restore.log",
+          "log_sha256": "a6dc1a5b5f01cf1f01fd8991f99f6b0c1ac99662211e3675e718f8ad9461fa17"
+        },
+        {
+          "run": "retry-v4",
+          "programmer_pid": 48744,
+          "quartus_pgm_exit": 0,
+          "tool_config_operation_checksum_jtagid": "PASS",
+          "wrapper_exit": 1,
+          "wrapper_gate": "owned-chain design identity; final standard golden chain PASS",
+          "log": "build/agents/T-20260920-031/retry-v4/golden-restore.log",
+          "log_sha256": "e14816f6b4b92480820f6973a6bd4b09ae65f0eeb9e61c71d8e129882f3baa2d"
+        },
+        {
+          "run": "retry-v5",
+          "programmer_pid": 21364,
+          "quartus_pgm_exit": 0,
+          "tool_config_operation_checksum_jtagid": "PASS",
+          "wrapper_exit": 0,
+          "log": "build/agents/T-20260920-031/retry-v5/golden-restore.log",
+          "log_sha256": "6d4261078f7f0fa1e012f9cf5ed5e7564e649f5ceeca94621c737d4167d667d4"
+        }
+      ]
+    }
+  },
+  "input_contract": {
+    "candidate_sof": {
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842105,
+      "sha256": "bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264",
+      "quartus_checksum": "0x315AC2B3",
+      "design_hash": "0CC907F3DD48A9C78864E3C5BD66B9AF",
+      "jtag_usercode": "0xFFFFFFFF"
+    },
+    "golden_sof": {
+      "remote_path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "quartus_checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F"
+    },
+    "jtag_id": "0x02E060DD",
+    "console_cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "program_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310",
+    "device": 1,
+    "instance": 0,
+    "program_server_source": "D:/Projects/fpga-altra/jtag-30mhz",
+    "program_server_channel": 0,
+    "program_server_frequency_hz": 15000000
+  },
+  "preflight": {
+    "initial_result": "PASS",
+    "initial_log": {
+      "path": "build/agents/T-20260920-031/preflight/preflight.log",
+      "bytes": 1124,
+      "sha256": "38f6ea893470e9344e96e98f959e66e425bc4872b140811a436354769b458ae3"
+    },
+    "root_absent_before_creation": true,
+    "root_created_by_task": true,
+    "candidate_and_golden_identity": "PASS",
+    "busy_process_count": 0,
+    "port_1310_listener_count": 0,
+    "standard_server": {
+      "pid": 5640,
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\jtagserver.exe",
+      "count": 1,
+      "preserved": true
+    },
+    "initial_jtagconfig": {
+      "exit": 0,
+      "cable": true,
+      "jtag_id": true,
+      "golden_design_hash": true,
+      "jtag_uart_0": true,
+      "jtag_phy_0": true,
+      "nodes": ["Virtual JTAG #0", "Signal Tap #0", "JTAG UART #0", "JTAG PHY #0"]
+    },
+    "retry_preflight": {
+      "result": "PASS",
+      "path": "build/agents/T-20260920-031/retry-v5/retry-preflight.log",
+      "bytes": 1225,
+      "sha256": "55ce3678b0792b6d08e35c74d01fbb6b1cb2ecc7de5b92860c0290899c2b8ecd",
+      "note": "The first preflight created this task-owned root after proving it absent. Later retry-preflights only inspected that same owned root and allowed the immutable task-owned v3/v4 run directories; no pre-existing root was deleted or overwritten."
+    }
+  },
+  "programming_server": {
+    "bundle_manifest": "build/agents/T-20260920-031/retry-v5/remote-evidence/program-candidate-retry-v5/runtime/server-manifest.json",
+    "candidate_manifest_sha256": "0346165c6f333446b73c6d049fa79eccbbb16ffc1b4a12373b42b8dba2e6e6da",
+    "golden_manifest": "build/agents/T-20260920-031/retry-v5/remote-evidence/program-golden-retry-v5-restore/runtime/server-manifest.json",
+    "golden_manifest_sha256": "4806785f4147b2c4388300d9c00fb14f1349a33aed60d55f4512d7c031c6bca9",
+    "file_hashes": {
+      "jtagserver.exe": "72562a0193aa2b4c0b6332256453f9f337ac61fb18cdac8895f30706228314ee",
+      "jtag_hw_microsoft_catapult.dll": "b7fe801ae91c50bd7ea159ea905d732a0b13ada9f7791b85384a6dc8167092f6",
+      "client.conf": "850870f8867409ed2917275f1150192eb36d66b3abf5f2ea00f74c09eb62bdeb",
+      "msftdi.cfg": "36580939ab36d1b38a3a118c54b49529484b352b00d004f94fe0f7c8445f15ef"
+    },
+    "bundle_note": "The jtag_hw_microsoft_catapult.dll value above is the frozen expected driver hash from the T-021 template; the authoritative per-file copy/source records are in each fetched server-manifest.json."
+  },
+  "candidate_configuration": {
+    "result": "PROGRAMMER_PASS_CHAIN_IDENTITY_FAIL",
+    "run": "program-candidate-retry-v5",
+    "log": {
+      "path": "build/agents/T-20260920-031/retry-v5/candidate-program.log",
+      "bytes": 3669,
+      "sha256": "87200725c7e1340a3d8435f30da3ace2db1079fa3d7ced8a350c0f69bb54dca8"
+    },
+    "programmer": {
+      "pid": 25360,
+      "exit": 0,
+      "tool_success": true,
+      "configuration_success": true,
+      "operation_success": true,
+      "checksum_match": true,
+      "jtag_id_match": true,
+      "stdout": {
+        "path": "build/agents/T-20260920-031/retry-v5/remote-evidence/program-candidate-retry-v5/runtime/candidate-quartus_pgm.stdout.log",
+        "bytes": 2414,
+        "sha256": "ef725651a80f6a909fe815a0dbd031c1bd3c1daa0089c31fcc7febb6870ffc43"
+      },
+      "stderr": {
+        "path": "build/agents/T-20260920-031/retry-v5/remote-evidence/program-candidate-retry-v5/runtime/candidate-quartus_pgm.stderr.log",
+        "bytes": 104,
+        "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"
+      }
+    },
+    "owned_server": {
+      "pid": 7060,
+      "stopped": true,
+      "jtagconfig_exit": 0,
+      "cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310 [MBUSB-0]",
+      "jtag_id": "0x02E060DD",
+      "design_hash_line": "absent",
+      "design_hash_match": false
+    },
+    "standard_server_while_owned": {
+      "jtagconfig_exit": 0,
+      "design_hash_observed": "193DE4BC8A30F3ED5F1F",
+      "expected_candidate_design_hash_observed": false,
+      "nodes": ["JTAG UART #0", "JTAG PHY #0"]
+    },
+    "standard_server_after_owned_stop": {
+      "first_rescan_design_hash": "193DE4BC8A30F3ED5F1F",
+      "second_rescan_design_hash": "193DE4BC8A30F3ED5F1F",
+      "expected_candidate_design_hash_observed": false,
+      "nodes": ["JTAG UART #0", "JTAG PHY #0"],
+      "standard_pid_preserved": 5640
+    },
+    "failure_reason": "The exact candidate programmer transaction passed, but neither the task-owned nor preserved standard read-only jtagconfig exposed 0CC907F3DD48A9C78864E3C5BD66B9AF. The preserved server reported the golden 193DE4BC8A30F3ED5F1F while candidate-era nodes were UART/PHY only. This fails the explicit candidate design-hash proof, so the paced terminal sequence was stopped before its first byte.",
+    "terminal_gate": "NOT_STARTED_AFTER_FIRST_CANDIDATE_IDENTITY_FAILURE"
+  },
+  "direct_terminal": {
+    "status": "SKIPPED",
+    "reason": "Candidate programming acceptance failed at required design-hash enumeration; no live terminal process was started and no input byte was sent.",
+    "command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "session_method": "Not invoked; therefore no ordinary-file stdin, batch input, or reset was used.",
+    "input_events": [],
+    "transcript": null,
+    "parsed_rxdbg_rows": [],
+    "parsed_rxpath_rows": [],
+    "parsed_rxcpu_rows": []
+  },
+  "golden_rollback": {
+    "result": "PASS",
+    "run": "program-golden-retry-v5-restore",
+    "log": {
+      "path": "build/agents/T-20260920-031/retry-v5/golden-restore.log",
+      "bytes": 2771,
+      "sha256": "6d4261078f7f0fa1e012f9cf5ed5e7564e649f5ceeca94621c737d4167d667d4"
+    },
+    "programmer": {
+      "pid": 21364,
+      "exit": 0,
+      "tool_success": true,
+      "configuration_success": true,
+      "operation_success": true,
+      "checksum_match": true,
+      "jtag_id_match": true,
+      "stdout_sha256": "d01c94459ea174529ca72d8335b162a5b75ef14327faed0696ef6c33115189de",
+      "stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"
+    },
+    "owned_server": {
+      "pid": 28580,
+      "stopped": true,
+      "standard_server_preserved": true
+    },
+    "final_chain": {
+      "jtagconfig_exit": 0,
+      "design_hash": "193DE4BC8A30F3ED5F1F",
+      "jtag_id": "0x02E060DD",
+      "nodes": ["Virtual JTAG #0", "Signal Tap #0", "JTAG UART #0", "JTAG PHY #0"]
+    },
+    "result_json": {
+      "path": "build/agents/T-20260920-031/retry-v5/remote-evidence/program-golden-retry-v5-restore/runtime/program-result.json",
+      "bytes": 9138,
+      "sha256": "7ac1389a40162e05f9fdd43a4691735bd81d1915ae75e8918913051e26d2200c"
+    }
+  },
+  "postflight": {
+    "result": "PASS",
+    "log": {
+      "path": "build/agents/T-20260920-031/retry-v5/postflight-golden.log",
+      "bytes": 992,
+      "sha256": "abfb17eab8dc60f04540722e42d355091617fa34ed11a388d47bad842af004cc"
+    },
+    "golden_file_bytes": 36844906,
+    "golden_file_sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "busy_process_count": 0,
+    "port_1310_listener_count": 0,
+    "standard_server_count": 1,
+    "standard_server_pid": 5640,
+    "design_hash": "193DE4BC8A30F3ED5F1F",
+    "jtag_uart_0": true,
+    "jtag_phy_0": true
+  },
+  "attempt_history": [
+    {
+      "run": "initial",
+      "summary": "build/agents/T-20260920-031/final/summary.txt",
+      "summary_sha256": "2437c40d1139b809bddc19faa3dcb42603f37390a0e192cc068df533d11b078a",
+      "candidate_programmer_invocations": 0,
+      "golden_programmer_invocations": 0,
+      "candidate_script_exit": 1,
+      "golden_script_exit": 1,
+      "outcome": "Preflight/root creation passed; candidate and golden program scripts failed before server start due PowerShell output-object capture, so no quartus_pgm transaction occurred. Read-only postflight still proved the untouched initial golden."
+    },
+    {
+      "run": "retry-v2",
+      "summary": "build/agents/T-20260920-031/retry/summary.txt",
+      "summary_sha256": "b2e8198bda51133ec788c341ae1a8b88f12eecc7db21047e1ea4b1b6492d6f00",
+      "candidate_programmer_invocations": 0,
+      "golden_programmer_invocations": 0,
+      "candidate_script_exit": 1,
+      "golden_script_exit": 1,
+      "outcome": "Retry preflight passed; candidate and golden scripts failed before owned-server/programmer start due PowerShell inline-if syntax, so no quartus_pgm transaction occurred. Read-only postflight proved golden."
+    },
+    {
+      "run": "retry-v3",
+      "summary": "build/agents/T-20260920-031/retry-v3/summary.txt",
+      "summary_sha256": "4ac39671706e3d13bde367dc721f498687b40634723030871a36f672a98282fd",
+      "candidate_programmer_invocations": 1,
+      "candidate_transaction": "PASS",
+      "candidate_script_exit": 1,
+      "candidate_exit_reason": "post-program final standard design-hash identity gate",
+      "golden_programmer_invocations": 1,
+      "golden_transaction": "PASS",
+      "golden_script_exit": 0,
+      "outcome": "Candidate quartus_pgm transaction passed all required programmer markers, but wrapper exit1 rejected final standard design identity; terminal was skipped. Fresh golden quartus_pgm transaction and postflight passed."
+    },
+    {
+      "run": "retry-v4",
+      "summary": "build/agents/T-20260920-031/retry-v4/summary.txt",
+      "summary_sha256": "c464002cbfbd0896cb3799e09e51f3b3a46cb10c7cc25f1b2d2b064973c43a5d",
+      "candidate_programmer_invocations": 1,
+      "candidate_transaction": "PASS",
+      "candidate_script_exit": 1,
+      "candidate_exit_reason": "owned and standard-rescan candidate design-hash identity gate",
+      "golden_programmer_invocations": 1,
+      "golden_transaction": "PASS",
+      "golden_script_exit": 1,
+      "golden_exit_reason": "owned-chain design-hash gate; final standard golden chain was nevertheless captured and postflight passed",
+      "outcome": "Both candidate and golden quartus_pgm transactions passed all programmer markers. Candidate wrapper exit1 prevented terminal; golden wrapper exit1 was its owned-chain identity gate, while final standard golden identity and postflight passed."
+    },
+    {
+      "run": "retry-v5",
+      "summary": "build/agents/T-20260920-031/retry-v5/summary.txt",
+      "summary_sha256": "61b3e2bbe97ded5fcffa34229c4fd93e96ef483e5d7815c8929e4043d9fea52",
+      "candidate_programmer_invocations": 1,
+      "candidate_transaction": "PASS",
+      "candidate_script_exit": 1,
+      "candidate_exit_reason": "owned/standard-while-owned/final-rescan candidate design-hash identity gate",
+      "golden_programmer_invocations": 1,
+      "golden_transaction": "PASS",
+      "golden_script_exit": 0,
+      "outcome": "Authoritative final attempt; candidate quartus_pgm transaction passed but all candidate design-hash proofs failed, so terminal remained skipped. Fresh golden quartus_pgm transaction, final chain, and postflight passed."
+    }
+  ],
+  "historical_controls": {
+    "golden_bidirectional_control": "docs/tasks/evidence/T-20260920-003.json",
+    "accepted_candidate_source": "docs/tasks/evidence/T-20260920-030.json",
+    "note": "T-003 is historical golden control only; it is not substituted for this round's candidate interaction evidence."
+  },
+  "safety_and_resources": {
+    "all_gamepc_actions_locked": true,
+    "authoritative_lock_command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-031 board_t031 -- bash build/agents/T-20260920-031/tools/run_retry_v5.sh",
+    "final_gamepc_status": "FREE",
+    "final_board_state": "golden SOF running",
+    "standard_jtagserver_stopped": false,
+    "unknown_or_preexisting_process_stopped": false,
+    "task_owned_server_pids_stopped": [69252, 44608, 49800, 19320, 7060, 28580],
+    "task_owned_programmer_pids_completed": [68612, 54960, 16584, 48744, 25360, 21364],
+    "task_owned_terminal_started": false,
+    "persistent_flash_action": false,
+    "jic_epcq_flash_action": false,
+    "power_cycle": false,
+    "board_or_soc_reset": false,
+    "synthesis_fitter_sta_assembler": false,
+    "source_or_expected_modified": false,
+    "final_conflicting_process_count": 0,
+    "final_port_1310_listener_count": 0
+  },
+  "verification": {
+    "commands": [
+      "bash -n build/agents/T-20260920-031/tools/run_retry_v5.sh",
+      "python3 -m py_compile build/agents/T-20260920-031/tools/direct_terminal.py",
+      "git diff --check",
+      "jq empty docs/tasks/evidence/T-20260920-031.json",
+      "/home/chiro/projects/.resource-locks/resource-lock status gamepc"
+    ],
+    "candidate_programmer": "PASS",
+    "candidate_design_hash_proof": "FAIL",
+    "terminal_interaction": "NOT_RUN_AFTER_FIRST_CANDIDATE_FAILURE",
+    "golden_rollback": "PASS",
+    "golden_postflight": "PASS"
+  },
+  "integration_review": {
+    "reviewed_at": "2026-09-20T18:13:41+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "evidence_merge_sha": "6848124bea9f5a547562d67412004d754fcd20f0",
+    "evidence_merge_tree": "fec140eccc81ff0e70d87a2df853836843f54d60",
+    "topic_evidence_head": "93067787a10c4a44d2c8eb8d1d8d0b1bfa43e748",
+    "candidate_program_invocation_count": 3,
+    "candidate_program_transaction_success_count": 3,
+    "golden_program_invocation_count": 3,
+    "golden_program_transaction_success_count": 3,
+    "single_candidate_contract_deviation_acknowledged": true,
+    "candidate_functional_acceptance": "FAIL_NOT_RUN",
+    "golden_restoration_and_postflight": "PASS",
+    "final_board_state": "golden",
+    "successor": "T-20260920-032"
+  },
+  "conclusion": "The exact T-030 candidate SOF was verified by bytes/SHA-256 and its volatile Quartus transaction passed exit/tool/configuration/operation/checksum/JTAG-ID checks. However, both task-owned and preserved-standard read-only jtagconfig lacked the frozen candidate design hash 0CC907F3DD48A9C78864E3C5BD66B9AF (the standard server continued to report golden 193DE4BC8A30F3ED5F1F), so the required live terminal sequence was correctly not started. A fresh task-owned server then configured the exact golden SOF and postflight independently proved golden design hash, JTAG UART/PHY nodes, standard-server preservation, zero conflicts, and an idle port. Functional acceptance is therefore FAIL; golden restoration is PASS.",
+  "blockers": [
+    "Candidate design-hash enumeration is not proven by either owned or preserved standard jtagconfig; candidate transaction itself passed.",
+    "Because candidate acceptance failed before terminal start, ?/p/d/Z, RXPATH, RXCPU, and RXDBG evidence is intentionally absent."
+  ],
+  "next": "Investigate candidate live JTAG design-hash exposure/standard-server cache or obtain an explicit reviewed waiver before any new board attempt; leave board golden. Do not infer candidate functional acceptance from the programmer checksum alone.",
+  "handoff": "docs/handoffs/T-20260920-031-b25-logic-imm-repair-board-closeout.md"
+}

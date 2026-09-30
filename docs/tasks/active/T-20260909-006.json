@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-006",
+  "label": "B25-CDC-EXCEPTION-PRECEDENCE-AUDIT",
+  "title": "Resolve false-path and max-delay precedence for CDC synchronizers",
+  "kind": "report-only-sdc-diagnosis",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-data-delay-policy-with-qdb-limit",
+  "assigned_owner": "b25_exception_precedence",
+  "depends_on": ["T-20260909-002", "T-20260909-004"],
+  "base_sha": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "physical_source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "branch": "verify/T-20260909-006-b25-cdc-exception-precedence-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-006",
+  "remote_database": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/fpga/catapult_a10/quartus",
+  "scope": "Using Quartus Prime Pro 21.4 help and the frozen fitted database, determine the correct TimeQuest constraint combination for the four Gray-pointer first-stage crossings and T-045 poisoned synchronizer. The current identical full false_path plus 2 ns max_delay makes all max-delay exceptions Fully overridden. No checked-in SDC edit in this task.",
+  "writes": [
+    "build/agents/T-20260909-006/** ignored scripts/reports",
+    "remote probe runtime/T-20260909-006/** report-only scripts/results",
+    "docs/tasks/evidence/T-20260909-006.json",
+    "docs/handoffs/T-20260909-006-b25-cdc-exception-precedence-audit.md"
+  ],
+  "reads": [
+    "T-002 exception reports and T-045 evidence",
+    "catapult_a10.sdc sections 2/3/4c",
+    "Quartus 21.4 set_false_path/set_max_delay help",
+    "frozen T-002 fitted database, read-only"
+  ],
+  "validation": [
+    "Enumerate all five fully-overridden max-delay rows and their resolved source/target counts.",
+    "Test supported hypothetical alternatives such as hold-only false-path plus setup/datapath-only max-delay on a loaded database, with report_exceptions applied/ignored status and actual path checks.",
+    "State whether 2 ns is an electrical/data-coherency requirement for Gray bus versus unnecessary for single-bit poison; do not silently drop an intended bound.",
+    "Return exact minimum SDC region and validation queries for a future implementation lane."
+  ],
+  "acceptance": "One Quartus-21.4-supported, non-overridden constraint policy is proven or the task reports indeterminate; no source/compile/fit/board state changes.",
+  "resource": "Any remote report-only query acquires gamepc; no synthesis/fitter, one quartus_sta process, unique runtime output.",
+  "forbidden_regions": [
+    "all tracked RTL/SDC/QSF/test/task/status modifications",
+    "T-002 database/output_files mutation or deletion",
+    "synthesis/fitter/assembler/bitstream/JTAG/board/Flash actions",
+    "another worktree"
+  ],
+  "created_at": "2026-09-09T10:32:34+08:00",
+  "updated_at": "2026-09-09T12:42:02+08:00",
+  "result_head": "79188f1ca6ecf9fb3e49cbfb26609bd1ed2f6e2f",
+  "result_evidence": "docs/tasks/evidence/T-20260909-006.json",
+  "integrated_head": "77cfa20f",
+  "followup_task": "T-20260909-009",
+  "integrator_review": {
+    "status": "accepted-technical-result-with-qdb-integrity-indeterminate",
+    "reviewed_at": "2026-09-09T12:42:02+08:00",
+    "requirement": "Future overlay validation uses an isolated fitted-database clone with a pre-query full manifest; shared T-002 QDB mtime must not be claimed unchanged."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-09T10:35:01+08:00",
+    "agent_name": "b25_exception_precedence",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "27ff56b7dafee6c186761de93ea5cbe7e52588cf"
+  }
+}

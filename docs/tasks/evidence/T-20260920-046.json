@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-046",
+  "state": "blocked",
+  "acceptance_status": "microbench-pass-coremark-transcript-truncated-golden-unproven",
+  "base_sha": "1806c86c04396c04166adce838e90208a531395f",
+  "candidate_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_tree_sha": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+  "branch": "verify/T-20260920-046-b25-coremark-board",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-046",
+  "candidate_sof": {
+    "bytes": 36842099,
+    "sha256": "c648f9fe1744d66f5e60f97a2aa706a36d295d1029e887d4f3155d292127df4f",
+    "checksum": "0x31585D80",
+    "design_hash": "BE249DE82456FE40F022D019CD23D8C9"
+  },
+  "contract": {
+    "path": "build/agents/T-20260920-046/board-contract.json",
+    "sha256": "f0cb20c5668c5b26e27d34e3ac8638f6f0609d71387bb79907bf8290758ce96c"
+  },
+  "acceptance": {
+    "board_runner_ast_seal": "PASS 7/7 AST, 12/12 seal",
+    "candidate_program_invocations": 1,
+    "candidate_program_result_sha256": "226f7c008b6f3e92662e5c70f4871308278556c26abcf2dfafb872bb25c603ce",
+    "terminal_sessions": 1,
+    "boot_ready": "PASS LCVEX25 BOOT / CAL-WAIT / DDR-FAIL / READY",
+    "microbench": "PASS MBPASS 24 8679CF21",
+    "coremark_algorithm_selfcheck_marker": "firmware emitted CMSELF PASS; full record was truncated before state/final/cycles/score completed",
+    "coremark_selfcheck_host_parser": "FAIL timeout; transcript lacked complete self-check record",
+    "coremark_full_command_sent": false,
+    "coremark_valid_score": null
+  },
+  "uart_output_failure": {
+    "transcript_bytes": 47217,
+    "transcript_sha256": "50be01c624085df3ce636962d43d2d86ef6d0105109007c2c0daaf00b5046389",
+    "terminal_result_sha256": "796f1bfb35320e7ea92f5e161b5fec48c6117e6b8ec38823dd8884bcbbbaf3bf",
+    "parsed_lines_sha256": "72bcf8260637189b83f5e755e72627323b094cb120789a8e7a0a276fe0bbf0e0",
+    "host_parser_log_sha256": "83a863ef0a84bedb611ecabe1923df50cd8843afbe81f4b6c871c4854b279c39",
+    "firmware_uart_tx_wait_cycles": 64,
+    "vendor_fifo_depth_bytes": 64,
+    "diagnosis": "TX-full wait expires before the host drains the FIFO; firmware drops summary bytes, then monitor telemetry resumes and appears adjacent to the partial line"
+  },
+  "golden_restore": {
+    "attempts": 1,
+    "result": "FAIL",
+    "failure": "Error (213019): Can't scan JTAG chain. Error code 86.",
+    "program_result_sha256": "a4ce3f40e1c992ae69be2b436c1f4d8591ddfee1c3a875e26cc46c321e0aa2be",
+    "candidate_quartus_pgm_once_marker": true,
+    "golden_quartus_pgm_once_marker": true,
+    "postflight_cached_chain_match": true,
+    "live_golden_proven": false,
+    "postflight_sha256": "1e737c8945cd350588294d0f0023569fd4182f56d4d49b35ad1cb5d97c39607a"
+  },
+  "scope_counts": {
+    "candidate_programmer_attempts": 1,
+    "terminal_sessions": 1,
+    "golden_programmer_attempts": 1,
+    "persistent_flash_epcq_actions": 0,
+    "reset_or_power_actions": 0,
+    "standard_or_unknown_process_stops": 0,
+    "task_owned_server_cleanups": 2
+  },
+  "known_limits": [
+    "The candidate terminal transcript proves the CPU correctness suite but not a fully transferred CoreMark self-check or valid full score.",
+    "Cached standard-server design hash and node list after failed golden programming do not prove the live FPGA image."
+  ],
+  "next": "T-20260920-049 repairs finite UART TX backpressure and adds a slow-host SoC smoke; rerun physical and hardware only after firmware validation and GamePC cable presence."
+}

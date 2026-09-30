@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "task": "T-20260828-069-gateD",
+  "title": "P7-5 合入后冻结候选 e36b7b1 完整 Gate D（Gate-F ISA candidate 更新）",
+  "frozen_sha": "e36b7b12ea7197872b1df465e60c9008988a61da",
+  "merge_sha": "e36b7b1",
+  "branch": "feature/p7-fp-neon",
+  "gate_worktree": "/home/chiro/projects/mycpu/lcvex-gate-T-20260828-069",
+  "run_at": "2026-08-28T17:13~17:56+08:00",
+  "commander": "root-integrator (bash sim/difftest/run_gate_d.sh --parallel)",
+  "result": "ALL_GREEN",
+  "overall_pass_markers": 74,
+  "qemu": {
+    "version": "11.1.0",
+    "fork_sha": "84f07211cc5b4fc6a371559bf8a5de4fb068e648"
+  },
+  "tools": {
+    "verilator": "5.050",
+    "cocotb": "2.0.1",
+    "python": "3.12.14"
+  },
+  "stages": [
+    {
+      "stage": "make test（单元 + SVA）",
+      "result": "pass",
+      "note": "P0 全量，含 FP_V state / backpressure / MSR atomicity 等"
+    },
+    {
+      "stage": "make coverage（缓存/MMU TB 覆盖率）",
+      "result": "pass",
+      "note": "merged.dat 8611 lines"
+    },
+    {
+      "stage": "M2-4b/4c 定向锁步",
+      "result": "pass",
+      "note": "40 项并行锁步全部通过（base+全缓存）"
+    },
+    {
+      "stage": "P5a-Hardening + M2 定向（13 组）",
+      "result": "pass",
+      "note": "26 项并行锁步全部通过"
+    },
+    {
+      "stage": "Gate C 异常/EL0-EL1（7 组）",
+      "result": "pass"
+    },
+    {
+      "stage": "P5a MMU 数据翻译（3 组）",
+      "result": "pass"
+    },
+    {
+      "stage": "P4b 异常/系统指令",
+      "result": "pass"
+    },
+    {
+      "stage": "随机回归 seed 1~3 × 100k",
+      "result": "pass",
+      "note": "每轮 100002/100003 条与 QEMU 完全一致"
+    },
+    {
+      "stage": "指令覆盖记账 random 1~3 ↔ ISA_SCOPE",
+      "result": "pass",
+      "note": "期望覆盖集全部命中"
+    },
+    {
+      "stage": "baremetal-C 锁步",
+      "result": "pass",
+      "note": "200 条与 QEMU 完全一致"
+    }
+  ],
+  "relation": "在 T-069 P7-5 合入 feature/p7-fp-neon（merge e36b7b1）后重跑的完整 Gate D；确认 P7-5 未破坏既有 ISA/缓存/MMU/异常路径；作为更新后的 Gate-F ISA candidate 证据。",
+  "not_in_scope": [
+    "Gate-F-BOARD（需物理板/授权）",
+    "可信 CI/GitHub Actions",
+    "main 晋级",
+    "Linux/nightly 长验证（另有任务）"
+  ],
+  "log": "lcvex-gate-T-20260828-069/build/agents/T-20260828-069-gateD/gate_d.log"
+}

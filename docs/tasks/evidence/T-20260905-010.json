@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-010",
+  "state": "review",
+  "partial": false,
+  "base_sha": "80b7664215d4547cbca638ad7beb5b8de2e78997",
+  "functional_candidate_sha": "32622b4d153bad7ca55b1a02c91b213fe6729bf5",
+  "timing_evidence_commit": "46181b25e677ef42324ef4e8081a2731c7da3c68",
+  "head_sha": "e4f3d5b8bad1b55c7b4c4c4423b51269ae72c4f3",
+  "documentation_tip": "final docs-only commit tip is reported separately to avoid self-reference",
+  "merge_sha": null,
+  "branch": "timing/T-20260905-010-r17-fp-p1-split",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-010",
+  "batch_parent": "T-20260905-009",
+  "depends_on": ["T-20260905-009"],
+  "dependency_override": "Speculative timing implementation starts from the exact T-009 candidate while broad validation is occupied; no integration or green claim is made here.",
+  "cone_id": "R17-FP-PPPRE-PACKMID",
+  "scope": "Split the Round16 pp_pre->pack_mid normalization/leading-bit/GRS cone with one additional real register boundary for ordinary FP producers while preserving iterative DIV/SQRT, special-value priority, packed-half lanes, response hold, kill/reset and architectural commit timing.",
+  "timing_source": {
+    "task": "T-20260905-008",
+    "commit": "46181b25e677ef42324ef4e8081a2731c7da3c68",
+    "raw_top50_report": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-008/build/agents/T-20260905-008/retry3/sta/extended/t008r3_sys_clk_50_setup_top50.rpt",
+    "raw_top50_report_sha256": "07236136ddb69b73c2bc7e30d61e647b1738baa4e52683c90e18a26c51d594cf",
+    "parsed_top50": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-008/build/agents/T-20260905-008/retry3/sta/extended/top50_parsed.json",
+    "parsed_top50_sha256": "58248726ffbb646193cfae1276baddf8fdef51853df7ac2ab2e3a62617082ffa",
+    "top50_path_count": 50,
+    "target_path_count": 26,
+    "target_slack_range_ns": [-4.797, -4.683],
+    "target_logic_levels": 65,
+    "top1": {
+      "from": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre_lo.sig[251]",
+      "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pack_mid_lo.mant[97]",
+      "slack_ns": -4.797,
+      "data_delay_ns": 24.996,
+      "logic_levels": 65,
+      "sdc_exception": "No SDC Exception on Path"
+    },
+    "clusters": [
+      {
+        "cone": "fp_exec.scalar_unit.g_iter.pp_pre -> fp_exec.scalar_unit.g_iter.pack_mid",
+        "count": 26,
+        "slack_range_ns": [-4.797, -4.683],
+        "logic_levels": 65,
+        "ranks": [1, 2, 6, 7, 8, 9, 10, 11, 12, 16, 23, 24, 25, 26, 27, 31, 32, 33, 34, 35, 36, 40, 41, 45, 49, 50]
+      },
+      {
+        "cone": "core.exmem_valid -> fp_exec.acc",
+        "count": 18,
+        "slack_range_ns": [-4.767, -4.685],
+        "logic_levels": 27,
+        "ranks": [3, 4, 5, 13, 14, 15, 17, 18, 19, 20, 21, 22, 42, 43, 44, 46, 47, 48]
+      },
+      {
+        "cone": "core.memwb_wb_rd -> fp_exec.acc",
+        "count": 3,
+        "slack_range_ns": [-4.706, -4.706],
+        "logic_levels": 27,
+        "ranks": [28, 29, 30]
+      },
+      {
+        "cone": "core.exmem_wb_rd -> fp_exec.acc",
+        "count": 3,
+        "slack_range_ns": [-4.698, -4.698],
+        "logic_levels": 27,
+        "ranks": [37, 38, 39]
+      }
+    ]
+  },
+  "implementation": {
+    "commits": ["f3f35044ab974c36180cec3788395abd410a11b2", "e4f3d5b8bad1b55c7b4c4c4423b51269ae72c4f3"],
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv",
+      "docs/handoffs/T-20260905-010-r17-fp-p1-split.md",
+      "docs/tasks/evidence/T-20260905-010.json"
+    ],
+    "summary": "Added fp_round_pre_t pack_pre* and IT_PACK_PRE. Ordinary pp_pre producers now execute registered leading-one/exponent classification, registered normalization/GRS construction, then existing p2 final pack. Iterative DIV/SQRT uses round_pack_iter_p1 and retains IT_FIN->IT_PACK. A follow-up fix restores round_pack_h's local integer emax declaration.",
+    "state_boundary": {
+      "IT_PREP": "For uses_round_pack_pre, round_pack_pre captures special metadata, leading-one index, exponent classification and tiny/zero status into pack_pre*; no result or iter_done.",
+      "IT_PACK_PRE": "round_pack_p1 consumes registered pack_pre* and constructs mantissa/guard/sticky/discarded into pack_mid*; no result or iter_done.",
+      "IT_PACK": "round_pack_p2 consumes registered pack_mid*, performs increment/overflow/subnormal/FZ/AHP/final pack and presents one iter_done/result pulse.",
+      "iterative_div_sqrt": "IT_FIN calls round_pack_iter_p1 directly from div_pre/sqrt_pre and enters the unchanged IT_PACK path; no added iterative stage.",
+      "reset_kill": "Reset or iter_kill sets it_state_r=IT_IDLE and clears pack_pre*, pack_mid*, it_fin_valid_r and all prior non-architectural payloads.",
+      "valid_drop": "IT_PREP, IT_PACK_PRE and IT_PACK return to IT_IDLE and clear the new/related payload without iter_done; earlier states cannot expose a new payload.",
+      "iter_pause": "The existing !iter_pause state-machine gate holds IT_PACK_PRE and payload; final IT_PACK suppresses p2/iter_done while paused and resumes from the registered payload.",
+      "architectural_commit": "No architectural state or commit interface changed; V/GPR/NZCV/FPSR effects remain in the existing slot/response/commit path."
+    },
+    "latency": {
+      "scalar_fadd_fsub_s_d_h": {"before": 8, "after": 9},
+      "scalar_fmul_fma": {"before": 7, "after": 8},
+      "scalar_scvtf_ucvtf": {"before": 6, "after": 7},
+      "scalar_fcvt": {"before": 5, "after": 6},
+      "neon_fadd_fsub_2s": {"before": 15, "after": 17},
+      "neon_fadd_fsub_4s": {"before": 29, "after": 33},
+      "neon_fmul_fma_2s": {"before": 13, "after": 15},
+      "neon_scvtf_ucvtf_2s": {"before": 11, "after": 13},
+      "other_pp_other_ops": "CMP, FMIN/FMAX, FRINT and FCVTZS/FCVTZU unchanged",
+      "iterative_fdiv_s": {"before": 261, "after": 261},
+      "iterative_fsqrt_s_d": {"before": 69, "after": 69},
+      "iterative_fsqrt_h": {"before": 70, "after": 70},
+      "iterative_fdiv_h": {"before": 518, "after": 518},
+      "neon_iterative_fsqrt_2s": {"before": 137, "after": 137},
+      "fmov": "unchanged combinational passthrough",
+      "pause": "paused cycles are additive and excluded from nominal latency"
+    },
+    "semantics": {
+      "special_priority": "Special/NaN/zero/Inf paths carry the existing fp_pre special payload through both new registers; no new classification priority was introduced.",
+      "rounding": "Normal and tiny paths preserve the original leading-one, exponent, mantissa, guard, sticky and discarded calculations before unchanged round_pack_p2.",
+      "fpcr_fpsr": "DN/FZ/FZ16/AHP/RMode and input FPSR flags are copied into the new payload; p2 flag OR and output behavior are unchanged.",
+      "packed_half": "Both H lanes use pack_pre_lo/hi and pack_mid_lo/hi; FCVT remains a single-lane path.",
+      "false_path": false,
+      "public_interfaces_modified": false,
+      "core_neon_pkg_qemu_modified": false
+    }
+  },
+  "runs": [
+    {
+      "run_id": "read-t008-top50",
+      "stage": "pre-batch-analysis",
+      "command": "read-only sed/jq of T-008 retry3 raw top-50 and parsed clusters",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Confirmed 26 pp_pre->pack_mid paths, 65 logic levels, top1 pp_pre_lo.sig[251] -> pack_mid_lo.mant[97], and separate exmem_valid->acc cluster."
+    },
+    {
+      "run_id": "git-diff-check",
+      "stage": "pre-batch-static",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Implementation diff was clean before documentation files were added."
+    },
+    {
+      "run_id": "iverilog-static-syntax",
+      "stage": "pre-batch-static",
+      "command": "iverilog -g2012 -Wall -s lcvex_fp_exec_tb -o /dev/null rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv",
+      "result": "pass_with_existing_tool_diagnostics",
+      "exit_code": 0,
+      "notes": "No syntax error after emax declaration fix. Icarus emitted the repository's existing four `inside` unsupported notices and the existing lcvex_neon_fp.sv:448 implicit FP_EXEC_KIND_SCALAR wire warning; no simulation was run."
+    },
+    {
+      "run_id": "manual-state-review",
+      "stage": "pre-batch-static",
+      "command": "manual review of round_pack_pre/round_pack_p1/round_pack_p2, IT_PREP/IT_PACK_PRE/IT_PACK, reset/kill/valid-drop/pause/output branches and write set",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Confirmed p0/p1 calculations are equivalent to the old p1 decomposition, iterative DIV/SQRT is isolated, and all new non-architectural state has reset/kill/drop handling."
+    }
+  ],
+  "not_run": [
+    "Verilator compilation or simulation",
+    "Cocotb FP exec and P7 suites",
+    "QEMU or strict lockstep",
+    "P7-1/P7-3/P7-4/P7-5 base/edge/rounding/sequence matrices",
+    "reset/kill/backpressure merged-candidate regression",
+    "Quartus synthesis/fitter/signoff STA",
+    "assembler, bitstream generation, JTAG, programming, power-on and board test"
+  ],
+  "batch_acceptance_tests": [
+    "FP exec directed SV and Cocotb",
+    "P7-1/P7-3/P7-4/P7-5 SV+Cocotb and strict lockstep matrices",
+    "ordinary S/D/H normal/subnormal/zero/Inf/QNaN/SNaN, DN/FZ/FZ16/AHP and all RMode vectors",
+    "packed-half two-lane and FCVT single-lane checks",
+    "reset/kill/valid-drop/pause/response-hold and commit_ready checks",
+    "merged-candidate Quartus physical rerun and new top-50 clustering"
+  ],
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "false_path_added": false,
+    "core_modified": false,
+    "neon_fp_modified": false,
+    "pkg_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "active_task_modified": false,
+    "heavy_validation_run": false,
+    "generated_large_artifacts_created": false,
+    "assembler_run": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false
+  },
+  "known_limits": [
+    "T-009 is still the active broad-validation dependency; this speculative lane cannot be integrated or called functionally green until the dependency and joint candidate tests pass.",
+    "No Verilator/Cocotb/QEMU result is claimed from the Icarus static compile; the reported exit code only checks parser acceptance.",
+    "Physical timing improvement, resource cost and actual post-fit logic depth require a fresh full-FP rerun on the merged candidate SHA.",
+    "The added boundary increases ordinary pp_pre latency by one cycle per scalar slot and does not change iterative DIV/SQRT nominal latency.",
+    "The new packed metadata includes integer exponent fields; joint simulator and synthesis checks must confirm tool handling and bit-exact behavior for tiny/carry cases."
+  ],
+  "validation": {
+    "git_diff_check": "pass",
+    "iverilog_static_syntax": "pass_with_existing_tool_diagnostics",
+    "evidence_json_parse": "pass",
+    "handoff_present": true,
+    "active_task_unchanged": true,
+    "write_set_review": "pass: RTL, directed SV test, handoff and evidence only",
+    "heavy_validation": "not_run_by_policy"
+  },
+  "timestamps": {
+    "sent_at": "2026-09-05T09:25:14+08:00",
+    "received_at": "2026-09-05T09:25:14+08:00",
+    "implementation_commit_at": "2026-09-05T09:52:25+08:00",
+    "reported_at": "2026-09-05T09:53:00+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260905-010-r17-fp-p1-split.md",
+  "next": "After T-009 is done, merge this lane into a disposable timing-batch candidate, run the complete joint L0-L2 matrix, then rerun full-FP physical timing before any integration or assembler decision."
+}

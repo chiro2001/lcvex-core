@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-013",
+  "state": "done",
+  "base_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+  "head_sha": "df1d0c12856a25b5291228301f016b078912f0d6",
+  "branch": "feature/T-20260830-013-perf-fp",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-013",
+  "scope": "P-FP: add self-contained baremetal FP/NEON performance workloads for scalar FP32/FP64 latency/throughput, scalar FP16 throughput, and NEON 128-bit integer/FP vector add/mul/fma/load-store throughput. No Verilator or Quartus run.",
+  "toolchain": {
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "aarch64_objcopy": "aarch64-linux-gnu-objcopy",
+    "compile_flags": "-O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -Wall -Wextra",
+    "fp16_arch": "armv8.2-a+fp16 via #pragma GCC target",
+    "sve": "not used"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile-001",
+      "source_sha": "e9022919b4e445d0271c6d93693a6f78619e554b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "for f in baremetal/perf/t_fp_scalar.c baremetal/perf/t_fp_fp16.c baremetal/perf/t_neon_vect.c; do aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -Wall -Wextra -c $f -o /tmp/$(basename ${f%.c}).o; done",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All three P-FP sources compile cleanly without -mgeneral-regs-only; FP16 H instructions and NEON 2S/4S/2D instructions are emitted directly."
+    },
+    {
+      "run_id": "owner-l0-standalone-link-002",
+      "source_sha": "e9022919b4e445d0271c6d93693a6f78619e554b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "for f in t_fp_scalar t_fp_fp16 t_neon_vect; do aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -DPERF_STANDALONE -I baremetal -c baremetal/perf/$f.c -o /tmp/${f}_sa.o && aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -mabi=lp64 -c baremetal/startup_mb.s -o /tmp/startup_mb.o && aarch64-linux-gnu-gcc -nostdlib -T baremetal/link.ld -o /tmp/$f.elf /tmp/startup_mb.o /tmp/${f}_sa.o && aarch64-linux-gnu-objcopy -O binary /tmp/$f.elf /tmp/$f.bin; done",
+      "seed": null,
+      "wall_seconds": 2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Each workload links into a standalone bare-metal ELF/bin using PERF_STANDALONE and the existing startup/linker without changing shared build inputs."
+    },
+    {
+      "run_id": "owner-l0-diff-check-003",
+      "source_sha": "e9022919b4e445d0271c6d93693a6f78619e554b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": 0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-013-perf-fp.md",
+      "sha256": "cf240ebad3794c97158016a054cdda4212b592a23d135bae94cb1cc369d2e0a3",
+      "bytes": null,
+      "owner": "T-20260830-013",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-013-perf-fp.md"
+    },
+    {
+      "id": "src-fp-scalar",
+      "uri": "baremetal/perf/t_fp_scalar.c",
+      "sha256": "058fc34df1b4d5390c37ec2836e33799008aeb60951f314af05e66211730cac8",
+      "bytes": null,
+      "owner": "T-20260830-013",
+      "retain_until": "task-close",
+      "reproduce": "aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -Wall -Wextra -c baremetal/perf/t_fp_scalar.c"
+    },
+    {
+      "id": "src-fp-fp16",
+      "uri": "baremetal/perf/t_fp_fp16.c",
+      "sha256": "b99e89eed613fc0b814d75bd91b263c0db6a08ebc401fa379fee3f4396d3e788",
+      "bytes": null,
+      "owner": "T-20260830-013",
+      "retain_until": "task-close",
+      "reproduce": "aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -Wall -Wextra -c baremetal/perf/t_fp_fp16.c"
+    },
+    {
+      "id": "src-neon-vect",
+      "uri": "baremetal/perf/t_neon_vect.c",
+      "sha256": "ab63a86fa87044c9cbed13d0d3d11bb81a3ac87cf0fafb0d90e6da9828b53bfb",
+      "bytes": null,
+      "owner": "T-20260830-013",
+      "retain_until": "task-close",
+      "reproduce": "aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -Wall -Wextra -c baremetal/perf/t_neon_vect.c"
+    }
+  ],
+  "known_limits": [
+    "perf_common.h is not merged; each file is self-contained as requested.",
+    "The three workloads are not wired into scripts/build-microbench.sh, microbench_main.c, or the Makefile; standalone PERF_STANDALONE build/run is provided.",
+    "FP/NEON files require compilation without -mgeneral-regs-only because they intentionally use FP/SIMD registers.",
+    "CPACR_EL1.FPEN must be set by the workload before FP/NEON use; each run_test_* enables FPEN=11 at EL1.",
+    "Current P7 RTL does not implement NEON integer MUL (UDEF); t_neon_vect.c covers 128-bit integer ADD plus FP vector MUL/FMLA.",
+    "No Verilator microbench_runner execution, no Quartus, and no actual cycle measurements were performed; only compile/link verification.",
+    "Performance data is proxy only and is not an A10/Fmax or architectural signoff."
+  ],
+  "next": "Integrator review; after P-INFRA merges, wire these run_test/run_perf entry points into the shared perf build/JSON flow and collect cycle data on the target FP/NEON configuration.",
+  "status": "done",
+  "merge_sha": "df1d0c12856a25b5291228301f016b078912f0d6",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:11:29+08:00",
+    "head_sha": "e808c48413b1dcc8a0ae2cd288d35a9691be67b4",
+    "notes": "P-FP merged via cherry-pick. Added FP scalar/FP16/NEON perf workloads with CPACR FPEN enabling. Cross-compile pass; cycle measurements pending P-INFRA.",
+    "merge_sha": "df1d0c12856a25b5291228301f016b078912f0d6",
+    "result_sha": "df1d0c12856a25b5291228301f016b078912f0d6"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "df1d0c12856a25b5291228301f016b078912f0d6",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "df1d0c12856a25b5291228301f016b078912f0d6",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-013-perf-fp.md",
+        "sha256": "cf240ebad3794c97158016a054cdda4212b592a23d135bae94cb1cc369d2e0a3",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "src-fp-scalar",
+        "uri": "baremetal/perf/t_fp_scalar.c",
+        "sha256": "058fc34df1b4d5390c37ec2836e33799008aeb60951f314af05e66211730cac8",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "src-fp-fp16",
+        "uri": "baremetal/perf/t_fp_fp16.c",
+        "sha256": "b99e89eed613fc0b814d75bd91b263c0db6a08ebc401fa379fee3f4396d3e788",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "src-neon-vect",
+        "uri": "baremetal/perf/t_neon_vect.c",
+        "sha256": "ab63a86fa87044c9cbed13d0d3d11bb81a3ac87cf0fafb0d90e6da9828b53bfb",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

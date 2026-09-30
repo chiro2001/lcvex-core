@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-040",
+  "label": "B25-JTAG-UART",
+  "title": "Close polling JTAG-UART DATA/CONTROL and RX/TX semantics",
+  "kind": "rtl-protocol-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-parent-union-pass",
+  "assigned_owner": "b25_jtag_uart",
+  "depends_on": ["T-20260906-035", "T-20260907-036"],
+  "batch_parent": "T-20260907-037",
+  "base_sha": "689959472faf59844fb486834fad27f8fedb2ca6",
+  "branch": "verify/T-20260907-040-b25-jtag-uart",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-040",
+  "cone_id": "catapult-jtag-uart-polling-bridge",
+  "write_regions": [
+    "rtl/lcvex_catapult_soc_top.sv::module lcvex_catapult_soc_jtag_uart only",
+    "tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+    "tb/sv/lcvex_jtag_uart_model.sv",
+    "docs/tasks/evidence/T-20260907-040.json",
+    "docs/handoffs/T-20260907-040-b25-jtag-uart.md"
+  ],
+  "forbidden_regions": [
+    "top-level clock and BRAM parameter regions owned by T-038/T-039",
+    "vendor-generated JTAG-UART production HDL",
+    "boot firmware owned by T-039",
+    "shared SoC integration TB/test registry, interrupts/GIC, QEMU and board actions"
+  ],
+  "protocol": {
+    "data_address": "0x09000000 / Avalon address 0",
+    "control_address": "0x09000004 / Avalon address 1",
+    "data_read": "RVALID bit15; character bits7:0; read pops RX FIFO",
+    "control_read": "WSPACE bits31:16; AC is not TX capacity",
+    "response": "accepted request completes once and response remains stable until rsp_ready"
+  },
+  "scope": "Test the existing classic addr[2] mapping first, fix only proven bridge defects, and model RX injection/TX full/waitrequest/reset without importing the RISC-V high-bit workaround.",
+  "validation": "Directed SV covers DATA versus CONTROL, delayed waitrequest, RX pop, TX full/retry, held response, reset/valid drop, repeated characters and no duplicate Avalon side effect.",
+  "acceptance": "Core-visible +0/+4 accesses remain distinct through the bridge, PING/PONG primitives can be driven in simulation, and no IRQ dependency is introduced.",
+  "resource": "No heavy or remote job in the lane; parent owns full SoC validation.",
+  "dispatch": {
+    "sent_at": "2026-09-07T03:07:03+08:00",
+    "agent_name": "b25_jtag_uart",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true
+  },
+  "result": {
+    "owner_head": "f7e74b6ec9be1e0e26e343ec16c75b133fd23b4e",
+    "implementation_merge": "97877baa",
+    "metadata_merge": "cbdcfac8",
+    "status": "accepted; Icarus/Verilator focused and parent SoC exactly-once interaction checks pass",
+    "evidence": "docs/tasks/evidence/T-20260907-040.json"
+  },
+  "created_at": "2026-09-07T00:23:34+08:00",
+  "updated_at": "2026-09-07T04:26:15+08:00"
+}

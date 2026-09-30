@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260919-002",
+  "label": "B25-M20K-MERGE-GATE-D",
+  "state": "done",
+  "acceptance_status": "complete-release-mode-gate-d-pass",
+  "partial": false,
+  "candidate_sha": "b05521e6f0ee09a15898545bac429ee78e7014f7",
+  "candidate_tree_sha": "f77809e573a2f6287b5d350c63b148374c7aba03",
+  "run_head_sha": "0f965d22f305cd7d0ca6b35ff37a163428ef0a0d",
+  "run_tree_sha": "b2d2cde586695986cdf981dda99ce4e371eaeefb",
+  "run_head_delta": "Only docs/tasks/TASKS.md and the T-002/T-003 task registrations differ from the candidate; RTL, tests, QEMU plugin source and runners are identical.",
+  "branch": "verify/T-20260919-002-b25-m20k-gate-d",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-002",
+  "owner": "root",
+  "timestamps": {
+    "started_at": "2026-09-19T23:06:40+08:00",
+    "finished_at": "2026-09-19T23:22:56+08:00",
+    "reported_at": "2026-09-19T23:28:30+08:00",
+    "wall_seconds": 976,
+    "timezone": "Asia/Shanghai"
+  },
+  "run": {
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260919-002 root --min-local-available-mib 8192 --meta stage=gate_d --meta source_sha=b05521e6f0ee09a15898545bac429ee78e7014f7 --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=gate-d-parallel -- env VERILATOR_JOBS=1 bash sim/difftest/run_gate_d.sh --parallel",
+    "exit_code": 0,
+    "result": "PASS: Gate D 系统回归全部通过",
+    "assertions_enabled": true,
+    "comparisons_enabled": true,
+    "skip_baremetal": false,
+    "verilator_jobs": 1,
+    "parallel_runner": true,
+    "log": {
+      "path": "build/agents/T-20260919-002/gate-d.lock.log",
+      "bytes": 352702,
+      "sha256": "b3e924b4fe2c5a1535e59604e8d1a94591ce92d1d74daedf60db795739462452"
+    }
+  },
+  "results": {
+    "make_test": "PASS",
+    "coverage": {
+      "result": "PASS",
+      "covered_points": 8760,
+      "artifact": {
+        "path": "build/coverage/merged.dat",
+        "bytes": 3196159,
+        "sha256": "5842d7316b279b12328e875eb81409441f878743133f1523b6ad94e53927960c"
+      }
+    },
+    "m2_r1": {"base": 40, "cache": 40, "result": "PASS"},
+    "delay2_cache": {"tests_including_random_smoke": 33, "result": "PASS"},
+    "p5a_hardening": {"tests": 26, "result": "PASS"},
+    "gate_c": {"groups": 7, "result": "PASS"},
+    "p5a_mmu": {"groups": 3, "result": "PASS"},
+    "p4b": {"groups": 5, "result": "PASS"},
+    "random": {
+      "seeds": [1, 2, 3],
+      "requested_length": 100000,
+      "rtl_qemu_commits_each": 100002,
+      "result": "PASS",
+      "traces": [
+        {"path": "build/difftest/random_1.trace", "bytes": 3937845, "sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e"},
+        {"path": "build/difftest/random_2.trace", "bytes": 3948075, "sha256": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768"},
+        {"path": "build/difftest/random_3.trace", "bytes": 3947467, "sha256": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"}
+      ]
+    },
+    "instruction_coverage": {"expected_hit": "62/62", "observed_families": 63, "commits": 300006, "result": "PASS"},
+    "baremetal_c": {"image_bytes": 1104, "commits": 200, "result": "PASS"},
+    "parallel_results": {"count": 50, "rc0": 50, "common_sha256": "93ff7811a209e2a8479230bbb9b6bc19f7f311d3af383ec350c1db2a7e7d5494", "result": "PASS"},
+    "orphan_process_check": {"task_owned_qemu_or_coordinator": 0, "result": "PASS"}
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu": {
+      "release": "11.1.0",
+      "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+      "source_state": "expected local difftest fork modifications present",
+      "binary": {"path": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64", "sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e"},
+      "plugin": {"path": "qemu/plugins/lcvex_difftest.so", "sha256": "798051717b9b50c2c148f1811f596af4bcf4306f85bddfa86b90fd5015b86dab"}
+    },
+    "rtl_filelist_sha256": "23e27cb9249c08be6e5d11fd8daa0d315d9859dc12b459473ed8f39dea92f46e",
+    "coordinators": {
+      "base": "52de365b973f4e72205b87c04e03bd2d83df6276ffb39ee2077b178a4c3f9c83",
+      "l1dl2": "ff30a801af4b96941b1d7cc0915942d687741f0ec4406b9332dadc3d15f2fb71",
+      "l1dl2_delay2": "1254f9b47c1d472450bc77d0e0ae9974be3f3d719c1437aafbd83795b9d2d675"
+    }
+  },
+  "resource_lock": {
+    "resource": "local",
+    "admission_min_available_mib": 8192,
+    "memory_policy": "exclusive-no-hard-cap",
+    "cpu_policy": "gate-d-parallel",
+    "released_after_exit": true,
+    "final_status": "local FREE"
+  },
+  "safety_and_scope": {
+    "tracked_source_modified_by_gate": false,
+    "assertion_or_comparison_disabled": false,
+    "expected_result_modified": false,
+    "qemu_source_modified_by_gate": false,
+    "gamepc_or_quartus": false,
+    "assembler_or_jtag_board_flash_reset_power": false
+  },
+  "handoff": "docs/handoffs/T-20260919-002-b25-m20k-gate-d.md",
+  "next": "Together with T-20260919-004 physical acceptance, this releases the corrected no-FP profile to a one-shot volatile-SOF assembler task."
+}

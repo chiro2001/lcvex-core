@@ -1,0 +1,216 @@
+{
+  "artifacts": [
+    {
+      "bytes": 7973,
+      "id": "a4-trend-report",
+      "reproduce": "cat fpga/opensynth/a4_trend_report.md",
+      "retain_until": "task-review",
+      "sha256": "e651b0ee8e02bed82fc7cbf772e31e8b75a9dc2cc79559dce226c236e98a5ed9",
+      "uri": "fpga/opensynth/a4_trend_report.md"
+    },
+    {
+      "bytes": 38287,
+      "id": "a4-trend-thresholds",
+      "reproduce": "python3 -m json.tool fpga/opensynth/a4_trend_thresholds.json",
+      "retain_until": "task-review",
+      "sha256": "8888d588add172bb1b994fdd34e31fe3f09c4602c409855eb63bc829bb9f8333",
+      "uri": "fpga/opensynth/a4_trend_thresholds.json"
+    },
+    {
+      "bytes": 30461,
+      "id": "a4-script",
+      "reproduce": "python3 scripts/opensynth/trend_diff.py --help",
+      "retain_until": "task-review",
+      "sha256": "411591fc25b2aef139e3d3fa36c76e1759c42be84de1ee78a930aa45253beee5",
+      "uri": "scripts/opensynth/trend_diff.py"
+    },
+    {
+      "bytes": 4192,
+      "id": "a4-handoff",
+      "reproduce": "cat docs/handoffs/T-20260829-087-a4-trend-regression.md",
+      "retain_until": "task-review",
+      "sha256": "553f64de63a3190886566d8585fee2b3f6d6e2dd13a7dc3925b4511095709c92",
+      "uri": "docs/handoffs/T-20260829-087-a4-trend-regression.md"
+    },
+    {
+      "bytes": 7044,
+      "id": "a4-readme",
+      "reproduce": "cat fpga/opensynth/README.md",
+      "retain_until": "task-review",
+      "sha256": "0e9075050a19f54e835f177228eb33f6c03deeb1db363e66285cbdc48acbdba4",
+      "uri": "fpga/opensynth/README.md"
+    }
+  ],
+  "base_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+  "branch": "feature/T-20260829-087-a4-trend-regression",
+  "head_sha": "3a1c66e7786391d8f3cde287c72c7e986115e384",
+  "input_sha256": {
+    "fpga/opensynth/a1_generic_synth_stats.json": "a5c27ff87bc78a55a940326abf91155762538d645e4529b7e155cb25ad4da300",
+    "fpga/opensynth/a2_soc_stub_manifest.md": "d9cb3daa6ba9fb830ffe3e2b0411f3ee2ed4d02647be2f821b64a850735e1072",
+    "fpga/opensynth/a2_soc_stub_stats.json": "d8c66aac65b0fbdeba99e4c22a3922b59a5b0aaa042a920ca0a670e4c059db6f",
+    "fpga/opensynth/a3_correlation_data.json": "6c5b052ea941641bc65bd1f1e723f572e244ce3063f0416b8b68dced213bd152"
+  },
+  "known_limits": [
+    "A1 未包含 lcvex_core/lcvex_l2，不是完整 SoC 开源代理。",
+    "A2 为 0-cell 边界 stub，不代表真实面积；ECP5 nextpnr 失败，Fmax N/A。",
+    "本次只有一份 A4 快照，时间趋势 N/A。",
+    "Generic 4-LUT/FF 不是 A10/ECP5 厂商资源，ALM 与 LUT 不可直接换算。",
+    "本报告非 A10 signoff、不替代 Quartus、不解除 T-067。"
+  ],
+  "metadata": {
+    "blockers": "无新增阻断；不替代Quartus；不解除T-067；时间趋势为N/A",
+    "files": "docs/handoffs/T-20260829-087-a4-trend-regression.md,docs/tasks/evidence/T-20260829-087.json,fpga/opensynth/a4_trend_report.md,fpga/opensynth/a4_trend_thresholds.json,fpga/opensynth/README.md,scripts/opensynth/trend_diff.py",
+    "next": "集成者复核；后续可把本A4阈值JSON作为首个baseline；Gate F-BOARD仍由T-067/Quartus负责",
+    "received_at": "2026-08-29T08:09:00+0800",
+    "reported_at": "2026-08-29T08:09:00+0800",
+    "sent_at": "2026-08-29T08:09:00+0800",
+    "state": "review",
+    "tests": "python3 -m json.tool fpga/opensynth/a4_trend_thresholds.json; python3 -m py_compile scripts/opensynth/trend_diff.py; git diff --check",
+    "timezone": "Asia/Shanghai"
+  },
+  "method": "只读汇总既有 A1/A2/A3 OpenSynth 产物，输出运行间资源/统计差异、输入 SHA、工具版本和代理内部阈值检查。不运行 Yosys/nextpnr/Verilator/Quartus/P&R。不做 A10 线性换算，不新增 A10 Fmax，不解除 T-067。",
+  "qemu": {
+    "binary_sha256": "",
+    "commit": "N/A",
+    "patches_sha256": "",
+    "release": "N/A"
+  },
+  "runs": [
+    {
+      "command": "python3 scripts/opensynth/trend_diff.py --base-sha 7c847561d3de3edeee0f7f8937fd3929fc101ba6 --head-sha 3a1c66e7786391d8f3cde287c72c7e986115e384 --branch feature/T-20260829-087-a4-trend-regression",
+      "exit_code": 0,
+      "result": "pass",
+      "run_id": "owner-a4-generate-001"
+    },
+    {
+      "command": "python3 -m json.tool fpga/opensynth/a4_trend_thresholds.json",
+      "exit_code": 0,
+      "result": "pass",
+      "run_id": "owner-a4-json-validate-002"
+    },
+    {
+      "command": "python3 -m py_compile scripts/opensynth/trend_diff.py",
+      "exit_code": 0,
+      "result": "pass",
+      "run_id": "owner-a4-script-compile-003"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "run_id": "owner-a4-diff-check-004"
+    }
+  ],
+  "schema_version": 1,
+  "state": "done",
+  "task": {
+    "id": "T-20260829-087",
+    "kind": "opensynth-trend-threshold-guard",
+    "label": "A4",
+    "parent": "T-20260828-071",
+    "title": "A4 OpenSynth 趋势/差分回归与阈值守卫"
+  },
+  "task_id": "T-20260829-087",
+  "threshold_guard": {
+    "a10_thresholds_defined": false,
+    "checks": [
+      {
+        "id": "a1-two-run-determinism",
+        "status": "pass"
+      },
+      {
+        "id": "a2-two-run-determinism",
+        "status": "pass"
+      },
+      {
+        "id": "a1-vs-a3-consistency",
+        "status": "pass"
+      },
+      {
+        "id": "a2-vs-a3-consistency",
+        "status": "pass"
+      },
+      {
+        "id": "a3-input-hash-stability",
+        "status": "pass"
+      },
+      {
+        "id": "no-a10-resource-or-fmax-threshold",
+        "status": "pass"
+      },
+      {
+        "id": "temporal-trend-baseline",
+        "status": "N/A"
+      }
+    ],
+    "note": "阈值仅限代理内部不变量，不涉及 A10 资源/Fmax；不替代 Quartus，不解除 T-067。",
+    "overall": "pass"
+  },
+  "toolchain": {
+    "a1_abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+    "a1_yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1)",
+    "a2_nextpnr_ecp5": "nextpnr-0.11.1-18-gdec04b3b",
+    "a2_verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "a2_yosys_oss": "Yosys 0.68+136 (git sha1 c30457480-dirty, Release, Clang 21.1.8)",
+    "a3_a10_quartus": "Quartus Prime Shell/Pro 21.4.0 Build 67 12/06/2021",
+    "a3_python": "Python 3.12.10"
+  },
+  "trend": {
+    "baseline_path": null,
+    "deltas": {},
+    "reason": "首次 A4 baseline，无更早 A4 快照；未编造时间趋势。",
+    "status": "N/A"
+  },
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-087",
+  "merge_sha": "9d96ed07c943e3002b1ad3121db2f31343635f09",
+  "handoff_sha": "108320470a2c0c8765f1ad6666c9436c9722daf4",
+  "integrator_review": {
+    "received_at": "2026-08-29T08:15:51+08:00",
+    "status": "accepted",
+    "head_sha": "9af5ffd",
+    "notes": "A4 趋势/阈值脚本已审阅并合并；轻量只读，未新增 A10/Fmax 声明；当前仅首次 baseline，时间趋势 N/A。",
+    "merge_sha": "9d96ed0",
+    "result_sha": "3a1c66e7786391d8f3cde287c72c7e986115e384"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "9d96ed0",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "108320470a2c0c8765f1ad6666c9436c9722daf4",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "3a1c66e7786391d8f3cde287c72c7e986115e384",
+        "reason": "set explicit result head from evidence head_sha"
+      },
+      {
+        "field": "merge_sha",
+        "old": "9d96ed0",
+        "new": "9d96ed07c943e3002b1ad3121db2f31343635f09",
+        "reason": "expand to full merge SHA"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

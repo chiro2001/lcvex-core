@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-024",
+  "state": "done",
+  "partial": false,
+  "base_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+  "head_sha": "5cc81509c19f2d792eabe7fb687a31964eddf5c0",
+  "branch": "fix/T-20260902-024-a10-rtl-cdc-harden",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-024",
+  "scope": "A10 RTL CDC hardening: remove raw EMIF cal_fail from CPU-domain adapter control, add per-domain FSM reset release chains, and route calibration_gate status flops through those synchronized resets.",
+  "changes": [
+    {
+      "path": "rtl/lcvex_axi4_avalon_adapter.sv",
+      "type": "rtl_hardening",
+      "summary": "Split reset synchronizers into FSM reset (cpu_fsm_rst_n/emif_fsm_rst_n, no cal_fail) and FIFO epoch reset (cpu_fifo_rst_n/emif_fifo_rst_n, includes calibration failure); replace raw cpu_domain_rst_n in CPU/EMIF FSM reset with per-domain synchronized reset; replace raw cal_fail in CPU control with cal_failed_cpu/cal_abort_cpu."
+    },
+    {
+      "path": "rtl/lcvex_calibration_gate.sv",
+      "type": "rtl_hardening",
+      "summary": "Change reset ports to adapter-provided per-domain synchronized resets (cpu_rst_n_sync/emif_rst_n_sync); source-domain fail latch and CPU status synchronizers reset only in their own domain."
+    }
+  ],
+  "source_evidence": {
+    "task": "T-20260902-021",
+    "handoff": "docs/handoffs/T-20260902-021-a10-cdc-sdc-fix.md",
+    "sta_handoff": "docs/handoffs/T-20260902-022-fp-p5-rerun.md",
+    "root_cause": "EMIF adapter used raw cal_fail in CPU-domain control and CPU reset as an asynchronous reset of EMIF-side FSM; SDC false paths were only a constraint stand-in, not RTL synchronization."
+  },
+  "rtl_filelist_sha256": "23e27cb9249c08be6e5d11fd8daa0d315d9859dc12b459473ed8f39dea92f46e",
+  "soc_filelist_sha256": "be79ea369b0280cbf3fb7a695f82d9ccbf0214c28a49abe4c7045a2ebbcbc975",
+  "modified_file_hashes": {
+    "rtl/lcvex_axi4_avalon_adapter.sv": "2e952e4e43919fc0f44b6f2aa4f6f9eb7fc1048a462274b2cc50ea4499e3aef3",
+    "rtl/lcvex_calibration_gate.sv": "bbdbd4047fa238f31afcfe0d54cdf805d9a3b70f3768f2e096e365a746ff26f0"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile",
+      "source_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex make compile",
+      "seed": null,
+      "wall_seconds": 7,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-lint-soc",
+      "source_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex bash fpga/catapult_a10/tools/lint_soc.sh",
+      "seed": null,
+      "wall_seconds": 8,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-lint-platform",
+      "source_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex bash fpga/catapult_a10/tools/lint_platform.sh",
+      "seed": null,
+      "wall_seconds": 7,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l1-b2-sv-regression",
+      "source_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal --top-module lcvex_axi4_avalon_tb; ./obj_dir/lcvex_axi4_avalon_tb",
+      "seed": "b2_054",
+      "wall_seconds": 16,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "output": "PASS: B2 AXI4/Avalon SV regression writes=0 reads=0"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-024-a10-rtl-cdc-harden.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-024.json"
+    },
+    {
+      "id": "local-build-logs",
+      "uri": "build/agents/T-20260902-024/**"
+    },
+    {
+      "id": "b2-sv-obj",
+      "uri": "build/agents/T-20260902-024/sv/obj_dir"
+    }
+  ],
+  "known_limits": [
+    "No Quartus/Qsys synthesis, fitter, signoff STA, TimeQuest Report CDC, assembler/SOF, or board reset/calibration stress was run.",
+    "tb/** was treated as read-only in this task, so no new dedicated CDC directed test file was added; existing B2 SV regression was rerun and passed.",
+    "Post-fit STA must confirm recovery/removal on the new FSM/FIFO reset synchronizer hierarchy; SDC wildcard names cpu_rst_sync0_n*/emif_rst_sync0_n* remain compatible with the kept first-stage naming."
+  ],
+  "next": "Have integrator merge, then rerun FP-P4 functional and FP-P5 synthesis/fitter/signoff STA on the merged SHA; only all timing non-negative and DDR pass permits assembler/SOF.",
+  "timestamps": {
+    "sent_at": "2026-09-03T08:53:00+08:00",
+    "received_at": "2026-09-03T08:55:00+08:00",
+    "reported_at": "2026-09-03T09:02:00+08:00"
+  },
+  "merge_sha": "ede264837cc6eea57aeb116e9b5237428381f768",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T09:04:32+08:00",
+    "merged_at": "2026-09-03T09:05:15+08:00",
+    "recorded_at": "2026-09-03T09:05:15+08:00",
+    "notes": "A10 RTL CDC/reset hardening merged and accepted"
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-028",
+  "label": "B25-SLD-WARNING-PROVENANCE",
+  "state": "done",
+  "acceptance_status": "source-qualified-vendor-padding-contract-accepted-by-integrator",
+  "analysis_base_sha": "58f721194a8975d98b1b746513183faeeb305f13",
+  "evidence_parent_sha": "22ce45e2f86fcb67e34e363850868c27f81244d1",
+  "final_head_sha": null,
+  "final_head_sha_note": "The correction commit is self-referential and is reported in the final response rather than embedded in its own content.",
+  "branch": "verify/T-20260920-028-b25-sld-warning-provenance",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-028",
+  "sent_at": "2026-09-20T16:40:18+08:00",
+  "received_at": "2026-09-20T16:40:18+08:00",
+  "reported_at": "2026-09-20T17:06:41+08:00",
+  "review_correction_at": "2026-09-20T17:06:41+08:00",
+  "scope_and_safety": {
+    "quartus_version_in_historical_reports": "Quartus Prime 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+    "analysis_mode": "local read-only artifact/hash/XML/report inspection",
+    "quartus_started": false,
+    "synthesis_fitter_sta_assembler": false,
+    "sof_jtag_board_flash_reset_power": false,
+    "tracked_source_modified": false,
+    "other_worktrees_modified": false
+  },
+  "source_commits": {
+    "T017_candidate": {
+      "commit": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+      "tree": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+      "source_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+      "rtl_decode_sha256": "d1a1d2fbcf865a34aa33cca4e8586804bacd02f5f3853af1839a96be1febcc67",
+      "rtl_decode_path": "rtl/lcvex_decode.sv"
+    },
+    "T023_old_negative": {
+      "commit": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+      "rtl_decode_sha256": "d1a1d2fbcf865a34aa33cca4e8586804bacd02f5f3853af1839a96be1febcc67",
+      "rtl_decode_path": "rtl/lcvex_decode.sv"
+    },
+    "T023_fixed_fail_closed_self_check": {
+      "commit": "836f7fd884c5561abf2238a27f99e54ede8dc4e0",
+      "rtl_decode_sha256": "d1a1d2fbcf865a34aa33cca4e8586804bacd02f5f3853af1839a96be1febcc67",
+      "rtl_decode_path": "rtl/lcvex_decode.sv",
+      "interpretation": "This deliberately ran fixed-mode against the unrepaired baseline; it is an expected-fail self-check, not the T027 repaired candidate."
+    },
+    "T027_candidate": {
+      "commit": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+      "tree": "e5e94ab175f6847d727901576a8f12958efc1100",
+      "source_manifest_sha256": "4bfb8f25201c467f01ac3a5b3725cc847908b869f78d1dbaea19e0e8f6fc1f06",
+      "rtl_decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+      "rtl_decode_path": "rtl/lcvex_decode.sv"
+    }
+  },
+  "warning_identity_inventory": {
+    "identity_key": "message_id + normalized_net + source_basename + source_line",
+    "canonical_identities": {
+      "tracked_decoder_16788": {
+        "message_id": 16788,
+        "net": "imm[63]_2",
+        "source": "lcvex_decode.sv",
+        "line": 1806,
+        "class": "tracked RTL decoder"
+      },
+      "generated_sld_16788": {
+        "message_id": 16788,
+        "net": "ir_in_2d[2][4]",
+        "source": "alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd",
+        "line": 243,
+        "class": "Quartus-generated SLD hub",
+        "canonical_hpath": "auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|sldfabric"
+      }
+    },
+    "runs": {
+      "T017": {
+        "report_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/remote-collect-synthesis/output_files/catapult_a10.syn.rpt",
+        "report_sha256": "dffab4b7c641830f559700c6ba77eee4f13bf5b6a9db8042e7656bdfb1a9ee43",
+        "smsg_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/remote-collect-synthesis/output_files/catapult_a10.syn.smsg",
+        "smsg_sha256": "1127e47c74f6a09eb6159d5c52445e2b7b465812ce3b8f2875aef43c81a82aef",
+        "summary_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/remote-collect-synthesis/output_files/catapult_a10.syn.summary",
+        "summary_sha256": "1943a2236b61bd2df50ce4056fc8e2c23d769a1d0ec9843ddd9331b261405e66",
+        "raw_16788_occurrences": {"syn_rpt": 3, "syn_smsg": 1, "syn_summary": 0, "total_across_report_and_smsg": 4},
+        "detailed_rows": ["tracked_decoder_16788: 1 in syn.rpt", "generated_sld_16788: 1 in syn.smsg"],
+        "summary_rows": ["tracked_decoder_16788: 1 in syn.rpt summary table", "generated_sld_16788: 1 in syn.rpt generated-file summary table"],
+        "unique_identity_count": 2,
+        "report_lines": [14530, 14950, 14968],
+        "smsg_line": 3
+      },
+      "T023_old": {
+        "report_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-023/build/agents/T-20260920-023/old-negative/lcvex_logic_imm_probe.syn.rpt",
+        "report_sha256": "eda1b87b1b391513787a2f823b4e449b4c42e1adde8b328fd97137c22c93de3e",
+        "synthesis_log_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-023/build/agents/T-20260920-023/old-negative/synthesis.log",
+        "synthesis_log_sha256": "33ce18c5ed06cf5fac5c76e13dc78be94bfeee40a16c908a921a5015faaf73c1",
+        "raw_16788_occurrences": {"syn_rpt": 2, "detailed": 1, "summary": 1},
+        "unique_identity_count": 1,
+        "identities": ["tracked_decoder_16788"],
+        "report_lines": [368, 397]
+      },
+      "T023_fixed_old_baseline_self_check": {
+        "report_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-023/build/agents/T-20260920-023/fixed-old-warning-fail-20260920-1/lcvex_logic_imm_probe.syn.rpt",
+        "report_sha256": "29c30eb4fb99956df93243272f9a8dae6e79127858c594593c15eaab49b6acc5",
+        "synthesis_log_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-023/build/agents/T-20260920-023/fixed-old-warning-fail-20260920-1/synthesis.log",
+        "synthesis_log_sha256": "8c6694c576f2e03e8d7183a4ff00d42ef249e51ad68efa37c469680dc56cac4c",
+        "raw_16788_occurrences": {"syn_rpt": 2, "detailed": 1, "summary": 1},
+        "unique_identity_count": 1,
+        "identities": ["tracked_decoder_16788"],
+        "report_lines": [368, 397]
+      },
+      "T027": {
+        "report_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/output_files/catapult_a10.syn.rpt",
+        "report_sha256": "3f9346ffd73999b75f1d3f1a055902e2d3612b239971b650ddc20551d49efee5",
+        "smsg_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/output_files/catapult_a10.syn.smsg",
+        "smsg_sha256": "b6a63076bc7dcd1e58f6aac4df5c4676429b923655214b2477529e1dd2d343ba",
+        "summary_path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/output_files/catapult_a10.syn.summary",
+        "summary_sha256": "14a313d5971625de155163f1f0c3359496534900d01128bad15b347fb01bcb41",
+        "raw_16788_occurrences": {"syn_rpt": 1, "syn_smsg": 1, "syn_summary": 0, "total_across_report_and_smsg": 2},
+        "detailed_rows": ["generated_sld_16788: 1 in syn.smsg"],
+        "summary_rows": ["generated_sld_16788: 1 in syn.rpt summary table"],
+        "unique_identity_count": 1,
+        "decoder_identity_occurrences": 0,
+        "report_line": 15033,
+        "smsg_line": 3
+      }
+    },
+    "normalization_conclusion": "T027 has no lcvex_decode imm[63]_2 identity in syn.rpt, syn.smsg or syn.summary. After detail/summary deduplication, its sole 16788 identity is generated SLD ir_in_2d[2][4]. T017 has both identities; T023 old and deliberate fixed-mode baseline self-check have only the decoder identity."
+  },
+  "sld_topology_identity": {
+    "T017_synthesized_sopcinfo": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/remote-collect-v3-final/acceptance-v3/fitted-clone/fpga/catapult_a10/quartus/qdb/_compiler/catapult_a10/auto_fab_0/21.4.0/synthesized/1/sld_sysconfiles/alt_sld_fab_0.sopcinfo",
+      "bytes": 86667,
+      "lines": 3015,
+      "raw_sha256": "238dc70e4f18d5ab0ca636c53f2e2d4da095e285d24d5b8576cf4833061a974f",
+      "timestamp_comment": "2026.09.20.11:00:46"
+    },
+    "T027_synthesized_sopcinfo": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/fitted-clone/fpga/catapult_a10/quartus/qdb/_compiler/catapult_a10/auto_fab_0/21.4.0/synthesized/1/sld_sysconfiles/alt_sld_fab_0.sopcinfo",
+      "bytes": 86667,
+      "lines": 3015,
+      "raw_sha256": "ec3b82411cbe2cc4830aa29434d0514b7ebff3fa0ee3d2de4e9f31b0bc507e4d",
+      "timestamp_comment": "2026.09.20.15:50:28"
+    },
+    "normalization": {
+      "rule": "remove only XML timestamp comment matching ^ <!-- YYYY.MM.DD.HH:MM:SS -->$",
+      "T017_normalized_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+      "T027_normalized_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+      "normalized_diff_exit": 0,
+      "normalized_diff_lines": 0,
+      "raw_content_diff": "one XML timestamp comment only"
+    },
+    "modules": {
+      "module_count": 7,
+      "hpaths": ["alt_sld_fab_0", "alt_sld_fab_0|alt_sld_fab_0", "alt_sld_fab_0|alt_sld_fab_0|splitter", "alt_sld_fab_0|alt_sld_fab_0|jtagpins", "alt_sld_fab_0|alt_sld_fab_0|sldfabric", "alt_sld_fab_0|alt_sld_fab_0|ident", "alt_sld_fab_0|alt_sld_fab_0|configresetfabric"],
+      "hub_hpath": "alt_sld_fab_0|alt_sld_fab_0|sldfabric",
+      "hub_kind": "altera_sld_jtag_hub",
+      "hub_count": 2,
+      "n_sel_bits": 2,
+      "n_node_ir_bits": 5,
+      "node_info": "0000110000100000011011100000000000001100000000000110111000000000"
+    },
+    "settings_and_endpoints": {
+      "fabric_settings_order": [
+        {"mfr_code": 110, "type_code": 132, "version": 1, "instance": -1, "ir_width": 3, "bridge_agent": 0, "psig": "9b67919e"},
+        {"mfr_code": 110, "type_code": 128, "version": 1, "instance": -1, "ir_width": 1, "bridge_agent": 0, "psig": "9b67919e"}
+      ],
+      "hub_settings_order": [
+        {"mfr_code": 110, "type_code": 128, "version": 1, "instance": 0, "ir_width": 1, "bridge_agent": 0},
+        {"mfr_code": 110, "type_code": 132, "version": 1, "instance": 0, "ir_width": 3, "bridge_agent": 0}
+      ],
+      "endpoint_hpaths_order": [
+        "emif|emif_bot|emif_bot|col_if|colmaster|jtag_phy_embedded_in_jtag_master|node|sld_virtual_jtag_component|sld_virtual_jtag_impl_inst|jtag_signal_adapter|sld_jtag_endpoint_adapter_impl_inst|sld_agent_ep_inst|ep",
+        "jtag_uart_inst|jtag_uart|jtag_uart_only_jtag_uart_altera_avalon_jtag_uart_1910_zesttkq_alt_jtag_atlantic|inst|sld_jtag_endpoint_adapter_impl_inst|sld_agent_ep_inst|ep"
+      ],
+      "node_interfaces": [
+        {"interface": "node_0", "encoded_sld_id": 201354752, "ir_in_width": 1, "ir_out_width": 1, "type_code": 128, "ir_width": 1},
+        {"interface": "node_1", "encoded_sld_id": 203451904, "ir_in_width": 3, "ir_out_width": 3, "type_code": 132, "ir_width": 3}
+      ],
+      "endpoint_identity_from_raw_report": [
+        "sld_ir_width=3, sld_node_info_internal=203451904 -> mfr_code=110,type_code=132,ir_width=3 (T017 report lines 14511-14513; T027 14578-14580)",
+        "sld_ir_width=1, sld_node_info_internal=201354752 -> mfr_code=110,type_code=128,ir_width=1 (T017 report lines 14516-14518; T027 14583-14585)"
+      ],
+      "interpretation": "Metadata and raw VHDL elaboration identify the EMIF endpoint as type-132/IR-3 and JTAG-UART as type-128/IR-1; both node interfaces and widths are unchanged."
+    }
+  },
+  "net_semantics": {
+    "raw_generated_context": [
+      "T017 report identifies Quartus IP generation for debug fabric alt_sld_fab_0 and Generated by version 21.4 build 67 (lines 14729-14775).",
+      "T027 report identifies generated hub entity count=2,n_node_ir_bits=5,node_info=<same 64-bit value> at line 14842 and warning source .../alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd(243)."
+    ],
+    "ir_in_2d": {
+      "driver": "Quartus raw warning says the net has no driver; no source assignment proving a driver is present exists.",
+      "consumer": "Available sopcinfo exposes only hub node_0 and node_1; the ephemeral generated VHDL that would show exact ir_in_2d port indexing/consumer logic is not retained. The only auditable consumer context is the generated altera_sld_jtag_hub entity.",
+      "index_shape_observation": "COUNT=2 exposes nodes 0 and 1, and N_NODE_IR_BITS=5 is the hub-wide packed width. ir_in_2d[2][4] is a third row/high-bit slot with no corresponding node_2 or endpoint IR width; this is a metadata-supported padding interpretation, not a claim about unavailable VHDL assignments."
+    },
+    "lost_fanout": {
+      "T017_and_T027_same": true,
+      "removed_register_count": 12,
+      "irf_rows": ["irf_reg[2][4]", "irf_reg[2][3]", "irf_reg[1][4]", "irf_reg[1][3]", "irf_reg[1][2]", "irf_reg[1][1]"],
+      "shadow_irf_rows": ["shadow_irf_reg[2][4]", "shadow_irf_reg[2][3]", "shadow_irf_reg[1][4]", "shadow_irf_reg[1][3]", "shadow_irf_reg[1][2]", "shadow_irf_reg[1][1]"],
+      "raw_report": "Both reports list these 12 registers under auto_fab_0|alt_sld_fab_0|...|jtag_hub_gen.real_sld_jtag_hub as Lost fanout and then show Total Number of Removed Registers = 12.",
+      "causal_limit": "The row/bit overlap is consistent with unused/padded SLD IR state, but a direct one-net-to-one-register causal graph cannot be proven without ephemeral VHDL or netlist."
+    },
+    "generated_vhdl_availability": {
+      "available": false,
+      "checked_roots": ["/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017", "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027"],
+      "tracked_alt_sld_source": false,
+      "limitation": "Only raw report paths into Quartus qdb/.t temporary directories and sopcinfo metadata remain; no generated alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd was copied into task evidence. No VHDL behavior was invented."
+    }
+  },
+  "historical_functional_chain": {
+    "evidence_files": {
+      "T017": {"path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-017.json", "sha256": "23f3b0159410ff67ebdd9b311a5fd0ba30c050f7bafcc53c92c258f8d36f6666"},
+      "T020": {"path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-020.json", "sha256": "7b4c328eb49cc19bdde3282e97b2ba85b73f1f7b41860927c5be32124a369aa0"},
+      "T021": {"path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-021.json", "sha256": "21b050d72e702285b19289b8936d361b96b2b139dfce5e46a5694e4adaa2f80e"}
+    },
+    "T017_to_T020": {
+      "T017_candidate": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+      "T017_tree": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+      "T020_input_candidate": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+      "T020_input_tree": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+      "source_manifest_equal": true,
+      "T020_assembler_command": "quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10",
+      "assembler_invocations": 1,
+      "sof": {"bytes": 36842101, "sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd", "quartus_checksum": "0x3159F8A0", "design_hash": "4DAED3C37174544441E6912B371092CA"},
+      "interpretation": "T020 consumed exactly the T017 candidate and did not change the physical database payload; it is the valid historical bridge from fitted T017 to the SOF used by T021."
+    },
+    "T020_to_T021": {
+      "candidate_sof_sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd",
+      "configuration": "programmer exit=0; configuration/operation/checksum/JTAG-ID all pass; JTAG ID=0x02E060DD",
+      "jtag_nodes": ["Virtual JTAG #0", "Signal Tap #0", "JTAG UART #0", "JTAG PHY #0"],
+      "terminal_startup": ["LCVEX25 BOOT", "CAL-WAIT", "DDR-FAIL", "READY"],
+      "positive_observations": ["direct terminal connected", "RXPATH bridge/PoC/core-dmem all captured 0x0000A43F with one valid event and no fault", "JTAG-UART node was present"],
+      "acceptance_boundary": "T021 was partial/functional-fail: DDR-FAIL, no CLOCK25/pong/debug/z echo, and CPU-visible RX load data remained zero despite tap response. It was rolled back to a verified Golden SOF."
+    },
+    "same_topology_judgement": "The historical T020/T021 board run positively exercised T017 SLD topology. T017 and T027 synthesized alt_sld_fab_0 metadata are byte-identical after timestamp removal, so topology identity is the same. This is historical evidence only; it is not a new T027 board test and does not prove warning-free synthesis."
+  },
+  "tracked_source_audit": {
+    "relevant_file_sha256_at_T017_and_T027": {
+      "fpga/catapult_a10/quartus/catapult_a10.qsf": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+      "fpga/catapult_a10/qsys/ddr4_bot/Qsys.qsys": "3da27e815b3f89dd89129a856794ad1da8f4cfe4d5b7b8aee7d525ab4bc79ca6",
+      "fpga/catapult_a10/qsys/ddr4_bot/ip/Qsys/Qsys_emif_bot.ip": "89d3b8e1caed52d713e1530cb2576b4406f157759ef4f0a7bee34880620e667",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+      "fpga/catapult_a10/jtag_uart/jtag_uart_std.v": "d400e066f110145a8b6829ba5d1872474d41d09834475b44f48a7b1079be3fe1",
+      "fpga/catapult_a10/jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v": "09a9b9a78d3e27b2c1499868f9ea56074186115e95f94bd12415a07461161d3c"
+    },
+    "qsf_ip_findings": [
+      "catapult_a10.qsf explicitly retains Qsys EMIF IP and both JTAG-UART Verilog inputs; it contains no SLD disable, endpoint removal, MESSAGE_DISABLE, filter or waiver assignment.",
+      "Qsys_emif_bot.ip has diagnostic declarations DIAG_EXPORT_VJI=false, DIAG_ENABLE_JTAG_UART=false and EMIF debug export disabled in tracked IP metadata; changing these would alter or disable debug topology and is not a repair that preserves both observed endpoints.",
+      "The tracked generated JTAG-UART Verilog contains five 'altera message_off ... 16788' comments (lines 18, 75, 161, 240, 329). This is message suppression, explicitly outside the repair definition, and does not suppress the generated SLD hub warning in T027.",
+      "The same generated Verilog has SLD_AUTO_INSTANCE_INDEX=YES only inside a commented alt_jtag_atlantic block (lines 558-574); it is not an active source-qualified topology repair.",
+      "git ls-files has no tracked alt_sld_fab_0 or altera_sld_jtag_hub generated source. T017->T027 relevant QSF/IP/JTAG source hashes are unchanged; only rtl/lcvex_decode.sv changed for the decoder repair."
+    ],
+    "legal_tracked_root_cause_repair_found": false,
+    "search_boundary": "No tracked setting was found that repairs ir_in_2d[2][4] while retaining both EMIF and JTAG-UART endpoints. Disabling either node, editing generated VHDL, suppression/filtering and waiver were excluded."
+  },
+  "decision": {
+    "classification": "deterministic-Quartus-21.4-generated-SLD-padding-warning-for-this-canonical-topology",
+    "basis": [
+      "T017 and T027 are independent full-SoC fresh reports at different times with exact same generated SLD metadata after timestamp normalization.",
+      "T027 changes tracked decoder RTL and removes the decoder identity while preserving generated warning, entity parameters, endpoint identities, node widths and Lost fanout rows.",
+      "T023 minimal old/fixed probe reproduces only the tracked decoder identity and has no full-SoC SLD fabric, separating the warning classes.",
+      "No legal tracked QSF/IP source root-cause repair preserving both endpoints was found."
+    ],
+    "T027_status": "Do not mark T027 passed here. Its original global-zero acceptance remains blocked pending integrator review.",
+    "proposed_source_qualified_contract": {
+      "raw_warning_visibility": "Keep raw .syn.rpt, .syn.smsg and .syn.summary; no suppression, filter, waiver or generated-source edit.",
+      "tracked_rtl_zero": "Deduplicated Warning 16788 identities whose source resolves to tracked RTL/IP must be exactly zero; in particular lcvex_decode.sv imm[63]_2 at line 1806 must be absent.",
+      "generated_allowlist": {
+        "maximum_canonical_identity_count": 1,
+        "expected_identity_count_for_this_topology": 1,
+        "message_id": 16788,
+        "net": "ir_in_2d[2][4]",
+        "source_basename": "alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd",
+        "source_line": 243,
+        "hpath": "auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|sldfabric"
+      },
+      "raw_detail_summary_contract": "For current Quartus 21.4, exactly one generated canonical identity may occur as one detail row plus one summary row (T027: one syn.smsg line and one syn.rpt summary row). Any extra/missing raw row, unrecognized detail/summary form, or second identity fails closed.",
+      "topology_contract": "Normalized synthesized alt_sld_fab_0.sopcinfo SHA256 must equal b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e; module/hpath set, endpoint hpaths, SETTINGS/type-code/IR-width sequence, COUNT=2, N_SEL_BITS=2, N_NODE_IR_BITS=5, NODE_INFO and node_0/node_1 widths (1/3) must match. Any count, signature, endpoint or topology drift fails closed.",
+      "freshness": "Report and sopcinfo must come from the same fresh synthesis root; missing/stale artifacts fail closed. Any tracked RTL/QSF/IP/topology/tool-version change requires a new physical evidence task and fresh authorized flow."
+    }
+  },
+  "integrator_decision": {
+    "reviewed_at": "2026-09-20T17:13:14+08:00",
+    "integration_branch": "batch/T-20260907-037-b25-bringup",
+    "evidence_merge_sha": "e6c0e9bd1232a4d2beb8b089b50a18a0c6cde4ac",
+    "evidence_merge_tree": "ee32d37b23a44bed8d35fe436e99d6410a709bdb",
+    "independent_recheck": {
+      "T017_normalized_sopcinfo_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+      "T027_normalized_sopcinfo_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+      "normalized_diff": 0,
+      "T027_decoder_identity_occurrences": 0,
+      "T027_generated_sld_syn_rpt_occurrences": 1,
+      "T027_generated_sld_syn_smsg_occurrences": 1
+    },
+    "contract_adopted": true,
+    "classification": "acceptance-contract correction, not warning suppression, filtering or waiver",
+    "T027_result": "PASS under the exact source-qualified and topology-bound contract",
+    "next": "assembler/SOF packaging from the accepted T-027 fitted database"
+  },
+  "artifacts": [
+    {"id": "T017-evidence", "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-017.json", "sha256": "23f3b0159410ff67ebdd9b311a5fd0ba30c050f7bafcc53c92c258f8d36f6666"},
+    {"id": "T020-evidence", "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-020.json", "sha256": "7b4c328eb49cc19bdde3282e97b2ba85b73f1f7b41860927c5be32124a369aa0"},
+    {"id": "T021-evidence", "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-021.json", "sha256": "21b050d72e702285b19289b8936d361b96b2b139dfce5e46a5694e4adaa2f80e"},
+    {"id": "T023-evidence", "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-023.json", "sha256": "fd5bd9903166f2a287afd6459a4e5ea5410bdfc48dd2cff5bd6ff14a31f8784c"},
+    {"id": "T027-evidence", "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/docs/tasks/evidence/T-20260920-027.json", "sha256": "d68bcfb5238b5f108591b249ffc8d29cf185756b51cae7da1b63550792561892"},
+    {"id": "T017-sopcinfo-raw", "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/remote-collect-v3-final/acceptance-v3/fitted-clone/fpga/catapult_a10/quartus/qdb/_compiler/catapult_a10/auto_fab_0/21.4.0/synthesized/1/sld_sysconfiles/alt_sld_fab_0.sopcinfo", "sha256": "238dc70e4f18d5ab0ca636c53f2e2d4da095e285d24d5b8576cf4833061a974f"},
+    {"id": "T027-sopcinfo-raw", "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/remote-collect/runtime/acceptance-v3/fitted-clone/fpga/catapult_a10/quartus/qdb/_compiler/catapult_a10/auto_fab_0/21.4.0/synthesized/1/sld_sysconfiles/alt_sld_fab_0.sopcinfo", "sha256": "ec3b82411cbe2cc4830aa29434d0514b7ebff3fa0ee3d2de4e9f31b0bc507e4d"},
+    {"id": "T020-sof-historical", "path": "build/agents/T-20260920-020/remote-evidence/catapult_a10.sof (historical path in T020 evidence)", "sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd", "bytes": 36842101},
+    {"id": "T021-terminal-transcript-historical", "path": "build/agents/T-20260920-021/terminal/direct-terminal.typescript (historical path in T021 evidence)", "sha256": "2ac376a0390252f514405e5c48fe99f23a381e80d48a0ef0a5891f8b0d956f4e", "bytes": 23917}
+  ],
+  "commands": [
+    "sha256sum <T017/T023/T027 syn.rpt, syn.smsg, syn.summary, synthesis.log>; rg -n -C 2 '16788|imm[63]_2|ir_in_2d|shadow_irf|irf' <raw reports>",
+    "rg -n '^Warning (16788)|^; 16788' <raw report> and rg -o '16788' <artifact> | wc -l",
+    "diff -u --label T017 --label T027 <T017 alt_sld_fab_0.sopcinfo> <T027 alt_sld_fab_0.sopcinfo>",
+    "sed -E '/^ <!-- [0-9]{4}\\.[0-9]{2}\\.[0-9]{2}\\./d' <sopcinfo> | sha256sum; diff -u --label T017 --label T027 <(sed -E '/^ <!-- [0-9]{4}\\.[0-9]{2}\\.[0-9]{2}\\./d' <T017>) <(sed -E '/^ <!-- [0-9]{4}\\.[0-9]{2}\\.[0-9]{2}\\./d' <T027>)",
+    "xmllint --xpath 'count(/EnsembleReport/module)' <sopcinfo>; xmllint --xpath '<SETTINGS/EP_INFOS/COUNT/N_SEL_BITS/N_NODE_IR_BITS/NODE_INFO/module hpaths>' <sopcinfo>",
+    "find <T017 build/agents> <T027 build/agents> -type f -name 'alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd'; git ls-files | rg 'alt_sld_fab_0|altera_sld_jtag_hub'; git grep -n -i 'sld|jtag|uart|suppress|waiv|message|instance|ir_width|type_code|mfr_code' -- '*.qsf' '*.qsys' '*.ip' '*.v' '*.sv' '*.vhd'",
+    "jq . <T017/T020/T021/T023/T027 evidence JSON>",
+    "git diff --check; jq empty docs/tasks/evidence/T-20260920-028.json"
+  ],
+  "verification": {
+    "warning_normalization": "PASS: unique identities and detail/summary duplicate classes recorded",
+    "sopcinfo_xml_parse": "PASS: xmllint parsed both files; normalized diff exit=0",
+    "tracked_source_search": "PASS: no legal source-qualified repair found; no tracked files changed",
+    "historical_chain_review": "PASS: T017->T020->T021 evidence identities and limitations recorded",
+    "local_tests": [
+      {"command": "git diff --check", "result": "PASS"},
+      {"command": "jq empty docs/tasks/evidence/T-20260920-028.json", "result": "PASS"}
+    ],
+    "not_run_by_policy": ["Quartus synthesis/fitter/STA/assembler", "SOF generation", "JTAG/board/Flash/reset/power"]
+  },
+  "known_limits": [
+    "The generated VHDL named in Warning 16788 was ephemeral under Quartus qdb/.t and is not available in either task artifact root; exact internal driver/consumer statements cannot be audited.",
+    "The normalized topology identity proves equality of T017 and T027 metadata, not functional equivalence of every generated primitive across Quartus releases or devices.",
+    "T021 is historical partial board evidence with DDR-FAIL and a CPU load/writeback mismatch; it is not warning-free or full functional acceptance.",
+    "The owner task did not modify T027, the runner, the warning policy or task ledger; the integrator subsequently adopted the exact contract and finalized T027 acceptance.",
+    "The existing tracked JTAG-UART message_off 16788 comments are suppression metadata and are intentionally not treated as a repair."
+  ],
+  "blockers": [],
+  "next": "Generate a content-addressed volatile SOF from the accepted T-027 fitted database, then perform the authorized JTAG-UART board interaction."
+}

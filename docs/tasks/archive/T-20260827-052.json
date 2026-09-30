@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-052",
+  "title": "Catapult A10 B0-Platform 平台输入收编与可重生成检查",
+  "kind": "fpga-platform-foundation",
+  "priority": "high",
+  "assigned_owner": "b0-platform-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只收编 Microsoft Catapult v3/Arria 10 平台白名单输入、manifest、哈希和可重生成检查；不实现 AXI4、Cache、CPU/SoC、QEMU、RISC-V 软件链或板级功能",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "仅当外部 PoC 输入、Qsys/IP 生成边界或 Quartus 再生成路径存在歧义时补充拆解；不扩大 B0 写集"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审 task JSON、Catapult 输入清单、manifest/hash、再生成命令和目标 diff；检查 clean-room、许可证/生成物边界与误收编风险"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "审核只做一次简明阻断门；仅在写集、平台输入边界或验收证据发生实质变化时重新审核",
+    "required_sequence": "一次 Sol 方向审查给出 GO 或阻断结论后进入 owner 实现"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "仅在资源允许时监控 manifest 校验、Qsys/Quartus 最小检查和 artifact 记录；重型 full compile 进入集成者队列"
+  },
+  "disabled_profiles": [
+    "deepseek-v4-flash[max]"
+  ],
+  "phase": "done",
+  "execution": {
+    "agent_id": "01a03f33-4d00-7ec2-b4cd-761a75cd3b71",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "started_at": "2026-08-27T01:45:00+08:00",
+    "state": "blocked",
+    "blocked_at": "2026-08-27T08:25:49+08:00",
+    "blocking_task": "T-20260827-057",
+    "blocking_reason": "Windows Quartus 工具已确认可用，但用户指定 D:\\Projects\\fpga-altra\\lcvex 工程不存在。"
+  },
+  "parent": "T-20260827-050",
+  "depends_on": [
+    "T-20260827-050"
+  ],
+  "writes": [
+    "fpga/catapult_a10/",
+    "docs/handoffs/T-20260827-052-b0-platform.md",
+    "docs/tasks/evidence/T-20260827-052.json"
+  ],
+  "reads": [
+    "docs/FPGA_PLAN.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "/home/chiro/projects/a10-linux-riscv/AGENTS.md",
+    "/home/chiro/projects/a10-linux-riscv/manifests/tools.lock",
+    "/home/chiro/projects/a10-linux-riscv/manifests/sources.lock",
+    "/home/chiro/projects/a10-linux-riscv/manifests/golden.sha256",
+    "/home/chiro/projects/a10-linux-riscv/hw/quartus/vex_soc_ddr/vex_soc_ddr.qsf",
+    "/home/chiro/projects/a10-linux-riscv/hw/quartus/vex_soc_ddr/vex_soc_ddr.sdc",
+    "/home/chiro/projects/a10-linux-riscv/hw/rtl/vex_soc_ddr_top.v",
+    "/home/chiro/projects/a10-linux-riscv/hw/ip/ddr4_bot/Qsys/Qsys_bb.v",
+    "/home/chiro/projects/a10-linux-riscv/hw/ip/ddr4_bot",
+    "/home/chiro/projects/a10-linux-riscv/docs/04-交接-软件链QEMU门全绿与cleanroom软件复现-20260826.md"
+  ],
+  "context_docs": [
+    "docs/FPGA_PLAN.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "base_sha": "c76cc28d53bcab4af0e42dcf4ca8dbb4426dcb6e",
+  "branch": "feature/T-20260827-052-b0-platform",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-052",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 4096,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "新增/修改 JSON 通过 python3 -m json.tool；git diff --check",
+      "platform manifest、输入白名单、SHA256 和来源路径交叉校验",
+      "clean clone 静态检查确认不复制 VexRiscv/RV32/Sv32/OpenSBI/CLINT/PLIC/RISC-V DT 或调试 alias"
+    ],
+    "l1": [
+      "在可用 Quartus/Qsys 环境执行最小版本、IP/Qsys regenerate 或等价 dry-run，并保存精确日志",
+      "验证时钟/复位/EMIF calibration/EPCQ/JTAG-UART 输入与 manifest 一致"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "建立 fpga/catapult_a10/ 的白名单平台输入、来源说明、版本和 SHA256 manifest，以及可在 fresh clone 中执行的静态/再生成检查；确认器件 10AX115N4F40E3SG、Quartus Pro 21.4 Build 67、100→50 MHz 时钟、266.667 MHz DDR 参考、72-bit DDR/512-bit Avalon-MM EMIF、EPCQL1024 和 JTAG-UART 边界。不得把 sibling PoC 整体复制进仓库，不得引入 CPU/Cache/AXI4/SoC/QEMU/RISC-V 软件实现；DDR 精确 part、物理 UART/LED 和完整 2 GiB 稳定性若无法从输入确认，必须记录为限制而非猜测。",
+  "created_at": "2026-08-27T01:28:00+08:00",
+  "updated_at": "2026-08-28T01:18:30+08:00",
+  "commits": [
+    "0202448eaf9ec33c68050fd0be273b65c46a4d8f",
+    "ef4a2db0a23e19c9cfe20f5efd96dd3007df22d6"
+  ],
+  "owner_handoff": {
+    "state": "review",
+    "implementation_head": "0202448eaf9ec33c68050fd0be273b65c46a4d8f",
+    "handoff_commit": "ef4a2db",
+    "handoff": "docs/handoffs/T-20260827-052-b0-platform.md",
+    "evidence": "docs/tasks/evidence/T-20260827-052.json",
+    "scope_accepted_for_integration": "Catapult B0 platform whitelist, provenance, target hashes and offline checker",
+    "scope_remaining": "目标 Windows lcvex 工程出现后的 exact Quartus 21.4/Qsys regenerate；随后 STA、B5 integration 和 board gates"
+  },
+  "integration": {
+    "status": "done",
+    "strategy": "T-062 expanded B0 platform package on integration line; T-063 validated remote project creation/regeneration",
+    "merge_sha": "e5313e7",
+    "validated_scope": "B0 offline platform package (15 files) + skeleton/checker on merge SHA; remote project created and Qsys/IP regenerated by T-063",
+    "remaining_scope": "SFL sfl_sys.qsys input missing; exact Quartus full flow/STA with real LCVEX wrapper (Gate F-BOARD)"
+  },
+  "handoff": "docs/handoffs/T-20260827-052-b0-platform.md",
+  "evidence": "docs/tasks/evidence/T-20260827-052.json",
+  "known_limits": [
+    "phase=blocked 表示 B0 离线部分已完成，但目标 Windows lcvex 工程缺失；不表示平台已综合或上板。",
+    "B1-AXI4、B2-EMIF、B3-L2-WB、B4-L1-Coherence 和 B5-SoC/Boot 后置。",
+    "不复制 sibling PoC 的 VexRiscv/RV32 软件和既有 32→512 bridge；Avalon 只保留为 Catapult 板级适配层输入。",
+    "Quartus full compile、STA、DDR March、裸机/Linux 板测属于后续集成者队列和 Gate F-BOARD。"
+  ],
+  "review_record": {
+    "agent_id": "01a03f2c-ecb0-7842-88f1-91bc72c44a14",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "source_sha": "c76cc28d53bcab4af0e42dcf4ca8dbb4426dcb6e",
+    "status": "go_with_acceptance_blockers",
+    "recorded_at": "2026-08-27T01:44:00+08:00",
+    "blocking_before_acceptance": [
+      "以当前 PoC 实际 Qsys/IP 输入重新生成 SHA256 manifest，不能直接复用旧 golden.sha256 哈希。",
+      "解释或解决 Qsys 顶层 speed grade=2 与器件/EMIF speed grade=3 的差异，不得静默忽略。",
+      "为 EPCQL1024 和 JTAG-UART 纳入具体可追溯配置输入及哈希，不能只依赖 QSF 引用或注释。",
+      "至少执行一次 fresh-clone Qsys/IP regenerate，保存命令、Quartus 21.4 Build 67 版本、输入哈希和接口差异。"
+    ],
+    "non_blocking_limits": [
+      "DDR 精确 part、完整 2 GiB 稳定性和物理 UART/LED 未确认，保留为已知限制。",
+      "Quartus full compile、STA、DDR March 和板测属于后续集成者队列与 Gate F-BOARD。"
+    ],
+    "boundary_confirmation": [
+      "不得收编 vex_soc_ddr_top.v、VexRiscv、RV32/Sv32、OpenSBI、CLINT/PLIC、C alias、SignalTap/VJI 或 32→512 bridge。",
+      "Avalon 仅作为 Catapult 平台边界；不提前实现通用 AXI4、Cache 或 SoC。"
+    ]
+  },
+  "external_probe": {
+    "task_id": "T-20260827-057",
+    "reported_at": "2026-08-27T08:25:49+08:00",
+    "status": "blocked_target_project_missing",
+    "evidence": "docs/tasks/evidence/T-20260827-057.json",
+    "tool_fact": "Quartus Pro 21.4.0 Build 67、qsys-generate 可启动；ip-generate 受 acdstest resource 限制。"
+  },
+  "next": "在远程工程上补录 sfl_sys.qsys 输入缺口并执行 exact Qsys/IP regenerate；随后由 wrapper 顶层任务跑真实 full flow/STA",
+  "unblocked": {
+    "unblocked_at": "2026-08-28T01:12:00+08:00",
+    "reason": "T-20260828-063 已创建远程 D:\\Projects\\fpga-altra\\lcvex 并打通 Qsys/IP regenerate 与 smoke full compile"
+  },
+  "merge_sha": "e5313e7"
+}

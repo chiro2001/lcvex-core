@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-029",
+  "state": "done",
+  "partial": false,
+  "base_sha": "af0445070f387bf2ffa82bc55d4bb8a50c4cbd16",
+  "head_sha": "029491b8791c88aeb37291831cfafb1fbc7885a6",
+  "branch": "feature/T-20260830-029-fpga-g2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-029",
+  "scope": "BRAM M20K/MLAB explicit mapping and capacity matrix; SoC-only black-box comparison; L1D/L2 ramstyle assessment.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "started_at": "2026-08-30T09:05:00+08:00",
+    "standalone_behavioral_timeout": "2026-08-30T09:21:24+08:00",
+    "altsyncram_matrix_start": "2026-08-30T09:47:56+08:00",
+    "altsyncram_matrix_done": "2026-08-30T09:49:14+08:00",
+    "soc_bu_altsync_done": "2026-08-30T09:51:08+08:00",
+    "l1d_m20k_done": "2026-08-30T09:56:51+08:00",
+    "documents_written_at": "2026-08-30T10:04:00+08:00",
+    "l2_m20k_done": "2026-08-30T10:02:48+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-029",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "original_modified": false,
+    "license_read": false,
+    "full_flow_started": false
+  },
+  "toolchain": {
+    "quartus_syn": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+    "monitor_ps1": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-029\\run_quartus_monitor.ps1"
+  },
+  "runs": [
+    {
+      "run_id": "behavioral-baseline-16k",
+      "variant": "baseline",
+      "result": "timeout",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off base_16k -c base_16k",
+      "capacity_bytes": 16384,
+      "wall_s": 601,
+      "peak_pm_mb": 10916,
+      "summary": "Behavioral lcvex_bram_boot 16KB did not finish in 10min; killed by monitor. No syn.rpt."
+    },
+    {
+      "run_id": "behavioral-m20k-16k",
+      "variant": "ramstyle_M20K",
+      "result": "timeout",
+      "command": "quartus_syn --read_settings_files=on --write_settings_files=off m20k_16k -c m20k_16k",
+      "capacity_bytes": 16384,
+      "wall_s": 666,
+      "peak_pm_mb": 11308,
+      "summary": "Behavioral array with ramstyle=M20K still did not produce synthesis report; killed/no report."
+    },
+    {
+      "run_id": "altsyncram-16k",
+      "variant": "altera_syncram_M20K",
+      "result": "pass",
+      "capacity_bytes": 16384,
+      "wall_s": 3,
+      "peak_pm_mb": 463.6,
+      "peak_vm_mb": 645,
+      "ram_segments": 64,
+      "m20k": true,
+      "mlab_bits": 0,
+      "block_bits": 131072,
+      "warnings": 0,
+      "summary": "Explicit altera_syncram BIDIR_DUAL_PORT M20K; standalone PASS in 3s."
+    },
+    {
+      "run_id": "altsyncram-64k",
+      "variant": "altera_syncram_M20K",
+      "result": "pass",
+      "capacity_bytes": 65536,
+      "wall_s": 3,
+      "peak_pm_mb": 644.1,
+      "peak_vm_mb": 644,
+      "ram_segments": 64,
+      "m20k": true,
+      "mlab_bits": 0,
+      "block_bits": 524288,
+      "warnings": 0,
+      "summary": "Explicit altera_syncram M20K; 64KB PASS."
+    },
+    {
+      "run_id": "altsyncram-256k",
+      "variant": "altera_syncram_M20K",
+      "result": "pass",
+      "capacity_bytes": 262144,
+      "wall_s": 3,
+      "peak_pm_mb": 648,
+      "peak_vm_mb": 648,
+      "ram_segments": 128,
+      "m20k": true,
+      "mlab_bits": 0,
+      "block_bits": 2097152,
+      "warnings": 0,
+      "summary": "Explicit altera_syncram M20K; 256KB PASS."
+    },
+    {
+      "run_id": "altsyncram-1m",
+      "variant": "altera_syncram_M20K",
+      "result": "pass",
+      "capacity_bytes": 1048576,
+      "wall_s": 4,
+      "peak_pm_mb": 660.7,
+      "peak_vm_mb": 665,
+      "ram_segments": 512,
+      "m20k": true,
+      "mlab_bits": 0,
+      "block_bits": 8388608,
+      "warnings": 0,
+      "summary": "Explicit altera_syncram M20K; 1MB PASS in 4s."
+    },
+    {
+      "run_id": "soc-bu-altsync-1M",
+      "variant": "soc_only_blackbox_altsyncram",
+      "result": "pass",
+      "command": "quartus_syn soc_bu_altsync_16k (top default passes 1MB to shim)",
+      "wall_s": 8,
+      "peak_pm_mb": 627.6,
+      "peak_vm_mb": 750,
+      "ram_segments": 512,
+      "errors": 0,
+      "warnings": 10876,
+      "summary": "F3/F4 SoC-only black-box top with stubs + explicit altsyncram shim passes in 8s; compared to behavioral version 31.3GB/85s OOM."
+    },
+    {
+      "run_id": "l1d-m20k",
+      "variant": "lcvex_l1_d_wb_ramstyle_M20K",
+      "result": "pass",
+      "wall_s": 277,
+      "peak_pm_mb": 3929.6,
+      "peak_vm_mb": 3639,
+      "logic_cells": 182885,
+      "block_bits": 0,
+      "errors": 0,
+      "warnings": 8,
+      "summary": "ramstyle=M20K attribute recorded but L1D data array did not map to M20K; Block Memory Bits=0, still LEs."
+    },
+    {
+      "run_id": "l2-m20k",
+      "variant": "lcvex_l2_wb_ramstyle_M20K",
+      "result": "pass",
+      "wall_s": 317,
+      "peak_pm_mb": 4363.6,
+      "summary": "ramstyle=M20K attribute recorded but L2 data array did not map to M20K; Block Memory Bits=0, still LEs.",
+      "peak_vm_mb": 4572,
+      "logic_cells": 179258,
+      "block_bits": 0,
+      "errors": 0,
+      "warnings": 87
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-029-fpga-g2.md",
+      "sha256": "fa062d8149465265301c661eca7082049b8531e0591cb121c7e145b6b6ee0a1c",
+      "bytes": null,
+      "owner": "T-20260830-029",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-029-fpga-g2.md"
+    },
+    {
+      "id": "remote-altsyncram-rtl",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-029\\rtl\\lcvex_bram_boot_altsyncram_{16k,64k,256k,1m}.sv",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-029",
+      "retain_until": "task-close",
+      "reproduce": "Explicit altera_syncram wrappers used for standalone matrix"
+    },
+    {
+      "id": "remote-soc-bu-altsync",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-029\\projects\\soc_bu_altsync_16k",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-029",
+      "retain_until": "task-close",
+      "reproduce": "SoC-only black-box top with explicit altsyncram BRAM shim"
+    },
+    {
+      "id": "remote-l1d-m20k",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-029\\projects\\l1d_m20k",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-029",
+      "retain_until": "task-close",
+      "reproduce": "L1D ramstyle=M20K standalone; block memory bits=0"
+    },
+    {
+      "id": "remote-l2-m20k",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-029\\projects\\l2_m20k",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-029",
+      "retain_until": "task-close",
+      "reproduce": "L2 reduced ramstyle=M20K standalone"
+    }
+  ],
+  "known_limits": [
+    "Behavioral A/B did not complete for 16KB in 10min; no full capacity matrix for A/B.",
+    "Altsyncram wrapper is word-aligned; strict unaligned byte-access equivalence still needs additional byte-lane/rotate logic.",
+    "No fit/STA/SOF produced.",
+    "Original RTL/QSF/SDC untouched; no license read; full flow not started."
+  ],
+  "status": "done"
+}

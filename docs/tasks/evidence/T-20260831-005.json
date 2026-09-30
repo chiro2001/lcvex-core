@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260831-005",
+  "label": "PE-F1A-H03",
+  "state": "cancelled",
+  "checkpoint": "diagnostic",
+  "partial": true,
+  "acceptance_status": "not_met",
+  "base_sha": "c141fd57bc824dfd33bd42d1748b2c375410fe02",
+  "source_sha": "c141fd57bc824dfd33bd42d1748b2c375410fe02",
+  "head_sha": "7511fd06be08a5e20bc7e8f1d280bba6d18dd471",
+  "head_sha_note": "owner 诊断 checkpoint tip；无功能 RTL 改动",
+  "merge_sha": "134d5c219369604ab16ca5b0416ef43819d4a2c6",
+  "branch": "feature/T-20260831-005-f1a-fault-head",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005",
+  "owner": "luna-f1a-fault-head / t042_checkpoint_protocol_luna",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-08-31T12:33:56+08:00",
+    "received_at": "2026-08-31T12:33:56+08:00",
+    "reported_at": "2026-08-31T12:50:11+08:00",
+    "source_head_at_dispatch": "2026-08-31T11:37:06+08:00",
+    "base_build_started_at": "2026-08-31T12:35:06+08:00",
+    "base_build_finished_at": "2026-08-31T12:41:01+08:00",
+    "mmu_probe_started_at": "2026-08-31T12:43:04+08:00",
+    "mmu_probe_finished_at": "2026-08-31T12:43:06+08:00",
+    "imem_probe_started_at": "2026-08-31T12:43:14+08:00",
+    "imem_probe_finished_at": "2026-08-31T12:43:17+08:00"
+  },
+  "scope": "建立并审计 F1a FIFO fault-head 的 pre-fix failure；在确认 fault 响应晚于 older commit 后停止功能修复，不改变公共协议、QEMU 或 ABI。",
+  "acceptance": {
+    "required": "每个 current-epoch fault 只能通过既有 older-WB merge 或 IFID/sys fault commit 一次，且 commit_ready 背压、flush/reset、FSC/ESR/FAR/ELR、T-046/T-004 和 L0-L2 均通过。",
+    "status": "not_met",
+    "reason": "pre-fix 根因已复现，但没有可同时满足 QEMU PRE/COMMIT 合并语义的局部消费方案；未交付 post-fix。",
+    "recommendation": "cancelled/superseded；不得标记 done"
+  },
+  "stop_condition": {
+    "triggered": true,
+    "condition": "fault 响应晚于 older commit，无法保持 QEMU pending PC/seq 合并语义",
+    "evidence": "MMU fetch fault head 在 older 0x44000ffc 的 commit 窗口之后出现；独立 synthetic packet 会形成额外提交。",
+    "out_of_scope_followup": "另立 protocol/H-01 任务决定 fault 与 older pending commit 的一一对应及 response identity；T-005 不修改 pkg/MMU/arbiter/SoC ABI/QEMU/plugin/comparator。"
+  },
+  "root_cause": {
+    "summary": "FIFO fault entry 已经入队并保持为 head，但 fault head 没有架构消费 fire；pop/issue 被禁止后 core 永久停在该 head。",
+    "mmu_fetch_fault": {
+      "image_bin": {
+        "uri": "build/agents/T-20260831-005/pre_fix/hard_sys_fetch_fault.bin",
+        "sha256": "6ff3033ba3b8e7559442a4c3ddeb54968d517cb6faf3d89612433a23f97fb360",
+        "bytes": 90112
+      },
+      "image_hex": {
+        "uri": "build/agents/T-20260831-005/pre_fix/hard_sys_fetch_fault.bin.hex",
+        "sha256": "def5f1497f28b6e30ebafee5e8017837b16ab445921920441f7bcde9cc5d444c",
+        "words": 22528
+      },
+      "historical_pre_fix_signature": "pre_fix/mmu_fetch_fault.log：cycle 52 起 head_pc=0x44001000, head_epoch=6, head_seq=22, FSC=0x07, fifo_count=1, pop=0；后续 160 cycles 无 IABT。",
+      "historical_log": {
+        "uri": "build/agents/T-20260831-005/pre_fix/mmu_fetch_fault.log",
+        "sha256": "fa523415dc953d322168643d8b0e2c622c77f5ceba80b3898f6e35938b26feac"
+      },
+      "checkpoint_signature": "cycle 142 首次 head_fault=1：head_pc=0x44001000, head_epoch=6, head_seq=18, fetch/head FSC=0x07, fifo_count=1, pop=0；cycle 115 已有 older commit_valid=1 且 IFID PC=0x44000ffc、commit_next=0x44001000。",
+      "checkpoint_log": {
+        "uri": "build/agents/T-20260831-005/checkpoint/mmu_fetch_fault.log",
+        "sha256": "aef249f00267f758f886becd9ab2148692633839e55a5d0fb996cd0f23a43f95"
+      }
+    },
+    "imem_fault": {
+      "image_bin": {
+        "uri": "build/agents/T-20260831-005/pre_fix/hard_imem_fault_short.bin",
+        "sha256": "a62f0c7e2ae2c2b2838b1dc18891fa5de3611f654ccfe048243e72e27943ebc8",
+        "bytes": 16
+      },
+      "image_hex": {
+        "uri": "build/agents/T-20260831-005/pre_fix/hard_imem_fault_short.bin.hex",
+        "sha256": "50b383f8b6136ad3e17caf4acb3638172d0b85aa2665f4e3bb99fd4ecfd39771",
+        "words": 4
+      },
+      "historical_standalone_signature": "pre_fix standalone RESET_PC=0x50000000：head_pc=0x50000000, epoch=0, seq=0, FSC=0x10, fifo_count=1, pop=0；后续 160 cycles 无 IABT。",
+      "historical_log": {
+        "uri": "build/agents/T-20260831-005/pre_fix/imem_reset_fault.log",
+        "sha256": "7834b6ccdf9b229bc9e997ee1c6ff1ba764eeb0396e4fc993b1882e47a9b5e5f"
+      },
+      "checkpoint_signature": "默认 RESET_PC=0x44000000 的 4-word replay 先在 cycle 16 将 BR 到 0x5000 的 IABT 合并到 older commit（EXC=0x21, ESR=0x86000010, FAR=0x5000, next=0x200），随后 cycle 29 的 vector fault head 为 PC=0x200, epoch=1, seq=3, FSC=0x10, fifo_count=1, pop=0；后续 160 cycles 无新的 IABT。",
+      "checkpoint_log": {
+        "uri": "build/agents/T-20260831-005/checkpoint/imem_short_fault.log",
+        "sha256": "6e5d3252a9eba235048f4d7e7bb79955508f9fc5138bd7dfeabe41428e25afd3"
+      }
+    },
+    "fifo_full_held": {
+      "status": "not_reproduced",
+      "signature": "+H03_HOLD 的 held_armed=0；单 outstanding fetch 下 fault response 到达时通常 fifo_count=1，未伪造 count=2 + fetch_fault_pending。",
+      "conclusion": "没有对 FIFO-full held fault 作通过性结论，也没有调整 timeout 或伪造输入。"
+    }
+  },
+  "implementation": {
+    "functional_rtl_changed": false,
+    "rtl_status": "rtl/lcvex_core.sv 的实验性改动已完整撤回；git diff -- rtl/lcvex_core.sv 为空。",
+    "reverted_experiment": {
+      "items": [
+        "IFID synthetic fault metadata（ifid_fetch_fault/ifid_fetch_fsc）",
+        "fault-head ready gating/hold",
+        "synthetic sys_commit IABT 消费"
+      ],
+      "observed_invalid_packet": "post-fix probe 曾产生 commit_pc/FAR=0x44001000, EXC_IABORT=0x21, ESR=0x86000007, next_pc=0x44010200，但 older 0x44000ffc 已先 commit。",
+      "reason": "该额外 packet 违反现有 QEMU step plugin 的 older pending PRE/COMMIT 合并协议。"
+    },
+    "diagnostic_testbench": {
+      "path": "tb/sv/lcvex_fetch_fifo_tb.sv",
+      "changes": [
+        "增加 RESET_PC 参数透传",
+        "probe_mem 从 4096 扩大为 32768 words",
+        "增加 H03 plusargs 和每周期 fault-head/FIFO/流水/commit exception 输出"
+      ],
+      "architectural_effect": "testbench-only；不改变 DUT 接口、公共 commit packet 或架构状态更新时机。"
+    },
+    "unchanged_boundaries": [
+      "rtl/lcvex_pkg.sv",
+      "MMU/arbiter/SoC memory ABI",
+      "QEMU/plugin/comparator",
+      "Cocotb/difftest",
+      "F1b/H-05/F1c/Gate D/Linux/Quartus"
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "checkpoint-verilator-binary",
+      "uri": "build/agents/T-20260831-005/checkpoint/obj_base/lcvex_fetch_fifo_tb",
+      "sha256": "7568faa13b3edd6eec99ea53175da498d9911f8b93e863113dcbd7d91e3d05e5",
+      "bytes": 10890696,
+      "source_sha": "c141fd57bc824dfd33bd42d1748b2c375410fe02",
+      "config": "FETCH_FIFO_ENABLE=1, MEM_DELAY_MODE=2, RESET_PC=0x44000000"
+    },
+    {
+      "id": "checkpoint-mmu-log",
+      "uri": "build/agents/T-20260831-005/checkpoint/mmu_fetch_fault.log",
+      "sha256": "aef249f00267f758f886becd9ab2148692633839e55a5d0fb996cd0f23a43f95",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "checkpoint-imem-log",
+      "uri": "build/agents/T-20260831-005/checkpoint/imem_short_fault.log",
+      "sha256": "6e5d3252a9eba235048f4d7e7bb79955508f9fc5138bd7dfeabe41428e25afd3",
+      "retain_until": "task-close"
+    }
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cxx": "x86_64-conda-linux-gnu-c++",
+    "resource_policy": "MemoryMax=15G, MemorySwapMax=0, CPUQuota=50%, MAKEFLAGS=-j1, VERILATOR_JOBS=1；重型作业串行"
+  },
+  "runs": [
+    {
+      "run_id": "checkpoint-base-build-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "unit": "lcvex-t005-checkpoint-base-build.service",
+      "started_at": "2026-08-31T12:35:06+08:00",
+      "finished_at": "2026-08-31T12:41:01+08:00",
+      "wall_seconds": 355.860,
+      "cpu_seconds": 177.947,
+      "peak_rss": "3.2G",
+      "swap": "0B",
+      "exit_code": 0,
+      "result": "pass",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260831-005/checkpoint/obj_base -o lcvex_fetch_fifo_tb -GFETCH_FIFO_ENABLE=1 -GMEM_DELAY_MODE=2 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+      "outer_command": "systemd-run --user --wait --unit=lcvex-t005-checkpoint-base-build -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005 -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 PATH=/home/chiro/miniforge3/bin:/usr/local/bin:/usr/bin:/bin /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260831-005/checkpoint/obj_base -o lcvex_fetch_fifo_tb -GFETCH_FIFO_ENABLE=1 -GMEM_DELAY_MODE=2 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+      "artifact": "build/agents/T-20260831-005/checkpoint/obj_base/lcvex_fetch_fifo_tb"
+    },
+    {
+      "run_id": "checkpoint-mmu-probe-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "unit": "lcvex-t005-checkpoint-mmu-probe.service",
+      "started_at": "2026-08-31T12:43:04+08:00",
+      "finished_at": "2026-08-31T12:43:06+08:00",
+      "wall_seconds": 2.875,
+      "cpu_seconds": 1.471,
+      "peak_rss": "129.9M",
+      "swap": "0B",
+      "exit_code": 0,
+      "result": "pass_expected_pre_fix_repro",
+      "command": "build/agents/T-20260831-005/checkpoint/obj_base/lcvex_fetch_fifo_tb +H03_PROBE +H03_EXPECT_TIMEOUT +H03_LABEL=mmu_fetch_checkpoint +PROBE_HEX=build/agents/T-20260831-005/pre_fix/hard_sys_fetch_fault.bin.hex +PROBE_WORDS=22528",
+      "outer_command": "systemd-run --user --wait --collect --unit=lcvex-t005-checkpoint-mmu-probe -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005 -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- /bin/sh -c 'exec /home/chiro/projects/mycpu/lcvex-wt-T-20260831-005/build/agents/T-20260831-005/checkpoint/obj_base/lcvex_fetch_fifo_tb +H03_PROBE +H03_EXPECT_TIMEOUT +H03_LABEL=mmu_fetch_checkpoint +PROBE_HEX=/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005/build/agents/T-20260831-005/pre_fix/hard_sys_fetch_fault.bin.hex +PROBE_WORDS=22528 > /home/chiro/projects/mycpu/lcvex-wt-T-20260831-005/build/agents/T-20260831-005/checkpoint/mmu_fetch_fault.log 2>&1'",
+      "artifact": "build/agents/T-20260831-005/checkpoint/mmu_fetch_fault.log",
+      "summary": "head fault persists for 160 cycles; no IABT; H03_PRE_FIX_REPRO emitted"
+    },
+    {
+      "run_id": "checkpoint-imem-probe-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "unit": "lcvex-t005-checkpoint-imem-probe.service",
+      "started_at": "2026-08-31T12:43:14+08:00",
+      "finished_at": "2026-08-31T12:43:17+08:00",
+      "wall_seconds": 2.739,
+      "cpu_seconds": 1.384,
+      "peak_rss": "129.9M",
+      "swap": "0B",
+      "exit_code": 0,
+      "result": "pass_expected_pre_fix_repro",
+      "command": "build/agents/T-20260831-005/checkpoint/obj_base/lcvex_fetch_fifo_tb +H03_PROBE +H03_EXPECT_TIMEOUT +H03_LABEL=imem_short_checkpoint +PROBE_HEX=build/agents/T-20260831-005/pre_fix/hard_imem_fault_short.bin.hex +PROBE_WORDS=4",
+      "outer_command": "systemd-run --user --wait --collect --unit=lcvex-t005-checkpoint-imem-probe -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005 -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- /bin/sh -c 'exec /home/chiro/projects/mycpu/lcvex-wt-T-20260831-005/build/agents/T-20260831-005/checkpoint/obj_base/lcvex_fetch_fifo_tb +H03_PROBE +H03_EXPECT_TIMEOUT +H03_LABEL=imem_short_checkpoint +PROBE_HEX=/home/chiro/projects/mycpu/lcvex-wt-T-20260831-005/build/agents/T-20260831-005/pre_fix/hard_imem_fault_short.bin.hex +PROBE_WORDS=4 > /home/chiro/projects/mycpu/lcvex-wt-T-20260831-005/build/agents/T-20260831-005/checkpoint/imem_short_fault.log 2>&1'",
+      "artifact": "build/agents/T-20260831-005/checkpoint/imem_short_fault.log",
+      "summary": "vector fault head persists for 160 cycles; no new IABT; H03_PRE_FIX_REPRO emitted"
+    }
+  ],
+  "static_checks": [
+    {
+      "check": "git diff -- rtl/lcvex_core.sv",
+      "result": "pass",
+      "summary": "empty after reverting synthetic fault experiment"
+    },
+    {
+      "check": "git diff --check",
+      "result": "pass",
+      "summary": "no whitespace errors before diagnostic commit"
+    },
+    {
+      "check": "JSON parse",
+      "result": "pass",
+      "summary": "python3 -m json.tool docs/tasks/evidence/T-20260831-005.json"
+    }
+  ],
+  "not_run": [
+    "post-fix functional RTL",
+    "Cocotb",
+    "strict lockstep/QEMU",
+    "F1c",
+    "Gate D",
+    "Linux",
+    "Quartus/FPGA",
+    "QEMU fork/plugin/ABI 修改"
+  ],
+  "known_limits": [
+    "FIFO-full held fault 未自然 arm，不能据此宣称 count=2 场景结论。",
+    "checkpoint binary 为 c141 + MEM_DELAY_MODE=2；未对完整 delay/cache/FIFO-off 矩阵作新复跑。",
+    "build/ 下完整 log、trace 和 binary 不进入 Git；保留路径和 SHA256 供本地复核。"
+  ],
+  "integrator_review": {
+    "received_at": "2026-08-31T12:31:42+08:00",
+    "merged_at": "2026-08-31T12:51:39+08:00",
+    "recorded_at": "2026-08-31T12:51:56+08:00",
+    "status": "accepted_diagnostic_checkpoint_only",
+    "checks": [
+      "three checkpoint artifacts and all root-cause image/log hashes independently matched",
+      "c141..owner tip changes only testbench probe, handoff and evidence; rtl/** is byte-identical",
+      "base build and two expected-failure probes ran serially under 15G/no-swap/50%-CPU/-j1 limits"
+    ],
+    "decision": "accept diagnostic evidence; acceptance remains not_met; transition blocked then cancelled/superseded",
+    "scope_correction": "successor first tests the narrow F1a fetch_next_settled predicate; UID/age or QEMU ABI expansion remains conditional on a later identity first-trace"
+  },
+  "lifecycle": {
+    "blocked_at": "2026-08-31T12:51:56+08:00",
+    "cancelled_at": "2026-08-31T12:53:02+08:00",
+    "superseded_by": "T-20260831-006",
+    "acceptance_met": false,
+    "reason": "diagnostic stop condition invalidated the original FIFO-local implementation scope; write lock released only after checkpoint merge"
+  },
+  "recommendation": "集成者将任务设为 cancelled/superseded，不标 done；后续先收窄修正 system next-fetch settled 语义，只有 first-trace 证明 response identity 不足才升级 H-01/ABI。",
+  "next": "T-005 于诊断 checkpoint 合并后转 cancelled/superseded；不在本 worktree 继续功能修改。"
+}

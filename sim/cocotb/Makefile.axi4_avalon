@@ -1,0 +1,21 @@
+# B2-EMIF 独立 Cocotb 入口；不修改现有 Makefile/filelist。
+
+SIM ?= verilator
+TOPLEVEL_LANG ?= verilog
+TOPLEVEL ?= lcvex_axi4_avalon_cocotb_tb
+COCOTB_TEST_MODULES ?= test_axi4_avalon
+SIM_BUILD ?= ../../build/agents/T-20260827-054/cocotb
+SEED ?= 0x0b2054
+
+VERILOG_SOURCES = $(abspath ../../rtl/lcvex_axi4_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_axi4_avalon_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_async_fifo.sv) \
+                  $(abspath ../../rtl/lcvex_calibration_gate.sv) \
+                  $(abspath ../../rtl/lcvex_axi4_avalon_adapter.sv) \
+                  $(abspath ../../tb/sv/lcvex_axi4_avalon_bfm.sv) \
+                  $(abspath ../../tb/sv/lcvex_axi4_avalon_tb.sv)
+
+EXTRA_ARGS += --timing --assert -Wall
+COMPILE_ARGS += -GBFM_SEED=$(SEED)
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

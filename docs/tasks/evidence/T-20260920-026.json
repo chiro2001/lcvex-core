@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-026",
+  "label": "B25-LOGIC-IMM-REPAIR-NOFP-PROFILE",
+  "state": "done",
+  "acceptance_status": "one-line-derivative-and-affected-l0-l2-pass",
+  "partial": false,
+  "base_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+  "base_tree_sha": "7ea2ea1c473a7c2c2b0eafe4dfd0fdfab9273c03",
+  "profile_sha": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+  "profile_tree_sha": "e5e94ab175f6847d727901576a8f12958efc1100",
+  "branch": "fpga/T-20260920-026-b25-logic-imm-repair-nofp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-026",
+  "owner": "profile_t026",
+  "reported_at": "2026-09-20T15:35:00+08:00",
+  "implementation": {
+    "commit": "2a1cd5c59fc27f0a6d947c58f5b24b194d4dd13b",
+    "changed_files": [
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv"
+    ],
+    "diff_stat": "1 insertion, 1 deletion",
+    "change": "parameter logic A64_FP_SIMD = 1'b1 -> 1'b0",
+    "profile_file_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+    "functional_diff_relative_to_base": "exactly one file, one removed line and one added line",
+    "forbidden_regions_unchanged": true,
+    "rtl_decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df"
+  },
+  "input_identity": {
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_hex_sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "image_expected_sha256": "872c3cbfdf9b1be3da2ef47f42543add6bb186e09e22169d1b169cc60918851",
+    "image_manifest_sha256": "340048b8d1654e84c0788771ef8b5d2240b078787cb441825ae1b6c83f9f7535",
+    "boot_mif_width": 64,
+    "boot_mif_depth": 8192,
+    "boot_mif_records": 8192
+  },
+  "verification": {
+    "logic_imm_oracle": {
+      "result": "PASS",
+      "marker": "LOGIC_IMM_BEHAVIORAL_ORACLE_PASS exact=A43F/3F exhaustive=16384 legal=11328 reserved=5056",
+      "command": "resource-lock run local ... env VERILATOR_JOBS=1 LCVEX_LOGIC_IMM_SOURCE_ROOT=$WORKTREE fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh --behavioral",
+      "metadata_log_sha256": "df0917ec27e791a9a2d7205b751e5b06e4acc95cf69684634427a5727d6a8a20",
+      "build_log_sha256": "53e4d30f29396954352a8257d4806be83b03b06a5b540b0de8041a11ffe3da55",
+      "run_log_sha256": "6c87b801a3f0b11662aee056ca850c2368269f23d9a02e8208fd7a7f713d3457"
+    },
+    "boot_image_and_contract": {
+      "result": "PASS; boot build plus IMAGE_CONTRACT emit/check",
+      "boot_build_log_sha256": "8239338a231c05f55cb78ae5c0425108622dc46ec7c4709426910ca9e848c6c3",
+      "image_manifest_file_sha256": "7c4975fc657e12601b85a173d227362dd0d8e6c408efef8251cca1ea71b835dc",
+      "markers": [
+        "BOOT_IMAGE_SIZE bytes=2011 capacity=65536",
+        "IMAGE_CONTRACT_PASS mode=emit load_bytes=2011 expected_bytes=65536",
+        "IMAGE_CONTRACT_PASS mode=check load_bytes=2011 expected_bytes=65536"
+      ]
+    },
+    "board_skeleton_lint": {
+      "result": "PASS; LCVEX_CATAPULT_A10_SKELETON_LINT_PASS",
+      "log_sha256": "8793a40c7436de2455de1ce8fd0cf67eea6bda91ffec4bdc9e5ced6e20695166"
+    },
+    "core_nofp_lint": {
+      "result": "PASS; explicit -GA64_FP_SIMD=0",
+      "log_sha256": "1a912f37fcb682980e22bee17a137a51d34f57017903edf9759833b6f169eec0"
+    },
+    "soc_nofp_lint": {
+      "result": "PASS; explicit -GA64_FP_SIMD=0",
+      "log_sha256": "e9bab7871f37af03e4f4c8be02270d07bdc87eea3948cb24036196b83379cf14"
+    },
+    "platform_checker": {
+      "result": "PASS; PLATFORM_CHECK_PASS files=50 strict_source=OFF",
+      "json_sha256": "f8c18dc4e70dfda310691a9fe2519a04011ccb24a613249057859b1004010a17",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "synthesis_selector": {
+      "result": "PASS; SYNTHESIS_SELECTOR_CHECK_PASS",
+      "json_sha256": "05f623e43252bfe51aff0bf5f87fc87e39f3ee08708de93f2342be0e6e04d218",
+      "stderr_sha256": "4dc7cadf5d5ad522241a3d8b7526655808c89f88e9fe5dc59e2d449dc9996b0b"
+    },
+    "m20k_timing": {
+      "result": "PASS; BRAM_M20K_TIMING_TB PASS",
+      "build_log_sha256": "388ea4816780d49b3605d9a9543029fdbe057c3aee846f9e36f7bdcb49eec0cc",
+      "run_log_sha256": "846a7d167bff24adae2360f3e93f0958a2fa4f3cf58a9b59bad9f3811fda6764"
+    },
+    "vendor_focused_status": {
+      "result": "PASS; Icarus and Verilator bridge/status",
+      "bridge_iverilog_log_sha256": "6aedcc11eed588e080ffb026fb50f887446e8bceb4272acf79a5bb965e4435be",
+      "status_iverilog_log_sha256": "ed797769bbf562436522c73419f293c3689815e80d4a3f51407ad8694445446c",
+      "bridge_verilator_log_sha256": "d9cd68b8f81a92b404d0b27c124ecb54f94bf23e26b6d18f25080669d9c3e9be",
+      "status_verilator_log_sha256": "a6d749d1f41102afdd1b66e60decadb3d9caa16574d49d9c08f25749919a7e49"
+    },
+    "rx_response_focused": {
+      "result": "PASS; focused status/observer/bridge",
+      "markers": [
+        "CATAPULT_STATUS_OBSERVABILITY_TEST PASS",
+        "RX_OBSERVER_UNIT PASS",
+        "JTAG_UART_TEST PASS",
+        "RX_RESPONSE_TRACE_FOCUSED_PASS"
+      ],
+      "status_log_sha256": "ed797769bbf562436522c73419f293c3689815e80d4a3f51407ad8694445446c",
+      "observer_log_sha256": "5115a394af4b8aa856303a31f260109d16dd6c2562cfd5eb7b934040f1b8e8b1",
+      "bridge_log_sha256": "6aedcc11eed588e080ffb026fb50f887446e8bceb4272acf79a5bb965e4435be"
+    },
+    "vendor_full_soc": {
+      "result": "PASS; Quartus-21.4 registered timing model, explicit no-FP",
+      "parameters": [
+        "-GJTAG_VENDOR_TIMING=1",
+        "-GA64_FP_SIMD=0"
+      ],
+      "markers": [
+        "SOC_B25_VENDOR_EMPTY_POLLS reads=262144 commits=2359306 cycles=12058697",
+        "SOC_B25_ALL_PASS",
+        "JTAG_UART_VENDOR_SOC_PASS",
+        "JTAG_UART_VENDOR_TIMING_TEST_PASS"
+      ],
+      "smoke_log_sha256": "4583584c21e7d83b83800487221ac5068d1681e8fc4fd9998ecce760ae7444dc",
+      "wrapper_log_sha256": "d9f708d512b0a049b468b9f7de6679b4c233ed0cef3ee45d00f751651a2f641a",
+      "status_verilator_log_sha256": "6ea6599886b389c40de74114c74c7a75d67f54f01e4544d4c34b8f51234a4571"
+    },
+    "rx_response_full": {
+      "result": "PASS by exact input-equivalence reuse of T-20260920-022",
+      "prior_candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+      "prior_marker": "RX_RESPONSE_TRACE PASS checks=4 bridge=4 poc=4 dmem=4",
+      "prior_build_log_sha256": "1a8194f8a325e428058d54da747231ec118c00f252a80f7fcb09c4726ac3dd41",
+      "prior_run_log_sha256": "8b03328486ea9a97129070069ef676a64d0f50d821ecdbccb37ae95c85d82671",
+      "reason": "The trace testbench explicitly sets A64_FP_SIMD=0 and both its full filelist and its SoC filelist contain no board-top module. The profile changes only that absent board-top default, so the prior exact candidate result applies after the complete 33-input hash proof below."
+    }
+  },
+  "input_equivalence": {
+    "filelist_unique_input_count": 33,
+    "board_top_absent": true,
+    "filelist_paths_sha256": "c9a1a3162ea8d390b26b6025be0acce9d043cd0f5d45d177936eeb0ea3538cda",
+    "filelist_inputs_sha256": "418c74a0115ad762fe1470f2a5b562f9f2058b467c32defca41bef33ccc483aa",
+    "entrypoints_sha256": "0a81521e06596a52eb0808dc610eae88ad8a9a4768ad225f87dec5ba1645e7ee",
+    "manifest_sha256": "063cf91188d0ece4a6548e3d37c0d0ec36300b306e45d0629711102e17fa71ec",
+    "filelists": [
+      "fpga/catapult_a10/tb/filelist_soc.f",
+      "fpga/catapult_a10/tb/filelist_rx_response_trace.f"
+    ],
+    "all_profile_vs_base_tracked_diff": "only fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv, 1 insertion/1 deletion",
+    "decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df"
+  },
+  "tools": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "iverilog": "13.0 stable",
+    "python": "3.12.10"
+  },
+  "resource_and_safety": {
+    "local_heavy_runs_under_resource_lock": true,
+    "min_local_available_mib": 8192,
+    "verilator_jobs": 1,
+    "final_local": "FREE",
+    "final_gamepc": "FREE",
+    "gamepc_used": false,
+    "quartus_used": false,
+    "assembler_or_configuration_artifact": false,
+    "jtag_board_fpga_configuration": false,
+    "jic_epcq_flash": false,
+    "reset_power": false,
+    "unknown_process_stopped": false,
+    "qsf_sdc_modified": false
+  },
+  "handoff": "docs/handoffs/T-20260920-026-b25-logic-imm-repair-nofp-profile.md",
+  "next": "Push this profile and use profile_sha/profile_tree_sha as the sole source for T-027 fresh physical flow; do not claim full-FP release equivalence."
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260828-068",
+  "state": "done",
+  "base_sha": "c0071641",
+  "merge_sha": "c0071641",
+  "candidate": "detached gate worktree /home/chiro/projects/mycpu/lcvex-gate-T-20260828-067",
+  "runner_role": "root-integrator",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu_release": "11.1.0",
+    "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_source_changes": "none"
+  },
+  "run": {
+    "observed_at": "2026-08-28T04:15:00+08:00",
+    "reported_at": "2026-08-28T04:16:00+08:00",
+    "command": "bash sim/difftest/run_gate_d.sh --parallel",
+    "exit_code": 0,
+    "result": "pass",
+    "log": "build/gate-d-c007164.log",
+    "log_sha256": "7c389c54460cecb09454fd11c31b2046e805fdc73f2fea31d2d1192d8429a12f"
+  },
+  "subresults": {
+    "parallel_lockstep": "26/26 pass (P5a-Hardening + M2 directed)",
+    "gate_c": "7/7 pass",
+    "p5a_mmu": "3/3 pass",
+    "p4b": "5/5 pass",
+    "random": {
+      "seed_1": "100002/100002 pass",
+      "seed_2": "100003/100003 pass",
+      "seed_3": "100002/100002 pass"
+    },
+    "coverage": {
+      "expected_hit": "60/60",
+      "observed_families": 61
+    },
+    "baremetal_c": "200/200 pass"
+  },
+  "known_limits": [
+    "仅证明冻结 SHA 完整 Gate D 全绿；不证明 Gate-F-BOARD、CI 晋级、Linux/nightly 或正式发布。",
+    "P7-4 未列族（FP16/sqrt/estimate/minmax/round/SVE）仍后置。"
+  ],
+  "next": "Gate-F ISA 正式验收与 CI/main 晋级仍按既定条件；继续 T-067 B5 full flow 重跑与 Gate F-MEM/BOARD。"
+}

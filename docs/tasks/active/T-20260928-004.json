@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "T-20260928-004",
+  "title": "Create versioned AArch64 Linux Flash payload and BRAM loader",
+  "kind": "flash-image-tooling",
+  "priority": "high",
+  "phase": "review",
+  "dispatch_status": "owner-complete-awaiting-integrator",
+  "assigned_owner": "flash_loader_agent",
+  "depends_on": ["T-20260927-001"],
+  "batch_parent": "T-20260928-002",
+  "base_sha": "8d24b68ba2f8d4d22fdff95309d6be008a0ea7d8",
+  "branch": "feature/T-20260928-004-linux-flash-loader",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-004",
+  "writes": [
+    "fpga/catapult_a10/boot/linux_loader.S",
+    "fpga/catapult_a10/boot/linux_loader.ld",
+    "fpga/catapult_a10/boot/build_linux_loader.sh",
+    "fpga/catapult_a10/boot/linux_image_format.py",
+    "fpga/catapult_a10/boot/test_linux_image_format.py",
+    "fpga/catapult_a10/boot/linux_flash_layout.json"
+  ],
+  "reads": [
+    "docs/LINUX_BOARD_BOOT_PLAN.md §3.1, §5, §7",
+    "fpga/catapult_a10/boot/boot.S",
+    "fpga/catapult_a10/boot/boot.ld",
+    "fpga/catapult_a10/boot/build.sh",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/scripts/gen_flash_data.py",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/scripts/bin2ihex.py",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/hw/quartus/vex_soc_ddr/output_file.cof"
+  ],
+  "context_docs": [
+    "docs/LINUX_BOARD_BOOT_PLAN.md §5",
+    "docs/BRINGUP_25MHZ_PLAN.md §5.3"
+  ],
+  "validation": {
+    "maximum_level": "L0 only",
+    "checks": ["host tests reject overlap, out-of-range, overflow, bad alignment and checksum errors", "loader assembles/links and image limits are explicit"],
+    "forbidden": ["do not edit SoC/platform top or claim the Flash Avalon aperture is integrated", "do not run Quartus, JTAG or Flash programming"]
+  },
+  "acceptance": "AArch64-specific, versioned descriptor and reproducible payload/HEX generator with strict address and checksum tests; BRAM loader source matches the descriptor and remains within the 64 KiB image contract.",
+  "handoff": "docs/handoffs/T-20260928-004-linux-flash-loader.md",
+  "evidence": "docs/tasks/evidence/T-20260928-004.json",
+  "created_at": "2026-09-28T00:09:11+08:00",
+  "updated_at": "2026-09-28T01:42:57+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-28T00:15:41+08:00",
+    "agent_name": "flash_loader",
+    "model": "platform default; explicit model selector omitted per user instruction",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-004"
+  },
+  "owner_result": {
+    "implementation_sha": "a2e314001a60a34fdd0d112e36d0fea012ca6329",
+    "evidence_sha": "11e27755973044e117344407bd1d28d01d5fad24",
+    "summary": "18/18 format host tests and independent AArch64 loader assemble/link/MIF roundtrip passed; integration review pending."
+  }
+}

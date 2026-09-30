@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-011",
+  "title": "Gate D candidate 全量回归（lint 修复后）",
+  "kind": "gate-regression",
+  "priority": "high",
+  "assigned_owner": "luna-monitor-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "在 T-010 修复后的 detached candidate 上运行完整本地 Gate D；不修改 RTL/QEMU",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "只读核对 candidate SHA 与 Gate D evidence"
+  },
+  "phase": "cancelled",
+  "parent": "T-20260826-010",
+  "depends_on": ["T-20260826-010"],
+  "writes": [
+    "docs/tasks/evidence/T-20260826-011.json",
+    "docs/handoffs/T-20260826-011-gate-d-candidate.md"
+  ],
+  "reads": [
+    "sim/difftest/run_gate_d.sh",
+    "scripts/ci-fast.sh",
+    "scripts/ci-difftest.sh",
+    "docs/handoffs/T-20260826-009-gate-d-candidate.md",
+    "docs/ROADMAP.md",
+    "docs/PROJECT_STATUS.md"
+  ],
+  "context_docs": ["docs/MULTI_AGENT_WORKFLOW.md", "docs/VERIFICATION.md"],
+  "base_sha": "acc3f95",
+  "branch": "verify/T-20260826-011-gate-d-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-011",
+  "resource": {"cpu": 6, "memory_mb": 8192, "disk_mb": 4096, "timeout_s": 7200, "cpus": [0,1,2,3,4,5]},
+  "validation": {
+    "l0": ["toolcheck + candidate SHA/hash"],
+    "l1": ["make test", "make coverage"],
+    "l2": ["make difftest difftest-hazard p4c p5a p6-lse p6-wfi"],
+    "l3": ["bash sim/difftest/run_gate_d.sh"],
+    "l4": [],
+    "seeds": [1,2,3,4,5]
+  },
+  "acceptance": "T-010 修复后的 candidate SHA 上本地 Gate D 全量及所有子项通过，或在首个真实失败处停止并分类；证据绑定同一 SHA/QEMU/plugin/资源，不能复用 T-009 的失败或历史绿记录。",
+  "created_at": "2026-08-26T18:20:00+08:00",
+  "updated_at": "2026-08-26T19:30:00+08:00",
+  "commits": ["1551efd", "b1f47fb"],
+  "handoff": "docs/handoffs/T-20260826-011-gate-d-candidate.md",
+  "evidence": "docs/tasks/evidence/T-20260826-011.json",
+  "known_limits": [
+    "CI 暂不作为本地回归前置；Gate E 仍需独立 Linux 判据。"
+  ],
+  "next": "第二个 PINMISSING 阻断已取证并取消；T-013 在 T-012 修复 candidate 上重新运行完整 Gate D。"
+}
+

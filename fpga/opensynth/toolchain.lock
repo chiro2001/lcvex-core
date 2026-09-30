@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-074",
+  "captured_at": "2026-08-29T02:01:14+08:00",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "isolation": {
+    "primary_suite": "oss-cad-suite-build 2026-08-28 linux-x64 (downloaded to /tmp; not committed)",
+    "project_conda_env": "lcvex (Verilator 5.050 fixed by docs/TOOLCHAIN.md)",
+    "system_packages_installed_this_session": [
+      "yosys 0.66-1 (Arch extra)",
+      "iverilog 13.0-1 (Arch extra)",
+      "vtr 9.0.0-1 (Arch extra, VPR only)"
+    ]
+  },
+  "tools": [
+    {
+      "name": "yosys",
+      "role": "synthesis",
+      "version": "0.68+136 (git sha1 c30457480-dirty, Release)",
+      "source": "oss-cad-suite 20260828",
+      "path": "/tmp/oss_cad/oss-cad-suite/bin/yosys",
+      "status": "available",
+      "url": "https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-08-28/oss-cad-suite-linux-x64-20260828.tgz",
+      "sha256": "a7f1b795aa10271ff8a0f96de0e5ee77ac9df86b71808cbe506159cb8117eed1"
+    },
+    {
+      "name": "nextpnr-ecp5",
+      "role": "ecp5 place-and-route (conditional proxy only)",
+      "version": "nextpnr-0.11.1-18-gdec04b3b",
+      "source": "oss-cad-suite 20260828",
+      "path": "/tmp/oss_cad/oss-cad-suite/bin/nextpnr-ecp5",
+      "status": "available",
+      "device_db": "ECP5 LFE5U-85F CABGA381 present in suite",
+      "url": "https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-08-28/oss-cad-suite-linux-x64-20260828.tgz",
+      "sha256": "a7f1b795aa10271ff8a0f96de0e5ee77ac9df86b71808cbe506159cb8117eed1"
+    },
+    {
+      "name": "nextpnr-generic",
+      "role": "generic place-and-route",
+      "version": "nextpnr-0.11.1-18-gdec04b3b",
+      "source": "oss-cad-suite 20260828",
+      "path": "/tmp/oss_cad/oss-cad-suite/bin/nextpnr-generic",
+      "status": "available"
+    },
+    {
+      "name": "verilator",
+      "role": "SystemVerilog lint/simulation (project baseline)",
+      "version": "5.050 2026-07-01 rev conda-forge build 0",
+      "source": "conda env lcvex (docs/TOOLCHAIN.md fixed)",
+      "path": "/home/chiro/miniforge3/envs/lcvex/bin/verilator",
+      "status": "available",
+      "note": "Project make compile/sim uses this."
+    },
+    {
+      "name": "verilator",
+      "role": "SystemVerilog lint from OSS CAD Suite",
+      "version": "5.051 devel rev v5.050-281-g1ad9acd22",
+      "source": "oss-cad-suite 20260828",
+      "path": "/tmp/oss_cad/oss-cad-suite/bin/verilator",
+      "status": "available (secondary)"
+    },
+    {
+      "name": "iverilog",
+      "role": "Verilog/SystemVerilog compilation (secondary)",
+      "version": "14.0 (devel) s20260301-391-g64f13540a",
+      "source": "oss-cad-suite 20260828",
+      "path": "/tmp/oss_cad/oss-cad-suite/bin/iverilog",
+      "status": "available",
+      "note": "Arch system also has iverilog 13.0-1; OSS suite version used for consistency."
+    },
+    {
+      "name": "sv2v",
+      "role": "SystemVerilog-to-Verilog conversion",
+      "version": "N/A",
+      "source": "N/A",
+      "path": "NOT FOUND",
+      "status": "unavailable",
+      "attempt": "AUR package sv2v-0.0.13-1 exists, but source build requires GHC/Haskell deps; yay install failed because TUNA mirror returned 404 for haskell-* package files. No prebuilt binary found in oss-cad-suite/bin.",
+      "fallback": "Use Verilator for SV consumption; Yosys only consumes plain-Verilog subset. A1 can use manual/scripted flattening or wait for sv2v binary."
+    },
+    {
+      "name": "vtr / vpr",
+      "role": "research FPGA CAD flow (conditional)",
+      "version": "VPR 9.0.0-dev+unkown (Arch vtr 9.0.0-1)",
+      "source": "Arch extra package vtr",
+      "path": "/usr/bin/vpr",
+      "status": "available (VPR only; no full VTR regression harness used)",
+      "note": "A0 did not invoke VPR because no architecture/flow was needed; nextpnr-ecp5 was available and used for minimal smoke."
+    }
+  ],
+  "input_sha256": {
+    "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60",
+    "rtl/lcvex_core.sv": "331b11adc1f4e191dcbdc3f59cf54203c48faa1efee46d3d9d34c59a0186a31e",
+    "rtl/lcvex_axi4_master.sv": "0fdaf8e151a1136e0641f8fc073757a1b9c7bc3b5a5248ca71f5b76171892fe2",
+    "rtl/lcvex_l2.sv": "b879bed0e925823d24b0f5493751bba6824fc4560d7f3941370e0dd468866422",
+    "rtl/lcvex_catapult_soc_top.sv": "f8082f8a0c28af6dc2af5f87972df5b8e1c6f74ebd65f8f6df43f6c3f23f0ff3",
+    "rtl/filelist.f": "a28a62a38dcaba3f3752b01f9ba8cbb7b6d7ec81170aaac304bb5a6844fbb63c",
+    "fpga/catapult_a10/tb/filelist_soc.f": "6008d3a14aba77b15c7c09e8a59419def6f7f491f0ef76f7dd136aeca23dae8d",
+    "fpga/opensynth/examples/minimal_counter.sv": "04ce2be24e939a96aef4f8e65d69f02f14d75b9a16e5c5d2686fdd85bb6edbdb",
+    "fpga/opensynth/examples/sv_pkg_struct.sv": "dcc509af4d2bfadb55c2eee750ec4780ff928f266af68ab94ca8a421fcffd20d",
+    "fpga/opensynth/examples/sv_features.sv": "95e4c054921c814f3182d7ee443958d8a8df5911d746618320ddc2937a50abd6"
+  }
+}

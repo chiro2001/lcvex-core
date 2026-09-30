@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-007",
+  "label": "GATE-D-CACHE-PERF-ELAB-FIX",
+  "title": "可选 Cache 性能观测端口与 cache-off elaboration 修复",
+  "kind": "testbench-elaboration-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-cache-perf-elaboration-fix",
+  "agent_type": "rtl-interface-and-verification-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": [],
+  "triggered_by": "T-20260901-005",
+  "base_sha": "2f17d401e8d85847eaa80dc0a492aa3cd9c6643f",
+  "branch": "verify/T-20260901-007-cache-perf-elab-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-007",
+  "scope": "修复 Gate D 在默认 I_L1_ENABLE=0、D_L1_ENABLE=0、L2_ENABLE=0 时的 lcvex_soc_tb elaboration：移除 testbench 对 conditional-generate cache 实例内部 hit/state/d_req 的直接层次引用，改为稳定的只读性能观测端口或等价的 testbench-only wrapper。首选在 lcvex_l1_d/lcvex_l1_i/lcvex_l2 增加无状态组合 perf_hit/perf_refill_beat 输出，并由 lcvex_soc_tb 显式连接；不得改变缓存功能、请求/响应协议、默认参数、性能计数定义、断言或参考结果。加入 cache-off/cache-on 双配置 elaboration 回归并复现 make test/random 入口；不运行完整 Gate D、Linux、Quartus。",
+  "planning_guidance": {
+    "root_cause": [
+      "T-005 @ aa60cfe 的 default cache-off lcvex_soc_tb 在直接引用 dl1.hit/il1.hit/l2.hit 及 state/d_req 时，Verilator 5.050 对已裁剪实例报 42 个 missing-module errors。",
+      "make test 为首个失败；random 3x100k 同源失败；coverage trace 缺失是级联，不得分别打补丁规避。"
+    ],
+    "implementation": [
+      "观测端口必须为纯组合输出，不新增寄存器或 reset 状态；hit 仅由上层既有 valid/ready/maint/bypass 条件资格化使用，refill beat 保持原 state==REFILL 且下游握手语义。",
+      "lcvex_soc_tb 禁止继续引用 conditional cache 实例内部层次名；downstream 可直接使用已有顶层连接信号。",
+      "所有其它 cache 实例要么显式接未使用输出，要么确认工具允许省略输出且不产生 fatal；Catapult 路径不得引入功能或综合依赖。",
+      "若选择 testbench-only wrapper，必须说明为何比模块只读输出更小，并保证 wrapper 自身在 cache-off 顶层仍可解析。"
+    ],
+    "tests": [
+      "增加独立快速入口，对 lcvex_soc_tb 的 0/0/0 和 1/1/1 cache 参数做 lint/elaboration，确保重新干净构建而非复用旧 sim_build。",
+      "复跑 make sim-cocotb-backpressure，并以独立 build dir 复现默认 lcvex_soc_tb Cocotb elaboration。",
+      "复跑至少 random seed=1 的构建/100k 锁步或 Gate 对应最小 random 入口；复跑 I-L1、D-L1、L2 单元 TB，确认性能端口不改变功能。",
+      "检查 cache-off perf counters 为零；cache-on smoke 中 hit/refill/downstream 仍有有效观测，不得通过恒零修复 elaboration。"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_l1_d.sv",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_l1_d_tb.sv",
+    "tb/sv/lcvex_l1_i_tb.sv",
+    "tb/sv/lcvex_l2_tb.sv",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/CACHE_PERF_OBSERVABILITY_ELABORATION_FIX.md",
+    "docs/handoffs/T-20260901-007-cache-perf-elab-fix.md",
+    "docs/tasks/evidence/T-20260901-007.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/GATE_D_F1F_RESULTS.md",
+    "docs/tasks/evidence/T-20260901-005.json", "sim/cocotb/**", "sim/difftest/**", "rtl/filelist.f"
+  ],
+  "validation": {
+    "l0": ["cache-off/cache-on lcvex_soc_tb lint/elaboration；registry/Makefile consistency"],
+    "l1": ["I-L1/D-L1/L2 SV TB；sim-cocotb-backpressure；cache perf counter off=0/on active smoke"],
+    "l2": ["default random seed=1 build and 100k QEMU lockstep or exact minimal Gate random reproducer"],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "T-005 的 42 个 cache-off dotted-reference errors 不再出现；cache-off/cache-on 均从干净 build elaboration；三类 cache 功能 TB、Cocotb backpressure 和随机定向通过；性能计数在 off 时为零、on 时保持有效。修复不得靠跳过 Gate step、关闭断言或恒零 cache-on counters。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 12288, "timeout_s": 7200, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 90, "extension_increment_minutes": 60, "max_minutes": 240, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-09-01T08:31:42+08:00", "released_at": "2026-09-01T09:32:53+08:00", "reason": "cache-off/on、counter smoke、三层 cache TB、Cocotb backpressure 和 random seed1 100k 全部通过", "rule": "本地唯一重型任务；15G/no-swap/50%-CPU/-j1；不与 Gate/Linux/Quartus/perf probe 并发"},
+  "created_at": "2026-09-01T08:30:38+08:00",
+  "updated_at": "2026-09-01T09:40:35+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T08:31:42+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "agent_reuse_note": "复用已完成 T-20260901-004 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-007。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-007"
+  },
+  "handoff": "docs/handoffs/T-20260901-007-cache-perf-elab-fix.md",
+  "evidence": "docs/tasks/evidence/T-20260901-007.json",
+  "merge_sha": "a2680009749d7ee7b4f79220ba5d69a5996ad296",
+  "merged_at": "2026-09-01T09:37:55+08:00",
+  "integrator_review": {
+    "received_at": "2026-09-01T09:35:59+08:00",
+    "correction_requested_at": "2026-09-01T09:36:41+08:00",
+    "corrected_at": "2026-09-01T09:37:31+08:00",
+    "accepted_at": "2026-09-01T09:40:35+08:00",
+    "status": "accepted_cache_perf_observability_elaboration_fix",
+    "implementation_tip": "6a31cfe338e488a9201611e4564fc949ace43789",
+    "owner_final_tip": "e0eb79995907e7904592f454e151fa5d45d6b9b1",
+    "checks": [
+      "I-L1/D-L1/L2 只新增纯组合 perf_hit/perf_refill_beat 输出，无新状态/reset/协议或默认参数变化",
+      "soc_tb 不再层次引用 conditional cache 实例；off counters 全零，on 三层 hit/refill/downstream 均非零且架构 digest 一致",
+      "owner 三层 cache TB、Cocotb backpressure 2/2、random seed1 100002 commits 全绿",
+      "合并 SHA 上 cache-off/on lint-elaboration 与 registry 66 项/一致性全绿；集成者修正 handoff EOF 空行"
+    ]
+  },
+  "known_limits": ["本任务不解决 F1a delay2 性能回退。", "不运行完整 Gate D/Linux/Quartus；完整 Gate 由后继新冻结 SHA 执行。"],
+  "next": "冻结包含本修复的新 candidate，登记新的完整串行 Gate D 任务。"
+}

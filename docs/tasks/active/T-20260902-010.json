@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-010",
+  "label": "A10-FULL-FP-SYNTH-MERGESHA",
+  "title": "A10 真实 full-FP synthesis 合并 SHA 重跑（T-008 lane clamp 后）",
+  "kind": "verify-fpga-synthesis",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-a10-full-fp-synth-merge",
+  "agent_type": "remote-quartus-synthesis",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-008"
+  ],
+  "base_sha": "87777425e0a23c65763b847d39a2074f9bc77962",
+  "branch": "verify/T-20260902-010-a10-full-fp-synth-merge",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-010",
+  "scope": "在包含 T-008 NEON lane clamp 的合并 SHA 上，重新同步远端隔离 candidate/probe，重跑真实 SoC full-FP synthesis，确认正式 RTL 不再报 index 128 out-of-range；记录 wall/峰值/exit/resource。只到 synthesis。",
+  "reads": [
+    "docs/handoffs/T-20260902-007-a10-full-fp-synth-rerun.md",
+    "docs/handoffs/T-20260902-008-neon-lane-clamp.md",
+    "docs/tasks/evidence/T-20260902-007.json",
+    "fpga/catapult_a10/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-010-a10-full-fp-synth-merge.md",
+    "docs/tasks/evidence/T-20260902-010.json",
+    "build/agents/T-20260902-010/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-010-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "远端只读预检；candidate/probe 隔离"
+    ],
+    "l1": [
+      "full-FP synthesis 成功日志与资源表"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "正式 RTL 直接通过 Quartus 21.4 full-FP synthesis；若仍失败需保留日志与根因。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T18:27:00+08:00",
+  "updated_at": "2026-09-02T20:39:20+08:00",
+  "known_limits": [
+    "不运行 fit/STA/SOF/编程；不读取 license；不删除远端文件；不停止非 EDA 进程"
+  ],
+  "handoff": "docs/handoffs/T-20260902-010-a10-full-fp-synth-merge.md",
+  "evidence": "docs/tasks/evidence/T-20260902-010.json",
+  "next": "成功后进入 fitter → STA → assembler/SOF",
+  "dispatch": {
+    "sent_at": "2026-09-02T18:27:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-010",
+    "branch": "verify/T-20260902-010-a10-full-fp-synth-merge"
+  },
+  "head_sha": "5b0aad81a0381a22a07dd70e453869c186342a87",
+  "merge_sha": "cfc0bc5415cc60205b6da473f3d6a81d7bc8b7f8",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T20:35:00+08:00",
+    "merged_at": "2026-09-02T20:39:20+08:00",
+    "recorded_at": "2026-09-02T20:39:20+08:00",
+    "notes": "Full-FP synthesis on merge SHA PASS with repo RTL only; next fitter/STA/SOF staged."
+  }
+}

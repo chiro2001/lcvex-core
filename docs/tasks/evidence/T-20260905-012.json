@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-012",
+  "state": "review",
+  "partial": false,
+  "base_sha": "80b7664",
+  "head_sha": "d6e6d032f6d6ab62c0b0db5a6e2801f907a4a4ee",
+  "merge_sha": null,
+  "branch": "fix/T-20260905-012-dynamic-pc-token-sva",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-012",
+  "scope": "在 6ef67db core 修复上补充 older FP response 与 younger data-MMU translation 并发的定向回归；不修改 FP datapath、MMU 控制、QEMU 或板级流程。",
+  "implementation": {
+    "commits": [
+      "6ef67db4aa61769113c23ec4577f6b901b3f0043",
+      "d6e6d032f6d6ab62c0b0db5a6e2801f907a4a4ee"
+    ],
+    "files": [
+      "rtl/lcvex_core.sv",
+      "sim/cocotb/test_p7_3_neon_fp.py",
+      "docs/handoffs/T-20260905-012-dynamic-pc-token-sva.md"
+    ],
+    "summary": "完整装载 P5a 四级页表并恢复 MMU/FP 状态；旧 MUL 预取窗口，scalar FADD response 与 younger LDR data walk 并发时逐周期检查 fp_rsp payload、ID/EX token、ready/consume 和 EX/MEM/commit 唯一性。"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-diff-check-001",
+      "level": "L0",
+      "started_at": "2026-09-05T11:04:16+08:00",
+      "finished_at": "2026-09-05T11:04:16+08:00",
+      "source_sha": "d6e6d032f6d6ab62c0b0db5a6e2801f907a4a4ee",
+      "command": "git diff --check",
+      "result": "pass",
+      "exit_code": 0,
+      "cpu_count": 1,
+      "resource_limit": "read-only"
+    },
+    {
+      "run_id": "owner-l0-python-compile-002",
+      "level": "L0",
+      "started_at": "2026-09-05T11:04:16+08:00",
+      "finished_at": "2026-09-05T11:04:16+08:00",
+      "source_sha": "d6e6d032f6d6ab62c0b0db5a6e2801f907a4a4ee",
+      "command": "python3 -m py_compile sim/cocotb/test_p7_3_neon_fp.py",
+      "result": "pass",
+      "exit_code": 0,
+      "cpu_count": 1,
+      "resource_limit": "read-only"
+    },
+    {
+      "run_id": "owner-l1-t012-focused-003",
+      "level": "L1",
+      "started_at": "2026-09-05T11:06:32+08:00",
+      "finished_at": "2026-09-05T11:06:39+08:00",
+      "source_sha": "d6e6d032f6d6ab62c0b0db5a6e2801f907a4a4ee",
+      "command": "systemd-run --user --wait --collect --unit=lcvex-t012-p73-final-focused -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260905-012 -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.p7_3_neon_fp SIM_BUILD=sim_build_t012_direct COCOTB_TESTCASE=test_p7_3_fp_response_held_during_data_mmu_walk",
+      "result": "pass",
+      "exit_code": 0,
+      "cpu_count": 1,
+      "memory_limit_mb": 16384,
+      "cpu_limit": "50%",
+      "summary": "blocked_cycles=5, data_issues=1, consume=1, exmem_captures=1, fp_commits=1, load_commits=1"
+    },
+    {
+      "run_id": "owner-l1-p7-3-cocotb-004",
+      "level": "L1",
+      "started_at": "2026-09-05T11:06:58+08:00",
+      "finished_at": "2026-09-05T11:07:05+08:00",
+      "source_sha": "d6e6d032f6d6ab62c0b0db5a6e2801f907a4a4ee",
+      "command": "systemd-run --user --wait --collect --unit=lcvex-t012-p73-full-final -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260905-012 -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.p7_3_neon_fp SIM_BUILD=sim_build_t012_direct",
+      "result": "pass",
+      "exit_code": 0,
+      "cpu_count": 1,
+      "memory_limit_mb": 16384,
+      "cpu_limit": "50%",
+      "summary": "P7-3 Cocotb 5/5；既有 NEON 4/4 加新增 T-012 并发回归。"
+    },
+    {
+      "run_id": "owner-l1-p7-3-sv-005",
+      "level": "L1",
+      "started_at": "2026-09-05T11:02:26+08:00",
+      "finished_at": "2026-09-05T11:03:39+08:00",
+      "source_sha": "d6e6d032f6d6ab62c0b0db5a6e2801f907a4a4ee",
+      "command": "systemd-run --user --wait --collect --unit=lcvex-t012-p73-sv -p WorkingDirectory=/home/chiro/projects/mycpu/lcvex-wt-T-20260905-012 -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- /home/chiro/miniforge3/bin/conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "cpu_count": 1,
+      "memory_limit_mb": 16384,
+      "cpu_limit": "50%",
+      "summary": "P7-3 NEON FP raw SV directed unit PASS。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "test-p7-3-cocotb",
+      "uri": "sim/cocotb/test_p7_3_neon_fp.py",
+      "sha256": "fed683337ae2d5365b4fd0f578afaf33456e8cee181a8b3b9df1bf7ce9205116",
+      "bytes": 19515,
+      "owner": "T-20260905-012",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260905-012-dynamic-pc-token-sva.md",
+      "sha256": "1be1aef5167ebead6ce51ffa180eb8a050d2596b598f62f2dd6aea476c980bff",
+      "bytes": 2491,
+      "owner": "T-20260905-012",
+      "retain_until": "task-close"
+    }
+  ],
+  "not_run": [
+    "T-009 full L0-L2 restart and integrator merge-candidate rerun",
+    "Gate D、Quartus synthesis/fitter/STA、assembler/SOF/JIC/RBF、JTAG 和上板",
+    "QEMU/QSF/SDC；本任务未修改这些路径"
+  ],
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "false_path_added": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "board_action": false
+  },
+  "known_limits": [
+    "并发回归使用 scalar FADD 以在当前 1-cycle SRAM 下形成稳定窗口；core fp_exec response handshake 与 NEON 共用，既有 NEON 测试另行通过。",
+    "merge_sha 由集成者在 T-009 candidate 合入并复跑后补写。"
+  ],
+  "handoff": "docs/handoffs/T-20260905-012-dynamic-pc-token-sva.md",
+  "status": "review",
+  "next": "集成者 cherry-pick d6e6d03 到 T-009 candidate，复跑受影响 L0-L2 并定稿 merge_sha。"
+}

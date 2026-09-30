@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-107",
+  "state": "done",
+  "base_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+  "head_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+  "merge_sha": "7beebb5911a31bd8582a571e5d95a680ee047493",
+  "branch": "feature/T-20260829-107-aud-02-make-test",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-107",
+  "sent_at": "2026-08-30T00:03:00+0800",
+  "received_at": "2026-08-30T00:03:00+0800",
+  "reported_at": "2026-08-30T00:13:37+0800",
+  "owner": "T-20260829-107-aud-02-owner",
+  "model": "dsh-default",
+  "label": "AUD-02",
+  "title": "make test full regression on feature/p7-final",
+  "scope": "Run complete make test in isolated worktree at current main feature/p7-final under cgroup <16GiB, -j1, record SHA/time/RSS/failures; do not run Quartus.",
+  "files": [
+    "docs/handoffs/T-20260829-107-aud-02.md",
+    "docs/tasks/evidence/T-20260829-107.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12.14",
+    "make": "GNU Make 4.4.1",
+    "cocotb": "2.0.1",
+    "qemu": "11.1.0 fork 84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "gcc_warn": "aarch64-none-elf-gcc not installed (P2 tool only, not required by make test)"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches_sha256": null,
+    "binary_sha256": null
+  },
+  "runs": [
+    {
+      "run_id": "owner-make-test-full-001",
+      "source_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 --unit=aud02-make-test --working-directory=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-107 /tmp/aud02_run.sh  (inside: make -j1 test)",
+      "seed": null,
+      "wall_seconds": 484.754,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 3532.1,
+      "peak_memory_bytes": 3703697408,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Full make test passed. Final output: 'P0 检查全部通过'. No failed/skipped targets in the make test prerequisite set."
+    },
+    {
+      "run_id": "owner-toolcheck-001",
+      "source_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make -j1 test (toolcheck prerequisite)",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "toolcheck passed; only warning is aarch64-none-elf-gcc not installed (not part of P0 make test requirement)."
+    },
+    {
+      "run_id": "owner-compile-001",
+      "source_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make -j1 test (compile prerequisite: verilator --lint-only -Wall -Wno-UNUSEDPARAM --top-module lcvex_core -f rtl/filelist.f)",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "core lint passed within make test."
+    },
+    {
+      "run_id": "owner-sv-tb-cluster-001",
+      "source_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make -j1 test (sim-sv, sim-sv-backpressure, sim-sv-memif, sim-sv-l1d, sim-sv-l1i, sim-sv-l2, sim-sv-mmu, sim-sv-pl011, sim-sv-pl061, sim-sv-mmio, sim-sv-crc prerequisites)",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All SystemVerilog testbench build+run targets passed under make test."
+    },
+    {
+      "run_id": "owner-cocotb-tb-cluster-001",
+      "source_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make -j1 test (sim-cocotb, sim-cocotb-regfile, sim-cocotb-backpressure, sim-cocotb-mmio prerequisites)",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All Cocotb core/regfile/backpressure/mmio-fabric targets passed."
+    },
+    {
+      "run_id": "owner-check-encoders-001",
+      "source_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make -j1 test (check-encoders prerequisite: python3 sim/difftest/check_encoders.py)",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PASS: a64.py encoder consistent with cross assembler (86 entries)."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-aud02-handoff",
+      "owner": "T-20260829-107",
+      "uri": "docs/handoffs/T-20260829-107-aud-02.md",
+      "reproduce": "cat docs/handoffs/T-20260829-107-aud-02.md",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "fd8b9839865601c42ca024a3ce78f672f67c3fbd6738379b4d9656ef58c22ea1"
+    },
+    {
+      "id": "artifact-aud02-evidence",
+      "owner": "T-20260829-107",
+      "uri": "docs/tasks/evidence/T-20260829-107.json",
+      "reproduce": "cat docs/tasks/evidence/T-20260829-107.json",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "e461229e0d377ae2e7f60eb653d19df1331b8b81e821655f2931f12a1fcadc24"
+    }
+  ],
+  "known_limits": [
+    "Only make test P0 regression was run; Gate D, L3, lockstep, multicore SoC, Linux long-run and Quartus were not run.",
+    "aarch64-none-elf-gcc is not installed; toolcheck reports a warning, but make test's P0 set does not require it.",
+    "Verilator internal -j6 was used by recipes (make -j1 still serializes targets one at a time); cgroup memory cap was 16GiB with zero swap."
+  ],
+  "next": "Integrator reviews; optionally rerun on merge SHA and then run stronger Gate D/lockstep if desired.",
+  "integrator_review": {
+    "received_at": "2026-08-30T00:15:04+08:00",
+    "status": "accepted",
+    "head_sha": "77159e3aa37bd1b7d76ab9efbf16026e8af9839c",
+    "notes": "AUD-02 merged. make test full pass rc=0, 484.754s, cgroup peak 3.449GiB, no failures/skips. Source SHA ceb8af4 (before later doc/script merges, no functional RTL changes).",
+    "merge_sha": "7beebb5911a31bd8582a571e5d95a680ee047493",
+    "result_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "7beebb5911a31bd8582a571e5d95a680ee047493",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-aud02-handoff",
+        "uri": "docs/handoffs/T-20260829-107-aud-02.md",
+        "sha256": "fd8b9839865601c42ca024a3ce78f672f67c3fbd6738379b4d9656ef58c22ea1",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-aud02-evidence",
+        "uri": "docs/tasks/evidence/T-20260829-107.json",
+        "sha256": "e461229e0d377ae2e7f60eb653d19df1331b8b81e821655f2931f12a1fcadc24",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

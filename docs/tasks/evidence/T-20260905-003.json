@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-003",
+  "state": "done",
+  "partial": false,
+  "base_sha": "1ccbb3baed633c9c64e7a078df4cad4ece69a2a5",
+  "head_sha": "0c630561e4d458fa3717c040d42efefd53ce1198",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "branch": "timing/T-20260905-003-r16-fp-roundpack-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-003",
+  "batch_parent": "T-20260905-002",
+  "cone_id": "R16-FP-PPPRE-ROUNDPACK-SLOTRES",
+  "scope": "Cut the T-20260902-058 top-50 FP pp_pre.sig -> slot_result_r cone by registering round_pack p1/p2 across IT_PREP -> IT_PACK in FP_ITER, while preserving T-056 IT_ALIGN/IT_ADD and all architectural response semantics.",
+  "implementation": {
+    "commits": [
+      "81af35faa088c16e2826b70a7e79089f32ec9e54",
+      "a0f33602a1e13ce4f4b33c0fc9ae6d052f4d7b10",
+      "76154a7d3d66f2afd9214b6bf8399a5e6686ae06",
+      "0c630561e4d458fa3717c040d42efefd53ce1198"
+    ],
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv",
+      "docs/handoffs/T-20260905-003-r16-fp-roundpack-cut.md",
+      "docs/tasks/evidence/T-20260905-003.json"
+    ],
+    "summary": "Added IT_PACK and pack_mid/pack_mid_lo/pack_mid_hi fp_round_mid_t registers. IT_PREP now captures round_pack_p1 and IT_PACK alone performs p2 and raises iter_done for ordinary pp_pre operations (ADD/SUB/MUL/FMA/SCVTF/UCVTF/FCVT). The existing iterative IT_FIN p1 path now enters the same IT_PACK p2 state. round_pack_p1 scans ordinary lead_valid=0 pre.sig instead of treating finite nonzero values as zero. Added B1 pause contract probes for ordinary, FDIV and FSQRT IT_PACK paths plus pause kill/reset priority.",
+    "state_boundary": {
+      "it_prep": "For uses_round_pack_pre, capture complete fp_round_mid_t into pack_mid*; no result or iter_done.",
+      "it_pack": "Consume registered pack_mid* with round_pack_p2 and present result/fpsr_flags/iter_done; clear payload on the following state-machine edge.",
+      "iterative_div_sqrt": "IT_FIN remains the p1 capture stage for div_pre/sqrt_pre and transitions to IT_PACK; iterative latency is unchanged.",
+      "reset_kill": "it_state_r=IT_IDLE and all pack_mid* registers are zero on reset or iter_kill.",
+      "valid_drop": "IT_PREP/IT_PACK return to IT_IDLE and clear pack_mid* without iter_done/result.",
+      "iter_pause": "State and payload hold; IT_PREP does not capture and IT_PACK suppresses p2/iter_done until pause is released. Direct TB uses a bounded hierarchical wait preceded by an unconditional posedge+#1 NBA fence for ordinary ADD, FDIV.S and FSQRT.S IT_PACK (it_state_r=4'd10, with it_fin_valid_r distinguishing iterative payloads), holds two cycles while changing live operands, then checks one original result/flags pulse.",
+      "architectural_commit": "No architectural state is changed; existing slot capture, response hold, and commit path are unchanged."
+    },
+    "latency": {
+      "scalar_fadd_fsub_s_d_h": {"before": 7, "after": 8},
+      "scalar_fmul_fma": {"before": 6, "after": 7},
+      "scalar_scvtf_ucvtf": {"before": 5, "after": 6},
+      "scalar_fcvt": {"before": 4, "after": 5},
+      "neon_fadd_fsub_2s": {"before": 13, "after": 15},
+      "neon_fadd_fsub_4s": {"before": 25, "after": 29},
+      "neon_fmul_fma_2s": {"before": 11, "after": 13},
+      "neon_scvtf_ucvtf_2s": {"before": 9, "after": 11},
+      "pause_nominal_latency": "unchanged; paused cycles are additive and are not part of the nominal table",
+      "pause_locator": "unconditional posedge+#1 NBA fence, then bounded hierarchical IT_PACK state wait; fixed prep cycle counts are not used",
+      "cmp": {"before": 4, "after": 4},
+      "minmax_frint_fcvtz": {"before": 5, "after": 5},
+      "neon_frintz_2s": {"before": 9, "after": 9},
+      "iterative_fdiv_s": {"before": 261, "after": 261},
+      "iterative_fsqrt_s_d": {"before": 69, "after": 69},
+      "iterative_fsqrt_h": {"before": 70, "after": 70},
+      "iterative_fdiv_h": {"before": 518, "after": 518},
+      "neon_iterative_fsqrt_2s": {"before": 137, "after": 137},
+      "fmov": "unchanged combinational passthrough"
+    },
+    "semantics": {
+      "special_priority": "NaN, zero, Inf and finite paths use the existing fp_pre helpers; p1/p2 only split round/pack.",
+      "fpcr_fpsr": "DN/FZ/RMode and FPCR snapshot behavior preserved; p2 flags are the same p1 input_flags plus round flags.",
+      "raw_bits": "IEEE raw-bit payload, quieting, overflow/subnormal and zero sign behavior preserved.",
+      "slot_response": "Single outstanding transaction, per-slot NEON order, held response and commit sequencing unchanged.",
+      "false_path": false,
+      "core_neon_pkg_qemu_modified": false
+    }
+  },
+  "runs": [
+    {
+      "run_id": "git-diff-check-pre-corrective",
+      "stage": "pre-batch-static",
+      "command": "git diff --check",
+      "source_sha": "a0f33602a1e13ce4f4b33c0fc9ae6d052f4d7b10",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Final static diff check bound to the corrective TB source head."
+    },
+    {
+      "run_id": "manual-structure-review",
+      "stage": "pre-batch-static",
+      "command": "manual review of round_pack_p1, IT_PREP/IT_PACK, reset/kill/valid-drop/output branches and write set",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Confirmed ordinary lead_valid=0 scan, FCVT single-lane handling, IT_ALIGN/IT_ADD untouched, and ordinary p2/iter_done output only from IT_PACK."
+    },
+    {
+      "run_id": "pause-contract-static-review",
+      "stage": "pre-batch-static",
+      "command": "manual review of ordinary/FDIV/FSQRT IT_PACK pause probes and pause+kill/reset priority",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Probes hold payload for two cycles, alter live operands, require iter_done=0/result and flags not consumed while paused, then require one bit-exact result/flags pulse after release."
+    },
+    {
+      "run_id": "batch-candidate-449f48c-joint-l0-l1-fail-fast",
+      "stage": "batch-L0-L1",
+      "candidate_sha": "449f48c",
+      "source_sha": "a0f33602a1e13ce4f4b33c0fc9ae6d052f4d7b10",
+      "command": "batch T-20260905-002 joint L0/L1 fail-fast",
+      "result": "fail_fast",
+      "exit_code": 1,
+      "checks": {
+        "compile": "pass",
+        "ordinary_it_pack_pause": "pass",
+        "pause_iterative_fdiv_locator": "fail"
+      },
+      "failure": "tb/sv/lcvex_fp_exec_tb.sv:620: FDIV.S IT_PACK was not active before pause",
+      "capture": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-002/build/agents/T-20260905-002/joint-l0-l1.log",
+      "capture_sha256": "aa36064c2c1efc6f377e5b6e9b4895a9e40f783195876271fa5bead60d3ab89e",
+      "notes": "Failure was caused by the pre-corrective fixed prep_cycles=258 locator; no RTL failure is inferred. Corrective source head 76154a7 replaces it with bounded hierarchical state wait."
+    },
+    {
+      "run_id": "batch-candidate-cb4da06-joint-l0-l1-rerun-fail-fast",
+      "stage": "batch-L0-L1",
+      "candidate_sha": "cb4da06",
+      "source_sha": "76154a7d3d66f2afd9214b6bf8399a5e6686ae06",
+      "command": "batch T-20260905-002 joint L0/L1 fail-fast rerun",
+      "result": "fail_fast",
+      "exit_code": 1,
+      "checks": {
+        "compile": "pass",
+        "ordinary_it_pack_pause": "fail",
+        "pause_iterative_fdiv_locator": "not_reached"
+      },
+      "failure": "tb/sv/lcvex_fp_exec_tb.sv:597: ordinary IT_PACK was not active before pause",
+      "capture": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-002/build/agents/T-20260905-002/joint-l0-l1-rerun1.log",
+      "capture_sha256": "6b4a9d895e61cce9629625013acb089aebc07f934939b09bdd113f8463b8e3e9",
+      "notes": "Failure was caused by the old helper returning immediately on stale prior IT_PACK state before the previous task's NBA update. Corrective source head 0c63056 adds an unconditional posedge+#1 fence before bounded hierarchical state waiting."
+    },
+    {
+      "run_id": "git-diff-check-corrective-final",
+      "stage": "post-corrective-static",
+      "command": "git diff --check 1ccbb3baed633c9c64e7a078df4cad4ece69a2a5..76154a7d3d66f2afd9214b6bf8399a5e6686ae06",
+      "source_sha": "76154a7d3d66f2afd9214b6bf8399a5e6686ae06",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Final static check after pause locator corrective TB commit."
+    },
+    {
+      "run_id": "json-parse-corrective-final",
+      "stage": "post-corrective-static",
+      "command": "jq empty docs/tasks/evidence/T-20260905-003.json",
+      "source_sha": "76154a7d3d66f2afd9214b6bf8399a5e6686ae06",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Evidence JSON parses after corrective update."
+    },
+    {
+      "run_id": "git-diff-check-locator-fence-final",
+      "stage": "post-locator-fence-static",
+      "command": "git diff --check 1ccbb3baed633c9c64e7a078df4cad4ece69a2a5..0c630561e4d458fa3717c040d42efefd53ce1198",
+      "source_sha": "0c630561e4d458fa3717c040d42efefd53ce1198",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Final static diff check after the stale-IT_PACK NBA fence correction."
+    },
+    {
+      "run_id": "json-parse-locator-fence-final",
+      "stage": "post-locator-fence-static",
+      "command": "jq empty docs/tasks/evidence/T-20260905-003.json",
+      "source_sha": "0c630561e4d458fa3717c040d42efefd53ce1198",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Evidence JSON parses after the locator-fence metadata update."
+    }
+  ],
+  "not_run": [
+    "make compile and direct lcvex_fp_exec_tb (must run on the merged batch candidate)",
+    "complete P7-1 FP scalar SV and Cocotb suites",
+    "complete P7-3 NEON FP SV and Cocotb suites",
+    "complete P7-4 FMA/conversion SV and Cocotb suites",
+    "complete P7-5 FP16/sqrt/minmax/frint SV and Cocotb suites",
+    "P7-1 base/edge/rounding/sequence strict lockstep",
+    "P7-3 base strict lockstep (`make p7-3-neon-fp`)",
+    "P7-4 base/edge/rounding/sequence strict lockstep",
+    "P7-5 base/edge/rounding/sequence strict lockstep",
+    "QEMU, Verilator, Cocotb, lockstep and any generated artifacts in this lane",
+    "Quartus full-FP synthesis/fitter/signoff STA and physical timing rerun",
+    "assembler/SOF/JIC/RBF generation and FPGA programming/JTAG/board testing"
+  ],
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "false_path_added": false,
+    "core_modified": false,
+    "neon_fp_modified": false,
+    "pkg_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "heavy_validation_run": false,
+    "generated_artifacts_created": false
+  },
+  "known_limits": [
+    "This lane is review-only until the timing batch candidate is formed; no functional green result is claimed.",
+    "Physical improvement and resource/latency cost require one unified FP physical rerun on the merged candidate SHA.",
+    "The existing IT_FIN iterative path was unified onto IT_PACK without changing its measured latency; joint tests must verify DIV/SQRT special, pause, kill and reissue behavior.",
+    "Batch candidate 449f48c exposed the fixed FDIV prep-count locator failure; candidate cb4da06 then exposed stale IT_PACK state at a task boundary. Source head 0c63056 adds an unconditional posedge+#1 fence before bounded hierarchical IT_PACK state waiting.",
+    "All P7 and strict lockstep acceptance sets listed above remain pending by batch policy."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-05T02:38:19+08:00",
+    "received_at": "2026-09-05T02:38:19+08:00",
+    "reported_at": "2026-09-05T04:02:00+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260905-003-r16-fp-roundpack-cut.md",
+  "integrator_validation": "PASS; see T-20260905-002 evidence for the complete L0-L2 union and exact log hashes.",
+  "next": "Consume the Round16 physical report; no board action is authorized."
+}

@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-027",
+  "state": "done",
+  "base_sha": "3ae420dbd292d7a679fe58b4b2a4c1b78184c4e5",
+  "head_sha": "9f00ed109e8558df53bba8d70186c2bdb7f54d17",
+  "branch": "feature/p7-final",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "scope": "批量定稿历史 done 任务 evidence（merge/result head/artifact hash/correction records），并清除 check_task_timestamps.py --scope live 时间戳残留。只改 docs/scripts，不碰 RTL/QEMU/FPGA；历史 handoff 不改写。",
+  "summary": {
+    "done_tasks_covered": 66,
+    "newly_finalized_evidence": 63,
+    "already_finalized_evidence": 3,
+    "active_or_proposed_head_backfilled": 63,
+    "git_backed_artifact_sha256_filled": 62,
+    "external_or_local_artifact_without_hash": 33,
+    "timestamp_fields_normalized": 253,
+    "monotonic_fields_aligned": 4,
+    "live_errors_before": 204,
+    "live_warnings_before": 125,
+    "live_errors_after": 0,
+    "live_warnings_after": 0,
+    "all_scope_errors_after": 12,
+    "all_scope_warnings_after": 78,
+    "short_merge_sha_expanded": 8
+  },
+  "script_changes": {
+    "file": "scripts/check_task_timestamps.py",
+    "change": "read_evidence(scope) now filters live scope to proposed/active task evidence; archive evidence is only checked in --scope all. Existing correction_record/old_* skip logic retained.",
+    "rationale": "Historical archive records remain immutable; live scope should not count them as current residuals."
+  },
+  "corrections": {
+    "scope": "active/proposed done tasks and their evidence",
+    "method": "Add/backfill authoritative fields and correction records without rewriting historical handoffs.",
+    "old_values_preserved": true,
+    "counts": {
+      "evidence_finalization_entries": 277,
+      "artifact_hash_fixes": 62,
+      "timestamp_fixes": 253,
+      "monotonic_fixes": 4,
+      "merge_sha_expansions": 8
+    }
+  },
+  "runs": [
+    {
+      "run_id": "t027-json-valid-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -c \"import json,glob; [json.load(open(f,encoding='utf-8')) for f in glob.glob('docs/tasks/**/*.json',recursive=True)]\"",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All changed JSON files parse; 139 changed JSON validated."
+    },
+    {
+      "run_id": "t027-py-compile-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m py_compile scripts/check_task_timestamps.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Timestamp checker syntax OK."
+    },
+    {
+      "run_id": "t027-live-before-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/check_task_timestamps.py --scope live",
+      "exit_code": 0,
+      "result": "pass-with-known-residual",
+      "summary": "Baseline before cleanup: 204 errors / 125 warnings in live scope."
+    },
+    {
+      "run_id": "t027-normalize-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 /tmp/normalize_apply.py && python3 /tmp/finalize_all_done.py && python3 /tmp/fill_artifact_hashes.py && python3 /tmp/fill_result_sha.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Normalized 253 timestamp fields, finalized 63 evidence files, filled 62 artifact SHA256, added result_sha to 63 evidence records; old values preserved in correction_record."
+    },
+    {
+      "run_id": "t027-live-after-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/check_task_timestamps.py --scope live",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "After cleanup: 0 errors / 0 warnings in live scope."
+    },
+    {
+      "run_id": "t027-all-scope-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/check_task_timestamps.py --scope all --json",
+      "exit_code": 0,
+      "result": "pass-with-known-residual",
+      "summary": "All scope still has 12 errors / 78 warnings, all in archived tasks/evidence intentionally excluded from live and not rewritten."
+    },
+    {
+      "run_id": "t027-diff-check-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace errors."
+    },
+    {
+      "run_id": "t027-scope-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --name-only | grep -E '^(rtl|qemu|fpga|Makefile)' || true",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Changed files are docs/** and scripts/check_task_timestamps.py only; no RTL/QEMU/FPGA/Makefile changes."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t027-handoff",
+      "uri": "docs/handoffs/T-20260830-027-hist-evid-fix.md",
+      "owner": "T-20260830-027",
+      "retain_until": "repository-history",
+      "sha256": null,
+      "bytes": null,
+      "reproduce": "git show HEAD:docs/handoffs/T-20260830-027-hist-evid-fix.md | sha256sum"
+    },
+    {
+      "id": "t027-evidence",
+      "uri": "docs/tasks/evidence/T-20260830-027.json",
+      "owner": "T-20260830-027",
+      "retain_until": "repository-history",
+      "sha256": null,
+      "bytes": null,
+      "reproduce": "python3 -m json.tool docs/tasks/evidence/T-20260830-027.json"
+    },
+    {
+      "id": "t027-checker",
+      "uri": "scripts/check_task_timestamps.py",
+      "owner": "T-20260830-027",
+      "retain_until": "repository-history",
+      "sha256": null,
+      "bytes": null,
+      "reproduce": "python3 scripts/check_task_timestamps.py --scope live"
+    }
+  ],
+  "known_limits": [
+    "live 时间戳已清零；--scope all 仍有 12 error / 78 warning，均为归档历史记录，未改写。",
+    "33 个 live evidence artifact 无法在 Git 内计算 SHA256，均为远程 Windows/FPGA 路径、build 目录或 worktree-local 文件，保留原 reproduce 信息。",
+    "本任务未运行重型 Verilator/Gate D/Quartus；未修改 RTL/QEMU/FPGA/Makefile；历史 handoff 未改写。",
+    "当前工作树改动尚未由集成者合入，head_sha 为任务起点分支 HEAD，集成者合并后应回填最终 merge_sha。"
+  ],
+  "next": "由集成者合并本分支并复核 live 0/0；如需清理 --scope all 归档残留，另立 archive-only 任务。",
+  "status": "done"
+}

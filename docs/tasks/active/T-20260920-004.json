@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-004",
+  "label": "B25-STANDARD-SERVER-RESCAN-CONTROL",
+  "title": "Corrected B25 first-terminal control after delayed read-only standard-server rescan",
+  "kind": "board-bringup-control",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "completed-rescan-control-functional-failure",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-001", "T-20260920-003"],
+  "triggered_by": "T-20260920-001 found no modeled production defect, while T-20260920-003 proved that delayed read-only jtagconfig rescans can restore JTAG UART enumeration without restarting the standard server",
+  "base_sha": "1ebd6c65b09d817d24d1c00a0a31c98eee9513e1",
+  "branch": "verify/T-20260920-004-b25-standard-server-rescan-control",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-004",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-004-b25-standard-server-rescan-control",
+  "writes": [
+    "build/agents/T-20260920-004/** ignored programmer/console evidence",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-004-b25-standard-server-rescan-control/** task-owned runtime",
+    "docs/tasks/evidence/T-20260920-004.json",
+    "docs/handoffs/T-20260920-004-b25-standard-server-rescan-control.md"
+  ],
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "scope": "One bounded volatile configuration of the frozen corrected SOF, delayed read-only standard-server enumeration, then one ordinary-file-input terminal session; safe golden volatile rollback on failure.",
+    "excluded": [
+      "JIC/EPCQ/Flash write or erase",
+      "power cycle or board/SoC reset",
+      "stopping or restarting standard server PID 5640",
+      "stopping unknown or pre-existing processes",
+      "Quartus synthesis/fitter/STA/assembler"
+    ]
+  },
+  "candidate_sof": {
+    "task": "T-20260919-006",
+    "bytes": 36842110,
+    "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7",
+    "quartus_checksum": "0x31426358",
+    "design_hash": "DAE55641F59510866D2107F480818B86"
+  },
+  "scope": "Program the exact accepted corrected SOF through the existing volatile path. After stopping only the task-owned programming server, preserve standard PID 5640 and run delayed read-only jtagconfig -n scans until the candidate device and JTAG UART #0 are explicitly visible. Do not open a console probe. The next and only terminal uses the historical ordinary-file stdin bytes '?\\np\\nZ\\n'.",
+  "acceptance": "Programmer exit 0 plus checksum/JTAG-ID match; read-only enumeration identifies the candidate and JTAG UART #0 without a server restart; the first terminal connects, receives BOOT/CAL/DDR/READY, returns a CLOCK25 status line and PONG, and echoes Z. Hash-bind enumeration, input, stdout, process ownership and final state.",
+  "failure_policy": "This is one bounded new server-state control, not a repeat of T-002. Preserve failure evidence and restore the content-addressed golden SOF through the same volatile path without opening another terminal. Do not reset, power-cycle, write Flash or restart PID 5640. On failure, proceed to a separately registered physical RX observability task.",
+  "resource": "Every remote, programmer, enumeration and terminal action acquires gamepc. One foreground task-owned programming server, one programmer and one terminal; return 75 means wait. Stop only recorded task-owned PIDs.",
+  "created_at": "2026-09-20T02:24:00+08:00",
+  "updated_at": "2026-09-20T02:36:26+08:00",
+  "result": {
+    "status": "blocked-board-rx-rescan-excluded",
+    "partial": true,
+    "integration_commit": "078d65e7",
+    "candidate_programming": "PASS; exact T-006 SOF, checksum 0x31426358 and JTAG ID 0x02E060DD",
+    "standard_server_rescan": "PASS; two scans separated by 2 seconds both saw JTAG UART #0 while PID 5640 was preserved",
+    "first_console": "PASS for connect and BOOT/CAL-WAIT/DDR-FAIL/READY; FAIL for status/PONG/Z",
+    "rollback": "PASS; golden checksum 0x31510BB6 and final design hash 193DE4BC8A30F3ED5F1F",
+    "safety": "No Flash/JIC/EPCQ, reset, power action, server restart or unknown-process stop; gamepc FREE",
+    "evidence": "docs/tasks/evidence/T-20260920-004.json",
+    "handoff": "docs/handoffs/T-20260920-004-b25-standard-server-rescan-control.md",
+    "next": "Implement T-20260920-005 physical DATA-read/RVALID/last-byte observability; do not repeat host-method controls."
+  }
+}

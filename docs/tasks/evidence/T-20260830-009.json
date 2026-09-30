@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-009",
+  "state": "done",
+  "kind": "parent-closure",
+  "base_sha": "6559336cf63d548bd3e183590236ee6afa0998e2",
+  "merge_sha": "ed72c107ae40b095bb8d660dff5f6b2487154c2f",
+  "closed_at": "2026-08-30T19:21:22+08:00",
+  "children": [
+    {"id": "T-20260830-010", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-010.json"},
+    {"id": "T-20260830-011", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-011.json"},
+    {"id": "T-20260830-012", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-012.json"},
+    {"id": "T-20260830-013", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-013.json"},
+    {"id": "T-20260830-014", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-014.json"},
+    {"id": "T-20260830-015", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-015.json"},
+    {"id": "T-20260830-017", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-017.json"},
+    {"id": "T-20260830-021", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-021.json"},
+    {"id": "T-20260830-037", "state": "done", "evidence": "docs/tasks/evidence/T-20260830-037.json"}
+  ],
+  "integration": {
+    "reviewed_at": "2026-08-30T19:21:22+08:00",
+    "result": "accepted",
+    "checks": [
+      "all listed child task JSON records are done",
+      "workload plan, infrastructure, snapshot and F0 baseline are present",
+      "no A10 Fmax, board-test or architecture-signoff claim was introduced"
+    ],
+    "tests": "parent closure only; no new test run, child evidence remains authoritative"
+  },
+  "known_limits": [
+    "Performance data are Verilator/proxy measurements and do not replace FPGA STA/Fmax or board measurements.",
+    "F0 data are a baseline for later same-SHA comparison, not proof of implemented F1/F3 gains."
+  ],
+  "next": "Use T-20260830-033 and the F1/F3 child DAG for implementation and same-SHA measurement."
+}

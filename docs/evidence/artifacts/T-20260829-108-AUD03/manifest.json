@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-108",
+  "title": "AUD-03 Gate D + CORE_COUNT=1 rerun logs",
+  "artifact_store": "/home/chiro/projects/mycpu/artifacts/gate-d/T-20260829-108-AUD03",
+  "entries": [
+    {
+      "file": "gate_d_T-108-rerun.log",
+      "uri": "gate-d/T-20260829-108-AUD03/gate_d_T-108-rerun.log",
+      "sha256": "9d30ee4a43c6e5a5f74fbad675dc53a52af9326afbe4d24e3d4c2d38524fb778",
+      "bytes": 176910,
+      "retention": "artifact store",
+      "source": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-108/build/gate_d_T-108-rerun.log"
+    },
+    {
+      "file": "gate_d_T-108.log",
+      "uri": "gate-d/T-20260829-108-AUD03/gate_d_T-108.log",
+      "sha256": "5f55649696b1476fc277cd7039193afefc79ecf60772ad1aafdc342f94da5397",
+      "bytes": 166124,
+      "retention": "artifact store",
+      "source": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-108/build/gate_d_T-108.log"
+    },
+    {
+      "file": "core_count_1_lint.log",
+      "uri": "gate-d/T-20260829-108-AUD03/core_count_1_lint.log",
+      "sha256": "4bab822727b6c3531299756299c02d89a23d344cab0b74169f27ec86e1cb8c6a",
+      "bytes": 436,
+      "retention": "artifact store",
+      "source": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-108/build/core_count_1_lint.log"
+    },
+    {
+      "file": "step_coord.log",
+      "uri": "gate-d/T-20260829-108-AUD03/step_coord.log",
+      "sha256": "b53c5433b170d427175067931d9e8273f1cb84661485df7d58239ca1e84dbe93",
+      "bytes": 13232,
+      "retention": "artifact store",
+      "source": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-108/build/step_coord.log"
+    },
+    {
+      "file": "step_qemu.log",
+      "uri": "gate-d/T-20260829-108-AUD03/step_qemu.log",
+      "sha256": "a04b6dd232fe4ea8a5f3255de547a11adfc0a2d09f9d4d4b8a26024aaff4589a",
+      "bytes": 70,
+      "retention": "artifact store",
+      "source": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-108/build/step_qemu.log"
+    }
+  ],
+  "notes": "Logs copied to external artifact store; repository keeps this manifest for reference."
+}

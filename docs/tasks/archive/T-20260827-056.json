@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-056",
+  "title": "B4-L1-Coherence 单核 D-L1 写回与维护闭环",
+  "kind": "cache-l1-coherence",
+  "priority": "high",
+  "assigned_owner": "b4-l1-coherence-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现模块级 CORE_COUNT=1 D-L1 write-back/write-allocate、单客户端 probe、PTW 最新数据观察、DC/IC maintenance 和 checkpoint drain；不接入 CPU/SoC，不修改 P7/P8 或 B0 平台",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "若 L1/L2 probe、PTW 或 maintenance 顺序存在跨模块歧义，再补一次边界拆解；不扩大写集"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审 task JSON、L2/B3 probe contract、目标 diff 和独立验证；检查 dirty/valid、probe/maintenance/checkpoint/PTW 顺序与单核/多核边界，不提供逐行实现"
+  },
+  "review_record": {
+    "agent_id": "01a0403d-9ab3-7083-bacc-f08d8d984813",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T06:42:34+08:00",
+    "received_at": "2026-08-27T06:45:23+08:00",
+    "reported_at": "2026-08-27T06:45:23+08:00",
+    "elapsed_seconds": 139,
+    "status": "blocked_contract",
+    "blocking_points": [
+      "现有 B3 L2 probe 是外部→L2 入向，缺少 L2→D-L1 出向 probe，不能闭合包容式层次。",
+      "checkpoint clean/drain-to-PoC 命令和完成确认尚未冻结，coordinator 顺序不明确。"
+    ],
+    "resolution_required": "增加 L2→L1 probe/drain 写集，或将 B4 明确收窄为独立 D-L1 candidate；集成者选择前者。"
+  },
+  "contract_resolution": {
+    "decision": "补充 L2→L1 probe/drain 契约，保持 B4 的层次一致性目标，不收窄为孤立 D-L1",
+    "l2_to_l1_probe": {
+      "initiator": "L2 在选择 victim、clean 或 invalidate 前发起 l1_probe_req",
+      "commands": "lookup/clean/invalidate/clean+invalidate，沿用 B3 cmd=0/1/2/3",
+      "hold": "L2 在 l1_probe_rsp_valid && ready 前保持 victim valid/tag/dirty/data，禁止复用 tag 或接受冲突请求",
+      "response": "D-L1 返回 line_addr、valid、dirty、完整 64B raw data、fault、source_id、transaction_id",
+      "dirty": "dirty response 必须先写回下游并成功后才允许 L2 继续；probe/fault 失败保留旧 metadata"
+    },
+    "checkpoint_drain": {
+      "order": "checkpoint_quiesce → D-L1 停止新请求并 drain/probe → L2 drain_to_poc → drain_ack → 后续 IC invalidate/ISB 接线",
+      "l1_rule": "quiesce 阻止新 core/PTW 请求，待本地 dirty line 和 probe response 完成后报告 l1_drain_done",
+      "l2_rule": "L2 在 drain_to_poc 期间排空所有 dirty line，全部写回成功后才报告 l2_drain_ack",
+      "failure": "任一 fault/reset 取消本轮 drain，保留未完成 line 的 valid/dirty，不产生成功 ack 或 stale response"
+    },
+    "scope": "B4 可修改已释放的 rtl/lcvex_l2_wb.sv 以增加出向 probe/drain 端口，并加入 L1/L2 联合模块测试；仍不得修改 core/pkg/filelist/SoC"
+  },
+  "review_resolution": {
+    "agent_id": "01a0403d-9ab3-7083-bacc-f08d8d984813",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T06:53:13+08:00",
+    "received_at": "2026-08-27T06:53:55+08:00",
+    "reported_at": "2026-08-27T06:53:55+08:00",
+    "elapsed_seconds": 16,
+    "status": "go",
+    "resolution_commit": "46d391d",
+    "boundary": "L2 仅增加 CORE_COUNT=1 出向 D-L1 probe/drain；checkpoint 按 L1 quiesce/drain→L2 drain-to-PoC→ack；不扩展多核或 core/SoC 接线"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "一次简明一致性审核只报告阻断风险；仅在 L1/probe/maintenance 契约、写集或 evidence 实质变化时重审",
+    "required_sequence": "一次 Sol 方向审查后允许 owner 实现；P7-2 后的 core/SoC 接线和 Gate F-MEM 前必须闭合阻断项"
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "extend_when": "owner 在自然 checkpoint 带时间戳报告新增 L1 状态/probe/scoreboard/测试证据且写集稳定",
+    "control": "集成者根据 reported_at - dispatch_sent_at 动态延长；不因等待窗口到期中断 owner",
+    "progress_report_fields": ["sent_at", "received_at", "reported_at", "elapsed_seconds", "files", "tests", "blockers", "remaining_minutes", "extension_request"]
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "仅在预算允许时监控独立 L1 BFM/scoreboard；全 Cache/QEMU/Linux/Gate 由集成者队列执行"
+  },
+  "disabled_profiles": ["deepseek-v4-flash[max]"],
+  "phase": "done",
+  "execution": {
+    "agent_id": "01a0404e-3bd4-71d2-9970-48cd6527ac02",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T07:00:37+08:00",
+    "budget_minutes": 45,
+    "budget_history": [
+      {
+        "from_minutes": 30,
+        "to_minutes": 45,
+        "increment_minutes": 15,
+        "approved_at": "2026-08-27T07:32:31+08:00",
+        "reason": "checkpoint 已观察到全部 RTL/TB/Cocotb 文件齐备，仅剩文档、evidence 和最终验证",
+        "basis": "scheduler checkpoint 2026-08-27T07:31:48+08:00；owner reported_at 尚未提供"
+      }
+    ],
+    "budget_policy": "initial=30m; extension=+15m by timestamped progress; max=60m",
+    "reported_at": "2026-08-27T07:44:09+08:00",
+    "received_at": "2026-08-27T07:44:09+08:00",
+    "elapsed_seconds": 2612,
+    "state": "review",
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": null
+    }
+  },
+  "owner_handoff": {
+    "state": "done",
+    "implementation_commit": "ccb3ed79a3ae6a8ec2a1ce242027ff04bd949b4d",
+    "evidence_commit": "03386523e47b5f156c856822f08bcd61ae4bd2e3",
+    "handoff": "docs/handoffs/T-20260827-056-b4-l1-coherence.md",
+    "evidence": "docs/tasks/evidence/T-20260827-056.json",
+    "scope_accepted_for_integration": "D-L1 WB/WA、L2→L1 probe/drain、PTW 优先、DC/IC maintenance、checkpoint 顺序及独立 SV/Cocotb L0/L1",
+    "scope_remaining": "module-level candidate accepted on clean FPGA line; real core/I-L1/AXI4/SoC, QEMU and Gate F-MEM remain later"
+  },
+  "integration": {
+    "status": "pass_l0_l1",
+    "line": "feature/fpga-catapult-a10",
+    "strategy": "在 feature/fpga-catapult-a10 上按 B4 owner commit 合入，复跑 L1 SV、L2/L1 联合 SV、Cocotb 和 B3 回归；不修改 P7 core/pkg/filelist/SoC",
+    "source_sha": "03386523e47b5f156c856822f08bcd61ae4bd2e3",
+    "merge_sha": "52144b450182cb18c6c0fc4689aff33e37e09eea",
+    "validated_scope": "clean feature/fpga-catapult-a10 B4 module-level L0/L1: lint, D-L1 SV, L2/L1 joint SV, Cocotb and B3 L2-only regression",
+    "remaining_scope": "real core/I-L1/AXI4/SoC wiring, QEMU lockstep, full-cache Gate F-MEM and board gates"
+  },
+  "progress_reports": [
+    {
+      "type": "scheduler_checkpoint",
+      "observed_at": "2026-08-27T07:31:48+08:00",
+      "sent_at": "2026-08-27T07:32:31+08:00",
+      "received_at": null,
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 1871,
+      "actual_elapsed_seconds": null,
+      "files": [
+        "rtl/lcvex_l2_wb.sv",
+        "rtl/lcvex_l1_coherence.sv",
+        "rtl/lcvex_l1_d_wb.sv",
+        "tb/sv/lcvex_l1_d_wb_bfm.sv",
+        "tb/sv/lcvex_l1_d_wb_tb.sv",
+        "tb/sv/lcvex_l1_d_wb_cocotb_tb.sv",
+        "tb/sv/lcvex_l2_l1_probe_tb.sv",
+        "sim/cocotb/Makefile.l1_d_wb",
+        "sim/cocotb/test_l1_d_wb.py"
+      ],
+      "tests": "尚未收到 owner test report",
+      "blockers": "尚未收到 owner blocker report",
+      "remaining_minutes": 15,
+      "extension_request": "integrator_approved_plus_15",
+      "measurement": "只记录 scheduler 观察，不替代 owner reported_at"
+    },
+    {
+      "type": "owner_final",
+      "sent_at": "2026-08-27T07:32:31+08:00",
+      "received_at": "2026-08-27T07:44:09+08:00",
+      "reported_at": "2026-08-27T07:44:09+08:00",
+      "elapsed_seconds": 2612,
+      "actual_elapsed_seconds": 2612,
+      "files": [
+        "rtl/lcvex_l2_wb.sv",
+        "rtl/lcvex_l1_coherence.sv",
+        "rtl/lcvex_l1_d_wb.sv",
+        "tb/sv/lcvex_l1_d_wb_bfm.sv",
+        "tb/sv/lcvex_l1_d_wb_tb.sv",
+        "tb/sv/lcvex_l1_d_wb_cocotb_tb.sv",
+        "tb/sv/lcvex_l2_l1_probe_tb.sv",
+        "sim/cocotb/Makefile.l1_d_wb",
+        "sim/cocotb/test_l1_d_wb.py",
+        "docs/L1_COHERENCE.md",
+        "docs/L1_L2_PROBE_CONTRACT.md",
+        "docs/handoffs/T-20260827-056-b4-l1-coherence.md",
+        "docs/tasks/evidence/T-20260827-056.json"
+      ],
+      "tests": "L1 SV 66 transactions PASS；联合 SV 73/73、probe=3、drain=2 PASS；Cocotb 1/1 PASS、7150ns；B3 L2-only PASS",
+      "blockers": "owner 无；旧 B3 Cocotb wrapper 因未连接新增端口退出码 2，未纳入 T-056 写集",
+      "remaining_minutes": 1,
+      "extension_request": "none",
+      "measurement": "owner 提供 reported_at 与 elapsed_seconds，按 dispatch_sent_at=2026-08-27T07:00:37+08:00 计算"
+    }
+  ],
+  "parent": "T-20260827-050",
+  "depends_on": ["T-20260827-050", "T-20260827-055"],
+  "writes": [
+    "rtl/lcvex_l1_d_wb.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "tb/sv/lcvex_l1_d_wb_bfm.sv",
+    "tb/sv/lcvex_l1_d_wb_tb.sv",
+    "tb/sv/lcvex_l1_d_wb_cocotb_tb.sv",
+    "tb/sv/lcvex_l2_l1_probe_tb.sv",
+    "sim/cocotb/Makefile.l1_d_wb",
+    "sim/cocotb/test_l1_d_wb.py",
+    "docs/L1_COHERENCE.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/handoffs/T-20260827-056-b4-l1-coherence.md",
+    "docs/tasks/evidence/T-20260827-056.json"
+  ],
+  "reads": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/AXI4_PROFILE.md",
+    "docs/AXI4_AVALON_ADAPTER.md",
+    "docs/L2_WRITEBACK.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_l1_d.sv",
+    "rtl/lcvex_l1_i.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_l2_probe.sv",
+    "tb/sv/lcvex_l1_d_tb.sv",
+    "tb/sv/lcvex_l2_wb_tb.sv"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/FPGA_PLAN.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/L2_WRITEBACK.md",
+    "docs/AXI4_AVALON_ADAPTER.md"
+  ],
+  "base_sha": "cfa8b9aec01596bc6f3e28d982cfa28b53a93a82",
+  "branch": "feature/T-20260827-056-b4-l1-coherence",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-056",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "新增/修改 JSON 通过 python3 -m json.tool；git diff --check",
+      "valid/dirty/tag/probe/maintenance/checkpoint 状态边界和 CORE_COUNT/source_id 预留静态检查"
+    ],
+    "l1": [
+      "独立 Verilator SV scoreboard：read miss/refill、write miss allocate、dirty hit、victim writeback、probe read/clean/invalidate、PTW latest-data、DC clean/invalidate、checkpoint drain、fault/reset",
+      "独立 Cocotb 随机 partial-store/替换/背压/fault/maintenance：dirty implies valid、probe/clean 完成前不复用 tag、无 stale/丢失/重复，SMC 序列可观测"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": ["记录 L1 替换/背压/故障随机 seed 和事务窗口"]
+  },
+  "acceptance": "建立模块级单核层次一致性 candidate：D-L1 64B write-back/write-allocate、dirty victim 先写回、partial store、probe read/clean/invalidate、PTW 能观察 D-L1 最新脏页表数据、DC clean/invalidate 与 IC invalidate 顺序、checkpoint quiesce 后 clean/drain；所有 fault/reset 不得丢数据或产生 stale response，并预留 source/transaction/owner/sharer 字段但不实现多核协议。独立 SV/Cocotb scoreboard/SVA 通过 L0-L1。不得修改 B0 fpga/catapult_a10、P7 core/pkg/decoder、rtl/filelist.f、顶层 Makefile、soc_tb、QEMU、scripts/test_registry 或接入 SoC；不得以模块级结果宣称完整 Cache/一致性或 Gate F-MEM。",
+  "created_at": "2026-08-27T06:40:00+08:00",
+  "updated_at": "2026-08-27T07:59:19+08:00",
+  "commits": [
+    "ccb3ed79a3ae6a8ec2a1ce242027ff04bd949b4d",
+    "03386523e47b5f156c856822f08bcd61ae4bd2e3"
+  ],
+  "handoff": "docs/handoffs/T-20260827-056-b4-l1-coherence.md",
+  "evidence": "docs/tasks/evidence/T-20260827-056.json",
+  "known_limits": [
+    "phase=done 表示 B4 owner 交付并在 clean FPGA 线通过模块级 L0-L1；不表示系统一致性或 Gate F-MEM 完成。",
+    "只做模块级 CORE_COUNT=1 candidate；P7-2 后的 core/SoC/PTW/维护接线、QEMU lockstep 和完整 Gate F-MEM 后置。",
+    "不实现跨核 MESI/MOESI、ACE/CHI、硬件一致 DMA 或完整多核 TLBI/GIC/PSCI。",
+    "B0 exact Quartus/Qsys regenerate、STA、DDR 校准和板测仍由平台队列负责。"
+  ],
+  "next": "B4 已在 clean feature/fpga-catapult-a10 的 merge SHA 52144b4 通过模块级 L0-L1 并归档；P7-2 后再进行真实 core/I-L1/AXI4/SoC 接线和 Gate F-MEM。"
+}

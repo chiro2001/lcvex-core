@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-051",
+  "state": "done",
+  "acceptance_status": "fresh-physical-pass-for-uart-backpressure-payload",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "branch": "verify/T-20260920-051-b25-coremark-uart-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-051",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-051-b25-coremark-uart-fresh-physical",
+  "started_at": "2026-09-27T17:21:15+08:00",
+  "finished_at": "2026-09-27T17:47:35+08:00",
+  "fresh_inputs": {
+    "stage_file_count": 190,
+    "qsf_reference_count": 50,
+    "stage_manifest_sha256": "432efd72ba627cdcbce98209b5fe1bb11b9d83c218b684779245631ed3722fc6",
+    "stage_archive_sha256": "5eb4835d9419fd861dc5497ba9be3dae1ef8df4dbeb324668f9d23d9253d28e3",
+    "boot_bin": {"bytes": 20448, "sha256": "241b0ce4dface8c4a9db782b63e4ada8674f5c8b51c00f228a795e98fc1aedab"},
+    "boot_hex_sha256": "93cbacda0b8d22864534da5f62ec8f6161ff69ede9eca10e0df2638e995709ab",
+    "boot_mif": {"bytes": 204942, "sha256": "0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f"},
+    "decoded_64k_image_sha256": "aa43d0b7030d3bfc7d92b426c9d296b36428654b4cbf3e4c50300f3592ebf944",
+    "microbench_build_manifest_sha256": "d9a087765da1839ed4a2847132999e8755807300f06c015b6f5bae4cd632cd3a",
+    "rtl": {
+      "boot_sha256": "7b336f012b361d418fd828afc5bca50cd49dd6a716c4751c30a6fa6237772675",
+      "decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+      "bram_sha256": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+      "soc_pkg_sha256": "3b707be07c708c4096ecb2408ef13c55b91180ad1888fbae603478f9a276662d",
+      "soc_top_sha256": "3decb91ac0271ff74ee451857620ffb5e612352a17f238e38f5f8ea2a91f5ef0",
+      "board_top_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+      "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5"
+    }
+  },
+  "resource": {
+    "lock": "gamepc",
+    "single_uninterrupted_lock_window": true,
+    "preflight_root_preexisting": false,
+    "preflight_eda_process_count": 0,
+    "preflight_free_physical_mib": 31253,
+    "preflight_disk_d_free_bytes": 70654283776,
+    "parallel_marker": "16 of the 24 processors detected",
+    "final_free_physical_mib": 31363.4,
+    "final_disk_d_free_bytes": 68711198720,
+    "lock_after_run": "FREE"
+  },
+  "stages": [
+    {
+      "stage": "source-closure",
+      "status": "PASS",
+      "source_hash_bad_count": 0,
+      "qsf_missing_count": 0,
+      "preexisting_database_dirs": 0,
+      "preexisting_configuration_artifacts": 0
+    },
+    {
+      "stage": "synthesis",
+      "status": "PASS_BY_INDEPENDENT_AUDIT",
+      "quartus_version": "21.4.0 Build 67 Pro",
+      "synthesis_elapsed": "00:06:18",
+      "shell_elapsed": "00:07:49",
+      "errors": 0,
+      "warnings": 234,
+      "syn_report_sha256": "7782ebc502bb3b1c8e7456e2e5327e18c0d45fe883f928b74c6ae4e4df40a9a4",
+      "syn_smsg_sha256": "86fe2f909b66374e58b4ce2e5a74b52f6e76a522e3930bd4ddb82eb2e6fc2d07",
+      "syn_summary_sha256": "8ae32a3c2dadde1fdf87cc8b33f14cec7ca55438a5a074fd0e1db7f913961f49",
+      "audit_log_sha256": "cbe187fcd18f7f4f11c64a884c0f7d2a44efed0c98388f174561532c7d5dc463",
+      "wrapper_exitcode_observation": "blank; printed bookkeeping SYNTHESIS_FAIL; no rerun"
+    },
+    {
+      "stage": "fitter",
+      "status": "PASS",
+      "errors": 0,
+      "elapsed": "00:14:43",
+      "fit_report_sha256": "7ab784fc18d9c075f1605422df8d3d72176f84daba745da8edd96dd7d1135122",
+      "fit_summary_sha256": "2491fd7ab3accd836a613b83055b91a8836dc574c8c23f749a6570a2c65df648",
+      "resources": {"alms": 75804, "registers": 80789, "ram_blocks": 121, "dsp_blocks": 21, "plls": 3}
+    },
+    {
+      "stage": "sta-signoff",
+      "status": "PASS",
+      "errors": 0,
+      "sta_report_sha256": "79887460d10a5b64f1e3fff4561b951dc8a3240eb322f81eb9eefa74f78b3178",
+      "sta_summary_sha256": "da0ff9c5a2efdd39f31b2f4a3ff5c7b6625f352f115a6e74960269cddb88e18a",
+      "summary_global_worst_setup_ns": 0.320,
+      "summary_global_worst_hold_ns": 0.000,
+      "all_slack_nonnegative": true
+    },
+    {
+      "stage": "report-only-acceptance-v3",
+      "status": "PASS",
+      "overall_exit": 0,
+      "fifo_payload_exit": 0,
+      "data_delay_exit": 0,
+      "ucp_exit": 0,
+      "source_diff": 0,
+      "clone_bad_diff": 0,
+      "configuration_artifacts": 0
+    },
+    {
+      "stage": "final-readonly-scan",
+      "status": "PASS",
+      "file_count": 1349,
+      "output_files": 26,
+      "acceptance_files": 675,
+      "eda_process_count": 0,
+      "configuration_artifacts": 0,
+      "source_pre_sha256": "86ac31c6d40b4d2db41a2885cb32c50e481fa5c328d3352d0208da2ec608d865",
+      "source_post_sha256": "86ac31c6d40b4d2db41a2885cb32c50e481fa5c328d3352d0208da2ec608d865"
+    }
+  ],
+  "warning_16788_contract": {
+    "status": "PASS",
+    "tracked_rtl_unique_identities": 0,
+    "generated_sld_unique_identities": 1,
+    "syn_rpt_summary_rows": 1,
+    "syn_smsg_detail_rows": 1,
+    "syn_summary_rows": 0,
+    "net": "ir_in_2d[2][4]",
+    "source_basename": "alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd",
+    "source_line": 243,
+    "canonical_hpath": "auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|sldfabric",
+    "normalized_sopcinfo_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+    "qsf_suppression_filter_waiver_count": 0
+  },
+  "physical": {
+    "sys_clk_25": {"setup_ns": 9.398, "hold_ns": 0.018, "recovery_ns": 13.596, "removal_ns": 0.197},
+    "minimum_pulse_width_ns": 0.120,
+    "fifo_payload": {"reports": 24, "nothing_to_report": 24, "violations": 0},
+    "cdc_data_delay": {"reports": 20, "violations": 0, "worst_slack_ns": 1.184},
+    "normalized_invariant": {
+      "status": "PASS",
+      "ucp_input_paths": 60,
+      "ucp_output_paths": 4,
+      "clock_count": 2,
+      "reset_paths": 624,
+      "family_counts": [606, 4, 13, 1],
+      "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+      "worst_recovery_ns": 1.101,
+      "worst_removal_ns": 0.181,
+      "violations": 0,
+      "measurement_path": "build/agents/T-20260920-051/analysis/invariant-measurement.json",
+      "measurement_sha256": "6977a9601ef7f07ce21ddac8fab6c637dce39a0b477de33b19349602a84364ba",
+      "policy_sha256": "474a907a0b1e4dfe7f6327ed582ffcad1d0deb6976d6ca080ace86b6a6d83df8"
+    }
+  },
+  "artifacts": {
+    "local_runtime_root": "build/agents/T-20260920-051/remote-collect",
+    "evidence_bundle": {"path": "build/agents/T-20260920-051/remote-collect/t051-physical-evidence.tar.gz", "bytes": 2109370, "sha256": "d663d0677bf932eef3e9d481036ca8c43d9179ac341b8a90debec5350ca6914a"},
+    "physical_summary": {"path": "build/agents/T-20260920-051/analysis/physical-summary.json", "sha256": "ad97b0bd68a363868fe048a87d15cdd4a66c0ca0f616d34c37ce34d195ed7c9c"},
+    "key_logs": {
+      "preflight": "ecbca2a2ef48d5390360081cd452ca2ba4fe8cdcb1c62a2b53f48380af933bc7",
+      "source_prepare": "34c69ad14257a81c50358487032f36ef71522952cb8633b14252eccb22e9a08a",
+      "synthesis": "80115b6594a305df1547bb20b75ed14fb66c786b8cd7e3b55048181d99e752bd",
+      "synthesis_audit": "cbe187fcd18f7f4f11c64a884c0f7d2a44efed0c98388f174561532c7d5dc463",
+      "fitter": "2bb58126bc7e2221de34581df02db0000fb5793ef836a84efddae0f9f280bf80",
+      "sta": "856604a7baa70346c5d39d9ec8f6ad950d2508dfa8d6faf3ca581561c3dc26af",
+      "acceptance": "e2a6b9a4a285928fe35df7fc453fa4be5f507ef748879dd4723837a0b857818e",
+      "final_scan": "2c022d90e566a2ab886ccb7569d05ebdfc74af2849a5a2f5da6ced9f83c37d92"
+    }
+  },
+  "commands": [
+    "bash build/agents/T-20260920-051/prepare_physical.sh",
+    "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-051 root --meta stage=fresh_physical_corrected_uart_payload --meta candidate=5b33c451317442f385dd828ece8c3bf829289d14 --meta mif_sha256=0743295f90cb75e4d21092012c723bc9da4b6d055f13d46958cbd572bd610a2f --meta remote_root=T-20260920-051-b25-coremark-uart-fresh-physical -- bash build/agents/T-20260920-051/run_physical_flow.sh",
+    "python3 build/agents/T-20260920-051/measure_invariant.py build/agents/T-20260920-051/remote-collect/runtime/acceptance-v3 fpga/catapult_a10/physical_waivers_invariant.json build/agents/T-20260920-051/analysis/invariant-measurement.json",
+    "python3 build/agents/T-20260920-051/summarize_physical.py"
+  ],
+  "safety": {
+    "assembler": false,
+    "sof_pof_jic_rbf_jbc_svf_jam": 0,
+    "quartus_pgm": false,
+    "jtag": false,
+    "board_configuration": false,
+    "flash_epcq": false,
+    "reset_power": false,
+    "unknown_process_stopped": false,
+    "live_fpga_identity": "not touched; remains unproven after T-048"
+  },
+  "known_limits": [
+    "PowerShell Start-Process reported a blank synthesis ExitCode; independent raw/audit reports and fitter prove the synthesis pass, so synthesis was not repeated.",
+    "This task only signs off physical closure; it does not configure hardware or prove a CoreMark score."
+  ],
+  "next": "T-20260920-052: clone accepted fitted database and invoke assembler exactly once",
+  "handoff": "docs/handoffs/T-20260920-051-b25-coremark-uart-fresh-physical.md"
+}

@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-085",
+  "label": "B2c",
+  "parent": "T-20260828-072",
+  "title": "B2c 向量访存/编码族闭合",
+  "kind": "isa-vector-memory-encoding",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "708b3c38065f02efd9c461a97ae7528912d090c7",
+  "branch": "feature/T-20260829-085-b2c-vector-memory",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-085",
+  "scope": "依据 docs/V82_PROFILE_MANIFEST.md 的 V82-SELECTED-EXT，补齐已声明但尚未闭合的向量访存/编码族：lane/by-element、replicate、结构化/多寄存器访存、fault/preflight，按可支持的 store slot 分批；与 L1/L2 backpressure、byte lane、fault 原子性联测；不扩成 SVE。",
+  "writes": [
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_mem.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-085-b2c-vector-memory.md",
+    "docs/tasks/evidence/T-20260829-085.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-2_NEON_INT.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_mem.sv",
+    "sim/cocotb/**",
+    "sim/difftest/**"
+  ],
+  "validation": {
+    "l0": [
+      "编码/raw-bit 定向，保留编码负测"
+    ],
+    "l1": [
+      "SV + Cocotb：lane/by-element、replicate、结构/多寄存器访存、fault/preflight、backpressure"
+    ],
+    "l2": [
+      "P7 定向 QEMU lockstep 受影响子集（集成者合并后跑）"
+    ],
+    "l3": []
+  },
+  "acceptance": "至少一个或多个 V82-SELECTED-EXT 向量访存/编码 row 闭合并提供 L0/L1 证据；未实现行明确 blocked/deferred；不把 shim 当实现。",
+  "next": "B2c 通过后进入 B3 系统/维护或 B4 编译覆盖。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T05:12:23+08:00",
+  "updated_at": "2026-08-29T05:57:39+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T05:12:23+08:00",
+    "agent_name": "b2c_vector_memory",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-085"
+  },
+  "known_limits": [
+    "不处理 SVE/SME、POST-V82-DEFERRED、完整 FP 异常 trap、MOPS/MTE/PAuth/Crypto。",
+    "共享热点修改需与 C 线串行窗口协调；如实际需要修改 core/pkg/mem，应记录为共享热点并等待集成者窗口。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-085-b2c-vector-memory.md",
+  "evidence": "docs/tasks/evidence/T-20260829-085.json",
+  "merge_sha": "14bbd7174feef157d2952219b9369a5cbd731f31",
+  "merged_at": "2026-08-29T10:46:46+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T10:46:46+08:00",
+    "status": "accepted",
+    "head_sha": "997f34c437db0cd1975d61ab58cdebaebe0e1a52",
+    "implementation_sha": "dc783dc",
+    "notes": "B2c DUP scalar/element + LD1R 已合入；使用默认优化（含 FP scalar 修复）跑通定向 Cocotb PASS=2/2，raw-unit PASS；结构化/多寄存器访存保持 deferred。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T05:14:00+0800",
+        "new": "2026-08-29T05:12:23+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T05:58:00+0800",
+        "new": "2026-08-29T05:57:39+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T05:14:00+0800",
+        "new": "2026-08-29T05:12:23+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T10:50:00+0800",
+        "new": "2026-08-29T10:46:46+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T10:50:00+0800",
+        "new": "2026-08-29T10:46:46+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "d9f644c65660fa005f8e109d02f04845cd25e60b",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ],
+    "merge_sha_expansion": [
+      {
+        "old": "14bbd71",
+        "new": "14bbd7174feef157d2952219b9369a5cbd731f31",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  },
+  "head_sha": "d9f644c65660fa005f8e109d02f04845cd25e60b"
+}

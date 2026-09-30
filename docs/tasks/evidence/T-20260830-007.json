@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-007",
+  "title": "Disable GitHub Actions automatic CI and sync",
+  "status": "done",
+  "head_sha": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+  "commit_message": "ci: disable GitHub Actions automatic triggers; keep manual workflow_dispatch; add T-007 record",
+  "files": [
+    ".github/workflows/ci.yml"
+  ],
+  "notes": "Automatic push/PR/schedule triggers removed. Local CI scripts retained. Manual workflow_dispatch remains. Pushed to origin/feature/p7-final.",
+  "merge_sha": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+  "state": "done",
+  "handoff_sha": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T01:08:59+08:00",
+    "head_sha": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+    "notes": "GitHub Actions auto triggers disabled; manual workflow_dispatch retained; pushed.",
+    "merge_sha": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+    "result_sha": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "f5a5cabf0a71f9eee7ea12b8131ec14a8ab6fa92",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

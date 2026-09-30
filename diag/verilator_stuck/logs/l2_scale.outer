@@ -1,0 +1,5 @@
+nohup: 忽略输入
+l2-16-wf rc=0 wall=0.067s 08:57:19
+l2-256-wf rc=0 wall=0.099s 08:57:19
+l2-1024-wf rc=0 wall=0.272s 08:57:20
+l2-1024-wf-assert rc=0 wall=0.955s 08:57:21

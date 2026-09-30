@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-008",
+  "state": "done",
+  "partial": false,
+  "base_sha": "d638b056d151a234301b8dd22dd367f2e2a15d9a",
+  "head_sha": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679",
+  "branch": "feature/T-20260830-008-fpga-f2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-008",
+  "scope": "FPGA-F2: deep split measurements and block-based bottom-up QDB validation on isolated remote copies; no full B5 flow.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-30T03:20:14+08:00",
+    "sync_and_qsf": "2026-08-30T02:20:00+08:00",
+    "l1d_run": "2026-08-30T02:24:28+08:00",
+    "l2_run": "2026-08-30T02:30:06+08:00",
+    "soc_coh_run": "2026-08-30T02:38:23+08:00",
+    "core_run": "2026-08-30T03:00:01+08:00",
+    "light_runs": "2026-08-30T03:04:16+08:00",
+    "bottomup_run": "2026-08-30T03:10:16+08:00",
+    "documents_written_at": "2026-08-30T03:20:00+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-008",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "original_modified": false,
+    "license_read": false,
+    "full_flow_started": false
+  },
+  "toolchain": {
+    "quartus_syn": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+    "quartus_cdb": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_cdb.exe",
+    "quartus_sh": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe",
+    "monitor_script": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-008\\run_quartus_monitor.ps1"
+  },
+  "module_results": [
+    {
+      "module": "l1_d_wb",
+      "top": "lcvex_l1_d_wb",
+      "result": "pass",
+      "wall_s": 254,
+      "peak_pm_mb": 3767.1,
+      "peak_vm_mb": 3643,
+      "logic_cells": 182885,
+      "note": "SETS=64 default"
+    },
+    {
+      "module": "l2_wb_reduced",
+      "top": "lcvex_l2_wb",
+      "result": "pass",
+      "wall_s": 305,
+      "peak_pm_mb": 4305.6,
+      "peak_vm_mb": 4521,
+      "logic_cells": 179258,
+      "note": "64x1; isolated one-way support added"
+    },
+    {
+      "module": "soc_coh_reduced",
+      "top": "lcvex_catapult_soc_coh",
+      "result": "pass",
+      "wall_s": 975,
+      "peak_pm_mb": 8443.6,
+      "peak_vm_mb": 8053,
+      "logic_cells": 405349,
+      "note": "L1I+L1D+L2 reduced, all below 16GB"
+    },
+    {
+      "module": "core_nofp",
+      "top": "lcvex_core",
+      "result": "pass",
+      "wall_s": 146,
+      "peak_pm_mb": 2429.7,
+      "peak_vm_mb": 1363,
+      "logic_cells": 48663,
+      "note": "A64_FP_SIMD=0, 12 DSP"
+    },
+    {
+      "module": "axi4_master",
+      "top": "lcvex_axi4_master",
+      "result": "pass",
+      "wall_s": 6,
+      "peak_pm_mb": 344.7,
+      "peak_vm_mb": 602,
+      "logic_cells": 3487,
+      "note": ""
+    },
+    {
+      "module": "axi4_avalon_adapter",
+      "top": "lcvex_axi4_avalon_adapter",
+      "result": "pass",
+      "wall_s": 67,
+      "peak_pm_mb": 1708.7,
+      "peak_vm_mb": 939,
+      "logic_cells": 22381,
+      "note": "1123 RAM segments, 9 DSP"
+    },
+    {
+      "module": "soc_axi",
+      "top": "lcvex_catapult_soc_axi_bridge",
+      "result": "pass",
+      "wall_s": 6,
+      "peak_pm_mb": 515.4,
+      "peak_vm_mb": 598,
+      "logic_cells": 1144,
+      "note": "QSF needed lcvex_axi4_pkg"
+    },
+    {
+      "module": "fp_scalar",
+      "top": "lcvex_fp_scalar",
+      "result": "not_completed_in_window",
+      "wall_s": ">7min",
+      "peak_pm_mb": 1420,
+      "logic_cells": null,
+      "note": "after non-constant loop fix, synthesis still running in observation window; not blocking no-FP line"
+    }
+  ],
+  "bottomup": {
+    "export_command": "quartus_cdb qdb_src -c qdb_src --export_partition child --snapshot synthesized --file child.qdb",
+    "plain_import_then_synth": {
+      "result": "still_resynthesizes",
+      "evidence": "quartus_syn after import logs 'Synthesizing partition child'"
+    },
+    "working_flow": {
+      "steps": [
+        "Create top project with black-box stub child (same ports/params, empty body) and PARTITION assignment.",
+        "Run quartus_syn once on the top project (child becomes GND blackbox at synthesis level).",
+        "Run quartus_cdb <top> -c <rev> --import_partition <partition> --file <block>.qdb.",
+        "Run quartus_sh --flow compile <top> -c <rev> -start fitter -end fitter."
+      ],
+      "result": "skips_partition_reesynthesis",
+      "evidence_log": "No 'Synthesizing partition' after import+fitter-only; logs show Loading synthesized snapshot then Running Quartus Prime Fitter; Fitter successful."
+    },
+    "failed_setting": "set_instance_assignment -name PARTITION_PRESERVE child -to u_child caused QSF read error; not required by working flow."
+  },
+  "compatibility_fixes_isolated": [
+    "lcvex_fp_scalar.sv: remove input defaults; fixed q_high loop to constant 256 iteration.",
+    "lcvex_alu.sv: removed function-call result bit-selects.",
+    "lcvex_decode.sv: rdg slice wrappers; fixed part-select indexing; replaced logic_imm_valid non-constant loop with case.",
+    "lcvex_pkg.sv: enum literal widths aligned.",
+    "lcvex_l2_wb.sv: guarded WAYS=1 hardcoded way[1] logic.",
+    "lcvex_core.sv: replaced LD1R dynamic loop replication with static size-based replication.",
+    "lcvex_catapult_soc_top.sv/lcvex_catapult_soc_coh.sv: reduced defaults L2 64x1/A64_FP_SIMD=0."
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-008-fpga-f2.md",
+      "sha256": "8f1c537d4c793f402677e512d983e76d2054351aa0467e20e255307de626ea55",
+      "bytes": null,
+      "owner": "T-20260830-008",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-008-fpga-f2.md"
+    },
+    {
+      "id": "remote-module-qsf",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-008",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-008",
+      "retain_until": "task-close",
+      "reproduce": "standalone module QSFs under l1_d_wb, l2_wb_reduced, soc_coh_reduced, core_nofp, axi4_master, axi4_avalon_adapter, soc_axi, fp_scalar"
+    },
+    {
+      "id": "remote-qdb-src",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-008\\qdb_src\\child.qdb",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-008",
+      "retain_until": "task-close",
+      "reproduce": "tiny child QDB for bottom-up flow validation"
+    },
+    {
+      "id": "remote-blackbox-import-fit",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-008\\qdb_imp_blackbox",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-008",
+      "retain_until": "task-close",
+      "reproduce": "blackbox synth + import + fitter-only; log shows no child re-synthesis"
+    }
+  ],
+  "known_limits": [
+    "No complete B5 full flow; no fit/STA/SOF evidence.",
+    "Bottom-up validated on tiny black-box child, not yet on full B5 top with all real partitions.",
+    "fp_scalar standalone did not complete in observation window; default FP full-flow may need further work.",
+    "Isolated RTL compatibility fixes are not in formal repo RTL."
+  ],
+  "status": "done",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.received_at",
+        "old": "2026-08-30T05:10:00+08:00",
+        "new": "2026-08-30T03:20:14+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "c67541540c8d55575155499eaa58ab03c3408646",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-008-fpga-f2.md",
+        "sha256": "8f1c537d4c793f402677e512d983e76d2054351aa0467e20e255307de626ea55",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  },
+  "merge_sha": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679",
+  "handoff_sha": "c67541540c8d55575155499eaa58ab03c3408646",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:20:32+08:00",
+    "head_sha": "517f854cca56872a3f6e93e7e8bc74da562e267f",
+    "notes": "FPGA-F2 merged. All heavy standalone modules PASS <16GB; black-box stub + QDB import + fitter only flow verified to skip top-level re-synthesis. Full B5 flow not yet run.",
+    "merge_sha": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679",
+    "result_sha": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679"
+  }
+}

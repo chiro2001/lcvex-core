@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-048",
+  "base_sha": "4071ed356cfc0ec6109e61250d80831e19e6d2ba",
+  "head_sha": "28ad4f2aece89295be75221dea3be62d96d4e5e8",
+  "merge_sha": "bc78799fb9a75bb43cdc5d1b4a7b12b801f5b2da",
+  "candidate_status": "pass-local",
+  "scope": "仅收敛 P6 本地冻结的 ISA 文档口径和 coverage 展示，不修改 RTL、EXPECT 集或退出语义",
+  "facts": {
+    "rtl_source_sha": "b2568a506088ac34ef1529975b120a3f0849b0c1",
+    "rtl": {
+      "rtl/lcvex_decode.sv": "c55156336c5aebf2a7ad4a7907e67e0e401664aa9d0abaec0b7358e8e7a45c19",
+      "rtl/lcvex_core.sv": "a609d1c88be9b18a406575709402d608147931dd907233cd1755e9c8147144f3"
+    },
+    "runner": {
+      "sim/difftest/run_gate_d.sh": "6a9fdaf39383479bebdef91a3a7202f94a87be1fd38c0fa34abf6c8527781bd0"
+    },
+    "upstream_evidence": {
+      "docs/tasks/evidence/T-20260826-043.json": "2c767e03ea0adf80a06bedd76f56a4f0a71933bd1f41b41633c4dc3380c07fd0",
+      "docs/tasks/evidence/T-20260826-044.json": "0f826d2494499790c745a22b07a5c6b0e422356aa8fcf6952ec71257d4b659eb"
+    }
+  },
+  "changes": {
+    "docs/ISA_SCOPE.md": "顶部改为 P6 本地冻结；明确 varshift、ISB/DSB/DMB、WFI/WFE/WFxT 已实现，并保留逻辑移位寄存器 ROR、MOPS/MTE/RCpc、维护扩展、其它 LSE128/PMU 等真实余量",
+    "docs/ISA_GAPS.md": "把 T-043 Gate D 定向/随机和 T-044 Linux 动态证据分开；Linux fresh-root 更新为 35,000,000 条并明确不代表所有实现族均由 Linux 执行",
+    "docs/DEVELOPMENT_PLAN.md": "P2/P3/P5 改为已完成，P6 标为本地退出满足而正式 Gate E/main/CI 待定，P7 保持未开始",
+    "scripts/insn_coverage.py": "仅改写输出标签为 expected_hit=X/Y 与 observed_families=Z；EXPECT_RANDOM/EXPECT_ALL 和缺失退出路径未变"
+  },
+  "source_sha256": {
+    "docs/ISA_SCOPE.md": "62894af8d088aa0d57e07bb420bbf0f76d40df75b50acf3aec8ae6a11022f1b8",
+    "docs/ISA_GAPS.md": "42beed4d7aceec9e8795476f660c73db60cd6fe6192b0e49ee57c13d1b3baf98",
+    "docs/DEVELOPMENT_PLAN.md": "4f7aecfbfd324f324179f117d6a7450516dc41b1373f89973ab824167f27d396",
+    "scripts/insn_coverage.py": "5490bbcebfa5c1a9559aa8fd242bb01142feb8f3764dc9ce437fd876ec594efc"
+  },
+  "validation": [
+    {
+      "run_id": "owner-l0-pycompile-001",
+      "level": "L0",
+      "command": "python3 -m py_compile scripts/insn_coverage.py",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-coverage-t043-001",
+      "level": "L0",
+      "command": "python3 scripts/insn_coverage.py --expect random --out build/coverage/t048-random.txt /home/chiro/projects/mycpu/lcvex-wt-T-20260826-043/build/difftest/random_1.trace /home/chiro/projects/mycpu/lcvex-wt-T-20260826-043/build/difftest/random_2.trace /home/chiro/projects/mycpu/lcvex-wt-T-20260826-043/build/difftest/random_3.trace",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "expected_hit=60/60、observed_families=61、总提交 298188；已知额外族不改变退出码",
+      "output_sha256": "c4fa478e3b4503bdb4950f6680f0ff45ff1e94784161e309bbfabc50e3dca276"
+    },
+    {
+      "run_id": "owner-l0-diff-check-001",
+      "level": "L0",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-doc-json-check-001",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260826-048.json && markdown structure check (fenced blocks/tabs)",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "integration_validation": {
+    "source_sha": "bc78799fb9a75bb43cdc5d1b4a7b12b801f5b2da",
+    "command": "taskset -c 2 conda run --no-capture-output -n lcvex python3 -m py_compile scripts/insn_coverage.py && taskset -c 2 conda run --no-capture-output -n lcvex python3 scripts/insn_coverage.py --expect random --out build/coverage/t048-integration.txt <T-043 random_1/2/3.trace>",
+    "exit_code": 0,
+    "result": "pass",
+    "summary": "expected_hit=60/60、observed_families=61、总提交 298188；owner 与集成输出文件 SHA256 完全一致。",
+    "log": "build/agents/T-20260826-048/integration.log",
+    "log_sha256": "33b03db63ed48dc7587c8650de702b1f4779ce6aa384bf5fd33639ad8abaa05a",
+    "output": "build/coverage/t048-integration.txt",
+    "output_sha256": "c4fa478e3b4503bdb4950f6680f0ff45ff1e94784161e309bbfabc50e3dca276"
+  },
+  "review": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "result": "实现与统计口径无阻断问题；集成者修正文档中的 P7 前置边界",
+    "summary": "确认 P2/P3/P5、P6 本地完成/P7 未开始、Linux 35M 动态证据边界、logical ROR 保留缺口以及 coverage EXPECT/退出码均正确；指出 MOPS/MTE/RCpc 等非目标扩展不应被写成 P7 门槛。"
+  },
+  "known_limits": [
+    "T-043/T-044 是冻结候选 b2568a5 的既有本地证据；本任务不重新运行 Gate D 或 35M Linux 长跑。",
+    "Linux 动态窗口只覆盖实际执行到的指令族，不替代完整 ARMv8.2 ISA 覆盖率。",
+    "正式 Gate E、main 晋级和 CI 仍待策略确认；P7 尚未开始。"
+  ],
+  "handoff": "docs/handoffs/T-20260826-048-isa-baseline.md"
+}

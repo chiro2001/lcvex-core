@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-054",
+  "label": "IRQ-ATOMIC-OVERLAP-VERIFY",
+  "title": "Natural CASP/STXR/DC ZVA IRQ overlap regression",
+  "kind": "verification-regression",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-irq-atomic-overlap",
+  "agent_type": "verification-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "review": {
+    "required": true,
+    "agent_type": "one-pass-blocking",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "只读冻结 natural overlap 契约、可观测副作用和 QEMU 注入边界"
+  },
+  "depends_on": [
+    "T-20260902-051"
+  ],
+  "base_sha": "2a74712beaafdbda843cec4e9539a2d9cb1da51a",
+  "branch": "verify/T-20260902-054-irq-atomic-overlap",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-054",
+  "scope": "补齐 T-051 已知限制：不用 force synthetic commit_fire，通过真实流水与中断注入覆盖 CASP、STXR 和 DC ZVA 的自然 IRQ overlap；验证已接受不可逆写 exactly-once、未接受请求可 squash、IRQ 延迟/commit packet/内存副作用与 QEMU 一致。默认只改测试与 runner；若发现 RTL bug，停止并交付复现，不得在验证任务里修改 core。",
+  "reads": [
+    "docs/handoffs/T-20260902-051-irq-young-squash.md",
+    "docs/tasks/evidence/T-20260902-051.json",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_mmu.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/**",
+    "qemu/plugins/**",
+    "scripts/test_registry.json",
+    "Makefile",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "tb/sv/**irq*",
+    "sim/cocotb/**irq*",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run*irq*.sh",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/handoffs/T-20260902-054-irq-atomic-overlap.md",
+    "docs/tasks/evidence/T-20260902-054.json"
+  ],
+  "validation": {
+    "l0": [
+      "测试生成/编码与 registry consistency"
+    ],
+    "l1": [
+      "真实 MEM/WB + CASP/STXR/DC ZVA 中间相位 IRQ 注入，不 force commit_fire/stage metadata",
+      "FIFO off/on × delay 0/2，检查请求/写/commit exactly-once"
+    ],
+    "l2": [
+      "QEMU strict step 在整条指令边界比较普通 IRQ COMMIT（EXC_IRQ=0x40）、寄存器与内存副作用；至少 base 与 delay2，可行时 cache"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "双层验收：SV 在真实流水中仅注入 GIC IRQ，覆盖 CASP 读相/低写后、STXR ID squash 与读/写阶段、DC ZVA 八拍写入，禁止 force commit_fire/stage metadata；QEMU live strict base+delay2 用 Generic Timer PPI 验证整条 CASP/STXR/DC ZVA 的普通 IRQ COMMIT 与架构/内存结果。已接受写 exactly-once，未接受请求无副作用，IRQ 只在合法最老边界取走。所有 Verilator cgroup <16 GiB、单线程。若 RTL 或现有注入入口不足，保存最小复现并 blocked，不改 RTL/coordinator/plugin/QEMU/参考结果。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 60,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T19:32:53+08:00",
+  "updated_at": "2026-09-04T22:26:30+08:00",
+  "known_limits": [
+    "不得修改 rtl/**、QEMU fork/plugin、参考结果或断言；发现实现问题必须 blocked 并请求新 fix task",
+    "T-053 远端 physical flow 与本任务本地验证并行，互不接触 worktree/probe",
+    "QEMU 插件与 binary 仅只读复用；QEMU 构建仍全局串行且本任务不触发"
+  ],
+  "handoff": "docs/handoffs/T-20260902-054-irq-atomic-overlap.md",
+  "evidence": "docs/tasks/evidence/T-20260902-054.json",
+  "head_sha": "8fbc83cd17ff899b62a64b17aab3fae9f034788a",
+  "implementation_commits": [
+    "ca804be1305952101fc15cd0e90a7f534ff63b68",
+    "e4c190479dad599f76e57b9d956d260be078eb4a",
+    "6df1a92f31421c8fa12309418bf20f06baaa6b7d"
+  ],
+  "merge_sha": "59787b87025275f4d4b877a22405066a31444895",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T21:59:00+08:00",
+    "merged_at": "2026-09-04T22:16:47+08:00",
+    "recorded_at": "2026-09-04T22:26:30+08:00",
+    "notes": "Rework final review found no blockers. Integrator rebuilt all post-cleanup artifacts and reran the four-config SV matrix plus 10/10 QEMU base/delay2 cases with automatic IRQ PC/insn probes; all passed. Same-COMMIT STXR mon_we remains assigned to T-055."
+  },
+  "next": "通过则关闭 T-051 原子 overlap 已知限制；失败则登记独立 RTL regression fix",
+  "dispatch": {
+    "sent_at": "2026-09-04T19:35:47+08:00",
+    "agent_name": "/root/t054_irq_atomic_overlap",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-054",
+    "branch": "verify/T-20260902-054-irq-atomic-overlap"
+  },
+  "review_dispatch": {
+    "sent_at": "2026-09-04T19:35:47+08:00",
+    "agent_name": "/root/t054_overlap_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-shared-snapshot",
+    "received_at": "2026-09-04T19:35:47+08:00",
+    "reported_at": "2026-09-04T19:55:40+08:00",
+    "status": "conditional_go",
+    "blockers": "Current QEMU coordinator/plugin cannot inject IRQ at atomic micro-phases; acceptance is frozen as real-pipeline SV micro-phase coverage plus live QEMU architectural-boundary coverage without expanding writes.",
+    "notes": "CASP accepted writes must drain exactly once; STXR drain contract prevents some old-WB coexistence; DC ZVA IRQ remains pending through all eight writes; ordinary IRQ is a COMMIT EXC_IRQ packet, not WFI ASYNC.",
+    "final_review": {
+      "sent_at": "2026-09-04T20:46:42+08:00",
+      "received_at": "2026-09-04T20:46:42+08:00",
+      "reported_at": "2026-09-04T21:02:42+08:00",
+      "status": "rework_required",
+      "head_sha": "1f29913f92cd4c71f7969831657714e80228ef3b",
+      "code_blockers": "none",
+      "test_blockers": "QEMU IRQ occurred before the actual CASP instruction; SV CASP did not prove each half exactly once or validate packet addresses/strbes; DC ZVA lacked post-packet drain checks; runner lacked expected PC/insn assertions and registry lacked L2 entry.",
+      "followup": "STXR same-COMMIT IRQ mon_we mismatch requires separate T-20260902-055 QEMU/plugin regression."
+    },
+    "rework_final_review": {
+      "sent_at": "2026-09-04T22:01:06+08:00",
+      "received_at": "2026-09-04T22:01:06+08:00",
+      "reported_at": "2026-09-04T22:14:07+08:00",
+      "status": "accepted_for_integration",
+      "head_sha": "8fbc83cd17ff899b62a64b17aab3fae9f034788a",
+      "code_blockers": "none",
+      "test_blockers": "none",
+      "notes": "CASP target PC/insn probes, per-half SV write checks, DC ZVA post-state, cgroup entry and L2 registry all reviewed and accepted; T-055 owns the same-COMMIT STXR mon_we protocol gap."
+    }
+  }
+}

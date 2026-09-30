@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-076",
+  "label": "C0",
+  "parent": "T-20260828-073",
+  "title": "多核 cluster/一致性契约设计",
+  "kind": "multicore-contract",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "branch": "feature/T-20260829-076-c0-cluster-contract",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-076",
+  "scope": "设计 core wrapper、reset/start/stop/quiesce、core_id/MPIDR、每核 irq/timer、提交和内存请求接口；定义共享 L2 目录式 MSI、仲裁/回滚、保持 CORE_COUNT=1 兼容并复用 probe/abort/drain。",
+  "writes": [
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/handoffs/T-20260829-076-c0-cluster-contract.md",
+    "docs/tasks/evidence/T-20260829-076.json"
+  ],
+  "acceptance": "端口表、状态机、时序图、reset 值、backpressure/kill/SVA 草案获集成者 I0 批准。",
+  "next": "C0 通过后进入 D0 多核差分可行性和 C1 双核壳层。",
+  "updated_at": "2026-08-29T02:08:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T01:47:44+0800",
+    "agent_name": "c0_cluster_contract",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-076",
+    "branch": "feature/T-20260829-076-c0-cluster-contract"
+  },
+  "integrator_review": {
+    "received_at": "2026-08-29T01:54:00+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "ecb363faf97d1c14dc029f8b705423cb18985b4f",
+    "implementation_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+    "notes": "C0 设计文档完整，包含 core wrapper、目录 MSI、CORE_COUNT=1 兼容、reset/backpressure/kill/SVA、C1/C2/C3 边界和 12 项 I0 问题。待与 B0/D0/A0 一同进入 G1/I0；不合并 RTL。"
+  },
+  "merge_sha": "b7a48f3ccfdde3391d8e3b099d371cb1203a9dfd",
+  "merged_at": "2026-08-29T02:08:00+0800",
+  "head_sha": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+  "correction_record": {
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "039e4aaa6a9eaf6f0afb299b3fe85d80d6479db6",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  }
+}

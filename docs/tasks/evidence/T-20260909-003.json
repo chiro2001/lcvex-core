@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-003",
+  "label": "B25-PROVISIONAL-TIMING-TOPN",
+  "state": "provisional-analysis-complete",
+  "acceptance_status": "PROVISIONAL-no-rtl-candidate",
+  "partial": false,
+  "task_base_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "analysis_head_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "r21_physical_source_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+  "branch": "verify/T-20260909-003-b25-provisional-timing-topn",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-003",
+  "owner": "b25_timing_resume",
+  "timestamps": {
+    "sent_at": "2026-09-09T01:21:51+08:00",
+    "received_at": "2026-09-09T01:46:47+08:00",
+    "restart_recovery_received_at": "2026-09-09T01:46:47+08:00",
+    "reported_at": "2026-09-09T01:57:55+08:00"
+  },
+  "scope": {
+    "read_only_inputs": [
+      "docs/handoffs/T-20260905-002-timing-batch-r16.md",
+      "docs/handoffs/T-20260905-008-r16-quartus-physical.md",
+      "docs/handoffs/T-20260905-013-r17-timing-batch.md",
+      "docs/handoffs/T-20260905-014-r17-quartus-physical.md",
+      "docs/handoffs/T-20260905-019-r18-timing-batch.md",
+      "docs/handoffs/T-20260905-023-r19-timing-batch.md",
+      "docs/handoffs/T-20260906-024-r19-quartus-physical.md",
+      "docs/handoffs/T-20260906-027-r19-sta-report-recovery.md",
+      "docs/handoffs/T-20260906-028-r20-timing-batch.md",
+      "docs/handoffs/T-20260906-031-r20-quartus-physical.md",
+      "docs/handoffs/T-20260906-032-r21-timing-batch.md",
+      "docs/handoffs/T-20260906-033-r21-iter-round.md",
+      "docs/handoffs/T-20260906-034-r21-fma-cut.md",
+      "docs/handoffs/T-20260906-035-r21-quartus-physical.md",
+      "docs/tasks/evidence/T-20260906-035.json",
+      "git diff 80b1f813de47a1223dd135117650419a0b6c05fc..702bd8ee"
+    ],
+    "untracked_historical_reports_read": false,
+    "active_task_files_modified": false,
+    "task_status_files_modified": false,
+    "build_or_test_run": false,
+    "gamepc_or_quartus_used": false,
+    "jtag_or_board_action": false
+  },
+  "r21_reference": {
+    "clock": "sys_clk_50",
+    "fmax_mhz": 48.57,
+    "setup": {
+      "wns_ns": -0.588,
+      "tns_ns": -67.238,
+      "failing_endpoints": 550,
+      "logic_levels": [25, 26]
+    },
+    "top_n": {
+      "path_count": 50,
+      "violated": 50,
+      "worst_slack_ns": -0.588,
+      "first_path": "soc|core|idex_valid -> soc|core|fp_rsp_hold.gpr_data[40]",
+      "clusters": [
+        {
+          "cone": "core.idex_valid -> soc|core|fp_rsp_hold.gpr_data[]|fp_rsp_hold.gpr_data[]",
+          "path_count": 41,
+          "worst_slack_ns": -0.588,
+          "best_slack_ns": -0.529,
+          "logic_levels": [25, 26],
+          "endpoint_family": "fp_rsp_hold.gpr_data[]"
+        },
+        {
+          "cone": "core.idex_valid -> soc|coh|i_l1|rsp_data_r[]",
+          "path_count": 9,
+          "worst_slack_ns": -0.566,
+          "best_slack_ns": -0.531,
+          "logic_levels": [25, 26],
+          "endpoint_family": "soc|coh|i_l1|rsp_data_r[]"
+        }
+      ]
+    },
+    "directional_observations": [
+      {"query": "div_pre -> it_fin_mid", "paths": 50, "violated": 0, "worst_slack_ns": 4.290},
+      {"query": "it_fin_mid -> pack_result", "paths": 50, "violated": 0, "worst_slack_ns": 2.737},
+      {"query": "it_fin_mid -> slot_result_r", "paths": 0, "status": "no_timing_paths"},
+      {"query": "ap_pre -> fma_align", "paths": 50, "violated": 0, "worst_slack_ns": 2.553},
+      {"query": "fma_align -> pp_pre", "paths": 50, "violated": 0, "worst_slack_ns": 1.251},
+      {"query": "ap_pre -> pp_pre", "paths": 50, "violated": 50, "worst_slack_ns": -0.271},
+      {"query": "pack_mid -> pack_result", "paths": 50, "violated": 0, "worst_slack_ns": 1.832},
+      {"query": "pack_result -> slot_result_r", "paths": 50, "violated": 0, "worst_slack_ns": 12.055},
+      {"query": "pack_mid -> slot_result_r", "paths": 0, "status": "no_timing_paths"}
+    ],
+    "evidence": "docs/tasks/evidence/T-20260906-035.json",
+    "handoff": "docs/handoffs/T-20260906-035-r21-quartus-physical.md"
+  },
+  "current_source_diff": {
+    "from_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+    "to_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+    "diff_check": "PASS",
+    "source_delta_is_material": true,
+    "clock_delta": {
+      "old_clock": "sys_clk_50",
+      "new_clock": "sys_clk_25",
+      "old_divide_by": 2,
+      "new_divide_by": 4,
+      "old_sdc_anchor": "sys_clk_div2|q",
+      "new_sdc_anchor": "sys_clk_25|q"
+    },
+    "logic_impacting_modules": [
+      "rtl/lcvex_core.sv",
+      "rtl/lcvex_decode.sv",
+      "rtl/lcvex_fp_scalar.sv",
+      "rtl/lcvex_neon_fp.sv",
+      "rtl/lcvex_l1_i.sv (unchanged in current diff; measured endpoint remains here)",
+      "rtl/lcvex_axi4_avalon_adapter.sv",
+      "rtl/lcvex_bram_boot.sv",
+      "rtl/lcvex_bram_boot_altsyncram.sv",
+      "rtl/lcvex_bram_boot_shim.sv",
+      "rtl/lcvex_catapult_soc_axi.sv",
+      "rtl/lcvex_catapult_soc_pkg.sv",
+      "rtl/lcvex_catapult_soc_top.sv",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+      "fpga/catapult_a10/quartus/catapult_a10.qsf",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc"
+    ],
+    "task_touch_matrix": [
+      {
+        "task": "T-20260909-001 (T-001)",
+        "current_delta_scope": ["fpga/catapult_a10/boot/check_image_contract.py", "fpga/catapult_a10/tools/run_bram_init25_test.sh", "tb/sv/lcvex_bram_init25_tb.sv"],
+        "direct_measured_cone_touch": false,
+        "indirect_physical_coupling": "none; oracle/test-only files"
+      },
+      {
+        "task": "T-20260909-002 (T-002)",
+        "current_delta_scope": ["fresh physical selector/STA observation; no RTL delta in 702"],
+        "direct_measured_cone_touch": "gate",
+        "indirect_physical_coupling": "fresh source identity, clock/endpoint existence and top-N reordering gate"
+      },
+      {
+        "task": "T-20260909-004 (T-004)",
+        "current_delta_scope": ["physical acceptance audit; no RTL delta in 702"],
+        "direct_measured_cone_touch": false,
+        "indirect_physical_coupling": "none; audit-only"
+      },
+      {
+        "task": "T-20260908-002 (T-002 source lane; date-qualified)",
+        "current_delta_scope": ["rtl/lcvex_core.sv::gprv forwarding", "rtl/lcvex_core.sv::EX/MEM SP capture"],
+        "direct_measured_cone_touch": false,
+        "indirect_physical_coupling": "same core module and shared idex_valid launch fanout; write regions are outside fp_rsp_hold and request-fanout blocks"
+      },
+      {
+        "task": "T-20260908-004 (T-004 source lane)",
+        "current_delta_scope": ["rtl/lcvex_decode.sv::register-offset store rs2/rs3 dependency"],
+        "direct_measured_cone_touch": false,
+        "indirect_physical_coupling": "decode/hazard fanout can perturb implementation, but no i_l1 or fp_rsp_hold endpoint logic"
+      },
+      {
+        "task": "T-20260908-007 (T-007)",
+        "current_delta_scope": ["QSF/manifest/synthesis selector checker", "VERILOG_MACRO SYNTHESIS"],
+        "direct_measured_cone_touch": false,
+        "indirect_physical_coupling": "high; macro selects the M20K BRAM branch and can rename/reshape the fitted hierarchy, so R21 paths are not portable"
+      },
+      {
+        "task": "T-20260908-001 (FP compatibility follow-up)",
+        "current_delta_scope": ["rtl/lcvex_fp_scalar.sv::explicit iterative/divider controls", "rtl/lcvex_neon_fp.sv::control tie-offs"],
+        "direct_measured_cone_touch": false,
+        "indirect_physical_coupling": "same FP hierarchy; no arithmetic payload change claimed, but fresh STA must decide physical effect"
+      },
+      {
+        "task": "T-20260907-038 (B25 clock)",
+        "current_delta_scope": ["fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv", "fpga/catapult_a10/quartus/catapult_a10.sdc"],
+        "direct_measured_cone_touch": false,
+        "indirect_physical_coupling": "clock period/name changed from 50 MHz to 25 MHz; mandatory source/STA re-baseline"
+      }
+    ]
+  },
+  "clusters": [
+    {
+      "id": "R21-SHARED-IDEX-VALID",
+      "status": "PROVISIONAL",
+      "shared_cone": "core.idex_valid",
+      "endpoint_families": ["fp_rsp_hold.gpr_data[]", "soc|coh|i_l1|rsp_data_r[]"],
+      "path_count": 50,
+      "modules": ["rtl/lcvex_core.sv", "rtl/lcvex_catapult_soc_coh.sv", "rtl/lcvex_l1_i.sv"],
+      "observation": "Both R21 clusters share the same launch register; endpoint-specific edits alone may leave a high-fanout launch/control cost. Current B25 source changes make this only a hypothesis until T-002 fresh STA."
+    },
+    {
+      "id": "R21-FP-RSP-GPR",
+      "status": "PROVISIONAL",
+      "shared_cone": "core.idex_valid -> FP transaction request/response",
+      "endpoint_family": "fp_rsp_hold.gpr_data[]",
+      "path_count": 41,
+      "slack_ns": [-0.588, -0.529],
+      "modules": ["rtl/lcvex_core.sv", "rtl/lcvex_neon_fp.sv", "rtl/lcvex_fp_scalar.sv"],
+      "first_endpoint": "soc|core|fp_rsp_hold.gpr_data[40]",
+      "observation": "Largest current R21 family; prior R21 arithmetic/pack cuts are already positive or explicit no-paths, so do not reopen those closed directional cones."
+    },
+    {
+      "id": "R21-I-L1-RSP-DATA",
+      "status": "PROVISIONAL",
+      "shared_cone": "core.idex_valid -> instruction request/lookup",
+      "endpoint_family": "soc|coh|i_l1|rsp_data_r[]",
+      "path_count": 9,
+      "slack_ns": [-0.566, -0.531],
+      "modules": ["rtl/lcvex_core.sv", "rtl/lcvex_catapult_soc_coh.sv", "rtl/lcvex_l1_i.sv"],
+      "observation": "The current source leaves rtl/lcvex_l1_i.sv unchanged, but the B25 top/clock/BRAM/EMIF delta can alter this fitted endpoint family."
+    }
+  ],
+  "provisional_write_regions": [
+    {
+      "id": "B25-R21-A-FP-RSP",
+      "status": "PROVISIONAL",
+      "write_regions": [
+        "rtl/lcvex_core.sv::FP-P1 core-facing response mirror/hold blocks around fp_rsp_valid/fp_rsp/fp_ex_* and fp_rsp_hold capture (source lines 1325-1368, 1852-1891); exclude gprv, idex_valid state, EX/MEM capture, shared typedef/ports",
+        "rtl/lcvex_neon_fp.sv::lcvex_fp_exec rsp_comb plus slot_int_result_r/slot_result_valid TX_SLOT-to-TX_DONE response assembly only; exclude public ports and tx_state enum"
+      ],
+      "target": "R21-FP-RSP-GPR",
+      "mechanism": "If T-002 confirms the family, add a narrow registered GPR-response payload/metadata cut at the existing TX_SLOT/TX_DONE boundary (or equivalent response-side register) so fp_rsp_hold.gpr_data D no longer depends on live idex_valid/control. Keep gpr_we/gpr_rd/tag/fpsr/nzcv ownership coherent and preserve precise kill/ready/valid semantics; latency-table changes require explicit acceptance.",
+      "l0_l2": {
+        "L0": "FP scalar FCVTZS/FCVTZU GPR responses, H/S/D conversion boundaries, response-hold and backpressure focused tests",
+        "L1": "FP wrapper/core ready-valid, exactly-once response, kill/reset/IRQ/restore and commit-packet assertions",
+        "L2": "Affected strict scalar/NEON FP lockstep (R21 union: 1104 commits) plus the required GPR conversion and FP response-hold cases; retain QEMU state/commit comparison"
+      },
+      "exclusions": ["No RTL candidate before T-002 fresh STA", "No changes to T-20260908-002 core forwarding regions or T-20260908-001 FP port compatibility lines"]
+    },
+    {
+      "id": "B25-R21-B-I-L1-RSP",
+      "status": "PROVISIONAL",
+      "write_regions": [
+        "rtl/lcvex_l1_i.sv::S_IDLE hit/maintenance response-data selection and S_REFILL_WAIT/S_BYPASS_WAIT rsp_data_r assignment; request/lookup staging local to this module only",
+        "No edits to lcvex_core.sv, lcvex_catapult_soc_coh.sv, public mem_req/mem_rsp typedefs, cache state enum or test registry"
+      ],
+      "target": "R21-I-L1-RSP-DATA",
+      "mechanism": "If the family persists, move the live u_req hit/index/offset-dependent response calculation behind a registered local request/lookup stage (or equivalent registered response data), preserving single-outstanding ready/valid, cache hit/refill ordering, fault propagation and FIFO epoch/maintenance behavior. Any added hit latency must be reflected in fetch/FIFO timing expectations.",
+      "l0_l2": {
+        "L0": "I-L1 hit, miss/refill, bypass, aligned/unaligned word rotation and fault unit tests",
+        "L1": "I-L1 ready/valid SVA, single-outstanding/refill invariants, fetch FIFO/MMU/maintenance (IC IVAU/IALLU/TLBI) and stale-response quarantine",
+        "L2": "Strict fetch-fault/NEON-integer affected lockstep (51 commits) plus the affected scalar fetch stream and memory-side commit checks"
+      },
+      "exclusions": ["No RTL candidate before T-002 fresh STA", "No changes to T-20260908-004 decode or any D-L1/L2/EMIF path"]
+    },
+    {
+      "id": "B25-R21-C-SHARED-IDEX-FANOUT",
+      "status": "PROVISIONAL",
+      "write_regions": [
+        "rtl/lcvex_core.sv::FP request-valid fanout block fp_tx_candidate/fp_req_valid (source lines 1767-1775) only",
+        "rtl/lcvex_core.sv::IMEM request-valid selection fetch_imem_req_valid/imem_req_valid (source lines 2209-2241) only",
+        "No edits to fp_rsp_hold response block, gprv/EX-MEM capture, decode, shared declarations, typedefs, ports or state enums"
+      ],
+      "target": "R21-SHARED-IDEX-VALID",
+      "mechanism": "Only if endpoint-specific lanes do not remove the common launch cost, replicate or locally register endpoint-specific valid/issue qualifiers at these fanout boundaries. Preserve ID/EX token sequence, fetch epoch, FP request exactly-once, precise kill and commit ordering; a registered qualifier that changes latency must update the contract and be proven before physical use.",
+      "l0_l2": {
+        "L0": "Core ID/EX issue, FP request acceptance, IMEM request acceptance and fetch FIFO microbenchmarks",
+        "L1": "Core token/epoch/valid-drop/kill/branch/IRQ and FP owner invariants; IMEM single-outstanding and response-quarantine assertions",
+        "L2": "Combined affected core/FP/fetch strict lockstep, including the R21 1104 FP commits and 51 fetch-fault/NEON-integer commits where the changed qualifiers are exercised"
+      },
+      "exclusions": ["No RTL candidate before T-002 fresh STA", "Must merge serially after A/B because it shares the idex_valid launch family"]
+    }
+  ],
+  "activation_gate": {
+    "gate_task": "T-20260909-002",
+    "required": [
+      "fresh STA on exact current source 702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+      "record actual generated clock, hierarchy and endpoint cardinalities",
+      "recompute top-N and shared-cone clustering",
+      "confirm the R21 endpoint families still exist before activating any lane"
+    ],
+    "if_paths_missing": "Keep every lane PROVISIONAL, do not create an RTL candidate, and report the R21 paths as historical observation only.",
+    "if_paths_persist": "Re-rank by fresh slack/count/logic levels, then activate at most the disjoint regions above."
+  },
+  "merge_order": [
+    "0: T-20260909-002 fresh STA and source/clock/endpoint re-baseline; no lane activation before this gate.",
+    "1: B25-R21-A-FP-RSP, if the 41-path FP response family persists; run its focused/L0-L2 package.",
+    "2: B25-R21-B-I-L1-RSP, if the 9-path I-L1 family persists; run its fetch/cache/MMU L0-L2 package.",
+    "3: B25-R21-C-SHARED-IDEX-FANOUT last, because it touches the common launch family; merge all activated lanes into one candidate and run one combined affected L0-L2 plus the next serialized fresh physical flow."
+  ],
+  "risks": [
+    "R21 physical source is 80b1f813..., while current B25 source is 702bd8ee... with material platform/BRAM/EMIF changes; R21 top-N cannot be treated as current timing fact.",
+    "The generated clock changed from sys_clk_50/divide-by-2 to sys_clk_25/divide-by-4; endpoint names, timing period and path ranking may disappear or change.",
+    "T-20260908-007's SYNTHESIS macro selects the M20K BRAM implementation and may reshape/flatten the fitted hierarchy; no hierarchy claim is active until fresh STA.",
+    "FP response edits can break GPR/FP flags/tag/kill exactly-once semantics; I-L1 edits can break fetch FIFO epoch, maintenance, refill and fault boundaries; shared fanout edits can affect both.",
+    "No false path, timing exception, assembler, bitstream, JTAG, board or unrelated-process action is allowed in this analysis."
+  ],
+  "policy": {
+    "rtl_modified": false,
+    "qemu_modified": false,
+    "active_json_modified": false,
+    "timing_exception_added": false,
+    "reference_results_modified": false,
+    "rtl_candidate_created": false,
+    "heavy_resource_lock_taken": false
+  },
+  "handoff": "docs/handoffs/T-20260909-003-b25-provisional-timing-topn.md"
+}

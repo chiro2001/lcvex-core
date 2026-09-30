@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-020",
+  "label": "B25-RX-CPU-OBSERVABILITY-VOLATILE-SOF",
+  "title": "Generate one volatile SOF from the accepted T-017 fitted database",
+  "kind": "assembler-package",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "quartus-assembler-success-and-volatile-sof-frozen",
+  "assigned_owner": "monitor_disasm",
+  "depends_on": ["T-20260920-017", "T-20260920-019"],
+  "base_sha": "b56e1bd50091a5aba360d90bfe703913acf2bbae",
+  "branch": "verify/T-20260920-020-b25-rx-cpu-observability-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-020",
+  "remote_source": "D:/Projects/fpga-altra/lcvex/build/T-20260920-017-b25-rx-cpu-observability-fresh-physical",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-020-b25-rx-cpu-observability-volatile-sof",
+  "writes": [
+    "build/agents/T-20260920-020/** ignored assembler logs/artifacts",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-020-b25-rx-cpu-observability-volatile-sof/** task-owned exact clone",
+    "docs/tasks/evidence/T-20260920-020.json",
+    "docs/handoffs/T-20260920-020-b25-rx-cpu-observability-volatile-sof.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-015.json",
+    "docs/tasks/evidence/T-20260920-017.json",
+    "docs/tasks/evidence/T-20260920-019.json",
+    "T-20260920-010 assembler runner/evidence as a template only"
+  ],
+  "input_contract": {
+    "physical_candidate_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+    "physical_candidate_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+    "source_manifest_sha256": "1ce45a9e54266dfb09993b97a3e4132f15b05a4670f691e7a671eadb7dc45e19",
+    "boot_bin_bytes": 2011,
+    "boot_bin_sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79",
+    "boot_mif_sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "preexisting_config_artifacts": 0
+  },
+  "scope": "Create a never-before-used task-owned byte-identical clone of the accepted T-017 post-STA project, verify source and fitted database identities, run Quartus assembler exactly once, and seal the single volatile catapult_a10.sof with size, SHA-256, Quartus checksum, design hash and JTAG usercode.",
+  "validation": {
+    "freshness": "The T-020 remote root must not preexist. Copy only from the T-017 accepted physical root; never import T-007/T-010 databases or SOFs.",
+    "immutability": "T-017 source pre/post manifest remains identical and the T-020 clone baseline matches it byte-for-byte.",
+    "database": "The fitted database payload remains unchanged; only the narrowly reviewed assembler report/runlog metadata delta is allowed, with zero removed paths.",
+    "assembler": "Invoke exactly once: quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10. Require Successful, zero errors and command identity in stdout/report.",
+    "artifacts": "Exactly one SOF exists; POF/JIC/RBF/JBC/SVF/JAM counts are all zero. Record SOF bytes/hash/checksum/design hash/usercode and fetch the SOF plus reports into the task-local ignored root.",
+    "boundary": "No synthesis, fitter, STA, source edit, programmer, JTAG, terminal, FPGA configuration, Flash, reset, power or process termination."
+  },
+  "acceptance": "One content-addressed volatile SOF is produced from the exact accepted T-017 fitted database without changing the source or physical payload and without touching the board.",
+  "resource": "Every GamePC clone/query/assembler/fetch action must run under resource-lock gamepc. Require no conflicting EDA/programmer/terminal process; never stop an unknown or pre-existing process. Monitor event-driven with waits up to one hour.",
+  "forbidden_regions": [
+    "synthesis, fitter, STA, timing optimization or source/QSF/SDC/RTL/boot modification",
+    "T-007/T-010 physical databases, reports or SOFs as evidence or input",
+    "POF/JIC/RBF/JBC/SVF/JAM or any Flash/EPCQ format",
+    "quartus_pgm, jtagconfig, nios2-terminal, FPGA configuration, board reset/power or hardware access",
+    "stopping unknown or pre-existing processes"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T12:57:31+08:00",
+    "agent_name": "monitor_disasm",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "task_head_sha": "5d4814d21ee38d0ffa4ed24faeaef31a7a12ea54",
+    "integration_evidence_sha": "16cab9e371b7e7b623804ae192d4479a6f39edeb",
+    "assembler": "PASS; exact command invoked once, Successful, 0 errors, 0 warnings",
+    "source_and_database": "PASS; source/clone manifest identical, physical database payload changes 0",
+    "sof": {
+      "bytes": 36842101,
+      "sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd",
+      "quartus_checksum": "0x3159F8A0",
+      "design_hash": "4DAED3C37174544441E6912B371092CA",
+      "jtag_usercode": "0xFFFFFFFF"
+    },
+    "artifact_cardinality": "SOF=1; POF/JIC/RBF/JBC/SVF/JAM=0",
+    "boundary": "No synthesis/fitter/STA, programmer, JTAG, terminal, FPGA configuration, Flash, reset or power action",
+    "evidence": "docs/tasks/evidence/T-20260920-020.json",
+    "handoff": "docs/handoffs/T-20260920-020-b25-rx-cpu-observability-volatile-sof.md",
+    "next": "T-20260920-021 volatile board interaction using only this exact SOF identity"
+  },
+  "created_at": "2026-09-20T12:55:24+08:00",
+  "updated_at": "2026-09-20T13:13:33+08:00"
+}

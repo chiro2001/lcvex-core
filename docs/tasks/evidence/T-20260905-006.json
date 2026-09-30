@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-006",
+  "state": "done",
+  "partial": false,
+  "base_sha": "8383cb05808393cc2ad391af261089321d0e2288",
+  "head_sha": "f021315bcebdb76e51b5944520637f7c8bd18453",
+  "implementation_head": "f021315bcebdb76e51b5944520637f7c8bd18453",
+  "documentation_tip": "final metadata correction commit; exact final branch HEAD is reported separately to avoid self-referential evidence",
+  "head_semantics": "head_sha/implementation_head bind the Makefile source implementation; the final documentation commit tip is the branch HEAD reported with this handoff, not f021315.",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "branch": "infra/T-20260905-006-maint-v82-hermetic",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-006",
+  "batch_parent": "T-20260905-002",
+  "scope": "Make p6-maint-v82 self-contained from a clean worktree by creating build/difftest and invoking the existing qemu/plugins build before image generation and all six lockstep windows.",
+  "implementation": {
+    "commit": "f021315bcebdb76e51b5944520637f7c8bd18453",
+    "files": [
+      "Makefile",
+      "docs/handoffs/T-20260905-006-maint-v82-hermetic.md",
+      "docs/tasks/evidence/T-20260905-006.json"
+    ],
+    "summary": "Added mkdir -p build/difftest and $(MAKE) -C qemu/plugins to p6-maint-v82 before its existing maintenance image generation and six lockstep recipes. No maintenance program, reference, protocol, RTL or QEMU source changed.",
+    "entry_order": [
+      "lockstep-build",
+      "lockstep-build-l1dl2",
+      "mkdir -p build/difftest",
+      "make -C qemu/plugins",
+      "generate hard_maint_v82, hard_maint_v82_mmu and hard_maint_v82_el0 images",
+      "run six existing base/L1D+L2 windows in original order"
+    ],
+    "six_windows": [
+      "hard_maint_v82 + base coordinator",
+      "hard_maint_v82 + L1D/L2 coordinator",
+      "hard_maint_v82_mmu + base coordinator",
+      "hard_maint_v82_mmu + L1D/L2 coordinator",
+      "hard_maint_v82_el0 + base coordinator",
+      "hard_maint_v82_el0 + L1D/L2 coordinator"
+    ],
+    "policy": {
+      "maintenance_program_modified": false,
+      "reference_results_modified": false,
+      "protocol_modified": false,
+      "rtl_modified": false,
+      "qemu_source_modified": false,
+      "qsf_sdc_modified": false,
+      "jtag_or_board_action": false
+    }
+  },
+  "runs": [
+    {
+      "run_id": "git-diff-check",
+      "stage": "pre-batch-static",
+      "command": "git diff --check cb2a2c91a8e5c3248e5969e0d487853ab5f66146..f021315bcebdb76e51b5944520637f7c8bd18453",
+      "source_sha": "f021315bcebdb76e51b5944520637f7c8bd18453",
+      "started_at": "2026-09-05T05:12:34+08:00",
+      "finished_at": "2026-09-05T05:12:34+08:00",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "make-dry-run",
+      "stage": "pre-batch-static",
+      "command": "make -n p6-maint-v82",
+      "source_sha": "f021315bcebdb76e51b5944520637f7c8bd18453",
+      "started_at": "2026-09-05T05:12:40+08:00",
+      "finished_at": "2026-09-05T05:12:40+08:00",
+      "result": "pass",
+      "exit_code": 0,
+      "checks": [
+        "mkdir -p build/difftest appears before image generation",
+        "make -C qemu/plugins appears before all six window commands",
+        "all six original window commands remain present and ordered"
+      ]
+    },
+    {
+      "run_id": "registry-consistency",
+      "stage": "pre-batch-static",
+      "command": "python3 scripts/test_registry.py --check --check-consistency",
+      "source_sha": "f021315bcebdb76e51b5944520637f7c8bd18453",
+      "started_at": "2026-09-05T05:12:46+08:00",
+      "finished_at": "2026-09-05T05:12:46+08:00",
+      "result": "pass",
+      "exit_code": 0,
+      "summary": "registry 校验通过（73 项）；registry 与 Makefile/runner 最小一致性检查通过"
+    }
+  ],
+  "not_run": [
+    "actual clean-worktree make p6-maint-v82 six-window execution",
+    "Verilator/QEMU lockstep runtime and seq/PC result collection",
+    "T-20260905-005 SYS/MMU RTL failure reproduction",
+    "Quartus, JTAG, SOF, programming and board test"
+  ],
+  "known_limits": [
+    "Actual six-window execution is deferred to the single heavy queue and must run on the merged candidate SHA.",
+    "The target still requires the existing external QEMU binary and plugin build headers; this change only wires the repository-local plugin build entry.",
+    "A clean entry reaching the windows does not claim that the independent maintenance SYS/MMU path is functionally green."
+  ],
+  "task_ledger_correction": {
+    "active_json": "docs/tasks/active/T-20260905-006.json",
+    "dispatch_commit": "cb2a2c91a8e5c3248e5969e0d487853ab5f66146",
+    "dispatch_commit_time": "2026-09-05T04:52:06+08:00",
+    "recorded_created_at": "2026-09-05T04:57:00+08:00",
+    "recorded_updated_at": "2026-09-05T04:57:00+08:00",
+    "status": "correction_recorded_only; active JSON intentionally not modified because it is outside this lane writes"
+  },
+  "timestamps": {
+    "sent_at": "2026-09-05T04:53:41+08:00",
+    "received_at": "2026-09-05T04:53:41+08:00",
+    "reported_at": "2026-09-05T04:55:00+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260905-006-maint-v82-hermetic.md",
+  "integrator_validation": "PASS; merged candidate clean entry and maintenance six-window run are recorded in T-20260905-002 evidence.",
+  "next": "Closed; the hermetic entry is covered by merged-candidate evidence."
+}

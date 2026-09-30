@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-005",
+  "label": "F1A-DEFAULT-ON-PARAM",
+  "title": "F1a 默认启用参数传播与默认-on smoke/lint",
+  "kind": "feature",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-perf-f1a-param",
+  "agent_type": "rtl-param-propagation",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260901-011"
+  ],
+  "base_sha": "732aa5691134b2aaef64b50c570da2b7ad001497",
+  "branch": "feature/T-20260902-005-f1a-default-on",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-005",
+  "scope": "将 FETCH_FIFO_ENABLE/DEPTH/EPOCH_W 从 lcvex_core 参数传播到 lcvex_core_wrap、lcvex_cluster_top、lcvex_catapult_soc_top、lcvex_catapult_a10_top（及需要的外部 TB/顶层入口），并将默认 FETCH_FIFO_ENABLE 从 0 改为 1（F1a 默认开启）；补充默认-on smoke/lint 验证。保持 F0 可通过参数关闭。",
+  "reads": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "rtl/lcvex_catapult_soc_top.sv",
+    "rtl/lcvex_catapult_a10_top.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "Makefile",
+    "docs/PERFORMANCE_F1J_FULL_MATRIX_RESULTS.md",
+    "docs/F1A_CONTROL_FLOW_FETCH_FENCE_RESULTS.md"
+  ],
+  "writes": [
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "rtl/lcvex_catapult_soc_top.sv",
+    "rtl/lcvex_catapult_a10_top.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "Makefile",
+    "docs/handoffs/T-20260902-005-f1a-default-on.md",
+    "docs/tasks/evidence/T-20260902-005.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "make test-f1a PASS",
+      "make cocotb-f1a PASS",
+      "make f1a-control-flow-fence-smoke PASS"
+    ],
+    "l1": [
+      "git diff --check",
+      "默认 FETCH_FIFO_ENABLE=1 的 lint/elab 通过；PERF_FETCH_FIFO_ENABLE=0 仍可显式关闭"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "F1a 默认开启参数传播完成，默认-on smoke/lint 全绿；F0 可通过参数显式关闭；产出 handoff/evidence。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 8192,
+    "timeout_s": 5400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-02T03:04:00+08:00",
+  "updated_at": "2026-09-02T08:44:15+08:00",
+  "known_limits": [
+    "不运行完整 Gate D（T-013 单独派发）；不运行 Quartus；不改变 F1a 功能语义"
+  ],
+  "handoff": "docs/handoffs/T-20260902-005-f1a-default-on.md",
+  "evidence": "docs/tasks/evidence/T-20260902-005.json",
+  "next": "默认-on 完整 Gate D（T-013）与最终 FPGA candidate 重同步",
+  "dispatch": {
+    "sent_at": "2026-09-02T03:04:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-005",
+    "branch": "feature/T-20260902-005-f1a-default-on",
+    "resumed_at": "2026-09-02T08:18:53+08:00"
+  },
+  "head_sha": "ec59339fc308446a1e3fbc8a1251951b16f1ca1f",
+  "merge_sha": "057a1c159ab9632deb574acece62d1d9bd57e19a",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T08:43:42+08:00",
+    "merged_at": "2026-09-02T08:44:15+08:00",
+    "recorded_at": "2026-09-02T08:44:15+08:00",
+    "notes": "F1a default-on param propagation merged; L0/L1 smoke/lint green per subagent report; full Gate D T-013 remains next"
+  }
+}

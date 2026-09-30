@@ -1,0 +1,9 @@
+# QEMU 固定版本（LCVEX 参考模型），升级必须单独建分支并重跑差分回归。
+QEMU_VERSION=11.1.0
+QEMU_GIT_TAG=v11.1.0
+QEMU_GIT_REMOTE=https://gitlab.com/qemu-project/qemu.git
+QEMU_COMMIT=84f07211cc5b4fc6a371559bf8a5de4fb068e648
+QEMU_RELEASED=2026-08-11
+# 本地 fork 当前分支与提交（补丁已导出到 patches/，仅供追溯）
+QEMU_FORK_BRANCH=lcvex-step-hook
+QEMU_FORK_COMMIT=ccd819d

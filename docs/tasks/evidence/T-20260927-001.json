@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260927-001",
+  "state": "done",
+  "kind": "planning-only",
+  "source_sha": "ffa75333fc709cc0505d8eb7e77dce043a029834",
+  "reference_repo": "/home/chiro/projects/mycpu/a10-linux-riscv",
+  "reference_commit_short": "b2ffcc9",
+  "recorded_at": "2026-09-27T23:55:57+08:00",
+  "handoff": "docs/LINUX_BOARD_BOOT_PLAN.md",
+  "checks": [
+    {
+      "command": "git diff --cached --check",
+      "result": "PASS"
+    },
+    {
+      "command": "jq -e '.id == \"T-20260927-001\" and .phase == \"active\"' docs/tasks/active/T-20260927-001.json",
+      "result": "PASS before marking documentation task done"
+    },
+    {
+      "command": "test -f for each new local Markdown link target",
+      "result": "PASS",
+      "paths": [
+        "docs/LINUX_PLAN.md",
+        "docs/LINUX_BOARD_BOOT_PLAN.md",
+        "docs/handoffs/T-20260920-053-b25-coremark-uart-board-result.md",
+        "docs/handoffs/T-20260920-041-b25-ddr-m-control.md",
+        "docs/tasks/evidence/T-20260826-044.json",
+        "docs/BRINGUP_25MHZ_PLAN.md"
+      ]
+    }
+  ],
+  "findings": [
+    "Historical Gate E no-FP lite reached /init; B25 physical Linux platform is a separate integration gap.",
+    "Board CPU IRQ is tied low; existing GIC supports Timer PPI but needs an external UART SPI path.",
+    "Core Timer uses instruction-retirement/WFI virtual time and reports 1 GHz; real hardware counter mode is needed.",
+    "Board UART is Altera JTAG-UART, not historical Linux-lite PL011.",
+    "EPCQ CSR exists but the Flash memory read port is tied off and its declared 4 KiB placeholder is not routed.",
+    "Reference Flash scripts use absolute source offsets in descriptors and relative Intel HEX plus COF base.",
+    "Reference FLASH_IMAGE_NAME is printed but does not select the file actually opened; new tools must bind actual inputs.",
+    "Current board runner is volatile-only and T-053-specific exceptions cannot be reused as a Linux/Flash workflow."
+  ],
+  "actions": {
+    "rtl_or_software_changes": 0,
+    "subagents_dispatched": 0,
+    "heavy_builds_or_simulations": 0,
+    "remote_connections": 0,
+    "quartus_or_jtag_operations": 0,
+    "flash_writes_or_power_cycles": 0
+  },
+  "known_limits": [
+    "Only existing local sources and historical evidence were read; current GamePC availability and reference artifacts were not rechecked.",
+    "Proposed Flash aperture, payload base, kernel/DTB placement and UART SPI number are implementation defaults, not deployed interfaces.",
+    "Planning completion does not mark any Linux board boot or Flash milestone complete."
+  ]
+}

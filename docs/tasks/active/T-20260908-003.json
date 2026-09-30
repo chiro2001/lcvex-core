@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "T-20260908-003",
+  "label": "B25-GATE-D-RESIDUAL-TRIAGE",
+  "title": "Classify the seed-1 random mismatch and missing coverage traces independently of hard_postpre",
+  "kind": "read-only-failure-triage",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "accepted-different-root",
+  "assigned_owner": "b25_emif_resilience_impl",
+  "depends_on": [],
+  "follows_from": "T-20260907-046",
+  "base_sha": "004b62c19cf2ff4dfd0fb721332fc3a651ed7b99",
+  "branch": "verify/T-20260908-003-b25-gate-d-residual-triage",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-003",
+  "scope": "Reproduce or inspect the Gate D seed=1 mismatch at differential index 522990 in an isolated worktree, determine its instruction/state root class and whether it is causally the same post-index bug as T-002. Explain that random_2/3 coverage traces are downstream-not-run versus independent infrastructure failures.",
+  "writes": [
+    "docs/tasks/evidence/T-20260908-003.json",
+    "docs/handoffs/T-20260908-003-b25-gate-d-residual-triage.md",
+    "build/agents/T-20260908-003/** ignored artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260907-046.json",
+    "existing random seed generator, runner and trace coverage checker",
+    "RTL/QEMU/reference sources read-only"
+  ],
+  "validation": [
+    "If reproduction is needed, run only seed=1 until the first mismatch under local resource-lock; do not run full Gate D.",
+    "Capture encoding/disassembly, pre-state, RTL/QEMU state and recent commits at the first mismatch.",
+    "Classify missing seed2/3 traces from control flow and specify the minimum post-fix rerun needed."
+  ],
+  "acceptance": "A reproducible first-failure classification states same-root/different-root/indeterminate with evidence, while tracked RTL/QEMU/tests remain untouched.",
+  "resource": {
+    "lock": "local-if-heavy",
+    "policy": "Acquire resource-lock run local for any random lockstep; task-local TMPDIR/build output; return 75 means wait behind T-002."
+  },
+  "forbidden_regions": [
+    "any tracked RTL/QEMU/reference/test/expectation modification",
+    "full Gate D",
+    "GamePC/Quartus/JTAG/board/Flash actions",
+    "another task worktree"
+  ],
+  "created_at": "2026-09-08T11:18:18+08:00",
+  "updated_at": "2026-09-08T11:46:43+08:00",
+  "result_head": "ad7e7b4bbd993661c1f64976f956d3dd96612465",
+  "result_evidence": "docs/tasks/evidence/T-20260908-003.json",
+  "integrated_as": "5b2f4e6b",
+  "followup_task": "T-20260908-004",
+  "dispatch": {
+    "sent_at": "2026-09-08T11:23:14+08:00",
+    "agent_name": "b25_emif_resilience_impl",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "8316a1b8b94010ea31cf791e441e3f065197e841"
+  }
+}

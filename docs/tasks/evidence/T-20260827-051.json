@@ -1,0 +1,356 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-051",
+  "state": "review",
+  "base_sha": "c76cc28d53bcab4af0e42dcf4ca8dbb4426dcb6e",
+  "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+  "branch": "feature/T-20260827-051-p7-0-fp-state",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051",
+  "scope": "P7-0 RTL state boundary plus repository-side FP protocol/trace/checkpoint validation: FP_INIT/FP_COMMIT, strict frame length/seq, required handshake, ASYNC/WAIT exclusion, LCVXFP01 and manifest 13-column reader/transaction helpers.",
+  "excluded": [
+    "P7-1/P7-2/P7-3 FP/NEON operations and memory",
+    "P8 SVE",
+    "QEMU fork source/build/replay and external QEMU writes",
+    "rtl/filelist.f",
+    "top-level Makefile",
+    "tb/sv/lcvex_soc_tb.sv",
+    "PROJECT_STATUS.md",
+    "ROADMAP.md",
+    "active task JSON"
+  ],
+  "files": [
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fp_state_tb.sv",
+    "tb/sv/lcvex_fp_state_cocotb_tb.sv",
+    "sim/cocotb/Makefile.fp_state",
+    "sim/cocotb/test_fp_state.py",
+    "docs/P7-0_FP_STATE.md",
+    "docs/COMMIT_PACKET.md",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_protocol.py",
+    "qemu/plugins/lcvex_difftest.c",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/qemu_trace.py",
+    "scripts/trace_manifest.py",
+    "docs/DIFFTEST.md",
+    "docs/handoffs/T-20260827-051-p7-0-fp-state.md"
+  ],
+  "toolchain": {
+    "verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu": "external QEMU not built/replayed; plugin source builds against current unpatched header"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-diff-check-001",
+      "level": "L0",
+      "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无尾随空白或 patch 格式错误。"
+    },
+    {
+      "run_id": "owner-l1-core-lint-002",
+      "level": "L1",
+      "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only -Wall --top-module lcvex_core -f rtl/filelist.f",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "现有 scalar core/filelist 在 commit_packet 追加字段后仍可 lint；FP state 模块保持独立。"
+    },
+    {
+      "run_id": "owner-l1-sv-build-003",
+      "level": "L1",
+      "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_fp_state_tb -Mdir build/agents/T-20260827-051/sv/obj_dir -o lcvex_fp_state_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv tb/sv/lcvex_fp_state_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "独立 SV testbench 编译通过。"
+    },
+    {
+      "run_id": "owner-l1-sv-run-004",
+      "level": "L1",
+      "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+      "command": "build/agents/T-20260827-051/sv/obj_dir/lcvex_fp_state_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SV 输出 PASS；覆盖 reset、FPEN 四态、mask、trap 无副作用、1V/4V effect、超限/重复拒绝、scalar 兼容和 restore 同沿。"
+    },
+    {
+      "run_id": "owner-l1-cocotb-005",
+      "level": "L1",
+      "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.fp_state",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 3/3 tests PASS，仿真 196ns；使用独立 wrapper/Makefile，不依赖现有 SoC 顶层。"
+    },
+    {
+      "run_id": "owner-l0-tool-version-006",
+      "level": "L0",
+      "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+      "command": "conda run --no-capture-output -n lcvex verilator --version; conda run --no-capture-output -n lcvex python3 -c 'import cocotb, sys; print(sys.version.split()[0]); print(cocotb.__version__)'",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "记录 Verilator 5.050、Python 3.12.14、Cocotb 2.0.1。"
+    },
+    {
+      "run_id": "continuation-l0-protocol-007",
+      "level": "L0",
+      "source_sha": "484ce8e",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY' ... FP_INIT=520B, FP_COMMIT=16+16*popcount(v_mask) for 0..4, strict extra/seq rejection, LCVXFP01=552B ... PY",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Python protocol mirror通过5种合法 delta 长度、额外字节/错误长度/seq负路径和552B sidecar raw round-trip。"
+    },
+    {
+      "run_id": "continuation-l0-checkpoint-008",
+      "level": "L0",
+      "source_sha": "484ce8e",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 sim/difftest/checkpoint_manifest_smoke.py && PYTHONDONTWRITEBYTECODE=1 python3 sim/difftest/checkpoint_resume_manifest_smoke.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P6 manifest/resume 旧链兼容 smoke 通过。另行验证 LCVXFP01 552B gzip round-trip、header/长度/seq corruption 拒绝。"
+    },
+    {
+      "run_id": "continuation-l1-coordinator-build-009",
+      "level": "L1",
+      "source_sha": "484ce8e",
+      "command": "make lockstep-build",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator coordinator 编译通过；当前顶层未接入 FP restore/effect 端口。"
+    },
+    {
+      "run_id": "continuation-l1-plugin-build-010",
+      "level": "L1",
+      "source_sha": "484ce8e",
+      "command": "make -C qemu/plugins",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "plugin against 当前外部 QEMU plugin header 编译通过；保留原有 U128 switch warning，未链接/运行 0012 API。"
+    },
+    {
+      "run_id": "continuation-l1-sv-011",
+      "level": "L1",
+      "source_sha": "484ce8e",
+      "command": "mkdir -p build/agents/T-20260827-051/final-sv/obj_dir && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_fp_state_tb -Mdir build/agents/T-20260827-051/final-sv/obj_dir -o lcvex_fp_state_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv tb/sv/lcvex_fp_state_tb.sv && build/agents/T-20260827-051/final-sv/obj_dir/lcvex_fp_state_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "owner P7-0 SV 定向测试全部通过（196ns）。"
+    },
+    {
+      "run_id": "continuation-l1-cocotb-012",
+      "level": "L1",
+      "source_sha": "484ce8e",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.fp_state SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051/build/agents/T-20260827-051/final-cocotb",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 3/3 PASS，仿真196ns。"
+    },
+    {
+      "run_id": "continuation-l0-trace-013",
+      "level": "L0",
+      "source_sha": "484ce8e",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY' ... trace v2 FP_INIT/FP_COMMIT pairing and unpaired-frame rejection ... PY",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "trace_manifest 与 qemu_trace 对 V2 配对/seq/负路径通过。"
+    }
+  ],
+  "resolved_failures": [
+    {
+      "run_id": "owner-convergence-sv-lint-007",
+      "command": "同一独立 SV 编译命令的早期版本",
+      "exit_code": 1,
+      "result": "resolved",
+      "summary": "早期只读 package 常量在未接入 filelist 的 scalar lint 中触发 UNUSEDPARAM，且测试有宽度告警；已通过 package lint 范围、显式宽度和独立模块使用修正，最终 L0/L1 全绿。",
+      "failure_artifact": null
+    }
+  ],
+  "failures": [],
+  "blockers": [
+    "13 列 LCVXFP01 resume runner 尚未把 fp sidecar 自动接入续跑发布/恢复；coordinator 已支持 --restore-fp。",
+    "尚未实现或验证 FP32/FP64、NEON 算术、向量访存及其 raw-bit V/FPCR/FPSR delta。",
+    "Linux 长跑、完整 Gate D、Gate F-ISA/F-MEM/F-BOARD 仍未完成。"
+  ],
+  "known_limits": [
+    "EC=0x07 syndrome 固定为 QEMU syn_a64_fp_access_trap(1, 0xe) 的 0x1fe00000（EC/IL/CV/COND），仅覆盖 AArch64 FP access 边界。",
+    "FPCR/FPSR 只实现 P7 mask 规定的状态位；不实现 FP exception enable、AFP、AArch32 LEN/STRIDE。",
+    "commit effect 是 RTL-only L1 边界，不是 QEMU 同值写 oracle；当前 coordinator 已接入 DUT raw FP state，并只在协议提交边界比较。",
+    "QEMU required handshake、FPCR/FPSR 状态访问和 wiring/repair 负路径已通过；FP arithmetic/memory、LCVXFP01 真实发布/恢复、Linux 长跑、完整 Gate D 或 Gate-F 仍未完成；max/z adapter 禁止发布 P7 checkpoint。"
+  ],
+  "next": "补齐 run_lockstep_resume.sh 的 13 列 FP sidecar 参数化并完成真实 LCVXFP01 checkpoint round-trip；之后登记 P7-1 FP arithmetic，再进入 Gate D/F。",
+  "integration_validation": {
+    "runner_role": "root-integrator",
+    "line": "feature/p7-fp-neon",
+    "source_sha": "5045b193fbd58bce998c1e26b86851f11d311420",
+    "merge_inputs": [
+      "331cffdd9097528c0a19a68563631cbf151c54e8",
+      "484ce8e58a00b6dfae5477c08d1035063156fe02",
+      "9e0950317c804e38f49b82f369eb1a366c3f48b9",
+      "9e2c46bbfe2c0e3df8c5ed941bfb10070f697c90",
+      "4b527901ceecd9d60add6602e0808a4bbb7732f3",
+      "593e76798f7246e0a250e837c63b36a26d794dca",
+      "f3ae659",
+      "5045b193fbd58bce998c1e26b86851f11d311420"
+    ],
+    "merge_sha": "5045b193fbd58bce998c1e26b86851f11d311420",
+    "result": "pass_l0_l2_p7_state_wiring",
+    "runs": [
+      {
+        "run_id": "integrator-l1-core-lint-008",
+        "level": "L1",
+        "command": "make compile",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "现有 scalar core/filelist 在新增 commit effect 字段后仍通过 Verilator lint。"
+      },
+      {
+        "run_id": "integrator-l1-sv-build-run-009",
+        "level": "L1",
+        "command": "mkdir -p build/agents/T-20260827-051/sv/obj_dir && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_fp_state_tb -Mdir build/agents/T-20260827-051/sv/obj_dir -o lcvex_fp_state_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv tb/sv/lcvex_fp_state_tb.sv && build/agents/T-20260827-051/sv/obj_dir/lcvex_fp_state_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "独立 SV testbench 通过；覆盖 reset、FPEN、mask、trap、副作用、shape 限制、scalar 兼容和 restore。"
+      },
+      {
+        "run_id": "integrator-l1-cocotb-010",
+        "level": "L1",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.fp_state SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-051/cocotb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "Cocotb 3/3 PASS，仿真 196ns。"
+      },
+      {
+        "run_id": "integrator-l0-qemu-replay-014",
+        "level": "L0",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "command": "FINAL2_REPLAY_ROOT=/home/chiro/projects/mycpu/qemu-replay-T051-final2-Im4ZGn; for patch in qemu/patches/0001-tcg-arm-lcvex-difftest-step-hook.patch qemu/patches/0002-lcvex-checkpoint-hook.patch qemu/patches/0003-lcvex-wfi-idle-plugin-hook.patch qemu/patches/0004-lcvex-timer-recalc-after-restore.patch qemu/patches/0005-lcvex-wfxt-idle-plugin-hook.patch qemu/patches/0006-lcvex-timer-offset-schedule.patch qemu/patches/0007-lcvex-generic-timer-step-kick.patch qemu/patches/0008-lcvex-wait-resume-cntvct.patch qemu/patches/0009-lcvex-sys-sidecar-v3.patch qemu/patches/0010-lcvex-plugin-exception-note-context.patch qemu/patches/0011-lcvex-aarch64-vfpd32-off.patch qemu/patches/0012-lcvex-fp-state.patch; do git -C \"$FINAL2_REPLAY_ROOT\" apply \"/home/chiro/projects/mycpu/lcvex/$patch\"; done; git -C \"$FINAL2_REPLAY_ROOT\" diff --check",
+        "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+        "patch_sha256": "320328f8baac2d9f1714e7aa87097e9ee8ff4bb257688b3e0447db5d88389fdc",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "QEMU 11.1.0 基线按 0001→0012 全量 clean replay，git diff --check 通过。"
+      },
+      {
+        "run_id": "integrator-l1-qemu-build-015",
+        "level": "L1",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "command": "make -C /home/chiro/projects/mycpu/qemu/build -j2 qemu-system-aarch64",
+        "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648 + 0001..0012",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "QEMU 11.1.0 重新编译并链接成功；不是旧 binary 复用。",
+        "artifact": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64"
+      },
+      {
+        "run_id": "integrator-l1-plugin-build-016",
+        "level": "L1",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "command": "make -C qemu/plugins clean && make -C qemu/plugins",
+        "exit_code": 0,
+        "result": "pass_with_existing_warning",
+        "summary": "plugin 编译成功；保留既有 QEMU_PLUGIN_MEM_VALUE_U128 switch warning。",
+        "artifact": "qemu/plugins/lcvex_difftest.so"
+      },
+      {
+        "run_id": "integrator-l2-p7-required-smoke-017",
+        "level": "L2",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648 + 0001..0012",
+        "command": "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=14 PROGRESS_EVERY=1 SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.fail COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.mon bash sim/difftest/run_lockstep_step.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "A76 required handshake、FP_INIT/FP_COMMIT 零状态路径及 14 条 step lockstep 全部通过；包含同步异常提交。未覆盖算术。",
+        "artifacts": [
+          "build/tmp/p7-api-smoke-20260827.coord.log",
+          "build/tmp/p7-api-smoke-20260827.qemu.log"
+        ]
+      },
+      {
+        "run_id": "integrator-p7-wiring-repair-018",
+        "level": "L0-L2",
+        "source_sha": "5045b193fbd58bce998c1e26b86851f11d311420",
+        "commands": [
+          "make compile",
+          "make lockstep-build",
+          "make sim-sv",
+          "make sim-sv-backpressure",
+          "make microbench",
+          "make fail-fp-smoke",
+          "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_commit_backpressure SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-051/integrator/cocotb-backpressure",
+          "conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_p7_wiring SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-051/integrator/cocotb-p7-wiring",
+          "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=14 PROGRESS_EVERY=1 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so IMAGE=/home/chiro/projects/mycpu/lcvex/build/difftest/q6_svc.bin SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-a76-20260827.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-a76-20260827.fail COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-a76-20260827.coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-a76-20260827.qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-a76-20260827.ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-a76-20260827.mon bash sim/difftest/run_lockstep_step.sh",
+          "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=10 PROGRESS_EVERY=1 COORD=/home/chiro/projects/mycpu/lcvex/build/verilator_lockstep/lockstep_coordinator PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so IMAGE=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring/build/agents/T-20260827-051/wiring-required/fp_sysreg.bin SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-fp-20260827.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-fp-20260827.fail COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-fp-20260827.coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-fp-20260827.qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-fp-20260827.ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-wiring-fp-20260827.mon bash sim/difftest/run_lockstep_step.sh"
+        ],
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "wiring/repair 全部受影响 L0-L2 在同一 merge SHA 通过；完整命令、失败包和外部 smoke 日志见 repair evidence。",
+        "evidence_ref": "docs/tasks/evidence/T-20260827-051-wiring-repair.json"
+      }
+    ],
+    "resolved_owner_observations": [
+      "active task JSON 在集成根已登记并与 owner evidence 关联。",
+      "owner 提交已按 task writes 检查，未修改 filelist、SoC 顶层、QEMU 或路线图。"
+    ],
+    "remaining_blockers": [
+      "13 列 LCVXFP01 resume runner 和真实发布/恢复尚未运行。",
+      "FP/NEON arithmetic/memory、Linux 长跑和完整 Gate D/F 尚未运行。"
+    ],
+    "wiring_repair_evidence": "docs/tasks/evidence/T-20260827-051-wiring-repair.json",
+    "wiring_handoff": "docs/handoffs/T-20260827-051-wiring.md"
+  },
+  "artifacts": [
+    {
+      "id": "p7-qemu-fp-snapshot-patch",
+      "uri": "qemu/patches/0012-lcvex-fp-state.patch",
+      "sha256": "320328f8baac2d9f1714e7aa87097e9ee8ff4bb257688b3e0447db5d88389fdc",
+      "bytes": 2476,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "sha256sum qemu/patches/0012-lcvex-fp-state.patch"
+    },
+    {
+      "id": "p7-qemu-binary",
+      "uri": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64",
+      "sha256": "f0accfb67c2b4b79e39e40768b3c522a5f960515424839d90654d514c31f3aca",
+      "bytes": 126502296,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "make -C /home/chiro/projects/mycpu/qemu/build -j2 qemu-system-aarch64"
+    },
+    {
+      "id": "p7-plugin-binary",
+      "uri": "qemu/plugins/lcvex_difftest.so",
+      "sha256": "caf7f1223eabf24af032c4a685f50dbbaf59b80e5e336e708764beed7e8d09f5",
+      "bytes": 108608,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "make -C qemu/plugins clean && make -C qemu/plugins"
+    },
+    {
+      "id": "p7-required-smoke-coordinator-log",
+      "uri": "build/tmp/p7-api-smoke-20260827.coord.log",
+      "sha256": "251a18f8aa96a3dc3e653e45ad9f78f410287b423c77609cfbe90b46bd0127d3",
+      "bytes": 1035,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "integrator-l2-p7-required-smoke-017"
+    },
+    {
+      "id": "p7-required-smoke-qemu-log",
+      "uri": "build/tmp/p7-api-smoke-20260827.qemu.log",
+      "sha256": "e82fb6488c3ef45b6ee22f608399d65a09527afa337d2e3679c5ced51bd51609",
+      "bytes": 453,
+      "owner": "root-integrator",
+      "retain_until": "T-051-done",
+      "reproduce": "integrator-l2-p7-required-smoke-017"
+    }
+  ]
+}

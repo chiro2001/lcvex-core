@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-067",
+  "title": "Catapult A10 B5 SoC 远端 full flow/STA 重跑（b5l）",
+  "kind": "fpga-fullflow-sta-rerun",
+  "priority": "high",
+  "assigned_owner": "catapult-fullflow-rerun-dsv",
+  "agent_type": "implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "model_scope": "在宿主清理/重启远端 Quartus 残留进程后，于 D:\\Projects\\fpga-altra\\lcvex 用 B5 SoC 顶层执行 quartus_sh --flow compile catapult_a10（b5l）并采集 fit/STA/SOF 哈希；若宿主进程未清理则保持 blocked 并报告最小操作清单；不修改 Linux 集成线、不读取 license 内容、不删除未知用户文件。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "仅在 full flow/STA 结果或 CDC 约束出现歧义时补充审查；不替代远端实际编译验证。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "本任务以远端工程执行为主，默认不阻塞；仅在写集、工具版本或生成边界发生实质变化时重审。"
+  },
+  "phase": "blocked",
+  "blocked_reason": "Re-run after FP scalar unique-case->if/else optimization: Quartus Synthesis OOM still reproduces, peak private memory 77060 MB (serv_req 15:55:18), after ~38min synthesis. No fit/STA/SOF. The optimization did not resolve Quartus memory pressure. Need >~80GB memory/pagefile or reduce/partition synthesis scope; do not start another full flow until authorized.",
+  "parent": "T-20260828-065",
+  "depends_on": [
+    "T-20260828-065"
+  ],
+  "input_note": "T-065 本地实现已合入 FPGA 线 23218fb；远端 b5k 因宿主残留 quartus_syn（~44GB）内存耗尽中止。本任务在宿主清理/重启后重跑 full flow 并补 fit/STA/SOF 证据。",
+  "writes": [
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/build/T-20260828-067/**",
+    "docs/handoffs/T-20260828-067-b5-fullflow-rerun.md",
+    "docs/tasks/evidence/T-20260828-067.json"
+  ],
+  "reads": [
+    "docs/tasks/archive/T-20260828-064.json",
+    "docs/tasks/active/T-20260828-065.json",
+    "docs/tasks/evidence/T-20260828-065.json",
+    "fpga/catapult_a10/**",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+    "ssh://192.168.101.5/D:/Software/intelFPGA_pro/21.4"
+  ],
+  "context_docs": [
+    "docs/FPGA_PLAN.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "fpga/catapult_a10/README.md",
+    "fpga/catapult_a10/quartus/catapult_a10.qsf"
+  ],
+  "base_sha": "23218fb4",
+  "branch": "verify/T-20260828-067-b5-fullflow-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-067",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 4096,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true,
+    "extend_when": "owner 按 Asia/Shanghai 报告 sent_at/received_at/reported_at、文件、验证、阻断和剩余工作，且正在稳定推进 full flow 时延长。"
+  },
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "write_rule": "允许在 build/T-20260828-067 内创建/修改构建产物；同时允许 Quartus 自身在工程目录生成的内部/构建产物（包含 quartus\\qdb\\**、quartus\\tmp-clearbox\\**、quartus\\output_files\\**、quartus\\db\\** 以及 Quartus 生成的 .rpt/.summary/.sof/.sld/.pin/.done 等）。禁止修改 RTL 源码、catapult_a10.qsf/sdc/qpf、既有 compile_b5l*.log；禁止删除或覆盖未知用户文件；禁止读取/复制 license 文件内容。"
+  },
+  "validation": {
+    "l0": [
+      "确认远端残留 quartus_syn 已清理或宿主已重启（Get-Process quartus_syn 无结果或内存充足）",
+      "精确命令、版本、退出码、日志路径记录"
+    ],
+    "l1": [
+      "quartus_sh --flow compile catapult_a10 -c catapult_a10 exit 0；0 errors",
+      "fit.summary（ALM/reg/pin/RAM/PLL）、sta.rpt（setup/hold/Fmax）、SOF 哈希"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [
+      "DDR March/Linux/上板由 Gate F-BOARD 后续任务执行"
+    ]
+  },
+  "acceptance": "宿主清理后成功重跑 B5 SoC full flow，取得 0 errors、STA 无负 slack 与 SOF 哈希；与 T-064 基线对比记录资源/时序变化；若宿主未清理则保持 blocked 并给出精确操作清单。不得伪称板测/DDR 完成。",
+  "created_at": "2026-08-28T04:04:09+08:00",
+  "updated_at": "2026-08-31T02:23:14+08:00",
+  "user_authorization": {
+    "authorized_at": "2026-08-31T00:41:15+08:00",
+    "scope": "Quartus synthesis/simulation/fit/STA/assembler and board tests",
+    "constraints": "参考 a10-linux-riscv；监控内存；不得停止、暂停或抢占其它运行中进程；资源不足则等待"
+  },
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260828-067.json",
+  "handoff": "docs/handoffs/T-20260828-067-b5-fullflow-rerun.md",
+  "known_limits": [
+    "依赖宿主清理/重启远端 Windows；本任务不执行删除未知用户文件或强制重启。",
+    "full flow 可能超 30 分钟，按自然检查点延长；不伪称完成。"
+  ],
+  "next": "T-20260831-002 provenance 已重锁；执行 T-20260831-003 远端隔离 candidate 同步与 hash closure，再尝试 <=35GB reduced/partition scope；不得直接重启 full flow。",
+  "external_probe": {
+    "probed_at": "2026-08-28T19:31:11+08:00",
+    "host": "192.168.101.5",
+    "quartus_processes": "NONE (host rebooted)",
+    "boot_time": "2026-08-28T19:18:29+08:00",
+    "free_gb": 48.9,
+    "total_gb": 63.1,
+    "blocked_reason": "resolved: 宿主已重启，残留 Quartus 已清除，可重跑 b5l"
+  },
+  "dispatch": {
+    "sent_at": "2026-08-28T22:58:00+08:00",
+    "agent_name": "t067_b5_fullflow_rerun",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-067"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-28T04:06:00+08:00",
+        "new": "2026-08-28T04:04:09+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T16:15:00+0800",
+        "new": "2026-08-29T15:57:46+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks."
+  }
+}

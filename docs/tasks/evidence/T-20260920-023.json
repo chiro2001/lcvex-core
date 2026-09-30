@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-023",
+  "label": "B25-LOGIC-IMM-QUARTUS-REGRESSION",
+  "state": "done-owner-review",
+  "acceptance_status": "behavioral-exhaustive-pass-old-quartus-negative-reproduced-postmap-limited",
+  "base_sha": "836f7fd884c5561abf2238a27f99e54ede8dc4e0",
+  "functional_baseline_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+  "branch": "verify/T-20260920-023-b25-logic-imm-quartus-regression",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-023",
+  "owner": "logicimm_test",
+  "reported_at": "2026-09-20T14:42:00+08:00",
+  "source_scope": {
+    "tracked_rtl_modified": false,
+    "firmware_modified": false,
+    "expected_results_modified": false,
+    "common_registry_modified": false,
+    "task_json_modified": false,
+    "new_files": {
+      "fpga/catapult_a10/tb/sv/lcvex_logic_imm_quartus_tb.sv": {
+        "sha256": "7408a8aee4f386ca369e15b592e3a8a2ea3de29e674c50ccdd48c49ec6f541b9"
+      },
+      "fpga/catapult_a10/tb/filelist_logic_imm_quartus.f": {
+        "sha256": "3f5a34ba82c1c700b9ed0092960d97b53aafa2ca10c3cdeba8e7c30ba63dae27"
+      },
+      "fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh": {
+        "sha256": "5a36cb32413400aedb876b211f3a3e19e05d09fcdd1ea327e5b28eac2a257c14"
+      },
+      "fpga/catapult_a10/tools/quartus_logic_imm/lcvex_logic_imm_probe.qpf": {
+        "sha256": "f6b0959e5e798cc124a29ee8931b8451a3bbdc6bb204ca9676f7c6e1b221c02b"
+      },
+      "fpga/catapult_a10/tools/quartus_logic_imm/lcvex_logic_imm_probe.qsf": {
+        "sha256": "d911cd5a64d957c24cf24d0003de275b7141017b598b7dfaab5c3619b93c98ca"
+      },
+      "fpga/catapult_a10/tools/quartus_logic_imm/lcvex_logic_imm_quartus_postmap_tb.sv": {
+        "sha256": "1a6e5e61396767d1c0c4fb1c1ca99ebd076df175db30b7912b44a822664b7a22"
+      },
+      "fpga/catapult_a10/tools/quartus_logic_imm/lcvex_logic_imm_quartus_probe_top.sv": {
+        "sha256": "b829225d72242cd4f1d811a29f59157b5c0989285b74cc5f6daf16cfe432bc61"
+      },
+      "fpga/catapult_a10/tools/quartus_logic_imm/run_quartus_probe.ps1": {
+        "sha256": "f1981c76718da2f57acaadfe9ff00ca8ffa7ca1c8c099032642229021cb0d6af"
+      }
+    }
+  },
+  "behavioral_oracle": {
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-023 logicimm_test --meta stage=exhaustive-behavioral -- env LCVEX_LOGIC_IMM_OUT_DIR=build/agents/T-20260920-023/exhaustive fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh --behavioral",
+    "source_sha": "30981e9601b50f4e4f047c8092a3c5109e05efeb",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "result": "LOGIC_IMM_BEHAVIORAL_PASS",
+    "coverage": {
+      "exact_opcode_0x12003C06": "W0=0x0000A43F -> W6=0x0000A43F",
+      "exact_opcode_0x12001C00": "W0=0x0000A43F -> W0=0x0000003F",
+      "exhaustive_space": {
+        "dimensions": "sf=0/1, N=0/1, immr=0..63, imms=0..63",
+        "total_encodings": 16384,
+        "legal_encodings": 11328,
+        "reserved_encodings": 5056,
+        "legal_comparisons": "d.valid, d.exc, d.operand_b, d.is_32 width",
+        "reserved_comparisons": "d.valid=0 and d.exc=1 for every entry"
+      },
+      "independent_reference": "DecodeBitMasks reference in task-owned TB, separate from RTL function/output argument"
+    },
+    "artifacts": {
+      "metadata": {"path": "build/agents/T-20260920-023/exhaustive/behavioral/metadata.log", "sha256": "d7e4c2197502b2e1ccd9d0e946d5d964f23000bfbbae13331a18decad9a2593e"},
+      "build_log": {"path": "build/agents/T-20260920-023/exhaustive/behavioral/verilator-build.log", "sha256": "54c36b8162f10cbb4c9870bb9242130521ff3f71084410a657375c2a9fa6f163"},
+      "run_log": {"path": "build/agents/T-20260920-023/exhaustive/behavioral/verilator-run.log", "sha256": "132c847edb7a1794a5f07ff98799d1c4c0f3b47b8c3d1923958a4d12a53f85a3"}
+    }
+  },
+  "old_negative_control": {
+    "source_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+    "source_decode_sha256": "d1a1d2fbcf865a34aa33cca4e8586804bacd02f5f3853af1839a96be1febcc67",
+    "source_pkg_sha256": "de43ab7118605baa8e8d5c7a2072bcdd1b20bcc0317c4d04d6d7091090faab6b",
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-023-b25-logic-imm-quartus-regression/old-negative",
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-023 logicimm_test --meta stage=old-negative-synthesis --meta source_sha=1ce74e9c81c40812ea93a161d52cad8dda807a0d -- fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh --old-negative",
+    "quartus": {
+      "version": "Quartus Prime 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "synthesis_exit": 0,
+      "synthesis_successful": true,
+      "synthesis_errors": 0,
+      "synthesis_warnings": 3,
+      "warning_16788_occurrences": 2,
+      "warning_16788_unique_message": "Net imm[63]_2 does not have a driver at lcvex_decode.sv(1806)",
+      "quartus_eda_exit": 0,
+      "postmap_netlist_generated": true,
+      "postmap_netlist_sha256": "e16c6a2e51ed9f5e3d697a60314179a23c653777b6ca52d886b739d28a4f7145",
+      "postmap_netlist_bytes": 4126462,
+      "postmap_semantic_status": "UNAVAILABLE_NO_COMPATIBLE_SIMULATOR",
+      "postmap_limitation": "GamePC had no compatible iverilog/vvp or vendor primitive simulation path; runner does not claim semantic proof. Local iverilog audit also rejected missing twentynm_lcell_comb models."
+    },
+    "result": "PASS_SYNTHESIS_WARNING_CONTRACT_POSTMAP_LIMITED",
+    "artifacts": {
+      "probe_result": {"path": "build/agents/T-20260920-023/old-negative/probe-result.json", "sha256": "2d0e1a6d065bdb3a648653adf41130bf18a17ecb811ee13d85494962509a2d70"},
+      "preflight_log": {"path": "build/agents/T-20260920-023/old-negative/remote-preflight.log", "sha256": "4401ab2a7f0611bbb8570326fb963c01b343e63b31dd6e64ed4fff918608b646"},
+      "probe_log": {"path": "build/agents/T-20260920-023/old-negative/remote-probe.log", "sha256": "9e443dbec733528f29808725ead8da6caff0c23da244df55fd3c6ed4ceecd69a"},
+      "summary": {"path": "build/agents/T-20260920-023/old-negative/remote-summary.txt", "sha256": "791a0095285919d3480591dba046f584e6ad6f2d463ca92d0746fa42b1aa8cfa"},
+      "synthesis_log": {"path": "build/agents/T-20260920-023/old-negative/synthesis.log", "sha256": "33ce18c5ed06cf5fac5c76e13dc78be94bfeee40a16c908a921a5015faaf73c1"},
+      "synthesis_report": {"path": "build/agents/T-20260920-023/old-negative/lcvex_logic_imm_probe.syn.rpt", "sha256": "eda1b87b1b391513787a2f823b4e449b4c42e1adde8b328fd97137c22c93de3e"}
+    }
+  },
+  "fixed_mode_fail_closed_self_check": {
+    "source_sha": "836f7fd884c5561abf2238a27f99e54ede8dc4e0",
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-023 logicimm_test --meta stage=fixed-warning-fail-closed --meta source_sha=836f7fd884c5561abf2238a27f99e54ede8dc4e0 -- fpga/catapult_a10/tools/run_logic_imm_quartus_regression.sh --fixed",
+    "expected_exit": 1,
+    "observed_failure": "fixed-candidate-warning-16788",
+    "warning_16788_count": 2,
+    "quarantined_remote_variant": "D:/Projects/fpga-altra/lcvex/build/T-20260920-023-b25-logic-imm-quartus-regression/fixed-old-warning-fail-20260920-1",
+    "artifacts": {
+      "probe_result": {"path": "build/agents/T-20260920-023/fixed-old-warning-fail-20260920-1/probe-result.json", "sha256": "82f872d52496ebbc56c949318c664ae384ac21c9fc71bb3011c0240619a3235f"},
+      "probe_log": {"path": "build/agents/T-20260920-023/fixed-old-warning-fail-20260920-1/remote-probe.log", "sha256": "9444f5f1c881ce1467a9cb8c5e2a4449dcf500fe5a4113baceb12f27bd9e6d50"},
+      "synthesis_report": {"path": "build/agents/T-20260920-023/fixed-old-warning-fail-20260920-1/lcvex_logic_imm_probe.syn.rpt", "sha256": "29c30eb4fb99956df93243272f9a8dae6e79127858c594593c15eaab49b6acc5"}
+    }
+  },
+  "runner_contract": {
+    "old_negative": "requires fresh report, synthesis success/0 errors and warning 16788; warning is the expected negative result",
+    "fixed_candidate": "requires fresh report, synthesis success/0 errors and zero warning 16788",
+    "all_modes_fail_closed_on": ["stale output", "missing report", "synthesis errors", "warning on fixed candidate", "postmap semantic mismatch", "forbidden configuration artifact"],
+    "postmap": "tries quartus_eda functional Verilog netlist and compatible simulator; unavailable simulator is explicit limitation, not semantic PASS",
+    "behavioral_pass_marker": "LOGIC_IMM_BEHAVIORAL_ORACLE_PASS exact=A43F/3F exhaustive=16384 legal=11328 reserved=5056",
+    "reuse_on_fixed_sha": "run behavioral, then --fixed under gamepc lock from the merged candidate worktree; same exhaustive 16384-entry and exact opcode/output contract"
+  },
+  "safety_and_resources": {
+    "local_behavioral_lock": true,
+    "gamepc_all_quartus_and_scp_locked": true,
+    "fitter": false,
+    "sta": false,
+    "assembler": false,
+    "jtag": false,
+    "board_or_fpga_configuration": false,
+    "flash_jic_epcq": false,
+    "reset_or_power": false,
+    "unknown_process_stopped": false,
+    "standard_jtagserver_touched": false
+  },
+  "handoff": "docs/handoffs/T-20260920-023-b25-logic-imm-quartus-regression.md",
+  "next": "Integrate this task's files with T-024 on the batch SHA, rerun behavioral and --fixed; fixed acceptance requires fresh no-16788 synthesis. Post-map semantic comparison remains mandatory if a compatible simulator/model path becomes available."
+}

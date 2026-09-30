@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-029",
+  "parent": "T-20260920-027",
+  "label": "B25-LOGIC-IMM-REPAIR-UCP-INVARIANT-PROFILE",
+  "title": "Bind the T-027 fresh UCP/reset measurement to the production normalized invariant policy",
+  "kind": "verification-infrastructure",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-merged-validation-pass",
+  "assigned_owner": "ucp_t029",
+  "depends_on": ["T-20260920-027"],
+  "dependency_exception": "T-027 physical execution and normalized measurement are terminal and evidence-integrated; this task does not reinterpret its independent synthesis-warning blocker.",
+  "base_sha": "3992e66b204a7f9c0ce5d838d0dbe96c81fa7a02",
+  "branch": "infra/T-20260920-029-b25-logic-imm-repair-ucp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-029",
+  "writes": [
+    "fpga/catapult_a10/physical_waivers_invariant.json::T-20260920-027 accepted/report profiles only",
+    "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py::production policy digest only",
+    "build/agents/T-20260920-029/** ignored checker/audit outputs",
+    "docs/tasks/evidence/T-20260920-029.json",
+    "docs/handoffs/T-20260920-029-b25-logic-imm-repair-ucp-profile.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-019.json",
+    "docs/tasks/evidence/T-20260920-027.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/analysis/t027-invariant-measurement.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/sync/stage-manifest.json",
+    "T-019 logic/evidence as the accepted implementation and validation template"
+  ],
+  "scope": "Add only content-addressed T-027 accepted/report profiles to the existing normalized invariant policy, mechanically update its production digest, and rerun exporter, checker and positive/negative fixtures. Preserve every waiver rule, regex, expected cardinality, threshold and forbidden condition byte-for-byte.",
+  "acceptance": {
+    "measurement": "Bind candidate 2a1cd5c5/tree e5e94ab1, source pre/post manifest identity, 174-file/50-QSF fresh stage, Quartus/device/SDC identity and all raw UCP/recovery/removal report hashes without rewriting T-027 evidence.",
+    "invariants": "Normalized UCP input/reset remain 60/624, TDI/TMS/TDO remain 25/35/4, reset families remain 606/4/13/1, endpoint digests match the established policy, recovery/removal are nonnegative and violations are zero.",
+    "policy": "Only T-20260920-027 entries are added to accepted_profiles/report_profiles; waiver semantics, regexes, cardinalities, thresholds, schema and forbidden fields remain identical. Exporter production digest exactly matches the canonical resulting policy.",
+    "verification": "JSON validation, exporter, checker and existing positive/negative fixture matrix pass; Python files compile; diff is limited to declared writes.",
+    "boundary": "This task does not resolve or waive warning 16788 and does not run Quartus, assembler, JTAG or board actions."
+  },
+  "resource": "Local JSON/Python checks only and expected to be light; no local heavy or GamePC slot. T-027 artifacts are strictly read-only.",
+  "forbidden_regions": [
+    "waiver rules, regexes, counts, thresholds, schema or forbidden semantics",
+    "RTL, firmware, QSF, SDC, tests or expected results",
+    "T-027 evidence, worktree artifacts or remote root",
+    "warning suppression/filter/waiver",
+    "GamePC, Quartus, assembler, JTAG, board, Flash/JIC/EPCQ, reset or power"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T16:42:59+08:00",
+    "agent_name": "ucp_t029",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "logic_commit": "05ad2b2e2058a51168ae8863129dca6bb1960dea",
+    "evidence_head": "0262e7a96becc4b75f7c59ff60ca8cf104494140",
+    "integration_validation_sha": "ac4ec38d7796e483c854034e9674d515174fe671",
+    "integration_validation_tree": "de8895fefe1664aa7265a878f9690ca98711eec7",
+    "policy_semantics": "PASS; only T-20260920-027 accepted/report profiles added and production digest mechanically updated",
+    "exporter_checker": "PASS; normalized UCP input 60, reset 624, TDI/TMS/TDO 25/35/4, reset families 606/4/13/1",
+    "fixtures": "PASS; 2/2 positive and 27/27 negative rejected on the merged SHA",
+    "evidence": "docs/tasks/evidence/T-20260920-029.json",
+    "handoff": "docs/handoffs/T-20260920-029-b25-logic-imm-repair-ucp-profile.md",
+    "next": "T-027 warning-contract decision, then assembler/SOF packaging"
+  },
+  "created_at": "2026-09-20T16:42:10+08:00",
+  "updated_at": "2026-09-20T17:11:15+08:00"
+}

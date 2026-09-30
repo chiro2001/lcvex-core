@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-029",
+  "label": "FPGA-G2",
+  "parent": "T-20260828-067",
+  "title": "BRAM M20K/MLAB 显式映射与容量矩阵",
+  "kind": "fpga-exp",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "af0445070f387bf2ffa82bc55d4bb8a50c4cbd16",
+  "branch": "feature/T-20260830-029-fpga-g2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-029",
+  "scope": "在隔离副本对 lcvex_bram_boot 的 mem 增加 ramstyle=M20K/MLAB 或 altsyncram/lpm_ram_dq；测试 64KB/256KB/1MB；记录综合内存/时间；确认 Quartus 是否正确推断。",
+  "writes": [
+    "docs/handoffs/T-20260830-029-fpga-g2.md",
+    "docs/tasks/evidence/T-20260830-029.json",
+    "fpga/**",
+    "rtl/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260830-016-fpga-f3.md",
+    "docs/handoffs/T-20260830-020-fpga-f4.md",
+    "docs/handoffs/T-20260830-008-fpga-f2.md",
+    "docs/handoffs/T-20260829-102-t067-module-synth.md",
+    "rtl/**",
+    "fpga/**"
+  ],
+  "validation": {
+    "l0": [
+      "远程实验有日志/结论",
+      "git diff --check"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付实验数据/可行性结论；如果不可行，给出精确证据。",
+  "next": "根据结果决定后续 FPGA-G 任务。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T19:00:00+0800",
+  "updated_at": "2026-08-30T19:00:00+0800",
+  "known_limits": [
+    "不修改远端原始正式 QSF/SDC/RTL；不读 license；不启动完整 B5 full flow。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-029-fpga-g2.md",
+  "evidence": "docs/tasks/evidence/T-20260830-029.json",
+  "merge_sha": "0a5cf8d",
+  "merged_at": "2026-08-30T20:30:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-30T20:30:00+0800",
+    "status": "accepted",
+    "head_sha": "c188392f39d2efbfee6e0d55bca17b9315386d9e",
+    "notes": "FPGA-G2 confirmed behavioral byte-address BRAM array is the direct cause of F3/F4 31.3GB OOM; explicit altera_syncram wrapper passes 16KB-1MB in 3-4s/0.65GB and SoC-only blackbox in 8s/0.63GB. Experiment artifacts and evidence merged; L1D/L2 ramstyle alone does not yield M20K."
+  }
+}

@@ -1,0 +1,584 @@
+diff --git a/include/exec/lcvex-difftest.h b/include/exec/lcvex-difftest.h
+new file mode 100644
+index 0000000..6480923
+--- /dev/null
++++ b/include/exec/lcvex-difftest.h
+@@ -0,0 +1,131 @@
++/*
++ * LCVEX difftest 精确 step hook 的通用接口。
++ *
++ * LCVEX 项目用固定版本 QEMU 做逐指令差分：普通指令可以用 TCG 插件
++ * before-instruction 回调采样状态，但同步异常（SVC/UDEF/Abort 等）没有
++ * 插件级精确退休事件。本 hook 在 QEMU fork 内部补上两件事：
++ *
++ *   1. LCVEX_DIFFTEST_STEP=1 时强制单指令 TB（CF_NO_GOTO_TB | 1），
++ *      保证每条 guest 指令都是一个执行边界（见 accel/tcg/cpu-exec-common.c）。
++ *   2. 异常入口（arm_cpu_do_interrupt）时记录同步异常的 ESR.EC，插件在
++ *      discon 回调里通过 qemu_lcvex_difftest_take_exception() 取用，
++ *      从而把“异常未退休 + 异常入口 PC discontinuity”精确上报。
++ *
++ * 仅用于 LCVEX 差分测试；非测试运行不受影响（默认不激活）。
++ *
++ * SPDX-License-Identifier: GPL-2.0-or-later
++ */
++#ifndef QEMU_LCVEX_DIFFTEST_H
++#define QEMU_LCVEX_DIFFTEST_H
++
++#include "hw/core/cpu.h"
++
++#define LCVEX_SYS_STATE_VERSION 2u
++#define LCVEX_TIMER_STATE_VERSION 1u
++#define LCVEX_GIC_STATE_VERSION 1u
++#define LCVEX_GIC_IRQ_COUNT 96u
++
++/* QEMU -> LCVEX checkpoint sidecar。字段只选当前 RTL 已有或 Linux
++ * 恢复必需的架构状态，避免依赖 QEMU 私有 VMState 编码。 */
++struct __attribute__((packed)) lcvex_sys_state {
++    char magic[8];             /* "LCVXSYS2" */
++    uint32_t version;
++    uint32_t size;
++    uint64_t x[31];
++    uint64_t pc;
++    uint64_t next_pc;
++    uint64_t sp_el0;
++    uint64_t sp_el1;
++    uint64_t pstate;
++    uint64_t daif;
++    uint64_t elr_el1;
++    uint64_t spsr_el1;
++    uint64_t vbar_el1;
++    uint64_t sctlr_el1;
++    uint64_t tcr_el1;
++    uint64_t ttbr0_el1;
++    uint64_t ttbr1_el1;
++    uint64_t mair_el1;
++    uint64_t esr_el1;
++    uint64_t far_el1;
++    uint64_t par_el1;
++    uint64_t cpacr_el1;
++    uint64_t mdscr_el1;
++    uint64_t cntkctl_el1;
++    uint64_t tpidr_el0;
++    uint64_t tpidrro_el0;
++    uint64_t tpidr_el1;
++    uint64_t pir_el1;
++    uint64_t pire0_el1;
++    uint32_t nzcv;
++    uint8_t el;
++    uint8_t sp_sel;
++    uint8_t reserved[6];
++    /* v2：SVE/SME 探测控制寄存器与缓存选择器。SMPRI_EL1 在 QEMU
++     * 11.1（SMIDR_EL1.SMPS=0）为 RES0，无需保存。 */
++    uint64_t zcr_el1;
++    uint64_t smcr_el1;
++    uint64_t csselr_el1;
++};
++
++/* Generic Timer checkpoint sidecar。计数器采用 QEMU icount 的虚拟计数，
++ * ctl 保留 ENABLE/IMASK/ISTATUS 三个位；恢复到 DUT 时 ISTATUS 由
++ * cntpct、CVAL 和 CTL 重新组合，避免保存一个过期的派生值。 */
++struct __attribute__((packed)) lcvex_timer_state {
++    char magic[8];             /* "LCVXTMR1" */
++    uint32_t version;
++    uint32_t size;
++    uint64_t cntpct;
++    uint64_t cntfrq;
++    uint64_t cntvoff_el2;
++    uint64_t cntpoff_el2;
++    uint64_t cntp_cval;
++    uint64_t cntp_ctl;
++    uint64_t cntv_cval;
++    uint64_t cntv_ctl;
++};
++
++struct __attribute__((packed)) lcvex_gic_irq_state {
++    uint8_t enabled;
++    uint8_t pending;
++    uint8_t active;
++    uint8_t level;
++    uint8_t edge;
++    uint8_t group;
++};
++
++/* 当前 RTL 的单核 GICv2 摘要。QEMU virt 的 GIC 实例可有 128 个 IRQ，
++ * 但 RTL 只建模前 96 个；保存时若 96 以外仍有 live enable/pending/active
++ * 状态则拒绝发布，不能静默丢失中断。 */
++struct __attribute__((packed)) lcvex_gic_state {
++    char magic[8];             /* "LCVXGIC1" */
++    uint32_t version;
++    uint32_t size;
++    uint32_t num_irq;
++    uint32_t reserved;
++    uint32_t ctlr;
++    uint32_t cpu_ctlr;
++    uint16_t priority_mask;
++    uint16_t running_priority;
++    uint16_t current_pending;
++    uint8_t bpr;
++    uint8_t abpr;
++    uint8_t reserved2[2];
++    struct lcvex_gic_irq_state irq[LCVEX_GIC_IRQ_COUNT];
++    uint8_t priority[LCVEX_GIC_IRQ_COUNT];
++    uint8_t sgi_pending[16];
++    uint16_t reserved3;
++};
++
++/*
++ * 在 arm_cpu_do_interrupt() 异常入口处记录本次异常信息。
++ * 同步异常记录 ESR.EC；IRQ/FIQ 等异步事件记录为 async。
++ */
++void qemu_lcvex_difftest_note_exception(CPUState *cs);
++
++/* QEMU -incoming 设备状态不包含 QEMU_CLOCK_VIRTUAL 的当前基准；联合
++ * 恢复时由插件在第一条指令前读取 timer sidecar，设置一个仅限 difftest
++ * 的计数修正。普通运行该 offset 始终为 0。 */
++uint64_t qemu_lcvex_difftest_timer_offset(void);
++
++#endif /* QEMU_LCVEX_DIFFTEST_H */
+diff --git a/include/plugins/qemu-plugin.h b/include/plugins/qemu-plugin.h
+index 432885c..e09a48d 100644
+--- a/include/plugins/qemu-plugin.h
++++ b/include/plugins/qemu-plugin.h
+@@ -321,6 +321,19 @@ int qemu_lcvex_difftest_take_exception(unsigned int vcpu_index,
+                                        uint32_t *ec, uint32_t *esr,
+                                        uint64_t *far);
+ 
++/* 在当前单指令 vCPU 回调上下文保存 CPU/设备 vmstate；仅供 LCVEX
++ * CKPT_REQ 协议使用，返回 0 表示成功。 */
++QEMU_PLUGIN_API
++int qemu_lcvex_difftest_save_devices_state(const char *path,
++                                           const char *sys_path,
++                                           const char *timer_path,
++                                           const char *gic_path);
++
++/* 联合 checkpoint 恢复时，在第一条 guest 指令前校正 QEMU 虚拟计数基准；
++ * 仅当调用方设置 LCVEX_TIMER_RESTORE_PATH 时由插件使用。 */
++QEMU_PLUGIN_API
++int qemu_lcvex_difftest_restore_timer_state(const char *path);
++
+ /** struct qemu_plugin_tb - Opaque handle for a translation block */
+ struct qemu_plugin_tb;
+ /** struct qemu_plugin_insn - Opaque handle for a translated instruction */
+diff --git a/target/arm/helper.c b/target/arm/helper.c
+index b1a3d31..545161a 100644
+--- a/target/arm/helper.c
++++ b/target/arm/helper.c
+@@ -1356,7 +1356,8 @@ uint64_t gt_get_countervalue(CPUARMState *env)
+ {
+     ARMCPU *cpu = env_archcpu(env);
+ 
+-    return qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL) / gt_cntfrq_period_ns(cpu);
++    return qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL) / gt_cntfrq_period_ns(cpu) +
++           qemu_lcvex_difftest_timer_offset();
+ }
+ 
+ static void gt_update_gicv5_ppi(CPUARMState *env, int timeridx, bool level)
+@@ -5397,6 +5398,15 @@ static uint64_t rndr_readfn(CPUARMState *env, const ARMCPRegInfo *ri)
+     /* Success sets NZCV = 0000.  */
+     env->NF = env->CF = env->VF = 0, env->ZF = 1;
+ 
++    /*
++     * LCVEX difftest：RNDR/RNDRRS 是真实随机源，无法逐指令差分。
++     * 测试钩子改为返回“当前指令可见的虚拟计数”（与 DUT timer_count
++     * 一致），保持确定性且仍逐指令严格比较（含 NZCV=0000）。
++     */
++    if (qemu_lcvex_difftest_active()) {
++        return gt_get_countervalue(env);
++    }
++
+     if (qemu_guest_getrandom(&ret, sizeof(ret), &err) < 0) {
+         /*
+          * ??? Failed, for unknown reasons in the crypto subsystem.
+@@ -3311,6 +3311,13 @@ static void sctlr_write(CPUARMState *env, const ARMCPRegInfo *ri,
+     if (arm_feature(env, ARM_FEATURE_PMSA) && !cpu->has_mpu) {
+         /* M bit is RAZ/WI for PMSA with no MPU implemented */
+         value &= ~SCTLR_M;
+     }
++
++    /* LCVEX P6 标量目标不实现 ARMv8.3-A Pointer Authentication；
++     * 保持 EnIA/EnIB/EnDA/EnDB 清零，使 PAC HINT 在 QEMU 参考路径中
++     * 与 DUT 的 NOP shim 一致。普通 QEMU 运行不改变该架构行为。 */
++    if (qemu_lcvex_difftest_active()) {
++        value &= ~(SCTLR_EnIA | SCTLR_EnIB | SCTLR_EnDA | SCTLR_EnDB);
++    }
+
+     /* ??? Lots of these bits are not implemented.  */
+
+diff --git a/target/arm/tcg/lcvex-difftest.c b/target/arm/tcg/lcvex-difftest.c
+new file mode 100644
+index 0000000..dbae6c1
+--- /dev/null
++++ b/target/arm/tcg/lcvex-difftest.c
+@@ -0,0 +1,372 @@
++/*
++ * LCVEX difftest 精确 step hook：AArch64 实现。
++ *
++ * 插件 API 语义（include/plugins/qemu-plugin.h）：
++ *   - qemu_lcvex_difftest_active(): step 模式是否激活。
++ *   - qemu_lcvex_difftest_take_exception(): 取走最近一次异常入口信息，
++ *     返回 1 = 同步异常（*ec 为 ESR.EC），2 = 异步（IRQ/FIQ），0 = 无。
++ *
++ * 时序：插件收到 QEMU_PLUGIN_DISCON_EXCEPTION 回调时，本函数已经由
++ * arm_cpu_do_interrupt() 记录好 EC（先 note 后回调），且 env->pc 已是
++ * 异常向量入口；插件在下一个指令前回调采样到的状态即异常入口状态。
++ *
++ * SPDX-License-Identifier: GPL-2.0-or-later
++ */
++#include "qemu/osdep.h"
++#include "qemu/thread.h"
++#include "hw/core/cpu.h"
++#include "hw/intc/arm_gic.h"
++#include "qemu/plugin.h"
++#include "exec/lcvex-difftest.h"
++#include "cpu.h"
++#include "target/arm/gtimer.h"
++#include "syndrome.h"
++#include "migration/savevm.h"
++#include "migration/qemu-file.h"
++#include "migration/global_state.h"
++#include "io/channel-file.h"
++#include "qapi/error.h"
++#include "qom/object.h"
++#include "system/cpus.h"
++#include "system/runstate.h"
++#include "internals.h"
++
++#ifndef CONFIG_USER_ONLY
++
++/*
++ * 异常信息暂存。单 vCPU 差分测试假设（LCVEX 项目固定单核），
++ * current_cpu 校验防止多 vCPU 下误读。
++ */
++static __thread struct {
++    bool     pending;
++    bool     async;
++    uint32_t ec;
++    uint32_t esr;   /* 完整 ESR（EC<<26 | ISS，含 IL） */
++    uint64_t far;   /* FAR_EL1（仅 abort 类更新） */
++} lcvex_exc_note;
++
++int qemu_lcvex_difftest_active(void)
++{
++    static int active = -1;
++
++    if (active < 0) {
++        active = g_getenv("LCVEX_DIFFTEST_STEP") != NULL;
++    }
++    return active;
++}
++
++void qemu_lcvex_difftest_note_exception(CPUState *cs)
++{
++    CPUARMState *env = cpu_env(cs);
++    bool async = true;
++    uint32_t ec = 0;
++
++    if (!qemu_lcvex_difftest_active()) {
++        return;
++    }
++
++    switch (cs->exception_index) {
++    case EXCP_UDEF:
++    case EXCP_SWI:
++    case EXCP_HVC:
++    case EXCP_SMC:
++    case EXCP_HYP_TRAP:
++    case EXCP_BKPT:
++    case EXCP_PREFETCH_ABORT:
++    case EXCP_DATA_ABORT:
++    case EXCP_GPC:
++        ec = syn_get_ec(env->exception.syndrome);
++        async = false;
++        break;
++    default:
++        /* EXCP_IRQ/EXCP_FIQ/EXCP_VIRQ/...：异步，ESR 无意义 */
++        break;
++    }
++
++    lcvex_exc_note.pending = true;
++    lcvex_exc_note.async = async;
++    lcvex_exc_note.ec = ec;
++    lcvex_exc_note.esr = (uint32_t)env->exception.syndrome;
++    lcvex_exc_note.far = env->exception.vaddress;
++}
++
++int qemu_lcvex_difftest_take_exception(unsigned int vcpu_index, uint32_t *ec,
++                                       uint32_t *esr, uint64_t *far)
++{
++    CPUState *cs = qemu_get_cpu(vcpu_index);
++
++    if (!qemu_lcvex_difftest_active() || !lcvex_exc_note.pending ||
++        cs != current_cpu) {
++        return 0;
++    }
++    if (ec != NULL) {
++        *ec = lcvex_exc_note.ec;
++    }
++    if (esr != NULL) {
++        *esr = lcvex_exc_note.esr;
++    }
++    if (far != NULL) {
++        *far = lcvex_exc_note.far;
++    }
++    lcvex_exc_note.pending = false;
++    return lcvex_exc_note.async ? 2 : 1;
++}
++
++/* QEMU device-only migration 不包含 QEMU_CLOCK_VIRTUAL 的当前计数基准。
++ * 联合恢复只在插件明确提供 sidecar 时启用这个 unsigned modulo 2^64
++ * 修正；正常差分和普通 QEMU 运行保持零偏移。 */
++static __thread bool lcvex_timer_offset_valid;
++static __thread uint64_t lcvex_timer_offset;
++
++uint64_t qemu_lcvex_difftest_timer_offset(void)
++{
++    return lcvex_timer_offset_valid ? lcvex_timer_offset : 0;
++}
++
++int qemu_lcvex_difftest_restore_timer_state(const char *path)
++{
++    struct lcvex_timer_state state = {};
++    CPUARMState *env = cpu_env(current_cpu);
++    int fd;
++    uint64_t raw;
++
++    if (!qemu_lcvex_difftest_active() || path == NULL || path[0] == '\0') {
++        return -1;
++    }
++    fd = qemu_open_old(path, O_RDONLY, 0);
++    if (fd < 0) {
++        return -1;
++    }
++    size_t got = 0;
++    while (got < sizeof(state)) {
++        ssize_t n = read(fd, (char *)&state + got, sizeof(state) - got);
++        if (n <= 0) {
++            break;
++        }
++        got += (size_t)n;
++    }
++    bool ok = got == sizeof(state);
++    close(fd);
++    if (!ok || memcmp(state.magic, "LCVXTMR1", sizeof(state.magic)) != 0 ||
++        state.version != LCVEX_TIMER_STATE_VERSION ||
++        state.size != sizeof(state) ||
++        state.cntfrq != env->cp15.c14_cntfrq ||
++        state.cntvoff_el2 != 0 || state.cntpoff_el2 != 0) {
++        return -1;
++    }
++    /* 此函数只在第一条恢复指令前调用，此时 offset 尚未生效；raw 是
++     * incoming QEMU 当前的虚拟计数，目标值来自保存点 sidecar。 */
++    raw = gt_get_countervalue(env);
++    lcvex_timer_offset = state.cntpct - raw;
++    lcvex_timer_offset_valid = true;
++    return 0;
++}
++
++static int lcvex_save_sys_state(const char *path, CPUARMState *env)
++{
++    struct lcvex_sys_state state = {};
++    int fd;
++    uint64_t pstate;
++
++    if (path == NULL || path[0] == '\0') {
++        return -1;
++    }
++    memcpy(state.magic, "LCVXSYS2", sizeof(state.magic));
++    state.version = LCVEX_SYS_STATE_VERSION;
++    state.size = sizeof(state);
++    memcpy(state.x, env->xregs, sizeof(state.x));
++    state.pc = env->pc;
++    state.next_pc = env->pc;
++    pstate = pstate_read(env);
++    state.sp_el0 = env->sp_el[0];
++    state.sp_el1 = env->sp_el[1];
++    /*
++     * QEMU keeps the currently selected AArch64 SP in xregs[31] and the
++     * banked sp_el[] copy is refreshed at explicit SPSel transitions.  A
++     * checkpoint can be taken between those transitions, so the sidecar must
++     * capture the live working SP, not a stale banked copy.
++     */
++    if (pstate & PSTATE_SP) {
++        state.sp_el1 = env->xregs[31];
++    } else {
++        state.sp_el0 = env->xregs[31];
++    }
++    state.pstate = pstate;
++    state.daif = env->daif;
++    state.elr_el1 = env->elr_el[1];
++    state.spsr_el1 = env->banked_spsr[1];
++    state.vbar_el1 = env->cp15.vbar_el[1];
++    state.sctlr_el1 = env->cp15.sctlr_el[1];
++    state.tcr_el1 = env->cp15.tcr_el[1];
++    state.ttbr0_el1 = env->cp15.ttbr0_el[1];
++    state.ttbr1_el1 = env->cp15.ttbr1_el[1];
++    state.mair_el1 = env->cp15.mair_el[1];
++    state.esr_el1 = env->cp15.esr_el[1];
++    state.far_el1 = env->cp15.far_el[1];
++    state.par_el1 = env->cp15.par_el[1];
++    state.cpacr_el1 = env->cp15.cpacr_el1;
++    state.mdscr_el1 = env->cp15.mdscr_el1;
++    state.cntkctl_el1 = env->cp15.c14_cntkctl;
++    state.tpidr_el0 = env->cp15.tpidr_el[0];
++    state.tpidrro_el0 = env->cp15.tpidrro_el[0];
++    state.tpidr_el1 = env->cp15.tpidr_el[1];
++    state.pir_el1 = env->cp15.pir_el[1];
++    state.pire0_el1 = 0;
++    state.nzcv = (uint32_t)((pstate >> 28) & 0xf);
++    state.el = (uint8_t)arm_current_el(env);
++    state.sp_sel = (pstate & PSTATE_SP) != 0;
++    state.zcr_el1 = env->vfp.zcr_el[1];
++    state.smcr_el1 = env->vfp.smcr_el[1];
++    state.csselr_el1 = env->cp15.csselr_el[1];
++
++    fd = qemu_open_old(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
++    if (fd < 0) {
++        return -1;
++    }
++    bool ok = qemu_write_full(fd, &state, sizeof(state)) == sizeof(state);
++    close(fd);
++    return ok ? 0 : -1;
++}
++
++/* 保存 Generic Timer 的原始架构字段。QEMU 的 ctl bit2（ISTATUS）是
++ * 根据虚拟计数动态维护的派生位；同时保存它供诊断，但 DUT 恢复时只
++ * 注入低两位并用 cntpct/cval 重新计算。 */
++static int lcvex_save_timer_state(const char *path, CPUARMState *env)
++{
++    struct lcvex_timer_state state = {};
++    int fd;
++
++    if (path == NULL || path[0] == '\0') {
++        return -1;
++    }
++    memcpy(state.magic, "LCVXTMR1", sizeof(state.magic));
++    state.version = LCVEX_TIMER_STATE_VERSION;
++    state.size = sizeof(state);
++    state.cntpct = gt_get_countervalue(env);
++    state.cntfrq = env->cp15.c14_cntfrq;
++    state.cntvoff_el2 = env->cp15.cntvoff_el2;
++    state.cntpoff_el2 = env->cp15.cntpoff_el2;
++    state.cntp_cval = env->cp15.c14_timer[GTIMER_PHYS].cval;
++    state.cntp_ctl = env->cp15.c14_timer[GTIMER_PHYS].ctl & 7;
++    state.cntv_cval = env->cp15.c14_timer[GTIMER_VIRT].cval;
++    state.cntv_ctl = env->cp15.c14_timer[GTIMER_VIRT].ctl & 7;
++
++    fd = qemu_open_old(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
++    if (fd < 0) {
++        return -1;
++    }
++    bool ok = qemu_write_full(fd, &state, sizeof(state)) == sizeof(state);
++    close(fd);
++    return ok ? 0 : -1;
++}
++
++static int lcvex_save_gic_state(const char *path)
++{
++    struct lcvex_gic_state state = {};
++    Object *obj;
++    GICState *gic;
++    int fd;
++
++    if (path == NULL || path[0] == '\0') {
++        return -1;
++    }
++    obj = object_resolve_path_type("", TYPE_ARM_GIC, NULL);
++    if (obj == NULL) {
++        return -1;
++    }
++    gic = ARM_GIC(obj);
++    if (gic->num_cpu != 1 || gic->num_irq < LCVEX_GIC_IRQ_COUNT) {
++        return -1;
++    }
++    /* RTL 只实现前 96 个 IRQ；超出范围存在 live 状态时拒绝保存。 */
++    for (unsigned i = LCVEX_GIC_IRQ_COUNT; i < gic->num_irq; i++) {
++        if ((gic->irq_state[i].enabled & 1) ||
++            (gic->irq_state[i].pending & 1) ||
++            (gic->irq_state[i].active & 1)) {
++            return -1;
++        }
++    }
++    memcpy(state.magic, "LCVXGIC1", sizeof(state.magic));
++    state.version = LCVEX_GIC_STATE_VERSION;
++    state.size = sizeof(state);
++    state.num_irq = gic->num_irq;
++    state.ctlr = gic->ctlr & 3;
++    state.cpu_ctlr = gic->cpu_ctlr[0] & 0x21f;
++    state.priority_mask = gic->priority_mask[0];
++    state.running_priority = gic->running_priority[0];
++    state.current_pending = gic->current_pending[0];
++    state.bpr = gic->bpr[0];
++    state.abpr = gic->abpr[0];
++    for (unsigned i = 0; i < LCVEX_GIC_IRQ_COUNT; i++) {
++        const gic_irq_state *irq = &gic->irq_state[i];
++        state.irq[i].enabled = (irq->enabled & 1) != 0;
++        state.irq[i].pending = (irq->pending & 1) != 0;
++        state.irq[i].active = (irq->active & 1) != 0;
++        state.irq[i].level = (irq->level & 1) != 0;
++        state.irq[i].edge = irq->edge_trigger;
++        state.irq[i].group = (irq->group & 1) != 0;
++        state.priority[i] = i < GIC_INTERNAL
++            ? gic->priority1[i][0] : gic->priority2[i - GIC_INTERNAL];
++        if (i < GIC_NR_SGIS) {
++            state.sgi_pending[i] = gic->sgi_pending[i][0];
++        }
++    }
++
++    fd = qemu_open_old(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
++    if (fd < 0) {
++        return -1;
++    }
++    bool ok = qemu_write_full(fd, &state, sizeof(state)) == sizeof(state);
++    close(fd);
++    return ok ? 0 : -1;
++}
++
++int qemu_lcvex_difftest_save_devices_state(const char *path,
++                                           const char *sys_path,
++                                           const char *timer_path,
++                                           const char *gic_path)
++{
++    Error *err = NULL;
++    CPUARMState *env = cpu_env(current_cpu);
++    QIOChannelFile *ioc;
++    QEMUFile *f;
++    int ret;
++
++    if (!qemu_lcvex_difftest_active() || path == NULL || path[0] == '\0') {
++        return -1;
++    }
++    ioc = qio_channel_file_new_path(path, O_WRONLY | O_CREAT | O_TRUNC,
++                                    0600, &err);
++    if (ioc == NULL) {
++        error_free(err);
++        return -1;
++    }
++    qio_channel_set_name(QIO_CHANNEL(ioc), "lcvex-difftest-device-state");
++    f = qemu_file_new_output(QIO_CHANNEL(ioc));
++    object_unref(OBJECT(ioc));
++    cpu_synchronize_all_states();
++    global_state_store_running();
++    if (lcvex_save_sys_state(sys_path, env) < 0) {
++        qemu_fclose(f);
++        return -1;
++    }
++    if (lcvex_save_timer_state(timer_path, env) < 0) {
++        qemu_fclose(f);
++        return -1;
++    }
++    if (lcvex_save_gic_state(gic_path) < 0) {
++        qemu_fclose(f);
++        return -1;
++    }
++    /* 与普通 migration 一样带 configuration section，便于另一实例在
++     * 非 Xen 配置下通过专用 load wrapper 校验 machine 配置。 */
++    qemu_savevm_state_header(f);
++    ret = qemu_save_device_state(f, &err);
++    if (qemu_fclose(f) < 0) {
++        ret = -1;
++    }
++    error_free(err);
++    return ret < 0 ? -1 : 0;
++}
++
++#endif /* !CONFIG_USER_ONLY */

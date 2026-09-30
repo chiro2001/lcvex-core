@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-045",
+  "label": "B25-EMIF-RESILIENCE",
+  "state": "done",
+  "acceptance_status": "sv-and-cocotb-timeout-reset-epoch-pass",
+  "partial": false,
+  "functional_base_sha": "fbec08af334fafc3f9aa7801399f409301c20618",
+  "dispatch_head_sha": "fc730d33adca5fd103cc634a0b2920c9da42ad1b",
+  "implementation_head_sha": "c660e13d",
+  "followup_head_sha": "6864e0ae21658a76aaab365cf06b65332f4beaf0",
+  "implementation_commits": [
+    "0a892c37 emif: bound Avalon abort and preserve response epoch",
+    "c660e13d verify: cover EMIF timeout and reset abort",
+    "7c47c221 emif: use synchronized CPU reset for epoch retention",
+    "4100cbcd verify: harden reset epochs and partial AXI writes",
+    "6864e0ae verify: split EMIF SVA reset epoch"
+  ],
+  "branch": "verify/T-20260907-045-b25-emif-resilience",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-045",
+  "owner": "b25_emif_resilience",
+  "received_at": "2026-09-07T04:46:21+08:00",
+  "reported_at": "2026-09-07T09:16:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "objective": "Complete every accepted AXI transaction exactly once with OKAY or DECERR across calibration abort, EMIF-only reset, Avalon stalls and missing read responses; hold AXI responses and prevent stale backend data from crossing epochs.",
+  "timeout_policy": {
+    "production_default_cycles": 4096,
+    "production_emif_user_clock_hz": 266666750,
+    "production_bound_us_approx": 15.36,
+    "focused_endpoint_cycles": 32,
+    "focused_endpoint_role": "fast deterministic fault injection only",
+    "vendor_latency_evidence": "No Qsys/vendor EMIF worst-case waitrequest or readdatavalid latency upper bound exists in the checked-in platform manifest, Qsys snapshots, BFM, or existing tests; 32 cycles therefore cannot justify the production default."
+  },
+  "implementation": {
+    "rtl": [
+      "Added parameterized AVALON_TIMEOUT_CYCLES with explicit timeout counter reset value 0 and terminal handling; production default is 4096 EMIF clocks (about 15.36 us at 266.666750 MHz), while the focused endpoint explicitly overrides it to 32.",
+      "Avalon waitrequest and missing readdatavalid timeouts emit one DECERR response packet; an accepted read enters EMIF_DRAIN and a late response is consumed without a second packet.",
+      "Retained read_issued_q/emif_poisoned_q across EMIF-only reset, synchronously sampled CPU reset as the explicit re-arm boundary, and synchronized poison to CPU-side request backpressure.",
+      "EMIF-only reset and synchronized calibration failure convert an in-flight CPU transaction to one DECERR instead of silently returning CPU_IDLE.",
+      "BVALID/RVALID and ID/data/RESP/LAST remain driven in response states independent of later calibration abort until BREADY/RREADY handshake.",
+      "Timeout abort is explicitly surfaced to the Avalon SVA checker so intentional command withdrawal is checked as a bounded protocol escape, not an assertion suppression."
+    ],
+    "bfm": [
+      "Added cfg_drop_readdatavalid to model a permanently missing backend read response.",
+      "Added cfg_preserve_read_pending to retain an accepted response across an EMIF-only reset and verify late-response DRAIN; preserved counters in this mode."
+    ],
+    "verification": [
+      "Updated the prior in-flight cal_fail test from no-response success to held DECERR with stable payload.",
+      "Added permanent waitrequest timeout, missing readdatavalid timeout plus late drain/re-arm, and EMIF-only reset DECERR/response-hold scenarios to both SV and Cocotb.",
+      "Late-response tests use different Avalon words/IDs with deterministic BFM initialization and check new data; AW-first and W-first partial writes pause across EMIF reset and complete exactly once after release.",
+      "The Avalon SVA checker now has separate CPU and EMIF reset semantics: CPU reset clears all state, while EMIF reset clears only stall/payload hold state and retains read_inflight epoch. A command asserted under waitrequest=0 is explicitly covered during EMIF-only reset."
+    ]
+  },
+  "files": {
+    "modified": [
+      "rtl/lcvex_axi4_avalon_adapter.sv",
+      "tb/sv/lcvex_axi4_avalon_bfm.sv",
+      "tb/sv/lcvex_axi4_avalon_tb.sv",
+      "sim/cocotb/test_axi4_avalon.py"
+    ],
+    "sha256": {
+      "rtl/lcvex_axi4_avalon_adapter.sv": "ea1672308ead6fa6f45861a40c5cd1f4a037405a745ed3a6a75693350994cb32",
+      "tb/sv/lcvex_axi4_avalon_bfm.sv": "6d27b96f16473891aabf3459c211c1d5b5a7a31c1bde426fb8e3b27ce089c290",
+      "tb/sv/lcvex_axi4_avalon_tb.sv": "2d22ae8ce6ccb9de19a69cce94080236c05a952734899ae6cb317769b4857ae1",
+      "sim/cocotb/test_axi4_avalon.py": "b6cf9723ac0f76035d2149db881a650dacf5fee37eff47276a01b6fd203b72b2"
+    },
+    "forbidden_regions_modified": []
+  },
+  "validation": [
+    {
+      "run_id": "owner-sv-verilator-regression",
+      "level": "L1_SV",
+      "source_sha": "6864e0ae21658a76aaab365cf06b65332f4beaf0",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal --top-module lcvex_axi4_avalon_tb -Mdir build/agents/T-20260907-045/sv/obj_dir -o lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv && build/agents/T-20260907-045/sv/obj_dir/lcvex_axi4_avalon_tb",
+      "seed": "b2_054",
+      "resource": "local lock, min_local_available_mib=4096, Verilator single-thread build",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PASS: B2 AXI4/Avalon SV regression writes=0 reads=0; Verilator finished at 3us",
+      "build_log": "build/agents/T-20260907-045/sv/build-final3.log",
+      "build_log_sha256": "aba4d81fc425283dd3d960b975033571871fa6191ca6578b1d8f67b7852abd6a",
+      "run_log": "build/agents/T-20260907-045/sv/run-final3.log",
+      "run_log_sha256": "db8454db73dc9542a4985b076a719295e17238d8bd6caee23cdf96673a5b1a1f"
+    },
+    {
+      "run_id": "owner-cocotb-regression",
+      "level": "L1_Cocotb",
+      "source_sha": "6864e0ae21658a76aaab365cf06b65332f4beaf0",
+      "command": "resource-lock run local mycpu T-20260907-045 b25_emif_resilience --min-local-available-mib 4096 -- conda run --no-capture-output -n lcvex make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260907-045/sim/cocotb -f Makefile.axi4_avalon SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260907-045/build/agents/T-20260907-045/cocotb SEED=0x00b2054",
+      "seed": "0x00b2054",
+      "resource": "local lock, min_local_available_mib=4096, task-local TMPDIR and SIM_BUILD",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "7/7 tests passed: normal mapping, cal_fail held DECERR, reset flush, bounded timeout/late drain with different word/ID, partial AW/W collection across reset, stalled-command EMIF reset/SVA split, and EMIF-only reset/response hold plus different-word re-arm; simulation finished at 4616.01ns",
+      "log": "build/agents/T-20260907-045/cocotb/final3.log",
+      "log_sha256": "b51774f2542beddd24915befabef162379b483ae8941318bbd2189840b4e3e31"
+    },
+    {
+      "run_id": "owner-timeout-parameter-lint",
+      "level": "L0_static",
+      "source_sha": "6864e0ae21658a76aaab365cf06b65332f4beaf0",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal --top-module lcvex_axi4_avalon_tb -GAVALON_TIMEOUT_CYCLES=1 rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "AVALON_TIMEOUT_CYCLES=1 elaborates/lints through the dedicated generate branch without warnings",
+      "log": "build/agents/T-20260907-045/sv/timeout1-final3.log",
+      "log_sha256": "7b8fbc10ba94ce8485a554f083d93d1d25869780dc848364879896bfea8f361b"
+    },
+    {
+      "run_id": "owner-python-syntax-and-diff",
+      "level": "L0_static",
+      "source_sha": "6864e0ae21658a76aaab365cf06b65332f4beaf0",
+      "command": "python -c 'from pathlib import Path; compile(Path(\"sim/cocotb/test_axi4_avalon.py\").read_text(), \"sim/cocotb/test_axi4_avalon.py\", \"exec\")' && git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "integrator_review": {
+    "owner_head": "a99fe45bb35f489cc1cbaef54558503d74901917",
+    "parent_source_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+    "accepted_at": "2026-09-07T09:22:41+08:00",
+    "result": "pass",
+    "review_closures": [
+      "production timeout raised from 32 to 4096 EMIF cycles; focused endpoint remains 32",
+      "CPU reset re-arm uses cpu_rst_emif_meta_q/cpu_rst_emif_sync_q rather than raw sampling",
+      "different address/ID/data, partial AW/W and stalled-command reset tests eliminate prior false-green paths",
+      "SVA separates CPU epoch reset from EMIF command-hold reset",
+      "parent added ASYNC_REG markers, explicit SDC first-stage paths and design documentation"
+    ],
+    "reruns": {
+      "sv_log_sha256": "5106531ca775e41eb980269613615309aa9705f66f4dc7ea7f6bdc95e0643fd9",
+      "cocotb_7_of_7_log_sha256": "a7db7677ca149b3512f9181ef6c43569cd60e4c5103059315547cc2b8bc760b0",
+      "timeout1_lint_sha256": "993cd338187a89a55a2cf66a82a11155d892ea335977fb72de5b02fc039fdd86",
+      "production_lint_sha256": "a9f04585eee08ff12ef1ca90642b62c2046ac7e930d3b026bc88a41d75b173ff",
+      "soc_smoke_sha256": "c7f56b81b9c20b19d7296f4562e38ae20098c034031dc6ee0ab430c4011686a6"
+    },
+    "parent_evidence": "docs/tasks/evidence/T-20260907-037.json"
+  },
+  "policy": {
+    "writes_within_registered_regions": true,
+    "active_task_json_modified": false,
+    "tasks_status_files_modified": false,
+    "core_qemu_qsf_sdc_clock_ddr_bridge_modified": false,
+    "assertions_disabled": false,
+    "late_response_treated_as_success": false,
+    "gamepc_or_jtag_used": false,
+    "quartus_assembler_sof_or_board_action": false,
+    "system_tmp_used_for_build": false
+  },
+  "resource_lock": {
+    "resource": "local",
+    "all_heavy_runs_locked": true,
+    "min_local_available_mib": 4096,
+    "verilator_jobs": 1,
+    "task_local_tmpdir": "build/agents/T-20260907-045/cocotb/tmp",
+    "final_status": "local FREE",
+    "production_default_lint": "build/agents/T-20260907-045/sv/production-default-final3.log",
+    "production_default_lint_sha256": "fd94987aaac93a1d8ab2760e95b63ea29d5578e49c142a585a30a5736de8aa94",
+    "final_sv_build_log": "build/agents/T-20260907-045/sv/build-final3.log",
+    "final_sv_build_log_sha256": "aba4d81fc425283dd3d960b975033571871fa6191ca6578b1d8f67b7852abd6a",
+    "final_sv_run_log": "build/agents/T-20260907-045/sv/run-final3.log",
+    "final_sv_run_log_sha256": "db8454db73dc9542a4985b076a719295e17238d8bd6caee23cdf96673a5b1a1f"
+  },
+  "known_limits": [
+    "No Quartus, fitter, TimeQuest, GamePC, JTAG, assembler, SOF, board or Linux run was performed; those regions are explicitly outside T-045.",
+    "The EMIF-only reset retention flag uses cpu_rst_emif_meta_q -> cpu_rst_emif_sync_q synchronous sampling in the EMIF clock domain; both stages have explicit power-up value 0, are not cleared by emif_rst_n, and the explicit CPU reset is the re-arm boundary. The CPU reset must remain asserted across the two emif_clk sampling edges.",
+    "The BFM models missing/late responses and reset retention; vendor EMIF-specific cancellation behavior still requires parent-level physical/integration validation."
+  ],
+  "blockers": [],
+  "risks": [
+    "A backend that never returns a late response after an accepted read remains in EMIF_DRAIN by design; CPU request READY is blocked until an explicit CPU reset.",
+    "A calibration abort after an Avalon write acceptance cannot undo the external side effect; it reports DECERR exactly once and relies on higher-level retry/idempotence policy."
+  ],
+  "handoff": "docs/handoffs/T-20260907-045-b25-emif-resilience.md"
+}

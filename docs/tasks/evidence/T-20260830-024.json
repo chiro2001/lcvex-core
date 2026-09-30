@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-024",
+  "state": "done",
+  "partial": false,
+  "base_sha": "e76539fd4c5772c425d57588e7de16b93bc3bc67",
+  "head_sha": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+  "worktree_head_sha": "1d5a356b6e0f7778d3fcdbeb6c9baae3f15e599",
+  "branch": "feature/p7-final",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-024",
+  "scope": "Docs-only status sync: update PROJECT_STATUS.md, ROADMAP.md and audit state to current local Gate D/C3/C4/perf/audit/FPGA facts. No RTL/QEMU functional change.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "created_at": "2026-08-30T07:19:09+08:00",
+    "documents_written_at": "2026-08-30T07:19:09+08:00"
+  },
+  "category": "project-status-docs",
+  "runs": [
+    {
+      "run_id": "owner-doc-summary-001",
+      "source_sha": "1d5a356b6e0f7778d3fcdbeb6c9baae3f15e599",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check && paper review of updated status/roadmap/audit references",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All changes are documentation-only; no RTL/QEMU source touched."
+    }
+  ],
+  "changed_docs": [
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md",
+    "docs/audit/01-governance.md",
+    "docs/audit/02-reproducibility.md",
+    "docs/audit/03-rtl-quality.md",
+    "docs/audit/04-isa-architecture.md",
+    "docs/audit/05-verification.md",
+    "docs/audit/06-multicore.md",
+    "docs/audit/07-fpga.md",
+    "docs/audit/09-risks.md",
+    "docs/audit/self-assessment.md",
+    "docs/audit/action-dag.md",
+    "docs/audit/evidence-index.md",
+    "docs/audit/external-results/action-items.md",
+    "docs/audit/external-results/findings.md",
+    "docs/handoffs/T-20260830-024-status-sync.md",
+    "docs/tasks/evidence/T-20260830-024.json"
+  ],
+  "summary": {
+    "current_branch": "feature/p7-final",
+    "current_head": "1d5a356b6e0f7778d3fcdbeb6c9baae3f15e599",
+    "local_gate_d": "T-20260830-022 PASS on a110ba3; 13/13; make test PASS; CORE_COUNT=1/l2_cluster lint PASS",
+    "c3": "four-core merged fccb674; directed + full fourcore matrix PASS",
+    "c4": "8/16/32 scale/trend measurements completed (T-20260830-018/019); not full multicore compliance",
+    "performance": "14 workload P-SNAPSHOT complete (T-20260830-021)",
+    "audit12": "checkpoint v4 QEMU/DUT joint restore PASS (T-20260829-117)",
+    "audit13": "13-patch canonical fresh replay fixed (T-20260830-023); EXT-02-001 resolved",
+    "fpga": "F2 breakthrough; F3/F4 blocked; T-067 not resolved; no fit/STA/SOF",
+    "github_ci": "auto triggers disabled (T-20260830-007); workflow_dispatch retained"
+  },
+  "known_limits": [
+    "Only documentation updated; no new verification run in this task.",
+    "Current Gate D evidence is from functional RTL baseline a110ba3; current HEAD differs only by docs/QEMU patch/audit evidence.",
+    "FPGA-F3/F4 remain blocked by external Quartus/Qsys/top-level glue resource constraints.",
+    "No claim of A10/Fmax, board bring-up, multicore architecture compliance, full ARMv8.2-A, or formal phase release."
+  ],
+  "status": "done",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.created_at",
+        "old": "2026-08-30T15:00:00+08:00",
+        "new": "2026-08-30T07:19:09+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "timestamps.documents_written_at",
+        "old": "2026-08-30T15:00:00+08:00",
+        "new": "2026-08-30T07:19:09+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "delivered",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "merge_sha": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+  "handoff_sha": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T07:19:22+08:00",
+    "head_sha": "6d79b87",
+    "notes": "STATUS-SYNC merged. Updated PROJECT_STATUS/ROADMAP/audit to current local green status and external FPGA blocker.",
+    "merge_sha": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0",
+    "result_sha": "6d79b87ed956fda22f90e54f3ff48e871cdf2ca0"
+  }
+}

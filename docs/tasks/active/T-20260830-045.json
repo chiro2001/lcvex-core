@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-045",
+  "label": "PE-F1A-STATIC",
+  "parent": "T-20260830-044",
+  "title": "F1a 多退休现象静态 RTL 因果审阅",
+  "kind": "frontend-correctness-static-audit",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-static-audit",
+  "agent_type": "read-only-review",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260830-041",
+    "T-20260830-043"
+  ],
+  "base_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+  "branch": "verify/T-20260830-045-f1a-static-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-045",
+  "scope": "只读审阅 F1a FIFO/epoch/quarantine 与 legacy fetch/IFID/flush/memory-stall 交互，解释 T-043 的 timing-sensitive 多退休模式；输出按证据排序、可由 T-044 trace 证伪的根因候选、关键源码位置、预期首分歧签名和最小修复边界。不得改 RTL/测试/工具，不运行生成器、构建、仿真或 QEMU。",
+  "planning_guidance": {
+    "focus": [
+      "逐状态映射 enabled path 的请求发行、response capture、FIFO push/pop、IF/ID 装载、PC advance 和 seq/epoch 变化，特别检查同拍 pop+push、flush+response、mem_busy/dmem_pending、stall_id/stall_if 优先级。",
+      "审阅 wrong-path entry 在 branch/system/exception/IRQ/TLBI/IC/WFI/ERET kill 后是否可能进入 IF/ID；quarantine 清空前是否确实禁止新请求。",
+      "解释为何 alu/control/kernel_crc/hash/matmul 等等价，而 mem/FP/NEON/sort 在 delay0/cache 下多退休、delay1 多数恢复；不得用无源码引用的泛化猜测代替。",
+      "特别核查副作用相同但 retired 增加是否可能来自循环控制或重复无副作用指令，以及 6 对 memory effect/count 不同对应哪类更强错误。",
+      "每个 hypothesis 给出源码行/条件、T-044 trace 预期签名、排除条件和可能修复写集；明确区分 confirmed、likely、possible。"
+    ],
+    "stop_conditions": [
+      "需要写入 docs 之外文件或运行任何会生成产物的命令",
+      "需要把 T-041 已通过的定向 lockstep 误当作 14 workload 全覆盖",
+      "没有 trace 证据却声称唯一根因或给出逐行补丁"
+    ]
+  },
+  "writes": [
+    "docs/handoffs/T-20260830-045-f1a-static-audit.md",
+    "docs/tasks/evidence/T-20260830-045.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/PERFORMANCE_F1_RESULTS.md",
+    "docs/handoffs/T-20260830-041-pe-f1a-fetch-fifo.md",
+    "docs/tasks/evidence/T-20260830-041.json",
+    "docs/tasks/evidence/T-20260830-043.json",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.json",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/difftest/run_f1a.sh"
+  ],
+  "validation": {
+    "l0": [
+      "docs-only：源码引用、JSON、git diff --check 和两文件写集核对"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "形成源码行级因果图和至少三个排序 hypothesis，每个均有 T-044 可观测签名与排除条件；明确最小修复/测试边界，不修改输入源码、不运行构建，并对无法静态确认之处保持不确定。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.15
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 30,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T22:11:16+08:00",
+  "updated_at": "2026-08-30T22:49:33+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T22:13:05+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "agent_reuse_note": "复用已完成 T-042 的 gpt-5.6-luna(max) agent；当前只持有 T-045。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-045"
+  },
+  "handoff": "docs/handoffs/T-20260830-045-f1a-static-audit.md",
+  "evidence": "docs/tasks/evidence/T-20260830-045.json",
+  "merge_sha": "09a9eca8e6765dc43c8e0bcb5b2845c90eacaa03",
+  "merged_at": "2026-08-30T22:49:26+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T22:49:33+08:00",
+    "status": "accepted_static_audit",
+    "owner_head_sha": "1e0bfb5889bc09aa0bb6d8a25d56ac3c8b98286e",
+    "checks": [
+      "owner worktree clean and two-file docs/evidence write set matched",
+      "handoff SHA256 c842e111... matched evidence and JSON/diff checks passed",
+      "H-03 fault-head consumer gap and H-04 commit-ready/IFID hold gap independently confirmed from source conditions",
+      "H-01/H-02/H-05 correctly remain hypotheses pending T-044 first-divergence trace"
+    ],
+    "notes": "验收静态审阅，不把 hypothesis 升格为动态根因；F1a 继续默认关闭。"
+  },
+  "known_limits": [
+    "静态审阅不等于根因确认，最终以 T-044 first-divergence trace 为准。"
+  ],
+  "next": "等待 T-044 动态 trace；用 first mismatch 对 H-01/H-02/H-05 排序，并把 H-03/H-04 作为独立 correctness gap 纳入后续修复 DAG。"
+}

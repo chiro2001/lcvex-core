@@ -1,0 +1,31 @@
+{
+  "name": "fp_fp16",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "08a8be8450ea52d1cbd895d122d55bc515dddc61a756af1260e6ff631b3d940f",
+  "source_sha256": "08a8be8450ea52d1cbd895d122d55bc515dddc61a756af1260e6ff631b3d940f",
+  "image_hash": "e868b221ba0f6d069e08fd29e26aeed380346c54c140ceae23725d2cd4feb98f",
+  "image_sha256": "e868b221ba0f6d069e08fd29e26aeed380346c54c140ceae23725d2cd4feb98f",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 254247,
+  "wall_sec": 3.125171,
+  "rss_kb": 140164,
+  "rss": 136.879,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_fp_fp16.bin",
+    "--name",
+    "fp_fp16",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: fp_fp16 (254247 cycles)\n",
+  "runner_stderr": ""
+}

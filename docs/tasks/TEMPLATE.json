@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "T-YYYYMMDD-NNN",
+  "title": "简短、可验收的任务标题",
+  "kind": "feature",
+  "priority": "normal",
+  "assigned_owner": "",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "model_scope": "耗时/监控/相对简单编码；不得自行扩大写集或修改集成热点",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": false,
+    "scope": "仅复杂跨域依赖和方案拆解"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "task JSON + 指定文档/目标 diff；只给大方向和阻断风险"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+    "reasoning_effort": "max",
+  "scope": "仅在长跑/持续监控需要时启用"
+  },
+  "phase": "proposed",
+  "parent": "",
+  "depends_on": [],
+  "writes": [],
+  "reads": [],
+  "context_docs": [],
+  "base_sha": "",
+  "branch": "",
+  "worktree": "",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 2048,
+    "timeout_s": 1800
+  },
+  "validation": {
+    "l0": [],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "给出通过条件、失败时应保留的现场以及禁止的降级。",
+  "created_at": "",
+  "updated_at": "",
+  "commits": [],
+  "handoff": "docs/handoffs/T-YYYYMMDD-NNN-slug.md",
+  "evidence": "docs/tasks/evidence/T-YYYYMMDD-NNN.json",
+  "known_limits": [],
+  "next": ""
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-041",
+  "label": "B25-DDR-M-COMMAND-CONTROL",
+  "state": "blocked",
+  "acceptance_status": "ddr-magic-pass-golden-programmer-fail",
+  "partial": true,
+  "base_sha": "fb8fe47e333bdf713219567b228067da3487f2c8",
+  "head_sha": null,
+  "evidence_parent_sha": "fb8fe47e333bdf713219567b228067da3487f2c8",
+  "branch": "verify/T-20260920-041-b25-ddr-m-control",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-041",
+  "owner": "root",
+  "sent_at": "2026-09-20T22:11:22+08:00",
+  "received_at": "2026-09-20T22:11:22+08:00",
+  "remote_started_at": "2026-09-20T22:13:42.7368088+08:00",
+  "terminal_started_at": "2026-09-20T22:14:34.150512+08:00",
+  "terminal_finished_at": "2026-09-20T22:14:35.976366+08:00",
+  "golden_started_at": "2026-09-20T22:14:43.0703598+08:00",
+  "reported_at": "2026-09-20T22:15:54+08:00",
+  "contract": {
+    "path": "build/agents/T-20260920-041/board-contract.json",
+    "bytes": 3754,
+    "sha256": "83deaf434aeb5ed58e75526034962a718860ffb1bef1c331ac62cc5b24554d3b",
+    "manifest_path": "build/agents/T-20260920-041/script-manifest.json",
+    "manifest_bytes": 2420,
+    "manifest_sha256": "eafc0b00100aa7ea8d4e03e55c323b4ceace28e0fcbabb33c49399138c3b57b2",
+    "sealed_files": 12,
+    "remote_ast": "PASS 7/7",
+    "remote_seal": "PASS 12/12"
+  },
+  "scope": {
+    "hardware_access": true,
+    "runner_invocations": 1,
+    "candidate_programmer_invocations": 1,
+    "candidate_programmer_success": true,
+    "terminal_sessions": 1,
+    "golden_programmer_attempted": 1,
+    "golden_programmer_success": false,
+    "jtagconfig_invocations": 2,
+    "fpga_configurations": 1,
+    "jic_epcq_flash_actions": 0,
+    "reset_or_power_actions": 0,
+    "standard_or_unknown_process_stops": 0,
+    "task_owned_server_stops": 2,
+    "remote_access_after_window": false
+  },
+  "candidate_program": {
+    "result": "PASS",
+    "programmer_pid": 40232,
+    "exit_code": 0,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "jtag_id_match": true,
+    "result_artifact": {"path": "build/agents/T-20260920-041/run/final/remote-evidence/program-candidate-final-candidate/runtime/program-result.json", "bytes": 8841, "sha256": "625b28835c167c774e667538361b8fa1f46042d8fce76c229c337b48e61aed9c"},
+    "stdout_artifact": {"path": "build/agents/T-20260920-041/run/final/remote-evidence/program-candidate-final-candidate/runtime/quartus_pgm.stdout.log", "bytes": 2414, "sha256": "5b1152ddf518da872611df22222fb66c5562fd3f31605bf635e3acb6f4fbb3e4"}
+  },
+  "ddr_control": {
+    "result": "PASS",
+    "startup": ["LCVEX25 BOOT", "CAL-WAIT", "DDR-FAIL", "READY", "RXDBG 00000000 00000000"],
+    "calibration_status": "first ? returned CLOCK25 CAL-OK DDR-FAIL",
+    "memory_retry": "the only m returned DDR-OK",
+    "post_status": "the only post-m ? returned CLOCK25 CAL-OK DDR-OK",
+    "classification": "External DDR calibration completed after the bounded startup window, and the subsequent uncached magic write/read diagnostic passed. Startup DDR-FAIL was stale fallback state, not a proven DDR hardware failure.",
+    "input_event_count": 3,
+    "terminal_result": {"path": "build/agents/T-20260920-041/run/final/direct-terminal-final-terminal-result.json", "bytes": 3423, "sha256": "e36396929b6d48d26f75110863e1b6d5f8e6aa29ebaecf7fce2872200912e27e"},
+    "transcript": {"path": "build/agents/T-20260920-041/run/final/direct-terminal-final-terminal.typescript", "bytes": 767, "sha256": "31b56e1734a6d1d41b3f3b02c33ae67e133de476347bfe2e28f0f1b87eb1783c"},
+    "parsed_lines": {"path": "build/agents/T-20260920-041/run/final/direct-terminal-final-terminal-parsed-lines.json", "bytes": 2003, "sha256": "a6b1929be15a7449819375be23f00153d420489efaa0de0592c201cb374a37d0"}
+  },
+  "golden_restore": {
+    "result": "FAIL",
+    "marker_created": true,
+    "programmer_invoked_once": true,
+    "program_result": {"path": "build/agents/T-20260920-041/run/final/remote-evidence/program-golden-final-golden/runtime/program-result.json", "bytes": 381, "sha256": "b9b6fc5b3cf4522f36146ce027ecee575e693d5add2ff948f5d7520bdc93af68"},
+    "stdout": {"path": "build/agents/T-20260920-041/run/final/remote-evidence/program-golden-final-golden/runtime/quartus_pgm.stdout.log", "bytes": 231, "sha256": "13529411ded1909e4b9fae744836dbc5dd95321ccec9b9a4ab7d5a345796319b"},
+    "failure": [
+      "Error (213019): Can't scan JTAG chain. Error code 86.",
+      "Error (213002): Programming option p;<golden.sof> is illegal."
+    ],
+    "terminal_to_golden_seconds": 7.094,
+    "postflight": "PASS only as a cached standard-server observation; exact golden file/design/UART/PHY were listed, but the golden programmer transaction failed, so live golden is unproven.",
+    "postflight_artifact": {"path": "build/agents/T-20260920-041/run/final/postflight-result.json", "bytes": 637, "sha256": "5ec35e35a32117ac6c8e048629057a709003ee8263d6d3c7b79c07bd4d63ef42"}
+  },
+  "runner": {
+    "wrapper_exit": 1,
+    "summary": {"path": "build/agents/T-20260920-041/run/final/summary.txt", "bytes": 557, "sha256": "41250061d1b38a33679344743cd64009eb56ef21c52005c878ba27bb6469b287"},
+    "count_note": "The failure program-result intentionally omits success-only invocation count fields, so wrapper summary reports golden count 0. The durable marker, golden log, failure result and owned-server PID prove exactly one actual golden programmer invocation."
+  },
+  "blocker": {
+    "class": "golden-programmer-acceptance-failure",
+    "candidate_and_ddr_acceptance": "PASS",
+    "live_final_state": "unproven; most recent proven live identity is the candidate DDR-control session",
+    "retry_forbidden_and_not_performed": true,
+    "next": "Create one separate golden-only recovery task. Do not rerun candidate, terminal or m."
+  },
+  "next": "Blocked only on exact live golden recovery; DDR magic write/read is closed PASS."
+}

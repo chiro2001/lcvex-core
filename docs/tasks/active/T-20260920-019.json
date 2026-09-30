@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-019",
+  "label": "B25-RX-CPU-OBSERVABILITY-UCP-INVARIANT-PROFILE",
+  "title": "Bind T-017 fresh UCP/reset measurements to the normalized physical invariant policy",
+  "kind": "verification-infrastructure",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-merged-validation-pass",
+  "assigned_owner": "rx_verify_plan",
+  "depends_on": ["T-20260920-017"],
+  "triggered_by": "T-017 produced valid UCP measurements but its topic commit exceeded the declared write set by editing policy files",
+  "base_sha": "957b00b46d7a6d61ec11419f8be1566156d9a62f",
+  "base_tree_sha": "9f99abee0b6f0addc2923b3c8de2b4edb61ea6ef",
+  "branch": "infra/T-20260920-019-b25-rx-cpu-observability-ucp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-019",
+  "writes": [
+    "fpga/catapult_a10/physical_waivers_invariant.json::T-20260920-017 measurement/report profile only",
+    "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py::production policy digest only if mechanically required by the accepted policy",
+    "build/agents/T-20260920-019/** ignored checker/audit outputs",
+    "docs/tasks/evidence/T-20260920-019.json",
+    "docs/handoffs/T-20260920-019-b25-rx-cpu-observability-ucp-profile.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-017.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/analysis/t017-invariant-inventory.json",
+    "T-009/T-010 normalized invariant evidence and policy contract",
+    "T-017 topic diff 1956b696^..1956b696"
+  ],
+  "scope": "Independently review the proposed T-017 measurement/report profile, prove that it adds candidate-specific provenance and report hashes without changing waiver semantics or accepted cardinalities, mechanically update the policy digest if required, and rerun exporter/checker/self-tests. Do not rerun Quartus or modify physical source/SDC.",
+  "acceptance": {
+    "measurement": "T-017 candidate/tree, source pre/post manifest equality, Quartus/device, SDC hashes and all seven report hashes are content-addressed; no null required provenance remains unless the schema explicitly permits it with documented reason.",
+    "invariants": "Normalized input/reset counts remain 60/624, TDI/TMS/TDO 25/35/4, families 606/4/13/1, recovery/removal nonnegative and violations zero.",
+    "policy": "Only a T-017 measurement/report profile is added; waiver rules, expected cardinalities, regex families and acceptance thresholds are byte-identical. Production digest matches the canonical accepted policy exactly.",
+    "verification": "Exporter and checker positive path pass; negative/self-test fixtures still detect missing, duplicate, broadened or mismatched measurements; git diff is limited to declared writes plus evidence/handoff.",
+    "boundary": "No GamePC, Quartus, assembler, JTAG, board or configuration action."
+  },
+  "resource": "Local JSON/Python checks are light and run without heavy resource slots. T-017 artifacts are read-only.",
+  "forbidden_regions": [
+    "waiver semantics, regexes, counts or thresholds",
+    "RTL, firmware, QSF, SDC or test expected results",
+    "T-017 remote root or reports",
+    "GamePC/Quartus/assembler/JTAG/board/Flash/reset/power"
+  ],
+  "created_at": "2026-09-20T12:23:21+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-20T12:25:03+08:00",
+    "agent_name": "rx_verify_plan",
+    "model": "dsh-default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max"
+  },
+  "result": {
+    "status": "done",
+    "logic_commit": "30e52226085909a39d70cacb4db6f8952fa73b3f",
+    "evidence_commit": "a7cc2fad09f4e30a65c31fad11e6d7bbcad66634",
+    "integration_validation_sha": "9067aa3d64d050ef1faf669033827eadcb56b5e9",
+    "integration_validation_tree": "ae25bf73054b0a97cd234184eba9b76e85bf916b",
+    "policy_semantics": "PASS; waiver rules, regexes, cardinalities and thresholds unchanged",
+    "exporter_checker": "PASS; normalized UCP input 60, reset 624, zero violations",
+    "fixtures": "PASS; 2/2 positive and 27/27 negative rejected",
+    "py_compile": "PASS",
+    "merged_inventory_sha256": "5ffd3adc7df6cfa6d363ab785d4e4aa0a3f06af13690c243479f213899655139",
+    "merged_fixture_matrix_sha256": "10e1abe46498e4fa93baf6fac6b8c96c692ac5c6171d3f9f26b9614b20714f98",
+    "evidence": "docs/tasks/evidence/T-20260920-019.json",
+    "handoff": "docs/handoffs/T-20260920-019-b25-rx-cpu-observability-ucp-profile.md",
+    "next": "T-20260920-020 assembler/SOF packaging"
+  },
+  "updated_at": "2026-09-20T12:53:04+08:00"
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-032",
+  "label": "R21-TIMING-BATCH",
+  "state": "local-and-physical-validation-complete-setup-open",
+  "acceptance_status": "accepted-as-r21-functional-and-physical-baseline",
+  "partial": false,
+  "base_sha": "edaaca5bc3296aaf89f161a079ee09868b50b0b5",
+  "functional_base_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "candidate_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+  "branch": "batch/T-20260906-032-r21",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-032",
+  "owner": "codex-integrator",
+  "timing_input": {
+    "task": "T-20260906-031",
+    "r20_fmax_mhz": 45.15,
+    "r20_setup_wns_ns": -2.147,
+    "r20_setup_tns_ns": -8417.158,
+    "r20_failing_endpoints": 10353,
+    "global_top50": "div_pre_hi -> it_fin_mid_hi; 50/50 violated; 57-60 levels",
+    "secondary_cone": "ap_pre -> pp_pre; worst -1.944 ns"
+  },
+  "integration": {
+    "order": ["T-20260906-033", "T-20260906-034"],
+    "members": {
+      "T-20260906-033": {
+        "implementation_head": "25863a1fb1f8fe6de7d40d40857f26fb59be1a13",
+        "merge_commit": "8dde5a20",
+        "summary": "round_pack_iter_p1 consumes registered lead/lead_valid and no longer infers the duplicate 256-bit fallback scan",
+        "latency_delta_cycles": 0
+      },
+      "T-20260906-034": {
+        "implementation_head": "52a969df38894b835a19cd5be5f9a1336c0d6279",
+        "merge_commit": "4bacc181",
+        "summary": "IT_MUL captures FMA alignment payload and IT_FMA performs the remaining wide compare/add/sub",
+        "latency_delta_cycles": 1
+      }
+    },
+    "shared_test_commit": "80b1f813de47a1223dd135117650419a0b6c05fc",
+    "write_regions_conflicted": false,
+    "physical_rtl_delta_from_r20": ["M\trtl/lcvex_fp_scalar.sv"]
+  },
+  "latency": {
+    "FMADD_FMSUB_FNMADD_FNMSUB_scalar_cycles": 11,
+    "previous_FMA_scalar_cycles": 10,
+    "FMUL_scalar_cycles": 10,
+    "FADD_FSUB_scalar_cycles": 11,
+    "FDIV_S_D_cycles": 262,
+    "FDIV_H_cycles": 519,
+    "FSQRT_S_D_cycles": 70,
+    "FSQRT_H_cycles": 71,
+    "commit_semantics": "architectural state still updates only at commit; only FMA response availability is delayed by one cycle"
+  },
+  "source_hashes": {
+    "rtl/lcvex_fp_scalar.sv": "0b4507aff958594214736ddcd92c3c18ebe2c6016ce5cfc857b0f22a87f355d5",
+    "Makefile": "dc79436d74ed8d7d75f731dbfb122c91a1efa443f438771ed92be9cad08542de",
+    "tb/sv/lcvex_fp_exec_tb.sv": "6b4b15984077de3cd1185bd95b5949833b4d0f74b4b833b759cf306ff929d023",
+    "tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv": "4159ca4b157dad2555dd494b7e2ea07af089e24e2acf802527d1363c340aa4fb",
+    "tb/sv/lcvex_fp_scalar_r21_fma_cut_tb.sv": "07c4e7434d192add542fbfb0ec0fb378cd0250633aa3fdfe7d1b2f18a91f0bab"
+  },
+  "validation": [
+    {
+      "stage": "focused_l1",
+      "started_at": "2026-09-06T19:30:21+08:00",
+      "finished_at": "2026-09-06T19:33:41+08:00",
+      "result": "pass",
+      "entries": 6,
+      "scope": "R21 iterative/FMA focused, R20 route/pack, R18 prescan, FP exec latency/control",
+      "log": "build/agents/T-20260906-032/runtime/focused_l1.log",
+      "log_sha256": "e04ec459f2d515c1eac2702f2a242db9c868bc3159f22473a95dd5f71589e55c"
+    },
+    {
+      "stage": "affected_l1",
+      "started_at": "2026-09-06T19:34:19+08:00",
+      "finished_at": "2026-09-06T19:42:23+08:00",
+      "result": "pass",
+      "entries": 8,
+      "scope": "scalar FP, NEON FP, FMA/convert and FP16/sqrt/minmax/round SV+Cocotb",
+      "log": "build/agents/T-20260906-032/runtime/affected_l1.log",
+      "log_sha256": "fb96a5bc488c7dd1553637355d51c5fee3f4496890827eb934612e6746825313"
+    },
+    {
+      "stage": "strict_l2_fp_neon",
+      "started_at": "2026-09-06T19:42:40+08:00",
+      "finished_at": "2026-09-06T19:44:00+08:00",
+      "result": "pass",
+      "groups": 13,
+      "commits": 1104,
+      "log": "build/agents/T-20260906-032/runtime/strict_l2_fp_neon.log",
+      "log_sha256": "d972a932eaaba01e9f30946f9ddc22b0a02ab861f6a89f16ff419af38488fbb5"
+    },
+    {
+      "stage": "strict_l2_de_extension",
+      "started_at": "2026-09-06T19:44:10+08:00",
+      "finished_at": "2026-09-06T19:44:16+08:00",
+      "result": "pass",
+      "commits": 51,
+      "scope": "NEON integer 31 plus fetch-fault 20",
+      "log": "build/agents/T-20260906-032/runtime/strict_l2_de_extension.log",
+      "log_sha256": "6a16e8227d188faaf64bc3d0c448d11e6b5ed100f85a330ea4028515d262c8f8"
+    },
+    {
+      "stage": "affected_l1_memory_recheck",
+      "started_at": "2026-09-06T19:46:56+08:00",
+      "finished_at": "2026-09-06T19:47:14+08:00",
+      "result": "pass",
+      "cache_state": "warm",
+      "wall_s": 17.70,
+      "max_rss_kib": 175328,
+      "log": "build/agents/T-20260906-032/runtime/affected_l1_memory_recheck.log",
+      "log_sha256": "6285be12ede9c62cbbf621407a01b00600db92b2131e0a14681e54acd79f58bc"
+    }
+  ],
+  "resource_lock": {
+    "resource": "local",
+    "all_heavy_stages_locked": true,
+    "busy_return_75": false,
+    "admission_min_local_available_mib": 8192,
+    "verilator_jobs": 1,
+    "memory_max": null,
+    "swap_observed": "not sampled",
+    "cold_build_peak": "not captured; the exact prior R20 matrix peaked at 3.2 GiB",
+    "warm_recheck_max_rss_kib": 175328,
+    "final_status": "local FREE",
+    "metadata_note": "The first four lock invocations accidentally recorded an incorrect long-form source_sha after the valid 80b1f813 prefix. The immutable worktree HEAD before and after all runs was 80b1f813de47a1223dd135117650419a0b6c05fc; logs and source hashes bind the actual run. The memory recheck used the exact full SHA in lock metadata.",
+    "failed_measurement_attempt": "An /usr/bin/time wrapper was rejected before workload start with exit 127 because that binary is absent; it is not a validation failure. zsh TIMEFMT was then used successfully."
+  },
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "qemu_modified": false,
+    "qsf_or_sdc_modified": false,
+    "gamepc_used": false,
+    "assembler_or_bitstream_run": false,
+    "jtag_programming_power_on_board_test": false
+  },
+  "known_limits": [
+    "This is local functional acceptance, not timing closure or release acceptance.",
+    "Cold-build peak memory was not instrumented in this batch; the successful warm-cache recheck measured 175328 KiB and the exact prior matrix measured 3.2 GiB.",
+    "A fresh R21 physical flow is required to prove that both negative-slack cones moved or improved."
+  ],
+  "handoff": "docs/handoffs/T-20260906-032-r21-timing-batch.md",
+  "physical_validation": {
+    "task": "T-20260906-035",
+    "evidence": "docs/tasks/evidence/T-20260906-035.json",
+    "owner_commit": "dc2ae31f2bd8f5a5c505688960884c1a153323a0",
+    "integration_commit": "18b6b303",
+    "fmax_mhz": 48.57,
+    "setup_wns_ns": -0.588,
+    "setup_tns_ns": -67.238,
+    "setup_failing_endpoints": 550,
+    "hold_wns_ns": 0.017,
+    "status": "physical stages passed; 50 MHz setup remains open; no assembler or board action"
+  },
+  "next": "Proceed with T-20260907-037 B25 bring-up at a real 25 MHz logic clock; retain R21 as the latest 50 MHz timing baseline."
+}

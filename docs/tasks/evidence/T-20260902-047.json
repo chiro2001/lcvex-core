@@ -1,0 +1,1018 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-047",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "3be84369c8b5f28662c83c8169aa219fff0ac06d",
+  "head_sha": "9e97518112db6cde4aa6e424fe68f659a688a499",
+  "branch": "verify/T-20260902-047-fp-p5-rerun-round12",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-047",
+  "scope": "FP-P5 rerun round12 on merged SHA 3be8436 (T-20260902-046 FP iterative DIV/SQRT round_pack two-stage cut): full-FP synthesis -> fitter -> signoff STA; assembler/SOF only if all setup/hold/recovery/removal/min-pulse non-negative and DDR pass.",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-047-probe",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-047-probe\\real_a10_full_fp",
+    "project_name": "real_a10_full_fp",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "license_read": false,
+    "non_eda_processes_stopped": false,
+    "files_deleted": false,
+    "programming_jtag_touched": false
+  },
+  "preflight": {
+    "timestamp": "2026-09-04T08:38:10+08:00",
+    "probe_exists": false,
+    "eda_processes": [],
+    "jtagserver_running": true,
+    "jtagserver_pid": 5476,
+    "physical_free_mb": 47430.6,
+    "physical_total_mb": 63092.3,
+    "disk_d_free_gb": 66.1
+  },
+  "source_sync": {
+    "verified": true,
+    "rtl_file_count": 47,
+    "platform_file_count": 2,
+    "project_file_count": 3,
+    "remote_manifest_count": 52,
+    "all_sha256_match": true,
+    "remote_bad_count": 0,
+    "remote_missing_count": 0,
+    "local_manifest_path": "build/agents/T-20260902-047/sync/manifest_t047.json",
+    "key_files": {
+      "rtl/lcvex_core.sv": "fdc5571cdb5b8e50001b45789142931941fb45a34d783fa5171e4a4c816b44b8",
+      "rtl/lcvex_decode.sv": "1b01f3c482db2b5e509899740306806e094ee803b6f18dbe5239e80dfa262edf",
+      "rtl/lcvex_pkg.sv": "de43ab7118605baa8e8d5c7a2072bcdd1b20bcc0317c4d04d6d7091090faab6b",
+      "rtl/lcvex_fp_scalar.sv formal": "c4962974b854dcf4cb5515f3875f73b83fbafd0d0a256d2fd251b75f1de4cdd8",
+      "rtl/lcvex_fp_scalar.sv remote patched": "29ed24c22ae45ef09c349ac7684a9d9bb4fb810af0e1dcbb5f8bce0a60c01e64",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "a165866e794d688ab5d99792fdcabf84d78b06701696102375faffa30620a191",
+      "real_a10_full_fp/real_a10_full_fp.qsf": "a0f682448fa3965779c03cc4c15da18ab2f1b1f03131fe438115b4691f725ce3",
+      "real_a10_full_fp/real_a10_full_fp.sdc": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da"
+    },
+    "patch_note": "Isolated Quartus-compatibility patch applied to remote lcvex_fp_scalar.sv only: removed default values on iter_kill/iter_pause input ports in top module and kill/pause in lcvex_fp_divider (same as previous FP-P5 rounds). No formal RTL modified."
+  },
+  "runs": [
+    {
+      "run_id": "full-fp-synthesis",
+      "stage": "synthesis",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "result": "pass",
+      "started_at": "2026-09-04T08:40:00.6543684+08:00",
+      "finished_at": "2026-09-04T09:21:19.7503158+08:00",
+      "wall_s": 2479.096,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 3,
+      "critical_warnings": 0,
+      "peak_private_mb": 9498.0,
+      "peak_working_set_mb": 8720.2,
+      "peak_virtual_mb": 14310.5,
+      "samples": 2322,
+      "safety_stopped": false,
+      "resource": {
+        "estimate_alms": 154591,
+        "combinational_aluts": 199771,
+        "dedicated_logic_registers": 88393,
+        "block_memory_bits": 247272,
+        "total_dsp_blocks": 186,
+        "total_plls": 1,
+        "io_pins": 144,
+        "max_fanout_node": "sys_clk_div2",
+        "max_fanout": 80757,
+        "total_fanout": 1353769,
+        "max_lut_depth": 65.5,
+        "average_lut_depth": 18.53
+      },
+      "hierarchy": {
+        "soc_core_alut": 141347,
+        "soc_core_reg": 27633,
+        "soc_core_dsp": 177,
+        "soc_core_mmu_alut": 3679,
+        "soc_core_mmu_reg": 5972,
+        "fp_exec_alut": 82629,
+        "fp_exec_reg": 8054,
+        "fp_exec_dsp": 165,
+        "scalar_unit_alut": 80765,
+        "scalar_unit_reg": 7064,
+        "scalar_unit_dsp": 165,
+        "it_divider_alut": 212,
+        "it_divider_reg": 433,
+        "it_sqrt_alut": 755,
+        "it_sqrt_reg": 390,
+        "neon_int_alut": 8511,
+        "neon_int_reg": 0,
+        "emif_adapter_alut": 20227,
+        "emif_adapter_reg": 2998,
+        "emif_adapter_dsp": 9,
+        "calibration_gate_alut": 4,
+        "calibration_gate_reg": 6
+      },
+      "artifacts": {
+        "real_a10_full_fp.syn.rpt": "776303241444f6cc884c3c94bfff00944948ebb9a31d156648758ec45c38afd4",
+        "real_a10_full_fp.syn.summary": "829b6dc76772b25c2e9b00bd1d1ea1379dc9081345751ebde0235747823ae847",
+        "real_a10_full_fp.flow.rpt": "8b0440b7c0a3da66e361f7fd6c0769d78033bf87ff0134b93fe1f446d9211e95",
+        "monitor_result.json": "980b37ff96a7ed4b7bdb5579cdd712bcca2cbafed20191a56475a3e9f7825a20"
+      }
+    },
+    {
+      "run_id": "full-fp-fitter",
+      "stage": "fitter",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start fitter -end fitter",
+      "result": "pass",
+      "started_at": "2026-09-04T09:24:45.1202467+08:00",
+      "finished_at": "2026-09-04T09:52:25.1134239+08:00",
+      "wall_s": 1659.993,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 11,
+      "critical_warnings": [
+        "No exact pin location assignment(s) for 9 pins of 130 total pins",
+        "There are 48 unused RX channels in the design",
+        "There are 48 unused TX channels in the design"
+      ],
+      "peak_private_mb": 11365.5,
+      "peak_working_set_mb": 10629.1,
+      "peak_virtual_mb": 18620.4,
+      "samples": 1543,
+      "safety_stopped": false,
+      "resource": {
+        "logic_utilization_alms": 153409,
+        "device_alms": 427200,
+        "logic_utilization_percent": 36.0,
+        "total_registers": 91458,
+        "total_pins": "141 / 826 (17%)",
+        "total_block_memory_bits": "245608 / 55562240 (<1%)",
+        "total_ram_blocks": "121 / 2713 (4%)",
+        "total_dsp_blocks": "186 / 1518 (12%)",
+        "total_plls": "3 / 112 (3%)"
+      },
+      "artifacts": {
+        "real_a10_full_fp.fit.rpt": "01ec318b6cd3d1eec7c3aaf0d5b630ca3e9cec7012eb9fdb747a96977b0256ed",
+        "real_a10_full_fp.fit.summary": "a8bed981b37f3652bf77ffb2098813943bd64556c67d9a300ab7a20f03277686",
+        "real_a10_full_fp.fit.plan.rpt": "0fda93590c2f9de516f7c9a5cb355bfe6414a988d63214aa136173f673b3649c",
+        "real_a10_full_fp.fit.place.rpt": "9b745f46e8affcd46049b5f8116c859793ad2a6cc67a71ed9663d9f14882e4be",
+        "real_a10_full_fp.fit.route.rpt": "5baf2be5418aae115f29228ea67d048fee31a51bcdc691fe8f3ce3ef1beadc6d",
+        "real_a10_full_fp.fit.finalize.rpt": "c2be412e9034e2faf2241fbad07ba73b70ea73e7508fa062af2cb43657196721",
+        "real_a10_full_fp.pin": "ce2a3a2efef7b34a0819b36e98f9dd3fa80d80cd1d3068dbd77225b984f4f1d6",
+        "real_a10_full_fp.flow.rpt": "1b1677f7e5308621665386e6a97f0445a9070002c50f40d6875f40534c53176c",
+        "monitor_result.json": "85a29df1cf6db64b332f76e3dd92285a9b8dec088a6d7f55bbbcb04b521b194c"
+      }
+    },
+    {
+      "run_id": "full-fp-sta-signoff",
+      "stage": "sta_signoff",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start sta_signoff -end sta_signoff",
+      "result": "fail_timing_closure",
+      "exit_code": 0,
+      "tool_message": "Timing Analyzer successful, 0 errors, 3 warnings, but Timing Closure Summary = Fail (Setup Fail; Hold/Recovery/Removal/Min-Pulse/DDR/Metastability Pass)",
+      "started_at": "2026-09-04T09:55:51.6964701+08:00",
+      "finished_at": "2026-09-04T09:56:30.3702826+08:00",
+      "wall_s": 38.674,
+      "peak_private_mb": 6251.0,
+      "peak_working_set_mb": 6154.3,
+      "peak_virtual_mb": 11114.5,
+      "samples": 36,
+      "safety_stopped": false,
+      "timing": {
+        "closure": "Fail",
+        "setup": {
+          "sys_clk_50": {
+            "slack": -2.759,
+            "tns": -16618.153,
+            "failing_endpoints": 18519,
+            "corner": "Slow 900mV 100C Model"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.218,
+            "tns": 0.0,
+            "corner": "Slow 900mV 100C Model"
+          }
+        },
+        "hold": {
+          "sys_clk_50": {
+            "slack": 0.019,
+            "corner": "Fast 900mV 0C Model"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.017,
+            "corner": "Fast 900mV 0C Model"
+          }
+        },
+        "recovery": {
+          "emif_core_usr_clk": {
+            "slack": 0.464,
+            "corner": "Slow 900mV 100C Model"
+          },
+          "sys_clk_50": {
+            "slack": 1.614,
+            "corner": "Slow 900mV 0C Model"
+          }
+        },
+        "removal": {
+          "worst_any": {
+            "slack": 0.166,
+            "clock": "clk_y3",
+            "corner": "Fast 900mV 0C Model"
+          },
+          "sys_clk_50": {
+            "slack": 0.173,
+            "corner": "Fast 900mV 0C Model"
+          },
+          "emif_core_cal_master_clk": {
+            "slack": 0.175,
+            "corner": "Fast 900mV 0C Model"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.194,
+            "corner": "Fast 900mV 0C Model"
+          },
+          "emif_core_cal_slave_clk": {
+            "slack": 0.255,
+            "corner": "Fast 900mV 0C Model"
+          }
+        },
+        "min_pulse_width": {
+          "slack": 0.12,
+          "result": "Pass"
+        },
+        "ddr": {
+          "result": "Pass"
+        },
+        "metastability": "Pass",
+        "fmax": {
+          "sys_clk_50": "43.94 MHz",
+          "emif_core_usr_clk": "283.13 MHz",
+          "emif_core_cal_master_clk": "246.24 MHz",
+          "emif_core_cal_slave_clk": "343.29 MHz",
+          "clk_y3": "608.27 MHz"
+        }
+      },
+      "artifacts": {
+        "real_a10_full_fp.sta.rpt": "1b8cdc136f5c36417abff53885bf30508eb97041a9e245c8986fdaaf9a77190b",
+        "real_a10_full_fp.sta.summary": "2bde19e23a910b059bb758659d9905bdc8201d4003bd8175b0f0e9cf321cf795",
+        "real_a10_full_fp.flow.rpt": "42926709cbec6b3e8008d3bd07f2c34e5e8971ebe07c20f75cda3e75ad20a10d",
+        "monitor_result.json": "6bf0e6e5b781caefc10bda1baf2271dad05ce1c2c72542d9417ac93feab3eaad"
+      }
+    },
+    {
+      "run_id": "custom-sta-report-top",
+      "stage": "sta_custom_top",
+      "command": "quartus_sta -t report_top.tcl",
+      "result": "pass",
+      "notes": "Top-10 setup/hold/recovery/removal on final netlist (Slow 900mV 100C custom report); setup worst -2.759 (exmem_valid->idex_d.neon_fp_operand_c[17], 27 logic levels), hold worst +0.077, recovery worst +0.464, removal worst +0.410.",
+      "artifacts": {
+        "t047_setup_top.txt": "3458d2eac4e0db54d1cb465a2b7a735fdc3f96c697a3a5abd77b900d0e15bc82",
+        "t047_hold_top.txt": "84b548f1fd6555f03ac72b1e755d4cf042103742a9d6354b932974f4dc55c172",
+        "t047_recovery_top.txt": "2b24f651f558da4a78eb0909973a14a10814cf8c63354f6cb6d5da59cf2f876c",
+        "t047_removal_top.txt": "86a202b72063cd53c6b1c3e0acaa7f436473c833365e5ee3ac750fe3a8f7d5e2"
+      }
+    },
+    {
+      "run_id": "custom-sta-emif",
+      "stage": "sta_custom_emif",
+      "command": "quartus_sta -t report_emif_setup.tcl; quartus_sta -t report_emif_cross.tcl",
+      "result": "pass",
+      "notes": "EMIF core_usr_clk setup worst +0.480; to core_usr_clk worst +0.403; from core_usr_clk worst +0.480, all 0 violated.",
+      "artifacts": {
+        "t047_emif_setup_top.txt": "2384bbd13ec6d52993bb779da813e57f60906ea291131dc91578139de31f6947",
+        "t047_emif_to_setup_top.txt": "aa2422e8affb7d1a2e16b295b9c5397fc1de688db51586493037d551f6e699b2",
+        "t047_emif_from_setup_top.txt": "b856d72ef6fc223e15d31b86079485e3d63c6114ecc18c5e0961b64562f0d579"
+      }
+    },
+    {
+      "run_id": "assembler-artifact-check",
+      "stage": "assembler_not_run",
+      "command": "none",
+      "result": "not_run",
+      "notes": "Setup sys_clk_50 still negative; per task constraint assembler/SOF not run. Remote probe searched and found no .sof/.jic/.rbf/.pof/.jbc/.svf/.jam."
+    }
+  ],
+  "custom_top": {
+    "t047_setup_top": [
+      [
+        "-2.759",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.660"
+      ],
+      [
+        "-2.731",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.632"
+      ],
+      [
+        "-2.728",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.629"
+      ],
+      [
+        "-2.724",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.625"
+      ],
+      [
+        "-2.723",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.624"
+      ],
+      [
+        "-2.721",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.622"
+      ],
+      [
+        "-2.719",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.620"
+      ],
+      [
+        "-2.714",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.615"
+      ],
+      [
+        "-2.713",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.614"
+      ],
+      [
+        "-2.710",
+        "soc|core|exmem_valid",
+        "soc|core|idex_d.neon_fp_operand_c[17]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "20.000",
+        "-0.139",
+        "22.611"
+      ]
+    ],
+    "t047_hold_top": [
+      [
+        "0.077",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[2][175]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[158]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.121",
+        "0.723"
+      ],
+      [
+        "0.084",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[1][342]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[325]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.054",
+        "0.678"
+      ],
+      [
+        "0.087",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_size_counter[3]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_size_counter[3]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.000",
+        "0.553"
+      ],
+      [
+        "0.088",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[0][175]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[158]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.121",
+        "0.734"
+      ],
+      [
+        "0.088",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_size_counter[2]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_size_counter[2]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.000",
+        "0.561"
+      ],
+      [
+        "0.088",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_size_counter[1]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_size_counter[1]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.000",
+        "0.562"
+      ],
+      [
+        "0.088",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[3][563]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[546]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.054",
+        "0.689"
+      ],
+      [
+        "0.089",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_address_fifo|scfifo_inst|auto_generated|dpfifo|usedw_is_1_dff",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|read_address_fifo|scfifo_inst|auto_generated|dpfifo|usedw_is_1_dff",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.000",
+        "0.559"
+      ],
+      [
+        "0.089",
+        "soc|emif_adapter|emif_req_q.byteenable[27]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_output_data_byte_enable[30]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.174",
+        "0.809"
+      ],
+      [
+        "0.089",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|cmd_info_fifo|scfifo_inst|auto_generated|dpfifo|low_addressa[4]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|cmd_info_fifo|scfifo_inst|auto_generated|dpfifo|low_addressa[4]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.000",
+        "0.559"
+      ]
+    ],
+    "t047_recovery_top": [
+      [
+        "0.464",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "soc|emif_adapter|emif_rst_sync1_n",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.179",
+        "2.926"
+      ],
+      [
+        "0.538",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[91]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.151",
+        "2.859"
+      ],
+      [
+        "0.549",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[377]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.152",
+        "2.874"
+      ],
+      [
+        "0.573",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pending_data[1][173]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.177",
+        "2.795"
+      ],
+      [
+        "0.574",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pending_data[0][390]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.177",
+        "2.795"
+      ],
+      [
+        "0.575",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[93]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.151",
+        "2.859"
+      ],
+      [
+        "0.575",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pending_data[0][144]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.177",
+        "2.795"
+      ],
+      [
+        "0.575",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pending_data[1][171]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.177",
+        "2.795"
+      ],
+      [
+        "0.577",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pending_data[1][144]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.177",
+        "2.795"
+      ],
+      [
+        "0.577",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|pending_data[1][387]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.177",
+        "2.795"
+      ]
+    ],
+    "t047_removal_top": [
+      [
+        "0.410",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|use_counter_lock.counter_lock_gen_master.pll_ref_clk_reset_n_sync_rrr",
+        "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|counter_lock",
+        "clk_y3",
+        "clk_y3",
+        "0.000",
+        "0.000",
+        "0.473"
+      ],
+      [
+        "0.436",
+        "emif|emif_bot|emif_bot|col_if|colmaster|jtag_phy_embedded_in_jtag_master|normal.jtag_dc_streaming|jtag_streaming|clock_sense_reset_n_synchronizer|dreg[6]",
+        "emif|emif_bot|emif_bot|col_if|colmaster|jtag_phy_embedded_in_jtag_master|normal.jtag_dc_streaming|jtag_streaming|clock_sensor",
+        "emif|emif_bot|emif_bot_core_cal_master_clk",
+        "emif|emif_bot|emif_bot_core_cal_master_clk",
+        "0.000",
+        "0.000",
+        "0.493"
+      ],
+      [
+        "0.464",
+        "soc|emif_adapter|emif_rst_sync1_n",
+        "soc|emif_adapter|emif_state_q.EMIF_IDLE~0",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.001",
+        "0.521"
+      ],
+      [
+        "0.484",
+        "sfl_inst|epcq|epcq|epcq_controller_inst|altera_epcq_controller_epcq_epcq|controller|reset_n_reg",
+        "sfl_inst|epcq|epcq|epcq_controller_inst|altera_epcq_controller_epcq_epcq|controller|temp_sce[0]",
+        "sys_clk_50",
+        "sys_clk_50",
+        "0.000",
+        "0.033",
+        "0.595"
+      ],
+      [
+        "0.484",
+        "sfl_inst|epcq|epcq|epcq_controller_inst|altera_epcq_controller_epcq_epcq|controller|reset_n_reg",
+        "sfl_inst|epcq|epcq|epcq_controller_inst|altera_epcq_controller_epcq_epcq|controller|asmi_en4b_addr",
+        "sys_clk_50",
+        "sys_clk_50",
+        "0.000",
+        "0.033",
+        "0.595"
+      ],
+      [
+        "0.491",
+        "sfl_inst|epcq|epcq|epcq_controller_inst|altera_epcq_controller_epcq_epcq|controller|reset_n_reg",
+        "sfl_inst|epcq|epcq|epcq_controller_inst|altera_epcq_controller_epcq_epcq|controller|state.IDLE",
+        "sys_clk_50",
+        "sys_clk_50",
+        "0.000",
+        "0.000",
+        "0.583"
+      ],
+      [
+        "0.493",
+        "soc|emif_adapter|emif_rst_sync1_n_fifo",
+        "soc|emif_adapter|response_fifo|rd_ptr_gray_wr2_q[1]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.069",
+        "0.634"
+      ],
+      [
+        "0.494",
+        "soc|emif_adapter|emif_rst_sync1_n_fifo",
+        "soc|emif_adapter|response_fifo|rd_ptr_gray_wr1_q[0]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.069",
+        "0.634"
+      ],
+      [
+        "0.496",
+        "soc|emif_adapter|emif_rst_sync1_n_fifo",
+        "soc|emif_adapter|response_fifo|rd_ptr_gray_wr1_q[2]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.069",
+        "0.634"
+      ],
+      [
+        "0.497",
+        "soc|emif_adapter|emif_rst_sync1_n_fifo",
+        "soc|emif_adapter|response_fifo|rd_ptr_gray_wr2_q[2]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "0.000",
+        "0.069",
+        "0.634"
+      ]
+    ],
+    "t047_emif_setup_top": [
+      [
+        "0.480",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[160]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[1][177]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.095",
+        "3.474"
+      ],
+      [
+        "0.480",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[171]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.481",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[159]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.481",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[155]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.482",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[130]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.482",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[152]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[183]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[137]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[133]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[163]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ]
+    ],
+    "t047_emif_to_setup_top": [
+      [
+        "0.403",
+        "emif|emif_bot|emif_bot|arch|arch_inst|io_tiles_wrap_inst|io_tiles_inst|tile_gen[0].lane_gen[2].lane_inst~phy_reg0",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[160]",
+        "emif|emif_bot|emif_bot_phy_clk_1",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.407",
+        "2.935"
+      ],
+      [
+        "0.455",
+        "emif|emif_bot|emif_bot|arch|arch_inst|io_tiles_wrap_inst|io_tiles_inst|tile_gen[0].lane_gen[1].lane_inst~phy_reg0",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[157]",
+        "emif|emif_bot|emif_bot_phy_clk_1",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.407",
+        "2.826"
+      ],
+      [
+        "0.480",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[160]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[1][177]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.095",
+        "3.474"
+      ],
+      [
+        "0.480",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[171]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.481",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[159]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.481",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[155]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.482",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[130]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.482",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[152]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[183]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[137]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ]
+    ],
+    "t047_emif_from_setup_top": [
+      [
+        "0.480",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|master_rd_data_r[160]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[1][177]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.095",
+        "3.474"
+      ],
+      [
+        "0.480",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[171]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.481",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[159]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.481",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[155]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.482",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[130]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.482",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[152]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[183]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[137]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[133]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ],
+      [
+        "0.483",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[155]",
+        "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|decoder_output_data[163]",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "emif|emif_bot|emif_bot_core_usr_clk",
+        "3.750",
+        "-0.072",
+        "3.179"
+      ]
+    ]
+  },
+  "next": "The T-046 iterative round_pack cut succeeded (old div_pre->slot_result_r path left top-10). New sys_clk_50 setup top is soc|core|exmem_valid -> soc|core|idex_d.neon_fp_operand_c[17] (22.660 ns, 27 levels, -2.759 ns). Next cut should target the core FP/NEON operand-c forwarding/register-file-to-IDEX path, not the iterative DIV/SQRT round_pack. Do not use SDC false_path. Re-run full-FP after fix; assembler/SOF only when all setup/hold/recovery/removal/min-pulse non-negative and DDR pass.",
+  "merge_sha": "a2fad3eed5a1268ef03163e239e04e286aacbbf1",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-04T10:01:42+08:00",
+    "merged_at": "2026-09-04T10:02:10+08:00",
+    "recorded_at": "2026-09-04T10:02:10+08:00",
+    "notes": "FP-P5 rerun round12 blocked and accepted"
+  }
+}

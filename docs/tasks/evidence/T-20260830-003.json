@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "task": "T-20260830-003",
+  "state": "done",
+  "base_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+  "head_sha": "c60b773916f2a0ef6722cd264f9918572a23c217",
+  "merge_sha": "c60b773916f2a0ef6722cd264f9918572a23c217",
+  "branch": "feature/T-20260830-003-fpga-c",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-003",
+  "sent_at": "2026-08-30T00:30:00+0800",
+  "received_at": "2026-08-30T00:30:00+0800",
+  "reported_at": "2026-08-30T01:38:22+0800",
+  "owner": "T-20260830-003-fpga-c-owner",
+  "model": "dsh-default",
+  "label": "FPGA-C",
+  "title": "fp_scalar multi-cycle/blocked FDIV implementation",
+  "scope": "Replace >64-bit lpm_divide and non-viable 256-bit combinational division in fp_scalar with a multi-cycle blocked/iterative divider while preserving FP raw-bit semantics.",
+  "files": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "tb/sv/lcvex_fp_scalar_tb.sv",
+    "tb/sv/lcvex_fp_scalar_p7_4_tb.sv",
+    "tb/sv/lcvex_fp_scalar_p7_5_tb.sv",
+    "docs/handoffs/T-20260830-003-fpga-c.md",
+    "docs/tasks/evidence/T-20260830-003.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "simulator": "verilator",
+    "cocotb": "2.0.1",
+    "os": "Linux",
+    "python": "3.12",
+    "cgroup": "MemoryMax=16G, MemorySwapMax=0"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-fp-scalar-sv-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "wall_seconds": 20.119,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-1 FP scalar raw-bit directed SV TB passed with multi-cycle FDIV.",
+      "peak_memory_bytes": 661696512
+    },
+    {
+      "run_id": "owner-fp-p74-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "wall_seconds": 60.565,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-4 scalar and NEON FMA/conversion raw-bit SV TBs passed.",
+      "peak_memory_bytes": 1179987968
+    },
+    {
+      "run_id": "owner-fp-p75-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "wall_seconds": 171.095,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-5 scalar FP16/sqrt/minmax/frint/fcvt and NEON FP16 raw-bit SV TBs passed.",
+      "peak_memory_bytes": 2205339648
+    },
+    {
+      "run_id": "owner-compile-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+      "wall_seconds": 22.73,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "make compile -Wall core lint passed after the multi-cycle FDIV integration.",
+      "peak_memory_bytes": 427896832
+    },
+    {
+      "run_id": "owner-core-simsv-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv",
+      "wall_seconds": 184.912,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "lcvex_core_tb scalar + FPCR/FPSR wiring smoke passed with the modified EX stall path.",
+      "peak_memory_bytes": 3465306112
+    },
+    {
+      "run_id": "owner-cocotb-fp-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "wall_seconds": 286.822,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-1 Cocotb scalar FP pipeline 5/5 passed, including FDIV 2/1 through the real core.",
+      "peak_memory_bytes": 1381974016
+    },
+    {
+      "run_id": "owner-diff-check-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace/patch errors."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-fp-scalar-divider",
+      "owner": "T-20260830-003",
+      "uri": "rtl/lcvex_fp_scalar.sv",
+      "reproduce": "git show 22d64bdb4b678296094739fdf226800a22c46e9e:rtl/lcvex_fp_scalar.sv",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "10662bd99d247fb1ad89722e28e4bf17f795e91314bde6f3e7f84147fd6ce28f"
+    },
+    {
+      "id": "artifact-core-stall-wiring",
+      "owner": "T-20260830-003",
+      "uri": "rtl/lcvex_core.sv",
+      "reproduce": "git show 22d64bdb4b678296094739fdf226800a22c46e9e:rtl/lcvex_core.sv",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "ff0953f633f3d445adce64a251c605905d15607288381f348b5ac08e6fe5b943"
+    },
+    {
+      "id": "artifact-handoff",
+      "owner": "T-20260830-003",
+      "uri": "docs/handoffs/T-20260830-003-fpga-c.md",
+      "reproduce": "cat docs/handoffs/T-20260830-003-fpga-c.md",
+      "retain_until": "task-close",
+      "bytes": null,
+      "sha256": "a6c60a6ef84617aa33d0223c53b038236e15414d1e50a32533406228fe085a15"
+    }
+  ],
+  "known_limits": [
+    "Not run: Quartus full flow/STA, board flow, QEMU strict lockstep, Gate D/L3.",
+    "FDIV latency is fixed at 256 cycles; no dynamic leading-bit shortening or higher-radix optimization yet.",
+    "FP16 uses two divider instances in parallel for low/high lanes; area impact not measured on Quartus.",
+    "lcvex_fp_divider is in the same file as lcvex_fp_scalar and uses a lint_off for DECLFILENAME; no filelist change was made."
+  ],
+  "next": "Integrator reviews; rerun verification on merge SHA; optionally run Quartus standalone synthesis to confirm lpm_divide>64 is gone and measure area/timing.",
+  "status": "done",
+  "integrator_review": {
+    "received_at": "2026-08-30T01:44:35+08:00",
+    "status": "accepted",
+    "head_sha": "cb13ccec43687b97886d1c7e3b4f12261928e486",
+    "notes": "FPGA-C merged. Integrator reran make compile PASS, make sim-sv PASS, sim-sv-fp-scalar PASS under cgroup <16GiB. Multi-cycle 256-bit restoring divider avoids lpm_divide >64.",
+    "merge_sha": "c60b773916f2a0ef6722cd264f9918572a23c217",
+    "result_sha": "c60b773916f2a0ef6722cd264f9918572a23c217"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "c60b773916f2a0ef6722cd264f9918572a23c217",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "c60b773916f2a0ef6722cd264f9918572a23c217",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-fp-scalar-divider",
+        "uri": "rtl/lcvex_fp_scalar.sv",
+        "sha256": "10662bd99d247fb1ad89722e28e4bf17f795e91314bde6f3e7f84147fd6ce28f",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-core-stall-wiring",
+        "uri": "rtl/lcvex_core.sv",
+        "sha256": "ff0953f633f3d445adce64a251c605905d15607288381f348b5ac08e6fe5b943",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-handoff",
+        "uri": "docs/handoffs/T-20260830-003-fpga-c.md",
+        "sha256": "a6c60a6ef84617aa33d0223c53b038236e15414d1e50a32533406228fe085a15",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

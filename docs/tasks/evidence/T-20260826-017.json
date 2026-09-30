@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-017",
+  "base_sha": "5e17f56e85ebcd82f081262f8338ed3b99ca12ee",
+  "head_sha": "9ff4c05d778244cb56893149b4f174490c104ac8",
+  "merge_sha": "769422b",
+  "toolchain": {
+    "environment": "conda:lcvex",
+    "python": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "make": "GNU Make 4.4.1",
+    "cpu_binding": "0-1",
+    "memory_limit_mb": 2048,
+    "resource_escalation": false
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_path": "../qemu/build/qemu-system-aarch64",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_source_sha256": "8e9a8ba9ef4fce3044423db6faf09532fbda5c92bbf1f4fa204d66c239d452a2",
+    "note": "QEMU fork 仅用于 probe 与锁步，未修改。"
+  },
+  "rtl": {
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "pkg_sha256": "32f58db476889b7bdf09d0f6e714d7a375d900e6d28697e98ef86ae7974e33c7",
+    "decoder_sha256": "89971fdb841b45088d7d1a0845c100b3314fee8c7eaa204e4ac76abdae8ebcd6",
+    "core_sha256": "9349e86ece1aa1cd6c2ed31f177c7eaaff1e5d3da03ae68cd6aa503e431a03a1",
+    "a64_py_sha256": "298b08c04464088d11111d7a61d3624c316e6862ec3907bec7b470b50bbd07c8",
+    "test_program_sha256": "23ac1791aea6c8948dc410d26dd7a521a941325af826d4b09d955e7dec164097"
+  },
+  "runs": [
+    {
+      "run_id": "qemu-probe-el0-timer-001",
+      "source_sha": "9ff4c05",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "taskset -c 0-1 python3 sim/difftest/qemu_probe.py --image build/agents/T-20260826-017/hard_timer_el0.bin --max-insns 45 --el1 --icount shift=0,align=off,sleep=off",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "CNTKCTL=0 时 QEMU 对 CNTFRQ/CNTPCT/CNTVCT/ECV 视图与 timer 寄存器产生 EC=0x18；handler 可返回 EL0。",
+      "log": "build/agents/T-20260826-017/qemu-probe.log",
+      "log_sha256": "fe2b5e76e92ca6ae38541935eee71bcad38eec0972ba389b787164a37be82ccf"
+    },
+    {
+      "run_id": "owner-l0-compile-001",
+      "source_sha": "9ff4c05",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make compile",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 1.08,
+      "peak_rss_mb": 51,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260826-017/compile-pass.log",
+      "log_sha256": "96847bf3e14d904f333e64fdb4f940c789dbffc450c931d5708e45407fd90a54"
+    },
+    {
+      "run_id": "owner-l0-sim-sv-001",
+      "source_sha": "9ff4c05",
+      "runner_role": "integrator",
+      "level": "L0",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make sim-sv",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 1.25,
+      "peak_rss_mb": 136,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260826-017/sim-sv.log",
+      "log_sha256": "16854de0278faf773e801c3cf946266ebcb04e9cf92aee568d4b56131d53450c"
+    },
+    {
+      "run_id": "owner-l1-make-test-001",
+      "source_sha": "9ff4c05",
+      "runner_role": "integrator",
+      "level": "L1",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make test",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": null,
+      "peak_rss_mb": 371,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260826-017/make-test.log",
+      "log_sha256": "80f7b7655a7cdc8cf6a942e3cfaadb2562a52133a0d3b3e0b5949a71690f8357"
+    },
+    {
+      "run_id": "owner-l2-timer-el0-001",
+      "source_sha": "9ff4c05",
+      "runner_role": "integrator",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make p6-timer-el0",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 5.563,
+      "peak_rss_mb": 512,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "hard_timer_el0.bin 的 260 条窗口在 base 与 I/D L1+L2 配置均严格锁步通过。",
+      "log": "build/agents/T-20260826-017/p6-timer-el0.log",
+      "log_sha256": "5fe971b16a988944b68c61d69bd865cc79f45300e97744330e233477711ed93c"
+    },
+    {
+      "run_id": "owner-l2-wfi-regression-001",
+      "source_sha": "9ff4c05",
+      "runner_role": "integrator",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 bash sim/difftest/run_p6_wfi.sh",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 14.18,
+      "peak_rss_mb": 512,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "WFI/WFE/WFIT/WFET/Timer IRQ 的 base+cache 8 个锁步子项均通过。",
+      "log": "build/agents/T-20260826-017/p6-wfi-regression.log",
+      "log_sha256": "e6d456fa74e33e00b25368b3205bdb47442cf3c8bc8a710590dce11d400f20fb"
+    },
+    {
+      "run_id": "integrator-l2-timer-el0-002",
+      "source_sha": "769422b",
+      "runner_role": "integrator",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make p6-timer-el0",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 5.654,
+      "peak_rss_mb": 266,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "合并 SHA 上重新生成 base/cache coordinator 后，260 条 EL0 gate 窗口均严格锁步通过。",
+      "log": "build/agents/T-20260826-017/integrator-p6-timer-el0.log",
+      "log_sha256": "7cfe1f75e9a05dc4acedc08ce575e3e126e3c20e87c3ed23c4d4a955fe3d352c"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "hard-timer-el0-image",
+      "path": "build/difftest/hard_timer_el0.bin",
+      "sha256": "73ef02e2632c1408d6c32ccd8036d7c515ab7849795899843db2b9070d3d8a70",
+      "bytes": 67072,
+      "status": "generated; ignored from Git"
+    }
+  ],
+  "known_limits": [
+    "只实现单核 EL0 Generic Timer 访问门控；不实现 EL2/EL3 timer trap、PMU 或 FIQ。",
+    "Gate D/Gate E 尚未在本任务的 candidate SHA 上重新完成。"
+  ]
+}

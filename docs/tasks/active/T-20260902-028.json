@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-028",
+  "label": "FP-P5-RERUN-ROUND3",
+  "title": "FP-P5 rerun round3：T-026/T-027 后 full-FP synthesis/fit/STA",
+  "kind": "verify-fpga-physical",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p5-rerun3",
+  "agent_type": "remote-quartus-full-flow",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-026",
+    "T-20260902-027"
+  ],
+  "base_sha": "5970ea79eb0178f58cc3038078f63614c40ad40e",
+  "branch": "verify/T-20260902-028-fp-p5-rerun-round3",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-028",
+  "scope": "在包含 T-026 per-slot datapath cut 与 T-027 EMIF FIFO/reset CDC deep 的合并 SHA 上重跑 full-FP synthesis→fitter→signoff STA；若 setup/hold/recovery/removal/min-pulse 全非负且 DDR 通过则进入 assembler/SOF。",
+  "reads": [
+    "docs/handoffs/T-20260902-025-fp-p5-rerun-round2.md",
+    "docs/handoffs/T-20260902-026-fp-shared-dp-cut.md",
+    "docs/handoffs/T-20260902-027-emif-fifo-reset-cdc-deep.md",
+    "fpga/catapult_a10/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-028-fp-p5-rerun-round3.md",
+    "docs/tasks/evidence/T-20260902-028.json",
+    "build/agents/T-20260902-028/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-028-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "远端只读预检；SHA/QSF/SDC/IP 绑定"
+    ],
+    "l1": [
+      "synthesis/fit/STA 结果完整"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "full-FP synthesis/fitter/STA 同 SHA 报告完整；若时序全绿则 assembler/SOF；若仍红记录 top-N 与下一轮修复方向。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 43200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 180,
+    "extension_increment_minutes": 60,
+    "max_minutes": 720,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T18:16:00+08:00",
+  "updated_at": "2026-09-03T19:16:50+08:00",
+  "known_limits": [
+    "不编程/上板；不读取 license；不删除文件；不停止非 EDA 进程"
+  ],
+  "handoff": "docs/handoffs/T-20260902-028-fp-p5-rerun-round3.md",
+  "evidence": "docs/tasks/evidence/T-20260902-028.json",
+  "next": "若通过进入 Gate F-BOARD/发布候选；若失败继续 top-N 切级/CDC 修复",
+  "dispatch": {
+    "sent_at": "2026-09-03T18:17:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "ce7fa1c2-bd1f-4176-8bea-241fe0c718d3",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-028",
+    "branch": "verify/T-20260902-028-fp-p5-rerun-round3"
+  },
+  "head_sha": "2500400538e491c9cba8bb953b2d193dbda0a827",
+  "merge_sha": "4758698e3ae8623807640f9b74fa508b2d09d8b7",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-03T19:14:30+08:00",
+    "merged_at": "2026-09-03T19:16:50+08:00",
+    "recorded_at": "2026-09-03T19:16:50+08:00",
+    "notes": "FP-P5 rerun round3 still blocked: setup -14.432ns top moved to core/MMU fault path; EMIF FIFO setup/hold remains; recovery/removal/DDR now pass. Next targeted cuts for core/MMU fault chain and EMIF FIFO."
+  }
+}

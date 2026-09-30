@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-002",
+  "label": "B25-PHYSICAL-SELECTOR-RERUN",
+  "title": "Run fresh 25 MHz physical flow with the accepted synthesis selector",
+  "kind": "physical-bringup-validation",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "physical-complete-signoff-blocked",
+  "assigned_owner": "b25_physical_resume",
+  "depends_on": ["T-20260908-005", "T-20260908-007", "T-20260909-001"],
+  "follows_from": "T-20260908-006",
+  "source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "candidate_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "branch": "verify/T-20260909-002-b25-physical-selector-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-002",
+  "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical",
+  "scope": "Create a new exact source/MIF manifest from the accepted selector+oracle candidate, then run Quartus Prime Pro 21.4 IP generation, synthesis, fitter, signoff STA and non-destructive clock/BRAM/CDC/MIF/resource reports in serial. Confirm that SYNTHESIS selects the explicit M20K branches and that Error 19544 is gone.",
+  "writes": [
+    "build/agents/T-20260909-002/** ignored preparation/runtime artifacts",
+    "fresh remote probe D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical",
+    "docs/tasks/evidence/T-20260909-002.json",
+    "docs/handoffs/T-20260909-002-b25-physical-selector-rerun.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260908-005.json",
+    "docs/tasks/evidence/T-20260908-006.json",
+    "docs/tasks/evidence/T-20260908-007.json",
+    "docs/tasks/evidence/T-20260909-001.json",
+    "fpga/catapult_a10/** and QSF-reachable RTL"
+  ],
+  "launch_preconditions": [
+    "Exact candidate is clean; non-doc physical inputs match 702bd8ee.",
+    "Boot image contract/checker, selector, platform, skeleton, SHA and registry closure pass before transfer.",
+    "Remote probe is absent; reject rather than delete/reuse any pre-existing database or unknown file.",
+    "Acquire gamepc and record EDA/JTAG process counts without stopping unknown processes."
+  ],
+  "validation": [
+    "Rebuild boot.elf/bin/hex/mif and require WIDTH=64 DEPTH=8192/8192 records, ELF-derived oracle agreement and remote MIF hash equality.",
+    "Materialize and hash-bind canonical physical inputs plus QSF-relative aliases; require exact sole VERILOG_MACRO SYNTHESIS and exclude standalone duplicate BRAM wrapper.",
+    "Run ipgenerate+synthesis; if zero errors, run fitter then signoff STA serially with one Quartus process.",
+    "Report Error 19544 absence, lcvex_bram_boot_altsyncram/cache altera_syncram selection, M20K/MIF consumption, sys_clk_25=40 ns, Qsys/clk_y3 clocks, setup/hold/recovery/removal/min-pulse, T-045 SDC filters, DDR/metastability and resources."
+  ],
+  "acceptance": "All allowed physical stages pass on the exact candidate with nonnegative timing gates and proven MIF/M20K consumption, or the first honest new blocker is preserved without retry or source modification. No assembler/bitstream/board action occurs.",
+  "resource": {
+    "lock": "gamepc",
+    "one_quartus_process": true,
+    "min_free_physical_mib": 16384,
+    "safety_stop_free_physical_mib": 14336,
+    "max_run_seconds_per_stage": 43200,
+    "policy": "Every remote write/heavy stage uses resource-lock gamepc; retain fresh failed probe and return 75 means wait."
+  },
+  "forbidden_regions": [
+    "RTL/QEMU/QSF/SDC/checker/test semantic changes during the run",
+    "reuse/deletion of T-006 or any previous remote database",
+    "quartus_asm and SOF/JIC/RBF/POF/JBC/SVF/JAM generation",
+    "quartus_pgm, nios2-terminal, JTAG programming, board reset/power and Flash/EPCQ writes",
+    "license content and unknown user files/processes"
+  ],
+  "created_at": "2026-09-09T01:17:29+08:00",
+  "updated_at": "2026-09-09T10:30:57+08:00",
+  "result_head": "7c96888f1c4f123b288c81f09ff26fe66fae3f85",
+  "result_evidence": "docs/tasks/evidence/T-20260909-002.json",
+  "integrated_head": "d1b1c0d3",
+  "followup_tasks": ["T-20260909-005", "T-20260909-006", "T-20260909-007"],
+  "integrator_review": {
+    "status": "accepted-as-blocked-physical-evidence",
+    "reviewed_at": "2026-09-09T10:30:57+08:00",
+    "passed": "synthesis/fitter/STA tools, selector/MIF/M20K, 25 MHz setup, recovery/removal/min-pulse, DDR, metastability and resources",
+    "blocked": "EMIF response FIFO payload hold paths are not fully excepted; T-045 max-delay is overridden by false-path; two unconstrained clocks require classification",
+    "next": "Use the frozen fitted database for report-only endpoint/exception classification before changing SDC; then validate SDC-only corrections locally and on the reused database before one final fresh physical run."
+  },
+  "recovery": {
+    "reason": "User reported an abnormal local host restart; prior agent process terminated before any remote probe was created.",
+    "audited_at": "2026-09-09T01:46:47+08:00",
+    "local_worktree": "clean at 702bd8ee; task-local boot/oracle/manifest/staging artifacts preserved",
+    "local_processes": "none",
+    "resource_locks": "local FREE; gamepc FREE",
+    "remote_readonly_audit": "GAMEPC online; remote probe absent; db/incremental_db/output_files absent; EDA/JTAG command set empty; free physical memory 47387.9 MiB",
+    "policy": "Resume the same task after re-verifying preserved local artifacts; create the remote probe once. Do not duplicate or reuse a remote database."
+  },
+  "dispatch_history": [
+    {
+      "sent_at": "2026-09-09T01:18:51+08:00",
+      "agent_name": "b25_physical",
+      "outcome": "interrupted-by-local-restart-before-remote-probe"
+    }
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-09T01:46:47+08:00",
+    "agent_name": "b25_physical_resume",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "e6844bb9ba46826f8968b5e90b5314277ceaf698"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-036",
+  "label": "CORE-NEXTPC-ATOMIC-CUT",
+  "title": "Core ID/EX operand->next_pc/atomic_cmp2 setup cut (45L/28.0ns)",
+  "kind": "rtl-timing-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-core-nextpc-atomic-cut",
+  "agent_type": "local-rtl-sim",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-035"
+  ],
+  "base_sha": "39e0f8a5c9e87492dec3fc910f822e49b7da8671",
+  "branch": "fix/T-20260902-036-core-nextpc-atomic-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-036",
+  "scope": "打断 sys_clk_50 setup top-1: idex_d.operand_b[7] -> idex_d.next_pc[9]/atomic_cmp2（45 逻辑级 / 28.022ns / -8.192ns），保持分支/原子/异常语义。",
+  "reads": [
+    "docs/handoffs/T-20260902-035-fp-p5-rerun-round6.md",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_alu.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/**",
+    "sim/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_alu.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-036-core-nextpc-atomic-cut.md",
+    "docs/tasks/evidence/T-20260902-036.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS"
+    ],
+    "l1": [
+      "sim-sv/sim-cocotb-core/相关锁步 PASS"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "本地功能/回归全绿；不改变分支/原子/异常语义；后续 FP-P5 rerun 观察 next_pc/atomic 离开 top。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T23:34:00+08:00",
+  "updated_at": "2026-09-04T00:00:30+08:00",
+  "known_limits": [
+    "不改变分支预测/异常优先级/原子比较语义；不引入猜测执行；不做 false_path；不改变异步复位"
+  ],
+  "handoff": "docs/handoffs/T-20260902-036-core-nextpc-atomic-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260902-036.json",
+  "next": "合并后重跑 FP-P5；若 setup 闭合则 assembler/SOF 门",
+  "dispatch": {
+    "sent_at": "2026-09-03T23:35:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "befe1b26-c410-47d5-b8d1-0268c1bc352e",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-036",
+    "branch": "fix/T-20260902-036-core-nextpc-atomic-cut"
+  },
+  "head_sha": "116ffc9b844f6d75e9dcebb4dd070273b2720e5c",
+  "merge_sha": "98abdfc377fd700db04f72836ed9b59feeb00581",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T00:00:09+08:00",
+    "merged_at": "2026-09-04T00:00:30+08:00",
+    "recorded_at": "2026-09-04T00:00:30+08:00",
+    "notes": "Core remaining ID/EX SP/NZCV/wb3 forwarding cut merged; compile passes. Next FP-P5 rerun with T-036."
+  }
+}

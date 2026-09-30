@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-007",
+  "label": "P5A2-BRANCH-IABT-MERGE",
+  "state": "review",
+  "partial": false,
+  "acceptance_status": "owner_pass_integrator_candidate_rerun_required",
+  "base_sha": "bab301e04f69cda154a8c9bb44f77af286ff579a",
+  "dispatch_sha": "322fb40d80f9c0c55f1534b5d4bd65bfacf619ec",
+  "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+  "head_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+  "previous_source_sha": "59201ac141d59c3651ca11027a6ef342c9fa4666",
+  "implementation_head": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+  "test_head": "9befb7f3b31b7f76fcf3154b6da0adc02ebf1c01",
+  "documentation_tip": "final documentation commit tip is the branch HEAD reported in the handoff; source_sha/head_sha bind the RTL implementation",
+  "merge_sha": null,
+  "branch": "fix/T-20260905-007-p5a2-branch-iabt",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-007",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatched_at": "2026-09-05T06:10:00+08:00",
+    "source_commit_at": "2026-09-05T07:12:50+08:00",
+    "sent_at": "2026-09-05T08:00:00+08:00",
+    "received_at": "2026-09-05T08:00:01+08:00",
+    "reported_at": "2026-09-05T08:46:00+08:00",
+    "implementation_commit_at": "2026-09-05T08:14:28+08:00",
+    "test_commit_at": "2026-09-05T08:24:25+08:00"
+  },
+  "scope": "修复 FIFO-on/legacy fetch fault outcome 晚于 older MEM/WB 提交时无法合并 IABT 的年龄与 settled 时序；保持 current-epoch quarantine、提交顺序、系统/ERET merge、维护 owner 与普通分支语义。",
+  "implementation": {
+    "commit": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+    "files": [
+      "rtl/lcvex_core.sv"
+    ],
+    "summary": "新增 memwb_fetch_target_settled/memwb_fetch_wait。FIFO-on 以同代 FIFO entry 或 matching fetch fault 为 settled，已交付到 IF/ID、ID/EX、EX/MEM 的 target 也视为 settled；legacy path 仅对匹配的在途 fetch context 等待实际 IMEM 数据/fault。memwb_fetch_wait 并入 stall_wb，保持 MEM/WB、EX/MEM、FIFO pop，禁止 commit_fire 提前退休；younger system redirect、maintenance request/response owner、TLBI 和维护状态机在该等待期间遵循年龄边界。新增 maint_imem_req_selected 与 accepted-but-not-consumed 的 maint_imem_rsp_pending metadata，延迟/缓存响应跨 flush 仍排空到 maintenance，不误送普通 fetch；legacy MMU fetch acceptance 同步锁存 fetch_pc_r。",
+    "root_cause": {
+      "mechanism": "fetch_walk 只冻结流水级更新而不冻结 commit_fire。BR 进入 MEM/WB 后，目标 0x50000000 的 MMU walk 尚未完成时仍正常提交；稍后 mmu_done/fetch_faulted 到达，matching fault 只能进入 FIFO，已无可合并的未提交 MEM/WB entry。",
+      "pre_fix_signature": "seq=16 PC=0x4000000c insn=0xd61f0060；DUT next_pc=0x50000000、exc_valid=0、NZCV=0x4；QEMU next_pc=0x44010200、exc_code=0x21、ESR=0x86000006、FAR=0x50000000；DUT fetch_trans_busy=1、mmu_walking=1。",
+      "age_boundary": "在途目标结果未 settled 时，memwb_fetch_wait=1 -> stall_wb=1、commit_fire=0；目标 fault 被锁存后下一提交边界满足 fetch_merge_wb，保留 older 指令写回并转为 IABT。"
+    },
+    "preserved": [
+      "rtl/lcvex_muldiv.sv、rtl/lcvex_fp_scalar.sv 未修改",
+      "QEMU fork/plugin/reference results 未修改",
+      "公共 commit packet 与 memory ABI 未修改",
+      "current-epoch FIFO push、stale response quarantine 与 fault-head 不消费规则未放宽",
+      "无断言关闭、无跳过差分、无参考结果修改",
+      "无 QSF/SDC/JTAG/SOF/板级动作"
+    ],
+    "rtl_file_sha256": "1494bfbbc5748b78f9d72ef78993d54636da23069256c4d6eeb4ab48204485d6",
+    "owner_metadata": {
+      "request_owner": "maint_imem_req_selected = maint_imem_owner && MS_REQ && !maint_imem_rsp_pending && !frontend_kill/fetch_merge_wb/wb_exc_commit/sys_commit/sys_fetch_redirect/irq_taken",
+      "response_owner": "maint_imem_rsp_pending is set only on accepted maintenance IMEM request and cleared only on matching response consumption; it has priority over FIFO stale/kill ready",
+      "wait_boundary": "memwb_fetch_wait blocks maintenance IMEM/DCZVA/TLBI side effects; MS_WAIT may only drain an already accepted response"
+    }
+  },
+  "rework": {
+    "reason": "integrator review requested an explicit maintenance owner invariant and durable response metadata",
+    "implementation_head": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+    "test_head": "9befb7f3b31b7f76fcf3154b6da0adc02ebf1c01",
+    "source_sha256": "1494bfbbc5748b78f9d72ef78993d54636da23069256c4d6eeb4ab48204485d6",
+    "test_sha256": "d56867f938672c0a7e96f7d1a3ce64b2e80dce44c89fbd2a8e527e5908b6f1c7",
+    "focused_test": "+MAINT_OWNER uses a real IC IVAU request, legal checkpoint restore kill, and checks pending response owner/ready, no fetch capture, no wait-crossing side effects, and no killed IC commit"
+  },
+  "reproduction": {
+    "image": {
+      "path": "build/agents/T-20260905-007/pre-fix/p5a2_fetch.bin",
+      "sha256": "02e7d76e2a2c50f001295a7f24dde3aa04793f9e162d7121b1f47069b555ac99"
+    },
+    "source_sha": "322fb40d80f9c0c55f1534b5d4bd65bfacf619ec",
+    "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env IMAGE=$PWD/build/agents/T-20260905-007/pre-fix/p5a2_fetch.bin MAX_INSNS=17 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+    "exit_code": 1,
+    "result": "expected pre-fix failure at seq=16; 15 prior commits match",
+    "log": "build/agents/T-20260905-007/pre-fix/p5a2-step.log",
+    "log_sha256": "580398dcba3deb84c16194ba383d3f79766ca513bec6b20fd03beb25dc999e62",
+    "step_fail": "build/agents/T-20260905-007/pre-fix/step_fail.txt",
+    "step_fail_sha256": "f9610bba67c148e22ecea682afc983315f47e7ed74905fd04dcc9645038c4c83"
+  },
+  "artifacts": {
+    "coordinators": [
+      {
+        "config": "base FIFO-on",
+        "path": "build/verilator_lockstep/lockstep_coordinator",
+        "sha256": "28c6a7daeef5d6a217b0ce5709e63310886ef1c41cc3251264733a99d86298bf"
+      },
+      {
+        "config": "I+D+L2 FIFO-on",
+        "path": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+        "sha256": "948c76e03eef73eae5b13dde3ffd622428f827d88333691cd3d8abc033761c29"
+      },
+      {
+        "config": "FIFO-off",
+        "path": "build/verilator_lockstep_f0/lockstep_coordinator",
+        "sha256": "2f9398520e8516df6679cb2c2ff8e122a1ae5dbedd36af5fdf30be7903896394"
+      }
+    ],
+    "images": [
+      {
+        "name": "p5a2_fetch",
+        "path": "build/difftest/p5a2_fetch.bin",
+        "sha256": "02e7d76e2a2c50f001295a7f24dde3aa04793f9e162d7121b1f47069b555ac99"
+      },
+      {
+        "name": "hard_sys_fetch_fault",
+        "path": "build/difftest/hard_sys_fetch_fault.bin",
+        "sha256": "6ff3033ba3b8e7559442a4c3ddeb54968d517cb6faf3d89612433a23f97fb360"
+      },
+      {
+        "name": "hard_neon_fetch_fault",
+        "path": "build/difftest/hard_neon_fetch_fault.bin",
+        "sha256": "b0f80713a25f460e8ae6e750b883beeacfb2c6d3d67fbd671edd65ccaa2802c3"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "owner-compile-final",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-007/post-fix-compile-r6.log",
+      "log_sha256": "629cd04d97a5db1fe048116e757a9ef5fcce8df75dfd4737f3f923391b2f6dc3"
+    },
+    {
+      "run_id": "owner-p5a2-final",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env IMAGE=$PWD/build/difftest/p5a2_fetch.bin MAX_INSNS=40 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass: 40/40",
+      "log": "build/agents/T-20260905-007/final-p5a2.log",
+      "log_sha256": "7c5f5a5bc6f521e4d6d49d5565fbfa692bea0e54a5e3177854500f6f80aea378"
+    },
+    {
+      "run_id": "owner-p5a-final",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make p5a",
+      "exit_code": 0,
+      "result": "pass: p5a_mmu 24/24, p5a_mmu_el0 26/26, p5a2_fetch 40/40",
+      "log": "build/agents/T-20260905-007/final-p5a.log",
+      "log_sha256": "e73b89fbc3e242e02819b93eef578bbecd1615858d5e9eb640ea61325d1b9283"
+    },
+    {
+      "run_id": "owner-p5a2-fifo-off",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env IMAGE=$PWD/build/difftest/p5a2_fetch.bin MAX_INSNS=40 COORD=$PWD/build/verilator_lockstep_f0/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass: 40/40",
+      "log": "build/agents/T-20260905-007/post-fix-p5a2-fifo-off-r4.log",
+      "log_sha256": "3d8a82191923738bc10794fa6ee7d73a780a1c8d94a9f45ea53c56ad8312b653"
+    },
+    {
+      "run_id": "owner-fetch-fifo-sv",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make sim-sv-fetch-fifo",
+      "exit_code": 0,
+      "result": "pass: FIFO bounds/flush/epoch/delayed response/backpressure skeleton",
+      "log": "build/agents/T-20260905-007/final-sim-sv-fetch-fifo-build-run.log",
+      "log_sha256": "fe2ec7cf6cb6fb7c1195feb95b3952616e02c688274923c6c43357013a4ee1b8"
+    },
+    {
+      "run_id": "owner-t010-iabt",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- ./obj_dir_fetch_fifo/lcvex_fetch_fifo_tb +T010_IABT",
+      "exit_code": 0,
+      "result": "pass: decode=1 fence=0 commit=1 FAR=0x5000 epoch_changed=1",
+      "log": "build/agents/T-20260905-007/final-t010-iabt.log",
+      "log_sha256": "bebc7809003c438ae9ed35e71d2397af404a274e3785a803e126420e5d6d87c1"
+    },
+    {
+      "run_id": "owner-backpressure-sv",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make sim-sv-backpressure",
+      "exit_code": 0,
+      "result": "pass: normal/system commit ready hold atomicity",
+      "log": "build/agents/T-20260905-007/final-sim-sv-backpressure.log",
+      "log_sha256": "f33e6ccf5197eb4e25628ab6e7e68d6965d3984ae86861bc2e90b15afc0109e6"
+    },
+    {
+      "run_id": "owner-mmu-sv",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make sim-sv-mmu",
+      "exit_code": 0,
+      "result": "pass: MMU/TLB unit tests",
+      "log": "build/agents/T-20260905-007/final-sim-sv-mmu.log",
+      "log_sha256": "9b4fcafba4c8cb7c66c47e89138430f9bfc14e5f9648d0079f2604264d188f82"
+    },
+    {
+      "run_id": "owner-rtl-difftest",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make difftest-rtl",
+      "exit_code": 0,
+      "result": "pass: 33 instructions",
+      "log": "build/agents/T-20260905-007/final-difftest-rtl.log",
+      "log_sha256": "5fc4c0269139cc7c044adcb6be794e40a867cfac6983a82c610c46e556f258b0"
+    },
+    {
+      "run_id": "owner-hazard-difftest",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make difftest-hazard",
+      "exit_code": 0,
+      "result": "pass: 34 instructions",
+      "log": "build/agents/T-20260905-007/final-difftest-hazard.log",
+      "log_sha256": "7196e6bd6c9645849617539535f09297729f9b1306c3e3fd670d58cd2028e614"
+    },
+    {
+      "run_id": "owner-iabt-system-base-cache",
+      "level": "L2",
+      "exit_code": 0,
+      "result": "pass: base/cache 25/25",
+      "commands": [
+        "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env IMAGE=$PWD/build/difftest/hard_sys_fetch_fault.bin MAX_INSNS=25 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env IMAGE=$PWD/build/difftest/hard_sys_fetch_fault.bin MAX_INSNS=25 COORD=$PWD/build/verilator_lockstep_l1dl2/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh"
+      ],
+      "logs": [
+        "build/agents/T-20260905-007/final-hard-sys-fetch-fault-base.log",
+        "build/agents/T-20260905-007/final-hard-sys-fetch-fault-cache.log"
+      ],
+      "log_sha256": [
+        "f3d7d317fa60e208abf697c206342966d116a00db144f6b92579b0618a9311b2",
+        "63847771cde2c6d1c07015d371b399fb9532721a02dce59b3dc7f73633351fd6"
+      ]
+    },
+    {
+      "run_id": "owner-neon-iabt-base-cache",
+      "level": "L2",
+      "exit_code": 0,
+      "result": "pass: base/cache 20/20",
+      "commands": [
+        "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_fetch_fault.bin MAX_INSNS=20 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_fetch_fault.bin MAX_INSNS=20 COORD=$PWD/build/verilator_lockstep_l1dl2/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh"
+      ],
+      "logs": [
+        "build/agents/T-20260905-007/final-hard-neon-fetch-fault-base.log",
+        "build/agents/T-20260905-007/final-hard-neon-fetch-fault-cache.log"
+      ],
+      "log_sha256": [
+        "5b687820af35dd71b975e74da8738ec64ac70c80af515532efcc999017d7db95",
+        "21f8b5778829e40eec38599f88813286ad9b291f4f07572ff8f364d86c513c60"
+      ]
+    },
+    {
+      "run_id": "owner-gate-c",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make p4c",
+      "exit_code": 0,
+      "result": "pass: 7/7 synchronous exception and EL0/EL1 cases",
+      "log": "build/agents/T-20260905-007/final-p4c.log",
+      "log_sha256": "b7403553e7096c258b1bad8b8e9582bad3b647c13891f00bdb85d919f462cff6"
+    },
+    {
+      "run_id": "owner-maintenance-regression",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make p6-maint-v82",
+      "exit_code": 0,
+      "result": "pass: base/cache 19/19, 30/30, 24/24",
+      "log": "build/agents/T-20260905-007/final-p6-maint-v82.log",
+      "log_sha256": "cc9bc98d3b3a82e4ac7169479c0c2731883f5ba1135c9c9ddbc0c8c8638e9a52"
+    },
+    {
+      "run_id": "owner-rework-compile",
+      "level": "L1",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260905-007/rework-compile.log",
+      "log_sha256": "ada9c3669f1afc473e154024b9c62e7a953c5eefa7e50df1f80aa66637ce2eab"
+    },
+    {
+      "run_id": "owner-rework-p5a",
+      "level": "L2",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make p5a",
+      "exit_code": 0,
+      "result": "pass: p5a_mmu 24/24, p5a_mmu_el0 26/26, p5a2_fetch 40/40",
+      "log": "build/agents/T-20260905-007/rework-p5a.log",
+      "log_sha256": "ce433c2af8e1711f636dec234d23447aa1e648c1cf5ddb80dafd404199b623dc"
+    },
+    {
+      "run_id": "owner-rework-p5a2-fifo-off",
+      "level": "L2",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env IMAGE=$PWD/build/difftest/p5a2_fetch.bin MAX_INSNS=40 COORD=$PWD/build/verilator_lockstep_f0/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+      "exit_code": 0,
+      "result": "pass: 40/40",
+      "log": "build/agents/T-20260905-007/rework-p5a2-fifo-off.log",
+      "log_sha256": "f2b7882ddb725441b5778ee5bfbb0b3da0980f2e22c8e1167037cbec625647b3"
+    },
+    {
+      "run_id": "owner-rework-fetch-fifo",
+      "level": "L1",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "test_sha": "9befb7f3b31b7f76fcf3154b6da0adc02ebf1c01",
+      "commands": [
+        "./obj_dir_maint_owner/lcvex_fetch_fifo_tb",
+        "./obj_dir_maint_owner/lcvex_fetch_fifo_tb +T010_IABT",
+        "./obj_dir_fetch_fifo_cache/lcvex_fetch_fifo_tb",
+        "./obj_dir_fetch_fifo_cache/lcvex_fetch_fifo_tb +T010_IABT"
+      ],
+      "exit_code": 0,
+      "result": "pass: FIFO skeleton and T010 in base/cache",
+      "logs": [
+        "build/agents/T-20260905-007/rework-fetch-fifo-base.log",
+        "build/agents/T-20260905-007/rework-fetch-fifo-cache.log"
+      ],
+      "log_sha256": [
+        "4689c80f5df2d1674b6409199095275dc2f19ea099e398c66fc62ed1ec7c0bb8",
+        "3299d7e859b2ddc24ce1b042013bee14e3076a50c42fefa11fa8fe9c6a0dfa09"
+      ]
+    },
+    {
+      "run_id": "owner-rework-maint-owner",
+      "level": "L1",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "test_sha": "9befb7f3b31b7f76fcf3154b6da0adc02ebf1c01",
+      "commands": [
+        "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- ./obj_dir_maint_owner/lcvex_fetch_fifo_tb +MAINT_OWNER",
+        "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- ./obj_dir_fetch_fifo_cache/lcvex_fetch_fifo_tb +MAINT_OWNER"
+      ],
+      "exit_code": 0,
+      "result": "pass: FIFO-on delay2 base/cache; pending owner drains after restore kill; IC IVAU not committed",
+      "logs": [
+        "build/agents/T-20260905-007/rework-maint-owner-base.log",
+        "build/agents/T-20260905-007/rework-maint-owner-cache.log"
+      ],
+      "log_sha256": [
+        "1d794bb8294a4f53681169a3e682aac86738ddebc255dd5555aa26541f374eff",
+        "bc33db3b9be94c761d75a6c0eed2bc268afc235a748b5ed2ec2b6fef6645bc61"
+      ]
+    },
+    {
+      "run_id": "owner-rework-p6-maint-v82",
+      "level": "L2",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make p6-maint-v82",
+      "exit_code": 0,
+      "result": "pass: base/cache 19/19, 30/30, 24/24",
+      "log": "build/agents/T-20260905-007/rework-p6-maint-v82.log",
+      "log_sha256": "e99ef2faf0fd791e264582d4147a112b0844e22cb8e5c53ab556c97325b28012"
+    },
+    {
+      "run_id": "owner-rework-hard-fetch-fault",
+      "level": "L2",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "commands": [
+        "IMAGE=$PWD/build/difftest/hard_sys_fetch_fault.bin MAX_INSNS=25 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "IMAGE=$PWD/build/difftest/hard_sys_fetch_fault.bin MAX_INSNS=25 COORD=$PWD/build/verilator_lockstep_l1dl2/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_fetch_fault.bin MAX_INSNS=20 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "FP_NEON=required IMAGE=$PWD/build/difftest/hard_neon_fetch_fault.bin MAX_INSNS=20 COORD=$PWD/build/verilator_lockstep_l1dl2/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh"
+      ],
+      "exit_code": 0,
+      "result": "pass: hard_sys_fetch_fault 25/25 x2; hard_neon_fetch_fault 20/20 x2",
+      "log": "build/agents/T-20260905-007/rework-hard-fetch-fault.log",
+      "log_sha256": "f9dfba51f5aa2d1b54ecb102f16bd9210762e6a1202e53412a616fd0303bb8a1"
+    },
+    {
+      "run_id": "owner-rework-m2-ic-tlbi",
+      "level": "L2",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "commands": [
+        "IMAGE=$PWD/build/difftest/hard_selfmod.bin MAX_INSNS=45 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "IMAGE=$PWD/build/difftest/hard_tlbi.bin MAX_INSNS=60 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "IMAGE=$PWD/build/difftest/hard_selfmod.bin MAX_INSNS=45 COORD=$PWD/build/verilator_lockstep_l1dl2/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+        "IMAGE=$PWD/build/difftest/hard_tlbi.bin MAX_INSNS=60 COORD=$PWD/build/verilator_lockstep_l1dl2/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh"
+      ],
+      "exit_code": 0,
+      "result": "pass: hard_selfmod/hard_tlbi 45/60 x base/cache",
+      "log": "build/agents/T-20260905-007/rework-m2-selfmod-tlbi.log",
+      "log_sha256": "6ce09ea07b9574fe1a05d98302bc05de58e177f7d914bda44034f47d719cf17b"
+    },
+    {
+      "run_id": "owner-rework-p6-irq-atomic-overlap",
+      "level": "L2",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 make p6-irq-atomic-overlap",
+      "exit_code": 0,
+      "result": "pass: T054 QEMU Generic Timer IRQ base/delay2 matrix",
+      "log": "build/agents/T-20260905-007/rework-p6-irq-atomic-overlap.log",
+      "log_sha256": "24271f0b2183198cfde89b5170a91fb5bd9cb1beb30e970a48e956012c15b9d1"
+    },
+    {
+      "run_id": "owner-rework-p5a2-fifo-off-coordinator",
+      "level": "L1",
+      "source_sha": "0ccb0cf717b7a489a2d1858fc17a8bd41ca6ce45",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50% -- env VERILATOR_JOBS=1 conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_soc_tb -GFETCH_FIFO_ENABLE=0 -GFETCH_FIFO_DEPTH=2 -Mdir build/verilator_lockstep_f0 -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS -lz sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc",
+      "exit_code": 0,
+      "result": "pass: FIFO-off coordinator rebuilt",
+      "log": "build/agents/T-20260905-007/rework-lockstep-f0-build-r2.log",
+      "log_sha256": "bfa679336f162e586bf39cda6042a6981d3cf899c885a14bb0db183a99d59b5c"
+    }
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12 conda lcvex",
+    "qemu": "11.1.0 fixed release",
+    "resource_wrapper": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -p CPUQuota=50%; VERILATOR_JOBS=1; heavy jobs serialized"
+  },
+  "not_run": [
+    "full Gate D/L3",
+    "Round16 Quartus synthesis/fitter/signoff STA",
+    "assembler/SOF/JIC/RBF/POF",
+    "JTAG/programming/power-on/board test",
+    "Linux long run"
+  ],
+  "known_limits": [
+    "Owner evidence is review only; integration must apply this implementation to disposable T-20260905-002 candidate and rerun its required L0-L2 union.",
+    "The focused +MAINT_OWNER SV probe uses a legal checkpoint restore to kill a younger maintenance instruction; a natural branch-target-IABT plus younger-maintenance overlap is not reachable through this single-issue in-order frontend and is covered by core SVA owner invariants.",
+    "The added target-settled fence is correctness-first and may add front-end wait cycles; no performance or physical timing claim is made here.",
+    "Large logs/waveforms remain only under build/agents/T-20260905-007 and are not Git evidence."
+  ],
+  "handoff": "docs/handoffs/T-20260905-007-p5a2-branch-iabt.md",
+  "integrator_fields_pending": [
+    "docs/tasks/active/T-20260905-007.json source_sha/head_sha/merge_sha/merged_at",
+    "T-20260905-002 disposable candidate merge SHA and coordinator/artifact hashes",
+    "candidate p5a2 plus registered L0-L2 rerun commands, exit codes, logs and hashes",
+    "integrator_validation and final acceptance status"
+  ],
+  "next": "Integrator cherry-picks/merges 0ccb0cf and 9befb7f into the disposable candidate, rebuilds base/cache/delay2 as required, reruns p5a2 and registered L0-L2 union, then fills the pending integrator fields."
+}

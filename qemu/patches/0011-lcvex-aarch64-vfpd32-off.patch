@@ -1,0 +1,16 @@
+diff --git a/target/arm/cpu.c b/target/arm/cpu.c
+index 787e4dc..2883b3e 100644
+--- a/target/arm/cpu.c
++++ b/target/arm/cpu.c
+@@ -1617,6 +1617,11 @@ static void arm_cpu_post_init(Object *obj)
+             if (tcg_enabled() || qtest_enabled()) {
+                 qdev_property_add_static(DEVICE(obj),
+                                          &arm_cpu_has_vfp_property);
++                /* LCVEX：标量核关闭 FP 时需连同 vfp-d32 一起关（QEMU
++                 * 校验 has_vfp_d32 == has_neon）；AArch64 默认不暴露
++                 * 该属性，导致 -cpu max,vfp=off,neon=off 报错。 */
++                qdev_property_add_static(DEVICE(obj),
++                                         &arm_cpu_has_vfp_d32_property);
+             }
+         }
+     } else if (cpu_isar_feature(aa32_vfp, cpu)) {

@@ -1,0 +1,630 @@
+{
+ "schema_version": 1,
+ "task_id": "T-20260928-002",
+ "state": "active",
+ "acceptance_status": "Flash cold boot to Linux userspace with JTAG-UART interaction passed; objective requirements verified",
+ "base_sha": "8d24b68ba2f8d4d22fdff95309d6be008a0ea7d8",
+ "head_sha": "c459d282c356195318a8d106569f1fa98521dae4",
+ "merge_sha": null,
+ "branch": "feature/T-20260928-002-linux-bringup",
+ "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-002",
+ "recorded_at": "2026-09-30T05:19:27+08:00",
+ "working_tree_note": "HEAD plus uncommitted integration/testbench edits; this evidence records the inspected working tree and exact generated inputs by SHA-256.",
+ "toolchain": {
+  "verilator": "5.050 2026-07-01 conda-forge",
+  "linux_source_id": "linux-v6.6.0-local-tree-20260928",
+  "kernel_config_sha256": "c463477f06e81db2145f5da1104e17c9b5f7e489a17de48af9dfdc79e071e0fb",
+  "kernel_image_sha256": "b2c59df37f74770bb4d726cc437b031965a37e0ceb1d112bee1cb7d5af9c4209"
+ },
+ "platform_contract": {
+  "ddr_base": "0x40000000",
+  "ddr_size": "0x08000000",
+  "kernel_address": "0x40200000",
+  "dtb_address": "0x47000000",
+  "timer_hz": 25000000,
+  "gic_dts_compatible": "arm,gic-400",
+  "gicd_base": "0x08000000",
+  "gicc_base": "0x08010000",
+  "jtag_uart_data": "0x09000000",
+  "jtag_uart_control": "0x09000004"
+ },
+ "tracked_source_sha256": {
+  "rtl/lcvex_core.sv": "da1a9ced9a204b5b78dd55218ba14115be7f1e3fe4eb5059ca59e838967ceccf",
+  "rtl/lcvex_gic.sv": "6003ecd3dfd236863f1ee1d5db80552994bde4d0307546af3e735cc9d4ef115f",
+  "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv": "04088d6ca6e4f8b9ece33d280935b6fe20c31944e739089adc6f18d1b4ac33af",
+  "rtl/lcvex_l1_d_wb.sv": "6c1c5bf182d484330d11e3e20d346b2e58426df7bf599cbe76a2ab5a31278d92",
+  "tb/sv/lcvex_l1_d_wb_tb.sv": "69fd31b0c419a9fc0e1be54bcf498cdcb7149e062cc11094872e5eb32165f22e",
+  "tb/sv/lcvex_core_tb.sv": "ce6d52363e9b17486de1c65ca95b09d73aca87607f15b6454d8a187c0d541b99",
+  "tb/sv/lcvex_soc_tb.sv": "ffb69efc378b2ad8011349e74b84172ffcfa6006d9d5b7a8ea79dfad3663dbd5",
+  "tb/sv/lcvex_catapult_soc_coh_tail_tb.sv": "ef38913f30276bb1b82bfeb4ed237353d786d2c2e8d007aedd48e28b9d9aa766",
+  "tb/sv/lcvex_catapult_soc_axi_read_path_tb.sv": "812fec3bb8d69fdc619db543d2222cea7af38063dae6b39acfea146e38c7a6e1",
+  "Makefile": "abe37258d50238bb3929a6c7887b1c0b03ec1369d24df4503e3e280edefd5890",
+  "fpga/catapult_a10/tb/sv/lcvex_catapult_linux_boot_tb.sv": "2026afe418f52e570f4fd84b28c604969d5021e10542631e24e68e62fdd1f321",
+  "fpga/catapult_a10/tools/run_linux_boot_smoke.sh": "58ae76db72e84c7aabeb5c015a8f67e4ba9d2c0ac37cca3dce91251329c49e36",
+  "fpga/catapult_a10/boot/linux_flash_layout.json": "abb41581cf3dc57468925ce7c71edf2f06420b0cb65f8add9701b1ff0ac65ef5",
+  "fpga/catapult_a10/linux/catapult-a10.dts": "2e097cbe861d2e81244b59a5c5ab558c38c292c0eec35aad0f0a0bffab15df54"
+ },
+ "runs": [
+  {
+   "run_id": "owner-linux-16m-memblock-diagnostic",
+   "level": "L2-integrated-linux-diagnostic",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=linux_memblock_diagnostic --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-catapult-memblock-debug/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-memblock-debug/artifacts/flash_data.memh make b25-linux-boot-test",
+   "exit_code": 2,
+   "result": "TIMEOUT at 750000000 cycles; no /init marker and no synchronous external abort. Linux reported the expected 16 MiB region, only 7324 KiB available after reservations, then initialized the 2 MiB SWIOTLB fallback. TX stopped at 3100 bytes with WSPACE=64; this reduced-memory run does not represent the board DDR capacity.",
+   "artifacts": {
+    "simulation_log": "build/agents/T-20260928-002/linux-catapult-memblock-debug/simulation/simulation.log",
+    "simulation_log_sha256": "c4bdbe210289bf4c7d6cb80383c0b4ff3f4b363ead80676bfcbfc2f876feff67",
+    "dtb_sha256": "95f78578083bbba4dd3a53f63c90efc63b9e240aa3796e74b42755ff39a91bf1",
+    "payload_sha256": "559a597ae9d371932a95b27d6e769737933ee2e4b1a962b800ee66085a0c6a05"
+   }
+  },
+  {
+   "run_id": "owner-linux-128m-memblock-diagnostic",
+   "level": "L2-integrated-linux-diagnostic",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=linux_128m_memblock_diagnostic --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-catapult-128m-memblock-debug/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-memblock-debug/artifacts/flash_data.memh make b25-linux-boot-test",
+   "exit_code": 2,
+   "result": "TIMEOUT at 1500000000 cycles; no /init marker and no synchronous external abort. Linux progressed through initramfs decompression, page-table setup (including pgattr_change_is_safe with in-range descriptors), scheduler and object initialization. It entered repeated 1 ms WFIT delays; TX remained 2527 bytes, WSPACE=64, RX reads/pops=0. The exact delay caller was not yet proven.",
+   "artifacts": {
+    "simulation_log": "build/agents/T-20260928-002/linux-catapult-128m-memblock-debug/simulation/simulation.log",
+    "simulation_log_sha256": "b65541e5f009ca6fc8844f92494be669fac02f69c6c7a733de71e336b989d40e",
+    "dtb_sha256": "95e4dc74084cce979eb5b69d5aa964f6b7f38011b2b72f50afbcfdac663a8987",
+    "payload_bin_sha256": "ac546caad8633b3802cde45f77966e54d501473dd5216a6d4bfef6dce7cc6fa1",
+    "payload_memh_sha256": "1115989a2949c402add626f77f8d6687f40c160c27682db7e26a5fd645a867f1"
+   },
+   "timeout_state": {
+    "elr_el1": "0xffffffc0802512a4",
+    "spsr_el1": "0x21000005",
+    "ttbr0_el1": "0x40512000",
+    "ttbr1_el1": "0x40513000",
+    "wspace": 64,
+    "tx_bytes": 2527,
+    "tx_fifo_pushes": 2527,
+    "jtag_rx_reads": 0,
+    "jtag_rx_pops": 0
+   }
+  },
+  {
+   "run_id": "owner-linux-128m-gic-rwp-telemetry",
+   "level": "L2-integrated-linux-diagnostic",
+   "state": "finished",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=linux_128m_gic_rwp_diagnostic --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-catapult-128m-gic-diag/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-memblock-debug/artifacts/flash_data.memh make b25-linux-boot-test",
+   "started_at": "2026-09-29T03:44:15+08:00",
+   "pid": 3022439,
+   "exit_code": 2,
+   "result": "TIMEOUT at 1500000000 cycles before /init ready; no synchronous external abort. GIC RWP busy-read monitor did not trigger: GICD_CTLR reads=0/busy=0, GICC_CTLR reads=1/RWP busy=0, last GIC read 0x0801000c returned spurious IAR 0x3ff. Model state GICD_CTLR=1, GICC_CTLR=1. Kernel stopped producing UART bytes after 2527, FIFO WSPACE=64, RX reads/pops=0. Console transcript ends with printk selecting tty0 and disabling bootconsole juart0. ELR remained in __delay+WFIT; the immediate function return address is inside __delay, caller is unresolved.",
+   "timeout_state": {
+    "cycles": 1500000000,
+    "commits": 107254888,
+    "ddr_reads": 7693317,
+    "ddr_writes": 26361271,
+    "tx_bytes": 2527,
+    "elr_el1": "0xffffffc0802512a4",
+    "spsr_el1": "0x21000005",
+    "x19": "0x2e",
+    "x20": "0x61a8",
+    "x30": "0xffffffc080251200",
+    "sp_el1": "0xffffff800086bc60",
+    "ttbr0_el1": "0x40512000",
+    "ttbr1_el1": "0x40513000"
+   },
+   "output": "build/agents/T-20260928-002/linux-catapult-128m-gic-diag/simulation/simulation.log",
+   "output_sha256": "03e900f58d9dce5ec8aaaa9dca7458fc73dc8fdfa8d784bd78417064a888b69b",
+   "compile": "PASS; Verilator 5.050, 50 modules, one compile thread, 30.925 s wall time"
+  },
+  {
+   "run_id": "owner-linux-128m-swiotlb-initcall-console-diagnostic",
+   "level": "L2-integrated-linux-diagnostic",
+   "state": "finished",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=linux_128m_userland_console_diagnostic --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-catapult-128m-userland-diag/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-userland-diag/artifacts/flash_data.memh make b25-linux-boot-test",
+   "exit_code": 2,
+   "result": "TIMEOUT at 1500000000 cycles. No synchronous abort, /init marker, or EL0 retirement. The run still initialized a 64 MiB SWIOTLB pool despite diagnostic bootargs swiotlb=1024, so the parameter was not observed as effective. UART remained at 2527 TX bytes with WSPACE=64, control writes=0, data reads=0, RX pops=0. Kernel transcript selected tty0 and disabled bootconsole juart0. GIC SPI33 remained disabled; GICD/GICC RWP busy reads were zero. This points to command-line/data or JTAG tty probe/console setup, not TX FIFO backpressure.",
+   "input_sha256": {
+    "dtb": "d935aad1635c5ad4e235681bf1fe0eb1a64ee79efede9a39a5c139a552fc6e32",
+    "payload_bin": "5e2658c0cdf7bef3bb786463e3de1c864d0a3a7483fe3195bb7f216434b1c7d5",
+    "payload_memh": "5247abdc3cd8149e751ba1ed30589db4af29a2eed7969047640010df1bb999a8"
+   },
+   "timeout_state": {
+    "cycles": 1500000000,
+    "commits": 107260075,
+    "ddr_reads": 7710537,
+    "ddr_writes": 26404565,
+    "tx_bytes": 2527,
+    "EL0_commits": 0,
+    "elr_el1": "0xffffffc0802512a4",
+    "current_lr": "0xffffffc080251200",
+    "sp_el1": "0xffffff8007fd7f30",
+    "frame_pointer_va": "0xffffff8007fd7f30",
+    "frame_pointer_pa": "0x47fd7f30",
+    "saved_lr_in_delay": "0xffffffc080251200",
+    "saved_caller_lr_guess": "0xffffffc080077554",
+    "second_frame_l1_cache_hit": false,
+    "gicd_ctlr_reads": 0,
+    "gicd_rwp_busy_reads": 0,
+    "gicc_ctlr_reads": 1,
+    "gicc_rwp_busy_reads": 0,
+    "gicd_ctlr_model": "0x01",
+    "gicc_ctlr_model": "0x001",
+    "gic_spi33_enabled": false,
+    "jtag_wspace": 64,
+    "jtag_control_writes": 0,
+    "jtag_data_reads": 0,
+    "jtag_rx_pops": 0
+   },
+   "artifacts": {
+    "simulation_log": "build/agents/T-20260928-002/linux-catapult-128m-userland-diag/simulation/simulation.log",
+    "simulation_log_sha256": "67c4ef0bbf8c0f975dc7a9c84f71754c8b0c6c2fe852e671f92a2a4c4978c095"
+   },
+   "compile": "PASS; Verilator 5.050, one compile thread; stack/EL0/GIC/console telemetry elaborated and built"
+  },
+  {
+   "run_id": "owner-mmu-dl1-ldrb-scan-128",
+   "level": "L1-core-mmu-dl1-directed",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=mmu_d_l1_byte_load_unit --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 make sim-sv-core-mmu-ldrb-scan",
+   "exit_code": 0,
+   "result": "PASS: 128 printable bytes read by post-index LDRB through stage-1 translation and D-L1 across two cache lines; all retired values/base writebacks and translated physical request addresses matched. Program, source tail, and root page-table descriptor were read back before enabling MMU.",
+   "scope_note": "This verifies the basic MMU+D-L1 byte-load lane, not the full Linux printk/bootargs instruction and cache-conflict context.",
+   "toolchain": "Verilator 5.050 2026-07-01",
+   "resource": "local lock acquired and released; single compiler thread; simulation completed in 0.083 s"
+  },
+  {
+   "run_id": "owner-catapult-coh-production-ttbr1-byte-replay",
+   "level": "L1-catapult-writeback-coherence",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=catapult_writeback_cache_production_256x2 --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 make sim-sv-catapult-coh-tail",
+   "exit_code": 0,
+   "result": "PASS: actual Catapult write-back D-L1 plus production L2 (256 sets x 2 ways) returned a 128-byte TTBR1-style byte stream correctly. Two 4 KiB-spaced D-L1 conflicts returned their own pattern; rereading the source lines hit L2, so PoC reads remained at 40 total (8 tail + 16 source + 16 conflict).",
+   "toolchain": "Verilator 5.050 2026-07-01",
+   "source_sha256": {
+    "tb/sv/lcvex_catapult_soc_coh_tail_tb.sv": "ef38913f30276bb1b82bfeb4ed237353d786d2c2e8d007aedd48e28b9d9aa766",
+    "Makefile": "abe37258d50238bb3929a6c7887b1c0b03ec1369d24df4503e3e280edefd5890"
+   },
+   "resource": "local lock acquired and released; single compiler thread; build 17.682 s; simulation completed in 0.002 s"
+  },
+  {
+   "run_id": "owner-catapult-coh-stress-ttbr1-byte-replay",
+   "level": "L1-catapult-writeback-coherence-stress",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=catapult_writeback_cache_stress_64x1 --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 make sim-sv-catapult-coh-tail-stress",
+   "exit_code": 0,
+   "result": "PASS: the same 128-byte byte-at-a-time scan and two 4 KiB D-L1 conflicts passed with a smaller direct-mapped L2 (64 sets x 1 way). Source-line replay refetched both lines from PoC; total PoC reads were 56.",
+   "toolchain": "Verilator 5.050 2026-07-01",
+   "source_sha256": {
+    "tb/sv/lcvex_catapult_soc_coh_tail_tb.sv": "ef38913f30276bb1b82bfeb4ed237353d786d2c2e8d007aedd48e28b9d9aa766",
+    "Makefile": "abe37258d50238bb3929a6c7887b1c0b03ec1369d24df4503e3e280edefd5890"
+   },
+   "resource": "local lock acquired and released; single compiler thread; build 16.165 s; simulation completed in 0.001 s"
+  },
+  {
+   "run_id": "owner-catapult-axi-avalon-full-line-read",
+   "level": "L1-catapult-ddr-read-bridge",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=catapult_axi_avalon_full_line_read_path --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 make sim-sv-catapult-axi-read-path",
+   "exit_code": 0,
+   "result": "PASS: M1-B -> Catapult AXI bridge -> AXI master -> 512-bit Avalon adapter returned one complete synthetic EMIF line. All eight 64-bit words (bytes 0x40..0x7f), all four 128-bit AXI R beats, one AXI transaction, and one Avalon read matched.",
+   "toolchain": "Verilator 5.050 2026-07-01",
+   "source_sha256": {
+    "tb/sv/lcvex_catapult_soc_axi_read_path_tb.sv": "812fec3bb8d69fdc619db543d2222cea7af38063dae6b39acfea146e38c7a6e1",
+    "Makefile": "abe37258d50238bb3929a6c7887b1c0b03ec1369d24df4503e3e280edefd5890"
+   },
+   "resource": "local lock acquired and released; single compiler thread; build 10.112 s; simulation completed in 0.000 s"
+  },
+  {
+   "run_id": "owner-core-catapult-coh-ttbr1-jtag-wspace-strw",
+   "level": "L1-core-catapult-coherence-jtag-uart",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root --meta stage=core_catapult_jtag_uart_wspace_ldrb_strw_loop --meta cpu_policy=single-thread -- env VERILATOR_JOBS=1 make sim-sv-core-mmu-catapult-coh-ldrb-scan",
+   "exit_code": 0,
+   "result": "PASS: both subcases completed. First, 128 TTBR1 high-VA bytes passed through Catapult write-back D-L1/L2 with direct-map conflicts. Second, the core ran 128 iterations of LDR W CONTROL (WSPACE=64), LDRB from the TTBR1 4 KiB page, and STR W to DATA through the production lcvex_catapult_soc_jtag_uart bridge; commit memory effects and all 128 observed TX bytes matched. The UART endpoint is a deterministic behavioral Avalon model, not the vendor IP or board. An earlier intermediate attempt exited after one loop because the testbench used the simple-mode done PC; that checker was corrected before this passing run.",
+   "toolchain": "Verilator 5.050 2026-07-01",
+   "source_sha256": {
+    "tb/sv/lcvex_core_tb.sv": "ce6d52363e9b17486de1c65ca95b09d73aca87607f15b6454d8a187c0d541b99",
+    "tb/sv/lcvex_soc_tb.sv": "ffb69efc378b2ad8011349e74b84172ffcfa6006d9d5b7a8ea79dfad3663dbd5",
+    "Makefile": "abe37258d50238bb3929a6c7887b1c0b03ec1369d24df4503e3e280edefd5890"
+   },
+   "resource": "local lock acquired and released; single compiler thread; build 63.119 s; subcases completed in 0.133 s and 0.145 s"
+  },
+  {
+   "run_id": "owner-linux-crossline-printk-root-capture",
+   "level": "L2-integrated-linux-first-nul-diagnostic",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-first-nul-source-store/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-userland-diag/artifacts/flash_data.memh LINUX_BOOT_PLUSARGS=+LINUX_STOP_ON_TX_NUL make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260928-002 b25-linux-boot-test",
+   "exit_code": 2,
+   "result": "The 128 MiB boot reproduced the first NUL at TX index 96. The exact payload raw Image hash is 1d0dfe83f7fde72a130fd213c0e3955344e2b56d9d7f54211700452c8de6b417. Source-line tracing shows the original printk format bytes, including c/a, are written correctly at PA 0x40670b7a, but that 8-byte STP crosses the 64-byte line at PA 0x40670b80 and the old L1 write path drops the final two bytes. The subsequent overlapping __memcpy LDP at PA 0x40670b7a also reads zeros for bytes beyond the first line because line_read_word zero-fills out-of-line positions. The target-line LDP response then faithfully copies the already-corrupted source into the console buffer; this is an L1 cross-line read/write contract bug, not AXI/Avalon corruption.",
+   "toolchain": "Verilator 5.050 2026-07-01; one build thread and one simulation thread",
+   "input_sha256": {
+    "kernel_image_payload": "1d0dfe83f7fde72a130fd213c0e3955344e2b56d9d7f54211700452c8de6b417",
+    "flash_data_memh": "5247abdc3cd8149e751ba1ed30589db4af29a2eed7969047640010df1bb999a8"
+   },
+   "artifacts": {
+    "first_store_insn_log": "build/agents/T-20260928-002/linux-first-nul-store-insn/simulation/simulation.log",
+    "first_store_insn_log_sha256": "6ea7d8c81030c32855cf9bc981634cc9394f631f6a040956168a16769961ac14",
+    "ldp_source_line_log": "build/agents/T-20260928-002/linux-first-nul-ldp/simulation/simulation.log",
+    "ldp_source_line_log_sha256": "2ba697f5f23070461d43d3e04aa48ca630c781b57277f51b5e58b68b9d87f0ce",
+    "source_store_trace_log": "build/agents/T-20260928-002/linux-first-nul-source-store/simulation/simulation.log",
+    "source_store_trace_log_sha256": "54707279c0c0618163103c40ffb2e068b4d867a19afc30f5d49c21a07d13a368"
+   },
+   "resource": "local exclusive lock acquired/released for each run; no board, Quartus, JTAG, or Flash access"
+  },
+  {
+   "run_id": "owner-l1wb-crossline-load-store-regression",
+   "level": "L1-writeback-cache-directed",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env VERILATOR_JOBS=1 make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260928-002 sim-sv-l1d-wb",
+   "exit_code": 0,
+   "result": "PASS: lcvex_l1_d_wb_tb operations=25 accepted=147. Added cross-line 8-byte reads and stores, covering first/second line miss, adjacent dirty-line hit, dirty victim writeback, second-line refill fault, and byte-order readback.",
+   "toolchain": "Verilator 5.050 2026-07-01; one build thread",
+   "source_sha256": {
+    "rtl/lcvex_l1_d_wb.sv": "6c1c5bf182d484330d11e3e20d346b2e58426df7bf599cbe76a2ab5a31278d92",
+    "tb/sv/lcvex_l1_d_wb_tb.sv": "69fd31b0c419a9fc0e1be54bcf498cdcb7149e062cc11094872e5eb32165f22e"
+   },
+   "resource": "local lock acquired/released; no concurrent heavy job"
+  },
+  {
+   "run_id": "owner-linux-crossline-rw-integrated-smoke",
+   "level": "L2-integrated-linux-boot",
+   "state": "finished",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-first-nul-crossrw/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-userland-diag/artifacts/flash_data.memh LINUX_BOOT_PLUSARGS=+LINUX_STOP_ON_TX_NUL make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260928-002 b25-linux-boot-test",
+   "exit_code": 2,
+   "cycles": 1500000000,
+   "commits": 120649950,
+   "result": "The cross-line fix passed the first-NUL regression: no TX NUL occurred, and printk/kernel initialization continued beyond the previous failure. The run timed out at 1.5B cycles before LCVEX Catapult A10 /init ready, although the kernel printed Run /init as init process and ttyJ0 registration/selection. EL0 telemetry counted 80 commits, but its first reported PC is the ERET instruction itself and does not establish the first actual user instruction. JTAG telemetry: SPI33 enabled, WSPACE=64, CONTROL writes=7, DATA writes=26024, DATA reads=0, RX pops=0. No help/echo interaction was observed.",
+   "timeout_state": {
+    "cycles": 1500000000,
+    "commits": 120649950,
+    "ddr_reads": 9470552,
+    "ddr_writes": 16729461,
+    "tx_bytes": 26024,
+    "el0_commits": 80,
+    "first_el0_pc": "0xffffffc080011ee0 (ERET commit, not actual user PC)",
+    "elr_el1": "0xffffffc080278464",
+    "spsr_el1": "0x61002005",
+    "spi33_enabled": true,
+    "jtag_control_writes": 7,
+    "jtag_data_reads": 0,
+    "jtag_rx_pops": 0,
+    "console": "ttyJ0 selected/enabled; /init launch logged; no ready marker"
+   },
+   "artifact": "build/agents/T-20260928-002/linux-first-nul-crossrw/simulation/simulation.log",
+   "artifact_sha256": "9e7f9c23f9b59465a5a0d16ee79b764801c1935609fe2ab68965075c675b12a8",
+   "resource": "local exclusive lock acquired/released; one runtime CPU; no concurrent Quartus/JTAG/board job"
+  },
+  {
+   "run_id": "owner-linux-el0-syscall-diagnostic",
+   "level": "L2-integrated-linux-boot",
+   "state": "cancelled-after-diagnostic",
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-el0-syscall-2b/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-userland-diag/artifacts/flash_data.memh 'LINUX_BOOT_PLUSARGS=+LINUX_STOP_ON_TX_NUL +LINUX_TRACE_EL0' make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260928-002 b25-linux-boot-test",
+   "timeout_cycles": 2000000000,
+   "purpose": "Trace up to 128 EL0/SVC commits after the previous 1.5B-cycle timeout logged Run /init but no marker; first EL0-PC telemetry had captured the ERET packet itself.",
+   "compile": "PASS; Verilator 5.050, 50 modules, one build thread",
+   "artifact": "build/agents/T-20260928-002/linux-el0-syscall-2b/simulation/simulation.log",
+   "artifact_sha256": "a86601bcda85d45711125dd5fb407c0e3258004a259d458b35fe0978dfc82a1f",
+   "exit_code": 143,
+   "result": "Intentional SIGTERM after the bounded trace established the userland syscall/fd path; 1.275B cycles, 115805088 commits, 80 EL0 trace records, first real user PC 0x400000, no NUL. openat(/dev/console) returned fd3; dup3 to 0/1/2 returned 0/1/2; banner and prompt writes returned 32 and 7; first read(fd0, 1 byte) was reached. TX remained 26024 with no /init-ready marker; the harness did not inject RX because it waits for that marker.",
+   "latest_observation": {
+    "cycles": 1275000000,
+    "commits": 115805088,
+    "tx_bytes": 26024,
+    "el0_trace_started": true,
+    "el0_commits_observed": 80,
+    "first_user_pc": "0x0000000000400000",
+    "openat_console_fd": 3,
+    "dup3_returns": [
+     0,
+     1,
+     2
+    ],
+    "init_write_returns": [
+     32,
+     7
+    ],
+    "first_read": "fd=0 length=1 syscall=63",
+    "first_nul_observed": false,
+    "init_ready_marker_observed": false,
+    "uart_tx_after_init_writes": false,
+    "observed_at": "2026-09-30T06:59:19+08:00"
+   },
+   "diagnostic_findings": [
+    "The first EL0 trace record is the ERET commit at ffffffc080011ee0; the first actual user instruction is PC 0x0000000000400000.",
+    "The testbench declares ju_irq and passes it into the SoC, but does not drive it; lcvex_jtag_uart_vendor_model has no irq output and does not expose Altera control-register pending/enable bits.",
+    "The production generated JTAG-UART IP exports av_irq, and the Catapult wrapper routes it to GIC SPI33. Linux's normal TTY TX/RX paths use this IRQ; this model gap is the current best explanation for successful write syscalls with no additional UART TX. Confirm with an IRQ-aware integrated re-run.",
+    "The run was intentionally stopped at 1.275B cycles instead of consuming the remaining timeout while the harness waited for a marker that the undriven-IRQ model could not generate."
+   ],
+   "resource": "local exclusive lock released after intentional stop; no Quartus/JTAG/board activity"
+  },
+  {
+   "run_id": "owner-jtag-uart-irq-model-focused-001",
+   "level": "L1-JTAG-UART-model-regression",
+   "state": "finished",
+   "base_head_sha": "c459d282c356195318a8d106569f1fa98521dae4",
+   "working_tree_dirty": true,
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env LCVEX_JTAG_VENDOR_DIR=build/agents/T-20260928-002/jtag-uart-irq-model VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh --focused-only",
+   "exit_code": 0,
+   "toolchain": {
+    "iverilog": "13.0",
+    "verilator": "5.050 2026-07-01"
+   },
+   "result": "PASS: Icarus and Verilator both passed the existing vendor Avalon bridge regression, the new 64-entry TX/RX IRQ threshold/control-register regression, and Catapult status observability. This validates the test model only; the integrated Linux reboot with this IRQ-aware model is pending.",
+   "source_files_sha256": {
+    "tb/sv/lcvex_jtag_uart_model.sv": "bcd4ea27b55cf45d6ff4c86cbbd8d86fc67f71c1449381c20e58d97048cfde1d",
+    "tb/sv/lcvex_jtag_uart_irq_tb.sv": "aea15e8939e16d9be78c4ec9b4e8de1ba08707903aa33f1f45e5736a4f2b75b9",
+    "tb/sv/lcvex_jtag_uart_bridge_tb.sv": "8d3bbf0d885784bc12a5f0ac3fdcd7b80250bdda3d458f65d1bdbdab392426a9",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv": "5321399c7b05a6e9206f33a14936fe872fecef79bc3cf853323d1ee72e27eeab",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_linux_boot_tb.sv": "82fc7c29cab8521e2f4526d756b6f05764d414dfb7cd9571dcb98fd406b187df",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_rx_response_trace_tb.sv": "2953ffe54bf711d76714ce7c0ff8cfd7118e3784fd60e9e14f5d5354ceb2bcb3",
+    "fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh": "f6969ec2a30100c1785cc5efb035ea39c3c392053b2ea395a6969db40ff4f3e0"
+   },
+   "artifacts": {
+    "iverilog_bridge_log": "build/agents/T-20260928-002/jtag-uart-irq-model/iverilog-run.log",
+    "iverilog_bridge_log_sha256": "dcc2c76e56ecf9458cdedb242ce7b32f54dd34d2ade896f66851a4e4edcdf482",
+    "iverilog_irq_log": "build/agents/T-20260928-002/jtag-uart-irq-model/irq-iverilog-run.log",
+    "iverilog_irq_log_sha256": "8589b911b0ec6f99ce3041dc31d32f9148dcb808ed77e32e06940e36046b93ee",
+    "verilator_bridge_log": "build/agents/T-20260928-002/jtag-uart-irq-model/verilator-run.log",
+    "verilator_bridge_log_sha256": "fffd2757dd88f951eeb9630e88af4fc45f7f28d447aeb59aa2c62cb035b5703e",
+    "verilator_irq_log": "build/agents/T-20260928-002/jtag-uart-irq-model/irq-verilator-run.log",
+    "verilator_irq_log_sha256": "0bce2c704bc1da0c2c123840f3afdc7a27e5f13f8ed83d0b9ce55a4c71cd0c73",
+    "status_log": "build/agents/T-20260928-002/jtag-uart-irq-model/status-verilator-run.log",
+    "status_log_sha256": "6a295adeed5baf5765618f8c10d3cfda0a463c717aa296887008184cbb64bcd2"
+   },
+   "resource": "local exclusive resource-lock acquired/released; VERILATOR_JOBS=1; no Quartus/JTAG/board operation"
+  },
+  {
+   "run_id": "owner-linux-irq-aware-vendor-model-integration-001",
+   "level": "L2-integrated-linux-boot",
+   "state": "finished-help-rx-timeout",
+   "base_head_sha": "c459d282c356195318a8d106569f1fa98521dae4",
+   "working_tree_dirty": true,
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-irqfix1/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-userland-diag/artifacts/flash_data.memh 'LINUX_BOOT_PLUSARGS=+LINUX_STOP_ON_TX_NUL +LINUX_TRACE_EL0' make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260928-002 b25-linux-boot-test",
+   "timeout_cycles": 2000000000,
+   "purpose": "Validate that userland banner/help/echo pass through the IRQ-aware, generated-IP-shaped JTAG-UART model; specifically determine whether the 64-entry model's exact RX threshold allows short interactive lines.",
+   "compile": "PASS; Verilator 5.050, 50 modules, one build thread",
+   "output": "build/agents/T-20260928-002/linux-irqfix1/simulation/simulation.log",
+   "output_sha256": "96254634309c9893d5c714f8da0e39348146c9b712d62643018cd3e29e95b435",
+   "exit_code": 2,
+   "result": "Linux reached LCVEX Catapult A10 /init ready at cycle 1225650177 and emitted the user banner/prompt through JTAG-UART TX. The harness injected help plus CR and timed out after 5M cycles waiting for its response. At failure: commits=115073394, tx=26064, WSPACE=64, SPI33 enabled, CONTROL writes=8, DATA reads=0, RX pops=0. No NUL. Echo was not attempted.",
+   "latest_observation": {
+    "cycles": 1225650177,
+    "commits": 115073394,
+    "tx_bytes": 26064,
+    "ddr_read": 8167197,
+    "ddr_write": 14353699,
+    "ju_wspace": 64,
+    "ju_tx_push": 26064,
+    "ju_data_reads": 0,
+    "ju_rx_pops": 0,
+    "ju_control_writes": 8,
+    "gic_spi33_enabled": true,
+    "pc": "0xffffffc08004e2ac",
+    "init_ready_marker_observed": true,
+    "help_response_observed": false,
+    "el0_trace_started": true,
+    "el0_commits_observed": 48,
+    "first_user_pc": "0x0000000000400000",
+    "first_nul_observed": false,
+    "observed_at": "2026-09-30T10:35:54+08:00"
+   },
+   "diagnostic_findings": [
+    "The full kernel/BRAM loader path reaches the actual EL0 /init executable at 0x400000, and its banner/prompt bytes appear on JTAG-UART TX.",
+    "The /init help+CR stimulus is five RX bytes; after the 5M response window, the driver had performed zero DATA reads and zero RX pops despite GIC SPI33 being enabled and TX working.",
+    "The failed binary used the original generated HDL threshold (8 free slots, 56 queued bytes). The checked-in generated source/model are now patched to 63 free slots, and a direct generated-IP simulation plus model test proves the first RX byte asserts IRQ."
+   ],
+   "resource": "local exclusive lock released after testbench timeout; no Quartus/JTAG/board activity"
+  },
+  {
+   "run_id": "owner-jtag-uart-first-byte-rxirq-focused-001",
+   "level": "L1-generated-jtag-uart-and-model-regression",
+   "state": "finished",
+   "base_head_sha": "c459d282c356195318a8d106569f1fa98521dae4",
+   "working_tree_dirty": true,
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env LCVEX_JTAG_VENDOR_DIR=build/agents/T-20260928-002/jtag-uart-rxirq2 VERILATOR_JOBS=1 bash fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh --focused-only",
+   "exit_code": 0,
+   "platform_check": {
+    "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+    "exit_code": 0,
+    "result": "PLATFORM_CHECK_PASS files=50 strict_source=OFF"
+   },
+   "toolchain": {
+    "iverilog": "13.0",
+    "verilator": "5.050 2026-07-01"
+   },
+   "result": "PASS: Icarus and Verilator passed the JTAG-UART bridge/model/status tests; Icarus also simulated the checked-in generated Altera HDL itself, forcing a one-byte RX FIFO state and proving RX IRQ plus CONTROL pending bits assert with the 63-free-slot threshold. The one-byte IRQ model regression passes; no integrated Linux rerun yet.",
+   "source_files_sha256": {
+    "fpga/catapult_a10/jtag_uart/jtag_uart_std_altera_avalon_jtag_uart_1910_zesttkq.v": "262b18b4c6b3534170948de9985241dd5058a0a03d07ddbbbfd8ea88ed50c37e",
+    "fpga/catapult_a10/platform_manifest.json": "bc8333a5b488596460e0f49c34ffbb1a49380600f7e45863cb258867f7bbfea0",
+    "fpga/catapult_a10/source.lock": "e1b24ca8dbae689736fb7ee614cea6fb1624e49551c362506f00d2c1e7e81d6a",
+    "fpga/catapult_a10/SHA256SUMS": "3c3392042b73ebb4f5403340c2ffda1e70f27ab5b8cbcb44511f31ade6b9aa85",
+    "fpga/catapult_a10/tools/check_platform.py": "b9b9f1cd5b450a98578519e1957960fa4362f3d8d0eb82a408d474f6095d2eb8",
+    "fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh": "3531259688511be6caf7e6ecaf9f34e9f7f59108dda8b964055b72a1dd2307ef",
+    "fpga/catapult_a10/README.md": "163f198a982d72e157b6e5891de99a98d757129beccabb8e66dfff3597bcd607",
+    "tb/sv/lcvex_jtag_uart_model.sv": "e99c84f7e7d1e756c4e170cdadcdaa6ddf6b2c37e0b9eb91004a9c143d2f11e6",
+    "tb/sv/lcvex_jtag_uart_irq_tb.sv": "af584f8d0c8342d4aa1a68f9f4f84afeb917e28c21ccc2643eb6f81ced25186d",
+    "tb/sv/lcvex_jtag_uart_generated_irq_tb.sv": "d819b00dae093894f74025a1e3107c686d32ecea2c2fafb628b4af377260d4b5"
+   },
+   "artifacts": {
+    "iverilog_bridge_log": "build/agents/T-20260928-002/jtag-uart-rxirq2/iverilog-run.log",
+    "iverilog_bridge_log_sha256": "dcc2c76e56ecf9458cdedb242ce7b32f54dd34d2ade896f66851a4e4edcdf482",
+    "iverilog_irq_log": "build/agents/T-20260928-002/jtag-uart-rxirq2/irq-iverilog-run.log",
+    "iverilog_irq_log_sha256": "2afb73eddab74592209844eaeb633fd2b751ac4d50fe7bfddf1f8a6af9dcc695",
+    "generated_ip_irq_log": "build/agents/T-20260928-002/jtag-uart-rxirq2/generated-irq-iverilog-run.log",
+    "generated_ip_irq_log_sha256": "222b39acd46edb5874254788f7ce234c2059ed567af8a570616d92e33d248f44",
+    "verilator_bridge_log": "build/agents/T-20260928-002/jtag-uart-rxirq2/verilator-run.log",
+    "verilator_bridge_log_sha256": "daf76f34011695bf75697fd13b6a0fa2fb7bba59611e1e8625bf5887f3556f04",
+    "verilator_irq_log": "build/agents/T-20260928-002/jtag-uart-rxirq2/irq-verilator-run.log",
+    "verilator_irq_log_sha256": "efa333c12df0edf3e7bc5dc256c61ae3ad31e5d0ca9119ff4022c3a78ab0f591"
+   },
+   "resource": "local exclusive lock acquired/released for focused simulation; no Quartus/JTAG/board operation"
+  },
+  {
+   "run_id": "owner-linux-rxirq-firstbyte-integration-002",
+   "level": "L2-integrated-linux-boot",
+   "state": "finished-pass",
+   "base_head_sha": "c459d282c356195318a8d106569f1fa98521dae4",
+   "working_tree_dirty": true,
+   "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260928-002 root -- env VERILATOR_JOBS=1 LINUX_PLATFORM_TEST_OUT=build/agents/T-20260928-002/linux-rxirq-firstbyte1/simulation LINUX_BOOT_FLASH_MEMH=build/agents/T-20260928-002/linux-catapult-128m-userland-diag/artifacts/flash_data.memh 'LINUX_BOOT_PLUSARGS=+LINUX_STOP_ON_TX_NUL +LINUX_TRACE_EL0' make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260928-002 b25-linux-boot-test",
+   "timeout_cycles": 2000000000,
+   "purpose": "Rerun the integrated 128 MiB Catapult Linux boot with the patched generated-IP RX IRQ threshold that should wake ttyJ0 after the first received byte; acceptance remains help and echo responses.",
+   "compile": "PASS; Verilator 5.050, 50 modules, one build thread",
+   "output": "build/agents/T-20260928-002/linux-rxirq-firstbyte1/simulation/simulation.log",
+   "output_sha256": "b20bbaf062c3dd37f3b064dd12f3c61742a6bca7431e7cb48b10cb82dd3012fc",
+   "exit_code": 0,
+   "result": "SOC_LINUX_BOOT PASS. The testbench observed /init ready, the help command marker, and LCVEX_UART_OK after echo. Its before/after RX pop guards passed for both commands; no first TX NUL was observed.",
+   "latest_observation": {
+    "marker_cycle": 1225650177,
+    "help_reply_wait_cycles": 3784705,
+    "echo_reply_wait_cycles": 1003521,
+    "commits": 115070656,
+    "tx_bytes": 26141,
+    "ddr_read": 8165710,
+    "ddr_write": 14349293,
+    "ju_wspace": 64,
+    "ju_tx_push": 26141,
+    "init_ready_marker_observed": true,
+    "help_marker_observed": true,
+    "echo_marker_observed": true,
+    "help_rx_consumed": true,
+    "echo_rx_consumed": true,
+    "el0_trace_started": true,
+    "first_nul_observed": false,
+    "rx_irq_threshold": "one byte (63 free entries)",
+    "observed_at": "2026-09-30T14:24:17+08:00"
+   },
+   "source_head_sha": "c459d282c356195318a8d106569f1fa98521dae4",
+   "resource": "local exclusive lock acquired/released; one runtime CPU; one compiler thread; no Quartus/JTAG/board activity"
+  }
+ ],
+ "resource_and_scope": {
+  "local_lock": "re-taken for the canonical 128 MiB Linux boot run on the GIC-tree RTL",
+  "gamepc_lock": "released between stages; every stage ran inside its own gamepc lease",
+  "quartus": true,
+  "jtag": true,
+  "flash_programming": true,
+  "board_actions": 9,
+  "board_action_list": [
+   "volatile SOF configuration 1 (pre-Flash, loader reported ERR FORMAT as expected)",
+   "JIC write attempt 1 and 2 (failed: Flash Loader IP not loaded)",
+   "SFL helper SOF configuration (sfl_enhanced_10_02e060dd.sof)",
+   "JIC write 3 (PASS, 8m27s)",
+   "volatile SOF configuration 2 (PASS) with Linux boot transcript",
+   "JTAG-UART command session (help and echo responses)",
+   "board power cycle by the user (no host download) followed by a read-only JTAG-UART console session that captured the complete cold-boot transcript and answered help/echo",
+   "read-only JTAG-UART session running \"sleep\" (nanosleep) and a follow-up echo"
+  ],
+  "golden_recovery_package": "verified present and hashed before the first Flash write",
+  "rtl_modified_in_this_diagnostic": true,
+  "testbench_modified": true
+ },
+ "known_limits": [
+  "The physical candidate now reaches /init ready and answers help/echo on the real board twice: once with a volatile SOF configuration and once after a true power-cycle cold boot in which both the FPGA configuration and the payload came from EPCQ Flash.",
+  "The previous 16 MiB run is not a valid proxy for the 128 MiB board DDR and must not be used to sign off paging behavior.",
+  "The 128 MiB run progressed through page-table setup without external abort, but its timed WFIT loop has not been tied to a specific caller or GIC RWP read value.",
+  "The saved __delay caller LR was read from a stack line not resident in D-L1 and may be stale; original callsite still unverified.",
+  "The prior pre-patch run failed help RX because the generated JTAG-UART threshold required 56 queued bytes; the current target HDL and simulation model now assert after one byte, and the passing full-system regression consumes both commands.",
+  "The first printk NUL was traced to the Catapult write-back L1 zero-filling loads across a 64-byte line and dropping crossing-store tail bytes. Both paths are now split through the L1, the focused L1WB regression passes, and the current full Linux run has passed the prior corruption point.",
+  "The focused 128-byte cache/JTAG-UART test alone does not prove Linux; the later full-system simulation now independently proves EL0 /init and help/echo over JTAG-UART in the behavioral SoC model.",
+  "The focused core-integrated JTAG-UART test uses a synthetic printable source page and constant WSPACE=64. It proves basic LDRB/control-read/STR W traffic through the RTL bridge, but not the Linux init process, real RX syscalls, or vendor IP/CDC timing.",
+  "The first post-fit STA of the Linux candidate failed with a -103.394 ns sys_clk_25 setup violation (96-deep serial GIC priority scan). After the balanced-tree GIC fix the same flow reports +5.723 ns and TNR/TNS 0 everywhere; the earlier SOF from that failing run must not be used.",
+  "Writing the JIC needs the Serial Flash Loader helper design in the FPGA first; without it quartus_pgm stops with 'Flash Loader IP not loaded on device 1'. The recorded helper is helper_sofs/sfl_enhanced_10_02e060dd.sof.",
+  "The board transcripts contain nios2-terminal 'Gathering input from STDIO' noise whenever the terminal session runs without piped input; the *.clean.log files strip that line only.",
+  "The canonical production DTB does not pass swiotlb=, so Linux zeroes the default 64 MiB software IO TLB buffer during swiotlb_init. On the board that takes milliseconds, but in the behavioral simulation it is a long __memset that dominates the run (about 6.6 MB per 25M cycles, starting near cycle 325M). The earlier diagnostic DTB used swiotlb=1024 and therefore skipped most of this work; the two runs are not comparable after the first 325M cycles.",
+  "The GIC-tree RTL canonical-DTB full-Linux simulation was deliberately stopped at 775M cycles (of a 2B budget) to free the local resource lock for the Gate D rerun on the merge SHA. It had reached the SWIOTLB zeroing phase and was not diverging; the same RTL is proven on real hardware by the cold-boot transcript. The partial log is kept at build/agents/T-20260928-002/gic-tree-sim-20260930/simulation-stopped-at-775M.log."
+ ],
+ "next": "Objective closed for this candidate. Remaining optional follow-up: finish the canonical-DTB 128 MiB behavioral simulation on the GIC-tree RTL (running under the local lock) as extra non-board evidence, and consider a second on-board command such as sleep/uptime.",
+ "board_bringup": {
+  "candidate_commit": "0b822e64",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260928-002-linux-physical/candidate",
+  "stage_closure": {
+   "files": 239,
+   "bytes": 5249540,
+   "canonical_sha256": "86dc7aa7ab4cf38968609f012309c47bd9c110eee024ce99db8236f4ab7d5731",
+   "remote_verify": "239 files, 0 missing, 0 mismatch"
+  },
+  "quartus_flow": {
+   "synthesis": "PASS, 7m12s, peak working set 3201 MiB",
+   "fitter": "PASS, 78190 ALMs (18%), 82961 registers, 121 RAM blocks, 21 DSP",
+   "sta_signoff": "PASS, sys_clk_25 setup +5.723 ns, hold +0.018 ns, TNS 0.000",
+   "assembler": "PASS, 40 s",
+   "input_drift": "fpga/catapult_a10/qsys/ddr4_bot/Qsys/Qsys_bb.v and quartus/catapult_a10.qsf rewritten by ipgenerate; no RTL drift"
+  },
+  "sof": {
+   "path": "candidate/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+   "bytes": 36842103,
+   "sha256": "dc33f5cd444f591b8efddd8736b652a1afe537f5e4319737445be5b246c862df",
+   "program_checksum": "0x31B1E395",
+   "volatile_program": "PASS, 44.6 s, configuration succeeded"
+  },
+  "sfl_helper": {
+   "path": "D:/Software/intelFPGA_pro/21.4/quartus/common/devinfo/programmer/helper_sofs/sfl_enhanced_10_02e060dd.sof",
+   "bytes": 351239,
+   "program_checksum": "0x306EFE5B",
+   "program": "PASS, 43.2 s"
+  },
+  "jic": {
+   "cof": "payload/linux_flash.cof, 1475 bytes, sha256 36791ad022b9fb26b18a847e0a480b6ddef11a25cf1978a8449828cc39b0334c",
+   "cof_generator": "LINUX_FLASH_COF payload_offset=0x4000000 payload_bytes=4920502 payload_end=0x44b14b6 capacity=0x8000000",
+   "path": "payload/lcvex_linux.jic",
+   "bytes": 134217955,
+   "sha256": "f0cec1eab276fd9d8775d8bc584b7dbcc454e509ce9530fad0214231f6ef8b52",
+   "flash_write": "PASS, 8m27s, 0 errors 0 warnings, 'Successfully performed operation(s)'",
+   "golden_recovery": {
+    "jic": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/output_file.jic",
+    "jic_sha256": "86ee77ad2e69afee7e5280b54c84d24821b1da3838e8803d882afba272cc3196",
+    "sof_sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92"
+   }
+  },
+  "console": {
+   "cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+   "device": 1,
+   "instance": 0,
+   "jtag_id": "0x02E060DD",
+   "boot_log_raw": "build/agents/T-20260928-002/board-evidence-20260930/terminal-boot.log",
+   "boot_log_raw_sha256": "056f567a2df7854c023887c5426f24f61c5e7c0cdefec7b79d2f210a03310691",
+   "boot_log_clean_sha256": "445a87e80dd91a4d8b6ddcad15b4514f591344214cb15d2fa8c9f05b6f62cd0e",
+   "command_log_raw_sha256": "43a53a00678232bba179410c11b228a250068c1339644d8018a28eae0fa36887",
+   "command_log_clean_sha256": "3ebe1d763e4f332a1a13cb34aafbecc0588af5dfdc3ed57fa694b164854b3590",
+   "observed": [
+    "LCVX AArch64 Linux loader",
+    "CHECK KERNEL",
+    "CHECK DTB",
+    "LOAD OK; EL1 Booting Linux on physical CPU 0x0000000000 [0x000f0510]",
+    "Linux version 6.6.0 (lcvex@lcvex) #2 SMP",
+    "Machine model: LCVEX Catapult A10",
+    "earlycon: juart0 at MMIO32 0x0000000009000000",
+    "9000000.serial: ttyJ0 at MMIO 0x9000000 (irq = 11) is a Altera JTAG UART",
+    "clocksource: Switched to clocksource arch_sys_counter",
+    "Run /init as init process",
+    "LCVEX Catapult A10 /init ready",
+    "help -> commands: help, echo [text], sleep, about",
+    "echo LCVEX_UART_OK -> LCVEX_UART_OK"
+   ],
+   "not_yet_observed": "power-cycle cold boot with the FPGA configuration also loaded from EPCQ"
+  },
+  "cold_boot": {
+   "action": "user removed and restored board power at about 2026-09-30T21:57+08:00; no host programming ran after that until the console read",
+   "host_tools_in_window": "jtagconfig.exe (read-only) and nios2-terminal.exe only; no quartus_pgm and no SOF/JIC download",
+   "why_the_capture_is_complete": "the loader's 41-byte banner stays in the JTAG-UART TX FIFO until a host drains it, so the attached terminal still saw the loader header from the very beginning of the cold boot",
+   "transcript_raw": "build/agents/T-20260928-002/board-evidence-20260930/coldboot-transcript.raw.log",
+   "transcript_raw_sha256": "b50b305aadf278771e33513c5b708736213540f41a27b372fbc8495c0be925d2",
+   "transcript_clean_sha256": "b7831041b4b6c068a41c8aaaa3ed668e8ab1241e18663f80794e0b523b7c7a1d",
+   "full_session_log_sha256": "0f37a1cbd5180a57cc18a8db16d1828adfa5c61cdb16c047a4874799ebb8dd79",
+   "observed": [
+    "LCVX AArch64 Linux loader",
+    "CHECK KERNEL",
+    "CHECK DTB",
+    "LOAD OK; EL1",
+    "Booting Linux on physical CPU 0x0000000000 [0x000f0510]",
+    "Linux version 6.6.0 (lcvex@lcvex) #2 SMP",
+    "Machine model: LCVEX Catapult A10",
+    "kernel page table isolation disabled by kernel configuration",
+    "software IO TLB: mapped [mem 0x0000000043000000-0x0000000047000000] (64MB)",
+    "Memory: 57608K/131072K available",
+    "arch_timer: cp15 timer(s) running at 25.00MHz",
+    "9000000.serial: ttyJ0 at MMIO 0x9000000 (irq = 11) is a Altera JTAG UART",
+    "Freeing unused kernel memory: 704K",
+    "Run /init as init process",
+    "LCVEX Catapult A10 /init ready",
+    "help -> commands: help, echo [text], sleep, about",
+    "echo LCVEX_UART_OK -> LCVEX_UART_OK",
+    "lcvex> prompt observed both times",
+    "sleep -> \"sleep: 1 second elapsed\" (nanosleep syscall 101 returned after one second, proving the EL1 timer interrupt path under Linux)",
+    "echo AFTER_SLEEP_OK -> AFTER_SLEEP_OK"
+   ],
+   "sleep_session_log": "build/agents/T-20260928-002/board-evidence-20260930/terminal-sleep-test.log",
+   "sleep_session_log_sha256": "d75f5bb2d964995957fe475b3febe9a443e26af2e43bcb607623ae5b36c10234",
+   "sleep_session_clean_sha256": "5969c79c7ad5ebae49d938bcb07bf044ecefe726438bba3e722aab4e564e5628",
+   "sleep_session_note": "attached after the cold boot with the board left running; no programming, only jtagconfig+nios2-terminal"
+  }
+ }
+}

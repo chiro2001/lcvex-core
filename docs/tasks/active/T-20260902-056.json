@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-056",
+  "label": "FP-ALIGN-MAGNITUDE-CUT",
+  "title": "Register effective ADD/SUB magnitude between add_align and pp_pre",
+  "kind": "rtl-timing-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-fp-align-magnitude-cut",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "review": {
+    "required": true,
+    "agent_type": "one-pass-blocking",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "只读审查 add_align->pp_pre 67-level cone 的合法切点、special/cancellation 等价与 latency"
+  },
+  "depends_on": [
+    "T-20260902-053"
+  ],
+  "base_sha": "32c77ae334d1f61b081a7919359d5e40f645b984",
+  "branch": "fix/T-20260902-056-fp-align-magnitude-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-056",
+  "scope": "切断 T-053 setup top-1 `g_iter.add_align_hi.b_ext -> g_iter.pp_pre_hi.exp2`（-2.578 ns、67L、22.609 ns）：在已对齐 256-bit operands 的有效 compare/add/sub、相消/符号结果与最终 fp_pre_t 构造之间增加真实寄存器边界或等价结构化切分。保持 T-052 response payload 解耦、divider kill/pause、IT_ALIGN 与所有 SDC，不修改 core。",
+  "reads": [
+    "docs/handoffs/T-20260902-053-fp-p5-rerun-round14.md",
+    "docs/tasks/evidence/T-20260902-053.json",
+    "docs/handoffs/T-20260902-052-fp-rsp-preround-cut.md",
+    "docs/tasks/evidence/T-20260902-052.json",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "tb/sv/lcvex_fp_scalar*.sv",
+    "tb/sv/lcvex_neon_fp*.sv",
+    "sim/cocotb/test_p7_*.py",
+    "sim/difftest/**",
+    "Makefile",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "tb/sv/lcvex_fp_scalar*.sv",
+    "tb/sv/lcvex_neon_fp*.sv",
+    "sim/cocotb/test_p7_*.py",
+    "docs/handoffs/T-20260902-056-fp-align-magnitude-cut.md",
+    "docs/tasks/evidence/T-20260902-056.json"
+  ],
+  "validation": {
+    "l0": [
+      "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile"
+    ],
+    "l1": [
+      "FP exec latency/reset/kill/valid-drop directed test",
+      "P7-1/3/4/5 scalar+NEON SV/Cocotb raw/special/FZ/DN/RMode/cancellation regression"
+    ],
+    "l2": [
+      "P7-1 scalar、P7-3 NEON、P7-4/P7-5 sequence strict lockstep"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "源码结构上把 add_align 到 pp_pre 的 256-bit compare/add/sub 和后续 zero/special/fp_pre_t 构造分到不同寄存器周期；新增中间状态 reset/kill=0/IDLE、无架构权限或提前提交。NaN/Inf/zero、异号相消、round-toward-minus zero sign、FZ/DN/RMode/FPSR、H 双 lane、NEON slot、FDIV/FSQRT 和 response held 语义保持；latency 明确更新。所有受影响 L0-L2 通过，不用 false_path、关闭断言或修改参考结果。物理效果由下一 FP-P5 rerun 确认。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 60,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T21:19:19+08:00",
+  "updated_at": "2026-09-04T23:46:08+08:00",
+  "known_limits": [
+    "T-054 owns IRQ test/runner files; T-056 may read but must not modify them",
+    "不得修改 rtl/lcvex_core.sv、rtl/lcvex_neon_fp.sv、QEMU、QSF/SDC 或远端 probe",
+    "所有重型 Verilator 与 T-054 串行排队，cgroup <16 GiB、VERILATOR_JOBS=1"
+  ],
+  "handoff": "docs/handoffs/T-20260902-056-fp-align-magnitude-cut.md",
+  "evidence": "docs/tasks/evidence/T-20260902-056.json",
+  "head_sha": "c03ec3e22ed9b2336187b202acaefebfebc73033",
+  "merge_sha": "d5aeb4bd92c9ea5ab4c78e52aa962393be2608db",
+  "implementation_commits": [
+    "ac20e55a094c9728908d2b73c02f2d468e6dd126",
+    "12a610f609a1e14a46ccdee680c990ee9bea69ff"
+  ],
+  "next": "在冻结的 T-056 合并 SHA 上重跑 FP-P5；只有 signoff 全绿才运行 assembler/SOF",
+  "integrator_review": {
+    "status": "accepted",
+    "merged_at": "2026-09-04T23:46:08+08:00",
+    "recorded_at": "2026-09-04T23:46:08+08:00",
+    "merge_sha": "d5aeb4bd92c9ea5ab4c78e52aa962393be2608db",
+    "notes": "Implementation and metadata commits were cherry-picked and reviewed. On the merged SHA, make compile and lcvex_fp_exec_tb passed; representative strict QEMU lockstep passed for P7-1 scalar sequence 388/388, P7-3 NEON FP 48/48, P7-4 FMA/convert sequence 142/142, and P7-5 FP16/sqrt/minmax/round sequence 66/66."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-04T21:20:36+08:00",
+    "agent_name": "/root/t056_fp_align_magnitude_cut",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-056",
+    "branch": "fix/T-20260902-056-fp-align-magnitude-cut"
+  },
+  "review_dispatch": {
+    "sent_at": "2026-09-04T21:20:36+08:00",
+    "agent_name": "/root/t056_fp_align_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-shared-snapshot",
+    "received_at": "2026-09-04T21:20:36+08:00",
+    "reported_at": "2026-09-04T21:34:06+08:00",
+    "status": "conditional_go",
+    "blockers": "Register the full 256-bit effective magnitude/sign/exp before zero/special/fp_pre construction; no add_align bypass; prove special priority, zero sign, reset/kill/valid-drop and latency.",
+    "final_review": {
+      "sent_at": "2026-09-04T22:19:02+08:00",
+      "received_at": "2026-09-04T22:19:02+08:00",
+      "reported_at": "2026-09-04T22:25:25+08:00",
+      "head_sha": "74845bf1c5ab49a14e5977760aabe3ef7926a960",
+      "code_blockers": "none",
+      "test_blockers": "none",
+      "notes": "IT_ALIGN/IT_ADD boundary, special equivalence, reset/kill/valid-drop and full P7 L1-L2 evidence accepted. Metadata-only follow-up c03ec3e aligned the handoff implementation head."
+    }
+  }
+}

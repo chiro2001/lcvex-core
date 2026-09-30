@@ -1,0 +1,59 @@
+/dts-v1/;
+
+/ {
+	model = "LCVEX Catapult A10";
+	compatible = "lcvex,catapult-a10", "arm,armv8";
+	#address-cells = <2>;
+	#size-cells = <2>;
+	interrupt-parent = <&gic>;
+
+	chosen {
+		bootargs = "earlycon=juart,mmio32,0x09000000 console=ttyJ0,115200 keep_bootcon rdinit=/init nokaslr panic=-1";
+		stdout-path = "serial0:115200n8";
+	};
+
+	aliases {
+		serial0 = &jtag_uart;
+	};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0>;
+		};
+	};
+
+	memory@40000000 {
+		device_type = "memory";
+		reg = <0x0 0x40000000 0x0 0x08000000>;
+	};
+
+	gic: interrupt-controller@8000000 {
+		compatible = "arm,gic-400";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+		reg = <0x0 0x08000000 0x0 0x1000>,
+		      <0x0 0x08010000 0x0 0x1000>;
+	};
+
+	/* PPI 14 = INTID 30 (physical), PPI 11 = INTID 27 (virtual). */
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupts = <1 14 4>, <1 11 4>;
+		interrupt-names = "phys", "virt";
+		clock-frequency = <25000000>;
+	};
+
+	/* SPI 1 = INTID 33; DATA +0 and CONTROL +4 are Altera JTAG-UART CSRs. */
+	jtag_uart: serial@9000000 {
+		compatible = "altr,juart-1.0";
+		reg = <0x0 0x09000000 0x0 0x1000>;
+		interrupts = <0 1 4>;
+		status = "okay";
+	};
+};

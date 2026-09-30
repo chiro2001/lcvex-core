@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-003",
+  "title": "P6 LSE128 LDCLRP/LDSETP/SWPP 与差分回归",
+  "kind": "isa+verification",
+  "priority": "high",
+  "assigned_owner": "luna-implementation-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "在已审核的 LSE128 边界内实现 RTL/编码器/定向差分，不启动 Linux 长跑",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": true,
+    "scope": "核对 ARM 编码、CASP 事务复用、提交/Store 语义和验证依赖"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只看本任务 JSON、指定 RTL/QEMU 编码文档和目标 diff，给方向性阻断风险"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "监控 Verilator/QEMU 定向 smoke 资源，不运行 Linux 长跑"
+  },
+  "phase": "done",
+  "parent": "",
+  "depends_on": [],
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "sim/difftest/a64.py",
+    "sim/difftest/test_program.py",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/ISA_SCOPE.md",
+    "docs/ISA_GAPS.md",
+    "docs/tasks/evidence/T-20260826-003.json",
+    "docs/handoffs/T-20260826-003-lse128.md"
+  ],
+  "reads": [
+    "../qemu/target/arm/tcg/a64.decode",
+    "../qemu/target/arm/tcg/translate-a64.c",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "sim/difftest/a64.py",
+    "sim/difftest/test_program.py",
+    "docs/ISA_SCOPE.md",
+    "docs/ISA_GAPS.md",
+    "docs/DIFFTEST_QEMU_PLAN.md"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/DIFFTEST.md",
+    "docs/PROJECT_STRUCTURE.md"
+  ],
+  "base_sha": "ce4f6ba",
+  "branch": "infra/T-20260826-003-lse128",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-003",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 2048,
+    "disk_mb": 512,
+    "timeout_s": 1800
+  },
+  "validation": {
+    "l0": [
+      "python3 -m py_compile sim/difftest/a64.py sim/difftest/test_program.py",
+      "python3 -c 'import sys; sys.path.insert(0, \"sim/difftest\"); import a64, test_program'",
+      "python3 scripts/test_registry.py --check"
+    ],
+    "l1": [
+      "make p6-lse",
+      "make p6-lse128",
+      "conda run --no-capture-output -n lcvex verilator --lint-only -Wno-fatal -Wall --top-module lcvex_core -f rtl/filelist.f"
+    ],
+    "l2": [
+      "hard_lse128 定向 QEMU/Verilator 锁步（base 与 cache 配置）"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "LDCLRP/LDSETP/SWPP 的 X 寄存器对（用 W 写入初始化值覆盖低 32 位）、SP/非法寄存器边界、旧值写回和 128 位 Store 与固定 QEMU 11.1.0 逐指令一致；异常不产生伪 Store；既有 hard_lse_atomic、checkpoint smoke 和 Gate D 受影响子集全绿。",
+  "created_at": "2026-08-26T04:15:00+08:00",
+  "updated_at": "2026-08-26T05:05:00+08:00",
+  "commits": [
+    "2c6c32ec50edb306f85354b093aaac5023856dc3",
+    "81926ae",
+    "a4d1e4a",
+    "4b1d7b6"
+  ],
+  "handoff": "docs/handoffs/T-20260826-003-lse128.md",
+  "evidence": "docs/tasks/evidence/T-20260826-003.json",
+  "known_limits": [
+    "只实现 ARMv8.2-A LSE128 三个已选原子族，不实现完整多核内存一致性。",
+    "不在本任务启动 Linux 长跑；Gate E 续跑需从新 checkpoint 另行排队。"
+  ],
+  "next": "已完成并通过合并 SHA L0–L2；归档后从新 checkpoint 排队 Linux 深段续跑。"
+}
+

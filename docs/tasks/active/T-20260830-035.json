@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-035",
+  "label": "PE-EXT",
+  "parent": "T-20260830-033",
+  "title": "PE-EXT：独立外部性能审计材料准备与暂停（审计待其他 Agent 执行）",
+  "kind": "performance-external-audit-plan",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "e42bf7442044f74b41b4d96584f774116c533069",
+  "branch": "feature/T-20260830-035-pe-ext-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-035",
+  "scope": "独立外部 Agent 对 LCVEX 做性能静态审计与增强规划，覆盖 core/cache/总线/多核；必须评估更深流水线、顺序多发射、outstanding 访存以及取指/分支、cache bank、总线/仲裁、多核目录等候选；输出独立可审阅规划文档。不修改 RTL；待 PE-A 与 PE-EXT 两份规划完成后由集成者合并成最终性能增强计划，再启动实施。",
+  "writes": [
+    "docs/PERFORMANCE_AUDIT_INDEPENDENT_REQUEST.md",
+    "docs/PERFORMANCE_ENHANCEMENT_PLAN_INDEPENDENT.md",
+    "docs/handoffs/T-20260830-035-pe-ext-audit.md",
+    "docs/tasks/evidence/T-20260830-035.json"
+  ],
+  "reads": [
+    "rtl/**",
+    "tb/**",
+    "sim/**",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/C4_DUALCORE_BASELINE.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/C3_FOURCORE_PREWORK.md",
+    "docs/C4_SCALE_PREWORK.md",
+    "docs/PERFORMANCE_AUDIT_INDEPENDENT_REQUEST.md"
+  ],
+  "validation": {
+    "l0": [
+      "独立审计规划文档可审阅",
+      "覆盖用户指定的三个核心方向 + 其他性能方向"
+    ],
+    "l1": [
+      "每个候选给出收益/风险/改动范围/验证",
+      "不修改 RTL"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付独立外部性能审计与规划；不与 PE-A 合并前不启动实施。",
+  "next": "与 PE-A 结果综合，形成最终性能增强计划并拆分实施任务。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.3
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T22:10:00+0800",
+  "updated_at": "2026-08-30T22:10:00+0800",
+  "known_limits": [
+    "只读审计，不修改 RTL；不实施优化。",
+    "不宣称性能收益已实现。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-035-pe-ext-audit.md",
+  "evidence": "docs/tasks/evidence/T-20260830-035.json",
+  "blocked_reason": "外部审计完成，PE-EXT 综合出最终性能增强计划。"
+}

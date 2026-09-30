@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260828-066",
+  "state": "done",
+  "base_sha": "88656e9ad91f10a7a442dc1ddc0ab8c95022bdf5",
+  "implementation_head": "0a410c3",
+  "verification_head": "0a410c3",
+  "branch": "feature/T-20260828-066-p7-4-fma-convert",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-066",
+  "owner": "p7-4-fma-convert-dsv",
+  "model": "deepseek-v4-flash",
+  "reasoning_effort": "max",
+  "timezone": "Asia/Shanghai",
+  "reported_at": "2026-08-28T03:14:52+08:00",
+  "scope": "P7-4 标量 S/D FMADD/FMSUB/FNMADD/FNMSUB；SCVTF/UCVTF 与 FCVTZS/FCVTZU（整数/定点）；FCVT S<->D；NEON 2S/4S/2D FMLA/FMLS 与整数形式转换。",
+  "excluded": [
+    "FP16、sqrt、estimate、min/max、round、by-element FMA、FMLAL/FMLAL2",
+    "向量定点转换、结构化/lane/pair 访存、完整 FP exception-enable、SVE",
+    "Cache、AXI4、EMIF、FPGA 和 QEMU fork 修改"
+  ],
+  "files": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/filelist.f",
+    "Makefile",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_p7_4.sh",
+    "sim/cocotb/Makefile.p7_4_fma_convert",
+    "sim/cocotb/test_p7_4_fma_convert.py",
+    "tb/sv/lcvex_fp_scalar_tb.sv",
+    "tb/sv/lcvex_neon_fp_tb.sv",
+    "tb/sv/lcvex_fp_scalar_p7_4_tb.sv",
+    "tb/sv/lcvex_neon_fp_p7_4_tb.sv",
+    "docs/P7-4_FMA_CONVERT.md"
+  ],
+  "file_sha256": {
+    "rtl/lcvex_pkg.sv": "1748e4cb965813c1a2964751a39d250e452d431e3093235ebfee7f9772f58ae7",
+    "rtl/lcvex_decode.sv": "50f1ed092f77c70b79b86e6f7a119f76304c248387b696de4bbd282c91773fdc",
+    "rtl/lcvex_core.sv": "7b6ef14740e3dd08f177e71b72f924d2f6327f80b84a0df819ca1a662f682f71",
+    "rtl/lcvex_fp_scalar.sv": "8d8d0dd0bc77d30a49809a5ce30b4326d09a7fb962342af1429f6ed500551d13",
+    "rtl/lcvex_neon_fp.sv": "c9805dcf09e5531cd13962aa06490a6560f365c4ef503676580b14d0c496594b",
+    "rtl/filelist.f": "cd2eb57590490fb45df1799d762b323c0eb28430ed936d5bc061826d12d89818",
+    "Makefile": "9c05f7c9dcd009ccf8ff55babbb0794c9f31404eefcd07b38b342bd0a264ed81",
+    "sim/difftest/test_program.py": "06ccffc37559e7bbd18cdab96ff875e28b42b895560ab7ed43d22457f50fb3ad",
+    "sim/difftest/run_p7_4.sh": "9be0afd907cb1bde9f7102ef6aa378c7f930b4228472097ee692d832ccd87852",
+    "sim/cocotb/Makefile.p7_4_fma_convert": "fa501e29e2f7de89be101a44ec464d7f03d59e9ad1816c0cffabfc12fbae2cbe",
+    "sim/cocotb/test_p7_4_fma_convert.py": "87f035d01130cf4a10d85ce1936c3ad2abc4037263a2e504285ed268082923ef",
+    "tb/sv/lcvex_fp_scalar_tb.sv": "539d951c92be2ca8fb4f7c74221754daed75efe81696bdb9a4fdbd551ff0ab5c",
+    "tb/sv/lcvex_neon_fp_tb.sv": "fc9f45c7e30eb1f165368ca971d414861a2aa6d2e1aeaac4c307cef5de0e9d59",
+    "tb/sv/lcvex_fp_scalar_p7_4_tb.sv": "c870746cab007b039cd2a524a338e2db0788e9e38af7d4dbbc28cc4f14ddc122",
+    "tb/sv/lcvex_neon_fp_p7_4_tb.sv": "ca95dd51602cc3ff849ee25c067ffa3561addbf405f7acea909753bf1778b55e",
+    "docs/P7-4_FMA_CONVERT.md": "e061ad40a9eba9640b8787cbafab0807ecbaed45856df876556e1b848e9fde31"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu_release": "11.1.0",
+    "qemu_profile": "cortex-a76,cntfrq=1000000000,has_el3=false,has_el2=false",
+    "qemu_icount": "shift=0,align=off,sleep=off",
+    "cpu_count": 12
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "f0accfb67c2b4b79e39e40768b3c522a5f960515424839d90654d514c31f3aca",
+    "plugin_sha256": "b62e536844cce671bbe672e72b67dc88055b1223bd91042cea022d04a2bbf44e",
+    "source_changes": "none"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-static-001",
+      "level": "L0",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "python3 -m py_compile sim/difftest/test_program.py sim/cocotb/test_p7_4_fma_convert.py && bash -n sim/difftest/run_p7_4.sh && git diff --check",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l1-compile-002",
+      "level": "L1",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make compile",
+      "summary": "Verilator -Wall core lint/elaboration。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l1-sv-003",
+      "level": "L1",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make sim-sv-p7-4-fma-convert",
+      "summary": "P7-4 scalar/NEON raw-bit SV 全部 PASS。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l1-cocotb-p7-4-004",
+      "level": "L1",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make sim-cocotb-p7-4-fma-convert",
+      "summary": "Cocotb 5/5：pipeline、V/GPR 写回、FPEN trap、backpressure、UDEF。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l0-test-005",
+      "level": "L0",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make test",
+      "summary": "P0 全部通过（toolcheck/compile/SV/Cocotb/encoders）。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l1-cocotb-regress-006",
+      "level": "L1",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make sim-cocotb-fp-scalar sim-cocotb-p7-2-neon sim-cocotb-p7-3-neon-fp",
+      "summary": "P7-1 5/5、P7-2 8/8、P7-3 4/4 无回归。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l2-p7-1-007",
+      "level": "L2",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make p7-1-fp-scalar p7-1-fp-scalar-edge p7-1-fp-scalar-rounding p7-1-fp-scalar-sequence",
+      "summary": "A76 required 28/38/18/388；sequence seed=1。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l2-p7-2-p7-3-008",
+      "level": "L2",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make p7-2-neon-int p7-2-neon-fetch-fault p7-3-neon-fp",
+      "summary": "A76 required 31/20/48。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l2-p7-4-009",
+      "level": "L2",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "make p7-4-fma-convert p7-4-fma-convert-edge p7-4-fma-convert-rounding p7-4-fma-convert-sequence",
+      "summary": "A76 required 94/54/27/142；sequence seed=1。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l2-p6-010",
+      "level": "L2",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "MAX_INSNS=40 make lockstep",
+      "summary": "P6 scalar 40/40。",
+      "log": "build/agents/T-20260828-066/owner/owner-summary.log"
+    },
+    {
+      "run_id": "owner-l2-ckpt-011",
+      "level": "L2",
+      "source_sha": "0a410c3",
+      "runner_role": "owner",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "command": "FP_NEON=required IMAGE=$PWD/build/difftest/hard_p7_4_fma_convert.bin MAX_INSNS=94 DIFF_CKPT=1 CKPT_EVERY=16 CKPT_DIR=$PWD/build/tmp/T-20260828-066/ckpt-main COORD=$PWD/build/verilator_lockstep/lockstep_coordinator bash sim/difftest/run_lockstep_step.sh",
+      "summary": "LCVXFP01 差分 checkpoint：94 条锁步全绿、5 checkpoints、40 artifacts、last_seq=79。",
+      "log": "build/agents/T-20260828-066/owner/ckpt-main-coord.log",
+      "log_sha256": "390e90fc51c776c9089b5e65b0f65cce1fd8a4a8e935c91b9a9b175a6d660dd5",
+      "qemu_log": "build/agents/T-20260828-066/owner/ckpt-main-qemu.log",
+      "qemu_log_sha256": "5730c0a831bfa275e5678dd15a63767682fcae39a74ef6f63dfcb1d2ee9a594b"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "p7-4-main",
+      "uri": "build/difftest/hard_p7_4_fma_convert.bin",
+      "sha256": "d97bcc63a18e9b066b74fe80383e8b9b23db16a4499e913b2791636694e2561c",
+      "reproduce": "conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;assert test_program.build_hard_p7_4_fma_convert_program(\"build/difftest/hard_p7_4_fma_convert.bin\") == 94'"
+    },
+    {
+      "id": "p7-4-edge",
+      "uri": "build/difftest/hard_p7_4_fma_convert_edge.bin",
+      "sha256": "b6c436cc01e5a7db277ad1d5275eec7ee8321d1d180897bf5e81decc5263d40c",
+      "reproduce": "conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;assert test_program.build_hard_p7_4_fma_convert_edge_program(\"build/difftest/hard_p7_4_fma_convert_edge.bin\") == 54'"
+    },
+    {
+      "id": "p7-4-rounding",
+      "uri": "build/difftest/hard_p7_4_fma_convert_rounding.bin",
+      "sha256": "4377d385d6891f9cff2cc48c06d5f2bea74f83c2f2617c9dbe119f2533c81b4d",
+      "reproduce": "conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;assert test_program.build_hard_p7_4_fma_convert_rounding_program(\"build/difftest/hard_p7_4_fma_convert_rounding.bin\") == 27'"
+    },
+    {
+      "id": "p7-4-sequence",
+      "uri": "build/difftest/hard_p7_4_fma_convert_sequence.bin",
+      "sha256": "1c5cf09dccb781d51b524aa34a0e57354e8a4a73e19303647d22dd8a35dc1fd7",
+      "reproduce": "conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;assert test_program.build_hard_p7_4_fma_convert_sequence_program(\"build/difftest/hard_p7_4_fma_convert_sequence.bin\",seed=1,rounds=8) == 142'"
+    },
+    {
+      "id": "qemu-plugin",
+      "uri": "qemu/plugins/lcvex_difftest.so",
+      "sha256": "b62e536844cce671bbe672e72b67dc88055b1223bd91042cea022d04a2bbf44e",
+      "note": "owner worktree build artifact；QEMU fork source unchanged"
+    },
+    {
+      "id": "ckpt-manifest",
+      "uri": "build/agents/T-20260828-066/owner/ckpt-main-manifest.json",
+      "sha256": "72791db9cc57f58462eba6b9e3e55fd5261a6c6dbb85968d1330d394875601c5",
+      "note": "LCVX checkpoint manifest v2；5 entries/40 artifacts/last_seq=79"
+    },
+    {
+      "id": "owner-summary",
+      "uri": "build/agents/T-20260828-066/owner/owner-summary.log",
+      "sha256": "bf3a5deed521d8775ae1060a68b22a13a456645720ec82593d88f188418f33e6",
+      "note": "owner 回归摘要（build artifact，不进 Git）"
+    }
+  ],
+  "known_limits": [
+    "只支持选定的 FMA/转换子集；FP16、sqrt、estimate、min/max、round、by-element FMA、FMLAL/FMLAL2、向量定点转换、结构化访存、完整 FP exception-enable 与 SVE 后置。",
+    "不修改 QEMU fork；所有期望值来自 Cortex-A76 QEMU 实测 raw bits。",
+    "Gate D/Gate-F 由集成者在冻结 SHA 上串行复跑。"
+  ],
+  "merge_sha": "4b253ad",
+  "integration_review": {
+    "reviewed_at": "2026-08-28T03:30:00+08:00",
+    "reviewer": "root-integrator",
+    "rechecks": [
+      {
+        "run_id": "integrator-compile-001",
+        "command": "make compile",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-test-002",
+        "command": "make test",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P0 all green"
+      },
+      {
+        "run_id": "integrator-p7-4-sv-cocotb-003",
+        "command": "make sim-sv-p7-4-fma-convert && make sim-cocotb-p7-4-fma-convert",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "SV raw unit + Cocotb 5/5"
+      },
+      {
+        "run_id": "integrator-regression-004",
+        "command": "sim-sv/cocotb fp-scalar, p7-2-neon, p7-3-neon-fp",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P7-1/2/3 no regression"
+      },
+      {
+        "run_id": "integrator-lockstep-005",
+        "command": "bash sim/difftest/run_p7_4.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "A76 required 94/54/27/142"
+      },
+      {
+        "run_id": "integrator-p6-scalar-006",
+        "command": "MAX_INSNS=40 run_lockstep.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "P6 scalar 40/40"
+      },
+      {
+        "run_id": "integrator-ckpt-007",
+        "command": "DIFF_CKPT=1 CKPT_EVERY=16 run_lockstep_step.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "5 LCVXFP01 checkpoints, 40 artifacts, last_seq=79"
+      }
+    ]
+  }
+}

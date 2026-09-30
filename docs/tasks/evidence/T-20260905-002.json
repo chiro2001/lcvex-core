@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-002",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "joint_l0_l2_pass",
+  "base_sha": "1ccbb3baed633c9c64e7a078df4cad4ece69a2a5",
+  "validated_candidate_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "branch": "batch/T-20260905-002-r16",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-002",
+  "members": [
+    "T-20260905-003",
+    "T-20260905-004",
+    "T-20260905-005",
+    "T-20260905-006"
+  ],
+  "implementation": {
+    "fp_roundpack": "IT_PREP -> IT_PACK registered round-pack boundary for ordinary and iterative FP paths",
+    "core_issue": "registered muldiv request/launch and EX/MEM PA1-derived pair PA2",
+    "corrective": "MMU-on maintenance releases IMEM owner in MS_DONE, preserving settled/epoch/PAR commit semantics",
+    "infrastructure": "p6-maint-v82 creates build/difftest and builds its local QEMU plugin in clean worktrees"
+  },
+  "runs": [
+    {
+      "run_id": "post-fix-min-l1-l2",
+      "source_sha": "6a1c5539515a777382917451590c1ca89a626576",
+      "command": "registry consistency; make compile sim-sv sim-sv-fetch-fifo sim-sv-mmu p6-maint-v82",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-002/post-fix-min-l1-l2.log",
+      "artifact_sha256": "c1fe5c373b420b3ece597f57864dd427252e90bfe4da5020ac82cb4622b8eeb9",
+      "summary": "registry 77; compile/core/FIFO/MMU green; maintenance 19/19 x2, 30/30 x2, 24/24 x2"
+    },
+    {
+      "run_id": "post-fix-joint-l0-l1",
+      "source_sha": "6a1c5539515a777382917451590c1ca89a626576",
+      "command": "complete Round16 FP/P7/muldiv/core/FIFO/IRQ SV+Cocotb union",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-002/post-fix-joint-l0-l1.log",
+      "artifact_sha256": "4e714655366de538d7275a99930258f92ce021a661ed090e1016ea4d89a130c0",
+      "summary": "FP directed; P7-1/3/4/5; muldiv; backpressure; cache FIFO; IRQ-young x4; IRQ-atomic x4; P7-2 SV and Cocotb 10/10"
+    },
+    {
+      "run_id": "p7-2-negative-fault-bfm",
+      "source_sha": "6a1c5539515a777382917451590c1ca89a626576",
+      "command": "make sim-sv-p7-2-neon-fault-bfm",
+      "result": "pass_expected_fail",
+      "exit_code": 2,
+      "driver_log": "build/agents/T-20260905-002/post-fix-negative-fault-bfm-driver.log",
+      "driver_log_sha256": "a55ea7dbac1738f31a7fbb493f5b11585acafbeb86fc36bd13fa2f9f04a28b3f",
+      "failure_log": "build/agents/T-20260827-059/fault-bfm-assert.log",
+      "failure_log_sha256": "f6fcd36f2f53720891a21cd1473198441abdc8a0970e61e3135459952cb40204",
+      "expected_assertion": "rtl/lcvex_core.sv:4587 after first Q-store half is accepted and the second response faults"
+    },
+    {
+      "run_id": "post-fix-joint-l2-front",
+      "source_sha": "6a1c5539515a777382917451590c1ca89a626576",
+      "command": "make difftest-muldiv-request difftest-rtl difftest-hazard",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-002/post-fix-joint-l2-front-rerun.log",
+      "artifact_sha256": "5e8f4859c4238ab0a7c88dafe29ed61b1045de885567894f7509c27bc46e1e1a",
+      "summary": "muldiv 16/16; rtl 33/33; hazard 34/34"
+    },
+    {
+      "run_id": "post-fix-joint-l2-declared",
+      "source_sha": "6a1c5539515a777382917451590c1ca89a626576",
+      "command": "hard_pair_ldst; P6 LSE/LSE128/maintenance/IRQ-atomic/STXR-IRQ; P7-2 int/fetch-fault; P7-1/3/4/5 declared strict matrices",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-002/post-fix-joint-l2-declared-rerun.log",
+      "artifact_sha256": "d386591091bc36fd2d008d6e888984919e7c99efc448b4b4a14879d25ecf53dd",
+      "summary": "all registered member L2 acceptance entries passed, including base/cache and delay2 matrices where declared"
+    }
+  ],
+  "unrelated_discovery": {
+    "status": "new_pre_existing_failure_to_track_separately",
+    "test": "make p5a / p5a2_fetch",
+    "failure": "seq=16 BR X3 to unmapped 0x50000000 retires normally in DUT while QEMU merges IABT",
+    "why_not_round16_regression": "the program has no maintenance or muldiv/pair operation; with sys_maint_at_id=0 the T-005 owner expression is identical to the previous fetch selection",
+    "log": "build/agents/T-20260905-002/post-fix-joint-l2.log",
+    "log_sha256": "c48222e8517de86ccb9fedbaddf2a87697bc839e1e2eb3443bfeb74b5e4849c3",
+    "step_fail": "build/difftest/step_fail.txt",
+    "step_fail_sha256": "f9610bba67c148e22ecea682afc983315f47e7ed74905fd04dcc9645038c4c83",
+    "policy": "not hidden and not counted as a registered Round16 gate; isolate on a dedicated correctness task"
+  },
+  "promotion": {
+    "policy": "feature/p7-final may advance only by --ff-only to the batch documentation tip whose RTL/test source is identical to validated_candidate_sha",
+    "physical_next": "one Round16 synthesis/fitter/signoff STA run; no assembler or board action"
+  },
+  "not_run": [
+    "Gate D/L3",
+    "Round16 Quartus synthesis/fitter/signoff STA",
+    "assembler/SOF/JTAG/programming/board test"
+  ],
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "validated_at": "2026-09-05T06:05:48+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260905-002-timing-batch-r16.md",
+  "next": "Promote by ff-only, dispatch one Round16 physical run, and track p5a2_fetch separately."
+}

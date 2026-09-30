@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "description": "LCVEX AArch64 Linux Flash image contract. Flash aperture and payload offset are planning candidates; platform RTL does not yet implement this aperture.",
+  "format": {
+    "magic_ascii": "LCVXARM!",
+    "version": 1,
+    "header_size": 40,
+    "segment_size": 32,
+    "trailer_size": 8,
+    "segment_count": 2,
+    "segment_kinds": {
+      "kernel": 1,
+      "dtb": 2
+    },
+    "byte_order": "little",
+    "checksum": "CRC-32/ISO-HDLC; descriptor CRC covers header and segment table; each segment CRC covers its complete DDR load span"
+  },
+  "flash": {
+    "physical_capacity": "0x08000000",
+    "aperture_base": "0x10000000",
+    "aperture_size": "0x08000000",
+    "payload_offset": "0x04000000",
+    "payload_alignment": "0x10000",
+    "segment_alignment": "0x1000",
+    "candidate_only": true,
+    "source_offset_semantics": "absolute byte offset from the start of EPCQL flash",
+    "hex_address_semantics": "relative to the beginning of the payload BIN; COF adds payload_offset exactly once"
+  },
+  "ddr": {
+    "base": "0x40000000",
+    "size": "0x08000000",
+    "kernel_address": "0x40200000",
+    "dtb_address": "0x47000000",
+    "destination_alignment": "0x1000"
+  },
+  "bram": {
+    "size": "0x10000",
+    "stack_start": "0xF000",
+    "stack_top": "0x10000",
+    "loader_max_bytes": "0xF000",
+    "composition": "standalone Linux loader replaces the resident B25 monitor image for a Linux configuration; it does not link the monitor or CoreMark"
+  },
+  "registers": {
+    "uart_data": "0x09000000",
+    "uart_control": "0x09000004",
+    "platform_status": "0x09003000",
+    "cycle_counter": "0x09003040",
+    "cal_ready_mask": "0x1",
+    "cal_failed_mask": "0x2",
+    "calibration_timeout_cycles": "750000000",
+    "uart_tx_wait_limit": "0x00100000"
+  },
+  "linux_image": {
+    "magic_offset": 56,
+    "magic": "0x644D5241",
+    "text_offset_field": 8,
+    "image_size_field": 16
+  }
+}

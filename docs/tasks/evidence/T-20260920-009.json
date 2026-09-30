@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-009",
+  "label": "B25-RX-OBSERVABILITY-UCP-INVARIANT-PROFILE",
+  "state": "done",
+  "acceptance_status": "fresh-t007-normalized-invariant-profile-pass",
+  "partial": false,
+  "base_sha": "c2f23cc339fc7cc38f3db8858d82d9a64ce490df",
+  "implementation_head": "bb00f80a89ec15a3fe8e87d22a420540293ce20b",
+  "implementation_tree": "f3fba375d99234829b3ffc0ec7be938b47e22272",
+  "branch": "infra/T-20260920-009-b25-rx-observability-ucp-invariant-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-009",
+  "owner": "root",
+  "timestamps": {
+    "created_at": "2026-09-20T05:07:41+08:00",
+    "raw_bundle_finished_at": "2026-09-20T05:15:24+08:00",
+    "implementation_committed_at": "2026-09-20T05:17:52+08:00",
+    "reported_at": "2026-09-20T05:18:11+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "change": {
+    "policy": {
+      "path": "fpga/catapult_a10/physical_waivers_invariant.json",
+      "bytes": 13107,
+      "sha256": "8b3d38bf0a9222efa135044d7c57d5d40f37286184f20e19b11a2599422863ec",
+      "canonical_json_sha256": "4e31d0eca80176a8fd82e58bf3668a0d7c93d68937dbb7460da9f7bd3e6fc46f",
+      "delta": "Append accepted_profiles.T-20260920-007 and report_profiles.T-20260920-007 only."
+    },
+    "exporter": {
+      "path": "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py",
+      "bytes": 58834,
+      "sha256": "3ae7531839f75200446397721c3acd3b956459a174ef55511f69319ce6cadc84",
+      "delta": "Update PRODUCTION_POLICY_DIGEST only."
+    },
+    "normalized_contract_diff": "Byte-identical after deleting the provenance object from base and implementation policies.",
+    "historical_profile_diff": "T-20260909-011, T-20260909-013 and T-20260919-004 accepted/report profile objects are byte-identical to base."
+  },
+  "measurement_profile": {
+    "task_id": "T-20260920-007",
+    "candidate_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+    "candidate_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+    "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+    "source_pre_manifest_sha256": "c184798f4e9fa9bd59380ab581a98817174fe018ad7db231548f4e887d7b24c0",
+    "source_post_manifest_sha256": "c184798f4e9fa9bd59380ab581a98817174fe018ad7db231548f4e887d7b24c0",
+    "source_immutable": true,
+    "candidate_manifest": null,
+    "candidate_manifest_note": "The 174-file T-007 stage manifest is independently hash-bound by T-007. The invariant exporter retains its older canonical+alias manifest schema and binds exact SHA/tree plus immutable full source manifests here.",
+    "raw_report_sha256": {
+      "summary": "98cb1216c27a0a4a525f241f5729f9a8c047448ff59bda464880c8c571d50fe9",
+      "ucp_fast": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662",
+      "ucp_slow": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662",
+      "fast_recovery": "ed52645dd25ce3682dc721ac1fe6224a8c16ed0eb18c3bedfb1720ad55fe5c4b",
+      "fast_removal": "f8e0e7941088b5b91e989f8871a07df3a706fdd06080c84e84d93107bedd9404",
+      "slow_recovery": "2a2d5c971e8bcb21736e5d13f42acf3e8ec47d97efa8471570b2a3f583c7caf1",
+      "slow_removal": "af4330756e22015cdfcda3c7206934e0fd4798a8443ad40892fc6a0ee7d34f2b"
+    }
+  },
+  "normalized_result": {
+    "ucp": {
+      "clocks": 2,
+      "input_ports": 2,
+      "input_paths": 60,
+      "output_ports": 1,
+      "output_paths": 4,
+      "tdi": 25,
+      "tms": 35,
+      "tdo": 4,
+      "raw_duplicate_count": 0
+    },
+    "reset": {
+      "raw_path_count_each": 627,
+      "duplicate_count_each": 3,
+      "normalized_path_count": 624,
+      "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+      "families": {
+        "emif_req_q": 606,
+        "emif_state_q": 4,
+        "timeout_count_q": 13,
+        "calibration_gate": 1
+      },
+      "violations": 0,
+      "worst_recovery_slack_ns": 0.903,
+      "worst_removal_slack_ns": 0.202
+    },
+    "exceptions": [],
+    "clock_constraints": []
+  },
+  "validation": [
+    {
+      "id": "t007-export-check",
+      "result": "PASS; normalized UCP input=60, reset=624",
+      "inventory": {
+        "path": "build/agents/T-20260920-009/t007-invariant-inventory.json",
+        "bytes": 61806,
+        "sha256": "4225e94e5fcab76bba9d11167d246ac5da387a466428f4665df1598adb3a4afd"
+      },
+      "export_log_sha256": "04e8ef4bf6af42890a39ae84968707be47acfbae2604ac9bb553e397bae39767",
+      "checker_log_sha256": "38293a5021f855d97eee6f06c083faf55bdfe0e13b80bb7584ef9d57ebc22269"
+    },
+    {
+      "id": "fixture-matrix",
+      "result": "2/2 positive PASS; 27/27 negative rejected",
+      "matrix": {
+        "path": "build/agents/T-20260910-001/invariant-fixture-t009/matrix.json",
+        "bytes": 8062,
+        "sha256": "3d2c4c60484a3ed11fcdfbd7332f807511521bb5797f462ac2343980af2eb698"
+      }
+    },
+    {
+      "id": "historical-profile-replay",
+      "result": "T-20260909-011, T-20260909-013 and T-20260919-004 inventories PASS under the extended policy",
+      "t011_check_sha256": "c1c1a79862febb1af71da4cbb5e7ab0db24f1a2adc8248c0fe0e8e997871bad6",
+      "t013_check_sha256": "fdb3fbc9502a1a895beff8de5dd34ecea3541ece22ba17102642b39c2a684d32",
+      "t004_check_sha256": "4581681d96c91f71002e2102a52f9a95119a4f384a67001c39cd1dc2ad8b6f38"
+    },
+    {
+      "id": "scope-and-pycompile",
+      "result": "PASS; normalized contract and historical profiles unchanged; exactly policy profile append plus exporter digest update",
+      "scope_log_sha256": "1faa5e4530524e1bfd89e909905dbfa7129cbeaf757d1db3cf425fdb1ed26a4e"
+    }
+  ],
+  "raw_harness_correction": {
+    "finding": "The first reused UCP script mechanically rewrote the historical producer task and contract-source header to current candidate identifiers. The fail-closed exporter rejected both attempts.",
+    "correction": "Restore producer task T-20260909-007 and contract source 702bd8ee; bind current fitted candidate exclusively through the separate measurement provenance. Re-run only the report-only UCP query; no synthesis/fitter or policy relaxation.",
+    "final_tcl_sha256": "acb27c453cbe81972e324343407991eeb3b2a78dd0f3f874b373a10a193756b0"
+  },
+  "safety_and_scope": {
+    "normalized_policy_changed": false,
+    "historical_profile_changed": false,
+    "rtl_qsf_sdc_boot_qemu_changed": false,
+    "quartus_or_board_action_by_t009": false,
+    "assertion_checker_or_expected_result_weakened": false
+  },
+  "handoff": "docs/handoffs/T-20260920-009-b25-rx-observability-ucp-invariant-profile.md",
+  "next": "Integrate this two-file profile extension, finalize T-20260920-007 physical evidence, then register a one-shot assembler task from the exact accepted fitted database."
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-050",
+  "label": "IRQ-YOUNG-SQUASH-AUDIT",
+  "title": "Read-only audit of irq_taken younger pipeline squash risk",
+  "kind": "rtl-regression-audit",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reviewed",
+  "assigned_owner": "codex-irq-young-squash-audit",
+  "agent_type": "read-only-review",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "depends_on": [],
+  "base_sha": "e5405359a6f4780fbd917cf135cc2f76b7f61bf0",
+  "branch": "",
+  "worktree": "read-only integration snapshot /home/chiro/projects/mycpu/lcvex",
+  "scope": "只读判断 irq_taken/wfi_irq_take 等异步边界是否可能留下年轻 ID/EX、EX/MEM、访存或 FP/NEON transaction 状态，并给出最小修复写集、定向复现矩阵和 acceptance；不实现、不生成产物。",
+  "reads": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/**",
+    "docs/tasks/active/T-20260902-048.json",
+    "docs/handoffs/T-20260902-048-core-fp-operand-c-cut.md",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [],
+  "validation": {
+    "l0": [
+      "静态状态机/时序边界审查"
+    ],
+    "l1": [
+      "给出可实施的 SV/Cocotb 定向测试矩阵"
+    ],
+    "l2": [
+      "指出需要的 QEMU 锁步/中断注入验收，但本审查不运行"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "以证据区分真实 bug、已受现有 fence/kill 保护的路径和仅需测试的风险；列出准确状态寄存器、优先级、触发序列、预期 commit/memory side effect，以及后续写任务的 reads/writes/测试边界。只报告阻断性问题，不给逐行补丁。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 0,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.1
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T13:51:23+08:00",
+  "updated_at": "2026-09-04T14:14:18+08:00",
+  "known_limits": [
+    "纯只读，不进入任何 owner worktree，不运行构建/测试/生成器，不创建 handoff/evidence",
+    "审查结论不直接修改 T-049，也不扩大当前 physical flow 写集"
+  ],
+  "deliverable": "带 Asia/Shanghai 时间戳的结构化聊天报告；由集成者据此登记后续 regression task",
+  "next": "已确认普通 irq_taken 年轻流水线清空 bug；后继写任务 T-20260902-051",
+  "dispatch": {
+    "sent_at": "2026-09-04T13:52:44+08:00",
+    "agent_name": "/root/t050_irq_squash_audit",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-shared-snapshot",
+    "received_at": "2026-09-04T13:52:50+08:00",
+    "reported_at": "2026-09-04T14:12:51+08:00",
+    "finding": "mixed: ordinary irq_taken has a real younger-pipeline/transaction squash bug; WFI and sys_irq_taken drain paths are protected",
+    "blockers": "none"
+  },
+  "audit_result": {
+    "status": "accepted",
+    "recorded_at": "2026-09-04T14:14:18+08:00",
+    "confirmed_bug": "irq_taken clears frontend/FIFO but does not uniformly squash younger ID/EX, EX/MEM, memory/atomic/MMU or all FP/NEON transfer state; same-edge stage transfers can leak beyond the IRQ commit boundary",
+    "protected_paths": [
+      "WFI/WFE interrupt and wake paths drain ID/EX, EX/MEM and MEM/WB before system commit",
+      "sys_irq_taken is part of drained sys_commit behavior"
+    ],
+    "required_followup": "T-20260902-051 must add core fix plus FIFO on/off, memory/atomic/MMU and FP/NEON directed squash coverage; no DAIF/WFI/FIQ/nesting scope expansion"
+  }
+}

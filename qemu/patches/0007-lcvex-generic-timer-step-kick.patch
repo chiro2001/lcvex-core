@@ -1,0 +1,19 @@
+diff --git a/target/arm/helper.c b/target/arm/helper.c
+--- a/target/arm/helper.c
++++ b/target/arm/helper.c
+@@ -2020,2 +2045,9 @@ void arm_gt_ptimer_cb(void *opaque)
+     gt_recalc_timer(cpu, GTIMER_PHYS);
++    /* In LCVEX step mode a virtual-clock timer can expire exactly at the
++     * instruction boundary while the vCPU is waiting for the next protocol
++     * turn.  Explicitly kick the vCPU so the GIC IRQ is delivered and the
++     * plugin can emit the matching ASYNC packet. */
++    if (qemu_lcvex_difftest_active()) {
++        qemu_cpu_kick(CPU(cpu));
++    }
+ }
+@@ -2027,2 +2059,5 @@ void arm_gt_vtimer_cb(void *opaque)
+     gt_recalc_timer(cpu, GTIMER_VIRT);
++    if (qemu_lcvex_difftest_active()) {
++        qemu_cpu_kick(CPU(cpu));
++    }
+ }

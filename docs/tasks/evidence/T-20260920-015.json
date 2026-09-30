@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-015",
+  "label": "B25-RX-CPU-OBSERVABILITY-GATE-D",
+  "state": "done",
+  "acceptance_status": "complete-release-mode-gate-d-pass",
+  "partial": false,
+  "candidate_sha": "17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b",
+  "candidate_tree_sha": "49ae77b46bac077d68cd5432a09eb64b51b07ebb",
+  "branch": "detached",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-015-gate",
+  "owner": "rx_verify_plan",
+  "timestamps": {
+    "dispatch_at": "2026-09-20T09:33:14+08:00",
+    "accepted_rerun_finished_at": "2026-09-20T09:57:38+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "run": {
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-015 rx_verify_plan --min-local-available-mib 8192 --meta stage=gate_d --meta source_sha=17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b --meta memory_policy=exclusive-no-hard-cap --meta cpu_policy=gate-d-parallel -- bash -lc 'set -o pipefail; env VERILATOR_JOBS=1 bash sim/difftest/run_gate_d.sh --parallel 2>&1 | tee build/agents/T-20260920-015/gate-d.lock.log'",
+    "attempt": 2,
+    "exit_code": 0,
+    "result": "PASS: Gate D 系统回归全部通过",
+    "assertions_enabled": true,
+    "comparisons_enabled": true,
+    "skip_baremetal": false,
+    "random_requested_length": 100000,
+    "verilator_jobs": 1,
+    "parallel_runner": true,
+    "log": {
+      "path": "build/agents/T-20260920-015/gate-d.lock.log",
+      "bytes": 71090,
+      "sha256": "467f957bfd18616723a657eb7f5d6af632034ce7c8c8495ac5d1d9ec5b175321"
+    }
+  },
+  "results": {
+    "make_test": "PASS",
+    "coverage": {"result": "PASS", "covered_points": 8760, "merged_bytes": 3196159, "merged_sha256": "5842d7316b279b12328e875eb81409441f878743133f1523b6ad94e53927960c"},
+    "m2_r1": {"base": 40, "cache": 40, "result": "PASS"},
+    "delay2_cache": {"tests": 32, "result": "PASS"},
+    "p5a_hardening": {"tests": 26, "result": "PASS"},
+    "gate_c": {"groups": 7, "result": "PASS"},
+    "p5a_mmu": {"groups": 3, "result": "PASS"},
+    "p4b": {"groups": 5, "result": "PASS"},
+    "random": {
+      "seeds": [1, 2, 3],
+      "requested_length": 100000,
+      "rtl_qemu_commits_each": 100002,
+      "total_commits": 300006,
+      "result": "PASS",
+      "traces": [
+        {"path": "build/difftest/random_1.trace", "bytes": 3937845, "sha256": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e"},
+        {"path": "build/difftest/random_2.trace", "bytes": 3948075, "sha256": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768"},
+        {"path": "build/difftest/random_3.trace", "bytes": 3947467, "sha256": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"}
+      ]
+    },
+    "instruction_coverage": {"expected_hit": "62/62", "observed_families": 63, "commits": 300006, "map_bytes": 1274, "map_sha256": "f4a2fcbade7de4451433253f35601aa219bc131dc5a05f0403e663065e2faf2c", "result": "PASS"},
+    "baremetal_c": {"image_bytes": 1104, "image_sha256": "ed2f093617883206c3e56614b41f6942fa08985067bb82ad8b93972347964fc2", "commits": 200, "result": "PASS"},
+    "parallel_log_manifests": {
+      "run_logs": {"count": 50, "bytes": 7201, "sha256": "e081e0a337f2b06f42e7f3b3e503600cd4904e6a3b1eb691203825636f7a5728"},
+      "coord_logs": {"count": 50, "bytes": 319038, "sha256": "8c0614dffc6cfc5dc7e906d0b409d7c18ac1445de7e1a0c4c7af4b3dc4baecfe"},
+      "qemu_logs": {"count": 50, "bytes": 31322, "sha256": "a321ee4bf7ed69f61416aebe3695b6c43c2a112a9db908b0731d754ba2751739"}
+    }
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01",
+    "verilator_binary_sha256": "9213a72d341fd00d389936e45a16975b27b1f6725696fd303e4559b8f8c4bda3",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "make": "4.4.1",
+    "aarch64_gcc": "16.1.0",
+    "objcopy": "2.47",
+    "rtl_filelist_sha256": "23e27cb9249c08be6e5d11fd8daa0d315d9859dc12b459473ed8f39dea92f46e",
+    "qemu": {
+      "release": "11.1.0",
+      "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+      "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+      "plugin_sha256": "12328935aebcff8a2b257a5255a6974c3203324deaf3cc931c8cd2e996a26fe6"
+    },
+    "coordinators": {
+      "base": "21a10ae538a5526ab35ac10ff1d244826dcd9325bf41913780c662f5e236bc05",
+      "l1dl2": "6118b65f97a231de211c1851b1b49782cf686d38baabd71ea4c1c7db3fe3332b",
+      "l1dl2_delay2": "1570f035940a21abecef2732e92fc9895788239898ed5fd045078b0cbb02f24e"
+    }
+  },
+  "attempt_notes": {
+    "attempt_1": "All internal Gate groups passed, but the outer pipeline exited 1 because the task-owned tee directory had not been created; no complete aggregate log existed, so it was not accepted.",
+    "attempt_2": "Created only the ignored task log directory, reran the complete unsimplified Gate, obtained outer exit 0 and the content-addressed full log. Attempt 2 is authoritative."
+  },
+  "resource_and_integrity": {
+    "resource": "local",
+    "admission_min_available_mib": 8192,
+    "memory_policy": "exclusive-no-hard-cap",
+    "released_after_exit": true,
+    "final_local_status": "FREE",
+    "tracked_source_modified_by_gate": false,
+    "assertion_or_comparison_disabled": false,
+    "expected_result_modified": false,
+    "orphan_qemu_or_coordinator_or_verilator": 0,
+    "gamepc_or_quartus_used": false,
+    "assembler_or_jtag_board_flash_reset_power": false
+  },
+  "handoff": "docs/handoffs/T-20260920-015-b25-rx-cpu-observability-gate-d.md",
+  "next": "Create the exact one-line A64_FP_SIMD=0 board profile derivative, run its affected local checks, then use that content-addressed profile as the sole input to a fresh Quartus physical flow."
+}

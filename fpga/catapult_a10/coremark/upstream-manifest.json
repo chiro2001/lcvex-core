@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/eembc/coremark.git",
+  "tag": "v1.01",
+  "commit": "cfa9ab377835911f23d9b0831c7be302ed1f58de",
+  "files": {
+    "LICENSE.md": "d72094a3cb629dc7712ae09b7b777416903c6670930928b5530f2ddfb2296888",
+    "README.md": "13733fabd4e3100d5aaba502bc7740aac35a1bbbf162ef121e138df4e0796bf8",
+    "core_list_join.c": "e6c82700c2e422dc23962bf838f7d1cd3558fe825095fe832beb63f2f8412b14",
+    "core_main.c": "bafcc71c2cca06d7e15ac27e58e17f7f0bcb3c8c92404d9fa7039020de46091f",
+    "core_matrix.c": "7b8c44ee71d3a1a66dbf15d711861762852a45d6ec0c3c8aca6b780742ce3507",
+    "core_state.c": "74d5dfcdc2a2f4a9af5b1d6d0240d60522a24dbc55df20320e30d6d33ee79501",
+    "core_util.c": "3c73f46d7ddc066f92a811aad511808395549f8d67d626612064ebc1b2477290",
+    "coremark.h": "2da505dae03d07a259509a3b6dfde873cf5d64b120acba93236346f94eab0a9b"
+  }
+}

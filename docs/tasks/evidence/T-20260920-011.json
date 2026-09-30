@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-011",
+  "label": "B25-RX-OBSERVABILITY-BOARD-INTERACTION",
+  "state": "blocked-cpu-visible-rx-consumption",
+  "acceptance_status": "volatile-config-boot-ready-and-bridge-rx-pass-direct-delayed-command-response-fail-golden-rollback-pass",
+  "partial": true,
+  "base_sha": "9547bd953b6adb3169dd50116e2bf60fa14a15b3",
+  "base_tree_sha": "7ecbb7e2f39a4a4f218dc11c23deead775d889ac",
+  "physical_candidate_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+  "physical_candidate_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+  "branch": "verify/T-20260920-011-b25-rx-observability-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-011",
+  "owner": "root",
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。直接使用这个命令行即可读取和交互。",
+    "direct_command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "scope": "Exact frozen T-010 SOF volatile FPGA configuration, bounded direct JTAG-UART interaction, and content-addressed golden volatile rollback on functional failure.",
+    "excluded": [
+      "JIC/EPCQ/Flash write or erase",
+      "power cycle or board/SoC reset",
+      "standard jtagserver stop or restart",
+      "unknown or pre-existing process stop"
+    ]
+  },
+  "candidate": {
+    "sof": {
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-010-b25-rx-observability-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842100,
+      "sha256": "7e9c60641c48fb4afff047f97f1d84865d32d24bd92aead26041035fd985a2f2",
+      "quartus_checksum": "0x316ED173",
+      "design_hash": "18B51F1418BE0B12479B55B745396DBF"
+    },
+    "attempt_v2_ordinary_file_control": {
+      "started_at": "2026-09-20T05:39:40.7810777+08:00",
+      "finished_at": "2026-09-20T05:42:13.2444303+08:00",
+      "programming": {
+        "programmer_pid": 57036,
+        "exit_code": 0,
+        "configuration_success": true,
+        "operation_success": true,
+        "checksum_match": true,
+        "jtag_id_match": true,
+        "stdout_sha256": "3b242fbf712104fb2de4d88f4a1e6b1be4f83f9ac3bb97b8bbc85bbe8a24ef0c"
+      },
+      "terminal": {
+        "method": "first and only ordinary-file RedirectStandardInput terminal immediately after candidate configuration",
+        "input_hex": "3f0a700a640a5a0a",
+        "input_sha256": "a5839c5de0f7474431d0a43e3f184861e294a69bdc97ea2062fd428886b63852",
+        "connected": true,
+        "boot_ok": true,
+        "cal_state": "CAL-WAIT",
+        "ddr_state": "DDR-FAIL",
+        "ready_ok": true,
+        "rxdbg_count": 92,
+        "rxdbg_startup": "RXDBG 00000000 00000000",
+        "rxdbg_after_input": "RXDBG 00256C2E 0008010A",
+        "rxdbg_final": "RXDBG 018D6C2E 0008010A",
+        "status_ok": false,
+        "pong_ok": false,
+        "diagnostic_response_ok": false,
+        "echo_ok": false,
+        "stdout_sha256": "e2839b1020a61fac51701da198240bdd9d7c43c75fdb6e718c8f778d01cba345"
+      },
+      "result_json": {
+        "path": "build/agents/T-20260920-011/remote-evidence-attempt-v2/runtime/result.json",
+        "bytes": 16985,
+        "sha256": "08802d3e4b30b0d7003beaf5d1131441245119b3a7e38ba09fbeca2832686473"
+      },
+      "interpretation": "All eight ordinary-file bytes reached the production bridge, but immediate startup transmission could still have overlapped a full target TX FIFO; delayed direct interaction was required as a positive control."
+    },
+    "attempt_v3b_delayed_direct_interaction": {
+      "programming": {
+        "started_at": "2026-09-20T05:50:36.6081444+08:00",
+        "finished_at": "2026-09-20T05:51:32.8226307+08:00",
+        "programmer_pid": 69992,
+        "owned_server_pid": 66600,
+        "exit_code": 0,
+        "configuration_success": true,
+        "operation_success": true,
+        "checksum_match": true,
+        "jtag_id_match": true,
+        "owned_server_stopped": true,
+        "result_sha256": "cb62bf563c748022563c3098ec5ccc7c914294c6634e4b8490325ef0090672ea",
+        "programmer_stdout_sha256": "70095124c879b51dde266ecd7d8ba66d28ea5580ff91e427192dc0edc4803556"
+      },
+      "terminal": {
+        "method": "ssh -tt followed by the user-specified nios2-terminal command; commands entered into the same live terminal only after READY and repeated zero-event RXDBG snapshots",
+        "connected": true,
+        "boot_ok": true,
+        "cal_state": "CAL-WAIT",
+        "ddr_state": "DDR-FAIL",
+        "ready_ok": true,
+        "rxdbg_count": 153,
+        "input_sequence": ["?", "p", "d", "Z"],
+        "event_transitions": [
+          {"input": "?", "event": "0001013F", "meaning": "one RVALID observation, RX seen, last byte 0x3F"},
+          {"input": "p", "event": "00020170", "meaning": "two cumulative RVALID observations, RX seen, last byte 0x70"},
+          {"input": "d", "event": "00030164", "meaning": "three cumulative RVALID observations, RX seen, last byte 0x64"},
+          {"input": "Z", "event": "0004015A", "meaning": "four cumulative RVALID observations, RX seen, last byte 0x5A"}
+        ],
+        "snapshot_groups": [
+          {"event": "00000000", "first_data_read_count": "00000000", "last_data_read_count": "00940000", "snapshots": 27},
+          {"event": "0001013F", "first_data_read_count": "00993B7D", "last_data_read_count": "01293B7D", "snapshots": 37},
+          {"event": "00020170", "first_data_read_count": "012F39A2", "last_data_read_count": "01A339A2", "snapshots": 30},
+          {"event": "00030164", "first_data_read_count": "01A8A8A4", "last_data_read_count": "0200A8A4", "snapshots": 23},
+          {"event": "0004015A", "first_data_read_count": "02066451", "last_data_read_count": "02926451", "snapshots": 36}
+        ],
+        "status_ok": false,
+        "pong_ok": false,
+        "diagnostic_response_ok": false,
+        "echo_ok": false,
+        "exit": "Ctrl-C stopped only the task-owned nios2-terminal; tool reported exiting due to ^C on host and exit 0.",
+        "transcript": {
+          "path": "build/agents/T-20260920-011/attempt-v3-local/direct-terminal.typescript",
+          "bytes": 4554,
+          "sha256": "1f4e15615532afd8793dd037cfad19d44d04b92a1e135ff71ff91af59b53871c"
+        }
+      },
+      "functional_result": "FAIL; delayed direct interaction excludes startup TX congestion and proves each command byte reaches the bridge, but no CPU-visible command behavior is emitted."
+    }
+  },
+  "rollback": {
+    "attempted": true,
+    "started_at": "2026-09-20T05:53:58.2653603+08:00",
+    "finished_at": "2026-09-20T05:54:53.8313570+08:00",
+    "golden_sof_bytes": 36844906,
+    "golden_sof_sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "quartus_checksum": "0x31510BB6",
+    "programmer_pid": 63080,
+    "owned_server_pid": 50224,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "jtag_id_match": true,
+    "owned_server_stopped": true,
+    "programmer_stdout_sha256": "63f0b4076783e2dfafb3c9cffea7cd5404854b6468545c7b672b45b2cd3b3233",
+    "result_sha256": "deaf55979824e3cfcd941eabf4c485427a0409d6d0cb8bd5b7259dd49aa2b85c",
+    "final_board_state": "golden SOF running"
+  },
+  "postflight": {
+    "accepted": true,
+    "golden_design_hash": "193DE4BC8A30F3ED5F1F",
+    "device_jtag_id": "0x02E060DD",
+    "nodes": ["Virtual JTAG #0", "Signal Tap #0", "JTAG UART #0", "JTAG PHY #0"],
+    "standard_server_pid": 5640,
+    "standard_server_preserved": true,
+    "busy_eda_or_terminal_count": 0,
+    "port_1310_listener_count": 0,
+    "log": {
+      "path": "build/agents/T-20260920-011/attempt-v3-local/final-postflight.log",
+      "bytes": 1028,
+      "sha256": "b511ab6231a6d29beeeb6307970b91c50d6421aa091f4004a7b65f1d2e0300a1"
+    },
+    "final_resource_status": "gamepc FREE"
+  },
+  "controls_and_classification": {
+    "excluded": [
+      "wrong candidate SOF identity or failed volatile configuration",
+      "wrong JTAG cable, device or instance",
+      "host ordinary-file stdin semantics",
+      "early command transmission while the target TX FIFO is full",
+      "host-to-vendor-RX FIFO delivery failure",
+      "production bridge failure to observe RVALID and the received byte",
+      "CPU failure to issue repeated DATA-register reads"
+    ],
+    "remaining_fault_domain": "The RX DATA response value, response ownership/timing through the PoC/interconnect, core dmem response, load extension/writeback, or the firmware compare/branch path.",
+    "statement": "The bridge sees every delayed byte and the DATA-read counter continues advancing, yet software emits no byte-specific response. A deeper CPU-visible load observability task is required before any RTL fix."
+  },
+  "execution_notes": {
+    "attempt_v1": "The custom server exposed the expected device, but quartus_pgm reported Programming hardware cable not detected. No configuration occurred and the owned server was stopped.",
+    "attempt_v3_preflight_failure": "A first attempt-v3 wrapper tried to hash a live jtagserver log and failed before quartus_pgm. Owned PID 3920 was stopped and board state remained golden.",
+    "evidence_schema_note": "The candidate program-result server field contains PowerShell Write-Output strings mixed with the returned server record. Independent programmer logs, PIDs, cleanup checks and postflight bind the functional facts; no board rerun was performed only to normalize this field."
+  },
+  "safety_and_resources": {
+    "all_gamepc_actions_held_resource_lock": true,
+    "candidate_volatile_configurations": 2,
+    "golden_volatile_configurations": 2,
+    "persistent_flash_action": false,
+    "jic_or_epcq_action": false,
+    "reset_or_power_action": false,
+    "standard_server_restart_or_stop": false,
+    "unknown_or_preexisting_process_stopped": false,
+    "task_owned_servers_stopped": true,
+    "task_owned_terminals_stopped": true,
+    "final_board_state": "golden SOF running",
+    "final_resource_status": "gamepc FREE"
+  },
+  "blocker": "The production bridge observes all delayed command bytes while the CPU repeatedly reads the DATA register, but status, PONG, diagnostic response and printable echo remain absent.",
+  "handoff": "docs/handoffs/T-20260920-011-b25-rx-observability-board-interaction.md",
+  "next": "Register a CPU-visible RX load observability task. Trace bridge response, PoC response, core dmem response and committed load/writeback in simulation first; only then rebuild and repeat one bounded volatile board test."
+}

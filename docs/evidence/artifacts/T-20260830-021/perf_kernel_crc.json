@@ -1,0 +1,31 @@
+{
+  "name": "kernel_crc",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "f870e40c58bc91a4180eb79ff89cfb8f26c68625ac5a8210c737a9d83716a48e",
+  "source_sha256": "f870e40c58bc91a4180eb79ff89cfb8f26c68625ac5a8210c737a9d83716a48e",
+  "image_hash": "a22f6ceaffd2b2c84c7bf85a875c5f1844b7d3d254818aea5fbb0d0f8b2362bc",
+  "image_sha256": "a22f6ceaffd2b2c84c7bf85a875c5f1844b7d3d254818aea5fbb0d0f8b2362bc",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 184738,
+  "wall_sec": 2.462945,
+  "rss_kb": 139512,
+  "rss": 136.242,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_kernel_crc.bin",
+    "--name",
+    "kernel_crc",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: kernel_crc (184738 cycles)\n",
+  "runner_stderr": ""
+}

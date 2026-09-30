@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-005",
+  "title": "续跑 checkpoint parent/global provenance 与自动 manifest",
+  "kind": "difftest-infra",
+  "priority": "high",
+  "assigned_owner": "luna-implementation-agent",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "修复 run_lockstep_resume 的 checkpoint 发布与全局 seq 上下文；不修改 RTL/QEMU，不跑 Linux 长跑",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": true,
+    "scope": "拆解 local/global seq、parent chain、manifest 生命周期与失败回收边界"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审 checkpoint.py/run_lockstep_resume.sh 的目标 diff 和指定文档，给方向性验收意见"
+  },
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model_selection": "omit model when spawning; platform default is gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "监控低资源 smoke 与失败链清理，不启动 Linux 长跑"
+  },
+  "phase": "done",
+  "parent": "T-20260826-004",
+  "depends_on": ["T-20260826-004"],
+  "writes": [
+    "sim/difftest/run_lockstep_resume.sh",
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/checkpoint_resume_manifest_smoke.py",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/DIFFTEST.md",
+    "docs/DIFFTEST_QEMU_PLAN.md",
+    "docs/tasks/evidence/T-20260826-005.json",
+    "docs/handoffs/T-20260826-005-resume-provenance.md"
+  ],
+  "reads": [
+    "sim/difftest/run_lockstep_resume.sh",
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/checkpoint_manifest_smoke.py",
+    "docs/handoffs/T-20260826-004-linux-resume.md",
+    "docs/handoffs/055-checkpoint-manifest-hash.md",
+    "docs/DIFFTEST.md",
+    "docs/DIFFTEST_QEMU_PLAN.md"
+  ],
+  "context_docs": [
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PROJECT_STRUCTURE.md"
+  ],
+  "base_sha": "62f646f",
+  "branch": "infra/T-20260826-005-resume-provenance",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-005",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 1024,
+    "disk_mb": 256,
+    "timeout_s": 1200
+  },
+  "validation": {
+    "l0": [
+      "python3 -m py_compile sim/difftest/checkpoint.py sim/difftest/checkpoint_resume_manifest_smoke.py",
+      "python3 sim/difftest/checkpoint_resume_manifest_smoke.py"
+    ],
+    "l1": [
+      "make checkpoint-manifest-smoke checkpoint-resume-manifest-smoke",
+      "bash -n sim/difftest/run_lockstep_resume.sh"
+    ],
+    "l2": [
+      "小型 fixture 验证 resume chain local/global context、parent hash、失败不发布",
+      "既有 trace manifest smoke 回归"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "CKPT_EVERY>0 的 resume 运行在启动前创建输入绑定的 incomplete manifest，成功且 TSV/artifact 完整后才原子 finalize；read_manifest/restore 拒绝未完成元数据。context 明确 parent_chain、parent_manifest_sha256、parent_seq、global_seq_offset、local/global 窗口与 artifact 端点，并校验当前 Image/DTB/INITRD/QEMU/VERSION/plugin 与 parent 输入及 QEMU_CPU/machine/icount 上下文一致；失败不发布完成 manifest；局部 sidecar 保持 local seq、不伪造全局 seq；smoke 覆盖篡改拒绝、路径冲突和资源清理。",
+  "created_at": "2026-08-26T07:00:00+08:00",
+  "updated_at": "2026-08-26T08:00:00+08:00",
+  "commits": [
+    "aa51aec",
+    "e5d9072",
+    "8c18fd9",
+    "81b10ff"
+  ],
+  "handoff": "docs/handoffs/T-20260826-005-resume-provenance.md",
+  "evidence": "docs/tasks/evidence/T-20260826-005.json",
+  "known_limits": [
+    "不在本任务启动 QEMU/Verilator Linux 长跑；只用 fixture 和 shell 静态检查。",
+    "不改变现有 checkpoint TSV 的 local seq 解释，global 映射通过版本化 context 明确记录。"
+  ],
+  "next": "已完成并归档；重新建立 strict root Linux 链后再排队深段续跑。"
+}
+

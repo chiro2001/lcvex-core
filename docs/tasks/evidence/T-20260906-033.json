@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-033",
+  "label": "R21-ITER-ROUND-METADATA",
+  "state": "review",
+  "partial": true,
+  "acceptance_status": "local-focused-pass-heavy-validation-pending",
+  "base_sha": "edaaca5bc3296aaf89f161a079ee09868b50b0b5",
+  "functional_base_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "implementation_head": "this commit",
+  "branch": "timing/T-20260906-033-r21-iter-round",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-033",
+  "owner": "r21_iter_round",
+  "model": "platform-default-confirmed-gpt-5.6-luna-max",
+  "reasoning_effort": "max",
+  "dispatch_model_argument_omitted": true,
+  "sent_at": "2026-09-06T19:09:21+08:00",
+  "received_at": "2026-09-06T19:09:21+08:00",
+  "reported_at": "2026-09-06T19:20:00+08:00",
+  "cone_id": "r20-div-pre-hi-to-it-fin-mid-hi",
+  "write_regions": [
+    "rtl/lcvex_fp_scalar.sv::function round_pack_iter_p1 only",
+    "tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv",
+    "docs/tasks/evidence/T-20260906-033.json",
+    "docs/handoffs/T-20260906-033-r21-iter-round.md"
+  ],
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv"
+    ],
+    "rtl_sha256": "ff848bba00600c4b8da79f895c30e37c9caf7c482ec9cd5ce87d9ec2e9bce524",
+    "focused_tb_sha256": "4159ca4b157dad2555dd494b7e2ea07af089e24e2acf802527d1363c340aa4fb",
+    "implementation_commit": "this commit",
+    "summary": "round_pack_iter_p1 now consumes only the lead/lead_valid metadata already registered by DIV/SQRT finish; the duplicate descending 256-bit leading-one fallback is removed.",
+    "changed_logic": [
+      "Removed the local fallback-scan loop and its loop index declaration from round_pack_iter_p1.",
+      "lead_valid=1 selects pre.lead; lead_valid=0 remains the registered zero classification.",
+      "Special bypass, p1 normalization/GRS construction, p2 rounding, flags and FSM states are unchanged."
+    ],
+    "producer_contract": {
+      "div_finish_pre": "finite nonzero quotient sets sig, lead=leading_one_index(q_sig), lead_valid=(|q_sig != 0); zero/special cases remain special or lead_valid=0",
+      "sqrt_finish_pre": "finite nonzero quotient sets sig, lead=leading_one_index(q_sig), lead_valid=(|q_sig != 0); zero/special cases remain special or lead_valid=0",
+      "consumer": "round_pack_iter_p1 uses the registered metadata without rescanning pre.sig"
+    },
+    "semantic_invariants": [
+      "H/S/D normal and tiny p1 payloads preserve exponent, mantissa, guard, sticky and discarded bits.",
+      "lead_valid=0 produces the same zero p1/p2 result under the finish metadata contract.",
+      "Special bits and input flags bypass p1 magnitude work and remain ORed by p2.",
+      "IT_FIN -> IT_PACK -> IT_PACK_RESULT state/latency and exactly-once output ownership are untouched.",
+      "No public port, state enum, reset/kill/pause logic, latency table, QEMU, QSF or SDC changed."
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "owner-diff-check",
+      "level": "static",
+      "source_sha": "this commit",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-fallback-static-check",
+      "level": "static",
+      "source_sha": "this commit",
+      "command": "sed -n '/function automatic fp_round_mid_t round_pack_iter_p1/,/endfunction/p' rtl/lcvex_fp_scalar.sv | if rg -n 'for[[:space:]]*\\(|pre\\.sig\\[i\\]|integer i'; then exit 1; else echo 'PASS round_pack_iter_p1 has no fallback scan'; fi",
+      "exit_code": 0,
+      "result": "pass",
+      "notes": "The function retains only the metadata-driven h assignment; unrelated any_low_bits calls are part of GRS construction."
+    },
+    {
+      "run_id": "owner-verilator-lint",
+      "level": "lightweight-elaboration",
+      "source_sha": "this commit",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL --top-module lcvex_fp_scalar_r21_iter_round_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0"
+    },
+    {
+      "run_id": "owner-focused-build",
+      "level": "lightweight-focused",
+      "source_sha": "this commit",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL -j 1 --top-module lcvex_fp_scalar_r21_iter_round_tb -Mdir build/agents/T-20260906-033/focused/obj_dir_iter_round -o lcvex_fp_scalar_r21_iter_round_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "jobs": 1,
+      "resource": "lightweight; no local/GamePC production lock acquired"
+    },
+    {
+      "run_id": "owner-focused-runtime",
+      "level": "lightweight-focused",
+      "source_sha": "this commit",
+      "command": "build/agents/T-20260906-033/focused/obj_dir_iter_round/lcvex_fp_scalar_r21_iter_round_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "checks": [
+        "H/S/D predecoded normal GRS metadata",
+        "lead_valid=0 authoritative zero without a fallback scan",
+        "H/S/D special bypass and input flags",
+        "S tiny sticky UFC|IXC and normal tie rounding IXC",
+        "finite DIV finish lead metadata and result boundary",
+        "paired H SQRT finish lead metadata and result boundary"
+      ],
+      "artifact": "build/agents/T-20260906-033/focused/obj_dir_iter_round/lcvex_fp_scalar_r21_iter_round_tb"
+    },
+    {
+      "run_id": "owner-iverilog-elaboration",
+      "level": "lightweight-elaboration",
+      "source_sha": "this commit",
+      "command": "iverilog -g2012 -Wall -s lcvex_fp_scalar_r21_iter_round_tb -o /dev/null rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv",
+      "exit_code": 15,
+      "result": "known tool limitation; not used as a functional verdict",
+      "tool": "Icarus Verilog 13.0",
+      "stderr_signature": [
+        "rtl/lcvex_fp_scalar.sv:3282/3780/4210: inside expressions not supported yet",
+        "rtl/lcvex_fp_scalar.sv:5825/5832/5837/5846: existing concurrent assertion property syntax rejected"
+      ]
+    }
+  ],
+  "not_run": [
+    "merged-candidate L0-L2 union",
+    "Cocotb and QEMU/strict lockstep",
+    "Quartus synthesis/fitter/signoff STA",
+    "assembler, SOF/JIC/RBF/POF/JBC/SVF/JAM, JTAG, programming, power-on or board test"
+  ],
+  "policy": {
+    "active_task_modified": false,
+    "rtl_modified_only_in_round_pack_iter_p1": true,
+    "dedicated_tb_added": true,
+    "public_interface_modified": false,
+    "state_enum_modified": false,
+    "reset_kill_pause_logic_modified": false,
+    "latency_table_modified": false,
+    "shared_test_registry_modified": false,
+    "qemu_modified": false,
+    "qsf_or_sdc_modified": false,
+    "heavy_validation_run": false,
+    "quartus_or_physical_run": false,
+    "assertions_disabled": false,
+    "reference_results_modified": false
+  },
+  "known_limits": [
+    "专用 TB 仅为本 lane 的轻量 focused 证据；合并 candidate 仍需统一运行现有 scalar/NEON L0-L2 和受影响 latency 检查。",
+    "Icarus 受仓库既有 inside/SVA 语法限制；Verilator lint 与 runtime 均通过。",
+    "本 lane 不宣称 setup closure、面积收益或 physical signoff；需由 T-032 集成后 fresh STA 重新测量。"
+  ],
+  "merge_sha": null,
+  "integrator_review": {
+    "status": "pending",
+    "received_at": null,
+    "merged_at": null,
+    "notes": "等待 T-032 集成者核对写集、合并順序，并在 candidate SHA 上重跑联合功能/物理验证。"
+  },
+  "handoff": "docs/handoffs/T-20260906-033-r21-iter-round.md",
+  "next": "Integrator checks the function-only RTL diff, then merges this lane in the registered T-032 order before the unified L0-L2 and physical flow."
+}

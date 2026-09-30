@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-053",
+  "state": "review",
+  "base_sha": "124fedbcd7fff80227e95dbe78cd302ddf6e6048",
+  "head_sha": "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+  "merge_sha": "60c4d1060842efc26f361472c71e05fae69e8020",
+  "branch": "feature/T-20260827-053-b1-axi4",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-053",
+  "scope": "platform-independent AMBA AXI4 Full package/master, independent randomized SV BFM/slave, protocol SVA, SV and Cocotb L1 closure",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "git": "2.55.0"
+  },
+  "qemu": {
+    "status": "not in scope",
+    "release": "",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": null,
+  "runs": [
+    {
+      "run_id": "owner-l0-verilator-lint-001",
+      "source_sha": "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only -Wall --timing --assert --top-module lcvex_axi4_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv rtl/lcvex_axi4_sva.sv tb/sv/lcvex_axi4_bfm.sv tb/sv/lcvex_axi4_tb.sv",
+      "seed": null,
+      "wall_seconds": 0.73337814,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "独立 package/master/SVA/BFM/SV top 静态 lint 通过。"
+    },
+    {
+      "run_id": "owner-l1-sv-build-002",
+      "source_sha": "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_axi4_tb -Mdir build/agents/T-20260827-053/sv/obj_dir -o lcvex_axi4_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv rtl/lcvex_axi4_sva.sv tb/sv/lcvex_axi4_bfm.sv tb/sv/lcvex_axi4_tb.sv",
+      "seed": "0x01b1a4f7",
+      "wall_seconds": 14.100514824,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SV BFM/SVA 独立可执行文件构建通过。"
+    },
+    {
+      "run_id": "owner-l1-sv-run-003",
+      "source_sha": "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "build/agents/T-20260827-053/sv/obj_dir/lcvex_axi4_tb",
+      "seed": "0x01b1a4f7",
+      "wall_seconds": 0.000003596,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SV directed 全部场景通过，仿真到 875 ns；SVA 无失败。"
+    },
+    {
+      "run_id": "owner-l1-cocotb-004",
+      "source_sha": "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.axi4 SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-053/build/agents/T-20260827-053/cocotb SEED=0x01b1a4f7",
+      "seed": "0x01b1a4f7",
+      "wall_seconds": 1.41482841,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 3/3 PASS，仿真总时长 1115 ns；覆盖 canonical line、通道独立背压、窄访问、错误、边界和 reset。"
+    },
+    {
+      "run_id": "owner-l0-json-diff-005",
+      "source_sha": "6f3a239c1e4b19dc50544f3cd658034526b95a5d",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": 0.646330714,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON 通过 python3 -m json.tool，且工作树无空白错误。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "sv-executable",
+      "uri": "build/agents/T-20260827-053/sv/obj_dir/lcvex_axi4_tb",
+      "sha256": "10e424af8fca89b5051b7dd5918ee9d93f01a5076f31d707c882f60a3a33c728",
+      "bytes": 336712,
+      "owner": "b1-axi4-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-sv-build-002 followed by owner-l1-sv-run-003"
+    },
+    {
+      "id": "cocotb-executable",
+      "uri": "build/agents/T-20260827-053/cocotb/Vtop",
+      "sha256": "491cb943b91bbcb718d169d92556e59cacfc0ee9b0c2ef6b69612ad61458746a",
+      "bytes": 531896,
+      "owner": "b1-axi4-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-004"
+    },
+    {
+      "id": "cocotb-results",
+      "uri": "sim/cocotb/results.xml",
+      "sha256": "b24d4ba7d2701cde7e902cb4d554ec7feb8106cb5bd7011b75fddb091568d0bd",
+      "bytes": 950,
+      "owner": "b1-axi4-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-004"
+    }
+  ],
+  "known_limits": [
+    "首版只支持 single-ID/single-outstanding；master 只产生 INCR，FIXED/WRAP 和 exclusive transaction 未实现。",
+    "本任务未接入 Cache/L2、CPU、SoC、平台适配、CDC 或任何现有 filelist/顶层入口；集成者后续按写集串行接线。",
+    "BFM 存储是独立仿真字节数组；未运行 Quartus、板测、Linux、QEMU、锁步或 Gate F-MEM。",
+    "active task JSON 在主工作区由调度者维护；owner 未修改它。"
+  ],
+  "integration_validation": {
+    "runner_role": "root-integrator",
+    "source_sha": "60c4d1060842efc26f361472c71e05fae69e8020",
+    "line": "feature/fpga-catapult-a10",
+    "result": "pass_l0_l1",
+    "runs": [
+      {
+        "run_id": "integrator-b0-platform-check-006",
+        "level": "L0",
+        "command": "PYTHONDONTWRITEBYTECODE=1 python3 fpga/catapult_a10/tools/check_platform.py",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "PLATFORM_CHECK_PASS files=15"
+      },
+      {
+        "run_id": "integrator-b0-platform-sha-007",
+        "level": "L0",
+        "command": "cd fpga/catapult_a10 && sha256sum -c SHA256SUMS",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "15/15 target payload hashes match。"
+      },
+      {
+        "run_id": "integrator-b1-lint-008",
+        "level": "L0",
+        "command": "conda run --no-capture-output -n lcvex verilator --lint-only -Wall --timing --assert --top-module lcvex_axi4_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv rtl/lcvex_axi4_sva.sv tb/sv/lcvex_axi4_bfm.sv tb/sv/lcvex_axi4_tb.sv",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-b1-sv-009",
+        "level": "L1",
+        "seed": "0x01b1a4f7",
+        "command": "mkdir -p build/agents/T-20260827-053/fpga-line/sv/obj_dir && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_axi4_tb -Mdir build/agents/T-20260827-053/fpga-line/sv/obj_dir -o lcvex_axi4_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_master.sv rtl/lcvex_axi4_sva.sv tb/sv/lcvex_axi4_bfm.sv tb/sv/lcvex_axi4_tb.sv && build/agents/T-20260827-053/fpga-line/sv/obj_dir/lcvex_axi4_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "SV 全场景通过，仿真 875ns，SVA 无失败。"
+      },
+      {
+        "run_id": "integrator-b1-cocotb-010",
+        "level": "L1",
+        "seed": "0x01b1a4f7",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.axi4 SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-fpga-catapult-a10/build/agents/T-20260827-053/fpga-line/cocotb SEED=0x01b1a4f7",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "Cocotb 3/3 PASS，仿真总时长 1115ns。"
+      }
+    ],
+    "remaining_blockers": [
+      "B1 仍未接入 L2/EMIF/CPU；该任务不验证 AXI4 到 512-bit Avalon 的 B2 适配。",
+      "B0 exact Quartus/Qsys regenerate、STA 和 Gate F-BOARD 仍待具备工具的环境。"
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-024",
+  "label": "B25-LOGIC-IMM-QUARTUS-SAFE-RTL",
+  "state": "done-local-awaiting-integration",
+  "acceptance_status": "rtl-pure-decoder-and-exhaustive-reference-pass-local-l0-l1-pass",
+  "partial": true,
+  "base_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+  "implementation_commit": "92bd167b71ce675969bad8235142d59db2f66e20",
+  "implementation_tree_sha": "bb6f1c64f804df45b5d0fb877106c3531696086e",
+  "branch": "fix/T-20260920-024-b25-logic-imm-quartus-safe-rtl",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-024",
+  "owner": "logicimm_rtl",
+  "reported_at": "2026-09-20T14:18:42+08:00",
+  "implementation": {
+    "file": "rtl/lcvex_decode.sv",
+    "sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+    "summary": [
+      "Replaced the output-argument logic_imm_valid decoder with pure logic_imm_decode returning {valid, mask} as a 65-bit packed value.",
+      "Selected len with fixed casez priority and assigned every local/result bit on every path.",
+      "Used explicit element-size/levels tables, bounded shifts, guarded zero-rotation, and constant-width replication concatenations.",
+      "Preserved W-form zero-extension/64-bit replicated masks, X-form 2..64-bit element semantics, and reserved UDEF encodings.",
+      "Kept public decode fields, pipeline latency, and all non-logical-immediate decode regions unchanged."
+    ],
+    "forbidden_regions_touched": false,
+    "qsf_sdc_firmware_tests_expected_modified": false
+  },
+  "reference_contract": {
+    "testbench": "build/agents/T-20260920-024/logic_imm_exhaustive_tb.sv",
+    "testbench_sha256": "065ce3b36980005420f0092a90eeb470c9ea41b82fad6d4ca743ec6c6ad3d9e5",
+    "algorithm": "Independent ARM N:NOT(imms) highest-bit len, S/R masking, element ROR and 64-bit replication",
+    "coverage": "sf=0/1, N=0/1, immr=0..63, imms=0..63: 16384 instruction encodings",
+    "reserved_rule": "len<1, S==levels, and sf=0 with N=1 are all required invalid",
+    "directed_masks": {
+      "0x12003C06": {
+        "W0": "0x0000A43F",
+        "mask": "0x0000FFFF",
+        "AND_result": "0x0000A43F"
+      },
+      "0x12001C00": {
+        "W0": "0x0000A43F",
+        "mask": "0x000000FF",
+        "AND_result": "0x0000003F"
+      }
+    }
+  },
+  "validation": [
+    {
+      "name": "decode-only Verilator lint",
+      "level": "L1",
+      "command": "resource-lock run local lcvex T-20260920-024 logicimm_rtl -- conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -Wno-UNUSEDSIGNAL --top-module lcvex_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv",
+      "result": "PASS",
+      "log": "build/agents/T-20260920-024/verilator_decode_lint.log",
+      "log_sha256": "ca670cf7fa5e4b3cee7ee01c315aa0cae36c24313ead46e10a890a678319dfa4"
+    },
+    {
+      "name": "independent exhaustive logical-immediate comparison",
+      "level": "L1",
+      "command": "resource-lock run local lcvex T-20260920-024 logicimm_rtl -- conda run --no-capture-output -n lcvex verilator --binary --timing --assert ... logic_imm_exhaustive_tb.sv; build/agents/T-20260920-024/obj_dir/Vlogic_imm_exhaustive_tb",
+      "result": "PASS: T-024 exhaustive N/immr/imms sf=0/1 (16384 cases) and firmware masks",
+      "build_log": "build/agents/T-20260920-024/verilator_exhaustive_build_final.log",
+      "build_log_sha256": "538f143b9b7bdcfba59d3bf88d96bd870aa8ec84656f953a788a56d00cf378bb",
+      "run_log": "build/agents/T-20260920-024/verilator_exhaustive_run_final.log",
+      "run_log_sha256": "50e50aa40211071fe1e5eebbbf8ad93a0a3bc5d2bcae96581debf008ec214438"
+    },
+    {
+      "name": "existing core RTL lint",
+      "level": "L1",
+      "command": "resource-lock run local lcvex T-20260920-024 logicimm_rtl -- conda run --no-capture-output -n lcvex make compile",
+      "result": "PASS",
+      "log": "build/agents/T-20260920-024/l0_l1_compile.log",
+      "log_sha256": "47fa26f18cff640c052a0466b15c1e6ca51d4ec6bae5651bbc6a85e107a3264e"
+    },
+    {
+      "name": "existing scalar/core SV smoke",
+      "level": "L1",
+      "command": "resource-lock run local lcvex T-20260920-024 logicimm_rtl -- conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 sim-sv",
+      "result": "PASS: lcvex_core_tb scalar + FPCR/FPSR wiring smoke",
+      "log": "build/agents/T-20260920-024/l1_core_sv.log",
+      "log_sha256": "0dd1c0ba4a20d6f32d5b767a049e1b124a304eff23c15caa7f00993702fd3821"
+    },
+    {
+      "name": "L0 microbench",
+      "level": "L0",
+      "command": "resource-lock run local lcvex T-20260920-024 logicimm_rtl -- conda run --no-capture-output -n lcvex make VERILATOR_JOBS=1 microbench",
+      "result": "PASS: mb_all (2411 cycles), 8 targets, 3280-byte image",
+      "log": "build/agents/T-20260920-024/l0_microbench.log",
+      "log_sha256": "ca2bf5ce03633a9440cb80e59c602880ec26f9e37d2e5455ff18674c4dad9f1d"
+    },
+    {
+      "name": "A64 encoder cross-check",
+      "level": "L1",
+      "command": "resource-lock run local lcvex T-20260920-024 logicimm_rtl -- conda run --no-capture-output -n lcvex make check-encoders",
+      "result": "PASS: a64.py encoder与交叉汇编器一致（86条）",
+      "log": "build/agents/T-20260920-024/l1_check_encoders.log",
+      "log_sha256": "99ad0bc286df5aea138be660e154a06255159b9ca2ec2134c02d71beb49d864c"
+    }
+  ],
+  "not_completed_in_lane": [
+    "Cocotb core L2-style entry was not run to completion because test_lcvex_core requires externally generated QEMU_TRACE; the build/elaboration succeeded and the test exited before simulation with the explicit missing-variable assertion.",
+    "Gate D, Quartus synthesis/fitter/STA/assembler, SOF configuration, and board/JTAG validation belong to the merged T-023/T-024 integration and physical lanes."
+  ],
+  "cocotb_precondition_log": {
+    "path": "build/agents/T-20260920-024/l1_core_cocotb.log",
+    "sha256": "f7e39047d0f6cc07b6b15e7ff0dbdba5c686419cad84aae039f26618f86c8ee0",
+    "classification": "environmental precondition missing; no RTL assertion or compile failure"
+  },
+  "resource": {
+    "heavy_lock": "resource-lock run local lcvex T-20260920-024 logicimm_rtl -- ...",
+    "final_local_status": "FREE",
+    "gamepc_used": false,
+    "quartus_used": false,
+    "board_or_jtag_used": false
+  },
+  "safety": {
+    "qsf_sdc_modified": false,
+    "firmware_modified": false,
+    "tests_or_runner_modified": false,
+    "qemu_modified": false,
+    "assertions_disabled": false,
+    "jic_epcq_flash": false,
+    "power_cycle_or_board_reset": false,
+    "unknown_process_stopped": false
+  },
+  "handoff": "docs/handoffs/T-20260920-024-b25-logic-imm-quartus-safe-rtl.md"
+}

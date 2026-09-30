@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-020",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "e3200edfe4bf5edd2d53b428cb25e6173f9a265b",
+  "head_sha": "47a36b3a5cd172db6a46e3e660c796d8b95fa583",
+  "branch": "feature/T-20260830-020-fpga-f4",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-020",
+  "scope": "FPGA-F4: alternate paths to bypass Qsys/IP and top glue for B5 bottom-up; all paths blocked.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-30T04:41:39+08:00",
+    "ipgen_ok": "2026-08-30T04:18:21+08:00",
+    "b5_synth_attempt": "2026-08-30T04:19:27+08:00",
+    "orig_qdb_copy_fit": "2026-08-30T04:24:22+08:00",
+    "soc_top_reference": "2026-08-30T03:58:14+08:00",
+    "documents_written_at": "2026-08-30T04:41:39+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-020",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "original_modified": false,
+    "license_read": false,
+    "full_flow_started": false
+  },
+  "toolchain": {
+    "quartus_sh": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe",
+    "quartus_syn": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe",
+    "quartus_cdb": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_cdb.exe",
+    "quartus_ipgenerate": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_ipgenerate.exe"
+  },
+  "runs": [
+    {
+      "run_id": "owner-ipgenerate-pre-001",
+      "result": "pass",
+      "command": "quartus_sh --flow compile b5_top -c b5_top -start ipgenerate -end ipgenerate",
+      "wall_s": 8,
+      "peak_pm_mb": 324,
+      "summary": "Platform Designer IP generation completed in 8s, skipped existing generated synthesis files."
+    },
+    {
+      "run_id": "owner-b5-synth-after-ip-002",
+      "result": "blocked_alt_sld",
+      "command": "quartus_sh --flow compile b5_top -c b5_top -start synthesis -end synthesis",
+      "wall_s": null,
+      "peak_pm_mb": 21000,
+      "summary": "Still stuck at alt_sld_fab_0 debug fabric generation after elaboration; no synthesis completion."
+    },
+    {
+      "run_id": "owner-orig-db-copy-import-003",
+      "result": "import_ok",
+      "command": "quartus_cdb catapult_a10 -c catapult_a10 --import_partition <part> --file qdb",
+      "summary": "All 5 partition QDB imports succeeded on copied original project."
+    },
+    {
+      "run_id": "owner-orig-db-fitter-004",
+      "result": "blocked_db_load",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 -start fitter -end fitter",
+      "exit_code": 3,
+      "summary": "Cannot load synthesized database; original compiled DB is bound to original project path/state."
+    },
+    {
+      "run_id": "owner-soctop-blackbox-reference-005",
+      "result": "blocked_memory",
+      "command": "quartus_syn soc_top_bu (from F3)",
+      "wall_s": 85,
+      "peak_pm_mb": 31314,
+      "summary": "SoC top with core/coh/AXI stubs still exceeded 30GB; reused F3 evidence."
+    }
+  ],
+  "blocker": {
+    "status": "no_fit_no_sta_no_sof",
+    "details": "A10 synthesis still hangs at alt_sld_fab_0; copying original DB does not allow fitter-only; SoC top blackbox still >30GB; no whole-SoC QDB available.",
+    "needs": "Stable host >=32GB and working Quartus debug fabric generation, or solution to alt_sld_fab_0 hang; or generate whole-SoC QDB on high-memory host."
+  },
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-020-fpga-f4.md",
+      "sha256": "402fcd535dea0b0d2b8cf1b6318b5cef91dbf0d283c9c06a7b514f9ef9121d7a",
+      "bytes": null,
+      "owner": "T-20260830-020",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-020-fpga-f4.md"
+    },
+    {
+      "id": "b5-top-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-020\\b5_top",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-020",
+      "retain_until": "task-close",
+      "reproduce": "A10 blackbox project with copied qdb and IP generation results"
+    },
+    {
+      "id": "orig-bu-copy",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-020\\orig_bu",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-020",
+      "retain_until": "task-close",
+      "reproduce": "Copied original Quartus project with partition imports; fitter fails db load"
+    },
+    {
+      "id": "qdb-dir",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-016\\qdb",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260830-020",
+      "retain_until": "task-close",
+      "reproduce": "Reused exported module QDBs from F2/F3"
+    }
+  ],
+  "known_limits": [
+    "No fit/STA/SOF produced.",
+    "T-067 still blocked.",
+    "Original QSF/SDC/RTL untouched; no license read; no traditional full-flow synthesis started.",
+    "Quartus debug fabric alt_sld_fab_0 generation remains the principal A10 blocker."
+  ],
+  "status": "blocked",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "timestamps.received_at",
+        "old": "2026-08-30T10:00:00+08:00",
+        "new": "2026-08-30T04:41:39+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "timestamps.documents_written_at",
+        "old": "2026-08-30T05:00:00+08:00",
+        "new": "2026-08-30T04:41:39+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-020-fpga-f4.md",
+        "sha256": "402fcd535dea0b0d2b8cf1b6318b5cef91dbf0d283c9c06a7b514f9ef9121d7a",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

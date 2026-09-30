@@ -1,0 +1,1 @@
+fpga/opensynth/examples/sv_features.sv:32: ERROR: syntax error, unexpected TOK_ID, expecting ')' or ',' or '='

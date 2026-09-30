@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-062",
+  "title": "B0 从零创建 Catapult A10 可重生成工程骨架",
+  "kind": "fpga-platform-bootstrap",
+  "priority": "high",
+  "assigned_owner": "b0-bootstrap-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "从现有 Catapult v3/Arria 10 平台输入包创建可独立审计、可重生成的 Quartus/Qsys 工程骨架；只写 fpga/catapult_a10/**，不接入 P7 core/cache/QEMU，不复制 RISC-V PoC 软件或外部 Quartus database。",
+  "review": {
+    "agent_type": "luna-readonly-audit",
+    "model": "",
+    "reasoning_effort": "max",
+    "required": true,
+    "scope": "只读核对工程入口、顶层/时钟复位边界、QSF/SDC/Qsys/EMIF/EPCQ/JTAG provenance、checker 与缺失工具时的明确边界；不运行 Quartus、不修改文件。"
+  },
+  "phase": "done",
+  "parent": "T-20260827-050",
+  "depends_on": [
+    "T-20260827-050",
+    "T-20260827-053",
+    "T-20260827-054",
+    "T-20260827-055",
+    "T-20260827-056"
+  ],
+  "input_note": "T-20260827-052 的离线平台包已合入基线 52144b4（merge 0292cbb），本任务在其上继续扩展工程骨架；T-052 保持 blocked 直至 T-063 解除远端阻塞。与 T-063 并行，写集不冲突：本任务只写本地 fpga/catapult_a10/** 与自身 handoff/evidence。",
+  "base_sha": "52144b450182cb18c6c0fc4689aff33e37e09eea",
+  "branch": "feature/T-20260827-062-b0-bootstrap",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-062",
+  "writes": [
+    "fpga/catapult_a10/**",
+    "docs/tasks/evidence/T-20260827-062.json",
+    "docs/handoffs/T-20260827-062-b0-bootstrap.md"
+  ],
+  "reads": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/active/T-20260827-052.json",
+    "docs/tasks/active/T-20260827-057.json",
+    "docs/tasks/evidence/T-20260827-052.json",
+    "docs/tasks/evidence/T-20260827-057.json",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/source.lock",
+    "fpga/catapult_a10/README.md",
+    "fpga/catapult_a10/tools/check_platform.py",
+    "fpga/catapult_a10/tools/regenerate_qsys.sh",
+    "/home/chiro/projects/a10-linux-riscv"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "fpga/catapult_a10/README.md",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/tools/check_platform.py"
+  ],
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": null,
+    "soft_target_minutes": 60,
+    "hard_stop": false,
+    "extend_when": "owner 按 Asia/Shanghai 报告 sent_at/received_at/reported_at、文件、验证、阻断和剩余工作且持续有产出时延长。"
+  },
+  "validation": {
+    "l0": [
+      "python3 fpga/catapult_a10/tools/check_platform.py",
+      "工程入口/顶层实体/QSF/QPF/SDC/Qsys 引用与 source.lock/SHA256SUMS 一致",
+      "无 PoC CPU/RISC-V 软件/外部 Quartus database 越界依赖"
+    ],
+    "l1": [
+      "独立 platform shell/clock-reset/EMIF calibration gate 的 lint 或离线结构检查",
+      "缺失 ip-generate/qsys-generate 时明确记录可恢复状态，不伪称 regenerate/compile 通过"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [
+      "Quartus full compile/STA/DDR/板测由后续 B5/Gate-F-BOARD 任务执行"
+    ],
+    "seeds": []
+  },
+  "acceptance": "从现有平台输入创建一个自洽、可重生成的 Catapult A10 B0 工程骨架：有明确顶层实体、QPF/QSF/SDC/Qsys/EMIF/EPCQ/JTAG-UART 接口边界、时钟/复位/校准 gate、路径/provenance/hash checker 和缺失 Quartus 工具的可恢复报告；离线 L0/L1 全绿。不得宣称 Quartus full compile、STA、DDR 或板测完成。",
+  "created_at": "2026-08-27T23:53:24+08:00",
+  "updated_at": "2026-08-28T01:18:00+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-28T01:03:45+08:00",
+    "agent_name": "t062_b0_bootstrap",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-062"
+  },
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260827-062.json",
+  "handoff": "docs/handoffs/T-20260827-062-b0-bootstrap.md",
+  "known_limits": [
+    "Quartus/Qsys/IP generator 可能只在 Windows 环境可用；Linux 侧不得用缺失工具伪造生成结果。",
+    "本任务不接 CPU、Cache、AXI4、QEMU、Linux 或 FPGA 板级软件。"
+  ],
+  "next": "集成者提交登记，创建 direct sibling FPGA worktree，派发 Luna owner 从零创建工程骨架。",
+  "merge_sha": "e5313e7",
+  "integration": {
+    "status": "done",
+    "strategy": "cherry-pick e8ae159 + c3f14be to feature/p7-fp-neon",
+    "merge_sha": "e5313e7",
+    "validated_scope": "B0 regenerable Quartus skeleton: top shell/reset gate, QSF/SDC top entity, check_skeleton/lint_platform, skeleton manifest; offline L0/L1 all green on merge SHA",
+    "remaining_scope": "Quartus 21.4 regenerate/full flow/STA (Gate F-BOARD); SFL qsys input; B5 SoC/JTAG/EPCQ/boot"
+  }
+}

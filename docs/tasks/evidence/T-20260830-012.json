@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-012",
+  "state": "done",
+  "base_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+  "head_sha": "5b0be0ccf5efce2c1295a316ae2bd6f5760886bc",
+  "branch": "feature/T-20260830-012-perf-mem",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-012",
+  "scope": "P-MEM: add self-contained baremetal memory-performance workloads for sequential bandwidth, pointer-chase/random latency, and load/store/pair throughput. No Verilator or Quartus run.",
+  "toolchain": {
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) from system cross toolchain",
+    "aarch64_objcopy": "aarch64-linux-gnu-objcopy",
+    "compile_flags": "-O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -Wall -Wextra"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile-001",
+      "source_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "for f in baremetal/perf/t_mem_seq.c baremetal/perf/t_mem_random.c baremetal/perf/t_mem_ldst.c; do aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -Wall -Wextra -c $f -o /tmp/$(basename ${f%.c}).o; done",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "All three P-MEM sources compile cleanly with the bare-metal cross flags."
+    },
+    {
+      "run_id": "owner-l0-standalone-link-002",
+      "source_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "for f in t_mem_seq t_mem_random t_mem_ldst; do aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -DPERF_STANDALONE -I baremetal -c baremetal/perf/$f.c -o /tmp/$f.o && aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -mabi=lp64 -c baremetal/startup_mb.s -o /tmp/startup_mb.o && aarch64-linux-gnu-gcc -nostdlib -T baremetal/link.ld -o /tmp/$f.elf /tmp/startup_mb.o /tmp/$f.o && aarch64-linux-gnu-objcopy -O binary /tmp/$f.elf /tmp/$f.bin; done",
+      "seed": null,
+      "wall_seconds": 2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Each workload links into a standalone bare-metal ELF/bin using PERF_STANDALONE and the existing startup/linker, without changing shared build inputs."
+    },
+    {
+      "run_id": "owner-l0-diff-check-003",
+      "source_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": 0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-012-perf-mem.md",
+      "sha256": "d8e318a99e063075c2bda397911bfc26e270c73fc15790debfae6a3932c5e80d",
+      "bytes": null,
+      "owner": "T-20260830-012",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-012-perf-mem.md"
+    },
+    {
+      "id": "src-seq",
+      "uri": "baremetal/perf/t_mem_seq.c",
+      "sha256": "e95e2bfba6fd6678674552dc1c5ab03f3f86755e4359e9522b68c330a67341af",
+      "bytes": null,
+      "owner": "T-20260830-012",
+      "retain_until": "task-close",
+      "reproduce": "aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -Wall -Wextra -c baremetal/perf/t_mem_seq.c"
+    },
+    {
+      "id": "src-random",
+      "uri": "baremetal/perf/t_mem_random.c",
+      "sha256": "da850cf55b280ccdc70f3d1c47c8145e0af026c65e70ba27ba498fb4f0c4404e",
+      "bytes": null,
+      "owner": "T-20260830-012",
+      "retain_until": "task-close",
+      "reproduce": "aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -Wall -Wextra -c baremetal/perf/t_mem_random.c"
+    },
+    {
+      "id": "src-ldst",
+      "uri": "baremetal/perf/t_mem_ldst.c",
+      "sha256": "31dbf95d78d58b8ad37ac64c31d7f703fe2dafe775ab8ac04088227e78bcb503",
+      "bytes": null,
+      "owner": "T-20260830-012",
+      "retain_until": "task-close",
+      "reproduce": "aarch64-linux-gnu-gcc -O2 -ffreestanding -nostdlib -nostartfiles -mabi=lp64 -mgeneral-regs-only -Wall -Wextra -c baremetal/perf/t_mem_ldst.c"
+    }
+  ],
+  "known_limits": [
+    "perf_common.h is not merged; each file is self-contained as requested.",
+    "The three workloads are not wired into scripts/build-microbench.sh, microbench_main.c, or the Makefile; standalone PERF_STANDALONE build/run is provided.",
+    "No Verilator microbench_runner execution, no Quartus, and no actual cycle measurements were performed; only compile/link verification.",
+    "Fixed scratch addresses assume the 128 MiB physical RAM model (0x40000000..0x48000000).",
+    "Performance data is proxy only and is not an A10/Fmax or architectural signoff."
+  ],
+  "next": "Integrator review; after P-INFRA merges, wire these run_test entry points into the shared perf build/JSON flow and run on the intended cache/memory configuration.",
+  "status": "done",
+  "merge_sha": "5b0be0ccf5efce2c1295a316ae2bd6f5760886bc",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:02:25+08:00",
+    "head_sha": "b671370df8bda784cdd0b961161b1cae4a44cbab",
+    "notes": "P-MEM merged via cherry-pick (branch lacked P-MIXED merge). Three mem perf workloads added; cross-compile pass.",
+    "merge_sha": "5b0be0ccf5efce2c1295a316ae2bd6f5760886bc",
+    "result_sha": "5b0be0ccf5efce2c1295a316ae2bd6f5760886bc"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "5b0be0ccf5efce2c1295a316ae2bd6f5760886bc",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "5b0be0ccf5efce2c1295a316ae2bd6f5760886bc",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "handoff",
+        "uri": "docs/handoffs/T-20260830-012-perf-mem.md",
+        "sha256": "d8e318a99e063075c2bda397911bfc26e270c73fc15790debfae6a3932c5e80d",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "src-seq",
+        "uri": "baremetal/perf/t_mem_seq.c",
+        "sha256": "e95e2bfba6fd6678674552dc1c5ab03f3f86755e4359e9522b68c330a67341af",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "src-random",
+        "uri": "baremetal/perf/t_mem_random.c",
+        "sha256": "da850cf55b280ccdc70f3d1c47c8145e0af026c65e70ba27ba498fb4f0c4404e",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "src-ldst",
+        "uri": "baremetal/perf/t_mem_ldst.c",
+        "sha256": "31dbf95d78d58b8ad37ac64c31d7f703fe2dafe775ab8ac04088227e78bcb503",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

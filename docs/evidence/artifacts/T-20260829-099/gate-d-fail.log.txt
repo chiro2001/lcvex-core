@@ -1,0 +1,992 @@
+nohup: 忽略输入
+########## make test（单元 + SVA） ##########
+./scripts/toolcheck.sh
+OK   verilator: Verilator 5.050 2026-07-01 rev conda-forge build 0
+OK   cocotb: 2.0.1
+OK   python: Python 3.12.14
+OK   make: GNU Make 4.4.1
+OK   qemu: QEMU_VERSION=11.1.0
+OK   qemu fork: 84f07211cc5b4fc6a371559bf8a5de4fb068e648
+WARN aarch64-none-elf-gcc 未安装（P2 软件测试需要）
+conda run --no-capture-output -n lcvex verilator --lint-only -Wall -Wno-UNUSEDPARAM --top-module lcvex_core -f rtl/filelist.f
+- V e r i l a t i o n   R e p o r t: Verilator 5.050 2026-07-01 rev conda-forge build 0
+- Verilator: Built from 14.981 MB sources in 46 modules, into 23.952 MB in 14 C++ files needing 0.000 MB
+- Verilator: Walltime 36.264 s (elab=0.130, cvt=35.596, bld=0.000); cpu 35.963 s on 1 threads; allocated 386.902 MB
+conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 6   \
+	--top-module lcvex_core_tb \
+	-Mdir obj_dir -o lcvex_core_tb \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_core_tb.sv \
+	sim/mmio/lcvex_mmio_fabric.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_core_tb.dut.delay'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --binary --timing --assert -Wall -j 6 --top-module lcvex_core_tb -Mdir obj_dir -o lcvex_core_tb -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_core_tb.sv sim/mmio/lcvex_mmio_fabric.cc` failed. (See above for error)
+make: *** [Makefile:163：sim-sv] 错误 1
+FAIL(red-expected): make test（单元 + SVA）
+########## make coverage（缓存/MMU TB 覆盖率） ##########
+conda run --no-capture-output -n lcvex verilator --binary --timing --assert --coverage -Wall -j 6   --top-module lcvex_l1_d_tb -Mdir obj_dir_l1_d_cov -o lcvex_l1_d_tb -f rtl/filelist.f tb/sv/lcvex_l1_d_tb.sv
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_l1_d_tb.ram'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --binary --timing --assert --coverage -Wall -j 6 --top-module lcvex_l1_d_tb -Mdir obj_dir_l1_d_cov -o lcvex_l1_d_tb -f rtl/filelist.f tb/sv/lcvex_l1_d_tb.sv` failed. (See above for error)
+make: *** [Makefile:714：cov-l1_d] 错误 1
+FAIL(red-expected): make coverage（缓存/MMU TB 覆盖率）
+########## M2-4b/4c 定向锁步（base + 全缓存） ##########
+make: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+cc -O2 -g -Wall -Wextra -fPIC -shared -fvisibility=hidden -I/home/chiro/projects/mycpu/qemu/include/plugins \
+	-I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-6 -pthread -o lcvex_difftest.so lcvex_difftest.c
+lcvex_difftest.c: 在函数‘vcpu_mem’中:
+lcvex_difftest.c:1538:5: warning: switch 没有处理枚举值‘QEMU_PLUGIN_MEM_VALUE_U128’ [-Wswitch]
+ 1538 |     switch (v.type) {
+      |     ^~~~~~
+make: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+hard_barrier.bin 生成完成
+hard_selfmod.bin 生成完成
+hard_tlbi.bin 生成完成
+hard_mair_bypass.bin 生成完成
+hard_block_desc.bin 生成完成
+hard_sys_fetch_fault.bin 生成完成
+hard_msr_mmu_on.bin 生成完成
+hard_esr_far.bin 生成完成
+hard_compiler_isa.bin 生成完成
+hard_pair_ldst.bin 生成完成
+hard_reg_offset.bin 生成完成
+hard_ext_addsub.bin 生成完成
+hard_madd.bin 生成完成
+hard_csel.bin 生成完成
+hard_bfm.bin 生成完成
+hard_insn_gaps.bin 生成完成
+hard_ldr_literal.bin 生成完成
+hard_exclusive.bin 生成完成
+hard_p6_isa.bin 生成完成
+hard_big_mem.bin 生成完成
+hard_uart.bin 生成完成
+hard_pl031.bin 生成完成
+hard_crc32.bin 生成完成
+hard_pl061.bin 生成完成
+hard_timer.bin 生成完成
+hard_gic.bin 生成完成
+hard_irq.bin 生成完成
+hard_irq_daif.bin 生成完成
+hard_ldur.bin 生成完成
+hard_postpre.bin 生成完成
+hard_ttbr1.bin 生成完成
+hard_psci.bin 生成完成
+hard_dit.bin 生成完成
+hard_varshift.bin 生成完成
+hard_ldtr_sttr.bin 生成完成
+hard_adc_sbc.bin 生成完成
+hard_allint.bin 生成完成
+hard_sctlr_pauth.bin 生成完成
+hard_id_sysreg.bin 生成完成
+hard_sve_probe.bin 生成完成
+conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -j 6   \
+	--top-module lcvex_soc_tb -Mdir build/verilator_lockstep \
+	-o lockstep_coordinator --public-flat-rw \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv \
+	-CFLAGS "-I/usr/include" \
+	-LDFLAGS \"-lz\" \
+	sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --cc --exe --build --timing --assert -Wall -j 6 --top-module lcvex_soc_tb -Mdir build/verilator_lockstep -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS "-lz" sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc` failed. (See above for error)
+make: *** [Makefile:330：lockstep-build] 错误 1
+scripts/test_planner.sh: 行 49: pid: 未绑定的变量
+==> planner: parallel=3 cpus=[]
+资源不足：planner 未提供可用并行槽位（parallel=3 cpus=[]）；
+请使用 --wait 排队，或稍后重试。
+conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -j 6   \
+	--top-module lcvex_soc_tb -GI_L1_ENABLE=1 -GD_L1_ENABLE=1 \
+	-GL2_ENABLE=1 \
+	-Mdir build/verilator_lockstep_l1dl2 -o lockstep_coordinator \
+	--public-flat-rw \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv \
+	-CFLAGS "-I/usr/include" \
+	-LDFLAGS \"-lz\" \
+	sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --cc --exe --build --timing --assert -Wall -j 6 --top-module lcvex_soc_tb -GI_L1_ENABLE=1 -GD_L1_ENABLE=1 -GL2_ENABLE=1 -Mdir build/verilator_lockstep_l1dl2 -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS "-lz" sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc` failed. (See above for error)
+make: *** [Makefile:437：lockstep-build-l1dl2] 错误 1
+scripts/test_planner.sh: 行 49: pid: 未绑定的变量
+==> planner: parallel=2 cpus=[]
+资源不足：planner 未提供可用并行槽位（parallel=2 cpus=[]）；
+请使用 --wait 排队，或稍后重试。
+RED: 2/34 个 M2/R1 定向测试失败
+FAIL(red-expected): M2-4b/4c 定向锁步（base + 全缓存）
+########## lockstep-build-l1dl2-delay2 构建 ##########
+conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -j 6   \
+	--top-module lcvex_soc_tb -GI_L1_ENABLE=1 -GD_L1_ENABLE=1 \
+	-GL2_ENABLE=1 -GMEM_DELAY_MODE=2 \
+	-Mdir build/verilator_lockstep_l1dl2_d2 -o lockstep_coordinator \
+	--public-flat-rw \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv \
+	-CFLAGS "-I/usr/include" \
+	-LDFLAGS \"-lz\" \
+	sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --cc --exe --build --timing --assert -Wall -j 6 --top-module lcvex_soc_tb -GI_L1_ENABLE=1 -GD_L1_ENABLE=1 -GL2_ENABLE=1 -GMEM_DELAY_MODE=2 -Mdir build/verilator_lockstep_l1dl2_d2 -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS "-lz" sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc` failed. (See above for error)
+make: *** [Makefile:450：lockstep-build-l1dl2-delay2] 错误 1
+FAIL(red-expected): lockstep-build-l1dl2-delay2 构建
+########## 随机 smoke 镜像重新生成 ##########
+random_smoke.bin 重新生成完成
+OK(green): 随机 smoke 镜像重新生成
+########## delay2-cache-*（并行） ##########
+scripts/test_planner.sh: 行 49: pid: 未绑定的变量
+==> planner: parallel=2 cpus=[]
+资源不足：planner 未提供可用并行槽位（parallel=2 cpus=[]）；
+请使用 --wait 排队，或稍后重试。
+FAIL(red-expected): delay2-cache-*（并行）
+########## P5a-Hardening + M2 定向（13 组） ##########
+make: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+make: 对“all”无需做任何事。
+make: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -j 6   \
+	--top-module lcvex_soc_tb -Mdir build/verilator_lockstep \
+	-o lockstep_coordinator --public-flat-rw \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv \
+	-CFLAGS "-I/usr/include" \
+	-LDFLAGS \"-lz\" \
+	sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --cc --exe --build --timing --assert -Wall -j 6 --top-module lcvex_soc_tb -Mdir build/verilator_lockstep -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS "-lz" sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc` failed. (See above for error)
+make: *** [Makefile:330：lockstep-build] 错误 1
+hard_nzcv.bin 生成完成
+hard_movwide.bin 生成完成
+hard_addsub_shift.bin 生成完成
+hard_bcond_f.bin 生成完成
+hard_ap_matrix.bin 生成完成
+hard_af.bin 生成完成
+hard_uxn_pxn.bin 生成完成
+hard_ttbr_gap.bin 生成完成
+hard_pa_oob.bin 生成完成
+hard_barrier.bin 生成完成
+hard_selfmod.bin 生成完成
+hard_tlbi.bin 生成完成
+hard_mair_bypass.bin 生成完成
+hard_block_desc.bin 生成完成
+hard_sys_fetch_fault.bin 生成完成
+hard_msr_mmu_on.bin 生成完成
+hard_esr_far.bin 生成完成
+hard_compiler_isa.bin 生成完成
+hard_pair_ldst.bin 生成完成
+hard_reg_offset.bin 生成完成
+hard_ext_addsub.bin 生成完成
+hard_madd.bin 生成完成
+hard_csel.bin 生成完成
+hard_bfm.bin 生成完成
+hard_insn_gaps.bin 生成完成
+hard_ldr_literal.bin 生成完成
+scripts/test_planner.sh: 行 49: pid: 未绑定的变量
+==> planner: parallel=2 cpus=[]
+资源不足：planner 未提供可用并行槽位（parallel=2 cpus=[]）；
+请使用 --wait 排队，或稍后重试。
+FAIL(red-expected): P5a-Hardening + M2 定向（13 组）
+########## Gate C 异常/EL0-EL1（7 组） ##########
+make: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+make: 对“all”无需做任何事。
+make: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -j 6   \
+	--top-module lcvex_soc_tb -Mdir build/verilator_lockstep \
+	-o lockstep_coordinator --public-flat-rw \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv \
+	-CFLAGS "-I/usr/include" \
+	-LDFLAGS \"-lz\" \
+	sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --cc --exe --build --timing --assert -Wall -j 6 --top-module lcvex_soc_tb -Mdir build/verilator_lockstep -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS "-lz" sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc` failed. (See above for error)
+make: *** [Makefile:330：lockstep-build] 错误 1
+FAIL(red-expected): Gate C 异常/EL0-EL1（7 组）
+########## P5a MMU 数据翻译（3 组） ##########
+make: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+make: 对“all”无需做任何事。
+make: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -j 6   \
+	--top-module lcvex_soc_tb -Mdir build/verilator_lockstep \
+	-o lockstep_coordinator --public-flat-rw \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv \
+	-CFLAGS "-I/usr/include" \
+	-LDFLAGS \"-lz\" \
+	sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --cc --exe --build --timing --assert -Wall -j 6 --top-module lcvex_soc_tb -Mdir build/verilator_lockstep -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS "-lz" sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc` failed. (See above for error)
+make: *** [Makefile:330：lockstep-build] 错误 1
+FAIL(red-expected): P5a MMU 数据翻译（3 组）
+########## P4b 异常/系统指令 ##########
+make: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+make: 对“all”无需做任何事。
+make: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+conda run --no-capture-output -n lcvex verilator --cc --exe --build --timing --assert -Wall -j 6   \
+	--top-module lcvex_soc_tb -Mdir build/verilator_lockstep \
+	-o lockstep_coordinator --public-flat-rw \
+	-f rtl/filelist.f tb/sv/lcvex_soc_tb.sv \
+	-CFLAGS "-I/usr/include" \
+	-LDFLAGS \"-lz\" \
+	sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:10:18: Parameter is not used: 'CORE_COUNT_MAX'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   10 |   localparam int CORE_COUNT_MAX    = 4;
+      |                  ^~~~~~~~~~~~~~
+                      ... For warning description see https://verilator.org/warn/UNUSEDPARAM?v=5.050
+                      ... Use "/* verilator lint_off UNUSEDPARAM */" and lint_on around source to disable this message.
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:11:26: Parameter is not used: 'MC_VERSION'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   11 |   localparam logic [3:0] MC_VERSION = 4'd2;
+      |                          ^~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:39:27: Parameter is not used: 'INSN_WFI'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   39 |   localparam logic [31:0] INSN_WFI  = 32'hD503_207F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:40:27: Parameter is not used: 'INSN_WFE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   40 |   localparam logic [31:0] INSN_WFE  = 32'hD503_205F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:41:27: Parameter is not used: 'INSN_SEV'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   41 |   localparam logic [31:0] INSN_SEV  = 32'hD503_209F;
+      |                           ^~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:42:27: Parameter is not used: 'INSN_SEVL'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   42 |   localparam logic [31:0] INSN_SEVL = 32'hD503_20BF;
+      |                           ^~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:43:27: Parameter is not used: 'INSN_WFIT_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   43 |   localparam logic [31:0] INSN_WFIT_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:44:27: Parameter is not used: 'INSN_WFIT_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   44 |   localparam logic [31:0] INSN_WFIT_BASE = 32'hD503_1020;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:45:27: Parameter is not used: 'INSN_WFET_MASK'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   45 |   localparam logic [31:0] INSN_WFET_MASK = 32'hFFFF_FFE0;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:46:27: Parameter is not used: 'INSN_WFET_BASE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   46 |   localparam logic [31:0] INSN_WFET_BASE = 32'hD503_1000;
+      |                           ^~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:89:26: Parameter is not used: 'COH_PROBE_LOOKUP'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   89 |   localparam logic [1:0] COH_PROBE_LOOKUP           = 2'd0;
+      |                          ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:90:26: Parameter is not used: 'COH_PROBE_CLEAN'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   90 |   localparam logic [1:0] COH_PROBE_CLEAN            = 2'd1;
+      |                          ^~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:91:26: Parameter is not used: 'COH_PROBE_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   91 |   localparam logic [1:0] COH_PROBE_INVALIDATE       = 2'd2;
+      |                          ^~~~~~~~~~~~~~~~~~~~
+%Warning-UNUSEDPARAM: rtl/lcvex_cluster_pkg.sv:92:26: Parameter is not used: 'COH_PROBE_CLEAN_INVALIDATE'
+                                                    : ... note: In instance 'lcvex_soc_tb.mem'
+   92 |   localparam logic [1:0] COH_PROBE_CLEAN_INVALIDATE = 2'd3;
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+%Error: Exiting due to 14 warning(s)
+ERROR conda.cli.main_run:execute(127): `conda run verilator --cc --exe --build --timing --assert -Wall -j 6 --top-module lcvex_soc_tb -Mdir build/verilator_lockstep -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv -CFLAGS -I/usr/include -LDFLAGS "-lz" sim/mmio/lcvex_mmio_fabric.cc sim/difftest/lockstep_coordinator.cc` failed. (See above for error)
+make: *** [Makefile:330：lockstep-build] 错误 1
+FAIL(red-expected): P4b 异常/系统指令
+########## 随机回归（seed 1~3 × 100k） ##########
+make difftest-random SEED=1 LENGTH=100000
+make[1]: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099”
+make -C qemu/plugins
+make[2]: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+make[2]: 对“all”无需做任何事。
+make[2]: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+conda run --no-capture-output -n lcvex python3 sim/difftest/run_qemu.py --trace-only \
+	--program random --seed 1 --length 100000 \
+	--out build/difftest/random_1.trace
+==> /home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 -machine virt -cpu max -accel tcg,thread=single -icount shift=0,align=off,sleep=off -nographic -plugin file=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins/lcvex_difftest.so,trace=build/difftest/random_1.trace,limit=100002 -device loader,file=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random.bin,addr=0x44000000,cpu-num=0,force-raw=on
+==> trace 已写入 build/difftest/random_1.trace
+PROGRAM_BIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random.bin \
+QEMU_TRACE=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_1.trace \
+COCOTB_RESULTS_FILE=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_1_results.xml \
+	conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator \
+	TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_lcvex_core \
+	SIM_BUILD=sim_build_core
+make[2]: Entering directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+rm -f /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_1_results.xml
+"make" -f Makefile /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_1_results.xml
+make[3]: Entering directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+mkdir -p sim_build_core
+/home/chiro/miniforge3/envs/lcvex/bin/verilator -cc --exe -Mdir sim_build_core --top-module lcvex_soc_tb /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/mmio/lcvex_mmio_fabric.cc --timescale 1ns/1ps --vpi --public-flat-rw --prefix Vtop -o Vtop -LDFLAGS "-Wl,-rpath,/home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb/libs -L/home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb/libs -lcocotbvpi_verilator" --timing --assert /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_pkg.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_fp_state.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_fp_scalar.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_neon_fp.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_neon_int.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_regfile.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_alu.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_muldiv.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_mem.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_mem_ram.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_mem_delay.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_mem_arb.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_mem_router.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_pl011.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_pl061.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_mmio_fabric.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_gic.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_decode.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_mmu.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/rtl/lcvex_core.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/tb/sv/lcvex_soc_tb.sv /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/tb/sv/lcvex_mmio_fabric_cocotb_tb.sv /home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb/share/lib/verilator/verilator.cpp
+- V e r i l a t i o n   R e p o r t: Verilator 5.050 2026-07-01 rev conda-forge build 0
+- Verilator: Built from 4.317 MB sources in 26 modules, into 49.808 MB in 22 C++ files needing 0.942 MB
+- Verilator: Walltime 41.718 s (elab=0.110, cvt=40.615, bld=0.000); cpu 41.500 s on 1 threads; allocated 404.012 MB
+make -C sim_build_core  -f Vtop.mk
+make[4]: Entering directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb/sim_build_core'
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -Os  -c -o verilator.o /home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb/share/lib/verilator/verilator.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -Os  -c -o lcvex_mmio_fabric.o /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/mmio/lcvex_mmio_fabric.cc
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated.o /home/chiro/miniforge3/envs/lcvex/share/verilator/include/verilated.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_dpi.o /home/chiro/miniforge3/envs/lcvex/share/verilator/include/verilated_dpi.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_vpi.o /home/chiro/miniforge3/envs/lcvex/share/verilator/include/verilated_vpi.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /home/chiro/miniforge3/envs/lcvex/share/verilator/include/verilated_threads.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -x c++-header Vtop__pch.h -o Vtop__pch.h.fast.gch
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop___024root__0.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop___024root__1.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop___024root__2.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop___024root__3.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop___024root__4.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop_lcvex_fp_scalar__0.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop_lcvex_fp_scalar__1.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop_lcvex_fp_scalar__2.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop_lcvex_fp_scalar__3.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop_lcvex_fp_scalar__4.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++ -Os  -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.fast -c Vtop__Dpi.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -x c++-header Vtop__pch.h -o Vtop__pch.h.slow.gch
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop__ConstPool__0__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop___024root__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop___024root__0__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop___024root__1__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop___024root__2__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop_lcvex_fp_scalar__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop_lcvex_fp_scalar__0__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop_lcvex_fp_scalar__1__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop_lcvex_pkg__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++   -I.  -MMD -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include -I/home/chiro/miniforge3/envs/lcvex/share/verilator/include/vltstd -DVERILATOR=1 -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -DVM_VPI=1 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-int-in-bool-context -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -include Vtop__pch.h.slow -c Vtop__Syms__Slow.cpp
+/home/chiro/miniforge3/envs/lcvex/bin/x86_64-conda-linux-gnu-c++    -rdynamic verilator.o lcvex_mmio_fabric.o verilated.o verilated_dpi.o verilated_vpi.o verilated_threads.o Vtop__ALL.a   -Wl,-rpath,/home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb/libs -L/home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb/libs -lcocotbvpi_verilator  -pthread -lpthread -latomic -ldl   -o Vtop
+rm Vtop__ALL.verilator_deplist.tmp
+make[4]: Leaving directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb/sim_build_core'
+rm -f /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_1_results.xml
+COCOTB_TEST_MODULES=test_lcvex_core COCOTB_TESTCASE= COCOTB_TEST_FILTER= COCOTB_TOPLEVEL=lcvex_soc_tb TOPLEVEL_LANG=verilog \
+         sim_build_core/Vtop  --timing --assert   
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:93   in _embed_init_python              Using Python 3.12.4 interpreter at /home/chiro/miniforge3/envs/lcvex/bin/python3.12
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Verilator version 5.050 2026-07-01
+     0.00ns INFO     cocotb                             Seeding Python random module with 1787980635
+     0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from /home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb
+     0.00ns INFO     cocotb                             Running tests
+     0.00ns INFO     cocotb.regression                  running test_lcvex_core.test_p2_difftest (1/1)
+6394260.00ns INFO     test                               PASS: 100002 条指令与 QEMU 完全一致
+6394260.00ns INFO     cocotb.regression                  test_lcvex_core.test_p2_difftest passed
+6394260.00ns INFO     cocotb.regression                  ******************************************************************************************
+                                                         ** TEST                              STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                         ******************************************************************************************
+                                                         ** test_lcvex_core.test_p2_difftest   PASS     6394260.00          17.62     362805.35  **
+                                                         ******************************************************************************************
+                                                         ** TESTS=1 PASS=1 FAIL=0 SKIP=0                6394260.00          17.63     362782.46  **
+                                                         ******************************************************************************************
+- :0: Verilog $finish
+make[3]: Leaving directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+make[2]: Leaving directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+make[1]: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099”
+make difftest-random SEED=2 LENGTH=100000
+make[1]: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099”
+make -C qemu/plugins
+make[2]: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+make[2]: 对“all”无需做任何事。
+make[2]: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+conda run --no-capture-output -n lcvex python3 sim/difftest/run_qemu.py --trace-only \
+	--program random --seed 2 --length 100000 \
+	--out build/difftest/random_2.trace
+==> /home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 -machine virt -cpu max -accel tcg,thread=single -icount shift=0,align=off,sleep=off -nographic -plugin file=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins/lcvex_difftest.so,trace=build/difftest/random_2.trace,limit=100002 -device loader,file=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random.bin,addr=0x44000000,cpu-num=0,force-raw=on
+==> trace 已写入 build/difftest/random_2.trace
+PROGRAM_BIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random.bin \
+QEMU_TRACE=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_2.trace \
+COCOTB_RESULTS_FILE=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_2_results.xml \
+	conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator \
+	TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_lcvex_core \
+	SIM_BUILD=sim_build_core
+make[2]: Entering directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+rm -f /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_2_results.xml
+"make" -f Makefile /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_2_results.xml
+make[3]: Entering directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+rm -f /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_2_results.xml
+COCOTB_TEST_MODULES=test_lcvex_core COCOTB_TESTCASE= COCOTB_TEST_FILTER= COCOTB_TOPLEVEL=lcvex_soc_tb TOPLEVEL_LANG=verilog \
+         sim_build_core/Vtop  --timing --assert   
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:93   in _embed_init_python              Using Python 3.12.4 interpreter at /home/chiro/miniforge3/envs/lcvex/bin/python3.12
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Verilator version 5.050 2026-07-01
+     0.00ns INFO     cocotb                             Seeding Python random module with 1787980667
+     0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from /home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb
+     0.00ns INFO     cocotb                             Running tests
+     0.00ns INFO     cocotb.regression                  running test_lcvex_core.test_p2_difftest (1/1)
+6462390.00ns INFO     test                               PASS: 100002 条指令与 QEMU 完全一致
+6462390.00ns INFO     cocotb.regression                  test_lcvex_core.test_p2_difftest passed
+6462390.00ns INFO     cocotb.regression                  ******************************************************************************************
+                                                         ** TEST                              STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                         ******************************************************************************************
+                                                         ** test_lcvex_core.test_p2_difftest   PASS     6462390.00          18.49     349508.54  **
+                                                         ******************************************************************************************
+                                                         ** TESTS=1 PASS=1 FAIL=0 SKIP=0                6462390.00          18.49     349486.59  **
+                                                         ******************************************************************************************
+- :0: Verilog $finish
+make[3]: Leaving directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+make[2]: Leaving directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+make[1]: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099”
+make difftest-random SEED=3 LENGTH=100000
+make[1]: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099”
+make -C qemu/plugins
+make[2]: 进入目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+make[2]: 对“all”无需做任何事。
+make[2]: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins”
+conda run --no-capture-output -n lcvex python3 sim/difftest/run_qemu.py --trace-only \
+	--program random --seed 3 --length 100000 \
+	--out build/difftest/random_3.trace
+==> /home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 -machine virt -cpu max -accel tcg,thread=single -icount shift=0,align=off,sleep=off -nographic -plugin file=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/qemu/plugins/lcvex_difftest.so,trace=build/difftest/random_3.trace,limit=100002 -device loader,file=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random.bin,addr=0x44000000,cpu-num=0,force-raw=on
+==> trace 已写入 build/difftest/random_3.trace
+PROGRAM_BIN=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random.bin \
+QEMU_TRACE=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_3.trace \
+COCOTB_RESULTS_FILE=/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_3_results.xml \
+	conda run --no-capture-output -n lcvex make -C sim/cocotb SIM=verilator \
+	TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_lcvex_core \
+	SIM_BUILD=sim_build_core
+make[2]: Entering directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+rm -f /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_3_results.xml
+"make" -f Makefile /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_3_results.xml
+make[3]: Entering directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+rm -f /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/random_3_results.xml
+COCOTB_TEST_MODULES=test_lcvex_core COCOTB_TESTCASE= COCOTB_TEST_FILTER= COCOTB_TOPLEVEL=lcvex_soc_tb TOPLEVEL_LANG=verilog \
+         sim_build_core/Vtop  --timing --assert   
+     -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:93   in _embed_init_python              Using Python 3.12.4 interpreter at /home/chiro/miniforge3/envs/lcvex/bin/python3.12
+     -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:79   in gpi_print_registered_impl       VPI registered
+     0.00ns INFO     cocotb                             Running on Verilator version 5.050 2026-07-01
+     0.00ns INFO     cocotb                             Seeding Python random module with 1787980699
+     0.00ns INFO     cocotb                             Initialized cocotb v2.0.1 from /home/chiro/miniforge3/envs/lcvex/lib/python3.12/site-packages/cocotb
+     0.00ns INFO     cocotb                             Running tests
+     0.00ns INFO     cocotb.regression                  running test_lcvex_core.test_p2_difftest (1/1)
+6469830.00ns INFO     test                               PASS: 100002 条指令与 QEMU 完全一致
+6469830.00ns INFO     cocotb.regression                  test_lcvex_core.test_p2_difftest passed
+6469830.00ns INFO     cocotb.regression                  ******************************************************************************************
+                                                         ** TEST                              STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+                                                         ******************************************************************************************
+                                                         ** test_lcvex_core.test_p2_difftest   PASS     6469830.00          17.75     364523.35  **
+                                                         ******************************************************************************************
+                                                         ** TESTS=1 PASS=1 FAIL=0 SKIP=0                6469830.00          17.75     364501.71  **
+                                                         ******************************************************************************************
+- :0: Verilog $finish
+make[3]: Leaving directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+make[2]: Leaving directory '/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb'
+make[1]: 离开目录“/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099”
+OK(green): 随机回归（seed 1~3 × 100k）
+########## 指令覆盖记账（random 1~3 trace ↔ ISA_SCOPE） ##########
+==> 覆盖统计：expected_hit=62/62，observed_families=63，总提交 300006 条
+  add        9190
+  adds       2886
+  adr        2578
+  adrp       2511
+  and        1857
+  ands       1851
+  b          78912
+  b.cond     53637
+  bfm        2975
+  bic        1892
+  bics       1806
+  bti        1669
+  cbnz       5849
+  cbz        5939
+  ccmn       2520
+  ccmp       2438
+  clrex      405
+  clz        1830
+  csel       2589
+  csinc      2611
+  csinv      2485
+  csneg      2551
+  eon        1785
+  eor        1944
+  ldp        1339
+  ldr        4588
+  ldrb       2062
+  ldrh       2052
+  ldrsb      417
+  ldrsh      416
+  ldrsw      2317
+  ldxr       3372
+  madd       799
+  movk       7190
+  movn       4360
+  movz       17601
+  msr        1764
+  msub       835
+  mul        1690
+  nop        179
+  orn        1929
+  orr        1871
+  prfm       187
+  rbit       878
+  rev        2238
+  sbfm       1016
+  sdiv       1721
+  smaddl     409
+  smsubl     431
+  stp        1374
+  str        4824
+  strb       2105
+  strh       2157
+  stxr       4425
+  sub        6158
+  subs       5747
+  tbnz       5829
+  tbz        5813
+  ubfm       1018
+  udiv       1679
+  umaddl     429
+  umsubl     407
+  umulh      1670
+PASS: 期望覆盖集全部命中
+OK(green): 指令覆盖记账（random 1~3 trace ↔ ISA_SCOPE）
+/usr/aarch64-linux-gnu/bin/ld: warning: bm.elf has a LOAD segment with RWX permissions
+==> 裸机镜像：/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/difftest/bm_c.bin（1104 字节）
+########## baremetal-C 锁步 ##########
+错误：找不到 /home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/build/verilator_lockstep/lockstep_coordinator
+FAIL(red-expected): baremetal-C 锁步
+RED: Gate D 有 10 项失败

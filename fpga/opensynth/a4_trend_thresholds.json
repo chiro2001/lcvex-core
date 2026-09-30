@@ -1,0 +1,1085 @@
+{
+  "base_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+  "branch": "feature/T-20260829-087-a4-trend-regression",
+  "disclaimers": [
+    "This is not an Arria 10 signoff report.",
+    "This does not replace Quartus synthesis/STA.",
+    "This does not unblock or replace T-067.",
+    "No ECP5/Yosys/ABC number is linearly converted to an A10 resource, percentage, or Fmax."
+  ],
+  "head_sha": "3a1c66e7786391d8f3cde287c72c7e986115e384",
+  "inputs": [
+    {
+      "path": "fpga/opensynth/a1_generic_synth_stats.json",
+      "role": "A1 stats",
+      "sha256": "a5c27ff87bc78a55a940326abf91155762538d645e4529b7e155cb25ad4da300"
+    },
+    {
+      "path": "fpga/opensynth/a2_soc_stub_stats.json",
+      "role": "A2 stats",
+      "sha256": "d8c66aac65b0fbdeba99e4c22a3922b59a5b0aaa042a920ca0a670e4c059db6f"
+    },
+    {
+      "path": "fpga/opensynth/a3_correlation_data.json",
+      "role": "A3 data",
+      "sha256": "6c5b052ea941641bc65bd1f1e723f572e244ce3063f0416b8b68dced213bd152"
+    },
+    {
+      "path": "fpga/opensynth/a2_soc_stub_manifest.md",
+      "role": "A2 manifest",
+      "sha256": "d9cb3daa6ba9fb830ffe3e2b0411f3ee2ed4d02647be2f821b64a850735e1072"
+    }
+  ],
+  "known_limits": [
+    "A1 did not synthesize lcvex_core or lcvex_l2; there is no complete core/cache/SoC open-source proxy.",
+    "A2 is a 0-cell boundary stub; it is not a real SoC area proxy.",
+    "No prior A4 snapshot exists in this worktree, so temporal trend is N/A.",
+    "Run-to-run repeatability is determinism, not a time-series improvement or regression trend.",
+    "Generic 4-LUT/FF counts are not Arria 10 or ECP5 vendor resource counts.",
+    "A2 ECP5 nextpnr failed at IO packing; no Fmax is claimed.",
+    "This report is not Arria 10 signoff, does not replace Quartus, and does not unblock T-067."
+  ],
+  "metadata": {
+    "received_at": "2026-08-29T08:09:00+0800",
+    "reported_at": "2026-08-29T08:09:00+0800",
+    "sent_at": "2026-08-29T08:09:00+0800",
+    "state": "review",
+    "timezone": "Asia/Shanghai"
+  },
+  "method": "Read-only aggregation of existing A1/A2/A3 OpenSynth JSON artifacts. No Yosys, nextpnr, Verilator, Quartus, synthesis, or P&R is run. Outputs run-to-run metric/netlist diffs, input SHA, tool versions, proxy-internal threshold guard results, and an explicit temporal-trend N/A.",
+  "schema_version": 1,
+  "snapshot": {
+    "a1": {
+      "modules": {
+        "lcvex_axi4_master": {
+          "config": {
+            "ADDR_WIDTH": 64,
+            "DATA_WIDTH": 128,
+            "ID_WIDTH": 4,
+            "MAX_BURST_LEN": 16
+          },
+          "flat_file": "fpga/opensynth/generated/lcvex_axi4_master_flat.v",
+          "flat_sha256": "ba808f6fe97f8fb34a0cdbc64cb3687a4b5e94adc1143284577f116d5b13baa7",
+          "metrics": {
+            "abc_report_lut": 1870,
+            "area": "N/A",
+            "dff": 2406,
+            "dsp": "N/A",
+            "lut4": 1870,
+            "num_cells": 4276,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 2400,
+              "$_DFFE_PN1P_": 1,
+              "$_DFF_PN0_": 4,
+              "$_DFF_PN1_": 1,
+              "$lut": 1870
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 3010,
+            "num_ports": 56,
+            "num_wire_bits": 7000,
+            "num_wires": 1646,
+            "ram_bits": 0
+          },
+          "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+          "repeatability": {
+            "metrics_equal": true,
+            "netlist_sha_equal": true,
+            "reason": "Both runs have identical metrics and identical netlist SHA256.",
+            "run_count": 2,
+            "stable": true,
+            "status": "pass"
+          },
+          "run_count": 2,
+          "run_diff": {
+            "exit_code_equal": true,
+            "fields": [
+              {
+                "delta": 0,
+                "field": "abc_report_lut",
+                "first": 1870,
+                "same": true,
+                "second": 1870
+              },
+              {
+                "delta": "N/A",
+                "field": "area",
+                "first": "N/A",
+                "same": true,
+                "second": "N/A"
+              },
+              {
+                "delta": 0,
+                "field": "dff",
+                "first": 2406,
+                "same": true,
+                "second": 2406
+              },
+              {
+                "delta": "N/A",
+                "field": "dsp",
+                "first": "N/A",
+                "same": true,
+                "second": "N/A"
+              },
+              {
+                "delta": 0,
+                "field": "lut4",
+                "first": 1870,
+                "same": true,
+                "second": 1870
+              },
+              {
+                "delta": 0,
+                "field": "num_cells",
+                "first": 4276,
+                "same": true,
+                "second": 4276
+              },
+              {
+                "delta": null,
+                "field": "num_cells_by_type",
+                "first": {
+                  "$_DFFE_PN0P_": 2400,
+                  "$_DFFE_PN1P_": 1,
+                  "$_DFF_PN0_": 4,
+                  "$_DFF_PN1_": 1,
+                  "$lut": 1870
+                },
+                "same": true,
+                "second": {
+                  "$_DFFE_PN0P_": 2400,
+                  "$_DFFE_PN1P_": 1,
+                  "$_DFF_PN0_": 4,
+                  "$_DFF_PN1_": 1,
+                  "$lut": 1870
+                }
+              },
+              {
+                "delta": 0,
+                "field": "num_memories",
+                "first": 0,
+                "same": true,
+                "second": 0
+              },
+              {
+                "delta": 0,
+                "field": "num_memory_bits",
+                "first": 0,
+                "same": true,
+                "second": 0
+              },
+              {
+                "delta": 0,
+                "field": "num_port_bits",
+                "first": 3010,
+                "same": true,
+                "second": 3010
+              },
+              {
+                "delta": 0,
+                "field": "num_ports",
+                "first": 56,
+                "same": true,
+                "second": 56
+              },
+              {
+                "delta": 0,
+                "field": "num_wire_bits",
+                "first": 7000,
+                "same": true,
+                "second": 7000
+              },
+              {
+                "delta": 0,
+                "field": "num_wires",
+                "first": 1646,
+                "same": true,
+                "second": 1646
+              },
+              {
+                "delta": 0,
+                "field": "ram_bits",
+                "first": 0,
+                "same": true,
+                "second": 0
+              }
+            ],
+            "netlist_sha_equal": true,
+            "reason": "Compared first two recorded runs.",
+            "status": "ok",
+            "wall_seconds": {
+              "delta": -0.198,
+              "first": 3.257,
+              "second": 3.059
+            }
+          },
+          "source_files": [
+            "rtl/lcvex_axi4_pkg.sv",
+            "rtl/lcvex_axi4_master.sv"
+          ],
+          "source_sha256": {
+            "rtl/lcvex_axi4_master.sv": "0fdaf8e151a1136e0641f8fc073757a1b9c7bc3b5a5248ca71f5b76171892fe2",
+            "rtl/lcvex_axi4_pkg.sv": "ef4b8b201e1c1fdf555d901a26ab5645d05845e94f211e2c26a750201972b8ae"
+          },
+          "tool": {
+            "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+            "python": "Python 3.12.10",
+            "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+          },
+          "top": "lcvex_axi4_master"
+        },
+        "lcvex_mem_arb": {
+          "config": {
+            "PORTS": 3
+          },
+          "flat_file": "fpga/opensynth/generated/lcvex_mem_arb_flat.v",
+          "flat_sha256": "a58f6a9916927c25f4ea9779a544f5036d826d42f23a256aef5b0084b6371729",
+          "metrics": {
+            "abc_report_lut": 20,
+            "area": "N/A",
+            "dff": 3,
+            "dsp": "N/A",
+            "lut4": 20,
+            "num_cells": 23,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 3,
+              "$lut": 20
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 432,
+            "num_ports": 14,
+            "num_wire_bits": 449,
+            "num_wires": 26,
+            "ram_bits": 0
+          },
+          "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+          "repeatability": {
+            "metrics_equal": true,
+            "netlist_sha_equal": true,
+            "reason": "Both runs have identical metrics and identical netlist SHA256.",
+            "run_count": 2,
+            "stable": true,
+            "status": "pass"
+          },
+          "run_count": 2,
+          "run_diff": {
+            "exit_code_equal": true,
+            "fields": [
+              {
+                "delta": 0,
+                "field": "abc_report_lut",
+                "first": 20,
+                "same": true,
+                "second": 20
+              },
+              {
+                "delta": "N/A",
+                "field": "area",
+                "first": "N/A",
+                "same": true,
+                "second": "N/A"
+              },
+              {
+                "delta": 0,
+                "field": "dff",
+                "first": 3,
+                "same": true,
+                "second": 3
+              },
+              {
+                "delta": "N/A",
+                "field": "dsp",
+                "first": "N/A",
+                "same": true,
+                "second": "N/A"
+              },
+              {
+                "delta": 0,
+                "field": "lut4",
+                "first": 20,
+                "same": true,
+                "second": 20
+              },
+              {
+                "delta": 0,
+                "field": "num_cells",
+                "first": 23,
+                "same": true,
+                "second": 23
+              },
+              {
+                "delta": null,
+                "field": "num_cells_by_type",
+                "first": {
+                  "$_DFFE_PN0P_": 3,
+                  "$lut": 20
+                },
+                "same": true,
+                "second": {
+                  "$_DFFE_PN0P_": 3,
+                  "$lut": 20
+                }
+              },
+              {
+                "delta": 0,
+                "field": "num_memories",
+                "first": 0,
+                "same": true,
+                "second": 0
+              },
+              {
+                "delta": 0,
+                "field": "num_memory_bits",
+                "first": 0,
+                "same": true,
+                "second": 0
+              },
+              {
+                "delta": 0,
+                "field": "num_port_bits",
+                "first": 432,
+                "same": true,
+                "second": 432
+              },
+              {
+                "delta": 0,
+                "field": "num_ports",
+                "first": 14,
+                "same": true,
+                "second": 14
+              },
+              {
+                "delta": 0,
+                "field": "num_wire_bits",
+                "first": 449,
+                "same": true,
+                "second": 449
+              },
+              {
+                "delta": 0,
+                "field": "num_wires",
+                "first": 26,
+                "same": true,
+                "second": 26
+              },
+              {
+                "delta": 0,
+                "field": "ram_bits",
+                "first": 0,
+                "same": true,
+                "second": 0
+              }
+            ],
+            "netlist_sha_equal": true,
+            "reason": "Compared first two recorded runs.",
+            "status": "ok",
+            "wall_seconds": {
+              "delta": 0.0,
+              "first": 0.125,
+              "second": 0.125
+            }
+          },
+          "source_files": [
+            "rtl/lcvex_pkg.sv",
+            "rtl/lcvex_mem_arb.sv"
+          ],
+          "source_sha256": {
+            "rtl/lcvex_mem_arb.sv": "9d9a876b6b737ffd948b16746579801c3b950bb0e0d38cd178647c76f35c0918",
+            "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60"
+          },
+          "tool": {
+            "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+            "python": "Python 3.12.10",
+            "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+          },
+          "top": "lcvex_mem_arb"
+        },
+        "lcvex_mem_delay": {
+          "config": {
+            "DELAY_MODE": 1,
+            "RAND_MAX": 4,
+            "SEED": "8'hA5"
+          },
+          "flat_file": "fpga/opensynth/generated/lcvex_mem_delay_flat.v",
+          "flat_sha256": "bcf898b4c46a80dc315a83dd0bf68a79cf056f0b06f41669dbf5c6104543b559",
+          "metrics": {
+            "abc_report_lut": 63,
+            "area": "N/A",
+            "dff": 241,
+            "dsp": "N/A",
+            "lut4": 63,
+            "num_cells": 304,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 240,
+              "$_DFF_PN0_": 1,
+              "$lut": 63
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 424,
+            "num_ports": 14,
+            "num_wire_bits": 725,
+            "num_wires": 48,
+            "ram_bits": 0
+          },
+          "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+          "repeatability": {
+            "metrics_equal": true,
+            "netlist_sha_equal": true,
+            "reason": "Both runs have identical metrics and identical netlist SHA256.",
+            "run_count": 2,
+            "stable": true,
+            "status": "pass"
+          },
+          "run_count": 2,
+          "run_diff": {
+            "exit_code_equal": true,
+            "fields": [
+              {
+                "delta": 0,
+                "field": "abc_report_lut",
+                "first": 63,
+                "same": true,
+                "second": 63
+              },
+              {
+                "delta": "N/A",
+                "field": "area",
+                "first": "N/A",
+                "same": true,
+                "second": "N/A"
+              },
+              {
+                "delta": 0,
+                "field": "dff",
+                "first": 241,
+                "same": true,
+                "second": 241
+              },
+              {
+                "delta": "N/A",
+                "field": "dsp",
+                "first": "N/A",
+                "same": true,
+                "second": "N/A"
+              },
+              {
+                "delta": 0,
+                "field": "lut4",
+                "first": 63,
+                "same": true,
+                "second": 63
+              },
+              {
+                "delta": 0,
+                "field": "num_cells",
+                "first": 304,
+                "same": true,
+                "second": 304
+              },
+              {
+                "delta": null,
+                "field": "num_cells_by_type",
+                "first": {
+                  "$_DFFE_PN0P_": 240,
+                  "$_DFF_PN0_": 1,
+                  "$lut": 63
+                },
+                "same": true,
+                "second": {
+                  "$_DFFE_PN0P_": 240,
+                  "$_DFF_PN0_": 1,
+                  "$lut": 63
+                }
+              },
+              {
+                "delta": 0,
+                "field": "num_memories",
+                "first": 0,
+                "same": true,
+                "second": 0
+              },
+              {
+                "delta": 0,
+                "field": "num_memory_bits",
+                "first": 0,
+                "same": true,
+                "second": 0
+              },
+              {
+                "delta": 0,
+                "field": "num_port_bits",
+                "first": 424,
+                "same": true,
+                "second": 424
+              },
+              {
+                "delta": 0,
+                "field": "num_ports",
+                "first": 14,
+                "same": true,
+                "second": 14
+              },
+              {
+                "delta": 0,
+                "field": "num_wire_bits",
+                "first": 725,
+                "same": true,
+                "second": 725
+              },
+              {
+                "delta": 0,
+                "field": "num_wires",
+                "first": 48,
+                "same": true,
+                "second": 48
+              },
+              {
+                "delta": 0,
+                "field": "ram_bits",
+                "first": 0,
+                "same": true,
+                "second": 0
+              }
+            ],
+            "netlist_sha_equal": true,
+            "reason": "Compared first two recorded runs.",
+            "status": "ok",
+            "wall_seconds": {
+              "delta": -0.026,
+              "first": 0.185,
+              "second": 0.159
+            }
+          },
+          "source_files": [
+            "rtl/lcvex_pkg.sv",
+            "rtl/lcvex_mem_delay.sv"
+          ],
+          "source_sha256": {
+            "rtl/lcvex_mem_delay.sv": "421f163c494ac630ec865154954c3a58d3560a63353f840130cb91a6f40bf51c",
+            "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60"
+          },
+          "tool": {
+            "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+            "python": "Python 3.12.10",
+            "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+          },
+          "top": "lcvex_mem_delay"
+        }
+      },
+      "ranking": {
+        "by_dff": [
+          "lcvex_axi4_master",
+          "lcvex_mem_delay",
+          "lcvex_mem_arb"
+        ],
+        "by_lut4": [
+          "lcvex_axi4_master",
+          "lcvex_mem_delay",
+          "lcvex_mem_arb"
+        ]
+      },
+      "shares": {
+        "dff": {
+          "lcvex_axi4_master": 0.907925,
+          "lcvex_mem_arb": 0.001132,
+          "lcvex_mem_delay": 0.090943
+        },
+        "lut4": {
+          "lcvex_axi4_master": 0.957501,
+          "lcvex_mem_arb": 0.010241,
+          "lcvex_mem_delay": 0.032258
+        }
+      }
+    },
+    "a2": {
+      "ecp5_proxy": {
+        "exit_code": 0,
+        "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-081/build/tmp/opensynth/a2/yosys_ecp5.log",
+        "log_sha256": "a90850c99c9a16381953c8012721d10bb9101ee719ae06d21a3aeedc0e7675fe",
+        "nextpnr": {
+          "exit_code": 125,
+          "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-081/build/tmp/opensynth/a2/nextpnr_ecp5.log",
+          "log_sha256": "979f527335cc65422d5c1b34abb4c160f355ca78b7835542159f806842b43ad5",
+          "wall_seconds": 0.265
+        },
+        "reason": "nextpnr-ecp5 could not place all TRELLIS_IO cells (expected for 2627 port-bit boundary stub)",
+        "status": "fail",
+        "wall_seconds": 0.341
+      },
+      "flat_verilog": "fpga/opensynth/rtl/lcvex_catapult_soc_stub_top.v",
+      "input_sha256": {
+        "rtl/lcvex_axi4_avalon_adapter.sv": "45cc6290b56a16df0fe4da5d15f7795f28559b66f625e280798bfa5faf45d972",
+        "rtl/lcvex_axi4_master.sv": "0fdaf8e151a1136e0641f8fc073757a1b9c7bc3b5a5248ca71f5b76171892fe2",
+        "rtl/lcvex_bram_boot.sv": "40395866f8bc62e2d85e6e6045c766cb511b2693579eed98176b96d75d521a9a",
+        "rtl/lcvex_catapult_soc_axi.sv": "80822c9bee5b0c2669a4c8304b528550bd2b860f945975b0d4b18fea8101292e",
+        "rtl/lcvex_catapult_soc_coh.sv": "f281d47126f0c177186b3f470eed88a71c7499adef9012fa6a4e5c9483af05c4",
+        "rtl/lcvex_catapult_soc_pkg.sv": "66b34ffe422cefe1053ae3349b9e37ef9e76fa364ecfaab0eb9b3da4c09641e7",
+        "rtl/lcvex_catapult_soc_top.sv": "f8082f8a0c28af6dc2af5f87972df5b8e1c6f74ebd65f8f6df43f6c3f23f0ff3",
+        "rtl/lcvex_mem_router.sv": "d03cbc46b3b9db100b69bc8c91abd0ca433c6bc891e913886bd4f95218c36500",
+        "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60",
+        "stub_filelist": "15f0d8cc5eb897c9a46f725b418e7966169bcd414c3c171d7f5c3f90d9e5c4a7",
+        "stub_top": "2437cb499783e2c8b810ba821a4b7534735fe74a10483b65780a5a840fd63766",
+        "tieoff_filelist": "373b07554ad563ab3b5ccdfc0b092341b26348eb72aff350ec1068faca7061c9",
+        "tieoff_wrapper": "e1ade1e7941224c36cf4f396717ad8c7a2fff822da3ba798d003f17c8f8f5f58"
+      },
+      "known_limits": [
+        "ECP5 is only a proxy; it is not Arria 10 and does not replace Quartus/T-067.",
+        "The boundary stub has 109 ports/2627 port bits; nextpnr-ecp5 cannot place all TRELLIS_IO cells on LFE5U-85F.",
+        "Fmax is N/A unless a complete real design is successfully packed/routed on the target device.",
+        "No RTL semantics were changed; all stub/tie-off files are under fpga/opensynth."
+      ],
+      "metrics": {
+        "num_cells": 0,
+        "num_cells_by_type": {},
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 2627,
+        "num_ports": 109,
+        "num_processes": 0,
+        "num_pub_wire_bits": 2627,
+        "num_pub_wires": 109,
+        "num_submodules": 0,
+        "num_wire_bits": 2627,
+        "num_wires": 109
+      },
+      "module": "lcvex_catapult_soc_stub_top",
+      "netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+      "repeatability": {
+        "metrics_equal": true,
+        "netlist_sha_equal": true,
+        "reason": "Both runs have identical metrics and identical netlist SHA256.",
+        "run_count": 2,
+        "stable": true,
+        "status": "pass"
+      },
+      "run_count": 2,
+      "run_diff": {
+        "exit_code_equal": true,
+        "fields": [
+          {
+            "delta": 0,
+            "field": "num_cells",
+            "first": 0,
+            "same": true,
+            "second": 0
+          },
+          {
+            "delta": null,
+            "field": "num_cells_by_type",
+            "first": {},
+            "same": true,
+            "second": {}
+          },
+          {
+            "delta": 0,
+            "field": "num_memories",
+            "first": 0,
+            "same": true,
+            "second": 0
+          },
+          {
+            "delta": 0,
+            "field": "num_memory_bits",
+            "first": 0,
+            "same": true,
+            "second": 0
+          },
+          {
+            "delta": 0,
+            "field": "num_port_bits",
+            "first": 2627,
+            "same": true,
+            "second": 2627
+          },
+          {
+            "delta": 0,
+            "field": "num_ports",
+            "first": 109,
+            "same": true,
+            "second": 109
+          },
+          {
+            "delta": 0,
+            "field": "num_processes",
+            "first": 0,
+            "same": true,
+            "second": 0
+          },
+          {
+            "delta": 0,
+            "field": "num_pub_wire_bits",
+            "first": 2627,
+            "same": true,
+            "second": 2627
+          },
+          {
+            "delta": 0,
+            "field": "num_pub_wires",
+            "first": 109,
+            "same": true,
+            "second": 109
+          },
+          {
+            "delta": 0,
+            "field": "num_submodules",
+            "first": 0,
+            "same": true,
+            "second": 0
+          },
+          {
+            "delta": 0,
+            "field": "num_wire_bits",
+            "first": 2627,
+            "same": true,
+            "second": 2627
+          },
+          {
+            "delta": 0,
+            "field": "num_wires",
+            "first": 109,
+            "same": true,
+            "second": 109
+          }
+        ],
+        "netlist_sha_equal": true,
+        "reason": "Compared first two recorded runs.",
+        "status": "ok",
+        "wall_seconds": {
+          "delta": -0.003,
+          "first": 0.074,
+          "second": 0.071
+        }
+      },
+      "tool_versions": {
+        "nextpnr_ecp5": "\"nextpnr-ecp5\" -- Next Generation Place and Route (Version nextpnr-0.11.1-18-gdec04b3b)",
+        "python": "Python 3.12.10",
+        "verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+        "yosys": "Yosys 0.68+136 (git sha1 c30457480-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "yosys_oss": "Yosys 0.68+136 (git sha1 c30457480-dirty, Release, Clang /usr/bin/clang++ 21.1.8)"
+      },
+      "verilator": {
+        "command": "verilator --lint-only --timing --assert -Wno-fatal -Wno-DECLFILENAME ... --top-module lcvex_catapult_soc_tieoff_top -f fpga/opensynth/filelist_soc_tieoff.f",
+        "note": "The real SoC top is instantiated with all external EMIF/Avalon/JTAG/EPCQ/program/checkpoint inputs tied off. Elaboration completes; warnings are disabled as fatal so this lint harness exits 0.",
+        "result": {
+          "exit_code": 0,
+          "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-081/build/tmp/opensynth/a2/verilator_tieoff.log",
+          "log_sha256": "286781449a67c0d4ff5f719b10ea7577a15fb93855a009ef39af728b406bfb6b",
+          "skipped": true,
+          "wall_seconds": 349.622
+        },
+        "top": "lcvex_catapult_soc_tieoff_top"
+      }
+    },
+    "a3_reference": {
+      "a10_reference_only": {
+        "device": "10AX115N4F40E3SG",
+        "fit": {
+          "alms": 4468,
+          "dsp_blocks": 0,
+          "pins": 141,
+          "plls": 3,
+          "ram_blocks": 27,
+          "registers": 8641
+        },
+        "flow": "quartus_sh --flow compile catapult_a10 -c catapult_a10, exit 0, 0 errors / 68 warnings",
+        "note": "External T-064 full-flow/STA evidence, cited as directional reference only.",
+        "sta": {
+          "ddr_report_requirements_met": true,
+          "fmax_mhz": {
+            "clk_y3": 499.25,
+            "emif_core_cal_master_clk": 266.88,
+            "emif_core_user_clk": 283.29,
+            "sys_clk_50": 213.49
+          },
+          "tool_errors": 0,
+          "worst_hold_clock": "sys_clk_50",
+          "worst_hold_corner": "Fast 900mV 0C",
+          "worst_hold_slack_ns": 0.017,
+          "worst_min_pulse_slack_ns": 0.12,
+          "worst_recovery_slack_ns": 0.53,
+          "worst_removal_slack_ns": 0.112,
+          "worst_setup_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "worst_setup_corner": "Slow 900mV 100C",
+          "worst_setup_slack_ns": 0.22
+        }
+      },
+      "correlation_scope": "Only module proportions within the A1 proxy, ranking, and qualitative trends are compared. No ECP5/Yosys-to-A10 linear conversion or derived A10 percentage is performed.",
+      "task": "T-20260829-083"
+    }
+  },
+  "state": "review",
+  "task_id": "T-20260829-087",
+  "thresholds": {
+    "checks": [
+      {
+        "description": "Each A1 module must produce identical metrics and netlist SHA256 across its two recorded runs.",
+        "details": {
+          "lcvex_axi4_master": {
+            "metrics_equal": true,
+            "netlist_sha_equal": true,
+            "reason": "Both runs have identical metrics and identical netlist SHA256.",
+            "run_count": 2,
+            "stable": true,
+            "status": "pass"
+          },
+          "lcvex_mem_arb": {
+            "metrics_equal": true,
+            "netlist_sha_equal": true,
+            "reason": "Both runs have identical metrics and identical netlist SHA256.",
+            "run_count": 2,
+            "stable": true,
+            "status": "pass"
+          },
+          "lcvex_mem_delay": {
+            "metrics_equal": true,
+            "netlist_sha_equal": true,
+            "reason": "Both runs have identical metrics and identical netlist SHA256.",
+            "run_count": 2,
+            "stable": true,
+            "status": "pass"
+          }
+        },
+        "id": "a1-two-run-determinism",
+        "status": "pass"
+      },
+      {
+        "description": "A2 boundary-stub generic synthesis must produce identical metrics and netlist SHA256 across its two recorded runs.",
+        "details": {
+          "metrics_equal": true,
+          "netlist_sha_equal": true,
+          "reason": "Both runs have identical metrics and identical netlist SHA256.",
+          "run_count": 2,
+          "stable": true,
+          "status": "pass"
+        },
+        "id": "a2-two-run-determinism",
+        "status": "pass"
+      },
+      {
+        "description": "A1 statistics must still match the values recorded in the A3 correlation report.",
+        "details": {
+          "modules": [
+            {
+              "actual": {
+                "area": "N/A",
+                "dff": 2406,
+                "dsp": "N/A",
+                "lut4": 1870,
+                "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+                "ram_bits": 0,
+                "stable_across_two_runs": true
+              },
+              "expected": {
+                "area": "N/A",
+                "config": {
+                  "ADDR_WIDTH": 64,
+                  "DATA_WIDTH": 128,
+                  "ID_WIDTH": 4,
+                  "MAX_BURST_LEN": 16
+                },
+                "dff": 2406,
+                "dsp": "N/A",
+                "lut4": 1870,
+                "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+                "ram_bits": 0,
+                "stable_across_two_runs": true
+              },
+              "mismatches": {},
+              "module": "lcvex_axi4_master",
+              "status": "pass"
+            },
+            {
+              "actual": {
+                "area": "N/A",
+                "dff": 3,
+                "dsp": "N/A",
+                "lut4": 20,
+                "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+                "ram_bits": 0,
+                "stable_across_two_runs": true
+              },
+              "expected": {
+                "area": "N/A",
+                "config": {
+                  "PORTS": 3
+                },
+                "dff": 3,
+                "dsp": "N/A",
+                "lut4": 20,
+                "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+                "ram_bits": 0,
+                "stable_across_two_runs": true
+              },
+              "mismatches": {},
+              "module": "lcvex_mem_arb",
+              "status": "pass"
+            },
+            {
+              "actual": {
+                "area": "N/A",
+                "dff": 241,
+                "dsp": "N/A",
+                "lut4": 63,
+                "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+                "ram_bits": 0,
+                "stable_across_two_runs": true
+              },
+              "expected": {
+                "area": "N/A",
+                "config": {
+                  "DELAY_MODE": 1,
+                  "RAND_MAX": 4,
+                  "SEED": "8'hA5"
+                },
+                "dff": 241,
+                "dsp": "N/A",
+                "lut4": 63,
+                "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+                "ram_bits": 0,
+                "stable_across_two_runs": true
+              },
+              "mismatches": {},
+              "module": "lcvex_mem_delay",
+              "status": "pass"
+            }
+          ],
+          "status": "pass"
+        },
+        "id": "a1-vs-a3-consistency",
+        "status": "pass"
+      },
+      {
+        "description": "A2 boundary-stub statistics must still match the values recorded in the A3 correlation report.",
+        "details": {
+          "actual": {
+            "module": "lcvex_catapult_soc_stub_top",
+            "netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+            "num_cells": 0,
+            "num_port_bits": 2627,
+            "num_ports": 109,
+            "num_wires": 109,
+            "stable_across_two_runs": true
+          },
+          "expected": {
+            "ecp5_nextpnr": {
+              "exit_code": 125,
+              "fmax": "N/A",
+              "reason": "2627 port bits exceed LFE5U-85F IO capacity (365 TRELLIS_IO cells).",
+              "status": "fail"
+            },
+            "module": "lcvex_catapult_soc_stub_top",
+            "netlist_sha256": "d0c0ff14be9ca60e13178d2cec2fddef6976dcf584991b650110ffbe00ec9d33",
+            "note": "Boundary stub only; no real core/cache/SoC logic.",
+            "num_cells": 0,
+            "num_port_bits": 2627,
+            "num_ports": 109,
+            "num_wires": 109,
+            "stable_across_two_runs": true,
+            "verilator_real_soc_elaboration": {
+              "exit_code": 0,
+              "note": "Real lcvex_catapult_soc_top through tie-off wrapper elaborates in Verilator; warnings disabled as fatal for this lint harness.",
+              "status": "pass"
+            }
+          },
+          "mismatches": {},
+          "status": "pass"
+        },
+        "id": "a2-vs-a3-consistency",
+        "status": "pass"
+      },
+      {
+        "description": "Current A1/A2/A2-manifest file hashes must equal the hashes recorded in A3.",
+        "details": [
+          {
+            "alias": "a1_stats_json",
+            "current_sha256": "a5c27ff87bc78a55a940326abf91155762538d645e4529b7e155cb25ad4da300",
+            "expected_sha256": "a5c27ff87bc78a55a940326abf91155762538d645e4529b7e155cb25ad4da300",
+            "path": "fpga/opensynth/a1_generic_synth_stats.json",
+            "reason": "",
+            "status": "pass"
+          },
+          {
+            "alias": "a2_stats_json",
+            "current_sha256": "d8c66aac65b0fbdeba99e4c22a3922b59a5b0aaa042a920ca0a670e4c059db6f",
+            "expected_sha256": "d8c66aac65b0fbdeba99e4c22a3922b59a5b0aaa042a920ca0a670e4c059db6f",
+            "path": "fpga/opensynth/a2_soc_stub_stats.json",
+            "reason": "",
+            "status": "pass"
+          },
+          {
+            "alias": "a2_manifest_md",
+            "current_sha256": "d9cb3daa6ba9fb830ffe3e2b0411f3ee2ed4d02647be2f821b64a850735e1072",
+            "expected_sha256": "d9cb3daa6ba9fb830ffe3e2b0411f3ee2ed4d02647be2f821b64a850735e1072",
+            "path": "fpga/opensynth/a2_soc_stub_manifest.md",
+            "reason": "",
+            "status": "pass"
+          }
+        ],
+        "id": "a3-input-hash-stability",
+        "status": "pass"
+      },
+      {
+        "description": "No A10 ALM/register/RAM/Fmax threshold is defined or enforced. A-line thresholds are proxy-internal only.",
+        "details": {
+          "a10_thresholds_defined": false,
+          "quartus_replaced": false,
+          "t067_unblocked": false
+        },
+        "id": "no-a10-resource-or-fmax-threshold",
+        "status": "pass"
+      },
+      {
+        "description": "A true trend requires at least two A4 snapshots (a prior baseline plus this run).",
+        "details": {
+          "baseline_count": 0,
+          "baseline_path": null,
+          "reason": "No prior A4 baseline supplied; this snapshot is recorded as the first baseline."
+        },
+        "id": "temporal-trend-baseline",
+        "status": "N/A"
+      }
+    ],
+    "config": {
+      "a10_resource_or_fmax_thresholds": false,
+      "a1_a2_must_match_a3": true,
+      "a1_netlist_hash_must_match": true,
+      "a2_netlist_hash_must_match": true,
+      "allowed_relative_delta_pct": null,
+      "input_hashes_must_match_a3": true
+    },
+    "note": "Thresholds are proxy-internal invariants only; they do not represent Arria 10 QoR or signoff limits.",
+    "overall": "pass"
+  },
+  "title": "A4 OpenSynth trend/diff regression and threshold guard",
+  "toolchain": {
+    "a1_abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+    "a1_python": "Python 3.12.10",
+    "a1_yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]",
+    "a2_nextpnr_ecp5": "\"nextpnr-ecp5\" -- Next Generation Place and Route (Version nextpnr-0.11.1-18-gdec04b3b)",
+    "a2_verilator": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+    "a2_yosys": "Yosys 0.68+136 (git sha1 c30457480-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+    "a2_yosys_oss": "Yosys 0.68+136 (git sha1 c30457480-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+    "a3_a10_quartus": "Quartus Prime Shell/Pro 21.4.0 Build 67 12/06/2021",
+    "a3_python": "Python 3.12.10"
+  },
+  "trend": {
+    "baseline_path": null,
+    "deltas": {},
+    "reason": "No previous A4 snapshot was supplied; this is the first baseline and no temporal trend can be claimed.",
+    "status": "N/A"
+  },
+  "verification": {
+    "commands": [
+      "python3 scripts/opensynth/trend_diff.py --base-sha 7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "python3 -m json.tool fpga/opensynth/a4_trend_thresholds.json",
+      "git diff --check"
+    ],
+    "note": "Lightweight analytical validation only; no synthesis/compile was executed.",
+    "result": "pass"
+  },
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-087"
+}

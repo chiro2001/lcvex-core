@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-001",
+  "label": "B25-JTAG-RX-VENDOR-TIMING",
+  "state": "done-no-production-defect-reproduced",
+  "acceptance_status": "vendor-focused-and-full-soc-pass-no-production-rtl-change",
+  "partial": false,
+  "source_sha": "07e8148b55dfb92336f5c846a140de227f15d3fe",
+  "branch": "fix/T-20260920-001-b25-jtag-rx-vendor-timing",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-001",
+  "owner": "root",
+  "board_trigger": {
+    "evidence": "docs/tasks/evidence/T-20260920-002.json",
+    "result": "The exact corrected SOF reaches BOOT/READY, but a clean first ordinary-file terminal session receives no status, PONG or Z echo.",
+    "remaining_scope_before_this_task": "candidate host-to-target path after the JTAG Atlantic endpoint"
+  },
+  "implementation": {
+    "production_rtl_changed": false,
+    "production_bridge_diff_from_task_base": "empty for rtl/lcvex_catapult_soc_top.sv",
+    "files": [
+      "tb/sv/lcvex_jtag_uart_model.sv",
+      "tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+      "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv",
+      "fpga/catapult_a10/tools/run_jtag_uart_vendor_timing_test.sh",
+      "fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "scripts/test_registry.json"
+    ],
+    "coverage": [
+      "Quartus 21.4 registered waitrequest recurrence and registered DATA/CONTROL selector",
+      "registered RVALID and showahead-OFF RX FIFO q timing",
+      "vendor TX full behavior: accepted write plus overflow instead of behavioral backpressure",
+      "isolated bridge address mapping, exactly-once side effects, backpressure and reset",
+      "complete no-FP PC=0 monitor in CAL-OK/CAL-WAIT/CAL-FAIL paths",
+      "65,536 empty vendor DATA transactions before host RX injection",
+      "p/PONG, Z echo and ?/status after the long empty-poll interval"
+    ],
+    "source_hashes": {
+      "vendor_generated_ip": "09a9b9a78d3e27b2c1499868f9ea56074186115e95f94bd12415a07461161d3c",
+      "vendor_model": "8000a8c4a0119a59dd51c1fdece1eb7933423040f038aeb91e9a49a832dc3c60",
+      "focused_tb": "1412b966296812abb9dac2c9634ed13803de76fd2ff4c4521799937813d979cd",
+      "full_soc_tb": "a9d9854eae98bab6bf9576c4f243efb35da3caf543009f29e87c9e252c223007",
+      "runner": "a537a8ee0766a3b9a3572a5514f7828f43ba1f23f71612f4aaedc93694eace35"
+    }
+  },
+  "testbench_diagnostic": {
+    "initial_source_sha": "10446bc84a494371a47be2eabcac569656ab6805",
+    "initial_result": "The first vendor full-SoC run reached all commands and exactly 65,536 empty reads but failed only the same-cycle bridge/model TX event assertion in all three calibration scenarios.",
+    "initial_log_sha256": "1263bc7515c5ac46a07db765398c2ec69387f4632a4004132283cd6fb7522671",
+    "root_cause": "The vendor model performs its FIFO side effect during the registered high-waitrequest phase; the bridge emits its accepted-write pulse during the following low phase. The behavioral-only same-cycle assertion was invalid for that protocol.",
+    "fix_commit": "07e8148b55dfb92336f5c846a140de227f15d3fe",
+    "fix": "Delay only the vendor model event by one cycle before comparing valid/character; retain the same-cycle comparison for the behavioral model and retain final count equality checks.",
+    "classification": "testbench-observer-fix, not a production RTL fix"
+  },
+  "verification": {
+    "tools": {
+      "iverilog": "13.0 stable",
+      "verilator": "5.050 2026-07-01 conda-forge"
+    },
+    "vendor_focused_iverilog": {
+      "result": "PASS",
+      "reads": 8,
+      "writes": 8,
+      "rx_pops": 3,
+      "tx_pushes": 6,
+      "run_log": "build/agents/T-20260920-001/final-07e8148b/iverilog-run.log",
+      "run_log_sha256": "41c376bb74905bfb97597fa12e6c29b15340e025ca2c391bdb113bdf56858de3"
+    },
+    "vendor_focused_verilator": {
+      "result": "PASS",
+      "reads": 8,
+      "writes": 8,
+      "rx_pops": 3,
+      "tx_pushes": 6,
+      "run_log": "build/agents/T-20260920-001/final-07e8148b/verilator-run.log",
+      "run_log_sha256": "44d6d4775b88313889adf43613a3c78b6dee86f45c63293a7acfd2eca2da467c",
+      "build_log_sha256": "1c4805b59a371b29ed87a91a22c89f7f194b9241e1b9147e0954041eabf335fc"
+    },
+    "vendor_full_soc": {
+      "result": "PASS",
+      "scenarios": ["CAL-OK", "CAL-WAIT", "CAL-FAIL"],
+      "empty_data_reads": 65536,
+      "commits_during_empty_poll": 458755,
+      "cycles_during_empty_poll": 2621457,
+      "post_poll_commands": ["p -> PONG", "Z -> Z", "? -> CLOCK25 CAL-WAIT DDR-FAIL"],
+      "smoke_log": "build/agents/T-20260920-001/final-07e8148b/soc/smoke.log",
+      "smoke_log_sha256": "ce3ac84c42be1fe0b8f865cb9fdc0d2474365f8a66b551251ad9c69931f0515d",
+      "wrapper_log_sha256": "1167c5eb2bf3d53729655e76f2ea19c875d7564118dbb5fefccc1ef8f535aa39"
+    },
+    "behavioral_full_soc": {
+      "result": "PASS",
+      "scenarios": ["CAL-OK", "CAL-WAIT", "CAL-FAIL"],
+      "smoke_log": "build/agents/T-20260920-001/behavioral-final-07e8148b/smoke.log",
+      "smoke_log_sha256": "58c3ecff668cf64153ecc28528be8bbed6614054d62f64375053d87b1d1736d5"
+    },
+    "registry": {
+      "command": "make test-registry-check",
+      "result": "PASS; 86 entries and runner consistency"
+    }
+  },
+  "conclusion": {
+    "production_defect_reproduced": false,
+    "rtl_change_permitted_by_task_gate": false,
+    "statement": "The current production JTAG-UART bridge consumes delayed RX exactly once and returns PONG/status/echo after a long vendor-timed empty-poll interval. No deterministic failure exists at the modeled Avalon/bridge/monitor boundary, so speculative production RTL edits are forbidden.",
+    "uncovered_physical_boundaries": [
+      "the live JTAG Atlantic host-to-target transport and long-lived standard-server state",
+      "the synthesized vendor CDC/FIFO implementation before the Avalon DATA register",
+      "physical observation of whether a host byte reaches DATA.RVALID on the candidate"
+    ]
+  },
+  "resources_and_safety": {
+    "local_heavy_runs_held_resource_lock": true,
+    "verilator_jobs": 1,
+    "gamepc_used": false,
+    "quartus_or_board_action": false,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "final_local_lock_released": true
+  },
+  "handoff": "docs/handoffs/T-20260920-001-b25-jtag-rx-vendor-timing.md",
+  "next": "Before adding physical instrumentation, use the new T-20260920-003 finding to perform one bounded corrected-candidate control with a delayed read-only jtagconfig -n rescan before the first terminal. If RX still fails, add physical read-count/RVALID/last-byte observability and rebuild through the required gates."
+}

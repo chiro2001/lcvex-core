@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-078",
+  "label": "B1",
+  "parent": "T-20260828-072",
+  "title": "B1 标量/解码闭合：ROR 与低风险 V82-BASE 解码缺口",
+  "kind": "isa-scalar-decoder-closure",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+  "branch": "feature/T-20260829-078-b1-scalar-closure",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-078",
+  "scope": "依据 docs/V82_PROFILE_MANIFEST.md，实现 V82-BASE 中当前明确保留/缺口的低风险标量/解码项，优先处理 BASE-DP-018（logical shifted-register ROR）；同时检查相邻的 shifted-register 保留位、XZR/SP、W 零扩展和保留编码的严格拒绝。只做已登记在 V82-BASE 的行，不新增 FP/NEON/系统维护/QEMU 修改。",
+  "writes": [
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_alu.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/test_program.py",
+    "docs/handoffs/T-20260829-078-b1-scalar-closure.md",
+    "docs/tasks/evidence/T-20260829-078.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_SCOPE.md",
+    "docs/ISA_GAPS.md",
+    "docs/ARCHITECTURE.md",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_alu.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/test_lcvex_core.py",
+    "sim/difftest/**",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "新增解码/编码 raw-bit 定向测试；保留编码产生 UDEF 的负测"
+    ],
+    "l1": [
+      "SV + Cocotb：ROR shifted-register 成功路径、XZR/SP、32 位零扩展、负向保留编码"
+    ],
+    "l2": [
+      "P6 scalar 定向/随机受影响子集"
+    ],
+    "l3": []
+  },
+  "acceptance": "BASE-DP-018 至少提供 decoder/ALU 实现与 L0/L1 证据；若还有其它低风险 V82-BASE 解码缺口，必须逐项实现或明确标记 blocked/deferred；不修改 core/pkg/filelist/Makefile/QEMU；不把 shim 当实现。",
+  "next": "B1 通过后进入 B2a FP/ASIMD 算术或 B3 系统/维护。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T02:18:08+08:00",
+  "updated_at": "2026-08-29T02:42:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T02:18:08+08:00",
+    "agent_name": "b1_scalar_decoder_closure",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-078"
+  },
+  "known_limits": [
+    "本任务不处理 POST-V82-DEFERRED、SVE、FP/NEON 新族、系统寄存器矩阵和 QEMU 修改。",
+    "不修改共享热点 rtl/lcvex_core.sv、rtl/lcvex_pkg.sv、rtl/filelist.f、Makefile、QEMU commit/checkpoint。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-078-b1-scalar-closure.md",
+  "evidence": "docs/tasks/evidence/T-20260829-078.json",
+  "merge_sha": "98c7133d231a10753e70d39b88ea6d8f27a8d32f",
+  "merged_at": "2026-08-29T02:42:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-29T02:39:50+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "c5c0893100a844fb8e53cad8e66bd5fa5ba1baeb",
+    "implementation_sha": "fe36fe4ad4e798aa5f4678ce944fff3925de058d",
+    "notes": "B1 实现 logical shifted-register ROR；ALU cocotb 15/15、decoder SV TB 通过；完整 SoC 核心定向 cocotb 未执行，列为资源后补。BASE-DP-018 已在 profile 中更新为 implemented。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T02:20:00+0800",
+        "new": "2026-08-29T02:18:08+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T02:20:00+0800",
+        "new": "2026-08-29T02:18:08+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "fe36fe4ad4e798aa5f4678ce944fff3925de058d",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "fe36fe4ad4e798aa5f4678ce944fff3925de058d"
+}

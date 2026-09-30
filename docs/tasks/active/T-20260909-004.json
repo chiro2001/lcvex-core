@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-004",
+  "label": "B25-PHYSICAL-ACCEPTANCE-AUDIT",
+  "title": "Prepare an independent acceptance matrix for the selector physical rerun",
+  "kind": "read-only-physical-review",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "accepted-matrix-ready",
+  "assigned_owner": "b25_acceptance_resume",
+  "depends_on": ["T-20260908-007", "T-20260909-001"],
+  "follows_from": "T-20260909-002",
+  "base_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "branch": "verify/T-20260909-004-b25-physical-acceptance-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-004",
+  "scope": "Independently derive the exact pass/fail acceptance matrix for T-20260909-002 from tracked candidate/QSF/SDC/MIF/checker contracts. Cover provenance, synthesis selector, M20K/MIF consumption, clocks, all timing gate classes, EMIF CDC filters, DDR/metastability, resources and forbidden artifacts/actions. Do not inspect the running physical worktree or remote probe.",
+  "writes": [
+    "docs/tasks/evidence/T-20260909-004.json",
+    "docs/handoffs/T-20260909-004-b25-physical-acceptance-audit.md"
+  ],
+  "reads": [
+    "702bd8ee tracked candidate",
+    "docs/tasks/evidence/T-20260908-005/006/007 and T-20260909-001",
+    "Catapult QSF/SDC/platform manifests and checkers"
+  ],
+  "validation": [
+    "Map each acceptance claim to an exact Quartus report/query/artifact and fail-closed condition.",
+    "Include sys_clk_25=40 ns, MIF init recognition versus actual RAM consumption, setup/hold/recovery/removal/min-pulse, T-045 filter resolve counts, EMIF/DDR checks and no-assembler/bitstream/JTAG proof.",
+    "Identify claims that cannot be made from synthesis-only or failed stages."
+  ],
+  "acceptance": "A compact independent checklist can be applied to the returned evidence without remote access; no design/build/physical state is changed.",
+  "resource": "Read-only/light only; no resource lock, no physical worktree/probe access and no remote connection.",
+  "forbidden_regions": [
+    "all source/test/task/status modifications",
+    "T-20260909-002 worktree or remote probe",
+    "local heavy, GamePC/Quartus/JTAG/board/Flash actions"
+  ],
+  "created_at": "2026-09-09T01:20:22+08:00",
+  "updated_at": "2026-09-09T02:14:42+08:00",
+  "result_head": "1eab644c4e79f7ba3b4f484e7883f7d88cb61d8d",
+  "result_evidence": "docs/tasks/evidence/T-20260909-004.json",
+  "integrated_head": "fab4007f",
+  "integrator_review": {
+    "status": "accepted-read-only-matrix",
+    "reviewed_at": "2026-09-09T02:14:42+08:00",
+    "usage": "Apply all 14 rows fail-closed to the T-20260909-002 returned evidence; the matrix itself makes no physical PASS claim."
+  },
+  "recovery": {
+    "reason": "User reported an abnormal local host restart; prior read-only agent terminated with no task artifacts or commits.",
+    "audited_at": "2026-09-09T01:46:47+08:00",
+    "worktree": "clean at 702bd8ee",
+    "policy": "Restart the same bounded read-only acceptance audit from the registered base."
+  },
+  "dispatch_history": [
+    {
+      "sent_at": "2026-09-09T01:21:51+08:00",
+      "agent_name": "b25_emif_resilience_impl",
+      "outcome": "interrupted-by-local-restart-no-output"
+    }
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-09T01:46:47+08:00",
+    "agent_name": "b25_acceptance_resume",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "e6844bb9ba46826f8968b5e90b5314277ceaf698"
+  }
+}

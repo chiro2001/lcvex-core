@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-010",
+  "title": "修复 ADC/SBC carry 临时量宽度 lint 阻断",
+  "kind": "rtl-hygiene",
+  "priority": "high",
+  "assigned_owner": "root-integrator",
+  "agent_type": "fast-implementation",
+  "model": "",
+  "model_selection": "当前会话直接实现；不启动重型仿真",
+  "reasoning_effort": "low",
+  "phase": "done",
+  "parent": "T-20260826-009",
+  "depends_on": [],
+  "writes": [
+    "rtl/lcvex_alu.sv",
+    "docs/tasks/evidence/T-20260826-010.json",
+    "docs/handoffs/T-20260826-010-lint-width.md"
+  ],
+  "reads": [
+    "rtl/lcvex_alu.sv",
+    "docs/tasks/evidence/T-20260826-009.json"
+  ],
+  "context_docs": ["docs/MULTI_AGENT_WORKFLOW.md"],
+  "base_sha": "73f0d51",
+  "branch": "fix/T-20260826-010-carry-width",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-010",
+  "resource": {"cpu": 1, "memory_mb": 512, "disk_mb": 64, "timeout_s": 600},
+  "validation": {
+    "l0": ["verilator --lint-only -Wall --top-module lcvex_core -f rtl/filelist.f"],
+    "l1": ["make compile"],
+    "l2": ["既有 p6-lse/ADC-SBC 定向回归由 T-009 candidate 复跑"],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "仅修正 carry 临时量声明宽度，不改变 ADC/SBC 结果；标准 make compile 不再因 UNUSEDSIGNAL fatal 失败。",
+  "created_at": "2026-08-26T16:30:00+08:00",
+  "updated_at": "2026-08-26T17:00:00+08:00",
+  "commits": ["3bdfa33", "18af73b", "95b46c6", "963297a"],
+  "handoff": "docs/handoffs/T-20260826-010-lint-width.md",
+  "evidence": "docs/tasks/evidence/T-20260826-010.json",
+  "known_limits": ["不解决其它非 fatal lint 警告，不改变功能语义。"],
+  "next": "已完成并归档；T-009 candidate 需基于新 SHA 重新运行 Gate D。"
+}
+

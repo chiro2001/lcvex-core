@@ -1,0 +1,31 @@
+diff --git a/target/arm/helper.c b/target/arm/helper.c
+--- a/target/arm/helper.c
++++ b/target/arm/helper.c
+@@ -1539,8 +1539,27 @@ static void gt_recalc_timer(ARMCPU *cpu, int timeridx)
+                 nexttick = UINT64_MAX;
+             }
+         }
++        /* LCVEX checkpoint restore presents a shifted architectural counter
++         * through gt_get_countervalue(), while QEMU_CLOCK_VIRTUAL itself
++         * still starts at zero after -incoming.  timer_mod() consumes the
++         * raw virtual-clock deadline, so remove the difftest-only counter
++         * offset before arming the timer.  Without this conversion a timer
++         * only a few instructions away is scheduled tens of millions of
++         * ticks in the future and the step loop can stop at the boundary. */
++        if (qemu_lcvex_difftest_active()) {
++            uint64_t lcvex_offset = qemu_lcvex_difftest_timer_offset();
++            /* The offset is intentionally modulo-2^64 (it may represent a
++             * small negative delta when incoming QEMU's raw clock is ahead
++             * of the sidecar).  Unsigned subtraction preserves that wrap.
++             * UINT64_MAX is the architectural "far future" sentinel for an
++             * already asserted timer; keep it intact or it would wrap to a
++             * near-immediate deadline and spin in the timer callback. */
++            if (nexttick != UINT64_MAX) {
++                nexttick -= lcvex_offset;
++            }
++        }
+         /*
+          * Note that the desired next expiry time might be beyond the
+          * signed-64-bit range of a QEMUTimer -- in this case we just
+          * set the timer for as far in the future as possible. When the
+          * timer expires we will reset the timer for any remaining period.

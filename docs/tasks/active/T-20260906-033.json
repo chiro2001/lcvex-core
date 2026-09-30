@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-033",
+  "label": "R21-ITER-ROUND-METADATA",
+  "title": "Remove redundant iterative round-pack leading-one fallback",
+  "kind": "rtl-timing-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-and-validated",
+  "assigned_owner": "r21_iter_round",
+  "depends_on": ["T-20260906-031"],
+  "batch_parent": "T-20260906-032",
+  "base_sha": "edaaca5bc3296aaf89f161a079ee09868b50b0b5",
+  "functional_base_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "branch": "timing/T-20260906-033-r21-iter-round",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-033",
+  "cone_id": "r20-div-pre-hi-to-it-fin-mid-hi",
+  "write_regions": [
+    "rtl/lcvex_fp_scalar.sv::function round_pack_iter_p1 only",
+    "tb/sv/lcvex_fp_scalar_r21_iter_round_tb.sv",
+    "docs/tasks/evidence/T-20260906-033.json",
+    "docs/handoffs/T-20260906-033-r21-iter-round.md"
+  ],
+  "forbidden_regions": [
+    "iter_state_t, declarations, reset/kill and g_iter state machine",
+    "divider/sqrt implementation and finish helpers",
+    "FMA functions and IT_MUL owned by T-034",
+    "shared test registry, latency tables, QEMU/QSF/SDC"
+  ],
+  "scope": "Exploit the already registered lead/lead_valid metadata from DIV/SQRT finish payloads so round_pack_iter_p1 does not infer a duplicate 256-bit priority scan; preserve zero, special, rounding, sticky and latency behavior.",
+  "validation": "Run diff-check and lightweight focused SV/elaboration only. Cover H/S/D DIV/SQRT normal, zero, tiny, overflow, rounding, FZ, special values, half dual-lane and pause/kill/valid-drop where the focused harness supports it; merged candidate owns heavy L0-L2.",
+  "acceptance": "The fallback scan is absent from round_pack_iter_p1, all reachable iterative payload classes retain bit-exact behavior, and IT_FIN/IT_PACK latency and response ownership remain unchanged.",
+  "resource": "No local or GamePC heavy job; do not acquire a production lock for editing/static/lightweight focused work.",
+  "dispatch": {
+    "sent_at": "2026-09-06T19:09:21+08:00",
+    "agent_name": "r21_iter_round",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true
+  },
+  "created_at": "2026-09-06T19:09:21+08:00",
+  "implementation_head": "25863a1fb1f8fe6de7d40d40857f26fb59be1a13",
+  "merge_commit": "8dde5a20",
+  "batch_candidate_sha": "80b1f813de47a1223dd135117650419a0b6c05fc",
+  "updated_at": "2026-09-06T19:47:37+08:00"
+}

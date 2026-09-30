@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-066",
+  "title": "P7-4 FMA 与 FP/整数转换垂直实现",
+  "kind": "p7-fp-neon-fma-convert",
+  "priority": "high",
+  "assigned_owner": "p7-4-fma-convert-dsv",
+  "agent_type": "implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "model_scope": "在 P7 集成线实现协议明确延后的 FMA 与转换族：标量 S/D FMADD/FMSUB/FNMADD/FNMSUB；SCVTF/UCVTF（int/fixed→fp）与 FCVTZS/FCVTZU（fp→int/fixed）；FCVT S<->D；NEON 2S/4S/2D 对应 FMA 与转换（协议允许的 selected subset）。复用 P7-0 FPCR/FPSR/FPEN/V raw、P7-1 标量与 P7-3 NEON FP 管线边界；不实现 FP16、sqrt、estimate、min/max、round、完整 FP exception-enable、SVE、Cache/AXI/FPGA 或修改 QEMU fork。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "仅在 FMA/转换编码子集、raw-bit 语义或 QEMU 差分边界出现歧义时补充审查；不替代定向测试。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "本任务以受限垂直切片为主，默认不阻塞；仅在写集、指令子集或验收证据发生实质变化时重审。"
+  },
+  "phase": "done",
+  "parent": "T-20260827-060",
+  "depends_on": [
+    "T-20260827-060"
+  ],
+  "input_note": "P7-0/1/2/3 已完成并归档；协议 P7 分批表明确 FMA、FP16/vector conversion 与未列 FP 族为延后项。本任务实现 FMA 与选定转换（不含 FP16/未列族），并保持 P6 checkpoint/max 兼容。",
+  "writes": [
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/filelist.f",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/**",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/handoffs/T-20260828-066-p7-4-fma-convert.md",
+    "docs/tasks/evidence/T-20260828-066.json"
+  ],
+  "reads": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-2_NEON_INT.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/ISA_SCOPE.md",
+    "docs/VERIFICATION.md",
+    "docs/tasks/archive/T-20260827-058.json",
+    "docs/tasks/archive/T-20260827-060.json",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_state.sv",
+    "tb/sv/lcvex_fp_scalar_tb.sv",
+    "tb/sv/lcvex_neon_fp_tb.sv",
+    "sim/cocotb/test_p7_fp_scalar.py",
+    "sim/cocotb/test_p7_3_neon_fp.py",
+    "sim/difftest/**"
+  ],
+  "context_docs": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "base_sha": "88656e9ad91f10a7a442dc1ddc0ab8c95022bdf5",
+  "branch": "feature/T-20260828-066-p7-4-fma-convert",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-066",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true,
+    "extend_when": "owner 按 Asia/Shanghai 报告 sent_at/received_at/reported_at、文件、验证、阻断和剩余工作，且正在稳定推进实现/回归时延长。"
+  },
+  "validation": {
+    "l0": [
+      "每个新增编码的定向 SV/Cocotb 单测（含 NaN、signed zero、rounding、overflow、inf、denormal）",
+      "make test / lint / 既有 FP/NEON Cocotb 无回归"
+    ],
+    "l1": [
+      "P7-1/P7-2/P7-3 回归全绿；P6 scalar 40 回归全绿",
+      "SV testbench 与 Cocotb 可独立复现"
+    ],
+    "l2": [
+      "Cortex-A76 strict QEMU 锁步：每个新增编码成功/NaN/FPSR/trap 定向程序",
+      "checkpoint FP_INIT/FP_COMMIT 兼容；P6 checkpoint/max 兼容"
+    ],
+    "l3": [
+      "冻结 SHA 上完整 Gate D 由集成者串行复跑"
+    ],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "实现并验证协议选定的标量 S/D FMA 四族、SCVTF/UCVTF/FCVTZS/FCVTZU（含 fixed 宽度子集）与 FCVT S<->D，以及 NEON 2S/4S/2D 对应 FMA/转换子集；结果和 NaN/FPSR/FPCR 按 raw bits 与 Cortex-A76 QEMU strict lockstep 一致；FPEN trap、commit backpressure、V forwarding 和 unsupported UDEF 有 SV/Cocotb/定向程序/handoff/evidence；P7-1/2/3 与 P6 回归全绿。不得宣称完整 ARMv8.2-A FP/NEON，不得实现 FP16/sqrt/estimate/minmax/round/SVE，不得修改 QEMU fork。",
+  "created_at": "2026-08-28T02:20:00+08:00",
+  "updated_at": "2026-08-28T03:30:00+08:00",
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260828-066.json",
+  "handoff": "docs/handoffs/T-20260828-066-p7-4-fma-convert.md",
+  "known_limits": [
+    "只支持选定的 FMA/转换子集；FP16、sqrt、estimate、min/max、round、完整 FP exception-enable、未列 FP 族与 SVE 后置。",
+    "不修改 QEMU fork；QEMU A76 已支持目标编码，若发现差异只记录证据，不绕过差分。",
+    "结构化/lane/pair 访存不在本任务范围。"
+  ],
+  "next": "集成者复跑 L0-L2 后，将 P7-4 合入 P7 线并纳入 Gate-F ISA 候选（冻结 SHA 完整 Gate D）。",
+  "dispatch": {
+    "sent_at": "2026-08-28T02:18:54+08:00",
+    "agent_name": "t066_p7_4_fma_convert",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-066"
+  },
+  "merge_sha": "4b253ad",
+  "integration": {
+    "status": "done",
+    "strategy": "cherry-pick afabcc1+0a410c3+4701704 to feature/p7-fp-neon",
+    "merge_sha": "4b253ad",
+    "validated_scope": "P7-4 FMA+convert SV/Cocotb/A76 lockstep/checkpoint/P6 scalar all green on merge SHA",
+    "remaining_scope": "FP16/sqrt/estimate/minmax/round/full FP exception-enable/SVE remain deferred; Gate F-ISA frozen SHA complete Gate D"
+  }
+}

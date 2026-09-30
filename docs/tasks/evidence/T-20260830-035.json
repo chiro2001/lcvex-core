@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-035",
+  "state": "delivered",
+  "partial": false,
+  "base_sha": "e42bf7442044f74b41b4d96584f774116c533069",
+  "source_sha": "cf12ee23787a41eb455a4096c59300f8573fb865",
+  "audit_branch": "feature/T-20260830-035-pe-ext-audit",
+  "audit_head_sha": "24fc8d5",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-035",
+  "owner": "external-performance-audit-agent",
+  "label": "PE-EXT",
+  "title": "独立外部性能静态审计 + 最终合并版性能增强路线图",
+  "scope": "只读审计 core/cache/总线/多核性能结构；评估深流水、顺序 2-wide、outstanding/MSHR、取指/分支、cache bank、写回/refill、总线/仲裁、提交/backpressure、维护/异常和目录并行化；输出 PE-EXT 独立规划，并与 PE-A 综合为最终路线图。不修改 RTL/测试/QEMU，不启动 Quartus 或重型仿真。",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "audit_documents_written_at": "2026-08-30T11:45:59+08:00",
+    "final_synthesis_written_at": "2026-08-30T12:00:00+08:00"
+  },
+  "toolchain": {
+    "verilator": "not run",
+    "cross_gcc": "not run",
+    "qemu": "not used",
+    "quartus": "not started",
+    "resource_note": "静态审计与文档综合；无重型构建。"
+  },
+  "inputs": [
+    "docs/PERFORMANCE_AUDIT_INDEPENDENT_REQUEST.md",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/PERFORMANCE_SNAPSHOT.md",
+    "docs/C4_DUALCORE_BASELINE.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/C3_FOURCORE_PREWORK.md",
+    "docs/C4_SCALE_PREWORK.md",
+    "docs/PERFORMANCE_ENHANCEMENT_PLAN.md",
+    "docs/PERFORMANCE_ENHANCEMENT_PLAN_INDEPENDENT.md"
+  ],
+  "outputs": [
+    "docs/PERFORMANCE_ENHANCEMENT_PLAN_INDEPENDENT.md",
+    "docs/handoffs/T-20260830-035-pe-ext-audit.md",
+    "docs/tasks/evidence/T-20260830-035.json",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md"
+  ],
+  "runs": [
+    {
+      "run_id": "worktree-check-001",
+      "level": "L0",
+      "result": "pass",
+      "summary": "确认使用专用 worktree 与 feature/T-20260830-035-pe-ext-audit；审计开始干净。"
+    },
+    {
+      "run_id": "source-inventory-002",
+      "level": "L0",
+      "result": "pass",
+      "summary": "确认单发射/单取指上下文、全流水 stall、单 outstanding、目录-only L2、串行 probe、单 ID AXI/Avalon burstcount=1。"
+    },
+    {
+      "run_id": "performance-evidence-003",
+      "level": "L0",
+      "result": "pass",
+      "summary": "确认 14 项 P-line 为无缓存整程序 cycle；无 retired/stall/cache/总线计数。"
+    },
+    {
+      "run_id": "c4-trend-004",
+      "level": "L0",
+      "result": "pass",
+      "summary": "C4 synthetic 8/16/32 核吞吐 0.0521/0.0490/0.0473 lines/cycle；最大串行 probe 7/15/31。"
+    },
+    {
+      "run_id": "document-write-005",
+      "level": "L0",
+      "result": "pass",
+      "summary": "生成 PE-EXT 独立规划、handoff、evidence。"
+    },
+    {
+      "run_id": "document-validate-006",
+      "level": "L0",
+      "result": "pass",
+      "summary": "git diff --check 与 python3 -m json.tool 通过。"
+    },
+    {
+      "run_id": "final-merge-007",
+      "level": "L0",
+      "result": "pass",
+      "summary": "阅读 PE-A 与 PE-EXT，综合生成 FINAL_PLAN 和 ROADMAP；不修改 RTL，不启动 Quartus，不开始实施。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "independent-plan",
+      "uri": "docs/PERFORMANCE_ENHANCEMENT_PLAN_INDEPENDENT.md",
+      "sha256": "7bb304e4606eacaee2d6fa290249423c1816d9250e69ed4b5d90d50a2f57a310",
+      "owner": "T-20260830-035",
+      "retain_until": "final-plan-merge",
+      "reproduce": "sha256sum docs/PERFORMANCE_ENHANCEMENT_PLAN_INDEPENDENT.md"
+    },
+    {
+      "id": "final-plan",
+      "uri": "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+      "sha256": null,
+      "owner": "T-20260830-035-final-synthesis",
+      "retain_until": "implementation-start",
+      "reproduce": "sha256sum docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md"
+    },
+    {
+      "id": "roadmap",
+      "uri": "docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md",
+      "sha256": null,
+      "owner": "T-20260830-035-final-synthesis",
+      "retain_until": "implementation-start",
+      "reproduce": "sha256sum docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-035-pe-ext-audit.md",
+      "sha256": null,
+      "owner": "T-20260830-035",
+      "retain_until": "task-close",
+      "reproduce": "sha256sum docs/handoffs/T-20260830-035-pe-ext-audit.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260830-035.json",
+      "sha256": "self-referential; bind via final Git commit",
+      "owner": "T-20260830-035",
+      "retain_until": "task-close",
+      "reproduce": "python3 -m json.tool docs/tasks/evidence/T-20260830-035.json"
+    }
+  ],
+  "known_limits": [
+    "静态审计未运行 Verilator、QEMU、Quartus、STA 或 FPGA；没有 IPC、Fmax、面积、功耗和 Linux SMP 结论。",
+    "P-line 14 项数据是无缓存整程序 cycle；缺少 retired/stall/cache/总线计数，不能定量归因。",
+    "C4 8/16/32 结果来自 synthetic client；只说明串行 cluster 的扩展压力。",
+    "最终路线图中的性能收益均为待测假设，不宣称已实现。",
+    "主工作区存在其他未提交 RTL 改动；本任务未读取或修改这些改动。"
+  ],
+  "status": "delivered",
+  "next": "由集成者审阅最终路线图，拆分 PE-0/PE-1/PE-3 等任务；先跑 F0 无优化基线后按 DAG 实施；任务状态由集成者处理。"
+}

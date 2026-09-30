@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-022",
+  "state": "done",
+  "partial": false,
+  "candidate_status": "pass-local",
+  "base_sha": "ca13cc151d81044072cd3dd995073857ab4b4ae0",
+  "head_sha": "e337a2f19d98d92cc3906fc231464c3237bbfd3d",
+  "source_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+  "branch": "feature/T-20260830-022-final-gated",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-022",
+  "scope": "在 feature/p7-final a110ba3 上完整本地回归：make test、Gate D --parallel、CORE_COUNT=1/l2 cluster lint；可选 C3/C4 模块级 TB 通过。不启动 Quartus/FPGA/上板/CI。",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "created_at": "2026-08-30T05:07:00+08:00",
+    "documents_written_at": "2026-08-30T06:00:00+08:00"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "make": "GNU Make 4.4.1",
+    "aarch64_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "aarch64_objcopy": "GNU objcopy (GNU Binutils) 2.47"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e"
+  },
+  "rtl_filelist_sha256": "404108df9586747b6993e490fdda9d223112c0513041926f59d65cda499154c8",
+  "resource": {
+    "memory_cgroup_limit_mb": 15360,
+    "memory_swap": 0,
+    "verilator_jobs": 1,
+    "makeflags": "-j1",
+    "mode": "Gate D --parallel (lockstep parallel planner), heavy Verilator builds serial",
+    "gate_d_observed_peak_rss_bytes": 5852987392,
+    "gate_d_observed_peak_rss_mb": 5581.7,
+    "make_test_observed_peak_rss_bytes": 3499208704,
+    "make_test_observed_peak_rss_mb": 3337.5
+  },
+  "runs": [
+    {
+      "run_id": "owner-make-test-001",
+      "source_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make -j1 VERILATOR_JOBS=1 test under systemd-run MemoryMax=15G MemorySwapMax=0",
+      "seed": null,
+      "wall_seconds": 867.749,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 3337.1,
+      "peak_rss_bytes": 3499208704,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/make_test_T022.log.txt",
+      "summary": "Full P0 make test PASS; all 18 target groups green."
+    },
+    {
+      "run_id": "owner-gate-d-001",
+      "source_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+      "runner_role": "owner",
+      "level": "L3",
+      "command": "env VERILATOR_JOBS=1 MAKEFLAGS=-j1 bash sim/difftest/run_gate_d.sh --parallel under systemd-run MemoryMax=15G MemorySwapMax=0",
+      "seed": null,
+      "wall_seconds": 1717.841,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 5581.8,
+      "peak_rss_bytes": 5852987392,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/gate_d_T022.log.txt",
+      "summary": "Gate D full --parallel PASS; all top-level steps green; random 1-3 PASS; baremetal-C lockstep PASS."
+    },
+    {
+      "run_id": "owner-core1-cluster-lint-001",
+      "source_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_cluster_top -GCORE_COUNT=1 [cluster source list]",
+      "seed": null,
+      "wall_seconds": 25.751,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 403.2,
+      "peak_rss_bytes": 422805504,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/core_count_1_cluster_lint_T022.log.txt",
+      "summary": "CORE_COUNT=1 cluster top lint/elab PASS."
+    },
+    {
+      "run_id": "owner-core1-l2-cluster-lint-001",
+      "source_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run verilator --lint-only --no-assert --no-timing -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_l2_cluster -GCORE_COUNT=1 -GMEM_LINES=16 rtl/lcvex_pkg.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv",
+      "seed": null,
+      "wall_seconds": 0.887,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 65.0,
+      "peak_rss_bytes": 68149248,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/core_count_1_l2_cluster_lint_T022.log.txt",
+      "summary": "l2_cluster CORE_COUNT=1 lint/elab PASS; existing UNSIGNED warning only."
+    },
+    {
+      "run_id": "owner-c3-cluster4-multi-001",
+      "source_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -j1 --top-module lcvex_c3_cluster4_multi_tb ... && run",
+      "seed": null,
+      "wall_seconds": 23.814,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 574.3,
+      "peak_rss_bytes": 602206208,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/c3_cluster4_multi_T022.log.txt",
+      "summary": "Optional C3 four-core multi-sharer/ReadUnique TB PASS."
+    },
+    {
+      "run_id": "owner-c4-cluster8-001",
+      "source_sha": "a110ba3aeea212834edd86949845bd07eda99aba",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -j1 --top-module lcvex_c4_cluster8_tb ... && run",
+      "seed": null,
+      "wall_seconds": 28.282,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 637.0,
+      "peak_rss_bytes": 667934720,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "docs/evidence/artifacts/T-20260830-022/c4_cluster8_T022.log.txt",
+      "summary": "Optional C4 8-core synthetic MB/coherence smoke PASS."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-make_test_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/make_test_T022.log.txt",
+      "sha256": "379c66b4069502f22cdfb0b78885c22e93c115f28dd1dcd92efc362588a84f80",
+      "bytes": 151635,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "re-run commands in runs; logs are captured outputs"
+    },
+    {
+      "id": "artifact-gate_d_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/gate_d_T022.log.txt",
+      "sha256": "e94c6d618a817fab7beb8baeec901d2cad3addf926c42b240f811680f5b13a2a",
+      "bytes": 176341,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "re-run commands in runs; logs are captured outputs"
+    },
+    {
+      "id": "artifact-core_count_1_cluster_lint_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/core_count_1_cluster_lint_T022.log.txt",
+      "sha256": "a33d6e6d7fe23df46592ca168742b06a0e923ee5e6681313d39ebcee2dab9149",
+      "bytes": 704,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "re-run commands in runs; logs are captured outputs"
+    },
+    {
+      "id": "artifact-core_count_1_l2_cluster_lint_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/core_count_1_l2_cluster_lint_T022.log.txt",
+      "sha256": "52f85a24644d41268ae980cdd1a0b5b33169eb691be5466eac19ab38b00b1136",
+      "bytes": 1187,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "re-run commands in runs; logs are captured outputs"
+    },
+    {
+      "id": "artifact-c3_cluster4_multi_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/c3_cluster4_multi_T022.log.txt",
+      "sha256": "e5aa58a2a13cb7b36dab2d717a193e32819475013c1e1e171b376ecb2d27d3e7",
+      "bytes": 13560,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "re-run commands in runs; logs are captured outputs"
+    },
+    {
+      "id": "artifact-c4_cluster8_T022.log.txt",
+      "uri": "docs/evidence/artifacts/T-20260830-022/c4_cluster8_T022.log.txt",
+      "sha256": "8fde9c8af37780d39bcf7928876b4db4532ac27d1129584e2098652b61aebd45",
+      "bytes": 14826,
+      "owner": "T-20260830-022-owner",
+      "retain_until": "task review complete",
+      "reproduce": "re-run commands in runs; logs are captured outputs"
+    }
+  ],
+  "known_limits": [
+    "未启动 Quartus；不做 FPGA/上板/CI。",
+    "完整 fourcore 系统级 TB 未单独运行；可选 C3/C4 已跑 cluster4_multi(4核)与 cluster8(8核)模块级 TB。",
+    "l2_cluster CORE_COUNT=1 lint 有既有 UNSIGNED warning，非 fatal；全部命令退出码 0。",
+    "Gate D 使用 --parallel；但所有重型 Verilator 构建仍以 VERILATOR_JOBS=1/MAKEFLAGS=-j1 串行执行，锁步测试由 planner 并行。"
+  ],
+  "status": "done",
+  "merge_sha": "e337a2f19d98d92cc3906fc231464c3237bbfd3d",
+  "handoff_sha": "e337a2f19d98d92cc3906fc231464c3237bbfd3d",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T06:01:25+08:00",
+    "head_sha": "d622e63332a70555fa16a6c39b6ab857fc205290",
+    "notes": "FINAL-GATED merged. make test PASS, Gate D 13/13 PASS, CORE_COUNT=1 lint PASS, C3 cluster4_multi and C4 cluster8 PASS. Evidence archived.",
+    "merge_sha": "e337a2f19d98d92cc3906fc231464c3237bbfd3d",
+    "result_sha": "e337a2f19d98d92cc3906fc231464c3237bbfd3d"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "e337a2f19d98d92cc3906fc231464c3237bbfd3d",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "delivered",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "e337a2f19d98d92cc3906fc231464c3237bbfd3d",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "e337a2f19d98d92cc3906fc231464c3237bbfd3d",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

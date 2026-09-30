@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-043",
+  "label": "B25-MICROBENCH-COREMARK-GATE-D",
+  "state": "done",
+  "acceptance_status": "complete-release-mode-gate-d-and-affected-union-pass",
+  "partial": false,
+  "candidate_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_tree_sha": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-043-gate",
+  "detached": true,
+  "owner": "root",
+  "timestamps": {
+    "started_at": "2026-09-20T23:36:28+08:00",
+    "finished_at": "2026-09-20T23:48:02+08:00",
+    "elapsed_seconds": 694,
+    "affected_union_finished_at": "2026-09-20T23:50:29+08:00"
+  },
+  "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-043 root --min-local-available-mib 8192 --meta phase=complete-release-gate-d --meta candidate_sha=f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d --meta detached=true -- bash sim/difftest/run_gate_d.sh",
+  "identity": {
+    "pre_head": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+    "post_head": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+    "pre_tree": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+    "post_tree": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+    "pre_status": "clean detached HEAD",
+    "post_status": "clean detached HEAD"
+  },
+  "result": {
+    "outer_exit": 0,
+    "final_marker": "PASS: Gate D 系统回归全部通过",
+    "green_markers": 151,
+    "red_markers": 0,
+    "skip_flags": false,
+    "assertions_disabled": false,
+    "reference_or_expected_modified": false
+  },
+  "groups": {
+    "make_test": "PASS; unit and SVA",
+    "coverage": {
+      "result": "PASS",
+      "coverage_points": 8760,
+      "merged_dat_bytes": 3196159,
+      "merged_dat_sha256": "5842d7316b279b12328e875eb81409441f878743133f1523b6ad94e53927960c"
+    },
+    "m2_4b_4c": "PASS; base 40/40, cache 40/40",
+    "delay2_cache": "PASS; 32/32 including random smoke 3000 commits",
+    "p5a_hardening": "PASS; 26/26",
+    "gate_c": "PASS; 7/7",
+    "p5a_mmu": "PASS; 3/3",
+    "p4b": "PASS; 5/5",
+    "random": {
+      "seed_1_commits": 100002,
+      "seed_2_commits": 100002,
+      "seed_3_commits": 100002,
+      "trace_sha256": {
+        "seed_1": "f0b30da65cf64163b2b518e5f6213a19e96dc2caa725b916b02528f697aadb6e",
+        "seed_2": "6338f450cb19fdb0896026f6a08c1d4abce95ae37fc0a185bff753de61ead768",
+        "seed_3": "343b295206bff0c886d633df535d1c60b549b0f2521e685b152f4a6b0f0eec46"
+      }
+    },
+    "instruction_coverage": {
+      "expected_hit": "62/62",
+      "observed_families": 63,
+      "total_random_commits": 300006
+    },
+    "baremetal": {
+      "image_bytes": 1104,
+      "image_sha256": "ed2f093617883206c3e56614b41f6942fa08985067bb82ad8b93972347964fc2",
+      "lockstep_commits": 200,
+      "result": "PASS"
+    }
+  },
+  "affected_union": {
+    "l0_command": "LCVEX_MICROBENCH_TEST_DIR=build/agents/T-20260920-043/affected-l0 make b25-microbench-test",
+    "l0_result": "PASS reproducible double build, host oracle, 7 parser tests and provenance/disassembly/image audit",
+    "build_manifest_sha256": "985d186caf6dab652616221319eb38bffb3dbe69df89deeba12582fb68dd1d84",
+    "l1_command": "resource-lock run local ... -- make sim-sv-l1d-wb VERILATOR_JOBS=4",
+    "l1_result": "PASS operations=11 accepted=66",
+    "l2_command": "resource-lock run local ... -- env LCVEX_SOC_SMOKE_DIR=build/agents/T-20260920-043/affected-soc-behavioral VERILATOR_JOBS=4 bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+    "l2_result": "PASS CAL-OK/WAIT/FAIL, legacy monitor, MBPASS, CMSELF and transcript parsers",
+    "l2_log": {"path": "build/agents/T-20260920-043/affected-soc-behavioral/smoke.log", "bytes": 763, "sha256": "0475109376adc04301ff955b3fc41476ad2b25bfa21eae53236ba0209bd1c9d4"},
+    "payload_bin_sha256": "ddb27ff2ffdfb595c3821a20af262f4e3ae95c1e680bf5530e2865bf45b6c56d",
+    "payload_mif_sha256": "d56386b0714c65bab955cb91112d510b31f4290f80281f86c7feabdd6988d7d0"
+  },
+  "tools": {
+    "verilator": "5.050 2026-07-01",
+    "cocotb": "2.0.1",
+    "python": "3.12.14",
+    "qemu": "11.1.0",
+    "qemu_fork_sha": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "plugin_sha256": "234718f4199f6a3825bea8061e5fa0a5caaa099e7249cf627456f534116385bd",
+    "plugin_source_sha256": "b5adf6c888ab318e19c27d5a407cfbba5d7ec8763f301cf49065df8475e75595",
+    "protocol_header_sha256": "af62b3d8e4dd4625d958aef222303a97f3828b6c5cf8fb5d76c20ce94868b6b1",
+    "protocol_python_sha256": "655d82b4e0ee2da35edbe0751c18ffff803b9e92b09d206d7f5cd5b5dd195412",
+    "gate_runner_sha256": "21e55129476439e6e4d3dccec44a1dcf150bc6d821d8d48576c52f7cc3e992c7",
+    "coordinator_sha256": {
+      "base": "98558d62b0ee0068cb6fede7e332fae376803d3a82f2d53abe05e31e90fbee30",
+      "l1dl2": "39da2bf5af86a3a9391c5bacb66b0042420d80162ed4ab8f6b1cd4446f3f5bac",
+      "delay2": "0633c16f81802358e78f44a300c10a4cf79330ab3f1de0ea951ae34c6b9f70ca"
+    }
+  },
+  "artifacts": {
+    "gate_log": {
+      "path": "build/agents/T-20260920-043/gate-d.log",
+      "bytes": 437278,
+      "sha256": "1f8f7ec8d3618a86f81798bee9edc572e5df60ba9f81c148204ab15839611b43"
+    }
+  },
+  "resource_and_safety": {
+    "local_heavy_locked": true,
+    "final_local": "FREE",
+    "final_gamepc": "FREE",
+    "gamepc_quartus_jtag_board_used": false,
+    "flash_jic_epcq": false,
+    "reset_power": false,
+    "unknown_process_stopped": false
+  },
+  "known_limits": [
+    "Gate D and the affected local union pass, but T-044 fresh physical, T-045 assembler and T-046 live full CoreMark remain outstanding.",
+    "No CoreMark score is claimed by this task; only T-046 may accept a full c transcript after parser recomputation."
+  ],
+  "next": "Start T-20260920-044 from exact candidate f6633e70 with a fresh remote Quartus root and no reused compilation database."
+}

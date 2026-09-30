@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-040",
+  "label": "PE-F3-PRE",
+  "parent": "T-20260830-033",
+  "title": "F3 transaction ID/MSHR/store buffer 精确语义与实施切片",
+  "kind": "performance-memory-prework",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f3-prework",
+  "agent_type": "design-prework",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "model_scope": "只冻结 F3 事务身份、精确异常/顺序、分片 DAG 和验收；不修改 RTL/测试，不运行生成器、构建或仿真。",
+  "depends_on": [
+    "T-20260830-037"
+  ],
+  "base_sha": "e3d9fa5e9f5bad4d01cb75433046926e5daac4e7",
+  "branch": "feature/T-20260830-040-pe-f3-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-040",
+  "scope": "基于 F0 结论和当前 core/cache/memory 单 outstanding RTL，冻结 F3 的 transaction ID/epoch、2-entry miss queue/MSHR、同 line 合并与 store buffer 的精确语义，并拆成可串行验收的小任务。必须覆盖按序提交、DABT、设备/旁路内存、barrier/maintenance、exclusive/LSE、MMU/PTW、reset/checkpoint 与响应配对。只交付 docs/handoff/evidence，不编码、不构建。",
+  "planning_guidance": {
+    "recommended_slicing": [
+      "F3a 先把 transaction ID + epoch/kill 贯穿 core→arb/router/cache/memory 的单深度路径，队列深度仍为 1，行为/时序尽量等价；用此切片先关闭响应配对和 reset stale-response 风险。",
+      "F3b 再在 cache/memory 边界实现 2-entry 不同-line miss table + 同-line 合并，核心仍按序退休；不要一开始允许任意乱序完成。",
+      "F3c 最后评估 1-entry store buffer/forwarding。任何 store 在 fault 未知时提前架构提交都必须有严格证明，否则 store buffer 只可作为未退休请求槽。",
+      "F3d 用 F0 同口径做独立链/双独立链/流式 copy 与 kernel 对比；单 pointer chase 不应被包装成 MLP 收益。"
+    ],
+    "must_freeze": [
+      "transaction ID 位宽、分配/回收、epoch/reset/checkpoint、响应乱序到达与 oldest-first retirement 的规则。",
+      "Normal cacheable、Device/MMIO/bypass、PTW、atomic/exclusive、maintenance、DMB/DSB/ISB 的可并行/必须序列化矩阵。",
+      "load/store fault 的精确年龄、年轻请求取消、store-to-load forwarding、同地址/同 line 合并和 partial byte overlap。",
+      "L1D/L2 单阻塞状态机与正在实施的 G5 同步 RAM 端口/延迟约束；F3 不得假设 cache 已天然 nonblocking。",
+      "每个未来 child 的精确写集、依赖、接口冻结点、SVA、L0-L2 回归、默认关闭和 rollback 条件。"
+    ],
+    "decision_rule": "F3 不能作为一次跨 core/pkg/cache/router/AXI 的大提交；若 F3a 单深度 ID/epoch 仍无法维持精确异常和 reset 配对，后续 MSHR/store 子项必须保持 blocked。"
+  },
+  "writes": [
+    "docs/PERFORMANCE_F3_PREWORK.md",
+    "docs/handoffs/T-20260830-040-pe-f3-prework.md",
+    "docs/tasks/evidence/T-20260830-040.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/CHECKPOINT_PROTOCOL.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_mem_arb.sv",
+    "rtl/lcvex_mem_router.sv",
+    "rtl/lcvex_mem_delay.sv",
+    "rtl/lcvex_mem_ram.sv",
+    "rtl/lcvex_l1_d.sv",
+    "rtl/lcvex_l1_d_wb.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_axi4_master.sv",
+    "tb/sv/**",
+    "sim/cocotb/**"
+  ],
+  "context_docs": [
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/CHECKPOINT_PROTOCOL.md",
+    "docs/L1_L2_PROBE_CONTRACT.md"
+  ],
+  "validation": {
+    "l0": [
+      "只读核对 core/cache/memory/AXI 单 outstanding 与 fault/reset/checkpoint 路径，交付逐接口事务生命周期和引用行号",
+      "交付 F3a/F3b/F3c/F3d 分片 DAG、精确写集、串行集成门、SVA/测试矩阵与 rollback 条件",
+      "git diff --check；确认只修改允许的三个 docs 文件"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "形成可直接登记 F3a 单深度 ID/epoch 实现任务的冻结契约；内存类型/顺序/异常/atomic/MMU/checkpoint/reset/response pairing 无关键空白；F3b MSHR 与 F3c store buffer 明确后置门，不得声称已实现或已有性能收益。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T15:28:41+08:00",
+  "updated_at": "2026-08-30T16:09:34+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T15:30:28+08:00",
+    "agent_name": "t040_pe_f3_prework_luna",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-040"
+  },
+  "handoff": "docs/handoffs/T-20260830-040-pe-f3-prework.md",
+  "evidence": "docs/tasks/evidence/T-20260830-040.json",
+  "merge_sha": "46cd024f0b9fcfc9732335560c1850f92a1fc8c8",
+  "merged_at": "2026-08-30T16:09:34+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T16:09:34+08:00",
+    "status": "accepted",
+    "owner_head_sha": "2806f5c884ceb8cc7223d0e6f6b034438e3f42df",
+    "checks": [
+      "owner worktree clean and branch/base/head matched corrected final report",
+      "only three declared docs files changed",
+      "git diff --check and evidence JSON validation passed",
+      "prework/handoff hashes matched after metadata correction",
+      "docs-only task correctly made no build/test/performance-pass claim"
+    ],
+    "notes": "接受 F3a→F3b→F3c→F3d 串行切片；F3a 实现登记前必须补 docs/CHECKPOINT_PROTOCOL.md，或显式批准 T-097 handoff + checkpoint.py + coordinator + probe contract 为临时权威集。"
+  },
+  "known_limits": [
+    "docs-only：禁止修改 RTL/TB/sim/Makefile/filelist，禁止运行任何生成器、构建、仿真、QEMU 或 Quartus。",
+    "不在预研中决定完整乱序访存、4-entry 扩展、多核 ACE/CHI 或 AXI 多 ID 实现。",
+    "不把静态推断写成实测性能收益；F3 RTL 与 F1 共改 core，必须串行合入。"
+  ],
+  "next": "集成者验收后登记 F3a 单深度 transaction ID/epoch 实现；F3b/F3c 依次通过接口门后再派发。"
+}

@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-040",
+  "label": "B25-JTAG-UART",
+  "state": "focused-validation-complete-no-rtl-change",
+  "acceptance_status": "focused-bridge-pass",
+  "partial": false,
+  "base_sha": "689959472faf59844fb486834fad27f8fedb2ca6",
+  "dispatch_head_sha": "7158f1dd12f1f2d59298cd0f8ff6afebd5427b98",
+  "implementation_head": "a24a11dcddc3e0a6b709adcef0cc47d423802322",
+  "branch": "verify/T-20260907-040-b25-jtag-uart",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-040",
+  "owner": "b25_jtag_uart",
+  "received_at": "2026-09-07T03:08:12+08:00",
+  "reported_at": "2026-09-07T03:27:54+08:00",
+  "metadata_correction": "2026-09-07 metadata-only correction: received_at aligned to the actual dispatch message, reported_at aligned to the final handoff message, and implementation/source/head references fixed to the implementation commit a24a11dcddc3e0a6b709adcef0cc47d423802322; RTL, TB, model and validation conclusions are unchanged.",
+  "objective": "验证 Catapult SoC JTAG-UART bridge 的标准 req.addr[2] DATA/CONTROL 映射及 Avalon/FIFO 握手语义；仅在 focused TB 证明缺陷时修改 bridge。",
+  "implementation": {
+    "rtl_result": "现有 lcvex_catapult_soc_jtag_uart 通过 focused TB；未发现缺陷，未修改 RTL。",
+    "mapping": {
+      "core_data": "0x09000000 -> req.addr[2]=0 -> Avalon address 0",
+      "core_control": "0x09000004 -> req.addr[2]=1 -> Avalon address 1"
+    },
+    "model": "独立 behavioral Avalon JTAG-UART model，包含可注入 RX FIFO、TX FIFO/WSPACE、TX full waitrequest、host drain、AC 和 side-effect counters。",
+    "response_policy": "bridge 接收一次请求；Avalon waitrequest 放行后完成一次；rsp_valid/rdata/fault 在 rsp_ready 前保持。",
+    "forbidden_workaround": "未使用或移植 address[13] / RISC-V workaround。"
+  },
+  "files": {
+    "rtl_unchanged": [
+      "rtl/lcvex_catapult_soc_top.sv::module lcvex_catapult_soc_jtag_uart"
+    ],
+    "added": [
+      "tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+      "tb/sv/lcvex_jtag_uart_model.sv",
+      "docs/tasks/evidence/T-20260907-040.json",
+      "docs/handoffs/T-20260907-040-b25-jtag-uart.md"
+    ],
+    "sha256": {
+      "rtl/lcvex_catapult_soc_top.sv": "580f167d691327e37e1b5f2ba0a0c59bf6f2eeb943313251a8906f656201e17d",
+      "tb/sv/lcvex_jtag_uart_bridge_tb.sv": "b28039ca68b393845f3472a99b09388b2299a976bc35866feb6707db5d129d08",
+      "tb/sv/lcvex_jtag_uart_model.sv": "b9f85f2306e760377c6567eb6bbe6ea0df63bb8f94bf0c5ae56b18b4695804d9"
+    }
+  },
+  "coverage": [
+    "DATA/CONTROL +0/+4 distinct through req.addr[2] and Avalon address 0/1",
+    "DATA RVALID bit 15 and character bits [7:0]",
+    "CONTROL WSPACE bits [31:16] with AC bit 10 asserted independently",
+    "delayed waitrequest with Avalon controls held and no premature side effect",
+    "RX FIFO pop exactly once per accepted DATA read, including repeated characters",
+    "TX FIFO full/retry and WSPACE=0; one write side effect after host drain",
+    "response payload/valid held while rsp_ready=0",
+    "asynchronous reset during blocked request, valid/control drop, post-reset reuse",
+    "no duplicate Avalon read/write or TX pulse"
+  ],
+  "validation": [
+    {
+      "run_id": "owner-static-mapping",
+      "level": "static",
+      "source_sha": "a24a11dcddc3e0a6b709adcef0cc47d423802322",
+      "command": "sed -n '/module lcvex_catapult_soc_jtag_uart/,/endmodule/p' rtl/lcvex_catapult_soc_top.sv | rg -n 'req\\.addr\\[2\\]|req_addr_q|address|waitrequest|rsp_valid|rsp_ready|tx_pulse'; if rg -n 'addr\\[13\\]|address\\[13\\]|RISC.?V|VexRiscv' rtl/lcvex_catapult_soc_top.sv tb/sv/lcvex_jtag_uart_bridge_tb.sv tb/sv/lcvex_jtag_uart_model.sv; then exit 1; else echo PASS; fi",
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260907-040/runtime/static_mapping.log",
+      "log_sha256": "7f56dd339fc020876449277d3d5413b78ec7c3a5f68b9311446c23e5bd1b3077"
+    },
+    {
+      "run_id": "owner-iverilog-build",
+      "level": "lightweight-elaboration",
+      "source_sha": "a24a11dcddc3e0a6b709adcef0cc47d423802322",
+      "command": "iverilog -g2012 -s lcvex_jtag_uart_bridge_tb -o build/agents/T-20260907-040/jtag_uart.vvp rtl/lcvex_pkg.sv rtl/lcvex_catapult_soc_pkg.sv rtl/lcvex_catapult_soc_top.sv tb/sv/lcvex_jtag_uart_model.sv tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Icarus Verilog 13.0 (stable, v13_0-dirty)",
+      "log": "build/agents/T-20260907-040/runtime/iverilog_build.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "run_id": "owner-iverilog-runtime",
+      "level": "lightweight-focused",
+      "source_sha": "a24a11dcddc3e0a6b709adcef0cc47d423802322",
+      "command": "vvp build/agents/T-20260907-040/jtag_uart.vvp",
+      "exit_code": 0,
+      "result": "pass",
+      "checks": "JTAG_UART_TEST PASS; pre-reset Avalon reads=7, writes=7, RX pops=3, TX pushes=6",
+      "log": "build/agents/T-20260907-040/runtime/iverilog_run.log",
+      "log_sha256": "0e8877c0c224e4bd3e1893af4099438526c1db6653fc339313244c15d0c7b766"
+    },
+    {
+      "run_id": "owner-verilator-lint",
+      "level": "lightweight-elaboration",
+      "source_sha": "a24a11dcddc3e0a6b709adcef0cc47d423802322",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_jtag_uart_bridge_tb rtl/lcvex_pkg.sv rtl/lcvex_catapult_soc_pkg.sv rtl/lcvex_catapult_soc_top.sv tb/sv/lcvex_jtag_uart_model.sv tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "log": "build/agents/T-20260907-040/runtime/verilator_lint.log",
+      "log_sha256": "728bf0633d7eda52d857cf4b2f6121e16ecdcc6910b1260ebf9dbfd3cba908e1"
+    },
+    {
+      "run_id": "owner-verilator-build-runtime",
+      "level": "lightweight-focused",
+      "source_sha": "a24a11dcddc3e0a6b709adcef0cc47d423802322",
+      "command": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM --top-module lcvex_jtag_uart_bridge_tb -Mdir build/agents/T-20260907-040/verilator rtl/lcvex_pkg.sv rtl/lcvex_catapult_soc_pkg.sv rtl/lcvex_catapult_soc_top.sv tb/sv/lcvex_jtag_uart_model.sv tb/sv/lcvex_jtag_uart_bridge_tb.sv && build/agents/T-20260907-040/verilator/Vlcvex_jtag_uart_bridge_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "tool": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "checks": "JTAG_UART_TEST PASS; $finish at 870 ns; pre-reset Avalon reads=7, writes=7, RX pops=3, TX pushes=6",
+      "build_log": "build/agents/T-20260907-040/runtime/verilator_build.log",
+      "build_log_sha256": "187653be308f915e2ae639bb427746c8a83d41595161471e883df130a984aff0",
+      "run_log": "build/agents/T-20260907-040/runtime/verilator_run.log",
+      "run_log_sha256": "23c0cf5557eba3f5e651335ef74d00e7cfcc067b953e439994c53e640487b8f7"
+    }
+  ],
+  "integrator_review": {
+    "source_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+    "accepted_at": "2026-09-07T09:22:41+08:00",
+    "result": "pass; parent SoC uses the focused FIFO model and checks full transcript, RX pop and DATA write/model event/bridge pulse exactly once",
+    "address_mapping": "0x09000000 -> DATA address0; 0x09000004 -> CONTROL address1; no addr[13] workaround",
+    "parent_evidence": "docs/tasks/evidence/T-20260907-037.json"
+  },
+  "policy": {
+    "writes_within_registered_regions": true,
+    "rtl_bridge_modified": false,
+    "vendor_generated_hdl_modified": false,
+    "shared_soc_tb_or_registry_modified": false,
+    "active_task_json_modified": false,
+    "qemu_irq_gic_board_modified": false,
+    "address13_workaround_added": false,
+    "assertions_disabled": false,
+    "heavy_jobs_started": false,
+    "quartus_or_physical_run": false,
+    "gamepc_or_jtag_used": false
+  },
+  "blockers": [],
+  "risks": [
+    "focused model is behavioral and does not replace the vendor Avalon JTAG-UART IP; parent T-037 must connect the model in shared SoC validation.",
+    "full SoC/L0-L2 and physical validation remain outside this lane and must be run on the merged T-037 candidate.",
+    "vendor IP-specific waitrequest/readdata timing still needs confirmation in the later generated-IP/board path."
+  ],
+  "next": "集成者按 T-037 写集顺序合入本提交，在合并 SHA 上接入 SoC TB 并运行受影响 L0-L2；本 lane 不需要 RTL 修复或 QEMU/Quartus/板测。",
+  "handoff": "docs/handoffs/T-20260907-040-b25-jtag-uart.md"
+}

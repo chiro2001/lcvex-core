@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260831-008",
+  "label": "FPGA-G6-POSTFIX-SYNC",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "candidate_sync_pass",
+  "base_sha": "291018d9a63efe549be589d1127e424e1118ed8a",
+  "source_sha": "291018d9a63efe549be589d1127e424e1118ed8a",
+  "report_tip": "3afef6841e3e3f50affd8a77efd0c03771d3bf6a",
+  "report_tip_note": "owner 诊断/报告 tip；candidate source 仍是 291018d。",
+  "merge_sha": "5ccde17a0a78ae72f43b19109bf604cdb426a8b4",
+  "branch": "infra/T-20260831-008-a10-postfix-sync",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-008",
+  "owner": "luna-a10-postfix-sync",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "sent_at": "2026-08-31T20:26:25+08:00",
+    "received_at": "2026-08-31T20:26:25+08:00",
+    "reported_at": "2026-08-31T20:50:15+08:00",
+    "timezone": "Asia/Shanghai",
+    "remote_preflight": "2026-08-31T20:33:21.4907554+08:00",
+    "remote_root_create": "2026-08-31T20:34:17.3172491+08:00",
+    "remote_closure": "2026-08-31T20:41:13.7076226+08:00",
+    "remote_alias_qsf": "2026-08-31T20:41:36.9154057+08:00",
+    "remote_key_hashes": "2026-08-31T20:41:55.5551772+08:00",
+    "remote_post_snapshot": "2026-08-31T20:42:26.5627333+08:00",
+    "local_static_checks": {
+      "started_at": "2026-08-31T20:43:46.668470+08:00",
+      "finished_at": "2026-08-31T20:43:47.138471+08:00"
+    }
+  },
+  "scope": "从 291018d clean worktree 建立 rtl/** 与 fpga/catapult_a10/** closure，依据当前 QSF 重新生成 candidate-only aliases，写入远端全新 T-008 candidate 根并逐项回读；不运行 EDA/Qsys/仿真/编程，不读 license，不修改旧工程。",
+  "context_read": {
+    "project_docs": [
+      "AGENTS.md",
+      "docs/MULTI_AGENT_WORKFLOW.md",
+      "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+      "docs/FPGA_A10_REMOTE_CANDIDATE_SYNC.md",
+      "docs/tasks/evidence/T-20260831-003.json",
+      "docs/tasks/evidence/T-20260831-006.json"
+    ],
+    "reference_docs": [
+      "/home/chiro/projects/a10-linux-riscv/AGENTS.md",
+      "/home/chiro/projects/a10-linux-riscv/docs/03-交接-项目内软件重建与QEMU待定位-20260826.md",
+      "/home/chiro/projects/a10-linux-riscv/docs/04-交接-软件链QEMU门全绿与cleanroom软件复现-20260826.md"
+    ],
+    "old_a10_linux": "请求的 /home/chiro/projects/a10-linux 不存在，因此未读取其内容。"
+  },
+  "local_manifest": {
+    "path": "build/agents/T-20260831-008/candidate/candidate_manifest.json",
+    "sidecar": "build/agents/T-20260831-008/candidate/candidate_manifest.sha256",
+    "candidate_source_commit": "291018d9a63efe549be589d1127e424e1118ed8a",
+    "tracked_roots": ["rtl", "fpga/catapult_a10"],
+    "tracked_file_count": 121,
+    "tracked_total_bytes": 2738282,
+    "derived_alias_file_count": 29,
+    "alias_total_bytes": 754249,
+    "file_count": 150,
+    "total_bytes": 3492531,
+    "qsf_reference_count": 49,
+    "qsf_missing_before_alias_count": 29,
+    "qsf_missing_after_alias_count": 0,
+    "canonical_sha256": "c8c3caa599e86ef397a1cada33b9e951c4862891f10c94298f5a2b69cb1823b9",
+    "manifest_file_sha256": "64a4612979960fa9d01a734a151710b45be76c8335f63197a772067dc0c162a7",
+    "manifest_bytes": 88604,
+    "sidecar_sha256": "0b4d912c8e291aba3e5dd7264cd420a97a8024085ec4dd9e9e62e3741091c855",
+    "sidecar_bytes": 90,
+    "self_binding": "canonical hash is computed with manifest_binding.canonical_sha256 blank; final manifest hash is bound by sidecar"
+  },
+  "platform_provenance": {
+    "source_repo": "/home/chiro/projects/a10-linux-riscv",
+    "source_commit": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "offline_checker": "PLATFORM_CHECK_PASS files=50 strict_source=OFF",
+    "strict_checker": "PLATFORM_CHECK_PASS files=50 strict_source=PASS",
+    "target_sums": "SHA256SUMS 50/50 OK",
+    "skeleton_checker": "SKELETON_CHECK_PASS files=6; TOOLCHAIN_MISSING is informational in default mode"
+  },
+  "qpf_qsf_sdc": [
+    {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.qpf",
+      "bytes": 34,
+      "sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd"
+    },
+    {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.qsf",
+      "bytes": 13647,
+      "sha256": "78032dc5634dc08bf15e916fb70e9f2f6ddefd6b2dd5d59600b3c4c3a236f19d"
+    },
+    {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "bytes": 5656,
+      "sha256": "caf847755a8c42f2e88ea09e434888938ad4382193400593ddcc986f26154a8c"
+    }
+  ],
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "write_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260831-008\\candidate",
+    "root_collision_pre": false,
+    "root_child_count_pre": 0,
+    "root_created": true,
+    "root_child_count_post": 4,
+    "eda_compile_process_count_pre": 0,
+    "eda_compile_process_count_post": 0,
+    "existing_services_not_changed": [
+      {
+        "name": "jtagserver.exe",
+        "pid": 5700,
+        "classification": "JTAG service, not compile/fit/STA; not stopped"
+      },
+      {
+        "name": "java.exe",
+        "pid": 18104,
+        "classification": "SlimeVR non-EDA service; not stopped"
+      }
+    ],
+    "tool_paths_checked": "Quartus 21.4 quartus_sh/syn/fit/sta/asm/ipgenerate and qsys/ip-generate all exist",
+    "pre_snapshot": {
+      "artifact": "build/agents/T-20260831-008/remote_preflight_snapshot.json",
+      "artifact_sha256": "3142b4a4394f8f4d4ec6668a9cfb5974a54277f6ae7f47f1eb0c12b41733c0e2",
+      "physical_total_mb": 63092.3,
+      "physical_free_mb": 42146.4,
+      "pagefile_allocated_mb": 12800,
+      "pagefile_current_mb": 259,
+      "pagefile_peak_mb": 389,
+      "pagefile_available_mb": 12541,
+      "disk_d_free_gb": 95.61,
+      "disk_d_used_gb": 579.64,
+      "license_content_read": false
+    },
+    "post_snapshot": {
+      "artifact": "build/agents/T-20260831-008/remote_post_snapshot.json",
+      "artifact_sha256": "2781f00b9569aa8c7b1991a3af2a4253c1b1477e5425dd4f475b91af88ead2d6",
+      "physical_total_mb": 63092.3,
+      "physical_free_mb": 42943.3,
+      "pagefile_allocated_mb": 12800,
+      "pagefile_current_mb": 259,
+      "pagefile_peak_mb": 389,
+      "pagefile_available_mb": 12541,
+      "disk_d_free_gb": 95.59,
+      "disk_d_used_gb": 579.67,
+      "license_content_read": false
+    }
+  },
+  "remote_closure": {
+    "artifact": "build/agents/T-20260831-008/remote_closure_files.json",
+    "artifact_sha256": "e1f39ac889830ec6e3ddcb5ca559b9b175f491e998127bbdfacf9754a03813d7",
+    "root_total_file_count": 152,
+    "closure_file_count": 150,
+    "manifest_file_count": 150,
+    "actual_total_bytes": 3492531,
+    "file_set_match": true,
+    "missing_count": 0,
+    "extra_count": 0,
+    "hash_bytes_bad_count": 0,
+    "manifest_file_sha256": "64a4612979960fa9d01a734a151710b45be76c8335f63197a772067dc0c162a7",
+    "sidecar_match": true,
+    "candidate_commit": "291018d9a63efe549be589d1127e424e1118ed8a"
+  },
+  "qsf_alias_closure": {
+    "artifact": "build/agents/T-20260831-008/remote_alias_qsf.json",
+    "artifact_sha256": "8fb6f64f9100f0e4c033890f86bfeb15a61e904702e7674b094642cb64815b60",
+    "qsf_reference_count": 49,
+    "qsf_missing_count": 0,
+    "alias_count": 29,
+    "alias_mismatch_count": 0,
+    "all_aliases_byte_equal": true
+  },
+  "key_hash_closure": {
+    "artifact": "build/agents/T-20260831-008/remote_key_hashes.json",
+    "artifact_sha256": "0f2e9e27e553ba99ba8b9ba24725c9006d10674c891461e8713d34111f2bc989",
+    "key_count": 14,
+    "local_remote_mismatch_count": 0,
+    "paths": [
+      "fpga/catapult_a10/platform_manifest.json",
+      "fpga/catapult_a10/source.lock",
+      "fpga/catapult_a10/SHA256SUMS",
+      "fpga/catapult_a10/skeleton_manifest.json",
+      "fpga/catapult_a10/quartus/catapult_a10.qpf",
+      "fpga/catapult_a10/quartus/catapult_a10.qsf",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "fpga/catapult_a10/qsys/ddr4_bot/Qsys.qsys",
+      "fpga/catapult_a10/qsys/ddr4_bot/Qsys/Qsys_bb.v",
+      "fpga/catapult_a10/flash/sfl/sfl_sys.qip",
+      "fpga/catapult_a10/flash/sfl/synth/sfl_sys.v",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+      "rtl/filelist.f",
+      "rtl/lcvex_catapult_soc_top.sv"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "local-platform-offline",
+      "level": "L0",
+      "started_at": "2026-08-31T20:43:46.668470+08:00",
+      "finished_at": "2026-08-31T20:43:46.812642+08:00",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+      "exit_code": 0,
+      "result": "PLATFORM_CHECK_PASS files=50 strict_source=OFF",
+      "log": "build/agents/T-20260831-008/local_checks/platform-offline.log",
+      "log_sha256": "f8c18dc4e70dfda310691a9fe2519a04011ccb24a613249057859b1004010a17"
+    },
+    {
+      "run_id": "local-platform-strict",
+      "level": "L0",
+      "started_at": "2026-08-31T20:43:46.812820+08:00",
+      "finished_at": "2026-08-31T20:43:47.026289+08:00",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py --strict-source --source-repo /home/chiro/projects/a10-linux-riscv --source-commit 3db828e74651fda377a33d84f2a2ca0e69901d72",
+      "exit_code": 0,
+      "result": "PLATFORM_CHECK_PASS files=50 strict_source=PASS",
+      "log": "build/agents/T-20260831-008/local_checks/platform-strict.log",
+      "log_sha256": "ca3604e8b13c52afb24f88c3aec98b1542b17331b127bd4d9303f67e9247c990"
+    },
+    {
+      "run_id": "local-target-sums",
+      "level": "L0",
+      "started_at": "2026-08-31T20:43:47.026501+08:00",
+      "finished_at": "2026-08-31T20:43:47.110100+08:00",
+      "command": "cd fpga/catapult_a10 && sha256sum -c SHA256SUMS",
+      "exit_code": 0,
+      "result": "50/50 OK",
+      "log": "build/agents/T-20260831-008/local_checks/target-sums.log",
+      "log_sha256": "a18b796a2898c1f0fd28670b8de03b6f9fa4b654c45f7fb05b7f0fdcae735b8f"
+    },
+    {
+      "run_id": "local-skeleton",
+      "level": "L0",
+      "started_at": "2026-08-31T20:43:47.110289+08:00",
+      "finished_at": "2026-08-31T20:43:47.138471+08:00",
+      "command": "LCVEX_SKELETON_REPORT_DIR=build/agents/T-20260831-008/local_checks/skeleton-report python3 fpga/catapult_a10/tools/check_skeleton.py",
+      "exit_code": 0,
+      "result": "SKELETON_CHECK_PASS files=6; TOOLCHAIN_MISSING informational",
+      "log": "build/agents/T-20260831-008/local_checks/skeleton.log",
+      "log_sha256": "1a3c38465955af1d48ed3e1b67186a78c154c6fe802eef017f1fe760e5a0a9ab"
+    },
+    {
+      "run_id": "local-manifest-verify",
+      "level": "L0",
+      "command": "verify candidate_manifest entries/source blobs, canonical binding, sidecar, QSF refs and alias byte equality",
+      "exit_code": 0,
+      "result": "MANIFEST_VERIFY_PASS tracked=121 aliases=29 files=150 total_bytes=3492531 qsf_refs=49 aliases_match=29 canonical=PASS sidecar=PASS"
+    },
+    {
+      "run_id": "remote-preflight",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -EncodedCommand <root collision, EDA process, tool path, physical/pagefile/disk/high-memory read-only probe>",
+      "exit_code": 0,
+      "result": "root absent; no compile/fit/STA/Qsys/sim EDA; jtagserver and non-EDA SlimeVR left untouched",
+      "artifact": "build/agents/T-20260831-008/remote_preflight_snapshot.json",
+      "artifact_sha256": "3142b4a4394f8f4d4ec6668a9cfb5974a54277f6ae7f47f1eb0c12b41733c0e2"
+    },
+    {
+      "run_id": "remote-root-create",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -EncodedCommand <create only absent/empty T-008 candidate root and assert empty>",
+      "exit_code": 0,
+      "result": "CANDIDATE_ROOT_CREATED; CANDIDATE_ROOT_EMPTY"
+    },
+    {
+      "run_id": "remote-transfer",
+      "level": "L0",
+      "command": "scp -o BatchMode=yes -o ConnectTimeout=10 -r build/agents/T-20260831-008/candidate/rtl build/agents/T-20260831-008/candidate/fpga 192.168.101.5:D:/Projects/fpga-altra/lcvex/build/T-20260831-008/candidate/; scp manifest and sidecar",
+      "exit_code": 0,
+      "result": "only new T-008 candidate root written; transport event timestamp not retained"
+    },
+    {
+      "run_id": "remote-closure",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -EncodedCommand <manifest file-set/bytes/SHA256/sidecar read-back>",
+      "exit_code": 0,
+      "result": "150/150; bytes=3492531; missing=0; extra=0; hash_bytes_bad=0; sidecar_match=true",
+      "artifact": "build/agents/T-20260831-008/remote_closure_files.json",
+      "artifact_sha256": "e1f39ac889830ec6e3ddcb5ca559b9b175f491e998127bd7dacf9754a03813d7"
+    },
+    {
+      "run_id": "remote-qsf-alias",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -EncodedCommand <resolve all QSF refs and compare all aliases byte-for-byte>",
+      "exit_code": 0,
+      "result": "QSF=49/49; aliases=29/29; alias_mismatch=0",
+      "artifact": "build/agents/T-20260831-008/remote_alias_qsf.json",
+      "artifact_sha256": "8fb6f64f9100f0e4c033890f86bfeb15a61e904702e7674b094642cb64815b60"
+    },
+    {
+      "run_id": "remote-key-hashes",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -EncodedCommand <read 14 key input hashes/bytes>",
+      "exit_code": 0,
+      "result": "14/14 local-to-remote key hash/byte comparisons PASS",
+      "artifact": "build/agents/T-20260831-008/remote_key_hashes.json",
+      "artifact_sha256": "0f2e9e27e553ba99ba8b9ba24725c9006d10674c891461e8713d34111f2bc989"
+    },
+    {
+      "run_id": "remote-post-snapshot",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -EncodedCommand <post-sync root/resource/EDA/process read-only probe>",
+      "exit_code": 0,
+      "result": "candidate child_count=4; no compile/fit/STA/Qsys/sim EDA; resources recorded",
+      "artifact": "build/agents/T-20260831-008/remote_post_snapshot.json",
+      "artifact_sha256": "2781f00b9569aa8c7b1991a3af2a4253c1b1477e5425dd4f475b91af88ead2d6"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "candidate-manifest",
+      "path": "build/agents/T-20260831-008/candidate/candidate_manifest.json",
+      "bytes": 88604,
+      "sha256": "64a4612979960fa9d01a734a151710b45be76c8335f63197a772067dc0c162a7",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "candidate-sidecar",
+      "path": "build/agents/T-20260831-008/candidate/candidate_manifest.sha256",
+      "bytes": 90,
+      "sha256": "0b4d912c8e291aba3e5dd7264cd420a97a8024085ec4dd9e9e62e3741091c855",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "remote-preflight-snapshot",
+      "path": "build/agents/T-20260831-008/remote_preflight_snapshot.json",
+      "bytes": 1110,
+      "sha256": "3142b4a4394f8f4d4ec6668a9cfb5974a54277f6ae7f47f1eb0c12b41733c0e2",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "remote-post-snapshot",
+      "path": "build/agents/T-20260831-008/remote_post_snapshot.json",
+      "bytes": 2311,
+      "sha256": "2781f00b9569aa8c7b1991a3af2a4253c1b1477e5425dd4f475b91af88ead2d6",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "remote-closure-files",
+      "path": "build/agents/T-20260831-008/remote_closure_files.json",
+      "bytes": 697,
+      "sha256": "e1f39ac889830ec6e3ddcb5ca559b9b175f491e998127bbdfacf9754a03813d7",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "remote-alias-qsf",
+      "path": "build/agents/T-20260831-008/remote_alias_qsf.json",
+      "bytes": 20420,
+      "sha256": "8fb6f64f9100f0e4c033890f86bfeb15a61e904702e7674b094642cb64815b60",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "remote-key-hashes",
+      "path": "build/agents/T-20260831-008/remote_key_hashes.json",
+      "bytes": 2818,
+      "sha256": "0f2e9e27e553ba99ba8b9ba24725c9006d10674c891461e8713d34111f2bc989",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "local-check-runs",
+      "path": "build/agents/T-20260831-008/local_checks/runs.json",
+      "bytes": 1823,
+      "sha256": "d35d5f51ca70ecbf2fcb728d3041a88bf3577d19e7f738e1cf91738f0c978c1d",
+      "retain_until": "task-close"
+    }
+  ],
+  "non_actions": [
+    "未运行 quartus_sh/quartus_syn/quartus_fit/quartus_sta/quartus_asm/quartus_ipgenerate/qsys/vsim/questa/quartus_pgm",
+    "未运行任何仿真、综合、fit、STA、assembler、programming 或生成器",
+    "未读取 license 内容，仅做固定路径存在性检查",
+    "未写入 T-003 candidate、旧 build、旧工程、QEMU、cache、SOF/JIC/RBF 或 Flash",
+    "未停止、暂停、抢占、降优先级或改变 jtagserver/SlimeVR/其它远端进程",
+    "未修改 pagefile、系统配置、source RTL、QSF、SDC、Qsys 或 SFL 输入"
+  ],
+  "blockers": [
+    "full synthesis/fit/STA/assembler/programming/board test 不属于本任务，且历史 full synthesis 75--77 GB 峰值仍受资源门约束",
+    "JTAG chain/device identity 仍未闭合；programming 保持 WAIT",
+    "candidate 仅供后续 <=35 GB reduced/partition resource probe，不代表 release"
+  ],
+  "next": "待 T-007 释放重型槽后，由集成者以本 candidate manifest/source SHA 登记独立 reduced/partition probe；任何输入或 QSF 路径变化必须重新建立全新 candidate 根与 manifest。"
+  ,
+  "integrator_review": {
+    "received_at": "2026-08-31T20:50:15+08:00",
+    "merged_at": "2026-08-31T20:49:55+08:00",
+    "recorded_at": "2026-08-31T20:55:05+08:00",
+    "status": "accepted_postfix_candidate_sync",
+    "local_validation": "manifest sidecar, all 150 bytes/SHA entries, 121 tracked set, 29 alias byte comparisons, and all evidence artifact hashes pass",
+    "remote_validation": {
+      "timestamp": "2026-08-31T20:54:27.1798099+08:00",
+      "manifest_files": 150,
+      "actual_files": 150,
+      "missing": 0,
+      "extra": 0,
+      "hash_bytes_bad": 0,
+      "manifest_sha256": "64a4612979960fa9d01a734a151710b45be76c8335f63197a772067dc0c162a7",
+      "sidecar_match": true,
+      "eda_count": 0,
+      "physical_free_mb": 42384.4,
+      "pagefile_available_mb": 12541,
+      "disk_d_free_gb": 95.59
+    },
+    "invalid_probe_note": "20:53 first read-only probe used an invalid PowerShell backslash regex and produced actual_files=0; it is rejected. The 20:54 character-Replace rerun used ErrorActionPreference=Stop and is the accepted result.",
+    "decision": "candidate hash closure accepted; Quartus execution remains gated on T-007 heavy-slot release and a fresh resource/EDA snapshot"
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-010",
+  "label": "B25-PHYSICAL-UCP-WAIVER-CHECKER",
+  "state": "implementation-complete",
+  "acceptance_status": "pass-integrator-corrected-hermetic-ucp-reset-waiver-contract",
+  "partial": false,
+  "base_sha": "fcb61cb9ebff2f389f43b0f0a3973d9314176779",
+  "head_sha": "cebb871a3b6ffa362a6e7c1fb5877f36fce4190d",
+  "branch": "batch/T-20260907-037-b25-bringup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037",
+  "source_head": "daf0104a77d9988da7dbc50a53225490d01950e1",
+  "source_branch": "infra/T-20260909-010-b25-physical-ucp-waiver-checker",
+  "source_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-010",
+  "batch": "T-20260909-011",
+  "owner": "b25_ucp_waiver_checker",
+  "integrator": "codex-integrator",
+  "timestamps": {
+    "sent_at": "2026-09-09T12:48:32+08:00",
+    "received_at": "2026-09-09T12:48:32+08:00",
+    "implementation_committed_at": "2026-09-09T13:06:18+08:00",
+    "fixture_run_started_at": "2026-09-09T13:06:44+08:00",
+    "fixture_run_finished_at": "2026-09-09T13:06:44+08:00",
+    "pycompile_started_at": "2026-09-09T13:06:58+08:00",
+    "pycompile_finished_at": "2026-09-09T13:06:58+08:00",
+    "hermetic_check_started_at": "2026-09-09T13:07:09+08:00",
+    "hermetic_check_finished_at": "2026-09-09T13:07:09+08:00",
+    "reported_at": "2026-09-09T13:24:34+08:00",
+    "integrator_correction_started_at": "2026-09-09T13:21:33+08:00",
+    "integrator_correction_finished_at": "2026-09-09T13:24:34+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "objective": "将 T-007 的物理 UCP、JTAG vendor hierarchy 与 EMIF reset recovery/removal waiver 固化为可复跑、fail-closed、与工作目录无关的结构化 inventory checker。",
+  "policy": {
+    "path": "fpga/catapult_a10/physical_waivers.json",
+    "sha256": "284f9c140bba1c36992de222189f08c2b6b57d328949facee2d2128f0812c393",
+    "schema_version": 1,
+    "contract_source": {
+      "task_id": "T-20260909-007",
+      "source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+      "evidence": "docs/tasks/evidence/T-20260909-007.json"
+    },
+    "ucp": {
+      "unconstrained_clocks_exact": [
+        "altera_reserved_tck",
+        "soc|emif_adapter|emif_rst_sync1_n"
+      ],
+      "ports_exact": {
+        "input": [
+          "altera_reserved_tdi",
+          "altera_reserved_tms"
+        ],
+        "output": [
+          "altera_reserved_tdo"
+        ]
+      },
+      "counts": {
+        "input_ports": 2,
+        "input_paths": 63,
+        "output_ports": 1,
+        "output_paths": 4
+      }
+    },
+    "jtag_hierarchy": {
+      "allowed_classes": [
+        "jtag_uart_alt_jtag_atlantic",
+        "auto_fab_sld",
+        "emif_embedded_jtag",
+        "reserved_jtag_port"
+      ],
+      "required_vendor_classes": [
+        "jtag_uart_alt_jtag_atlantic",
+        "auto_fab_sld",
+        "emif_embedded_jtag"
+      ],
+      "arbitrary_tck_period": "forbidden",
+      "jtag_create_clock": "forbidden"
+    },
+    "reset_control": {
+      "name": "soc|emif_adapter|emif_rst_sync1_n",
+      "kind": "synchronized_active_low_reset_control",
+      "corners": [
+        "fast",
+        "slow"
+      ],
+      "recovery": {
+        "path_count": 627,
+        "violated": 0,
+        "worst_slack_requirement": "> 0 ns",
+        "baseline_worst_slack_ns": 1.202
+      },
+      "removal": {
+        "path_count": 627,
+        "violated": 0,
+        "worst_slack_requirement": "> 0 ns",
+        "baseline_worst_slack_ns": 0.191
+      },
+      "false_path_waiver": "forbidden"
+    }
+  },
+  "inventory_schema": {
+    "kind": "lcvex-physical-ucp-recovery-removal-v1",
+    "required_top_level": [
+      "schema_version",
+      "inventory_kind",
+      "provenance",
+      "ucp",
+      "recovery_removal",
+      "clock_constraints",
+      "exceptions"
+    ],
+    "provenance_source_sha_exact": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+    "exceptions_exact": [],
+    "absolute_paths_or_dut_output": "not consumed"
+  },
+  "implementation": {
+    "checker": {
+      "path": "fpga/catapult_a10/tools/check_physical_waivers.py",
+      "sha256": "91cb58cd3046a054a6b3d21e798406ffbebc4dfdeae7baff656689dfea2d57c7",
+      "lines": 796,
+      "behavior": [
+        "requires exact structured inventory schema",
+        "rejects extra clocks, ports, path groups and count drift",
+        "checks all required vendor hierarchy classes and approved patterns",
+        "requires provenance source_sha to equal the frozen T-007 physical source",
+        "checks fast/slow recovery/removal 627 paths, zero violations and positive slack",
+        "requires the waiver inventory exception list to be exactly empty and rejects duplicate JSON keys",
+        "rejects JTAG period/create_clock and reset false-path fields",
+        "uses only standard-library JSON/path processing; no network, Quartus, database or DUT access"
+      ]
+    },
+    "fixture_runner": {
+      "path": "fpga/catapult_a10/tools/run_physical_waivers_fixture.py",
+      "sha256": "0b57b7016a901ae201c737cef26105c28513af8cf08df678ed775a3f3206cd4e",
+      "lines": 323,
+      "output_root": "build/agents/T-20260909-010/physical-waivers-fixture",
+      "ignored": true,
+      "invocation_cwd": "fixture output directory"
+    }
+  },
+  "fixtures": {
+    "root": "build/agents/T-20260909-010/physical-waivers-fixture",
+    "positive": {
+      "path": "build/agents/T-20260909-010/physical-waivers-fixture/ucp_inventory.pass.json",
+      "sha256": "71bfc83904067ad994d68d70c87677a4be6094cb01be98ad5a9cbac6e51cddf7",
+      "result": "exit 0 / PHYSICAL_WAIVER_CHECK_PASS",
+      "stdout_sha256": "cc31318e763d3d1a2e0f0e3d22ddaadc0be8e3a9e3839378d342ac7b4d074ea3"
+    },
+    "negative": [
+      {
+        "name": "extra-user-clock",
+        "mutation": "append user_debug_clk to ucp.clocks",
+        "expected": "exit 1"
+      },
+      {
+        "name": "extra-user-port",
+        "mutation": "append user_debug_tap to ucp.ports",
+        "expected": "exit 1"
+      },
+      {
+        "name": "extra-user-path",
+        "mutation": "append user_logic path group",
+        "expected": "exit 1"
+      },
+      {
+        "name": "input-path-count-change",
+        "mutation": "change input_path_count 63 to 62",
+        "expected": "exit 1"
+      },
+      {
+        "name": "missing-emif-vendor-hierarchy",
+        "mutation": "remove emif_embedded_jtag group",
+        "expected": "exit 1"
+      },
+      {
+        "name": "missing-alt-jtag-hierarchy",
+        "mutation": "remove jtag_uart_alt_jtag_atlantic group",
+        "expected": "exit 1"
+      },
+      {
+        "name": "missing-auto-fab-hierarchy",
+        "mutation": "remove auto_fab_sld group",
+        "expected": "exit 1"
+      },
+      {
+        "name": "recovery-path-count-change",
+        "mutation": "change fast recovery path_count 627 to 626",
+        "expected": "exit 1"
+      },
+      {
+        "name": "removal-path-count-change",
+        "mutation": "change slow removal path_count 627 to 628",
+        "expected": "exit 1"
+      },
+      {
+        "name": "zero-recovery-slack",
+        "mutation": "change fast recovery worst_slack_ns to 0",
+        "expected": "exit 1"
+      },
+      {
+        "name": "negative-removal-slack",
+        "mutation": "change slow removal worst_slack_ns to -0.001",
+        "expected": "exit 1"
+      },
+      {
+        "name": "arbitrary-jtag-period",
+        "mutation": "add 15 ns period for altera_reserved_tck",
+        "expected": "exit 1"
+      },
+      {
+        "name": "reset-false-path",
+        "mutation": "add false_path exception from emif_rst_sync1_n",
+        "expected": "exit 1"
+      },
+      {
+        "name": "source-sha-mismatch",
+        "mutation": "replace the frozen physical source SHA with another valid 40-digit SHA",
+        "expected": "exit 1"
+      },
+      {
+        "name": "unexpected-exception",
+        "mutation": "append an otherwise well-formed non-reset exception",
+        "expected": "exit 1"
+      },
+      {
+        "name": "wrong-clock-kind",
+        "mutation": "classify altera_reserved_tck as a user functional clock",
+        "expected": "exit 1"
+      },
+      {
+        "name": "wrong-port-direction",
+        "mutation": "classify altera_reserved_tdi as an output",
+        "expected": "exit 1"
+      },
+      {
+        "name": "duplicate-json-key",
+        "mutation": "duplicate the top-level exceptions key",
+        "expected": "exit 1"
+      }
+    ],
+    "negative_count": 18,
+    "all_task_local": true
+  },
+  "validation": [
+    {
+      "run_id": "pycompile",
+      "level": "L0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile fpga/catapult_a10/tools/check_physical_waivers.py fpga/catapult_a10/tools/run_physical_waivers_fixture.py",
+      "started_at": "2026-09-09T13:06:58+08:00",
+      "finished_at": "2026-09-09T13:06:58+08:00",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "synthetic-matrix",
+      "level": "L0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 fpga/catapult_a10/tools/run_physical_waivers_fixture.py --output-dir build/agents/T-20260909-011/physical-waivers-fixture > build/agents/T-20260909-011/physical-waivers-matrix.stdout.json",
+      "started_at": "2026-09-09T13:24:33+08:00",
+      "finished_at": "2026-09-09T13:24:34+08:00",
+      "exit_code": 0,
+      "result": "positive PASS; 18/18 negative fixtures rejected",
+      "stdout_sha256": "44b166d9ef4866eec3b641e654b89a65d56d08d670e8ef2046553c5c70db476f",
+      "resource": "local light; no resource lock, GamePC, Quartus, network or DUT"
+    },
+    {
+      "run_id": "hermetic-cwd",
+      "level": "L0",
+      "command": "from build/agents/T-20260909-011/physical-waivers-fixture: PYTHONDONTWRITEBYTECODE=1 python3 ../../../../fpga/catapult_a10/tools/check_physical_waivers.py --policy ../../../../fpga/catapult_a10/physical_waivers.json --inventory ucp_inventory.pass.json --json",
+      "started_at": "2026-09-09T13:24:34+08:00",
+      "finished_at": "2026-09-09T13:24:34+08:00",
+      "exit_code": 0,
+      "result": "PHYSICAL_WAIVER_CHECK_PASS; output is independent of caller cwd",
+      "stdout_sha256": "cc31318e763d3d1a2e0f0e3d22ddaadc0be8e3a9e3839378d342ac7b4d074ea3"
+    },
+    {
+      "run_id": "diff-check",
+      "level": "L0",
+      "command": "git diff --check",
+      "started_at": "2026-09-09T13:11:58+08:00",
+      "finished_at": "2026-09-09T13:11:58+08:00",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "write_boundary": {
+    "allowed_tracked": [
+      "fpga/catapult_a10/physical_waivers.json",
+      "fpga/catapult_a10/tools/check_physical_waivers.py",
+      "fpga/catapult_a10/tools/run_physical_waivers_fixture.py",
+      "docs/tasks/evidence/T-20260909-010.json",
+      "docs/handoffs/T-20260909-010-b25-physical-ucp-waiver-checker.md"
+    ],
+    "ignored_build": "build/agents/T-20260909-010/physical-waivers-fixture/**",
+    "forbidden_unchanged": [
+      "RTL",
+      "SDC",
+      "QSF",
+      "platform_manifest.json",
+      "source.lock",
+      "SHA256SUMS",
+      "test registry",
+      "TASKS.md",
+      "PROJECT_STATUS.md",
+      "ROADMAP.md",
+      "QEMU",
+      "other worktrees"
+    ],
+    "quartus_or_gamepc": false,
+    "dut_output_consumed": false,
+    "absolute_path_dependency": false
+  },
+  "known_limits": [
+    "checker validates an exported structured inventory and cannot create one from raw Quartus reports",
+    "this task performs no Quartus synthesis/fitter/STA, GamePC action, JTAG, board or physical sign-off",
+    "the local merged-candidate checker matrix passed; the integrator must still export and validate inventory from the isolated fitted-DB overlay"
+  ],
+  "correction": {
+    "review_result": "NEEDS_CHANGES",
+    "reviewed_at": "2026-09-09T13:18:30+08:00",
+    "corrected_at": "2026-09-09T13:24:34+08:00",
+    "pre_correction_implementation_sha": "daf0104a77d9988da7dbc50a53225490d01950e1",
+    "corrected_implementation_sha": "cebb871a3b6ffa362a6e7c1fb5877f36fce4190d",
+    "changes": [
+      "bind policy and inventory provenance to frozen physical source 702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+      "require an exact empty exception inventory",
+      "reject duplicate JSON object keys",
+      "expand the negative matrix from 13 to 18 cases",
+      "replace the placeholder hermetic invocation with a directly replayable command",
+      "synchronize evidence and handoff report timestamps"
+    ],
+    "tests_rerun": true
+  },
+  "handoff": "docs/handoffs/T-20260909-010-b25-physical-ucp-waiver-checker.md"
+}

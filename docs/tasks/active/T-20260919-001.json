@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "T-20260919-001",
+  "label": "B25-M20K-READ-ALIGNMENT",
+  "title": "Prove and repair synthesis-only boot M20K read-response alignment",
+  "kind": "rtl-functional-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260907-044"],
+  "base_sha": "81b2b897fdbec81e5f1a57729204ecf36569059b",
+  "base_tree_sha": "8cae507e475b78a2d7c2b7730897edaddd0e1c3e",
+  "branch": "fix/T-20260919-001-b25-m20k-read-alignment",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-001",
+  "writes": [
+    "rtl/lcvex_bram_boot.sv::lcvex_bram_boot_altsyncram request/debug read timing only",
+    "tb/sv/altera_syncram_sync_stub.sv",
+    "tb/sv/lcvex_bram_boot_m20k_tb.sv",
+    "fpga/catapult_a10/tools/run_bram_m20k_timing_test.sh",
+    "scripts/test_registry.json::new T-20260919-001 test entry only",
+    "docs/tasks/evidence/T-20260919-001.json",
+    "docs/handoffs/T-20260919-001-b25-m20k-read-alignment.md",
+    "build/agents/T-20260919-001/** ignored logs/artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260907-044.json",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/lcvex_bram_boot_tb.sv",
+    "tb/sv/lcvex_bram_init25_tb.sv",
+    "fpga/catapult_a10/tools/run_bram_init25_test.sh",
+    "fpga/catapult_a10/tools/run_soc_smoke.sh",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/hw/rtl/vex_soc_ddr_top.v::registered JTAG-UART read-response precedent"
+  ],
+  "scope": "Model altera_syncram as a clocked synchronous RAM, demonstrate that the pre-fix synthesis wrapper returns stale data on the first accepted read, then preserve the public single-outstanding/one-cycle response contract by holding the accepted RAM address and offset until retirement and exposing only the corresponding post-edge q value. Align the debug port offset with the synchronous q_b value as well.",
+  "reset_and_commit_contract": {
+    "reset": "All new held address/offset/read metadata reset to zero. rsp_valid remains reset-low through rsp_pending. No architectural state is added.",
+    "request_commit": "Address, byte offset, fault and request kind are captured only on req_accept. Writes retain their existing accept-edge side effect.",
+    "read_response": "For an accepted read, rsp_valid becomes visible after the accept edge together with the post-edge M20K q_a for the held address; data and fault remain stable until rsp_ready.",
+    "debug_response": "dbg_addr is sampled by the synchronous RAM and its offset is captured on the same edge; dbg_rdata combines the corresponding q_b and captured offset without an additional stale capture."
+  },
+  "validation": {
+    "L0": [
+      "A vendor-faithful synchronous altera_syncram stub test fails on the old wrapper at the first PC=0-equivalent read and passes after the fix.",
+      "The test covers consecutive addresses, unaligned in-word offset, response backpressure stability, byte write/readback, range/cross-word fault and debug-port alignment.",
+      "Existing behavioral lcvex_bram_boot_tb remains green."
+    ],
+    "L1": [
+      "B25 ELF-derived BRAM initialization/oracle test passes.",
+      "Quartus synthesis-selector checker still selects exactly one in-file altera_syncram implementation and recognizes init_file/M20K."
+    ],
+    "L2": [
+      "B25 SoC CAL-OK/CAL-WAIT/CAL-FAIL smoke passes with LCVEX25 BOOT, READY, PONG and echo markers.",
+      "Affected compile/lint checks pass without disabling assertions or changing reference results."
+    ]
+  },
+  "acceptance": "The pre-fix failure is preserved in evidence, the corrected synthesis-only wrapper returns the reset-vector word on the first read with stable backpressure semantics, existing behavior-level and B25 oracle/SoC tests remain green, and no QSF/SDC/vendor IP/board action is used to hide the defect.",
+  "resource": "Analysis and small compile may run unlocked. Every local heavy Verilator/SoC regression must use /home/chiro/projects/.resource-locks/resource-lock run local; return 75 means wait. This task performs no GamePC or board action.",
+  "forbidden_regions": [
+    "behavioral RAM semantics except test-equivalent comments",
+    "core/cache/AXI/EMIF/JTAG-UART RTL",
+    "QEMU fork or reference results",
+    "QSF/SDC timing exceptions",
+    "vendor generated IP",
+    "assertion disable or test skip",
+    "Quartus synthesis/fitter/STA/assembler",
+    "JTAG/programming/reset/power/JIC/EPCQ/Flash"
+  ],
+  "created_at": "2026-09-19T21:40:34+08:00",
+  "updated_at": "2026-09-19T22:16:06+08:00",
+  "next_after_acceptance": "Run Gate D on the frozen integration SHA while a separate no-FP scalar bring-up profile enters fresh GamePC physical flow; assembler and corrected board retest remain downstream gates.",
+  "result": {
+    "status": "accepted",
+    "implementation_commit": "7a0c6705fb06df7785a95bfc3707e8cbd17749d1",
+    "owner_evidence_commit": "80f035fa",
+    "integration_implementation_commit": "c4c75ca6",
+    "integration_evidence_commit": "bd59d4fc188b1df31c14d4dc4a5de5c55b907166",
+    "integration_tree_sha": "2a6b3a993d5b1d390dbdc112f8a12a4f1f7811a6",
+    "owner_validation": "pre-fix stale response reproduced; post-fix focused, behavioral BRAM, ELF-derived oracle 13/13 negative suite, B25 three-scenario SoC smoke, compile/lint/static closure PASS",
+    "integration_validation": "focused M20K timing, synthesis selector, registry consistency, platform/skeleton/SHA closure and BRAM oracle emit/check plus 13/13 negative suite PASS on bd59d4fc",
+    "integration_heavy_note": "The owner implementation tree already passed the locked behavioral BRAM and three-scenario SoC heavy runs. On the merge SHA, the directly affected focused timing test was rerun; the broader heavy rerun deferred when the shared local lock correctly returned 75 to avoid interfering with pypto-x.",
+    "evidence": "docs/tasks/evidence/T-20260919-001.json",
+    "handoff": "docs/handoffs/T-20260919-001-b25-m20k-read-alignment.md"
+  }
+}

@@ -1,0 +1,27 @@
+diff --git a/target/arm/helper.c b/target/arm/helper.c
+--- a/target/arm/helper.c	2026-08-30 06:47:46.500033590 +0800
++++ b/target/arm/helper.c	2026-08-26 13:15:46.708006753 +0800
+@@ -1858,6 +1858,9 @@
+     trace_arm_gt_cntvoff_write(value);
+     raw_write(env, ri, value);
+     gt_recalc_timer(cpu, GTIMER_VIRT);
++    if (qemu_lcvex_difftest_active()) {
++        qemu_cpu_kick(CPU(cpu));
++    }
+ }
+
+ static uint64_t gt_virt_redir_cval_read(CPUARMState *env,
+@@ -2348,6 +2351,13 @@
+     trace_arm_gt_cntpoff_write(value);
+     raw_write(env, ri, value);
+     gt_recalc_timer(cpu, GTIMER_PHYS);
++    /* In LCVEX step mode a virtual-clock timer can expire exactly at the
++     * instruction boundary while the vCPU is waiting for the next protocol
++     * turn.  Explicitly kick the vCPU so the GIC IRQ is delivered and the
++     * plugin can emit the matching ASYNC packet. */
++    if (qemu_lcvex_difftest_active()) {
++        qemu_cpu_kick(CPU(cpu));
++    }
+ }
+
+ static const ARMCPRegInfo gen_timer_cntpoff_reginfo = {

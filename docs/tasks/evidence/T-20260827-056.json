@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-056",
+  "state": "done",
+  "base_sha": "cfa8b9aec01596bc6f3e28d982cfa28b53a93a82",
+  "head_sha": "ccb3ed79a3ae6a8ec2a1ce242027ff04bd949b4d",
+  "merge_sha": "5663486f398249de158428c04d4ad26ab9803757",
+  "branch": "feature/T-20260827-056-b4-l1-coherence",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-056",
+  "scope": "B4 模块级 CORE_COUNT=1 D-L1 write-back/write-allocate、L2 出向 probe/drain、PTW/maintenance/checkpoint 独立验证",
+  "contract_source": {
+    "resolution_commit": "46d391d77c758a5e22dd61b66c1916de0d644760",
+    "probe_commands": "lookup=0, clean=1, invalidate=2, clean+invalidate=3",
+    "checkpoint_order": "L1 quiesce/drain -> L2 drain_to_poc -> drain_ack",
+    "fault_rule": "fault/reset 保留未完成 line metadata，不产生成功 ack 或 stale response"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "git": "2.55.0"
+  },
+  "qemu": {
+    "status": "not in scope",
+    "release": "",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": null,
+  "runs": [
+    {
+      "run_id": "owner-l0-verilator-lint-001",
+      "source_sha": "ccb3ed7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --assert -Wall -Wno-fatal rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l1_d_wb.sv rtl/lcvex_l1_coherence.sv",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "B4 package/L2/D-L1/coherence wrapper lint 通过。"
+    },
+    {
+      "run_id": "owner-l1-l1-sv-002",
+      "source_sha": "ccb3ed7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "mkdir -p build/agents/T-20260827-056/sv-final/l1 && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 2 --top-module lcvex_l1_d_wb_tb -Mdir build/agents/T-20260827-056/sv-final/l1 -o lcvex_l1_d_wb_tb rtl/lcvex_pkg.sv rtl/lcvex_l1_d_wb.sv tb/sv/lcvex_l1_d_wb_bfm.sv tb/sv/lcvex_l1_d_wb_tb.sv && build/agents/T-20260827-056/sv-final/l1/lcvex_l1_d_wb_tb",
+      "seed": "0xd1056a",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "L1 SV scoreboard PASS：operations=10、accepted=66；包含 WA/WB、partial store、probe hold/clean/invalidate、fault retry、local checkpoint drain/fault；SVA 无失败。",
+      "log": "build/agents/T-20260827-056/sv-final/l1.log",
+      "artifact": "build/agents/T-20260827-056/sv-final/l1/lcvex_l1_d_wb_tb"
+    },
+    {
+      "run_id": "owner-l1-joint-sv-003",
+      "source_sha": "ccb3ed7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "mkdir -p build/agents/T-20260827-056/sv-final/joint && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 2 --top-module lcvex_l2_l1_probe_tb -Mdir build/agents/T-20260827-056/sv-final/joint -o lcvex_l2_l1_probe_tb rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l1_d_wb.sv rtl/lcvex_l1_coherence.sv tb/sv/lcvex_l1_d_wb_bfm.sv tb/sv/lcvex_l2_l1_probe_tb.sv && build/agents/T-20260827-056/sv-final/joint/lcvex_l2_l1_probe_tb",
+      "seed": "0xb4056a",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "联合 SV scoreboard PASS：operations=11、PoC accepted/responses=73/73、reads=40、writes=33、L2→L1 probes=3、checkpoint drain requests=2；SVA 无失败。覆盖 PTW 最新脏数据、DC/IC、成功/故障 checkpoint 和 response hold。",
+      "log": "build/agents/T-20260827-056/sv-final/joint.log",
+      "artifact": "build/agents/T-20260827-056/sv-final/joint/lcvex_l2_l1_probe_tb"
+    },
+    {
+      "run_id": "owner-l1-cocotb-004",
+      "source_sha": "ccb3ed7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.l1_d_wb SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-056/build/agents/T-20260827-056/cocotb-final2 SEED=0x5601",
+      "seed": "0x5601",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 1/1 PASS，仿真 7150ns；随机 partial-store/替换、PTW、DC/IC、checkpoint ack/backpressure、POC fault 和无 stale response 通过。",
+      "artifact": "build/agents/T-20260827-056/cocotb-final2/Vtop",
+      "results": "sim/cocotb/results.xml"
+    },
+    {
+      "run_id": "owner-l1-b3-l2-legacy-sv-005",
+      "source_sha": "ccb3ed7",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "mkdir -p build/agents/T-20260827-056/sv-final/l2 && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 2 --top-module lcvex_l2_wb_tb -Mdir build/agents/T-20260827-056/sv-final/l2 -o lcvex_l2_wb_tb rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l2_probe.sv tb/sv/lcvex_l2_wb_bfm.sv tb/sv/lcvex_l2_wb_tb.sv && build/agents/T-20260827-056/sv-final/l2/lcvex_l2_wb_tb",
+      "seed": "0x05512026",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "B3 L2-only SV 回归 PASS：operations=93、accepted=903；用于确认新增可选端口不破坏既有 L2 RTL 行为，不作为 B4 一致性证据。",
+      "log": "build/agents/T-20260827-056/l2-final.log",
+      "artifact": "build/agents/T-20260827-056/sv-final/l2/lcvex_l2_wb_tb"
+    },
+    {
+      "run_id": "owner-l0-json-hygiene-006",
+      "source_sha": "ccb3ed7",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260827-056.json && python3 -m py_compile sim/cocotb/test_l1_d_wb.py && git diff --check",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON、Cocotb Python 和空白检查通过。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "l1-sv-executable",
+      "uri": "build/agents/T-20260827-056/sv-final/l1/lcvex_l1_d_wb_tb",
+      "sha256": "4c578cd05b9ba6721df4d5c55b900375866a4a8898f1c4bb1b7ab8204005bf89",
+      "bytes": 447032,
+      "owner": "b4-l1-coherence-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-l1-sv-002"
+    },
+    {
+      "id": "joint-sv-executable",
+      "uri": "build/agents/T-20260827-056/sv-final/joint/lcvex_l2_l1_probe_tb",
+      "sha256": "da737eab16e819276a6c8b6f5067994f826fd9300324445bc3f697b5f43c1777",
+      "bytes": 727040,
+      "owner": "b4-l1-coherence-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-joint-sv-003"
+    },
+    {
+      "id": "cocotb-executable",
+      "uri": "build/agents/T-20260827-056/cocotb-final2/Vtop",
+      "sha256": "93a98c4c1b1f78c2b5c1a46b3fb5afc738cd0ca876ae5a9fca3040a340889351",
+      "bytes": 559512,
+      "owner": "b4-l1-coherence-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-004"
+    },
+    {
+      "id": "cocotb-results",
+      "uri": "sim/cocotb/results.xml",
+      "sha256": "3e1e68aeb0218e1142af05ec710079445500001244d8d0428c6e5b7a76e8194f",
+      "bytes": 400,
+      "owner": "b4-l1-coherence-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-004"
+    },
+    {
+      "id": "integrator-l1-d-l1-executable",
+      "uri": "build/agents/T-20260827-056/integrator/l1/lcvex_l1_d_wb_tb",
+      "sha256": "4c578cd05b9ba6721df4d5c55b900375866a4a8898f1c4bb1b7ab8204005bf89",
+      "bytes": 447032,
+      "owner": "root-integrator",
+      "retain_until": "archive",
+      "reproduce": "integrator-l1-d-l1-sv-010"
+    },
+    {
+      "id": "integrator-l1-joint-executable",
+      "uri": "build/agents/T-20260827-056/integrator/joint/lcvex_l2_l1_probe_tb",
+      "sha256": "0712ac9637a4ba30d1cb31e4a70ae82f853512e6cdef23d68d58149fbb948bb5",
+      "bytes": 727040,
+      "owner": "root-integrator",
+      "retain_until": "archive",
+      "reproduce": "integrator-l1-joint-sv-011"
+    },
+    {
+      "id": "integrator-l1-cocotb-executable",
+      "uri": "build/agents/T-20260827-056/integrator/cocotb-fixed/Vtop",
+      "sha256": "4aebaf4fa5e44eaf37bdb279436e24d42d76a75551566c63ebb142269dcffd73",
+      "bytes": 559512,
+      "owner": "root-integrator",
+      "retain_until": "archive",
+      "reproduce": "integrator-l1-cocotb-012"
+    },
+    {
+      "id": "integrator-l1-cocotb-results",
+      "uri": "sim/cocotb/results.xml",
+      "sha256": "4efa0f78f823f2aa16437842d8381e063ef1addbd2f9af070e62549308435167",
+      "bytes": 397,
+      "owner": "root-integrator",
+      "retain_until": "archive",
+      "reproduce": "integrator-l1-cocotb-012"
+    },
+    {
+      "id": "integrator-l1-b3-regression-executable",
+      "uri": "build/agents/T-20260827-056/integrator/l2/lcvex_l2_wb_tb",
+      "sha256": "5cf84ba19483826677812c35f6b35409bceb9658bac9a98dc30f72dc9ee1884a",
+      "bytes": 764256,
+      "owner": "root-integrator",
+      "retain_until": "archive",
+      "reproduce": "integrator-l1-b3-regression-013"
+    }
+  ],
+  "known_limits": [
+    "只做模块级 CORE_COUNT=1、blocking D-L1/L2、64B line；不实现多核 MESI/MOESI、ACE/CHI 或 coherent DMA。",
+    "未接入 core/pkg/decoder、I-L1、SoC、rtl/filelist.f、顶层 Makefile、QEMU、AXI4/EMIF 或 Gate D/F。",
+    "L2 默认 L1_PROBE_ENABLE=0 以保留 B3 standalone 编译兼容；B4 coherence wrapper 显式启用并连接出向 probe/drain。",
+    "旧 B3 Cocotb wrapper 未连接新增 L2 端口，原 Makefile 未带 -Wno-fatal 时会因 PINMISSING 警告退出；未修改该非 T-056 写集文件，集成者需在后续统一接线或抑制该兼容告警。",
+    "BFM/Verilator 证据不替代真实 SRAM、AXI/EMIF、QEMU lockstep、Linux 或 Gate F-MEM。"
+  ],
+  "transient_validation_notes": [
+    "L1 clean probe response 先返回提交前 dirty/raw metadata；TB 随后的 lookup 验证 clean 已在 ready handshake 后提交。",
+    "所有大日志/波形/构建产物保留在 worktree build/agents/T-20260827-056，未写入系统 /tmp 或 Git。"
+  ],
+  "integration_validation": {
+    "runner_role": "root-integrator",
+    "line": "feature/fpga-catapult-a10",
+    "source_sha": "5663486f398249de158428c04d4ad26ab9803757",
+    "result": "pass_l0_l1",
+    "runs": [
+      {
+        "run_id": "integrator-l0-json-diff-007",
+        "level": "L0",
+        "command": "python3 -m json.tool docs/tasks/evidence/T-20260827-056.json >/dev/null && git diff --check",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "合并线 evidence JSON 与空白检查通过。"
+      },
+      {
+        "run_id": "integrator-l0-writeset-008",
+        "level": "L0",
+        "command": "compare merged diff cfa8b9aec01596bc6f3e28d982cfa28b53a93a82..5663486f398249de158428c04d4ad26ab9803757 against T-20260827-056 writes",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "13 个 B4 owner 文件均落在登记写集内，未修改 P7/core/pkg/filelist/SoC。"
+      },
+      {
+        "run_id": "integrator-l0-verilator-lint-009",
+        "level": "L0",
+        "command": "conda run --no-capture-output -n lcvex verilator --lint-only --assert -Wall -Wno-fatal rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l1_d_wb.sv rtl/lcvex_l1_coherence.sv",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "B4 RTL lint 通过；未见致命告警。"
+      },
+      {
+        "run_id": "integrator-l1-d-l1-sv-010",
+        "level": "L1",
+        "seed": "0xd1056a",
+        "command": "mkdir -p build/agents/T-20260827-056/integrator/l1 && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 2 --top-module lcvex_l1_d_wb_tb -Mdir build/agents/T-20260827-056/integrator/l1 -o lcvex_l1_d_wb_tb rtl/lcvex_pkg.sv rtl/lcvex_l1_d_wb.sv tb/sv/lcvex_l1_d_wb_bfm.sv tb/sv/lcvex_l1_d_wb_tb.sv && build/agents/T-20260827-056/integrator/l1/lcvex_l1_d_wb_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "D-L1 SV scoreboard PASS：operations=10、accepted=66；SVA 无失败。",
+        "artifact": "build/agents/T-20260827-056/integrator/l1/lcvex_l1_d_wb_tb"
+      },
+      {
+        "run_id": "integrator-l1-joint-sv-011",
+        "level": "L1",
+        "seed": "0xb4056a",
+        "command": "mkdir -p build/agents/T-20260827-056/integrator/joint && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 2 --top-module lcvex_l2_l1_probe_tb -Mdir build/agents/T-20260827-056/integrator/joint -o lcvex_l2_l1_probe_tb rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l1_d_wb.sv rtl/lcvex_l1_coherence.sv tb/sv/lcvex_l1_d_wb_bfm.sv tb/sv/lcvex_l2_l1_probe_tb.sv && build/agents/T-20260827-056/integrator/joint/lcvex_l2_l1_probe_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "联合 SV PASS：accepted/responses=73/73、reads=40、writes=33、probe=3、drain=2；SVA 无失败。编译有 testbench BLKSEQ 非致命提示。",
+        "artifact": "build/agents/T-20260827-056/integrator/joint/lcvex_l2_l1_probe_tb"
+      },
+      {
+        "run_id": "integrator-l1-cocotb-012",
+        "level": "L1",
+        "seed": "SEED=0x5601; COCOTB_RANDOM_SEED=5633",
+        "command": "SEED=0x5601 COCOTB_RANDOM_SEED=5633 conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.l1_d_wb SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-fpga-catapult-a10/build/agents/T-20260827-056/integrator/cocotb-fixed",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "Cocotb 1/1 PASS，仿真 7150ns；测试内部 seed=0x5601，框架 seed=5633。",
+        "artifact": "build/agents/T-20260827-056/integrator/cocotb-fixed/Vtop",
+        "results": "sim/cocotb/results.xml"
+      },
+      {
+        "run_id": "integrator-l1-b3-regression-013",
+        "level": "L1",
+        "seed": "0x05512026",
+        "command": "mkdir -p build/agents/T-20260827-056/integrator/l2 && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -j 2 --top-module lcvex_l2_wb_tb -Mdir build/agents/T-20260827-056/integrator/l2 -o lcvex_l2_wb_tb rtl/lcvex_pkg.sv rtl/lcvex_l2_wb.sv rtl/lcvex_l2_probe.sv tb/sv/lcvex_l2_wb_bfm.sv tb/sv/lcvex_l2_wb_tb.sv && build/agents/T-20260827-056/integrator/l2/lcvex_l2_wb_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "B3 L2-only 回归 PASS：operations=93、accepted=903；旧 TB 的新增端口 PINMISSING 为非致命兼容告警。",
+        "artifact": "build/agents/T-20260827-056/integrator/l2/lcvex_l2_wb_tb"
+      }
+    ]
+  },
+  "next": "B4 模块级 candidate 已在 clean feature/fpga-catapult-a10 的 merge SHA 5663486f 通过 L0-L1；后续在 P7-2 后接入真实 core/I-L1/AXI4/SoC，并另行完成 QEMU lockstep 与 Gate F-MEM。",
+  "finalized_at": "2026-08-27T07:56:28+08:00"
+}

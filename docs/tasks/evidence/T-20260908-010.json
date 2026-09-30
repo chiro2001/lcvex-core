@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-010",
+  "label": "B25-BOOT-WORD-PROVENANCE",
+  "state": "done-stale-test",
+  "acceptance_status": "authoritative-image-provenance-established",
+  "partial": false,
+  "base_sha": "8f8faac30119c1db734a2ecd0394b4aad24e881b",
+  "dispatch_parent_sha": "193cf281f55c9c3792737c73b4adfec2a86d027c",
+  "dispatch_commit": "62e8d62114027ab619785ed4e257e1763fee95b4",
+  "checked_head_sha": "8f8faac30119c1db734a2ecd0394b4aad24e881b",
+  "branch": "verify/T-20260908-010-b25-boot-word-provenance",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-010",
+  "owner": "b25_gate_d",
+  "timestamps": {
+    "sent_at": "2026-09-09T00:01:15+08:00",
+    "received_at": "2026-09-09T00:01:15+08:00",
+    "review_started_at": "2026-09-09T00:01:15+08:00",
+    "reported_at": "2026-09-09T00:18:57+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "registration": {
+    "task_file": "docs/tasks/active/T-20260908-010.json",
+    "registration_commit": "193cf281f55c9c3792737c73b4adfec2a86d027c",
+    "dispatch_commit": "62e8d62114027ab619785ed4e257e1763fee95b4",
+    "checkout_registration_gap": true,
+    "checkout_gap_reason": "The checked base 8f8faac3 predates task registration. The active task JSON is absent in this worktree by construction; registration and dispatch commits are recorded here and were not modified."
+  },
+  "objective": "Trace the authoritative reset-vector value across ELF, BIN, byte HEX and 64-bit MIF, decode the current and stale LDR literal encodings, identify the source/layout change from c0 to 00, and determine whether the mismatch is stale test, bad image, endian generator bug or indeterminate.",
+  "source_identity": {
+    "source_tree_sha": "8f8faac30119c1db734a2ecd0394b4aad24e881b",
+    "worktree_clean_before_review": true,
+    "tracked_changes_before_review": 0,
+    "source_sha256": {
+      "fpga/catapult_a10/boot/boot.S": "5bc1bf0f08d14890307229c450c46508a0f8e44af8fcd15df343413d134b8443",
+      "fpga/catapult_a10/boot/boot.ld": "8633c608b75f2a2ed0f4e64414bf3f93f26d745415399592005726e43d14abb9",
+      "fpga/catapult_a10/boot/build.sh": "3410974f09765982b8566fa143ea4f64732a6d7d14a4328120d6ea96e78bdc2d",
+      "fpga/catapult_a10/boot/bin_to_mif.py": "2ebbf3968c495e96e3fcc51a02d51dafc2ea47b5ac9c76898d9d4681387bd67f",
+      "tb/sv/lcvex_bram_init25_tb.sv": "3f7b0153a037e2aae42ddfed6558f37e8bd3ca60febc2472dcd40397c9268328",
+      "fpga/catapult_a10/boot/README.md": "e1f6c5bbb9cf57bca457827ddfd60f0331741aacf0ef8c296e5e6936022b00f6"
+    },
+    "test_expectation": {
+      "file": "tb/sv/lcvex_bram_init25_tb.sv",
+      "line": 115,
+      "expected_word": "0x9100001f580017c0",
+      "current_source_word": "0x9100001f58001700",
+      "test_file_changed_after_old_image": false
+    },
+    "prior_integrated_evidence": {
+      "path": "docs/tasks/evidence/T-20260907-039.json",
+      "sha256": "268b46da3bb67ab86f85cb2657153f07e3e9cdde61499ea1f9d93f8e6598e598",
+      "note": "The hash above is a provenance reference captured from the checked-in file at review time; the T-039 evidence itself records the owner run at old head 91d53be and an integrator correction to the later 957-byte image."
+    }
+  },
+  "toolchain": {
+    "assembler": {
+      "path": "/usr/bin/aarch64-linux-gnu-as",
+      "version": "GNU assembler (GNU Binutils) 2.47",
+      "sha256": "d798e501ac1a4a674106e132865ba18236bb7e36304d18a1b886595b839f9f44"
+    },
+    "linker": {
+      "path": "/usr/bin/aarch64-linux-gnu-ld",
+      "version": "GNU ld (GNU Binutils) 2.47",
+      "sha256": "4416c3c8b866fc4607e977ab4a6c1751b2ed6debfc090e9165161c96bc1b6d60"
+    },
+    "objcopy": {
+      "path": "/usr/bin/aarch64-linux-gnu-objcopy",
+      "version": "GNU objcopy (GNU Binutils) 2.47",
+      "sha256": "1c66d805236ae2ca56c19ab894afd41d0d3c240e352d972ac1270b8d4131d99c"
+    },
+    "readelf": {
+      "path": "/usr/bin/aarch64-linux-gnu-readelf",
+      "version": "GNU readelf (GNU Binutils) 2.47",
+      "sha256": "df6221c7c23ae4f322f0c78db352f931c5b339bfc8b115c4904e4e2351d99699"
+    },
+    "objdump": {
+      "path": "/usr/bin/aarch64-linux-gnu-objdump",
+      "version": "GNU objdump (GNU Binutils) 2.47",
+      "sha256": "225a3b4e4dbf5ec1ffd2be590304ccb0fbfd9d8b499713b953af28e158db03ca"
+    },
+    "python": {
+      "path": "/home/chiro/miniforge3/bin/python3",
+      "version": "Python 3.12.10",
+      "sha256": "1bd14e3108945fd71ae43fdeb640ac61135ef5a51c33fbd04e65e182b4cc8d02"
+    },
+    "xxd": {
+      "path": "/usr/bin/xxd",
+      "version": "xxd 2026-06-16",
+      "sha256": "292b15071702d9bcf8cc7e5d5aca910ebbb47d144fd6d88d3bf16f5d8d4d705c"
+    }
+  },
+  "rebuild": {
+    "command": "LCVEX_BOOT_BUILD_DIR=build/agents/T-20260908-010/boot bash fpga/catapult_a10/boot/build.sh",
+    "result": "pass",
+    "summary": "LCVEX_BOOT_BUILD_PASS; the second deterministic run produced the same hashes; shell time was 0.063 s total.",
+    "warning": "GNU ld reports the existing RWX LOAD segment; this does not change the load bytes or image provenance.",
+    "output_dir": "build/agents/T-20260908-010/boot",
+    "artifacts": {
+      "boot.o": {"bytes": 3856, "sha256": "1233d0b46ab50a3d2a198248161443f824708ecba557d63b2f060890262c275e"},
+      "boot.elf": {"bytes": 68832, "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"},
+      "boot.bin": {"bytes": 957, "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"},
+      "boot.hex": {"bytes": 2871, "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"},
+      "boot.mif": {"bytes": 204942, "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7"},
+      "ddr.bin": {"bytes": 57, "sha256": "e494472390183273c2af39495f008f7d7b47022c17917d3f67a0bd68cffdf665"},
+      "ddr.hex": {"bytes": 171, "sha256": "10b54389ad97bbd2b71db1e012ba72164d1707a05063520fc1eae30728f6983d"}
+    },
+    "ignored_only": true
+  },
+  "elf_layout": {
+    "format": "ELF64 little-endian AArch64 EXEC",
+    "entry": "0x0000000000000000",
+    "pt_load": {
+      "file_offset": "0x10000",
+      "vaddr": "0x0000000000000000",
+      "filesz": "0x3bd",
+      "memsz": "0x3c8",
+      "flags": "RWE",
+      "align": "0x10000"
+    },
+    "sections": {
+      ".text": {"vaddr": "0x0", "file_offset": "0x10000", "bytes": 872},
+      ".rodata": {"vaddr": "0x368", "file_offset": "0x10368", "bytes": 85},
+      ".bss": {"vaddr": "0x3c0", "file_offset": "0x103bd", "mem_bytes": 8, "file_bytes": 0}
+    },
+    "symbols": {
+      "__image_end": "0x3c8",
+      "__stack_limit": "0xf000",
+      "__stack_top": "0x10000",
+      "msg_boot": "0x368",
+      "cal_state": "0x3c0",
+      "ddr_state": "0x3c4"
+    },
+    "stack_contract": "__image_end 0x3c8 <= __stack_limit 0xf000; __stack_top remains exactly 0x10000."
+  },
+  "payload_consistency": {
+    "elf_load_extraction": {
+      "command": "dd if=boot.elf bs=1 skip=65536 count=957 status=none | cmp - boot.bin",
+      "result": "pass",
+      "mismatch_count": 0
+    },
+    "sizes": {
+      "elf_pt_load_bytes": 957,
+      "boot_bin_bytes": 957,
+      "decoded_hex_bytes": 957,
+      "mif_records": 8192,
+      "mif_payload_bytes": 65536,
+      "mif_capacity_bytes": 65536,
+      "zero_pad_bytes_after_bin": 64579,
+      "last_mif_address": "0x1fff"
+    },
+    "sha256": {
+      "elf_file": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231",
+      "elf_pt_load": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+      "boot_bin": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+      "decoded_boot_hex": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+      "boot_hex_file": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa",
+      "boot_mif_file": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7",
+      "decoded_mif_payload": "7889fff7ca07867da8827cede9d0444ed306b7a2be42e2b2f934ec66be9b643b"
+    },
+    "byte_comparisons": {
+      "elf_pt_load_equals_boot_bin": true,
+      "boot_bin_equals_decoded_boot_hex": true,
+      "decoded_mif_equals_boot_bin_plus_zero_pad": true,
+      "mif_padding_all_zero": true,
+      "elf_bin_mismatch_count": 0,
+      "bin_hex_mismatch_count": 0,
+      "mif_expected_mismatch_count": 0
+    },
+    "first_bytes": {
+      "boot_bin_hex": "00 17 00 58 1f 00 00 91",
+      "boot_hex_first_lines": ["00", "17", "00", "58", "1f", "00", "00", "91"],
+      "boot_mif_record_0000": "0000 : 9100001F58001700;",
+      "little_endian_word": "0x9100001f58001700"
+    }
+  },
+  "literal_decode": {
+    "encoding_rule": "AArch64 LDR (literal) uses imm19=instruction[23:5], signed byte offset=(sign_extend(imm19)<<2), target=PC+offset.",
+    "current": {
+      "pc": "0x0",
+      "instruction": "0x58001700",
+      "imm19_hex": "0x000b8",
+      "imm19_decimal": 184,
+      "signed_offset": "0x2e0",
+      "target": "0x2e0",
+      "target_value": "0x0000000000010000",
+      "target_symbol": "__stack_top"
+    },
+    "stale_test_expected": {
+      "pc": "0x0",
+      "instruction": "0x580017c0",
+      "imm19_hex": "0x000be",
+      "imm19_decimal": 190,
+      "signed_offset": "0x2f8",
+      "target": "0x2f8",
+      "old_target_value": "0x0000000000010000",
+      "target_symbol_in_old_layout": "__stack_top"
+    },
+    "second_instruction": {
+      "current_and_old": "0x9100001f",
+      "disassembly": "mov sp, x0",
+      "effect": "Both encodings load the same __stack_top value; only the PC-relative literal-pool address changed."
+    },
+    "literal_pool": {
+      "current": {
+        "0x2dc": "0x00010000b007c0de (DDR_MAGIC_A at low word, adjacent pool entry)",
+        "0x2e0": "0x0000000000010000 (__stack_top)",
+        "0x2e8": "0x00000000000003c0 (cal_state)",
+        "0x2f0": "0x00000000000003c4 (ddr_state)",
+        "0x2f8": "0x0000000000000368 (msg_boot)"
+      },
+      "old_91d53be": {
+        "0x2e4": "0x00000000b007c0de (DDR_MAGIC_A)",
+        "0x2f8": "0x0000000000010000 (__stack_top)",
+        "0x300": "0x00000000000003f8 (cal_state)",
+        "0x308": "0x00000000000003fc (ddr_state)",
+        "0x310": "0x00000000000003a0 (msg_boot)"
+      }
+    }
+  },
+  "history": {
+    "commits_checked": [
+      {
+        "commit": "1e3187cf01efb17cd81dc326383b4b539ff603cd",
+        "date": "2026-09-07T03:30:37+08:00",
+        "summary": "Initial B25 BRAM image/resident monitor",
+        "boot_source_sha256": "988cff39be53b1876182d1d6084cafc32f3a1ebf6ae26610283806731d5758b5",
+        "boot_bin_bytes": 1013,
+        "boot_bin_sha256": "6a833eec9d4aedd94bd0432dff6e2a63ea20ab2de381217a88985303229d9059",
+        "first_word": "0x9100001f580017c0",
+        "ldr_target": "0x2f8",
+        "stack_top": "0x10000"
+      },
+      {
+        "commit": "3d0e055e5ac80f0ced096a533dda92c8f47623a8",
+        "date": "2026-09-07T03:35:54+08:00",
+        "summary": "UART timeout path changed; reset literal remained c0",
+        "boot_source_sha256": "f32ca7de8c67874f2adff73baab5661734cef02d06f4241a1894d2202e60df42",
+        "boot_bin_bytes": 1013,
+        "boot_bin_sha256": "3c861288a83eee92c8e4d17062818de947fa8ee47d1109d4ef8f3ea82676c32c",
+        "first_word": "0x9100001f580017c0",
+        "ldr_target": "0x2f8",
+        "stack_top": "0x10000"
+      },
+      {
+        "commit": "91d53be572a4ab121d1ad3533edf35fb18ab6d5c",
+        "date": "2026-09-07T03:35:54+08:00",
+        "summary": "T-039 owner/test head; old image contract",
+        "boot_source_sha256": "f32ca7de8c67874f2adff73baab5661734cef02d06f4241a1894d2202e60df42",
+        "boot_bin_bytes": 1013,
+        "boot_bin_sha256": "3c861288a83eee92c8e4d17062818de947fa8ee47d1109d4ef8f3ea82676c32c",
+        "first_word": "0x9100001f580017c0",
+        "ldr_target": "0x2f8",
+        "stack_top": "0x10000"
+      },
+      {
+        "commit": "fbec08af334fafc3f9aa7801399f409301c20618",
+        "date": "2026-09-07T04:44:40+08:00",
+        "summary": "B25 resident monitor integration; boot.S layout changed",
+        "boot_source_sha256": "5bc1bf0f08d14890307229c450c46508a0f8e44af8fcd15df343413d134b8443",
+        "boot_bin_bytes": 957,
+        "boot_bin_sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6",
+        "first_word": "0x9100001f58001700",
+        "ldr_target": "0x2e0",
+        "stack_top": "0x10000"
+      }
+    ],
+    "first_word_change_commit": "fbec08af334fafc3f9aa7801399f409301c20618",
+    "first_word_change_diff": {
+      "parent": "cbdcfac8106e3d532b451f892f601f886e8466c8",
+      "boot.S_numstat": {"added": 23, "deleted": 34},
+      "layout_changes": [
+        "Removed DDR_TEST_B..E constants and four additional store/test sequences; retained one uncached store/DSB/load test.",
+        "Added a startup CRLF emission after CAL state.",
+        "Expanded four helper stack prologues from pre-index STR to SUB plus STR, changing code placement.",
+        "The combined code/literal-pool relocation moved __stack_top's pool entry from 0x2f8 to 0x2e0."
+      ],
+      "linker_changed": false,
+      "test_changed_in_commit": false
+    },
+    "t039_reason": "T-039's owner BRAM_INIT25 run used head 91d53be5 and its 1013-byte old image, whose reset word was c0 and whose literal pool placed __stack_top at 0x2f8. The later fbec08af integration changed boot.S but left tb/sv/lcvex_bram_init25_tb.sv's c0 expectation unchanged; the old T-039 pass therefore does not validate the current 957-byte image."
+  },
+  "verdict": {
+    "stale_test": true,
+    "bad_image": false,
+    "generator_endian_bug": false,
+    "indeterminate": false,
+    "authoritative_reset_vector": "0x9100001f58001700",
+    "reason": "The current source rebuild, ELF PT_LOAD, boot.bin, decoded byte HEX and decoded full-depth MIF all agree. The linker still resolves __stack_top to 0x10000; only the PC-relative LDR literal pool address changed from the old layout."
+  },
+  "minimum_followup_write_set": {
+    "owner": "T-20260908-011 or integration test-contract lane",
+    "tracked_files": [
+      "tb/sv/lcvex_bram_init25_tb.sv",
+      "optionally one generated-image contract/checker or include selected by T-011; do not modify boot.S/build.sh/bin_to_mif.py"
+    ],
+    "recommended_contract": "Decode the first instruction as AArch64 LDR literal, derive its target from PC/imm19, read that target's little-endian 64-bit value and assert it equals __stack_top=0x10000; retain independent first-byte/word, zero-fill and 0xFFFC/0xFFFF/0x10000 boundary checks. This avoids freezing a layout-dependent imm19.",
+    "smallest_immediate_fix_if_needed": "Change only tb/sv/lcvex_bram_init25_tb.sv:115 from 64'h9100_001f_5800_17c0 to 64'h9100_001f_5800_1700, but the structural oracle is preferred for future monitor layout changes.",
+    "rerun": "Run the focused BRAM init TB against the freshly generated task-local boot.hex, without defining SYNTHESIS; preserve FAIL markers and existing boundary/zero-fill assertions."
+  },
+  "validation": [
+    {
+      "run_id": "boot-build-current",
+      "level": "L0_static",
+      "command": "LCVEX_BOOT_BUILD_DIR=build/agents/T-20260908-010/boot bash fpga/catapult_a10/boot/build.sh",
+      "result": "pass",
+      "summary": "957-byte deterministic image, MIF generator self-check pass, ELF header/section dump pass."
+    },
+    {
+      "run_id": "full-payload-identity",
+      "level": "L0_static",
+      "command": "ELF PT_LOAD extraction/cmp plus independent full HEX/MIF parser and byte-level mismatch counts",
+      "result": "pass",
+      "summary": "ELF load=BIN=decoded HEX; MIF=BIN plus 64579 zero bytes; all three mismatch counts are zero."
+    },
+    {
+      "run_id": "literal-disassembly-current-and-stale",
+      "level": "L0_static",
+      "command": "aarch64-linux-gnu-objdump plus explicit imm19 decode for 0x58001700 and 0x580017c0",
+      "result": "pass",
+      "summary": "Current target 0x2e0 and old target 0x2f8 both contain __stack_top=0x10000."
+    },
+    {
+      "run_id": "history-rebuild",
+      "level": "L0_static",
+      "command": "Assemble/link/objcopy raw boot.S and boot.ld blobs from 1e3187cf, 3d0e055e, 91d53be and fbec08af into task-local history outputs",
+      "result": "pass",
+      "summary": "c0 persists through 91d53be (T-039 head); fbec08af is the first checked commit producing 00."
+    },
+    {
+      "run_id": "history-test-proof",
+      "level": "L0_static",
+      "command": "Compare tb/sv/lcvex_bram_init25_tb.sv at T-039 head and current base; inspect T-039 evidence/source/head",
+      "result": "pass",
+      "summary": "The c0 expectation is unchanged while boot.S changed at fbec08af; T-039 passed against its old c0 image."
+    }
+  ],
+  "tests": {
+    "run": ["boot build", "readelf/objdump/nm", "ELF/BIN/HEX/MIF static byte checks", "historical raw-source rebuilds"],
+    "not_run_by_policy": ["Verilator/SV BRAM test", "Cocotb", "Quartus/IP generation/synthesis/fitter/STA", "GamePC/assembler/SOF/JTAG/board/Flash"],
+    "reason": "The task is a read-only provenance review; the existing TB expectation is deliberately not changed in this lane."
+  },
+  "blockers": [
+    "The checked-in BRAM init TB has a stale layout-dependent reset-word constant at tb/sv/lcvex_bram_init25_tb.sv:115; this is a test-contract follow-up, not an image-generation failure.",
+    "No physical Quartus/M20K consumption claim is made by this task."
+  ],
+  "next": [
+    "T-011 selects and implements the non-circular BRAM initialization oracle, retaining byte-lane, wrong-file, missing-init, boundary and zero-fill coverage.",
+    "Integration updates the fresh candidate manifest with the regenerated ignored MIF and reruns the focused BRAM test plus required L0-L2 checks before physical flow."
+  ],
+  "handoff": "docs/handoffs/T-20260908-010-b25-boot-word-provenance.md"
+}

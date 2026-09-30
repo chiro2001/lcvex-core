@@ -1,0 +1,19 @@
+# B1-AXI4 独立 Cocotb 入口；不修改仓库现有 sim/cocotb/Makefile。
+
+SIM ?= verilator
+TOPLEVEL_LANG ?= verilog
+TOPLEVEL ?= lcvex_axi4_cocotb_tb
+COCOTB_TEST_MODULES ?= test_axi4
+SIM_BUILD ?= ../../build/agents/T-20260827-053/cocotb
+SEED ?= 0x01b1a4f7
+
+VERILOG_SOURCES = $(abspath ../../rtl/lcvex_axi4_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_axi4_master.sv) \
+                  $(abspath ../../rtl/lcvex_axi4_sva.sv) \
+                  $(abspath ../../tb/sv/lcvex_axi4_bfm.sv) \
+                  $(abspath ../../tb/sv/lcvex_axi4_tb.sv)
+
+EXTRA_ARGS += --timing --assert
+COMPILE_ARGS += -GSEED=$(SEED)
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

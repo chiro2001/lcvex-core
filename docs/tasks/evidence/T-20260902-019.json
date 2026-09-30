@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-019",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "6e6c7b04ba24dfe09c763d3fd78ebf764901e085",
+  "head_sha": "6e6c7b04ba24dfe09c763d3fd78ebf764901e085",
+  "branch": "verify/T-20260902-019-fp-p5-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-019",
+  "scope": "FP-P5: run full-FP synthesis, fitter and signoff STA on the same source/QSF/SDC/IP/parameters; run assembler/SOF only if fit/STA and timing allow. Result: synthesis+fitter pass, signoff STA timing closure fail -> blocked before assembler/SOF.",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-019-probe",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-019-probe\\real_a10_full_fp",
+    "project_name": "real_a10_full_fp",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "license_read": false,
+    "non_eda_processes_stopped": false,
+    "files_deleted": false,
+    "programming_jtag_touched": false
+  },
+  "preflight": {
+    "timestamp": "2026-09-03T05:29:15+08:00",
+    "t019_probe_exists": false,
+    "eda_processes": [],
+    "physical_free_mb": 36536.7,
+    "disk_d_free_gb": 83.6,
+    "quartus_exists": true
+  },
+  "source_sync": {
+    "verified": true,
+    "rtl_file_count": 47,
+    "top_rtl_file_count": 2,
+    "remote_manifest_count": 52,
+    "all_sha256_match": true,
+    "key_files": {
+      "rtl/lcvex_core.sv": "BCC99194DA7C42A8E3F0A931A56207A7F714795580B0557F3A0F1858E9A33B14",
+      "rtl/lcvex_neon_fp.sv": "C3BF13889A72FB762BD13D71850DA8BB3423D7757B3E0345B0EBF3FF1554C16A",
+      "rtl/lcvex_pkg.sv": "9E176EC9352B354CB1C33C7E27E8A4AF55C36FAA3DB822B176A80271B3EDACEA",
+      "rtl/lcvex_fp_scalar.sv (repo original)": "C763A79544A57EB08FBC98BCC4C5D89B6BA4072FB099514D8B44B57121E9319E",
+      "rtl/lcvex_fp_scalar.sv (remote patched)": "BFAA10F033EB3E654B757A901DBA4059584BC8287168EF8D9B3DF51A6513D22C",
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "A165866E794D688AB5D99792FDCABF84D78B06701696102375FAFFA30620A191"
+    },
+    "patch_note": "Isolated Quartus-compatibility patch only: removed default values on 4 input ports in lcvex_fp_scalar.sv (same as T-018). No formal RTL modified."
+  },
+  "isolated_sdc_patch": {
+    "file": "build/agents/T-20260902-019/real_a10_full_fp_sdc_isolated_patch.sdc",
+    "sha256": "2bb31d2efb57d9177403bdc5eaf718204c47c7de7573ce4b5437035b44328c91",
+    "change": "Replaced 8 occurrences of get_clocks/get_registers -quiet with -nowarn; required by Quartus 21.4 (Error 332000). No formal QSF/SDC modified.",
+    "formal_sdc_sha": "CAF847755A8C42F2E88EA09E434888938AD4382193400593DDCC986F26154A8C",
+    "remote_used": true
+  },
+  "runs": [
+    {
+      "run_id": "full-fp-synthesis",
+      "stage": "synthesis",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "result": "pass",
+      "started_at": "2026-09-03T05:33:06.3784664+08:00",
+      "finished_at": "2026-09-03T06:05:20.9926908+08:00",
+      "wall_s": 1934.614,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 37,
+      "peak_private_mb": 4810.1,
+      "peak_working_set_mb": 4673.9,
+      "peak_virtual_mb": 9938.2,
+      "samples": 1736,
+      "safety_stopped": false,
+      "resource": {
+        "estimate_alms": 189771,
+        "combinational_aluts": 250297,
+        "dedicated_logic_registers": 82034,
+        "block_memory_bits": 247276,
+        "total_dsp_blocks": 45,
+        "total_plls": 1,
+        "io_pins": 144,
+        "max_fanout_node": "sys_clk_div2",
+        "max_fanout": 74400,
+        "total_fanout": 1567775
+      },
+      "hierarchy": {
+        "soc_core_alut": 193459,
+        "soc_core_reg": 21277,
+        "soc_core_dsp": 36,
+        "fp_exec_alut": 132967,
+        "fp_exec_reg": 1698,
+        "fp_exec_dsp": 24,
+        "scalar_unit_alut": 131960,
+        "scalar_unit_reg": 848,
+        "scalar_unit_dsp": 24,
+        "it_divider_alut": 187,
+        "it_divider_reg": 433,
+        "it_sqrt_alut": 755,
+        "it_sqrt_reg": 390,
+        "neon_int_alut": 8528
+      },
+      "artifacts": {
+        "monitor_result.json": "f58a851ff7611aad2f53e59321a651d8ba9306a161d03df2c8af95b49d3901d9",
+        "real_a10_full_fp.syn.rpt": "2a81fd98499cd20b3eb1d74c16aefdaaff61016a16542418823bafb6162c441e",
+        "real_a10_full_fp.syn.summary": "c7210eebddd30f8e7a81125e228d4ee56165c473a840a797b00d7ac4539343b3",
+        "real_a10_full_fp.syn.smsg": "e35368aafa99eb1195f2284098f29fee3973cdb88e05e9361a375e8fc686fc97",
+        "real_a10_full_fp.flow.rpt": "2373b6dd306c07210c4133e5253051190f334daa5fc780d28d98f35319f038ea"
+      }
+    },
+    {
+      "run_id": "full-fp-fitter-attempt-1",
+      "stage": "fitter",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start fitter -end fitter",
+      "result": "fail",
+      "started_at": "2026-09-03T06:09:16.0237807+08:00",
+      "finished_at": "2026-09-03T06:12:04.3136230+08:00",
+      "wall_s": 168.29,
+      "exit_code": 3,
+      "errors": 2,
+      "warnings": 18,
+      "failure": "Error (332000): Unknown option: -quiet; SDC get_clocks/get_registers -quiet unsupported by Quartus 21.4.",
+      "peak_private_mb": 6988.1
+    },
+    {
+      "run_id": "full-fp-fitter-attempt-2",
+      "stage": "fitter",
+      "result": "fail",
+      "started_at": "2026-09-03T06:13:28.8530924+08:00",
+      "finished_at": "2026-09-03T06:16:11.7003999+08:00",
+      "wall_s": 162.847,
+      "exit_code": 3,
+      "errors": 2,
+      "warnings": 20,
+      "failure": "After fixing get_clocks -quiet only, get_registers -quiet still fails with Error 332000; all -quiet replaced with -nowarn before final fitter.",
+      "peak_private_mb": 6988.1
+    },
+    {
+      "run_id": "full-fp-fitter-pass",
+      "stage": "fitter",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start fitter -end fitter",
+      "result": "pass",
+      "started_at": "2026-09-03T06:17:02.0361638+08:00",
+      "finished_at": "2026-09-03T06:54:23.0449924+08:00",
+      "wall_s": 2241.009,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 31,
+      "peak_private_mb": 11934.1,
+      "peak_working_set_mb": 11132.2,
+      "peak_virtual_mb": 18941.6,
+      "samples": 1980,
+      "safety_stopped": false,
+      "resource": {
+        "logic_utilization_alms": 189155,
+        "device_alms": 427200,
+        "logic_utilization_percent": 44.3,
+        "total_registers": 83212,
+        "total_pins": "141 / 826 (17%)",
+        "total_block_memory_bits": "245612 / 55562240 (<1%)",
+        "total_ram_blocks": "121 / 2713 (4%)",
+        "total_dsp_blocks": "43 / 1518 (3%)",
+        "total_plls": "3 / 112 (3%)"
+      },
+      "artifacts": {
+        "monitor_result.json": "947d3374ed291f01da6453bfb75d66976dda65eadc0c0b68a3fcded7c56e4a41",
+        "real_a10_full_fp.fit.rpt": "66e1649e02e76cb2ca0ee5b70b9286140c12af93feccaf9ed45b94ebfd4faf28",
+        "real_a10_full_fp.fit.summary": "6ab94747a397a59940693bde165912857f78d1a7af1272e115f70f8744991afc",
+        "real_a10_full_fp.flow.rpt": "c2194acdd8103a8528cfb497a4c7122edce04ba01b9adca8315c9bcaf40c9b8e"
+      }
+    },
+    {
+      "run_id": "full-fp-sta-signoff",
+      "stage": "sta_signoff",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start sta_signoff -end sta_signoff",
+      "result": "fail_timing_closure",
+      "exit_code": 0,
+      "tool_message": "Timing Analyzer successful, 0 errors, 27 warnings, but Timing Closure Summary = Fail",
+      "started_at": "2026-09-03T06:57:13.5116565+08:00",
+      "finished_at": "2026-09-03T06:57:57.5255158+08:00",
+      "wall_s": 44.014,
+      "peak_private_mb": 6611.8,
+      "peak_working_set_mb": 6503.3,
+      "peak_virtual_mb": 11488.6,
+      "samples": 39,
+      "safety_stopped": false,
+      "timing": {
+        "closure": "Fail",
+        "setup": {
+          "sys_clk_50": {
+            "slack": -319.308,
+            "tns": -1131622.114,
+            "failing_endpoints": 33264,
+            "corner": "Slow 900mV 100C"
+          },
+          "emif_core_usr_clk": {
+            "slack": -9.186,
+            "tns": -20342.88,
+            "failing_endpoints": 2316,
+            "corner": "Slow 900mV 0C"
+          }
+        },
+        "hold": {
+          "sys_clk_50": {
+            "slack": -6.677,
+            "tns": -17751.374,
+            "failing_endpoints": 3557,
+            "corner": "Slow 900mV 0C"
+          }
+        },
+        "recovery": {
+          "emif_core_usr_clk": {
+            "slack": -8.439,
+            "tns": -5025.134,
+            "failing_endpoints": 608,
+            "corner": "Slow 900mV 0C"
+          }
+        },
+        "removal": {
+          "sys_clk_50": {
+            "slack": -5.48,
+            "tns": -5808.935,
+            "failing_endpoints": 1225,
+            "corner": "Slow 900mV 0C"
+          }
+        },
+        "fmax": {
+          "sys_clk_50": "2.95 MHz",
+          "emif_core_usr_clk": "285.71 MHz",
+          "clk_y3": "508.39 MHz",
+          "emif_core_cal_master_clk": "253.29 MHz",
+          "emif_core_cal_slave_clk": "351.99 MHz"
+        },
+        "worst_setup_path": {
+          "slack": -319.308,
+          "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.is_double~DUPLICATE",
+          "to": "soc|core|g_fp_simd_enabled.fp_exec|rsp_r.v_data[84]",
+          "launch_clock": "sys_clk_50",
+          "latch_clock": "sys_clk_50",
+          "relationship": 20.0,
+          "clock_skew": -0.164,
+          "data_delay": 339.362,
+          "worst_corner": "Slow 900mV 100C",
+          "sdc_exception": "No SDC Exception on Path",
+          "through": "fp_exec/scalar_unit combinational unpack/add/shift/compare/round/pack chain"
+        },
+        "ddr": {
+          "core_setup": -4.549,
+          "core_removal": -2.6,
+          "critical_warning": "DDR Timing requirements not met"
+        }
+      },
+      "artifacts": {
+        "monitor_result.json": "74f1795850ce7bb64e4d0ab91b7a2f94626306676639cbd090df860d8eabccec",
+        "real_a10_full_fp.sta.rpt": "34de35f6dadc3b049ed147efeaa8167c9054cfb12a3b78169fb676adddec87d2",
+        "real_a10_full_fp.sta.summary": "48ba851ebbc421b1a1020d2f7e61977d1627b97131a4eeeee23362bc2311daea",
+        "real_a10_full_fp.flow.rpt": "a78e6c88b58da8b1ecab77f819ea40adca0138781f206acfd181a8573cd73f0c"
+      }
+    }
+  ],
+  "not_run": [
+    "assembler/SOF",
+    "programming/JTAG/board"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-019-fp-p5-physical.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-019.json"
+    },
+    {
+      "id": "remote-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-019-probe\\real_a10_full_fp"
+    }
+  ],
+  "known_limits": [
+    "Full-FP signoff STA failed timing closure; no assembler/SOF generated.",
+    "Worst setup is internal fp_exec/scalar_unit combinational path (339.36 ns) on sys_clk_50, requiring FP-P3T register cuts.",
+    "Additional EMIF core_usr_clk/sys_clk_50 CDC and DDR timing violations remain; the existing guarded SDC is not sufficient for full-signoff.",
+    "Isolated patches were used only in the remote probe (input-port defaults, SDC -quiet->-nowarn) and are documented; formal repo RTL/QSF/SDC remain unchanged.",
+    "No P7-2 Cocotb or L3 Gate rerun was part of this physical task; FP-P4 functional gate remains the earlier T-018 evidence."
+  ],
+  "next": "Register FP-P3T directed pipelining for fp_exec/scalar_unit, address EMIF/DDR CDC constraints, then rerun FP-P4 and FP-P5; only if all timing slacks non-negative proceed to assembler/SOF and Gate F-BOARD.",
+  "timestamps": {
+    "sent_at": "2026-09-03T05:27:30+08:00",
+    "received_at": "2026-09-03T05:28:00+08:00",
+    "reported_at": "2026-09-03T07:10:00+08:00"
+  },
+  "merge_sha": "2e26f3c1ebe652e48766c76a5d0d4dcd6dcad94c",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-03T07:00:00+08:00",
+    "merged_at": "2026-09-03T07:01:05+08:00",
+    "recorded_at": "2026-09-03T07:01:05+08:00",
+    "notes": "FP-P5 blocked evidence merged; STA timing closure failed"
+  }
+}

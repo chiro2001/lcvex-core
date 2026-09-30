@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-004",
+  "label": "FPGA-D",
+  "parent": "T-20260828-067",
+  "title": "FP/NEON 真 generate-gate 实验",
+  "kind": "fpga-line-split",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "bd93bf6d56eadf674fa9040162271b453687aea3",
+  "branch": "feature/T-20260830-004-fpga-d",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-004",
+  "scope": "在实验副本中真正移除/门控 FP/NEON 实例并测量面积/时间；不改主 RTL 功能，提供方案。",
+  "writes": [
+    "docs/handoffs/T-20260830-004-fpga-d.md",
+    "docs/tasks/evidence/T-20260830-004.json",
+    "fpga/**",
+    "rtl/**",
+    "tb/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260828-067-b5-fullflow-rerun.md",
+    "docs/handoffs/T-20260829-101-t067-synth-opt.md",
+    "docs/handoffs/T-20260829-102-t067-module-synth.md",
+    "rtl/**",
+    "fpga/**"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "handoff/evidence recorded"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T00:46:42+08:00",
+  "updated_at": "2026-08-30T00:46:42+08:00",
+  "known_limits": [
+    "不启动完整 B5 full flow（除非 FPGA-F）。",
+    "不读 license；不删除未知文件。",
+    "本地重型 Verilator 需 cgroup <16GiB。"
+  ],
+  "handoff": "docs/handoffs/fpga-d.md",
+  "evidence": "docs/tasks/evidence/T-20260830-004.json",
+  "merge_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+  "merged_at": "2026-08-30T02:03:45+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T02:03:45+08:00",
+    "head_sha": "95f18baf1723e07a9473f2a20c17e0a995bfd9c8",
+    "notes": "FPGA-D merged. True generate-gate A64_FP_SIMD=0 removes fp_scalar/neon_fp/neon_int instances; default=1 unchanged. Integrator reran make compile PASS."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T01:00:00+0800",
+        "new": "2026-08-30T00:46:42+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T01:00:00+0800",
+        "new": "2026-08-30T00:46:42+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T04:00:00+0800",
+        "new": "2026-08-30T02:03:45+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T04:00:00+0800",
+        "new": "2026-08-30T02:03:45+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04"
+}

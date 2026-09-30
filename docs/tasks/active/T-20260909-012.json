@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-012",
+  "label": "B25-PHYSICAL-WAIVER-INVENTORY-EXPORTER",
+  "title": "Export exact physical waiver inventory from TimeQuest audit artifacts",
+  "kind": "physical-report-parser",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-after-correction",
+  "assigned_owner": "b25_physical_inventory_exporter",
+  "depends_on": ["T-20260909-007"],
+  "batch_parent": "T-20260909-011",
+  "base_sha": "fd318a6a620d5b585406088e9714a60a1e34f87e",
+  "branch": "infra/T-20260909-012-b25-physical-inventory-exporter",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-012",
+  "writes": [
+    "fpga/catapult_a10/tools/export_physical_waiver_inventory.py (new)",
+    "task-local synthetic fixture/runner under fpga/catapult_a10/tools if needed",
+    "docs/tasks/evidence/T-20260909-012.json",
+    "docs/handoffs/T-20260909-012-b25-physical-inventory-exporter.md",
+    "build/agents/T-20260909-012/** ignored artifacts"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260909-007.json",
+    "fpga/catapult_a10/physical_waivers.json",
+    "fpga/catapult_a10/tools/check_physical_waivers.py",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/** (designated read-only snapshot)",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/** (integrator-designated read-only snapshot)"
+  ],
+  "scope": "Implement a hermetic fail-closed exporter that consumes T-007-style machine-readable summary plus explicit raw UCP report artifacts and emits exactly the T-010 lcvex-physical-ucp-recovery-removal-v1 inventory. Bind source_sha to 702bd8ee5295efe8a2ad9e094d6c12471a1d3089, derive rather than hard-code observed counts/slack/hierarchy, and reject missing, duplicate, ambiguous or extra user rows.",
+  "validation": [
+    "Positive synthetic/T-007 snapshot export passes check_physical_waivers.py.",
+    "Negative matrix rejects missing reports/rows, malformed summaries, duplicate keys, extra UCP objects, count drift and source-SHA mismatch.",
+    "Python standard library only; no Quartus, GamePC, QDB, network, JTAG or board action."
+  ],
+  "acceptance": "A directly replayable exporter turns actual TimeQuest audit artifacts into a policy-checkable inventory without manual fact entry and fails closed when provenance or report content differs.",
+  "resource": "Local light only; no resource lock or GamePC.",
+  "forbidden_regions": [
+    "RTL/SDC/QSF/manifest/SHA/test-registry changes",
+    "hard-coded output that ignores report observations",
+    "Quartus/remote/assembler/JTAG/board/Flash actions",
+    "another worktree except the explicitly designated read-only T-007 artifact snapshot"
+  ],
+  "created_at": "2026-09-09T13:27:00+08:00",
+  "updated_at": "2026-09-09T14:26:32+08:00",
+  "result_head": "59007a80e99f0ef9fdaa4f4ed68ac3a89cadeb4e",
+  "result_evidence": "docs/tasks/evidence/T-20260909-012.json",
+  "integrated_head": "4618c17f85a3a84f28824a9d5964d8600c3d966d",
+  "integrator_review": {
+    "status": "accepted-after-correction",
+    "reviewed_at": "2026-09-09T14:26:32+08:00",
+    "decision": "Exporter derives actual T-011 inventory from raw reports, passes 13 fault cases, and the exported inventory passes the corrected T-010 checker."
+  },
+  "dispatch": {
+    "sent_at": "2026-09-09T13:33:51+08:00",
+    "agent_name": "b25_physical_inventory_exporter",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "bdae01c66f1058dbfc5e0c62dd7c99ed1200da89"
+  },
+  "review": {
+    "reviewed_at": "2026-09-09T14:11:40+08:00",
+    "result": "needs-changes",
+    "required_fixes": [
+      "reject non-empty Clock fields on unconstrained raw UCP rows",
+      "reject timing rows outside the exact parsed table range",
+      "reject unknown non-decorative UCP summary rows",
+      "replace evidence command placeholders with exact replayable paths"
+    ]
+  }
+}

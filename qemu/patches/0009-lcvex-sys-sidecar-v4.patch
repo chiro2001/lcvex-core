@@ -1,0 +1,117 @@
+diff --git a/include/exec/lcvex-difftest.h b/include/exec/lcvex-difftest.h
+index 6480923..f1c5f56 100644
+--- a/include/exec/lcvex-difftest.h
++++ b/include/exec/lcvex-difftest.h
+@@ -26,6 +26,6 @@
+ #include "hw/core/cpu.h"
+
+-#define LCVEX_SYS_STATE_VERSION 2u
++#define LCVEX_SYS_STATE_VERSION 3u
+ #define LCVEX_TIMER_STATE_VERSION 1u
+ #define LCVEX_GIC_STATE_VERSION 1u
+ #define LCVEX_GIC_IRQ_COUNT 96u
+@@ -34,7 +34,7 @@
+ /* QEMU -> LCVEX checkpoint sidecar。字段只选当前 RTL 已有或 Linux
+  * 恢复必需的架构状态，避免依赖 QEMU 私有 VMState 编码。 */
+ struct __attribute__((packed)) lcvex_sys_state {
+-    char magic[8];             /* "LCVXSYS2" */
++    char magic[8];             /* "LCVXSYS3" */
+     uint32_t version;
+     uint32_t size;
+     uint64_t x[31];
+@@ -71,6 +71,13 @@ struct __attribute__((packed)) lcvex_sys_state {
+     uint64_t zcr_el1;
+     uint64_t smcr_el1;
+     uint64_t csselr_el1;
++    /* v3：补齐已实现但 v2 未序列化的控制状态，并保留 exclusive
++     * monitor；exclusive_addr=~0ull 代表无有效 exclusive。 */
++    uint64_t pmuserenr_el0;
++    uint64_t tcr2_el1;
++    uint64_t exclusive_addr;
++    uint64_t exclusive_val;
++    uint64_t exclusive_high;
+ };
+
+ /* Generic Timer checkpoint sidecar。计数器采用 QEMU icount 的虚拟计数，
+diff --git a/target/arm/tcg/lcvex-difftest.c b/target/arm/tcg/lcvex-difftest.c
+index 927cf9b..0aefba8 100644
+--- a/target/arm/tcg/lcvex-difftest.c
++++ b/target/arm/tcg/lcvex-difftest.c
+@@ -184,7 +184,7 @@ static int lcvex_save_sys_state(const char *path, CPUARMState *env)
+     if (path == NULL || path[0] == '\0') {
+         return -1;
+     }
+-    memcpy(state.magic, "LCVXSYS2", sizeof(state.magic));
++    memcpy(state.magic, "LCVXSYS3", sizeof(state.magic));
+     state.version = LCVEX_SYS_STATE_VERSION;
+     state.size = sizeof(state);
+     memcpy(state.x, env->xregs, sizeof(state.x));
+@@ -227,6 +227,6 @@ static int lcvex_save_sys_state(const char *path, CPUARMState *env)
+     state.tpidr_el1 = env->cp15.tpidr_el[1];
+     state.pir_el1 = env->cp15.pir_el[1];
+-    state.pire0_el1 = 0;
++    state.pire0_el1 = env->cp15.pir_el[0];
+     state.nzcv = (uint32_t)((pstate >> 28) & 0xf);
+     state.el = (uint8_t)arm_current_el(env);
+     state.sp_sel = (pstate & PSTATE_SP) != 0;
+@@ -232,5 +232,10 @@ static int lcvex_save_sys_state(const char *path, CPUARMState *env)
+     state.zcr_el1 = env->vfp.zcr_el[1];
+     state.smcr_el1 = env->vfp.smcr_el[1];
+     state.csselr_el1 = env->cp15.csselr_el[1];
++    state.pmuserenr_el0 = env->cp15.c9_pmuserenr;
++    state.tcr2_el1 = env->cp15.tcr2_el[1];
++    state.exclusive_addr = env->exclusive_addr;
++    state.exclusive_val = env->exclusive_val;
++    state.exclusive_high = env->exclusive_high;
+
+     fd = qemu_open_old(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+diff --git a/include/exec/lcvex-difftest.h b/include/exec/lcvex-difftest.h
+--- a/include/exec/lcvex-difftest.h	2026-08-30 06:47:46.508748096 +0800
++++ b/include/exec/lcvex-difftest.h	2026-08-29 12:50:00.583223873 +0800
+@@ -20,7 +20,7 @@
+
+ #include "hw/core/cpu.h"
+
+-#define LCVEX_SYS_STATE_VERSION 3u
++#define LCVEX_SYS_STATE_VERSION 4u
+ #define LCVEX_TIMER_STATE_VERSION 1u
+ #define LCVEX_GIC_STATE_VERSION 1u
+ #define LCVEX_GIC_IRQ_COUNT 96u
+@@ -28,7 +28,7 @@
+ /* QEMU -> LCVEX checkpoint sidecar。字段只选当前 RTL 已有或 Linux
+  * 恢复必需的架构状态，避免依赖 QEMU 私有 VMState 编码。 */
+ struct __attribute__((packed)) lcvex_sys_state {
+-    char magic[8];             /* "LCVXSYS3" */
++    char magic[8];             /* "LCVXSYS4" */
+     uint32_t version;
+     uint32_t size;
+     uint64_t x[31];
+@@ -73,6 +73,8 @@
+     uint64_t exclusive_addr;
+     uint64_t exclusive_val;
+     uint64_t exclusive_high;
++    /* v4：CONTEXTIDR_EL1（EL1 RW）。 */
++    uint64_t contextidr_el1;
+ };
+
+ /* Generic Timer checkpoint sidecar。计数器采用 QEMU icount 的虚拟计数，
+diff --git a/target/arm/tcg/lcvex-difftest.c b/target/arm/tcg/lcvex-difftest.c
+--- a/target/arm/tcg/lcvex-difftest.c	2026-08-30 06:48:32.709790737 +0800
++++ b/target/arm/tcg/lcvex-difftest.c	2026-08-29 12:57:13.065645674 +0800
+@@ -228,7 +228,7 @@
+     if (path == NULL || path[0] == '\0') {
+         return -1;
+     }
+-    memcpy(state.magic, "LCVXSYS3", sizeof(state.magic));
++    memcpy(state.magic, "LCVXSYS4", sizeof(state.magic));
+     state.version = LCVEX_SYS_STATE_VERSION;
+     state.size = sizeof(state);
+     memcpy(state.x, env->xregs, sizeof(state.x));
+@@ -280,6 +280,7 @@
+     state.exclusive_addr = env->exclusive_addr;
+     state.exclusive_val = env->exclusive_val;
+     state.exclusive_high = env->exclusive_high;
++    state.contextidr_el1 = env->cp15.contextidr_el[1];
+
+     fd = qemu_open_old(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+     if (fd < 0) {

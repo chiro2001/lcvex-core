@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-098",
+  "state": "done",
+  "base_sha": "62192862bfb51fbc32cd0ee45ef1c1f5a0bde444",
+  "head_sha": "2ea2ca19ec08e723eec468ad69dfec68678d1ed3",
+  "merge_sha": "3681e6e821c60250d810b648f7c65cbe1c17d5b2",
+  "branch": "feature/T-20260829-098-b5-profile-freeze",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-088",
+  "sent_at": "2026-08-29T12:46:28+08:00",
+  "received_at": "2026-08-29T12:46:28+08:00",
+  "reported_at": "2026-08-29T12:46:28+08:00",
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches": [
+      "0001-tcg-arm-lcvex-difftest-step-hook.patch",
+      "0002-lcvex-checkpoint-hook.patch",
+      "0003-lcvex-wfi-idle-plugin-hook.patch",
+      "0004-lcvex-timer-recalc-after-restore.patch",
+      "0005-lcvex-wfxt-idle-plugin-hook.patch",
+      "0006-lcvex-timer-offset-schedule.patch",
+      "0007-lcvex-generic-timer-step-kick.patch",
+      "0008-lcvex-wait-resume-cntvct.patch",
+      "0009-lcvex-sys-sidecar-v3.patch",
+      "0010-lcvex-plugin-exception-note-context.patch",
+      "0011-lcvex-aarch64-vfpd32-off.patch",
+      "0012-lcvex-fp-state.patch"
+    ],
+    "plugin_source_sha256": "fb24cc183a497d8a3615283e0b74e095e82856105d86d354e6b3354326f9cb13",
+    "plugin_binary_sha256": "f5e7c61c20aafb9f280ffae16bdaa597adad7f2cc24327c5d90ec17ba24a2c6c",
+    "protocol_h_sha256": "af62b3d8e4dd4625d958aef222303a97f3828b6c5cf8fb5d76c20ce94868b6b1",
+    "protocol_py_sha256": "b93f14a5a9a45c7e2fe1ab0b2366bdf382dd2bd0dab7dcb5b11a2b91a08def22"
+  },
+  "rtl_filelist_sha256": "404108df9586747b6993e490fdda9d223112c0513041926f59d65cda499154c8",
+  "tools": {
+    "python": "3.12.10",
+    "verilator": "5.050",
+    "qemu": "11.1.0",
+    "aarch64-gcc": "aarch64-linux-gnu-gcc"
+  },
+  "artifacts": [
+    {
+      "id": "artifact-b5-manifest",
+      "owner": "T-20260829-098",
+      "uri": "docs/V82_PROFILE_MANIFEST.md",
+      "reproduce": "python3 scripts/v82_profile_check.py --emit-manifest docs/V82_PROFILE_MANIFEST.md",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "35817aa5bc806f61342fce10f36c3fbd543127d2091b64bedd5275e7b7483d75"
+    },
+    {
+      "id": "artifact-b5-profile-checker",
+      "owner": "T-20260829-098",
+      "uri": "scripts/v82_profile_check.py",
+      "reproduce": "python3 scripts/v82_profile_check.py --validate-manifest",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "89724a098820904c3f57e4c463266c32b4a52f19fced16e8241199142d086055"
+    },
+    {
+      "id": "artifact-b5-matrix-script",
+      "owner": "T-20260829-098",
+      "uri": "scripts/b5_profile_matrix.py",
+      "reproduce": "python3 scripts/b5_profile_matrix.py",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "03790f441079312450463688bd26d124a548399e7fcd8536f3f1dd6448d88553"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-b5-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 scripts/v82_profile_check.py --emit-manifest docs/V82_PROFILE_MANIFEST.md && python3 scripts/v82_profile_check.py --validate-manifest && python3 scripts/v82_profile_check.py --summary",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "117 rows validated; states implemented=94 udef=1 blocked=1 deferred=13 shim=8",
+      "source_sha": "62192862bfb51fbc32cd0ee45ef1c1f5a0bde444",
+      "seed": null,
+      "wall_seconds": 2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b5-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 scripts/b5_profile_matrix.py",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "generated build/coverage/b5_profile_matrix.json with 117 row-evidence mappings",
+      "source_sha": "62192862bfb51fbc32cd0ee45ef1c1f5a0bde444",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b5-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 120 make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "CORE_COUNT=1 core lint pass; Verilator Walltime 36.444s",
+      "source_sha": "62192862bfb51fbc32cd0ee45ef1c1f5a0bde444",
+      "seed": null,
+      "wall_seconds": 37,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": 387,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b5-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 sim/difftest/check_encoders.py",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "86 encoder cases match GNU assembler",
+      "source_sha": "62192862bfb51fbc32cd0ee45ef1c1f5a0bde444",
+      "seed": null,
+      "wall_seconds": 2,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b5-005",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "python3 scripts/insn_coverage.py --expect random --out build/coverage/b4_random_insn_final.txt build/difftest/b4_random_1.trace build/difftest/b4_random_2.trace build/difftest/b4_random_3.trace build/difftest/b4_random_4.trace",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "B4 random coverage referenced: expected_hit=62/62 observed_families=63",
+      "source_sha": "62192862bfb51fbc32cd0ee45ef1c1f5a0bde444",
+      "seed": null,
+      "wall_seconds": 3,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "known_limits": [
+    "Full make test, Gate D, P6/P7 checkpoint/max compatibility smoke, Linux long windows were not run in this freeze slice.",
+    "CONTEXTIDR_EL1 checkpoint sidecar v4 remains not implemented; restore falls back to reset 0.",
+    "EXT-FP-012 remains blocked; SVE/POST-V82 are excluded or deferred.",
+    "Full QEMU sysreg inventory JSON not generated.",
+    "This is profile evidence closure only, not a functional Gate D pass."
+  ],
+  "next": "Integrator review; if proceeding to formal freeze, run full make test, P6/P7 checkpoint/max smoke and Gate D on this SHA.",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "sent_at",
+        "old": "2026-08-29T13:20:00+0800",
+        "new": "2026-08-29T12:46:28+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "received_at",
+        "old": "2026-08-29T13:25:00+0800",
+        "new": "2026-08-29T12:46:28+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "reported_at",
+        "old": "2026-08-29T13:35:00+0800",
+        "new": "2026-08-29T12:46:28+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "3681e6e821c60250d810b648f7c65cbe1c17d5b2",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "2ea2ca19ec08e723eec468ad69dfec68678d1ed3",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "2ea2ca19ec08e723eec468ad69dfec68678d1ed3",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-b5-matrix-script",
+        "uri": "scripts/b5_profile_matrix.py",
+        "sha256": "03790f441079312450463688bd26d124a548399e7fcd8536f3f1dd6448d88553",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  },
+  "handoff_sha": "2ea2ca19ec08e723eec468ad69dfec68678d1ed3",
+  "integrator_review": {
+    "received_at": "2026-08-29T12:47:43+08:00",
+    "status": "accepted",
+    "head_sha": "6a53705b69cd9eda417258676608585c63658da8",
+    "notes": "B5 V82 profile freeze merged. Manifest 117 rows validated; make compile/check_encoders pass; profile matrix generated. Not claimed as Gate D; remaining: T-097, Gate D, full make test, Linux long window.",
+    "merge_sha": "3681e6e821c60250d810b648f7c65cbe1c17d5b2",
+    "result_sha": "2ea2ca19ec08e723eec468ad69dfec68678d1ed3"
+  }
+}

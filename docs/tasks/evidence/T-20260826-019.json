@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-019",
+  "base_sha": "1b92a22a55b856908be34720b46f820ff5aea0e8",
+  "head_sha": "e7e30fa81be5b2d94878e72fdd456a688b54a98d",
+  "merge_sha": "ac533b29fa9397edd3a5d1430ab4afd37101fd5e",
+  "toolchain": {
+    "environment": "conda:lcvex",
+    "python": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "assembler": "GNU assembler 2.47 (aarch64-linux-gnu-as)",
+    "cpu_policy": "taskset -c 0-1；VERILATOR_JOBS=2；本地默认 50% 资源"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "version_sha256": "1cbf8b2d4d17a008768b8121146f949d8430a2abb97c72d9dfa53bb59940daca",
+    "plugin_sha256": "2f4f580d6ec4489f3a03918967a0a8c8aed0c8b8e5b7b37e689729b809a8237"
+  },
+  "rtl": {
+    "source_sha": "e7e30fa81be5b2d94878e72fdd456a688b54a98d",
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "pkg_sha256": "5dc9a7119ff1e5c770f34f795b5edec2e8d2c65feaa0d9ec0b7a20a73246c622",
+    "decoder_sha256": "152bb9027488e76bbbe3360870ba8285e4c46a569cd53c0a0a85ac36d975c1a5",
+    "core_sha256": "4a32aa968f305e170179a088251c774446e6dbae02f69071ce75a818dfbf559e",
+    "mmu_sha256": "5dabaca195afca05d209912ba1da1b9564abd972530eb14012e032e5d612c857",
+    "coordinator_base_sha256": "a15b30383b84dbb12a14e6523c652ca9cf981c868a889e6b11b86e84a184bb05",
+    "coordinator_cache_sha256": "9fdf837fa1d1c0a98d70fb803fc9acbcfff5dc1230a7ae1cb903e08647e17e07"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile-001",
+      "level": "L0",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make compile",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "log": "build/agents/T-20260826-019/compile.log"
+    },
+    {
+      "run_id": "owner-l1-make-test-001",
+      "level": "L1",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make test",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 22.413,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "基础 SV/Cocotb/内存/缓存/MMU/外设/CRC 与 encoder 回归全部通过。",
+      "log": "build/agents/T-20260826-019/make-test.log"
+    },
+    {
+      "run_id": "owner-l1-mmu-pan-001",
+      "level": "L1",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make sim-sv-mmu",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "MMU page-walk/TLB hit、PAN=1 拒绝 AP=11、PAN=0 恢复访问均通过。",
+      "log": "build/agents/T-20260826-019/sim-sv-mmu.log"
+    },
+    {
+      "run_id": "owner-l2-maint-v82-001",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make p6-maint-v82",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 11.877,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "base/cache 两配置均通过：直接映射 AT+CVAP 19 条、MMU+PAN/E0/E1/P AT 30 条、EL0 UCI=0 CVAP EC=0x18 trap 24 条。",
+      "artifacts": [
+        {"path": "build/difftest/hard_maint_v82.bin", "sha256": "45c092382d0e2785c060a26a1e19ff5ef36378a25d91c1ab7b44ae7a2551f5e1", "max_insns": 19},
+        {"path": "build/difftest/hard_maint_v82_mmu.bin", "sha256": "7db91b8da0e1913bd93303ab071b9657bdd6fc171666efb2562d1f050d24c0cf", "max_insns": 30},
+        {"path": "build/difftest/hard_maint_v82_el0.bin", "sha256": "05f48c6a36b38f5cd0ab436748a2a14b6abb6cb316b2d08d054af511236b6b40", "max_insns": 24}
+      ],
+      "log": "build/agents/T-20260826-019/p6-maint-v82.log"
+    },
+    {
+      "run_id": "owner-l2-p5a-001",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 make p5a",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 5.714,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "p5a_mmu、p5a_mmu_el0、p5a2_fetch 均与 QEMU 一致。",
+      "log": "build/agents/T-20260826-019/p5a.log"
+    },
+    {
+      "run_id": "owner-l2-maint-regression-001",
+      "level": "L2",
+      "command": "base/cache hard_selfmod(45) + hard_tlbi(60) strict step lockstep",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "既有 IC/TLBI 维护路径在 base/cache 两配置保持绿色。",
+      "log": "build/agents/T-20260826-019/maintenance-regression.log"
+    },
+    {
+      "run_id": "owner-l0-encoder-001",
+      "level": "L0",
+      "command": "python3 sim/difftest/check_encoders.py; python3 scripts/test_registry.py --check",
+      "cpuset": "2",
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "新增 CVAP/AT/PAN 编码与交叉汇编器一致；registry 22 项校验通过。"
+    }
+  ],
+  "merge_validation": {
+    "source_sha": "643d5066cc2c683a880cc86cdbb62733e61d0afa",
+    "runs": [
+      {"command": "taskset -c 0-1 env VERILATOR_JOBS=2 make compile", "exit_code": 0, "result": "pass", "log": "build/agents/T-20260826-019-merge/compile.log", "log_sha256": "6cde380a1b0ed4684f199c15dd77e37633ab4fb4b4a95d851928365bb295fb6b"},
+      {"command": "taskset -c 0-1 env VERILATOR_JOBS=2 make p6-maint-v82", "exit_code": 0, "result": "pass", "summary": "6 个 base/cache maintenance 窗口全部通过", "log": "build/agents/T-20260826-019-merge/p6-maint-v82.log", "log_sha256": "f7fb9efe1b9265f2aea5f0a4e43fd8344ddc21d329edeebf66f8cf9e70d7d4fb"},
+      {"command": "taskset -c 0-1 env VERILATOR_JOBS=2 make p5a", "exit_code": 0, "result": "pass", "log": "build/agents/T-20260826-019-merge/p5a.log", "log_sha256": "49d0bc6ad99e7167e7c3a2e880c06ce36c3a8f509f220fd674b20f75f5b52184"},
+      {"command": "taskset -c 0-1 env VERILATOR_JOBS=2 make test", "exit_code": 0, "result": "pass", "wall_seconds": 150.72, "log": "build/agents/T-20260826-019-merge/make-test.log", "log_sha256": "851bb3b248ad45a33c51d88e98dfa05080e24f5a69e1fc824e3e5334ecd80c8f"}
+    ]
+  },
+  "artifacts": [
+    {"id": "make-test-log", "path": "build/agents/T-20260826-019/make-test.log", "sha256": "da8bafa520262889cd41bbc18fb3eb2f109d753f9a0265055862d62f3f338dcd"},
+    {"id": "p6-maint-log", "path": "build/agents/T-20260826-019/p6-maint-v82.log", "sha256": "8384070ef66cc8234c439f07730aab91688d4db8fa4964e4f13a1db623be9632"},
+    {"id": "p5a-log", "path": "build/agents/T-20260826-019/p5a.log", "sha256": "466325b674fb5d2b2f6ecdbc0080361b8071bd4927f6361f30d5f44c672ce9fa"},
+    {"id": "maintenance-regression-log", "path": "build/agents/T-20260826-019/maintenance-regression.log", "sha256": "8db0e53e15a6203902f415ea51d53e2c586c46cf08d543c0e86daf88606cf126"}
+  ],
+  "known_limits": [
+    "DC CVAP 在当前无持久介质/缓存模型中是严格权限检查后的 no-op，不代表真实持久化时序。",
+    "TLBI OS/RV/range、DC CVADP、EL2/EL3 maintenance、完整缓存一致性仍未实现。",
+    "本任务只证明 ARMv8.2 maintenance 垂直窗口；Linux continuation 必须在新合并 SHA 上重新建立。"
+  ]
+}

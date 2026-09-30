@@ -1,0 +1,36 @@
+%Warning-IMPLICITSTATIC: rtl/lcvex_l2_cluster.sv:196:11: Variable's lifetime implicitly set to static (IEEE 1800-2023 6.21)
+                                                       : ... The initializer value will only be set once
+                                                       : ... Suggest use 'static' before variable declaration'
+  196 |       int aj = (int'(rr_ptr) + ai) % CORE_COUNT;
+      |           ^~
+                         ... For warning description see https://verilator.org/warn/IMPLICITSTATIC?v=5.050
+                         ... Use "/* verilator lint_off IMPLICITSTATIC */" and lint_on around source to disable this message.
+-Info: Command Line disabled gate optimization with -fno-gate.  This may cause ordering problems.
+%Warning-UNOPTFLAT: rtl/lcvex_cluster_top.sv:91:33: Signal unoptimizable: Circular combinational logic: 'lcvex_c2_dualcore_tb.dut.cl_req_valid'
+                                                  : ... note: In instance 'lcvex_c2_dualcore_tb.dut'
+   91 |   logic [CORE_COUNT-1:0]        cl_req_valid;
+      |                                 ^~~~~~~~~~~~
+                    ... For warning description see https://verilator.org/warn/UNOPTFLAT?v=5.050
+                    ... Use "/* verilator lint_off UNOPTFLAT */" and lint_on around source to disable this message.
+                    rtl/lcvex_cluster_top.sv:91:33:      Example path: lcvex_c2_dualcore_tb.dut.cl_req_valid
+                    rtl/lcvex_cluster_top.sv:247:22:      Example path: ASSIGNW
+                    rtl/lcvex_l2_cluster.sv:39:41:      Example path: lcvex_c2_dualcore_tb.dut.g_c2_shared.cluster.req_valid
+                    rtl/lcvex_l2_cluster.sv:189:3:      Example path: ALWAYS
+                    rtl/lcvex_l2_cluster.sv:56:41:      Example path: lcvex_c2_dualcore_tb.dut.g_c2_shared.cluster.probe_req_source_id
+                    rtl/lcvex_cluster_top.sv:257:32:      Example path: ASSIGNW
+                    rtl/lcvex_cluster_top.sv:101:33:      Example path: lcvex_c2_dualcore_tb.dut.probe_req_source_id
+                    rtl/lcvex_cluster_top.sv:209:10:      Example path: ASSIGNW
+                    rtl/lcvex_core_wrap.sv:80:40:      Example path: lcvex_c2_dualcore_tb.dut.__Vcellinp__g_cores[0].wrap__probe_req_source_id
+                    rtl/lcvex_cluster_top.sv:209:49:      Example path: ASSIGNW
+                    rtl/lcvex_core_wrap.sv:80:40:      Example path: lcvex_c2_dualcore_tb.dut.g_cores[0].wrap.probe_req_source_id
+                    rtl/lcvex_core_wrap.sv:390:32:      Example path: ASSIGNW
+                    rtl/lcvex_l1_coherence.sv:483:41:      Example path: lcvex_c2_dualcore_tb.dut.g_cores[0].wrap.g_coherent_mem.l1coh.probe_req_source_id
+                    rtl/lcvex_l1_coherence.sv:621:3:      Example path: ALWAYS
+                    rtl/lcvex_l1_coherence.sv:471:41:      Example path: lcvex_c2_dualcore_tb.dut.g_cores[0].wrap.g_coherent_mem.l1coh.cl_req_valid
+                    rtl/lcvex_core_wrap.sv:383:25:      Example path: ASSIGNW
+                    rtl/lcvex_core_wrap.sv:70:40:      Example path: lcvex_c2_dualcore_tb.dut.g_cores[0].wrap.cl_req_valid
+                    rtl/lcvex_core_wrap.sv:70:40:      Example path: ASSIGNW
+                    rtl/lcvex_core_wrap.sv:70:40:      Example path: lcvex_c2_dualcore_tb.dut.__Vcellout__g_cores[0].wrap__cl_req_valid
+                    rtl/lcvex_cluster_top.sv:199:10:      Example path: ASSIGNW
+                    rtl/lcvex_cluster_top.sv:91:33:      Example path: lcvex_c2_dualcore_tb.dut.cl_req_valid
+%Error: Exiting due to 2 warning(s)

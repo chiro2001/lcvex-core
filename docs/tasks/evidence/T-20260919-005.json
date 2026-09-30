@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260919-005",
+  "label": "B25-NOFP-UCP-INVARIANT-PROFILE",
+  "state": "done",
+  "acceptance_status": "fresh-t004-normalized-invariant-profile-pass",
+  "partial": false,
+  "base_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+  "implementation_head": "4ef63a70acef32dcf140c377eb6059ff3cd5c9cd",
+  "implementation_tree": "eb619e6e2c73f8fd02c4b1c60f2a930f40a444c5",
+  "branch": "infra/T-20260919-005-b25-nofp-ucp-invariant-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-005",
+  "owner": "root",
+  "timestamps": {
+    "created_at": "2026-09-19T23:17:31+08:00",
+    "t004_raw_bundle_finished_at": "2026-09-19T23:37:38.8276468+08:00",
+    "implementation_committed_at": "2026-09-19T23:45:01+08:00",
+    "reported_at": "2026-09-19T23:45:49+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "change": {
+    "policy": {
+      "path": "fpga/catapult_a10/physical_waivers_invariant.json",
+      "bytes": 11543,
+      "sha256": "088d24051a43484eb8f60c3e5a0b8345151312b1790a2ac3f713c229c23b65fa",
+      "canonical_json_sha256": "7371bf3bb5a8acd3a99c4d37abbea039252dca0be24a5c4768c79bf5b98ca264",
+      "delta": "Append accepted_profiles.T-20260919-004 and report_profiles.T-20260919-004 only."
+    },
+    "exporter": {
+      "path": "fpga/catapult_a10/tools/export_physical_waiver_invariant_inventory.py",
+      "bytes": 58834,
+      "sha256": "227ba685143596399c7ef41ec58e81dcdeda0215df34a5b9ad49c61174770acc",
+      "delta": "Update PRODUCTION_POLICY_DIGEST only."
+    },
+    "normalized_contract_diff": "byte-identical after deleting the provenance object from base and implementation policies",
+    "historical_profile_diff": "T-20260909-011 and T-20260909-013 accepted/report profile objects are byte-identical to base"
+  },
+  "measurement_profile": {
+    "task_id": "T-20260919-004",
+    "candidate_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+    "candidate_tree_sha": "d5baa6b05f5f8824236c816980ab6e6d48578594",
+    "user_sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "generated_sdc_sha256": "32bf047be0124781fbc84be6d7a1384ef4df8318ef5de316ea7ede10560b4274",
+    "source_pre_manifest_sha256": "e87c4dd5ec9548fa20bd0071b7305306c8dd2a2619cf106454526c7c9eaf62e6",
+    "source_post_manifest_sha256": "e87c4dd5ec9548fa20bd0071b7305306c8dd2a2619cf106454526c7c9eaf62e6",
+    "source_immutable": true,
+    "candidate_manifest": null,
+    "candidate_manifest_note": "The v2 exporter candidate-manifest contract targets the older canonical+alias schema. T-004's different 174-file stage-manifest is independently hash-bound by T-004; this profile instead binds exact SHA/tree and immutable full source manifests without changing exporter schema.",
+    "raw_report_sha256": {
+      "summary": "af7b79136aeddabc64ffc97a35cc970ff7f94a31060bebec2e2807f34848c808",
+      "ucp_fast": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662",
+      "ucp_slow": "0f7a46f25f77dc0beb0e5d3aafa0962103e8d2883ba56e172c2a340d8cb73662",
+      "fast_recovery": "ed9fd6b48cb4a56d596503b65d09584d3e34ed009ba30bc3a17488eb57b75d37",
+      "fast_removal": "7add9b4b5968c8af245db81bb0c555eba9a498893bea3a03cbc5fbc41759fb86",
+      "slow_recovery": "1709cb457b7127512748e2e7c986be2629edc8e3669a54145b76f7223039f05e",
+      "slow_removal": "3756d6f3811e9dc41fef8b58c6343019d6a76cf826d640f980eb67040b424c42"
+    }
+  },
+  "normalized_result": {
+    "ucp": {
+      "clocks": 2,
+      "input_ports": 2,
+      "input_paths": 60,
+      "output_ports": 1,
+      "output_paths": 4,
+      "tdi": 25,
+      "tms": 35,
+      "tdo": 4,
+      "raw_duplicate_count": 0
+    },
+    "reset": {
+      "raw_path_count_each": 628,
+      "duplicate_count_each": 4,
+      "normalized_path_count": 624,
+      "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+      "families": {"emif_req_q": 606, "emif_state_q": 4, "timeout_count_q": 13, "calibration_gate": 1},
+      "violations": 0,
+      "worst_recovery_slack_ns": 1.086,
+      "worst_removal_slack_ns": 0.179
+    },
+    "exceptions": [],
+    "clock_constraints": []
+  },
+  "validation": [
+    {
+      "id": "t004-export-check",
+      "result": "PASS; normalized UCP input=60, reset=624",
+      "inventory": {"path": "build/agents/T-20260919-005/t004-invariant-inventory.json", "bytes": 62580, "sha256": "2e4cd01d01b198b5b030f5071f4cc96acfe1bf265d045c84c0954f95213202e0"},
+      "checker_sha256": "4581681d96c91f71002e2102a52f9a95119a4f384a67001c39cd1dc2ad8b6f38"
+    },
+    {
+      "id": "fixture-matrix",
+      "result": "2/2 positive PASS; 27/27 negative rejected",
+      "matrix": {"path": "build/agents/T-20260910-001/invariant-fixture-t005/matrix.json", "bytes": 8062, "sha256": "442956a1529681389618d2896d10e480f7fc0ac70283bc08fa5030c6e687c1c7"}
+    },
+    {
+      "id": "historical-profile-replay",
+      "result": "T-20260909-011 PASS and T-20260909-013 PASS under the extended policy",
+      "t011_inventory_sha256": "4fae831d09eca94b3bef08eb2ef1d5433eebcc4c9ec188b6e6f16ac6a9439d0a",
+      "t013_inventory_sha256": "706a74342b61d018cf943987a42fd336933c46550c965ff8c4b07c4a1ed05e3f"
+    },
+    {"id": "pycompile-json-diff", "result": "PASS"}
+  ],
+  "safety_and_scope": {
+    "normalized_policy_changed": false,
+    "historical_profile_changed": false,
+    "rtl_qsf_sdc_boot_qemu_changed": false,
+    "quartus_network_or_board_action": false,
+    "assertion_checker_or_expected_result_weakened": false
+  },
+  "handoff": "docs/handoffs/T-20260919-005-b25-nofp-ucp-invariant-profile.md",
+  "next": "Integrate this two-file profile extension, finalize T-20260919-004 physical evidence, then release the one-shot volatile-SOF assembler task."
+}

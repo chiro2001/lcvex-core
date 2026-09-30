@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-007",
+  "label": "PE-F1C-POSTFIX",
+  "parent": "T-20260830-033",
+  "title": "H-04/T-006 后 F0/F1a 完整 196-row 同 SHA 复测",
+  "kind": "performance-equivalence-measurement",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1c-postfix-matrix",
+  "agent_type": "verification-measurement",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260831-004", "T-20260831-006", "T-20260830-046", "T-20260830-043"],
+  "base_sha": "291018d9a63efe549be589d1127e424e1118ed8a",
+  "branch": "verify/T-20260831-007-f1c-postfix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-007",
+  "scope": "在冻结 source SHA 291018d 上使用现有 scripts/run_perf_matrix.py，完整重跑 14 workloads × 7 cache/delay bases × F0/F1a = 196 canonical rows。每个 base 严格成对，除 FETCH_FIFO_ENABLE/FIFO_VARIANT 外 provenance 完全相同；max_cycles=5000000。不改 RTL、workload、runner、QEMU 或参考结果，不过滤 timeout/摘要不一致。用最终矩阵判断 T-046/H-04/T-006 后 98 对 strict equivalence、FIFO bounds 与性能护栏；不运行 Gate D/Linux/Quartus，不声称 F1b/A10/Fmax。",
+  "planning_guidance": {
+    "freeze": [
+      "工作树开始与结束必须 clean，measurement_source_sha 固定 291018d9a63efe549be589d1127e424e1118ed8a。",
+      "使用现有 7 bases：nocache_d0,l1i_d0,l1id_l2_d0,nocache_d1,nocache_d2,fullcache_d1,fullcache_d2；14 workloads 使用 ALL_WORKLOADS 冻结顺序。",
+      "为每个 workload 只生成一次镜像并复用；每行保存 image/source/tool/config/source SHA。"
+    ],
+    "execution": [
+      "入口为 python3 scripts/run_perf_matrix.py --configs all --workloads all --max-cycles 5000000，out-dir 使用 build/agents/T-20260831-007/f1c_matrix，artifact-dir 使用 docs/evidence/artifacts/T-20260831-007。",
+      "整个入口置于 systemd-run --user scope：MemoryMax=15G,MemorySwapMax=0,CPUQuota=50%，MAKEFLAGS=-j1,VERILATOR_JOBS=1；一次一个重型 runner build。",
+      "先做 py_compile/aggregate-only 及 4 workload 成对 smoke 只在必要时使用已经该入口生成的产物；不另起并发构建。"
+    ],
+    "analysis": [
+      "对每对比较 status,returncode,retired_insn,commit_digest,memory_digest 以及 memory effect count；strict 目标 98/98，但任何失败必须诚实报告。",
+      "统计 pass/timeout/fail、pass/pass、timeout/timeout、status mismatch、retired/memory mismatch，并与 T-043 的 177 pass/19 timeout/56 strict-equivalent 对比。",
+      "检查 FIFO-on occupancy/peak<=2, overflow=0, push>=pop，以及 pass/pass cycle 护栏 cycles_f1a <= cycles_f0*1.02+64。",
+      "若 strict equivalence 仍不是 98/98，F1a 保持默认关闭，保存第一类失配索引，不在本任务修 RTL。"
+    ]
+  },
+  "writes": [
+    "docs/PERFORMANCE_F1C_POSTFIX_RESULTS.md",
+    "docs/evidence/artifacts/T-20260831-007/f1c_matrix.json",
+    "docs/evidence/artifacts/T-20260831-007/f1c_matrix.csv",
+    "docs/handoffs/T-20260831-007-f1c-postfix.md",
+    "docs/tasks/evidence/T-20260831-007.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/PERFORMANCE_F1_RESULTS.md",
+    "docs/F1A_DUPLICATE_RETIREMENT_FIX.md", "docs/F1A_COMMIT_READY_HOLD_FIX.md",
+    "docs/F1A_FETCH_NEXT_SETTLED_FIX.md", "docs/tasks/evidence/T-20260830-043.json",
+    "scripts/run_perf_matrix.py", "sim/microbench/perf_runner.py", "sim/microbench/microbench_runner.cc",
+    "rtl/**", "baremetal/perf/**"
+  ],
+  "validation": {
+    "l0": ["py_compile, config/workload expansion, clean SHA/provenance, JSON/CSV row count and pair-key uniqueness"],
+    "l1": ["14 F0/F1a runner builds under cgroup and per-row artifact/hash validation"],
+    "l2": ["196-row paired performance/equivalence matrix and T-043 comparison"],
+    "l3": [], "l4": []
+  },
+  "acceptance": "196 canonical rows/98 unique pairs 完整，所有 row/pair provenance 一致且无缺失/重复；原样报告 status/retired/commit/memory 摘要、FIFO bounds、cycles/IPC/护栏和 T-043 delta。数据完整且结论诚实即可 review；只有 strict 98/98 且无边界违例才允许建议重新签核 F1a。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 16384, "timeout_s": 3600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 60, "extension_increment_minutes": 60, "max_minutes": 240, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-08-31T20:22:26+08:00", "released_at": "2026-08-31T23:56:34.667+08:00", "reason": "196-row 矩阵完整结束；峰值 5.7G、swap 0B，未与 Quartus/Gate/Linux 并发", "rule": "本地唯一重型任务；15G/no-swap/50%-CPU/-j1；不与 Quartus/Gate/Linux 并发"},
+  "created_at": "2026-08-31T20:22:26+08:00",
+  "updated_at": "2026-09-01T00:18:17+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T20:26:25+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "agent_reuse_note": "复用已完成 T-006 诊断/实现的 gpt-5.6-luna(max) agent；当前只持有 T-007。",
+    "model": "gpt-5.6-luna", "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-007"
+  },
+  "handoff": "docs/handoffs/T-20260831-007-f1c-postfix.md",
+  "evidence": "docs/tasks/evidence/T-20260831-007.json",
+  "merge_sha": "53a2d959dd2b5f5b3318a1c2352826ee8ac36366",
+  "merged_at": "2026-09-01T00:18:01+08:00",
+  "integrator_review": {
+    "received_at": "2026-09-01T00:15:12+08:00",
+    "accepted_at": "2026-09-01T00:18:17+08:00",
+    "status": "accepted_measurement_strict_equivalence_failed",
+    "owner_report_tip": "b6c6fd41033242106bb55d41c6858b4d45ff805c",
+    "checks": [
+      "独立重算确认 196 rows、98 unique pairs、83 strict equal、15 mismatch，CSV 为表头加 196 行",
+      "196/196 measurement_source_sha 固定 291018d，14 configs/14 workloads，pair 无缺失或重复",
+      "JSON/CSV SHA256 与 evidence 一致；工作树 clean；提交只包含约定的 5 个报告/证据文件",
+      "FIFO occupancy/peak 最大 2、overflow=0、push>=pop；资源峰值 5.7G、swap=0B"
+    ],
+    "decision": "测量任务按数据完整性验收，但 F1a 未通过 98/98 签核门；保持默认关闭，不启动完整 Gate D，转提交级首分歧诊断。"
+  },
+  "known_limits": ["F1a strict equivalence 仅 83/98，默认保持关闭；F1b 仍未实现。", "本矩阵不是 A10/Fmax/FPGA 证据；未运行 Gate D/Linux/Quartus。"],
+  "next": "登记独立提交级差异诊断任务，优先复现跨配置稳定的 neon_vect commit-only mismatch，再覆盖 memory/status/timeout 类；修复后以新冻结 SHA 重跑完整矩阵。"
+}

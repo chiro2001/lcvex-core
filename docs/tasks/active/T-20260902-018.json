@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-018",
+  "label": "FP-P4-FUNC-PERF-PPA",
+  "title": "FP/NEON FP-P4：全量功能/性能与一/二 lane PPA sweep",
+  "kind": "verify-performance",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p4",
+  "agent_type": "functional-perf-ppa",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-017"
+  ],
+  "base_sha": "1d57fa9dadc92d9c85ad755ce0debd0c6fc0acb7",
+  "branch": "verify/T-20260902-018-fp-p4-func-perf-ppa",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-018",
+  "scope": "按 docs/FP_NEON_PIPELINE_PLAN.md FP-P4：在同一冻结 SHA 上执行 §6 验证矩阵（L0-L2、P7 Cocotb、lockstep、fp_scalar/fp_fp16/neon_vect/自定义链性能与 FP busy 计数）；对一 lane 实际周期与 slot/operation 模型核对；可综合二 lane 变体并比较面积/DSP/周期，形成 keep-1 或二 lane 晋级决策。",
+  "reads": [
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/FP_NEON_PIPELINE_BASELINE.md",
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/P7-5_FP16_SQRT_MINMAX_ROUND.md",
+    "rtl/**",
+    "tb/**",
+    "sim/**",
+    "scripts/**",
+    "Makefile",
+    "fpga/catapult_a10/**"
+  ],
+  "writes": [
+    "docs/FP_NEON_PIPELINE_PPA.md",
+    "docs/handoffs/T-20260902-018-fp-p4-func-perf-ppa.md",
+    "docs/tasks/evidence/T-20260902-018.json",
+    "build/agents/T-20260902-018/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-018-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS",
+      "P7 SV/Cocotb 全绿"
+    ],
+    "l2": [
+      "P7 lockstep/L2 子集 PASS"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "功能门全绿；一 lane 与二 lane 探索版的 synthesis 面积、DSP、周期和 busy 分解齐全，形成 keep-1 或二 lane 值得进入 FP-P6 的决策。此阶段不拿 synthesis 估计替代 STA。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 28800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T04:18:00+08:00",
+  "updated_at": "2026-09-03T05:26:05+08:00",
+  "known_limits": [
+    "不运行 fit/STA/SOF；如远端资源不足，二 lane 变体可只给 synthesis 或记录未跑；不修改 RTL 功能除非为二 lane 变体且另立任务"
+  ],
+  "handoff": "docs/handoffs/T-20260902-018-fp-p4-func-perf-ppa.md",
+  "evidence": "docs/tasks/evidence/T-20260902-018.json",
+  "next": "FP-P5 full-FP synthesis → fitter → STA → Gate F 候选",
+  "dispatch": {
+    "sent_at": "2026-09-03T04:18:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-018",
+    "branch": "verify/T-20260902-018-fp-p4-func-perf-ppa"
+  },
+  "head_sha": "be67a81dd53e92a15463b8b149bdf60ee8445b5f",
+  "merge_sha": "ae2c3c9a29ad456d514bea6d13df32d56f257c9f",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T05:25:43+08:00",
+    "merged_at": "2026-09-03T05:26:05+08:00",
+    "recorded_at": "2026-09-03T05:26:05+08:00",
+    "notes": "FP-P4 accepted; keep-1 recommended; one-lane exec 93,564 ALM, two-lane ~2.0x area; FP-P5 next."
+  }
+}

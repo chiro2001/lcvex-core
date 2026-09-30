@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-024",
+  "base_sha": "b7c91de4eab2995d30f2f43f4ac749c142180f58",
+  "head_sha": "b7c91de4eab2995d30f2f43f4ac749c142180f58",
+  "merge_sha": "e0c76a3",
+  "candidate_status": "pass",
+  "toolchain": {"environment": "conda:lcvex", "python": "3.12.14", "verilator": "5.050 2026-07-01 rev conda-forge build 0", "assembler": "GNU assembler 2.47 (aarch64-linux-gnu-as)"},
+  "qemu": {"release": "11.1.0", "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648", "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6", "plugin_sha256": "cd2a08234dc192f66c8b7f1c82d814bbf7abc015860df69c21087cc4b34e8d85"},
+  "rtl": {"source_sha": "b7c91de4eab2995d30f2f43f4ac749c142180f58", "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb", "coordinator_base_sha256": "a15b30383b84dbb12a14e6523c652ca9cf981c868a889e6b11b86e84a184bb05", "coordinator_cache_sha256": "9fdf837fa1d1c0a98d70fb803fc9acbcfff5dc1230a7ae1cb903e08647e17e07", "coordinator_delay2_sha256": "b0f57eb9b96335fda25709fd9a1163cdd1c1b6e9f525aec07c4ef6c0ff25cfce"},
+  "resource": {"cpuset": "0-4", "cpu_count": 5, "initial_ratio": 0.50, "memory_budget_mb": 10831, "peak_memory_note": "未观察到内存耗尽；编译单作业约 0.2 GiB RSS", "queue": "coverage 后 planner 暂时 parallel=0，--wait 排队后以 parallel=1 继续；无调度错误"},
+  "runs": [
+    {"run_id": "owner-l3-gate-d-001", "level": "L3", "command": "taskset -c 0-4 env VERILATOR_JOBS=5 bash sim/difftest/run_gate_d.sh --parallel", "wall_seconds": 710.96, "exit_code": 0, "result": "pass", "summary": "Gate D 全流程退出 0；M2/R1、delay2、P5a-Hardening、Gate C/P5a/P4b、随机与 baremetal-C 全部通过。", "log": "build/agents/T-20260826-024/gate-d.log", "log_sha256": "7310056898657e57f5bce5e28738107d370c1c1ebc3d55372e7e91d905fa0e6b"},
+    {"run_id": "owner-l3-m2-r1", "level": "L3", "command": "run_m2_4b.sh --parallel（base/cache）", "exit_code": 0, "result": "pass", "summary": "38 项并行锁步全部通过；含 hard_dit。"},
+    {"run_id": "owner-l3-delay2", "level": "L3", "command": "全缓存 + 随机下级延迟 0..4 周期并行锁步", "exit_code": 0, "result": "pass", "summary": "31 项（含 random_smoke）全部通过。"},
+    {"run_id": "owner-l3-hardening", "level": "L3", "command": "run_p5a_hardening.sh --parallel", "exit_code": 0, "result": "pass", "summary": "26 项并行锁步全部通过。"},
+    {"run_id": "owner-l3-gates-and-random", "level": "L3", "command": "Gate C/P5a/P4b + random seed 1..3 × 100k + insn coverage + baremetal-C", "exit_code": 0, "result": "pass", "summary": "所有步骤通过；random 覆盖 61/60 族，期望覆盖集命中。"}
+  ],
+  "artifacts": [
+    {"id": "random-trace-1", "path": "build/difftest/random_1.trace", "size": 3946725},
+    {"id": "random-trace-2", "path": "build/difftest/random_2.trace", "size": 3947879},
+    {"id": "random-trace-3", "path": "build/difftest/random_3.trace", "size": 3902520},
+    {"id": "coverage", "path": "build/coverage/merged.dat", "status": "generated; 8611 covered points"}
+  ],
+  "known_limits": ["Gate D 通过不等于 Gate E；Linux strict continuation、CI 可信度和 early-boot/EL0 稳定判据仍需在同一 candidate SHA 上单独验证。", "完整 trace/coverage 产物保留在 build/tmp/build，不进入 Git。"]
+}

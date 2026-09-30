@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-013",
+  "label": "FP-P0-BASELINE-RESOURCE",
+  "title": "FP/NEON FP-P0：基线复核与资源分解",
+  "kind": "verify-baseline",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-p0",
+  "agent_type": "resource-analysis",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-012"
+  ],
+  "base_sha": "8aa10fe4c5aa37e23b9d75a695e137e018a9d473",
+  "branch": "verify/T-20260902-013-fp-p0-baseline",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-013",
+  "scope": "执行 FP-P0：在当前冻结 SHA 上复核 P7 基线无未解释红项；复用/提取 T-010 hierarchy 报告，完成 no-FP、scalar standalone、4-lane NEON FP standalone、full-FP 的资源分解；运行 fp_scalar/fp_fp16/neon_vect 及 op/format 依赖链/独立链 microbench；记录 latency/busy 计数；产出 docs/FP_NEON_PIPELINE_BASELINE.md。",
+  "reads": [
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/tasks/evidence/T-20260902-010.json",
+    "docs/tasks/evidence/T-20260902-007.json",
+    "docs/tasks/evidence/T-20260902-001.json",
+    "docs/FPGA_A10_RESOURCE_GATE_REEVAL.md",
+    "fpga/catapult_a10/**",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_core.sv",
+    "Makefile",
+    "sim/microbench/**",
+    "baremetal/perf/**",
+    "scripts/**"
+  ],
+  "writes": [
+    "docs/FP_NEON_PIPELINE_BASELINE.md",
+    "docs/handoffs/T-20260902-013-fp-p0-baseline.md",
+    "docs/tasks/evidence/T-20260902-013.json",
+    "build/agents/T-20260902-013/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-013-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "JSON/链接/diff-check"
+    ],
+    "l1": [
+      "资源分解表与 artifact hash 完整"
+    ],
+    "l2": [
+      "P7 基线无未解释红项；DUP/SQADD 由 T-014 独立闭合"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "产出同 SHA 基线文档：四组资源报告、hierarchy 占比、op/format latency 或 busy 计数、workload cycle；所有进入后续任务的测试为绿；已知 P7-2 decode overlap 单独登记。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 12288,
+    "disk_mb": 16384,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T00:52:30+08:00",
+  "updated_at": "2026-09-03T01:13:05+08:00",
+  "known_limits": [
+    "不修改 RTL/测试/QEMU；不运行 fit/STA/SOF；full-FP 只到 synthesis；DUP/SQADD 由 T-014 修复"
+  ],
+  "handoff": "docs/handoffs/T-20260902-013-fp-p0-baseline.md",
+  "evidence": "docs/tasks/evidence/T-20260902-013.json",
+  "next": "FP-P1 transaction wrapper + core 单在途握手",
+  "dispatch": {
+    "sent_at": "2026-09-03T00:53:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-013",
+    "branch": "verify/T-20260902-013-fp-p0-baseline"
+  },
+  "head_sha": "2f2fc0880f14eadc32c006f3e6d5c264e7ab0f89",
+  "merge_sha": "6119691528453aea2e2f957b92808e52d7ddd896",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T01:12:26+08:00",
+    "merged_at": "2026-09-03T01:13:05+08:00",
+    "recorded_at": "2026-09-03T01:13:05+08:00",
+    "notes": "FP-P0 baseline merged; resource decomposition and FP busy counters accepted. Known limits: 4-lane NEON standalone and strict current-SHA full/no-FP not rerun; P7-2 red item closed by T-014."
+  }
+}

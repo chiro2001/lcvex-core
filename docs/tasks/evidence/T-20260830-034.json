@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-034",
+  "state": "done",
+  "partial": false,
+  "base_sha": "e42bf7442044f74b41b4d96584f774116c533069",
+  "head_sha": "03a99725f8e323b5b9f0fb44bb9008451934b741",
+  "content_sha": "f7d30027e016ffa9482079df2657003882ec7c37",
+  "merge_sha": "f7d30027e016ffa9482079df2657003882ec7c37",
+  "branch": "feature/p7-final",
+  "worktree": "main repository shared read-only workspace",
+  "scope": "PE-A internal static performance audit and enhancement plan for core/cache/bus/multicore. Produced docs/PERFORMANCE_ENHANCEMENT_PLAN.md, handoff, evidence. No RTL/test modification, no Quartus, no heavy Verilator build, no performance claims.",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "created_at": "2026-08-30T11:33:22+08:00",
+    "documents_written_at": "2026-08-30T11:33:22+08:00"
+  },
+  "toolchain": {
+    "verilator": "not run",
+    "cross_gcc": "not run",
+    "quartus": "not started",
+    "resource_note": "Static read-only audit only; no heavy build/run."
+  },
+  "qemu": {
+    "release": "not used",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": null,
+  "runs": [
+    {
+      "run_id": "owner-static-source-inventory-001",
+      "source_sha": "03a99725f8e323b5b9f0fb44bb9008451934b741",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "find rtl -maxdepth 1 -type f | sort; wc -l rtl/lcvex_core.sv rtl/lcvex_decode.sv rtl/lcvex_l1_i.sv rtl/lcvex_l1_d.sv rtl/lcvex_l2.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_mem_router.sv rtl/lcvex_axi4_master.sv rtl/lcvex_axi4_avalon_adapter.sv",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Inventory of core/cache/bus/multicore RTL confirmed modules and line counts for static review."
+    },
+    {
+      "run_id": "owner-static-doc-scan-002",
+      "source_sha": "03a99725f8e323b5b9f0fb44bb9008451934b741",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "cat docs/PERFORMANCE_WORKLOAD_PLAN.md docs/PERFORMANCE_SNAPSHOT.md docs/C4_DUALCORE_BASELINE.md docs/MULTICORE_CLUSTER_CONTRACT.md docs/C3_FOURCORE_PREWORK.md docs/C4_SCALE_PREWORK.md; sed -n '1,220p' docs/handoffs/T-20260830-021-perf-snapshot.md",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Confirmed P-line 14-workload cycle snapshot, current measurement method, multicore scale measurements, and known limitations."
+    },
+    {
+      "run_id": "owner-static-rtl-read-003",
+      "source_sha": "03a99725f8e323b5b9f0fb44bb9008451934b741",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "read lcvex_core.sv pipeline/stall/commit sections, lcvex_l1_i/l1_d/l2/l1_coherence/l2_cluster, mem_arb/router/delay/ram, axi4_master, axi4_avalon_adapter",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Static read of all relevant RTL state machines/handshakes: single-issue in-order pipeline, no fetch buffer/branch predictor, single outstanding memory, write-through and WB cache paths, cluster directory-only L2, serial probes, AXI 128-bit single outstanding, Avalon 512-bit single line."
+    },
+    {
+      "run_id": "owner-doc-write-004",
+      "source_sha": "03a99725f8e323b5b9f0fb44bb9008451934b741",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "write docs/PERFORMANCE_ENHANCEMENT_PLAN.md; write docs/handoffs/T-20260830-034-pe-audit-plan.md; write docs/tasks/evidence/T-20260830-034.json",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "peak_rss_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Delivered PE-A plan, handoff, and evidence. No RTL/test files modified by this task."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "performance-enhancement-plan",
+      "uri": "docs/PERFORMANCE_ENHANCEMENT_PLAN.md",
+      "sha256": "fb602f608697e895af18692fda39f44fb75719b817c45fd620f97dbde5cb7736",
+      "owner": "T-20260830-034",
+      "retain_until": "final-plan-merge",
+      "reproduce": "cat docs/PERFORMANCE_ENHANCEMENT_PLAN.md"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-034-pe-audit-plan.md",
+      "sha256": "148ee6e9192b608b510dc6014d485e10bd8d04004ef86234bd0309fd504cd3f8",
+      "owner": "T-20260830-034",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-034-pe-audit-plan.md"
+    }
+  ],
+  "known_limits": [
+    "Static audit only; no Verilator/Quartus/FPGA runs.",
+    "Current P-line 14-workload snapshot uses lcvex_soc_tb defaults with all caches disabled, so cache-related conclusions are hypotheses requiring a cache-enabled baseline.",
+    "No performance gain is claimed as implemented.",
+    "Workspace contained pre-existing uncommitted RTL modifications (e.g. rtl/lcvex_decode.sv, rtl/lcvex_alu.sv at final check); this task did not create or modify them.",
+    "This is the internal PE-A plan; it must be merged with T-20260830-035 PE-EXT before implementation."
+  ],
+  "status": "done",
+  "integration": {
+    "reviewed_at": "2026-08-30T19:21:22+08:00",
+    "result": "accepted",
+    "merge_sha": "f7d30027e016ffa9482079df2657003882ec7c37",
+    "note": "Static audit only; later T-035/final plan/F0 tasks consumed the output. No new build/test or performance claim was added during ledger reconciliation."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {"path": "timestamps.created_at", "old": "2026-08-30T22:15:00+08:00", "new": "2026-08-30T11:33:22+08:00", "basis": "content_merge_commit"},
+      {"path": "timestamps.documents_written_at", "old": "2026-08-30T22:15:00+08:00", "new": "2026-08-30T11:33:22+08:00", "basis": "content_merge_commit"}
+    ]
+  }
+}

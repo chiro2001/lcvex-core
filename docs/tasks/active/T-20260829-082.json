@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-082",
+  "label": "B2a",
+  "parent": "T-20260828-072",
+  "title": "B2a FP/ASIMD 算术闭合",
+  "kind": "isa-fp-asimd-arithmetic",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+  "branch": "feature/T-20260829-082-b2a-fp-arithmetic",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-082",
+  "scope": "依据 docs/V82_PROFILE_MANIFEST.md 的 V82-SELECTED-EXT，补齐已声明但尚未实现的 FP/Advanced SIMD 算术族（FP16/32/64 标量与 NEON 算术、比较、FMA 等），在 P7-0～P7-5 既有基础上做垂直实现。保留 raw-bit NaN、signed zero、FPSR sticky、FPEN trap 和单 commit 多副作用限制。",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_decode.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-082-b2a-fp-arithmetic.md",
+    "docs/tasks/evidence/T-20260829-082.json"
+  ],
+  "reads": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/P7-0_FP_STATE.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-2_NEON_INT.md",
+    "docs/P7-3_NEON_FP.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/P7-5_FP16_SQRT_MINMAX_ROUND.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_neon_int.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_decode.sv",
+    "sim/cocotb/**",
+    "sim/difftest/**"
+  ],
+  "validation": {
+    "l0": [
+      "raw-bit 定向测试；编码负测/保留"
+    ],
+    "l1": [
+      "SV + Cocotb：FP/NEON 算术、比较、FMA、NaN/Inf/signed zero、FPSR sticky"
+    ],
+    "l2": [
+      "P7 定向 QEMU lockstep 受影响子集（集成者合并后跑）"
+    ],
+    "l3": []
+  },
+  "acceptance": "实现至少一个或多个 V82-SELECTED-EXT FP/ASIMD 算术 row，并提供 L0/L1 证据；未实现行明确 blocked/deferred；不修改 core/pkg/filelist/Makefile/QEMU；不把 shim 当实现。",
+  "next": "B2a 通过后进入 B2b 转换/舍入/异常或 B2c 向量访存。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T02:43:10+08:00",
+  "updated_at": "2026-08-29T03:47:51+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T02:43:10+08:00",
+    "agent_name": "b2a_fp_asimd_arithmetic",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-082"
+  },
+  "known_limits": [
+    "本任务不处理 SVE/SME、POST-V82-DEFERRED、完整 FP 异常 trap、MOPS/MTE/PAuth/Crypto。",
+    "不修改 rtl/lcvex_core.sv、rtl/lcvex_pkg.sv、rtl/filelist.f、Makefile、QEMU；共享集成由后续波次处理。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-082-b2a-fp-arithmetic.md",
+  "evidence": "docs/tasks/evidence/T-20260829-082.json",
+  "merge_sha": "ed1fffa5d696df33b0d780b614c95f18fc3555f9",
+  "merged_at": "2026-08-29T03:47:51+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T03:47:00+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "479b81c34e5cbd78b4f818486ea27b7457758d2e",
+    "implementation_sha": "5a2662aab5c4381eaa5c439d822c23ad5447ad24",
+    "notes": "B2a 实现标量 H FMA 四族与 NEON 4H/8H FMLA/FMLS；标量 raw-unit、decoder、P7-4 回归通过；向量 raw-unit 与完整 cocotb/L2 待资源窗口复跑。manifest 已更新 EXT-FP-007/EXT-NEON-FP-002 编码/负测。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T02:49:00+0800",
+        "new": "2026-08-29T02:43:10+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T03:50:00+0800",
+        "new": "2026-08-29T03:47:51+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T02:49:00+0800",
+        "new": "2026-08-29T02:43:10+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T03:50:00+0800",
+        "new": "2026-08-29T03:47:51+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "5a2662aab5c4381eaa5c439d822c23ad5447ad24",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "5a2662aab5c4381eaa5c439d822c23ad5447ad24"
+}

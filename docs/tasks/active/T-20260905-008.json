@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-008",
+  "label": "R16-QUARTUS-PHYSICAL",
+  "title": "Round16 full-FP synthesis fitter and signoff STA",
+  "kind": "fpga-physical-verification",
+  "priority": "critical",
+  "phase": "accepted_blocked",
+  "dispatch_status": "remote-memory-guard-blocked",
+  "assigned_owner": "codex-r16-fp-roundpack-cut",
+  "agent_type": "physical-verification",
+  "model_selection": "spawn_agent model omitted; user-confirmed default gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260905-002"
+  ],
+  "functional_base_sha": "bab301e04f69cda154a8c9bb44f77af286ff579a",
+  "validated_source_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "source_equivalence": "6a1c553, bab301e and 322fb40 are content-identical across rtl, fpga, QPF/QSF/SDC, TB, sim and Makefile; differences are docs/task metadata only",
+  "branch": "verify/T-20260905-008-r16-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-008",
+  "timing_baseline": {
+    "task": "T-20260902-058",
+    "setup_slack_ns": -2.675,
+    "tns_ns": -13566.924,
+    "failing_endpoints": 14244,
+    "fmax_mhz": 44.10
+  },
+  "remote_execution": {
+    "host": "192.168.101.5",
+    "user": "GAMEPC",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260905-008-probe\\real_a10_full_fp",
+    "project": "real_a10_full_fp",
+    "max_run_seconds": 43200,
+    "min_free_mb": 16384,
+    "guards": "EDA pre/post process guard plus stale-output and forbidden assembler artifact checks"
+  },
+  "source_manifest": {
+    "sync": "Reuse T-058 exact 52-file sync: 47 formal RTL, 2 platform RTL, QPF, QSF and SDC",
+    "canonical_ip_entries": 18,
+    "remote_only_patch": "Apply only the established lcvex_fp_scalar.sv Quartus default-port compatibility patch in the isolated remote copy",
+    "immutable": "Formal RTL, QPF, QSF, SDC and canonical IP must not be edited or regenerated"
+  },
+  "provenance_discrepancy": {
+    "manifest_sdc_sha256": "caf84775 (existing stale SHA256SUMS/manifest record)",
+    "actual_git_and_t058_sdc_sha256": "2fad1663 (actual source blob used by T-058)",
+    "policy": "Do not modify SDC or manifest in T-008; bind evidence to the actual source blob and remote sync hash"
+  },
+  "scope": "Run one isolated full-FP Quartus synthesis, fitter and signoff STA with the same device/QSF/SDC and report policy as T-058. Extract utilization, all timing domains, Fmax, DDR/Metastability and raw+parsed top-50 paths; compare Round16 cones against T-058.",
+  "writes": [
+    "docs/handoffs/T-20260905-008-r16-quartus-physical.md",
+    "docs/tasks/evidence/T-20260905-008.json",
+    "build/agents/T-20260905-008/**",
+    "isolated remote probe artifacts"
+  ],
+  "forbidden": [
+    "RTL/QSF/SDC edits",
+    "assembler",
+    "SOF/JIC/RBF/POF generation",
+    "JTAG programming",
+    "power-on or board test"
+  ],
+  "acceptance": [
+    "source SHA and RTL/QSF/SDC hashes recorded",
+    "synthesis and fitter complete",
+    "signoff setup/hold/recovery/removal/min-pulse and DDR/Metastability extracted",
+    "top-50 raw report and parsed clustering saved with hashes",
+    "no assembler or board artifact/action"
+  ],
+  "resource": "independent remote Quartus slot; may overlap one local Verilator/QEMU heavy job",
+  "created_at": "2026-09-05T06:10:00+08:00",
+  "updated_at": "2026-09-05T06:41:39+08:00",
+  "evidence": "docs/tasks/evidence/T-20260905-008.json",
+  "handoff": "docs/handoffs/T-20260905-008-r16-quartus-physical.md",
+  "attempt_status": "Two synthesis attempts were safely stopped when free physical memory fell below MinFreeMb=16384; no completed synthesis database exists.",
+  "next": "When remote free memory changes, retry the same guarded synthesis/fitter/STA flow; only then re-cluster the new top-N. Do not use stale T-058 ranking as final.",
+  "board_policy": "Physical compile only. Explicit user permission is required before any assembler, JTAG, programming, power-on, or board test."
+}

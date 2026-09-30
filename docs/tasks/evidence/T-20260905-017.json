@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-017",
+  "state": "review",
+  "partial": false,
+  "base_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "implementation_head": "ebcf674abbbb81b0dac68faf12442c1c48e48d8e",
+  "head_sha": "ebcf674abbbb81b0dac68faf12442c1c48e48d8e",
+  "documentation_tip": "final documentation/evidence commit is intentionally not self-referenced",
+  "merge_sha": null,
+  "branch": "timing/T-20260905-017-r18-fp-prescan-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-017",
+  "scope": "Split the ordinary FP round-pack leading-one/zero scan and derived exponent from the following tiny classification/normalization stages with a real pack_scan register boundary, while preserving raw IEEE bits, FPCR/FPSR behavior, packed-half lanes and single-outstanding control semantics.",
+  "timing_source": {
+    "task": "T-20260905-014",
+    "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+    "physical_rtl_parent_sha": "0166ede4abab06aff35c06159acdde7570cafa6e",
+    "report": "docs/handoffs/T-20260905-014-r17-quartus-physical.md",
+    "cone": "fp_exec.scalar_unit.g_iter.pp_pre -> pack_pre",
+    "reported_paths": 50,
+    "violated_paths": 50,
+    "worst_slack_ns": -2.103,
+    "worst_data_delay_ns": 22.46,
+    "logic_levels": 59,
+    "worst_endpoint": "pp_pre.sig[249] -> pack_pre.is_tiny",
+    "report_context": "R17 post-fit directional report; physical improvement is not claimed by this owner lane"
+  },
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_scalar_r18_tb.sv",
+      "docs/handoffs/T-20260905-017-r18-fp-prescan-cut.md",
+      "docs/tasks/evidence/T-20260905-017.json"
+    ],
+    "rtl_sha256": "0dc20d1885c00dcc5754b1f4a26408d60e6f41cfac6e9a84dca3178756a2c223",
+    "focused_tb_sha256": "20ad8d4cccc9522e454d8bbdfdac630b3baa670af5b1fc946ede67650c30ec99",
+    "summary": "Added fp_round_scan_t/round_pack_scan and pack_scan{,_lo,_hi} registers. Ordinary pp_pre now crosses IT_PREP -> IT_PACK_SCAN -> IT_PACK_PRE -> IT_PACK; the scan and exp2+lead metadata are registered before round_pack_pre tiny classification. DIV/SQRT remains on div_pre/sqrt_pre -> IT_FIN -> IT_PACK.",
+    "state_boundary": {
+      "IT_PREP": "round_pack_scan(pp_pre*) writes pack_scan*; no result or iter_done",
+      "IT_PACK_SCAN": "round_pack_pre(pack_scan*) writes pack_pre* and performs only tiny/normal classification; no result or iter_done",
+      "IT_PACK_PRE": "round_pack_p1(pack_pre*) writes pack_mid* with normalize/GRS; no result or iter_done",
+      "IT_PACK": "round_pack_p2(pack_mid*) performs final increment/overflow/subnormal/FZ/AHP/pack and exposes iter_done/result",
+      "iterative_div_sqrt": "No IT_PACK_SCAN visit; existing div_pre/sqrt_pre -> IT_FIN -> IT_PACK path and nominal latency retained",
+      "reset_kill": "Reset and iter_kill return IT_IDLE and clear pack_scan*, pack_pre*, pack_mid* and prior non-architectural payloads",
+      "valid_drop": "IT_PREP, IT_PACK_SCAN, IT_PACK_PRE and IT_PACK drop to IT_IDLE without iter_done and clear their round-pack payloads",
+      "pause": "!iter_pause gates all state transitions; scan/classification/normalization payloads are held and live operands are not re-read",
+      "kill_priority": "iter_kill is evaluated before iter_pause, so kill clears a paused payload",
+      "architectural_commit": "No public interface, core, response ownership, commit order or architectural state path changed"
+    },
+    "latency": {
+      "ordinary_scalar_fadd_fsub_s_d_h": {"r17": 9, "r18_expected": 10},
+      "ordinary_scalar_fmul_fma": {"r17": 8, "r18_expected": 9},
+      "ordinary_scalar_scvtf_ucvtf": {"r17": 7, "r18_expected": 8},
+      "ordinary_scalar_fcvt": {"r17": 6, "r18_expected": 7},
+      "ordinary_neon_fadd_fsub_2s": {"r17": 17, "r18_expected": 19},
+      "ordinary_neon_fadd_fsub_4s": {"r17": 33, "r18_expected": 37},
+      "ordinary_neon_fmul_fma_2s": {"r17": 15, "r18_expected": 17},
+      "ordinary_neon_scvtf_ucvtf_2s": {"r17": 13, "r18_expected": 15},
+      "iterative_scalar_fdiv_s_d": {"r17": 261, "r18_expected": 261},
+      "iterative_scalar_fdiv_h": {"r17": 518, "r18_expected": 518},
+      "iterative_scalar_fsqrt_s_d": {"r17": 69, "r18_expected": 69},
+      "iterative_scalar_fsqrt_h": {"r17": 70, "r18_expected": 70},
+      "iterative_neon_fsqrt_2s": {"r17": 137, "r18_expected": 137},
+      "other_pp_other_ops": "unchanged",
+      "pause": "paused cycles are additive and excluded from nominal latency"
+    },
+    "semantics": {
+      "raw_bits": "round_pack_p2 and special/zero/NaN/overflow/subnormal paths are unchanged; only payload timing is extended",
+      "flags": "input_flags, FPSR IOC/DZC/OFC/UFC/IXC/IDC, DN/FZ/FZ16/AHP and RMode metadata are carried unchanged",
+      "packed_half": "pack_scan_lo/hi and pack_pre_lo/hi are captured in parallel; FCVT remains single-lane",
+      "false_path": false,
+      "public_interface_modified": false,
+      "forbidden_regions_modified": false
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-diff-check",
+      "level": "static",
+      "source_sha": "ebcf674abbbb81b0dac68faf12442c1c48e48d8e",
+      "command": "git diff --check HEAD^ HEAD",
+      "exit_code": 0,
+      "result": "pass",
+      "notes": "Implementation/test commit has no whitespace errors."
+    },
+    {
+      "run_id": "owner-iverilog-r18-focused",
+      "level": "static",
+      "source_sha": "ebcf674abbbb81b0dac68faf12442c1c48e48d8e",
+      "command": "iverilog -g2012 -Wall -s lcvex_fp_scalar_r18_tb -o /dev/null rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_r18_tb.sv",
+      "exit_code": 3,
+      "result": "parser_limited_by_existing_constructs",
+      "tool": "Icarus Verilog 13.0 (v13_0-dirty)",
+      "notes": "Only the repository's pre-existing `inside` expressions at rtl/lcvex_fp_scalar.sv:3120, :3618 and :4048 emitted `sorry: \"inside\" expressions not supported yet`; no T-017-specific diagnostic was emitted. This is not a complete compile green result."
+    },
+    {
+      "run_id": "owner-iverilog-existing-scalar-tbs",
+      "level": "static",
+      "source_sha": "ebcf674abbbb81b0dac68faf12442c1c48e48d8e",
+      "command": "iverilog -g2012 -Wall -s lcvex_fp_scalar_tb -o /dev/null rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_tb.sv; iverilog -g2012 -Wall -s lcvex_fp_scalar_p7_4_tb -o /dev/null rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_p7_4_tb.sv; iverilog -g2012 -Wall -s lcvex_fp_scalar_p7_5_tb -o /dev/null rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv tb/sv/lcvex_fp_scalar_p7_5_tb.sv",
+      "exit_code": 3,
+      "result": "parser_limited_by_existing_constructs",
+      "notes": "The same three pre-existing `inside` parser limitations are encountered; no dynamic test was run."
+    },
+    {
+      "run_id": "owner-structural-review",
+      "level": "static",
+      "source_sha": "ebcf674abbbb81b0dac68faf12442c1c48e48d8e",
+      "command": "manual review of round_pack_scan/round_pack_pre/round_pack_p1/round_pack_p2, IT_PREP/IT_PACK_SCAN/IT_PACK_PRE/IT_PACK, reset/kill/valid-drop/pause and output branches",
+      "exit_code": 0,
+      "result": "pass",
+      "notes": "Confirmed no direct pp_pre-to-pack_pre scan call remains, no ordinary path bypasses pack_scan, DIV/SQRT does not visit IT_PACK_SCAN, and all new state has reset/kill/drop handling."
+    }
+  ],
+  "not_run": [
+    "Verilator compilation or simulation",
+    "Cocotb P7 suites",
+    "QEMU or strict lockstep",
+    "merged-candidate L0-L2 validation",
+    "Quartus synthesis/fitter/signoff STA",
+    "assembler, SOF/bitstream, JTAG, programming, power-on or board test"
+  ],
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "false_path_added": false,
+    "core_modified": false,
+    "neon_fp_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "active_task_modified": false,
+    "heavy_validation_run": false,
+    "assembler_run": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false
+  },
+  "known_limits": [
+    "The owner lane has no functional green claim; the focused TB and existing scalar TBs require the integrator's Verilator run.",
+    "Icarus 13.0 cannot parse the three existing inside expressions and returned 3; this limitation is recorded rather than bypassed.",
+    "T-010's existing fp_exec transaction TB still has old numeric state/latency assumptions and must be updated or revalidated on the merged candidate.",
+    "Physical timing improvement, new top-N membership, area and actual post-fit logic depth require a fresh physical run on the merged SHA.",
+    "Ordinary path latency increases one cycle per scalar slot; DIV/SQRT nominal latency is expected unchanged because it remains outside IT_PACK_SCAN."
+  ],
+  "validation": {
+    "git_diff_check": "pass",
+    "focused_static_parser": "limited_by_preexisting_iverilog_inside_support",
+    "focused_test_present": true,
+    "handoff_present": true,
+    "write_set_review": "pass: RTL, focused scalar SV test, handoff and evidence only",
+    "heavy_validation": "not_run_by_policy"
+  },
+  "handoff": "docs/handoffs/T-20260905-017-r18-fp-prescan-cut.md",
+  "next": "Integrator merges the implementation commit into the disposable R18 batch candidate, updates/revalidates existing FP exec latency/state checks, runs the complete affected L0-L2 union and then a fresh post-fit/STA; no board action is authorized."
+}

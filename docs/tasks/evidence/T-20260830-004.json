@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-004",
+  "state": "done",
+  "base_sha": "9d52e81da8b566629bf12f082a485df9cf0b06ad",
+  "head_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+  "merge_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+  "branch": "feature/T-20260830-004-fpga-d",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-004",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12",
+    "cgroup": "MemoryMax=16G, MemorySwapMax=0",
+    "aarch64_tools": "aarch64-linux-gnu-as/ld/objcopy"
+  },
+  "qemu": {},
+  "rtl_filelist_sha256": "404108df9586747b6993e490fdda9d223112c0513041926f59d65cda499154c8",
+  "soc_filelist_sha256": "6008d3a14aba77b15c7c09e8a59419def6f7f491f0ef76f7dd136aeca23dae8d",
+  "runs": [
+    {
+      "run_id": "owner-l0-diff-check-001",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace/patch errors after RTL changes."
+    },
+    {
+      "run_id": "owner-l0-core-default-lint-002",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q make VERILATOR_JOBS=1 compile",
+      "seed": null,
+      "wall_seconds": 23.432,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Default A64_FP_SIMD=1 core lint; Verilator built 41.653 MB / 19 C++ files."
+    },
+    {
+      "run_id": "owner-l0-core-nofp-lint-003",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q conda run --no-capture-output -n lcvex verilator --lint-only -Wall -Wno-UNUSEDPARAM -GA64_FP_SIMD=0 --top-module lcvex_core -f rtl/filelist.f",
+      "seed": null,
+      "wall_seconds": 0.766,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "A64_FP_SIMD=0 core lint; Verilator built 2.899 MB / 6 C++ files. Local lint_off on idex_d keeps it warning-clean without global suppression."
+    },
+    {
+      "run_id": "owner-l0-soc-default-lint-004",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-DECLFILENAME -Wno-PINMISSING -Wno-UNUSEDSIGNAL -Wno-UNDRIVEN -Wno-WIDTHEXPAND -Wno-UNSIGNED -Wno-PROCASSINIT --top-module lcvex_catapult_soc_top -f fpga/catapult_a10/tb/filelist_soc.f",
+      "seed": null,
+      "wall_seconds": 25.108,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Default Catapult SoC top lint; Verilator built 45.009 MB / 21 C++ files."
+    },
+    {
+      "run_id": "owner-l0-soc-nofp-lint-005",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-DECLFILENAME -Wno-PINMISSING -Wno-UNUSEDSIGNAL -Wno-UNDRIVEN -Wno-WIDTHEXPAND -Wno-UNSIGNED -Wno-PROCASSINIT -GA64_FP_SIMD=0 --top-module lcvex_catapult_soc_top -f fpga/catapult_a10/tb/filelist_soc.f",
+      "seed": null,
+      "wall_seconds": 1.253,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "A64_FP_SIMD=0 Catapult SoC top lint; Verilator built 5.570 MB / 9 C++ files."
+    },
+    {
+      "run_id": "owner-l0-soc-nofp-build-006",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -Wno-fatal -Wno-DECLFILENAME -Wno-PINMISSING -Wno-UNUSEDSIGNAL -Wno-UNDRIVEN -Wno-WIDTHEXPAND -Wno-UNSIGNED -Wno-PROCASSINIT -Wno-UNUSEDPARAM -GA64_FP_SIMD=0 --top-module lcvex_catapult_soc_tb -Mdir /tmp/vlt_soc_nofp_build -o lcvex_catapult_soc_tb -f fpga/catapult_a10/tb/filelist_soc.f",
+      "seed": null,
+      "wall_seconds": 33.0,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "A64_FP_SIMD=0 Catapult SoC TB binary build succeeded."
+    },
+    {
+      "run_id": "owner-l1-soc-nofp-smoke-007",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q /tmp/vlt_soc_nofp_build/lcvex_catapult_soc_tb",
+      "seed": null,
+      "wall_seconds": 0.066,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Catapult SoC no-FP smoke: SOC_SMOKE_ALL_PASS (positive and cal-blocked)."
+    },
+    {
+      "run_id": "owner-l0-cluster-nofp-c1-008",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q conda run --no-capture-output -n lcvex verilator --lint-only --no-assert --no-timing --top-module lcvex_cluster_top -GCORE_COUNT=1 -GA64_FP_SIMD=0 rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv rtl/lcvex_mem_ram.sv rtl/lcvex_mem_arb.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv -Wno-fatal",
+      "seed": null,
+      "wall_seconds": 0.686,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cluster CORE_COUNT=1 no-FP lint; Verilator built 4.361 MB / 6 C++ files."
+    },
+    {
+      "run_id": "owner-l0-cluster-nofp-c2-009",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q conda run --no-capture-output -n lcvex verilator --lint-only --no-assert --no-timing --top-module lcvex_cluster_top -GCORE_COUNT=2 -GA64_FP_SIMD=0 rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv rtl/lcvex_mem_ram.sv rtl/lcvex_mem_arb.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv -Wno-fatal",
+      "seed": null,
+      "wall_seconds": 1.183,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cluster CORE_COUNT=2 no-FP lint; Verilator built 4.988 MB / 12 C++ files."
+    },
+    {
+      "run_id": "owner-l0-cluster-default-c1-010",
+      "source_sha": "1d067e2d0de14af1818febf71c218e3710b0623f",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -q conda run --no-capture-output -n lcvex verilator --lint-only --no-assert --no-timing --top-module lcvex_cluster_top -GCORE_COUNT=1 rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv rtl/lcvex_mem_ram.sv rtl/lcvex_mem_arb.sv rtl/lcvex_cluster_pkg.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv -Wno-fatal",
+      "seed": null,
+      "wall_seconds": 24.294,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cluster default A64_FP_SIMD=1 CORE_COUNT=1 lint; Verilator built 45.130 MB / 19 C++ files."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-handoff",
+      "uri": "docs/handoffs/T-20260830-004-fpga-d.md",
+      "sha256": "c1aaf1b0738234cd9d40742df296bb28d7e7c619aa0699173678aaced5ff3160",
+      "bytes": null,
+      "owner": "T-20260830-004-fpga-d-owner",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-004-fpga-d.md"
+    },
+    {
+      "id": "artifact-core-diff",
+      "uri": "rtl/lcvex_core.sv",
+      "sha256": "e5ffdf676b33a409dc817c561212d95a9c561efbcdeedc39ee5584bb34adfdac",
+      "bytes": null,
+      "owner": "T-20260830-004-fpga-d-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show 1d067e2d0de14af1818febf71c218e3710b0623f:rtl/lcvex_core.sv"
+    },
+    {
+      "id": "artifact-nofp-soc-lint-log",
+      "uri": "/tmp/nofp_soc_lint2.log",
+      "sha256": "3e1d61e66025f7e04301294cb9b1334100e49390f27e57f9a8acb01fed52dada",
+      "bytes": null,
+      "owner": "T-20260830-004-fpga-d-owner",
+      "retain_until": "task-close",
+      "reproduce": "re-run run owner-l0-soc-nofp-lint-005"
+    },
+    {
+      "id": "artifact-nofp-soc-run-log",
+      "uri": "/tmp/vlt_soc_nofp_run.log",
+      "sha256": "5779b7ea294f7900b62a6d284a90b69ab64752b039a2c751fe1020396301f025",
+      "bytes": null,
+      "owner": "T-20260830-004-fpga-d-owner",
+      "retain_until": "task-close",
+      "reproduce": "re-run run owner-l1-soc-nofp-smoke-007"
+    }
+  ],
+  "known_limits": [
+    "A64_FP_SIMD=0 removes FP/NEON execution units but does not yet make FP/NEON instructions architecturally trap/UDEF; software must avoid them.",
+    "lcvex_fp_state and V0-V31/FPCR/FPSR/CPACR remain instantiated; further area reduction is still possible.",
+    "No Quartus synthesis/fit/STA performed; Verilator elaboration metrics are proxies only.",
+    "No full B5 flow, no remote QSF/SDC changes, no license access, no SVE.",
+    "Default single/dual-core behavior unchanged (all new parameters default 1)."
+  ],
+  "next": "Integrator review; FPGA-F can use A64_FP_SIMD=0 for a reduced Quartus synthesis to measure LC/RAM and determine whether 75GB OOM is resolved.",
+  "status": "done",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T02:03:45+08:00",
+    "head_sha": "95f18baf1723e07a9473f2a20c17e0a995bfd9c8",
+    "notes": "FPGA-D merged. True generate-gate A64_FP_SIMD=0 removes fp_scalar/neon_fp/neon_int instances; default=1 unchanged. Integrator reran make compile PASS.",
+    "merge_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+    "result_sha": "13aea156ffa8fd9131fb92c36aab5eccbb996e04"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "13aea156ffa8fd9131fb92c36aab5eccbb996e04",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "artifact_hash_fixes": [
+      {
+        "artifact": "artifact-handoff",
+        "uri": "docs/handoffs/T-20260830-004-fpga-d.md",
+        "sha256": "c1aaf1b0738234cd9d40742df296bb28d7e7c619aa0699173678aaced5ff3160",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "artifact-core-diff",
+        "uri": "rtl/lcvex_core.sv",
+        "sha256": "e5ffdf676b33a409dc817c561212d95a9c561efbcdeedc39ee5584bb34adfdac",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  }
+}

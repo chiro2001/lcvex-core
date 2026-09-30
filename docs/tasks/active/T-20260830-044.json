@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-044",
+  "label": "PE-F1A-DYN",
+  "parent": "T-20260830-033",
+  "title": "F1a commit sequence 首分歧动态诊断",
+  "kind": "frontend-correctness-diagnosis",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1a-divergence",
+  "agent_type": "diagnostic-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260830-041",
+    "T-20260830-043"
+  ],
+  "base_sha": "ab6e44f6de301a50dd8930b7e457ee6e4ba3d424",
+  "branch": "verify/T-20260830-044-f1a-commit-divergence",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-044",
+  "scope": "为 microbench runner 增加默认关闭的 commit trace 诊断输出和流式 trace 比较器，在同一诊断 source SHA 上重建 nocache_d0 F0/F1a runner；以 alu_latency 为等价负对照，以 fp_scalar（历史 +2 retired）和 mem_seq（历史 +10 retired）定位第一处分歧，保存小型上下文/哈希并形成根因边界。只诊断、不修改 RTL/TB/QEMU/workload/参考结果，不宣称修复。",
+  "planning_guidance": {
+    "trace_contract": [
+      "新增 CLI 必须 opt-in，未给 trace 参数时 runner JSON、退出码和现有性能路径不变。",
+      "每条 trace 至少含架构 seq、PC、insn、next PC，以及只在对应 valid/write-enable 时规范化的 GPR/SP/NZCV/memory/exception/monitor/vector/FPCR/FPSR 副作用；inactive payload 必须归零或省略。",
+      "trace 文件写 build/ 下，不进 Git；比较器流式查找 first mismatch，并输出前后有限窗口、trace SHA256、镜像/source SHA 与反汇编。",
+      "先用 alu_latency 证明 off/on trace 完全一致且 instrumentation 不改变 T-043 的 cycles/retired/digest；再跑较短 fp_scalar，最后 mem_seq。"
+    ],
+    "diagnosis": [
+      "区分 duplicate retirement、skipped instruction、wrong-path commit、PC/insn 相同但副作用不同、以及仅终止边界不同；不得只报告最终 digest。",
+      "对第一处分歧关联当拍/邻近 fetch FIFO push/pop/flush/stale/epoch/occupancy 计数；若现有顶层端口不足，只报告所缺观测，不改 RTL/TB 扩端口。",
+      "比较历史 T-043 模式：delay0/cache 下 data/FP/NEON/sort 多退休，delay1 多数等价，6 对 memory effect/count 也不同；给出可证伪的根因候选与下一 RTL fix 精确写集。",
+      "发现真实 F1a 错误后仍不得在本任务修 core；提交诊断 artifact/handoff/evidence 后置 review。"
+    ],
+    "stop_conditions": [
+      "需要修改 rtl/**、tb/**、baremetal/**、QEMU 或参考结果",
+      "instrumentation 本身改变未开启 trace 的既有周期/retired/digest",
+      "off/on 不是同一诊断 source SHA、镜像 hash、工具或参数",
+      "需要并发重型 Verilator 或超过 15G 物理内存"
+    ]
+  },
+  "writes": [
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "scripts/compare_commit_traces.py",
+    "docs/F1A_COMMIT_DIVERGENCE.md",
+    "docs/handoffs/T-20260830-044-f1a-commit-divergence.md",
+    "docs/tasks/evidence/T-20260830-044.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/PERFORMANCE_F1_RESULTS.md",
+    "docs/tasks/evidence/T-20260830-041.json",
+    "docs/tasks/evidence/T-20260830-043.json",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.json",
+    "Makefile",
+    "scripts/run_perf_matrix.py",
+    "tb/sv/lcvex_soc_tb.sv",
+    "rtl/lcvex_core.sv",
+    "baremetal/perf/t_fp_scalar.c",
+    "baremetal/perf/t_mem_seq.c"
+  ],
+  "validation": {
+    "l0": [
+      "Python/C++ 静态检查、--help、git diff --check、写集核对",
+      "trace comparator 合成 equal/duplicate/skip/effect-mismatch fixture 自测"
+    ],
+    "l1": [
+      "15G cgroup、MemorySwapMax=0、-j1 串行构建 nocache_d0 f0/f1a runner",
+      "alu_latency trace equal 且未启用 trace 的 cycles/retired/digest 与 T-043 相同"
+    ],
+    "l2": [
+      "fp_scalar 和 mem_seq 同 SHA 成对 trace；报告第一处分歧、上下文、artifact hash 与根因候选"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "可重复捕获至少一个历史非等价 workload 的第一处 commit 分歧，且 alu_latency 负对照严格相同；trace/provenance/上下文足以区分重复、跳过、错误路径或副作用差异，并给出下一修复任务的精确方向。若观测不足，可交付 blocked 但不得伪造根因；本任务不修 RTL。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 60,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "test_slot": {
+    "status": "released",
+    "reason": "T-043 集成复跑已结束，T-044 独占重型 Verilator 队列",
+    "released_at": "2026-08-30T22:11:16+08:00",
+    "release_rule": "一次一个 MemoryMax=15G/MemorySwapMax=0、-j1 重型构建；不得并发 Gate/Quartus/QEMU 长跑"
+  },
+  "created_at": "2026-08-30T22:11:16+08:00",
+  "updated_at": "2026-08-30T23:00:08+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T22:13:05+08:00",
+    "agent_name": "t041_pe_f1a_impl_luna",
+    "agent_reuse_note": "复用已完成 T-043 的 gpt-5.6-luna(max) agent；当前只持有 T-044。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-044"
+  },
+  "handoff": "docs/handoffs/T-20260830-044-f1a-commit-divergence.md",
+  "evidence": "docs/tasks/evidence/T-20260830-044.json",
+  "merge_sha": "32980cef21a6decc3e4edf4df465556e0afca548",
+  "merged_at": "2026-08-30T22:59:29+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T23:00:08+08:00",
+    "status": "accepted_duplicate_retirement_diagnosis",
+    "owner_head_sha": "e519109bcb2ec4705eeb59bab5003ed7d176c423",
+    "diagnostic_source_sha": "5f7120ac768f2c5257f7ae1899787829e6065ed9",
+    "checks": [
+      "owner worktree clean and six-file write set matched",
+      "all six trace and three comparison SHA256 values independently matched evidence",
+      "independent comparator fixture plus full alu/fp/mem comparison reproduced byte-identical outputs",
+      "independent 1000-cycle mem_seq trace reproduced first duplicate at index 16/PC 0x44000104",
+      "merge SHA 32980ce has byte-identical diagnostic source and reproduced fixture plus short duplicate trace using reviewed binaries"
+    ],
+    "notes": "确认 F1a duplicate retirement；最高优先修复方向是 FIFO/IFID/data-stall consume 原子性，但具体 RTL 修点仍需内部时序 assertion/trace 证明。"
+  },
+  "known_limits": [
+    "动态 trace 是诊断工具，不替代 QEMU strict lockstep。",
+    "不运行 Gate D、Linux、Quartus、B5/full flow，不读取 license。"
+  ],
+  "next": "T-044/T-045 已汇合：登记 RTL 修复任务，先复现 mem_seq early duplicate 并证明 FIFO head/IFID/IDEX consume 时序，再修 core 与定向测试；同时把 fault-head 与 commit-ready hold gap 纳入独立回归。"
+}

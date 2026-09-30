@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-042",
+  "label": "CKPT-PROTO",
+  "parent": "T-20260830-040",
+  "title": "Checkpoint/restore/drain 权威协议文档闭合",
+  "kind": "checkpoint-protocol-documentation",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-checkpoint-protocol",
+  "agent_type": "design-documentation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "model_scope": "从当前已实现的 sidecar v4、coordinator、cache drain/probe 契约收敛权威协议；只写文档，不改代码、不运行构建。",
+  "depends_on": [
+    "T-20260830-040"
+  ],
+  "base_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+  "branch": "feature/T-20260830-042-checkpoint-protocol",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-042",
+  "scope": "补齐 docs/CHECKPOINT_PROTOCOL.md，作为后续 F3a/F3b transaction queue、MSHR 和 store buffer 的 checkpoint 启动门。文档必须以现有实现和 T-097 sidecar v4 为准，冻结 quiesce→流水线/事务排空→L1 drain→L2/PoC drain→ack/manifest atomic finalize→restore reset/epoch/quarantine/cache invalidation 的顺序、fault/reset/timeout 行为、架构与微架构状态边界、provenance/hash 和提交时机。只交付 docs/handoff/evidence，不修改 RTL/测试/脚本，不运行构建。",
+  "planning_guidance": {
+    "must_define": [
+      "checkpoint 请求/ack/fault 的 ready-valid、保持和超时语义；新请求何时被 quiesce，哪些已接受事务必须排空。",
+      "core pipeline/commit、D-L1 dirty drain、L2/PoC drain 和 sidecar/manifest finalize 的严格顺序；fault 时不得产生成功 ack。",
+      "restore 的 reset/epoch bump、stale response quarantine、cache/TLB/MMU/monitor/timer/GIC/FP 状态恢复与不可恢复微架构状态处理。",
+      "架构状态只在 commit 更新；MSHR/store buffer/fetch FIFO 不进入 sidecar，未来存在时必须 drain 或 invalidate，不得半恢复。",
+      "manifest pending/final、parent/source/image/tool/hash、artifact atomicity、seq window 和失败现场口径。",
+      "与 F1 local fetch epoch、F3 transaction epoch/age、L1/L2 probe abort 和 CORE_COUNT=1/多核 envelope 的接口门。"
+    ],
+    "authority": "以 T-20260829-097 handoff、sim/difftest/checkpoint.py、lockstep_coordinator.cc、lcvex_core restore、L1_L2_PROBE_CONTRACT 和现有 checkpoint tests 为事实源；发现实现间冲突时如实列出 gap，不在文档里虚构实现。",
+    "decision_rule": "文档可把未来 F3 queue 规则标为 required extension，但不能声称当前已实现；若现有实现无法证明 drain/restore 原子性，列为 F3a blocker。"
+  },
+  "writes": [
+    "docs/CHECKPOINT_PROTOCOL.md",
+    "docs/handoffs/T-20260830-042-checkpoint-protocol.md",
+    "docs/tasks/evidence/T-20260830-042.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_F3_PREWORK.md",
+    "docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/COMMIT_PACKET.md",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/checkpoint_*",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_l1_d_wb.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "tb/sv/lcvex_l2_l1_probe_tb.sv",
+    "docs/handoffs/*checkpoint*"
+  ],
+  "context_docs": [
+    "docs/PERFORMANCE_F3_PREWORK.md",
+    "docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/COMMIT_PACKET.md"
+  ],
+  "validation": {
+    "l0": [
+      "只读核对实现/测试与历史 handoff，文档逐条注明 implemented/required extension/gap",
+      "协议含状态/事件序列、reset/fault/timeout、状态所有权、provenance 和 F1/F3 扩展门",
+      "git diff --check；确认只修改允许的三个 docs 文件"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "产出与当前 sidecar v4/coordinator/cache drain 实现一致的权威 CHECKPOINT_PROTOCOL；明确 implemented 与 future-required，不伪造当前 MSHR/store buffer/fetch FIFO 支持；足以让 F3a child task 引用并定义 reset/epoch/quarantine/drain 验收。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T16:11:40+08:00",
+  "updated_at": "2026-08-30T16:52:33+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T16:15:06+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-042"
+  },
+  "handoff": "docs/handoffs/T-20260830-042-checkpoint-protocol.md",
+  "evidence": "docs/tasks/evidence/T-20260830-042.json",
+  "merge_sha": "ee5d5582bcc7478879636ef1895c643b9c95d976",
+  "merged_at": "2026-08-30T16:52:33+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T16:52:33+08:00",
+    "status": "accepted_with_implementation_gates",
+    "owner_head_sha": "fb0c5f1dad81b6d822f1885aac19024c8a960177",
+    "checks": [
+      "owner worktree clean and only the three declared docs files changed",
+      "git diff --check BASE..HEAD and JSON validation passed after follow-up",
+      "protocol/handoff hashes matched evidence",
+      "implemented/required-extension/gap claims were separated and historical tests were not relabeled current PASS"
+    ],
+    "notes": "Checkpoint protocol documentation is now authoritative, but F3a implementation stays blocked until P2↔B4 bridge, UID/epoch stale quarantine, core/I-L1/transport drain and timeout/watchdog are implemented and verified."
+  },
+  "known_limits": [
+    "docs-only：禁止修改 RTL/TB/sim/scripts/Makefile，禁止运行生成器、构建、仿真、QEMU 或 Quartus。",
+    "不把历史长跑或 sidecar 测试写成当前 SHA 新通过，不声称 queue/MSHR/store buffer 已实现。",
+    "若发现协议/实现冲突，只记录 gap 与 blocker，不在本任务改代码。"
+  ],
+  "next": "Checkpoint 文档门已闭合；F3a 仍须等待 F1a core 热点释放，并先实现/验证 P2↔B4 bridge、UID/epoch quarantine、pipeline/I-L1/transport drain 和 timeout。"
+}

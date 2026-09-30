@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "task": "T-20260829-088",
+  "state": "done",
+  "base_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+  "head_sha": "1a11472b1e325019fec854ff7a488a63ee25955d",
+  "merge_sha": "f1f021bf919d36b6175374e5e512cbd8ec00441e",
+  "branch": "feature/T-20260829-088-b3-system-maint-atomic",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-088",
+  "sent_at": "2026-08-29T08:08:06+08:00",
+  "received_at": "2026-08-29T08:08:06+08:00",
+  "reported_at": "2026-08-29T08:36:00+0800",
+  "merged_first_slice_sha": "14b93d58384bd619edb4d765809a16b02f679e41",
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches_sha256": null,
+    "binary_sha256": null
+  },
+  "rtl_filelist_sha256": "a28a62a38dcaba3f3752b01f9ba8cbb7b6d7ec81170aaac304bb5a6844fbb63c",
+  "tools": {
+    "python": "3.12.10",
+    "verilator": "5.050",
+    "cocotb": "2.0.1"
+  },
+  "artifacts": [
+    {
+      "id": "artifact-b3-decode-change",
+      "owner": "T-20260829-088",
+      "uri": "rtl/lcvex_decode.sv",
+      "reproduce": "git diff rtl/lcvex_decode.sv",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "421d71f638b3cc102f4f12543690e20404e5a5e2a531137f643d0b8fcc4a8694"
+    },
+    {
+      "id": "artifact-b3-sys-decode-tb",
+      "owner": "T-20260829-088",
+      "uri": "tb/sv/lcvex_b3_sys_decode_tb.sv",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_sys_decode_tb -Mdir build/b3_sys_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_sys_decode_tb.sv && conda run --no-capture-output -n lcvex ./build/b3_sys_decode/Vlcvex_b3_sys_decode_tb",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "ec5575474788f337068794dae5b7c020e7754dbc8210d5049dc9ceb0ca81ec0e"
+    },
+    {
+      "id": "artifact-b3-sysreg-access-tb",
+      "owner": "T-20260829-088",
+      "uri": "tb/sv/lcvex_b3_sysreg_access_tb.sv",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_sysreg_access_tb -Mdir build/b3_sysreg_access rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_sysreg_access_tb.sv && conda run --no-capture-output -n lcvex ./build/b3_sysreg_access/Vlcvex_b3_sysreg_access_tb",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "f09ee014d48eea6bf51519f4024f2c076f8d78e67d6f076b870f39f4908f5792"
+    },
+    {
+      "id": "artifact-b3-maint-decode-tb",
+      "owner": "T-20260829-088",
+      "uri": "tb/sv/lcvex_b3_maint_decode_tb.sv",
+      "reproduce": "conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_maint_decode_tb -Mdir build/b3_maint_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_maint_decode_tb.sv && conda run --no-capture-output -n lcvex ./build/b3_maint_decode/Vlcvex_b3_maint_decode_tb",
+      "retain_until": null,
+      "bytes": null,
+      "sha256": "6bb76a2fb0232e6c40d800b7b61be0753e1ee9a42d7af723f79364b7cc621457"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "owner-b3-001",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 120 conda run --no-capture-output -n lcvex verilator --lint-only --timing -Wall -j 2 --top-module lcvex_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "decoder module lint passed after third slice; Walltime 0.360s",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 300,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 240 conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_sys_decode_tb -Mdir build/b3_sys_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_sys_decode_tb.sv && timeout 30 conda run --no-capture-output -n lcvex ./build/b3_sys_decode/Vlcvex_b3_sys_decode_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "barrier decoder-level SV TB rebuilt and passed after third RTL change",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 248,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 240 conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_sysreg_access_tb -Mdir build/b3_sysreg_access rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_sysreg_access_tb.sv && timeout 30 conda run --no-capture-output -n lcvex ./build/b3_sysreg_access/Vlcvex_b3_sysreg_access_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "sysreg access decoder-level SV TB rebuilt and passed after third RTL change",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 248,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 240 conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall -j 2 --top-module lcvex_b3_maint_decode_tb -Mdir build/b3_maint_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv tb/sv/lcvex_b3_maint_decode_tb.sv && timeout 30 conda run --no-capture-output -n lcvex ./build/b3_maint_decode/Vlcvex_b3_maint_decode_tb",
+      "exit_code": 0,
+      "result": "pass",
+      "note": "PASS: lcvex_b3_maint_decode_tb (DC ZVA DZE gate, cache/TLBI maintenance matrix)",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "seed": null,
+      "wall_seconds": 20,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": 248,
+      "disk_delta_mb": null
+    },
+    {
+      "run_id": "owner-b3-005",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 120 make compile",
+      "exit_code": 124,
+      "result": "timeout",
+      "note": "full make compile did not finish; concurrent C2/B2c Verilator builds observed. Not claimed as pass.",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "seed": null,
+      "wall_seconds": 120,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null
+    }
+  ],
+  "known_limits": [
+    "Only decoder-level lint/SV TBs were run; full make compile timed out due concurrent C2/B2c Verilator builds, not claimed as pass.",
+    "No QEMU strict lockstep or Gate D run; oracle is QEMU 11.1.0 source (a64.decode, debug_helper.c, helper.c), not new QEMU execution.",
+    "Third slice implements EL0 DC ZVA DZE gating only; DC CVADP and TLBI OS/RV/range remain deferred/UDEF.",
+    "OSLAR_EL1 MRS is rejected as write-only; OSLSR_EL1 and CONTEXTIDR_EL1 not added.",
+    "RCpc/LDAPR, other LSE128, PMU remain out of scope and are not claimed.",
+    "rtl/lcvex_decode.sv is a shared RTL hotspot; all slices only modified localized decode branches, but integrator should three-way check with parallel decode work."
+  ],
+  "next": "Integrator review second/third slices; rerun full make compile in a clear resource slot; optionally promote three decoder tests into Makefile/test registry.",
+  "handoff_sha": "1a11472b1e325019fec854ff7a488a63ee25955d",
+  "integrator_review": {
+    "received_at": "2026-08-29T09:36:22+08:00",
+    "status": "accepted-three-slices",
+    "head_sha": "24675b8",
+    "notes": "B3 已合入三个低风险切片：(1) SB barrier 仅 CRm==0；(2) MRS OSLAR_EL1 write-only + 系统寄存器矩阵；(3) EL0 DC ZVA DZE 门控与 TLBI/DC/IC 维护矩阵。三个解码器级 TB 均由集成者复跑 PASS。剩余 B3（全量 reset/权限矩阵、DC CVADP、TLBI OS/RV/range、RCpc 等）后续另派。",
+    "merge_sha": "f1f021b",
+    "result_sha": "1a11472b1e325019fec854ff7a488a63ee25955d"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "f1f021b",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "1a11472b1e325019fec854ff7a488a63ee25955d",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "1a11472b1e325019fec854ff7a488a63ee25955d",
+        "reason": "set explicit result head from evidence head_sha"
+      },
+      {
+        "field": "merge_sha",
+        "old": "f1f021b",
+        "new": "f1f021bf919d36b6175374e5e512cbd8ec00441e",
+        "reason": "expand to full merge SHA"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "monotonic_fixes": [
+      {
+        "field": "sent_at",
+        "old": "2026-08-29T08:00:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "reason": "align evidence event timestamp with active dispatch sent_at"
+      },
+      {
+        "field": "received_at",
+        "old": "2026-08-29T08:05:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "reason": "align evidence event timestamp with active dispatch sent_at"
+      }
+    ]
+  }
+}

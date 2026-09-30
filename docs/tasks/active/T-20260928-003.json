@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "T-20260928-003",
+  "title": "Build Catapult Linux lite software and interactive init",
+  "kind": "linux-software",
+  "priority": "high",
+  "phase": "review",
+  "dispatch_status": "owner-complete-awaiting-integrator",
+  "assigned_owner": "linux_software_agent",
+  "depends_on": ["T-20260927-001"],
+  "batch_parent": "T-20260928-002",
+  "base_sha": "8d24b68ba2f8d4d22fdff95309d6be008a0ea7d8",
+  "branch": "feature/T-20260928-003-catapult-linux-software",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-003",
+  "writes": [
+    "configs/linux-catapult-lite.fragment",
+    "baremetal/linux-catapult/init.S",
+    "fpga/catapult_a10/linux/catapult-a10.dts",
+    "scripts/build-linux-catapult.sh",
+    "fpga/catapult_a10/linux/tests/"
+  ],
+  "reads": [
+    "docs/LINUX_BOARD_BOOT_PLAN.md",
+    "configs/linux-lite-6.6.fragment",
+    "baremetal/linux-lite/init.S",
+    "scripts/build-linux-lite.sh",
+    "fpga/catapult_a10/boot/README.md",
+    "rtl/lcvex_catapult_soc_pkg.sv"
+  ],
+  "context_docs": [
+    "docs/LINUX_BOARD_BOOT_PLAN.md §3.2–3.3, §4, §7",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/README.md",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/docs/04-交接-软件链QEMU门全绿与cleanroom软件复现-20260826.md",
+    "/home/chiro/projects/mycpu/a10-linux-riscv/docs/66-UART上板串口完整记录-20260827.md"
+  ],
+  "validation": {
+    "maximum_level": "L0 and software build only",
+    "checks": ["kernel fragment resolves against pinned Linux source", "DTB compiles and matches the agreed A10 MMIO/IRQ contract", "init builds as an integer-instruction AArch64 ELF and its command parser has a host-side focused test"],
+    "heavy_build": "Use the local resource lock before a full Linux Image build; report toolchain, source hash and output hashes. Do not run SoC simulation or Quartus."
+  },
+  "acceptance": "Reproducible Catapult-specific Image/DTB/init inputs; init provides a minimal UART shell protocol with deterministic help/echo/reply behavior, without assuming libc or NEON support.",
+  "handoff": "docs/handoffs/T-20260928-003-catapult-linux-software.md",
+  "evidence": "docs/tasks/evidence/T-20260928-003.json",
+  "created_at": "2026-09-28T00:09:11+08:00",
+  "updated_at": "2026-09-28T01:46:07+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-28T00:15:41+08:00",
+    "agent_name": "linux_software",
+    "model": "platform default; explicit model selector omitted per user instruction",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-003"
+  },
+  "owner_result": {
+    "implementation_sha": "09c44afbe6704480cc0cf9720937f0b51deefdd2",
+    "evidence_sha": "c09280c7fe8a499bda1ecd96cc351c87d273466e",
+    "summary": "Init parser/ELF, board DTB and script L0 checks passed; complete Image build awaits source-tree identity handling and integration."
+  }
+}

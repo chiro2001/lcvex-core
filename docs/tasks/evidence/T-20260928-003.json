@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260928-003",
+  "state": "awaiting-integrator",
+  "acceptance_status": "L0-software-pass-integration-pending",
+  "base_sha": "8d24b68ba2f8d4d22fdff95309d6be008a0ea7d8",
+  "head_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+  "merge_sha": "",
+  "branch": "feature/T-20260928-003-catapult-linux-software",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-003",
+  "recorded_at": "2026-09-28T02:20:55+08:00",
+  "model_record": "平台默认，未显式指定",
+  "dispatch_sent_at": "2026-09-28T00:15:41+08:00",
+  "toolchain": {
+    "kernel_source": {
+      "requested_version": "Linux 6.6",
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260928-003/build/linux-6.6",
+      "available": false,
+      "source_id": "not-available"
+    },
+    "aarch64_gcc": {
+      "version": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+      "path": "/usr/bin/aarch64-linux-gnu-gcc",
+      "sha256": "2fcae05bfafdfc6c0c3453431ce4538fdb8b481169c4670ae48be48a28e4fbe9"
+    },
+    "aarch64_ld": {
+      "version": "GNU ld (GNU Binutils) 2.47",
+      "path": "/usr/bin/aarch64-linux-gnu-ld",
+      "sha256": "4416c3c8b866fc4607e977ab4a6c1751b2ed6debfc090e9165161c96bc1b6d60"
+    },
+    "dtc": {
+      "version": "DTC v1.8.1",
+      "path": "/usr/bin/dtc",
+      "sha256": "79f7465d2df844e1544e76581494359e01329d76f0d42d621c0e5fd5c484684d"
+    },
+    "qemu_aarch64_user": {
+      "version": "qemu-aarch64 version 11.0.3",
+      "path": "/usr/bin/qemu-aarch64",
+      "sha256": "06dc8b07d01aac7bdfd5542dbde960feab726752423a55e2b8f20f7097643677"
+    },
+    "git": {
+      "version": "git version 2.55.0",
+      "path": "/usr/bin/git"
+    },
+    "hostcc": {
+      "version": "cc (GCC) 16.1.1 20260728",
+      "path": "/usr/bin/cc",
+      "sha256": "4df521565a190c08cfd1d41fa7e384abd2a6cfcade364b13c0fb52a129ba685d"
+    }
+  },
+  "source_identity_contract": "Use Git HEAD only when the physical Git --show-toplevel exactly matches KERNEL_SRC; otherwise use KERNEL_SOURCE_ID or no-git-metadata.",
+  "resource_lock_labels": {
+    "default": "local lcvex T-20260928-003 linux_software",
+    "override_tested": "local lcvex T-20260928-002 root"
+  },
+  "gen_init_cpio_host_preflight": {
+    "source_path": "/home/chiro/projects/mycpu/lcvex/build/linux-6.6/usr/gen_init_cpio.c",
+    "source_sha256": "89ed170bf5ebdcb39418e84875d12a78718ebf820382194fb2863c69d18886dc",
+    "source_bytes": 14867,
+    "hostcc": "cc (GCC) 16.1.1 20260728",
+    "output_sha256": "6b1926fd15c660df9d40ddefe9d611735779c76137940d398c1a08ef2d2fcb62",
+    "output_retention": "temporary under this worktree; cleaned by test"
+  },
+  "qemu": {
+    "release": "QEMU user mode 11.0.3 (qemu-aarch64)",
+    "commit": "",
+    "patches_sha256": "not-applicable",
+    "binary_sha256": "06dc8b07d01aac7bdfd5542dbde960feab726752423a55e2b8f20f7097643677"
+  },
+  "rtl_filelist_sha256": "not-applicable-software-only",
+  "runs": [
+    {
+      "run_id": "owner-l0-001-parser",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "fpga/catapult_a10/linux/tests/run_command_parser_test.sh",
+      "seed": null,
+      "wall_seconds": 0.107358,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS: full /init AArch64 compile/link; actual assembly command parser and CR/LF helper executed with qemu-aarch64"
+    },
+    {
+      "run_id": "owner-l0-002-dtb",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "dtc -I dts -O dtb -o build/tmp/T-20260928-003-l0/catapult-a10.dtb fpga/catapult_a10/linux/catapult-a10.dts",
+      "seed": null,
+      "wall_seconds": 0.000009,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "run_id": "owner-l0-003-script",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash -n scripts/build-linux-catapult.sh fpga/catapult_a10/linux/tests/run_command_parser_test.sh fpga/catapult_a10/linux/tests/test_kernel_source_identity.sh fpga/catapult_a10/linux/tests/test_resource_lock_identity.sh fpga/catapult_a10/linux/tests/test_gen_init_cpio_output.sh",
+      "seed": null,
+      "wall_seconds": 0.000009,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "run_id": "owner-prereq-004-source-tree",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "software-build-preflight",
+      "command": "scripts/build-linux-catapult.sh --kernel-src build/linux-6.6 --out-root build/tmp/T-20260928-003-l0/prereq --inputs-only",
+      "seed": null,
+      "wall_seconds": 0.000009,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 2,
+      "result": "SOURCE_TREE_MISSING: expected prerequisite diagnostic; Kconfig and Image stages were not entered"
+    },
+    {
+      "run_id": "owner-l0-005-init-elf",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "aarch64-linux-gnu-gcc -c -nostdlib -ffreestanding -fno-stack-protector -fno-pic -march=armv8-a -mgeneral-regs-only baremetal/linux-catapult/init.S -o build/tmp/T-20260928-003-l0/init.o && aarch64-linux-gnu-ld -nostdlib -static --build-id=none -z noexecstack -Ttext=0x400000 -o build/tmp/T-20260928-003-l0/init build/tmp/T-20260928-003-l0/init.o && aarch64-linux-gnu-readelf -h build/tmp/T-20260928-003-l0/init && aarch64-linux-gnu-readelf -l build/tmp/T-20260928-003-l0/init",
+      "seed": null,
+      "wall_seconds": 0.000010,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS: ELF64 AArch64 static executable, entry 0x400000, no PT_INTERP"
+    },
+    {
+      "run_id": "owner-l0-006-build-script-help",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "scripts/build-linux-catapult.sh --help",
+      "seed": null,
+      "wall_seconds": 0.000010,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS"
+    },
+    {
+      "run_id": "owner-l0-007-source-identity",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "fpga/catapult_a10/linux/tests/test_kernel_source_identity.sh",
+      "seed": null,
+      "wall_seconds": 0.017808,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS: nested non-Git source below the LCVEX checkout falls back to KERNEL_SOURCE_ID/no-git-metadata; a standalone Git source reports its own HEAD"
+    },
+    {
+      "run_id": "owner-l0-008-resource-lock-identity",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "fpga/catapult_a10/linux/tests/test_resource_lock_identity.sh",
+      "seed": null,
+      "wall_seconds": 0.000012,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS: default resource-lock labels and T-20260928-002/root override; no lock or full build started"
+    },
+    {
+      "run_id": "owner-l0-009-gen-init-cpio-output",
+      "source_sha": "d19103f91a7cd06ace7ea79999c58f685f77fe1b",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "KERNEL_SRC=/home/chiro/projects/mycpu/lcvex/build/linux-6.6 fpga/catapult_a10/linux/tests/test_gen_init_cpio_output.sh",
+      "seed": null,
+      "wall_seconds": 0.141243,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "PASS: compiled source usr/gen_init_cpio.c into this worktree's temporary KERNEL_OUT/usr/gen_init_cpio, verified executable/help and full-script generation/use paths; host binary sha256=6b1926fd15c660df9d40ddefe9d611735779c76137940d398c1a08ef2d2fcb62"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-catapult-init-elf",
+      "uri": "build/tmp/T-20260928-003-l0/init",
+      "sha256": "9e0e2130687fe2b189dea15b9e557b4c266fc056e5c54dbba9ae6e17afa58fce",
+      "bytes": 69232,
+      "owner": "linux_software_agent",
+      "retain_until": "integrator review",
+      "reproduce": "owner-l0-005-init-elf"
+    },
+    {
+      "id": "artifact-catapult-a10-dtb",
+      "uri": "build/tmp/T-20260928-003-l0/catapult-a10.dtb",
+      "sha256": "05f5453972e843d35f70e43c7d9c0d5db49324e4b895ff0aa9d58b4ba46ecf4a",
+      "bytes": 1206,
+      "owner": "linux_software_agent",
+      "retain_until": "integrator review",
+      "reproduce": "owner-l0-002-dtb"
+    }
+  ],
+  "resource": {
+    "local_lock": "FREE; no heavy build was started",
+    "remote_access": 0,
+    "gamepc_lock": "not used",
+    "board_actions": 0
+  },
+  "known_limits": [
+    "Linux 6.6 source is absent from this task worktree. The full inputs-only preflight still exits 2 before Kconfig/initramfs/Image; no kernel Image or .config hashes are claimed. The host-tool-only preflight read usr/gen_init_cpio.c from the separately located source and wrote only to a temporary output under this task worktree.",
+    "The build script's inputs-only path still requires Linux 6.6 source to resolve Kconfig and produce initramfs. It now compiles usr/gen_init_cpio.c to KERNEL_OUT/usr/gen_init_cpio and executes that path. Full Image mode acquires the local resource lock.",
+    "Source identity tests use synthetic nested non-Git and standalone Git fixtures under this worktree's ignored test output; the host-tool test reads one source file and does not use the shared kernel output.",
+    "DTB syntax compilation passed, but dtbs_check/schema validation was not run because the kernel source tree was absent.",
+    "No SoC Linux simulation, QEMU system-mode boot, Quartus, JTAG, or board boot was run. Timer/GIC wiring and live UART TX/RX remain platform integration checks."
+  ],
+  "handoff": "docs/handoffs/T-20260928-003-catapult-linux-software.md"
+}

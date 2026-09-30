@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-027",
+  "state": "done",
+  "partial": false,
+  "base_sha": "87354542f502e1ec74971b5d63435e9590601b89",
+  "head_sha": "5eb36e93ac99731d7a0df2cb60fc8de20c288169",
+  "branch": "fix/T-20260902-027-emif-fifo-reset-cdc-deep",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-027",
+  "scope": "Deep RTL/SDC fix for EMIF async FIFO gray-pointer hold, response FIFO mem->CPU FSM path, and reset synchronizer recovery by per-domain local async reset plus remote reset synchronizer.",
+  "changes": [
+    {
+      "path": "rtl/lcvex_axi4_avalon_adapter.sv",
+      "type": "rtl_hardening",
+      "summary": "Add local lcvex_async_fifo_cdc hardened Gray/FIFO module with keep attributes; change reset release bridges to local async reset + remote reset two-flop data sync; keep CPU response FSM off FIFO control/ID/error fields."
+    },
+    {
+      "path": "fpga/catapult_a10/quartus/catapult_a10.sdc",
+      "type": "constraint",
+      "summary": "Add guarded false path from reset_gate_inst|logic_rst_n_q to EMIF reset synchronizer first-stage data input."
+    }
+  ],
+  "source_evidence": {
+    "task": "T-20260902-024",
+    "handoff": "docs/handoffs/T-20260902-024-a10-rtl-cdc-harden.md",
+    "task_025": "docs/handoffs/T-20260902-025-fp-p5-rerun-round2.md",
+    "root_cause": "T-20260902-025 STA still shows request_fifo rd_ptr_bin->rd_ptr_gray_wr1 hold, response_fifo mem->CPU FSM path, and reset_gate logic_rst_n_q->emif_rst_sync1 recovery. Existing SDC cuts did not replace true RTL synchronization."
+  },
+  "rtl_filelist_sha256": null,
+  "soc_filelist_sha256": null,
+  "modified_file_hashes": {
+    "rtl/lcvex_axi4_avalon_adapter.sv": "6b07f793e81ba146c9fa7cbaa4e09deb4b2901790ba9ddd058988f9bec6f08bd",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc": "0e40fa6fb80372cb25b81f30fb81536895d7e27f364edb90a38a0946c2324b61"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile",
+      "source_sha": "87354542f502e1ec74971b5d63435e9590601b89",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make compile",
+      "seed": null,
+      "wall_seconds": 8,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-lint-soc",
+      "source_sha": "87354542f502e1ec74971b5d63435e9590601b89",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash fpga/catapult_a10/tools/lint_soc.sh",
+      "seed": null,
+      "wall_seconds": 9,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "output": "LCVEX_CATAPULT_A10_SOC_LINT_PASS"
+    },
+    {
+      "run_id": "owner-l0-lint-platform",
+      "source_sha": "87354542f502e1ec74971b5d63435e9590601b89",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "bash fpga/catapult_a10/tools/lint_platform.sh",
+      "seed": null,
+      "wall_seconds": 9,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "output": "LCVEX_CATAPULT_A10_SKELETON_LINT_PASS"
+    },
+    {
+      "run_id": "owner-l1-b2-sv-regression",
+      "source_sha": "87354542f502e1ec74971b5d63435e9590601b89",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_axi4_avalon_tb -Mdir obj_dir_b2 -o lcvex_axi4_avalon_tb -f rtl/filelist.f tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv; ./obj_dir_b2/lcvex_axi4_avalon_tb",
+      "seed": "b2_054",
+      "wall_seconds": 20,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "output": "PASS: B2 AXI4/Avalon SV regression writes=0 reads=0"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-027-emif-fifo-reset-cdc-deep.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-027.json"
+    }
+  ],
+  "known_limits": [
+    "No Quartus/Qsys synthesis, fitter, signoff STA, TimeQuest Report CDC, assembler/SOF, or FP-P4/FP-P5 physical rerun was executed.",
+    "The hardened async FIFO is duplicated inside the writable adapter source instead of editing read-only rtl/lcvex_async_fifo.sv.",
+    "Post-fit STA must confirm the renamed/reset bridge paths and the new SDC false path in the real generated-clock hierarchy."
+  ],
+  "next": "Integrator merges, then rerun FP-P4 functional and FP-P5 synthesis/fitter/signoff STA on the merged SHA; only setup/hold/recovery/removal/min-pulse all non-negative and DDR pass permits assembler/SOF.",
+  "timestamps": {
+    "sent_at": "2026-09-03T13:18:30+08:00",
+    "received_at": "2026-09-03T13:18:35+08:00",
+    "reported_at": "2026-09-03T14:10:00+08:00"
+  },
+  "merge_sha": "29bbf85eb91357c696fedc5aac35932d0ae3f330",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T14:10:50+08:00",
+    "merged_at": "2026-09-03T14:11:20+08:00",
+    "recorded_at": "2026-09-03T14:11:20+08:00",
+    "notes": "EMIF FIFO/reset CDC deep hardening merged and accepted"
+  }
+}

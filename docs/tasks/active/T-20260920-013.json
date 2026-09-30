@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-013",
+  "label": "B25-RX-HARDWARE-RESPONSE-TRACE",
+  "title": "Add non-intrusive bridge-to-core RX response observability and vendor-timed tests",
+  "kind": "rtl-verification-observability",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-combined-response-trace-pass",
+  "assigned_owner": "rx_rtl_trace",
+  "batch_parent": "T-20260920-012",
+  "triggered_by": "T-20260920-011 partial evidence",
+  "depends_on": ["T-20260920-001", "T-20260920-005"],
+  "base_sha": "84cee3f202889fcfc036ea4545c51d1d36f9bca5",
+  "base_tree_sha": "3277d79bd882d7fea9b53f8ad8bd85eaf791ce1b",
+  "branch": "verify/T-20260920-013-b25-rx-hardware-response-trace",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-013",
+  "writes": [
+    "rtl/lcvex_catapult_soc_pkg.sv::new SOC_STATUS observation offsets only",
+    "rtl/lcvex_catapult_soc_top.sv::observation signals/counters, lcvex_catapult_soc_status read-only mapping and debug outputs only",
+    "new fpga/catapult_a10/tb/sv/lcvex_catapult_soc_rx_response_trace_tb.sv",
+    "new fpga/catapult_a10/tb/filelist_rx_response_trace.f",
+    "new fpga/catapult_a10/tools/run_rx_response_trace.sh",
+    "tb/sv/lcvex_catapult_soc_status_tb.sv::new status ABI/reset/read-only/backpressure checks only",
+    "new tb/sv/lcvex_catapult_soc_rx_observer_tb.sv",
+    "build/agents/T-20260920-013/** ignored evidence",
+    "docs/tasks/evidence/T-20260920-013.json",
+    "docs/handoffs/T-20260920-013-b25-rx-hardware-response-trace.md"
+  ],
+  "reads": [
+    "docs/tasks/active/T-20260920-012.json",
+    "docs/tasks/evidence/T-20260920-011.json",
+    "rtl/lcvex_mem_router.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_jtag_uart_model.sv",
+    "tb/sv/lcvex_jtag_uart_bridge_tb.sv",
+    "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv",
+    "vendor-generated JTAG-UART HDL read-only"
+  ],
+  "write_regions": {
+    "rtl/lcvex_catapult_soc_pkg.sv": "SOC_STATUS offset localparams only",
+    "rtl/lcvex_catapult_soc_top.sv": "top observation declarations/assignments, lcvex_catapult_soc_status ports/register decode and new observation-only state; do not alter existing functional assignments or state transitions",
+    "tests": "new files only"
+  },
+  "scope": "Track CPU-originated UART DATA reads at bridge response, router/PoC response and core dmem response using one pending token per stage. Clear each token on its matched response, capture sticky fault on any matched fault, and update raw low 32-bit payload/count only for matched RVALID=1 responses so later empty polls cannot erase evidence. Expose the state and accepted bridge/Avalon TX writes through the frozen read-only status ABI. Add a vendor-registered timing test that injects one byte at a time after a long empty poll and asserts exactly-once payload equality. Prefer hierarchical test probes over widening public commit ABI.",
+  "acceptance": {
+    "reset_and_access": "All new observation state resets to zero; status writes have no effect; unknown offsets remain zero.",
+    "single_byte": "For ?, p, d and Z independently, bridge/PoC/dmem valid-event counts each advance exactly once and sticky full 32-bit raw payloads are equal with no fault. In the controlled one-byte vendor model the exact word is 0x0000A400|byte: bit15 RVALID, bit13 TX-not-full, bit10 AC and the low byte; subsequent empty polls leave raw values and counts unchanged.",
+    "backpressure": "Observation remains correct with response backpressure and does not affect ready/valid timing.",
+    "regression": "Focused Icarus/Verilator vendor timing, existing bridge test and existing full-SoC CAL-WAIT test pass.",
+    "no_fix": "Production response datapath diff is observation-only; if a current-source mismatch appears, report the first boundary and stop."
+  },
+  "resource": "Use unique task-local build paths. Obtain resource-lock local before Verilator/full-SoC; do not run concurrently with T-014 heavy validation. No GamePC/Quartus/JTAG/board action.",
+  "forbidden_regions": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "rtl/lcvex_mem_router.sv functional logic",
+    "vendor-generated HDL",
+    "boot.S",
+    "scripts/test_registry.json",
+    "QSF/SDC/physical/board paths"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T06:19:59+08:00",
+    "agent_name": "rx_rtl_trace",
+    "model": "dsh-default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max",
+    "initial_budget": "30m",
+    "max_budget": "60m"
+  },
+  "created_at": "2026-09-20T06:17:59+08:00",
+  "result": {
+    "implementation_sha": "7fd221ef2894daa31dc3397a165d0931e8a7a60b",
+    "task_head_sha": "e670117763e8448d06139c07b55c580782fca05e",
+    "focused": "PASS",
+    "full_soc": "PASS on T-012 combined source SHA 84715ac674366e9fa26556d97d197599731de832",
+    "evidence": "docs/tasks/evidence/T-20260920-013.json"
+  },
+  "updated_at": "2026-09-20T09:29:16+08:00"
+}

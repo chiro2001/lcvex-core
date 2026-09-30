@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-028",
+  "state": "local-validation-complete-physical-pending",
+  "functional_base_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "task_base_sha": "59c8d78bbb13f834c801e4897ad7c23ac698e833",
+  "dispatch_head_sha": "ef72f312350a682ef19628be6a9ab5e567fa0edf",
+  "candidate_sha": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+  "branch": "batch/T-20260906-028-r20",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-028",
+  "members": {
+    "T-20260906-029": {
+      "implementation_head": "ffe61e36a9df7dbc7a8197459a34e65d15302ba7",
+      "merge_commit": "9266914a",
+      "result": "pass",
+      "change": "Closed the supported non-half IT_ARITH route and removed the unreachable binary_pre_parts fallback call without latency change."
+    },
+    "T-20260906-030": {
+      "implementation_head": "f2c04ac1534b3b1feea6de0c59f03a5044482324",
+      "merge_commit": "bbc23007",
+      "integrator_fix": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+      "result": "pass-after-candidate-fix",
+      "change": "Added IT_PACK_RESULT registered output boundary; every round-pack scalar slot gains one cycle."
+    }
+  },
+  "candidate_fixes": [
+    {
+      "commit": "f17c5bfb",
+      "scope": "Update R18/wrapper state probes and all affected latency expectations; add FCVT and live-control result-register coverage."
+    },
+    {
+      "commit": "481a92e7",
+      "scope": "Register the two R20 focused SV tests in Makefile and test registry."
+    },
+    {
+      "commit": "12eb36fb8e1b10382d67a7b8a87f160e27c4fc98",
+      "scope": "Exclude DIV/SQRT from the IDLE single-cycle completion branch to restore exactly-once after IT_PACK_RESULT."
+    }
+  ],
+  "latency": {
+    "policy": "one additional cycle per round-pack scalar slot",
+    "scalar": {
+      "FADD_FSUB": 11,
+      "FMUL_FMA": 10,
+      "FCVT": 8,
+      "FDIV_S_D": 262,
+      "FDIV_H": 519,
+      "FSQRT_S_D": 70,
+      "FSQRT_H": 71
+    },
+    "neon_examples": {
+      "FMUL_2S": 19,
+      "FADD_2S": 21,
+      "FADD_4S": 41,
+      "SCVTF_2S": 17,
+      "FSQRT_2S": 139
+    }
+  },
+  "resource_policy": {
+    "wrapper": "/home/chiro/projects/.resource-locks/resource-lock",
+    "resource": "local",
+    "lock_acquired_for_every_heavy_run": true,
+    "min_local_available_mib": 8192,
+    "memory_policy": "exclusive-no-hard-cap",
+    "memory_max": null,
+    "verilator_jobs": 1,
+    "swap_peak": "0B",
+    "final_lock_status": "local FREE"
+  },
+  "failed_attempts": [
+    {
+      "result": "environment-precheck-fail",
+      "exit_code": 127,
+      "reason": "/usr/bin/time is not installed; no test started."
+    },
+    {
+      "started_at": "2026-09-06T12:46:22+08:00",
+      "result": "environment-precheck-fail",
+      "exit_code": 2,
+      "reason": "The systemd user unit PATH did not contain conda; Verilator did not start."
+    },
+    {
+      "started_at": "2026-09-06T12:47:08+08:00",
+      "finished_at": "2026-09-06T12:48:07+08:00",
+      "result": "functional-fail",
+      "reason": "The first iterative DIV repeated iter_done after returning IDLE because the refactored IDLE passthrough no longer excluded DIV/SQRT.",
+      "log": "build/agents/T-20260906-028/runtime/focused-l1.log",
+      "log_sha256": "47e3de3e7b7be631b5a6e5ddd8a8cd65dd22122101aee2417849cd4c47ecbfd4"
+    },
+    {
+      "started_at": "2026-09-06T12:50:06+08:00",
+      "finished_at": "2026-09-06T12:50:34+08:00",
+      "result": "test-contract-fail",
+      "reason": "The live-control mutation probe kept valid high after consuming the result, presenting FP_OP_NONE as a new request; the test was corrected to drop valid before the capture edge.",
+      "log": "build/agents/T-20260906-028/runtime/pack-fix.log",
+      "log_sha256": "c1aa94724013fd5c0536a52cbcafd77e03123681f88b661864d9945b47ca8686"
+    }
+  ],
+  "validation": [
+    {
+      "stage": "focused_l1",
+      "started_at": "2026-09-06T12:52:22+08:00",
+      "finished_at": "2026-09-06T12:54:10+08:00",
+      "wall": "1min47.624s",
+      "memory_peak": "1.5G",
+      "result": "pass",
+      "commands": [
+        "make VERILATOR_JOBS=1 sim-sv-fp-scalar-r20-route",
+        "make VERILATOR_JOBS=1 sim-sv-fp-scalar-r20-pack",
+        "make VERILATOR_JOBS=1 sim-sv-fp-scalar-r18",
+        "make VERILATOR_JOBS=1 sim-sv-fp-exec-directed"
+      ],
+      "log_sha256": "579b97ec4640ed88457676cd59c2a8e9d80d264cae83b1c956094a2066558389"
+    },
+    {
+      "stage": "affected_l1",
+      "started_at": "2026-09-06T12:54:30+08:00",
+      "finished_at": "2026-09-06T13:02:27+08:00",
+      "wall": "7min57.120s",
+      "memory_peak": "3.2G",
+      "result": "pass",
+      "entries": 8,
+      "scope": "scalar FP, NEON FP, FMA/convert and FP16/sqrt/minmax/round SV+Cocotb",
+      "log_sha256": "ba9159ebd42dc972d766a75957513362fd123990c38b6afb26f60370cce19ad0"
+    },
+    {
+      "stage": "strict_l2_fp_neon",
+      "started_at": "2026-09-06T13:02:56+08:00",
+      "finished_at": "2026-09-06T13:04:17+08:00",
+      "wall": "1min20.696s",
+      "memory_peak": "1013.3M",
+      "result": "pass",
+      "groups": 13,
+      "commits": 1104,
+      "log_sha256": "07547890763c9fe628cf85f5bec2b7f4e6800cf9ca41a2b5159871a0a1d2217f"
+    },
+    {
+      "stage": "strict_l2_de_extension",
+      "started_at": "2026-09-06T13:04:37+08:00",
+      "finished_at": "2026-09-06T13:04:43+08:00",
+      "wall": "6.528s",
+      "memory_peak": "165.8M",
+      "result": "pass",
+      "commits": 51,
+      "scope": "NEON integer 31 plus fetch-fault 20",
+      "log_sha256": "95ebab1de8c255b87848be98be8a903710a385ee1ffc00e08d86e48b89e71c37"
+    }
+  ],
+  "strict_l2_total_commits": 1155,
+  "source_hashes": {
+    "rtl/lcvex_fp_scalar.sv": "f804dd7ade1c728f969889f398532b9ca6db8ca3e7411e870ba3ee1b5f98215b",
+    "tb/sv/lcvex_fp_exec_tb.sv": "19774985bddede16a1e39a11e008d6f4092fd67ccfc0b107aa9d1293d9da7a22",
+    "tb/sv/lcvex_fp_scalar_r18_tb.sv": "55b14fa4d4ab9d0297b53a31556dba53f1a838dce183b533be9928f1964d2474",
+    "tb/sv/lcvex_fp_scalar_r20_route_tb.sv": "0c7ad12a2961cc635d0c91f188e88f5561f9ecfbf760cb8af4e845f688c2434b",
+    "tb/sv/lcvex_fp_scalar_r20_pack_tb.sv": "589d613ad8ed7b150c0d9253aa14c323b85b3c7c5b86a8b864f9ca5cc47b9c0e"
+  },
+  "policy": {
+    "reference_result_modified": false,
+    "assertion_disabled": false,
+    "heavy_jobs_serial": true,
+    "gamepc_used": false,
+    "assembler_or_board_actions": false
+  },
+  "timestamps": {
+    "created_at": "2026-09-06T11:50:38+08:00",
+    "candidate_fixed_at": "2026-09-06T12:51:59+08:00",
+    "validated_at": "2026-09-06T13:05:11+08:00",
+    "reported_at": "2026-09-06T13:05:11+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260906-028-r20-timing-batch.md"
+}

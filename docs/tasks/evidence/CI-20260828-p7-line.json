@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "CI-20260828-p7-line",
+  "state": "done",
+  "source_sha": "de19999",
+  "observed_at": "2026-08-28T04:31:00+08:00",
+  "runner": "root-integrator (local)",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu_release": "11.1.0",
+    "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "qemu_patch_0012_applied": true
+  },
+  "runs": [
+    {
+      "run_id": "ci-fast-20260828",
+      "command": "bash scripts/ci-fast.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "toolcheck/lint/sim-sv/backpressure-sv/memif-sv/cocotb-alu/cocotb-regfile/cocotb-backpressure all green"
+    },
+    {
+      "run_id": "ci-difftest-20260828",
+      "command": "bash scripts/ci-difftest.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "QEMU fork HEAD verified 84f0721; patch 0012 applied (11 skipped); difftest-p1p2/lockstep/hazard/p4c/p5a/hardening/p6-lse/p6-wfi/q6/random-short(20k) all green"
+    }
+  ],
+  "known_limits": [
+    "CI 证据为本地门禁复跑，不等同 GitHub Actions 远端 CI run；main 晋级仍需 feature/p7-final 冻结 SHA 与 Gate F 全套正式条件。"
+  ]
+}

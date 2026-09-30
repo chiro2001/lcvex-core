@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-024",
+  "label": "R19-QUARTUS-PHYSICAL",
+  "title": "Run fresh A10 synthesis, fitter and signoff STA for the R19 timing batch",
+  "kind": "physical-timing-validation",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "physical-complete-report-followup-required",
+  "assigned_owner": "codex-integrator",
+  "depends_on": ["T-20260905-023"],
+  "base_sha": "1c56632516c3d1e45c117d3a31dfa82faab9ecb8",
+  "branch": "verify/T-20260906-024-r19-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-024",
+  "scope": "Prepare an exact-source fresh remote probe for R19, prove manifest and canonical QSF closure, then serialize synthesis, fitter, signoff STA and custom directional reports after resource admission. Compare R19 against both T-014/R17 and T-020/R18 if the latter becomes available.",
+  "writes": [
+    "docs/tasks/active/T-20260906-024.json",
+    "docs/tasks/evidence/T-20260906-024.json",
+    "docs/handoffs/T-20260906-024-r19-quartus-physical.md",
+    "build/agents/T-20260906-024/** ignored preparation/runtime artifacts",
+    "fresh remote probe D:/Projects/fpga-altra/lcvex/build/T-20260906-024-r19-timing-probe"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260905-014.json",
+    "docs/tasks/evidence/T-20260905-020.json",
+    "docs/tasks/evidence/T-20260905-023.json",
+    "fpga/catapult_a10/real_a10_full_fp/**",
+    "T-020 preparation and guard scripts as templates"
+  ],
+  "validation": {
+    "preflight": "exact source SHA, local/remote manifest, QSF external closure, no EDA conflict, >=16 GiB free memory and low interactive CPU load",
+    "stages": "synthesis -> fitter -> sta_signoff -> custom_sta; one remote stage at a time with safety stop below 14 GiB free",
+    "directional": [
+      "idex_valid/core kill/control -> fp_exec.state.TX_DONE",
+      "core backpressure -> fp_rsp_hold_valid D",
+      "pp_pre -> pack_scan",
+      "pack_scan -> pack_pre",
+      "pack_pre -> pack_mid",
+      "pack_mid -> slot_result_r",
+      "global sys_clk_50 top-50/top-N"
+    ]
+  },
+  "acceptance": "All allowed physical stages and report parsing complete on an exact R19 manifest; report Fmax, setup WNS/TNS/failing endpoints, hold/recovery/removal/min-pulse, resource delta and replacement top-N without claiming closure when any required check is negative.",
+  "resource": "Do not overlap T-020 or another Quartus job. Admission requires EDA_COUNT=0, free memory >=16 GiB, no forbidden artifacts and a low-load window; runtime safety-stops the Quartus tree below 14 GiB free. Never terminate unrelated processes.",
+  "forbidden_regions": [
+    "RTL functional changes",
+    "QEMU/reference changes",
+    "QSF/SDC timing exceptions",
+    "Quartus assembler",
+    "SOF/JIC/RBF/POF/JBC/SVF/JAM",
+    "quartus_pgm/JTAG/programming/power-on/board test"
+  ],
+  "created_at": "2026-09-06T00:05:37+08:00",
+  "updated_at": "2026-09-06T11:15:35+08:00",
+  "blocked_reason": "Fresh synthesis, fitter and signoff STA passed, but report_directional.tcl treated the expected disappearance of the old TX_DONE endpoint as fatal exit 29, so top-50 and remaining directional queries were not reached.",
+  "followup_task": "T-20260906-027",
+  "board_policy": "No assembler, bitstream, programming, JTAG, power-on or board test without explicit user permission."
+}

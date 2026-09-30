@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-023",
+  "state": "done",
+  "partial": false,
+  "base_sha": "91c9232452664c0c28d9933a2742e76f693e270f",
+  "head_sha": "0a0575a",
+  "branch": "feature/T-20260902-023-fp-p3t-round2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-023",
+  "scope": "FP-P3T round2: further directed register cuts inside fp_exec/scalar_unit to break the remaining 831-level combinational chain reported by T-20260902-022; cover CMP/MINMAX/FRINT/FP-to-int and half-lane paths; update lcvex_fp_exec_tb latency assertions; keep raw-bit/order/single-in-flight semantics.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv"
+    ],
+    "summary": "Added fp_other_pre_t unpacked/flushed operand stage and uses_other_pre pipeline for FCMP, FMIN/FMAX/FMINNM/FMAXNM, FRINT, FCVTZS/FCVTZU in the FP_ITER=1 release branch. The scalar unit IT_PREP now finishes these operations one cycle after unpack/flush, so the request-to-response combinational path is split before result mux. Half-lane 4H/8H use separate lo/hi pipeline registers. Single outstanding transaction, held response, reset/kill, FPCR snapshot and FPEN trap semantics are unchanged.",
+    "latency_table": {
+      "scalar_fcmp": {
+        "before_est": 2,
+        "after": 3
+      },
+      "scalar_minmax": {
+        "before_est": 2,
+        "after": 3
+      },
+      "scalar_frint": {
+        "before_est": 2,
+        "after": 3
+      },
+      "scalar_fcvtzs_fcvtzu": {
+        "before_est": 2,
+        "after": 3
+      },
+      "neon_frintz_2s": {
+        "before_est": 3,
+        "after": 5
+      },
+      "scalar_heavy_noniter": {
+        "before": 3,
+        "after": 3,
+        "note": "unchanged from T-20260902-020"
+      },
+      "neon_2s_noniter": {
+        "before": 5,
+        "after": 5,
+        "note": "unchanged from T-20260902-020"
+      },
+      "iterative_fdiv_fsqrt": "unchanged"
+    },
+    "semantics": {
+      "raw_bit": "unchanged; finish functions reuse the same unpack/compare/minmax/frint/fp_to_int logic from the legacy helpers",
+      "commit_order": "unchanged; still single outstanding fp_exec transaction",
+      "fpsr_fpcr": "unchanged; FPCR snapshot still locked at request acceptance; FPSR OR still at commit",
+      "kill_reset": "pp_other* cleared on kill/reset; no ghost response"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Verilator lint-only on lcvex_core with release filelist"
+    },
+    {
+      "run_id": "lcvex_fp_exec_tb",
+      "command": "conda run -n lcvex verilator --binary --timing --assert -j 1 --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir/Vlcvex_fp_exec_tb",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Includes FADD/NEON FADD latency, new FCMP/FMIN/FCVTZS/FRINTZ latency assertions, FDIV/FSQRT iterative, single issue, held response, kill/reset"
+    },
+    {
+      "run_id": "sim-sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "cocotb-p7-1-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "tests": "5/5"
+    },
+    {
+      "run_id": "cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "tests": "4/4"
+    },
+    {
+      "run_id": "cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "tests": "5/5"
+    },
+    {
+      "run_id": "cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "tests": "8/8"
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/STA (belongs to next FP-P5 rerun)",
+    "A76 required L2 lockstep sub-suite"
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-023-fp-p3t-round2.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-023.json"
+    }
+  ],
+  "known_limits": [
+    "No physical timing run in this task; actual Fmax/slack must be confirmed by next FP-P5 rerun.",
+    "round_pack itself is not further split this round; if the next STA top-N is pp_pre->finish_pre or pp_other->finish_*, a normalize/round split is required.",
+    "MOV and special-value DIV/SQRT remain short combinational paths; not expected to be the 831-level main chain but listed for next STA review.",
+    "EMIF/sys CDC hold/recovery/removal negatives are outside this task and still require separate RTL synchronization work."
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-03T08:53:00+08:00",
+    "received_at": "2026-09-03T09:00:00+08:00",
+    "reported_at": "2026-09-03T09:20:00+08:00"
+  },
+  "merge_sha": "66a6024b8c5f3ca6648207a6556acd2e67557fd1",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T09:22:58+08:00",
+    "merged_at": "2026-09-03T09:23:35+08:00",
+    "recorded_at": "2026-09-03T09:23:35+08:00",
+    "notes": "FP-P3T round2 merged and accepted"
+  }
+}

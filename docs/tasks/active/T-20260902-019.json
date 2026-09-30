@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-019",
+  "label": "FP-P5-PHYSICAL",
+  "title": "FP/NEON FP-P5：full-FP synthesis → fitter → STA → Gate F 候选",
+  "kind": "verify-fpga-physical",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "reported",
+  "assigned_owner": "dsh-fp-p5",
+  "agent_type": "remote-quartus-full-flow",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-018"
+  ],
+  "base_sha": "6e6c7b04ba24dfe09c763d3fd78ebf764901e085",
+  "branch": "verify/T-20260902-019-fp-p5-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-019",
+  "scope": "按 docs/FP_NEON_PIPELINE_PLAN.md FP-P5：在同一 source/QSF/SDC/IP/参数上，串行执行 full-FP synthesis、fitter、signoff STA；通过后才进入 assembler/SOF 与既有 Gate F-BOARD 流程。每阶段单作业并采样，失败保留报告和峰值资源。",
+  "reads": [
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/FP_NEON_PIPELINE_BASELINE.md",
+    "docs/FP_NEON_PIPELINE_PPA.md",
+    "docs/tasks/evidence/T-20260902-010.json",
+    "docs/tasks/evidence/T-20260902-018.json",
+    "fpga/catapult_a10/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-019-fp-p5-physical.md",
+    "docs/tasks/evidence/T-20260902-019.json",
+    "build/agents/T-20260902-019/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-019-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "远端只读预检；source/SHA/QSF/SDC/IP 绑定"
+    ],
+    "l1": [
+      "full-FP synthesis PASS；fitter/STA 结果完整"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "full-FP synthesis、fitter、STA 全部有同 SHA 报告；若 fit/STA 失败则记录资源/时序数据并停止，不进入 SOF/发布；成功后 assembler/SOF 作为额外产物。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 43200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 180,
+    "extension_increment_minutes": 60,
+    "max_minutes": 720,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T05:27:00+08:00",
+  "updated_at": "2026-09-03T07:01:05+08:00",
+  "known_limits": [
+    "重型远端作业串行单跑；不读取 license；不删除文件；不停止非 EDA 进程；不编程/上板"
+  ],
+  "handoff": "docs/handoffs/T-20260902-019-fp-p5-physical.md",
+  "evidence": "docs/tasks/evidence/T-20260902-019.json",
+  "next": "若 FP-P5 通过，评估 Gate F-BOARD/发布候选；若时序红项则 FP-P3T 定向切级",
+  "dispatch": {
+    "sent_at": "2026-09-03T05:27:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-019",
+    "branch": "verify/T-20260902-019-fp-p5-physical"
+  },
+  "head_sha": "fc37acb953c35e2ab7bd1c4f953790f5deb45eab",
+  "merge_sha": "2e26f3c1ebe652e48766c76a5d0d4dcd6dcad94c",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-03T07:00:00+08:00",
+    "merged_at": "2026-09-03T07:01:05+08:00",
+    "recorded_at": "2026-09-03T07:01:05+08:00",
+    "notes": "FP-P5 blocked at STA timing closure; synthesis/fitter pass. Critical path in fp_exec/scalar_unit; EMIF/DDR CDC issues. Next FP-P3T pipeline/register FP path + CDC fixes."
+  }
+}

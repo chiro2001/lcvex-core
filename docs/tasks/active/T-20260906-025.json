@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "id": "T-20260906-025",
+  "label": "CROSS-PROJECT-RESOURCE-LOCK-V2",
+  "title": "Adopt the shared local and GamePC lock protocol with adaptive local resource limits",
+  "kind": "infrastructure-policy",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "completed-by-integrator",
+  "assigned_owner": "codex-integrator",
+  "depends_on": [],
+  "base_sha": "8d35b6d61669a7b61c8b2fb49e3665bf0e585db4",
+  "branch": "infra/T-20260906-025-resource-lock-policy",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-025",
+  "scope": "Make the cross-project resource-lock wrapper authoritative for local heavy jobs and GamePC stages, replace the fixed local 16 GiB/50% ceiling with an audited task-specific policy after exclusive acquisition, and preserve strict heavy-job serialization and interactive-system safety.",
+  "writes": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "scripts/ci-difftest.sh comments",
+    "scripts/ci-nightly.sh comments",
+    "docs/decisions/ADR-20260906-007-cross-project-resource-lock.md",
+    "docs/tasks/active/T-20260906-025.json",
+    "docs/tasks/evidence/T-20260906-025.json",
+    "docs/handoffs/T-20260906-025-resource-lock-policy.md",
+    "/home/chiro/projects/.resource-locks/{README.md,resource-lock,test-resource-lock}"
+  ],
+  "reads": [
+    "existing task resource records as historical evidence",
+    "/proc/meminfo",
+    "/home/chiro/projects/.resource-locks/*.guard and *.pid"
+  ],
+  "validation": {
+    "external_lock": "bash syntax plus isolated concurrency, close-inherited-fd, exit propagation, optional admission and dual-lock tests",
+    "repository": "git diff --check, JSON parse and task timestamp checker scoped to the new task",
+    "heavy": "none"
+  },
+  "acceptance": "All future local and GamePC heavy entries acquire the corresponding shared lock; local lock ownership removes the mandatory fixed 16 GiB/50% cap but does not remove task-specific admission, evidence or protection of interactive processes; existing evidence remains immutable.",
+  "resource": "Documentation and isolated lightweight self-test only; do not acquire a production lock or start a heavy job.",
+  "created_at": "2026-09-06T07:46:53+08:00",
+  "implementation_head": "f9792d12d42d6bd8323f8ce311b7136c74d4d034",
+  "evidence": "docs/tasks/evidence/T-20260906-025.json",
+  "handoff": "docs/handoffs/T-20260906-025-resource-lock-policy.md",
+  "updated_at": "2026-09-06T07:49:12+08:00"
+}

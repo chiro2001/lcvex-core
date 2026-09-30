@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "T-20260826-049",
+  "title": "P7 FP/NEON 架构状态与差分协议冻结",
+  "kind": "architecture-and-verification-protocol-design",
+  "priority": "high",
+  "assigned_owner": "p7-protocol-t049-terra",
+  "agent_type": "complex-design",
+  "model": "gpt-5.6-terra",
+  "model_selection": "Terra[xhigh] 处理跨 RTL/QEMU/commit/checkpoint 的兼容协议设计",
+  "reasoning_effort": "xhigh",
+  "model_scope": "只冻结 P7 设计与验收契约：V0-V31、FPCR/FPSR/CPACR、提交包、QEMU 锁步、trace、checkpoint、失败诊断和分层测试；只读审计 QEMU 11.1.0 与现有实现，不修改 RTL、QEMU fork、协议代码、checkpoint.py、测试生成器或参考结果",
+  "phase": "done",
+  "parent": "T-20260826-046",
+  "depends_on": ["T-20260826-045", "T-20260826-047", "T-20260826-048"],
+  "writes": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VERIFICATION.md",
+    "docs/DEVELOPMENT_PLAN.md",
+    "docs/tasks/evidence/T-20260826-049.json",
+    "docs/handoffs/T-20260826-049-p7-protocol.md"
+  ],
+  "reads": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_core.sv",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_difftest.c",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/run_lockstep_step.sh",
+    "/home/chiro/projects/mycpu/qemu/include/plugins/qemu-plugin.h",
+    "/home/chiro/projects/mycpu/qemu/target/arm"
+  ],
+  "context_docs": [
+    "docs/ROADMAP.md",
+    "docs/ISA_GAPS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/evidence/T-20260826-046.json",
+    "docs/tasks/evidence/T-20260826-047.json",
+    "docs/tasks/evidence/T-20260826-048.json"
+  ],
+  "base_sha": "01ed8eb48fc189e7fc8b7b87735f1b2c2c72f8e7",
+  "branch": "docs/T-20260826-049-p7-protocol",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260826-049",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 512,
+    "timeout_s": 7200,
+    "cpus": [3],
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "JSON/Markdown 结构检查",
+      "协议字段与现有 C/SV 结构逐项静态映射"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "形成可直接拆实现任务的冻结协议：明确 V0-V31 128 位状态及未来 SVE 低 128 位别名、FPCR/FPSR reset/权限/写掩码/提交时机与 CPACR trap；基于 QEMU 11.1.0 实码确认状态读取点；定义不破坏 scalar PRE/COMMIT/seq 的版本协商和可选向量提交/内存副作用；选择并精确定义压缩 FP checkpoint sidecar、manifest/旧链兼容与恢复顺序；规定 raw-bit/NaN/FPSR 比较、失败包和 P7 分层 ISA/测试/退出门。不得以文档名义提前实现或扩大 P8 SVE 范围。",
+  "created_at": "2026-08-26T21:14:21+08:00",
+  "updated_at": "2026-08-27T01:05:09+08:00",
+  "commits": [
+    "6c3e51fa35a6a906eedde63c853c2512bff975ea",
+    "7e4e4a607e00362ed0abc02c60434ab4924fa546",
+    "f229fda1f5f4891488e706e29f6cde5647332a48",
+    "bd8f95527733d92150ece3e38076f8cffc222b0b",
+    "48ab8aa1fc2a5e004ecbcda3923ab8d98e77de2f"
+  ],
+  "handoff": "docs/handoffs/T-20260826-049-p7-protocol.md",
+  "evidence": "docs/tasks/evidence/T-20260826-049.json",
+  "known_limits": [
+    "本任务只做协议冻结，不增加 FP/NEON ISA 覆盖率。",
+    "正式 main/CI 晋级仍后置；P7 feature 分支继续不等于 Gate F 通过。",
+    "P8 SVE256 只保留状态别名与扩展兼容点，不设计或实现 SVE 指令。"
+  ],
+  "next": "用户人工审核已通过；后续按 P7-0 至 P7-3 独立任务实施，并保持 P6 max/checkpoint 兼容与完整 Gate D 退出门。"
+}

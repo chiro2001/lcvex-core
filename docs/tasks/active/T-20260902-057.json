@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-057",
+  "label": "DISK-CLEANUP",
+  "title": "Safely reclaim inactive worktrees and rebuildable simulation artifacts",
+  "kind": "storage-maintenance",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-disk-cleanup",
+  "agent_type": "storage-maintenance",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "depends_on": [],
+  "base_sha": "5bb2208af27b170ab2286029a0f497460c2ec026",
+  "branch": "infra/T-20260902-057-disk-cleanup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-057",
+  "scope": "在精确白名单与前置检查下回收已结束且 clean 的历史 LCVEX worktree，并删除集成根中明确可重建的 Verilator/Cocotb build 目录；保护 active T-054/T-056、cleanup 自身、集成根、证据/失败现场、Linux/QEMU 与用户文件。",
+  "reads": [
+    "docs/HANDOFF_20260904_TO_CODEX.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/active/*.json",
+    "git worktree list --porcelain",
+    "/home/chiro/projects/mycpu/lcvex*/** storage metadata"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-057-disk-cleanup.md",
+    "docs/tasks/evidence/T-20260902-057.json",
+    "remove verified inactive clean paths registered by git worktree under /home/chiro/projects/mycpu/lcvex-wt-* or lcvex-gate-*",
+    "remove rebuildable /home/chiro/projects/mycpu/lcvex/obj_dir* directories",
+    "remove rebuildable /home/chiro/projects/mycpu/lcvex/sim/cocotb/sim_build* directories",
+    "remove rebuildable /home/chiro/projects/mycpu/lcvex/build/verilator* and build/microbench_runner* directories",
+    "remove rebuildable /home/chiro/projects/mycpu/lcvex/build/dbg_*_work, build/lcv_dbg and build/c2_dual_default directories"
+  ],
+  "protected_paths": [
+    "/home/chiro/projects/mycpu/lcvex",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-054",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-056",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-057",
+    "/home/chiro/projects/mycpu/lcvex/build/agents",
+    "/home/chiro/projects/mycpu/lcvex/build/difftest",
+    "/home/chiro/projects/mycpu/lcvex/build/tmp",
+    "/home/chiro/projects/mycpu/lcvex/build/linux-6.6",
+    "/home/chiro/projects/mycpu/lcvex/build/linux-lite-6.6",
+    "/home/chiro/projects/mycpu/qemu",
+    "/home/chiro/projects/mycpu/qemu-replay-*",
+    "/home/chiro/projects/mycpu/lcvex/qemu/plugins",
+    "/home/chiro/projects/mycpu/lcvex/docs/HANDOFF_20260902_TO_DSH.md",
+    "/home/chiro/projects/mycpu/lcvex/docs/HANDOFF_20260904_TO_CODEX.md"
+  ],
+  "preconditions": [
+    "任何 worktree 删除前必须来自 `git worktree list`，真实路径位于 /home/chiro/projects/mycpu，且不在 protected_paths",
+    "worktree `git status --porcelain --untracked-files=all` 必须为空；非空、命令失败或存在运行中 Agent/进程时跳过",
+    "分支 worktree 只移除 worktree，不删除分支；detached worktree 的 HEAD 必须仍由某个 ref 包含，否则跳过",
+    "只使用 `git worktree remove <exact-path>`，禁止 --force；失败立即跳过，不手工 rm worktree",
+    "生成目录删除前解析 realpath、逐项记录，必须严格位于声明的集成根子路径；禁止未解析 glob、禁止触碰 protected_paths"
+  ],
+  "validation": {
+    "l0": [
+      "before/after df and du snapshots",
+      "git worktree list remains valid; protected worktrees and active branches unchanged"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "仅删除明确可重建或已由 Git 分支/ref 保留的 clean 非 active worktree；记录每个 removed/skipped 路径、原因、删除前字节数、总回收量和 df 前后。不得删除 branch/ref、tracked/untracked 用户文件、build/agents、build/difftest、build/tmp、Linux、QEMU、active worktree、失败证据或交接文档。清理不可恢复的仅是可重建 build 产物；源码可由保留分支恢复。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 256,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.1
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T21:35:34+08:00",
+  "updated_at": "2026-09-04T22:03:26+08:00",
+  "known_limits": [
+    "不清理远端 Quartus probe、系统 cache、外部 QEMU/replay clone 或任何未在白名单中的路径",
+    "当前 du 目录树计量约 224 GB，高于 df 已用 162 GB，最终以 df 可用空间变化和逐目录块计量共同报告"
+  ],
+  "handoff": "docs/handoffs/T-20260902-057-disk-cleanup.md",
+  "evidence": "docs/tasks/evidence/T-20260902-057.json",
+  "head_sha": "7cfece2c04df28a47a5f25b833132981103fe499",
+  "merge_sha": "e776d1b936b87b9a21377c0b4d971afb5e540308",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T21:56:38+08:00",
+    "merged_at": "2026-09-04T22:03:26+08:00",
+    "recorded_at": "2026-09-04T22:03:26+08:00",
+    "notes": "Independent df/du/worktree/protected-path verification passed. Filesystem used fell from 173018787840 to 123255607296 bytes across the observed cleanup window; 7 registered worktrees remain and all protected paths are intact."
+  },
+  "next": "清理完成后由集成者核对 protected paths、worktree registry 和实际可用空间",
+  "dispatch": {
+    "sent_at": "2026-09-04T21:36:55+08:00",
+    "agent_name": "/root/t057_disk_cleanup",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-057",
+    "branch": "infra/T-20260902-057-disk-cleanup"
+  }
+}

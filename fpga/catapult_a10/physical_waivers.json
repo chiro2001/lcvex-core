@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "policy_id": "B25-PHYSICAL-UCP-WAIVER",
+  "contract_source": {
+    "task_id": "T-20260909-007",
+    "source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+    "evidence": "docs/tasks/evidence/T-20260909-007.json"
+  },
+  "inventory_schema": {
+    "kind": "lcvex-physical-ucp-recovery-removal-v1",
+    "required_top_level": [
+      "schema_version",
+      "inventory_kind",
+      "provenance",
+      "ucp",
+      "recovery_removal",
+      "clock_constraints",
+      "exceptions"
+    ],
+    "exceptions_exact": []
+  },
+  "ucp": {
+    "summary": {
+      "clock_count": 2,
+      "input_port_count": 2,
+      "input_path_count": 63,
+      "output_port_count": 1,
+      "output_path_count": 4
+    },
+    "clocks": [
+      {
+        "name": "altera_reserved_tck",
+        "status": "unconstrained",
+        "kind": "vendor_generated_jtag_clock"
+      },
+      {
+        "name": "soc|emif_adapter|emif_rst_sync1_n",
+        "status": "unconstrained",
+        "kind": "synchronized_reset_control"
+      }
+    ],
+    "ports": [
+      {
+        "name": "altera_reserved_tdi",
+        "direction": "input",
+        "path_count": 26,
+        "path_groups": {
+          "jtag_uart_alt_jtag_atlantic": 7,
+          "auto_fab_sld": 11,
+          "emif_embedded_jtag": 7,
+          "reserved_jtag_port": 1
+        }
+      },
+      {
+        "name": "altera_reserved_tms",
+        "direction": "input",
+        "path_count": 37,
+        "path_groups": {
+          "auto_fab_sld": 37
+        }
+      },
+      {
+        "name": "altera_reserved_tdo",
+        "direction": "output",
+        "path_count": 4,
+        "path_groups": {
+          "auto_fab_sld": 4
+        }
+      }
+    ]
+  },
+  "jtag_hierarchy": {
+    "allowed_classes": [
+      {
+        "class": "jtag_uart_alt_jtag_atlantic",
+        "pattern": "jtag_uart_inst|jtag_uart|*alt_jtag_atlantic|*",
+        "required": true
+      },
+      {
+        "class": "auto_fab_sld",
+        "pattern": "auto_fab_0|alt_sld_fab_0|*",
+        "required": true
+      },
+      {
+        "class": "emif_embedded_jtag",
+        "pattern": "emif|emif_bot|*jtag_phy_embedded_in_jtag_master*",
+        "required": true
+      },
+      {
+        "class": "reserved_jtag_port",
+        "pattern": "reserved_jtag_port|altera_reserved_tdo",
+        "required": false
+      }
+    ],
+    "forbid_arbitrary_tck_period": true,
+    "forbid_jtag_create_clock": true
+  },
+  "reset_control": {
+    "name": "soc|emif_adapter|emif_rst_sync1_n",
+    "kind": "synchronized_active_low_reset_control",
+    "corners": [
+      "fast",
+      "slow"
+    ],
+    "checks": {
+      "recovery": {
+        "path_count": 627,
+        "violated": 0,
+        "baseline_worst_slack_ns": 1.202,
+        "require_worst_slack_positive": true
+      },
+      "removal": {
+        "path_count": 627,
+        "violated": 0,
+        "baseline_worst_slack_ns": 0.191,
+        "require_worst_slack_positive": true
+      }
+    },
+    "forbid_false_path_fields": true
+  },
+  "forbidden": {
+    "reset_false_path_fields": [
+      "false_path",
+      "false_paths",
+      "reset_false_path",
+      "reset_false_paths",
+      "set_false_path",
+      "set_false_paths"
+    ],
+    "jtag_clock_period_fields": [
+      "period",
+      "period_ns",
+      "clock_period",
+      "clock_period_ns"
+    ]
+  }
+}

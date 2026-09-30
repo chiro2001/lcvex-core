@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-089",
+  "state": "done",
+  "base_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+  "head_sha": "c5afbc220bbdeeaff0215e16ae568c3643239f01",
+  "merge_sha": "a436cc01b02ac5bbb2a42f7893deb81407a90294",
+  "branch": "feature/T-20260829-089-c3-fourcore-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-089",
+  "sent_at": "2026-08-29T08:09:33+0800",
+  "received_at": "2026-08-29T08:09:33+0800",
+  "reported_at": "2026-08-29T08:09:33+0800",
+  "owner": "T-20260829-089-c3-pre-owner",
+  "model": "dsh-default",
+  "label": "C3-pre",
+  "title": "C3 四核前置设计/契约拆解",
+  "scope": "只做 C3 前置设计与差距拆解：GIC/PSCI/Timer、IPI/SEV/WFE、TLB shootdown、启动次序、共享 MMIO 路由、公平仲裁；与 C2 当前接口差距、C2 必须关闭点、可先独立准备项、MC-v2/checkpoint 扩展、建议子任务切片与验收、风险。不实现 4 核功能 RTL；C2 未关闭前不派发 C3 实际功能实现。",
+  "files": [
+    "docs/C3_FOURCORE_PREWORK.md",
+    "docs/handoffs/T-20260829-089-c3-fourcore-prework.md",
+    "docs/tasks/evidence/T-20260829-089.json"
+  ],
+  "toolchain": {
+    "git": "git",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 whitespace 错误。"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-089.json",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON 合法。"
+    },
+    {
+      "run_id": "owner-l0-003",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git status --short && git diff --name-only",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "仅允许写集三个文档文件被修改；rtl/tb/sim/QEMU 无改动。"
+    },
+    {
+      "run_id": "owner-l0-004",
+      "source_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "read-only audit of rtl/lcvex_l2_cluster.sv, rtl/lcvex_core_wrap.sv, rtl/lcvex_cluster_top.sv, rtl/lcvex_gic.sv, rtl/lcvex_mem_router.sv, rtl/lcvex_mmu.sv, sim/difftest",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "确认 C2 模块级 MSI 有 2 核硬编码目标选择；C1 壳层无 coherent 接线；GIC 单 GICC；PSCI 为 decode 静态返回；TLBI 仅 per-core 全表脉冲。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "docs/C3_FOURCORE_PREWORK.md",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-089-c3-pre-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:docs/C3_FOURCORE_PREWORK.md"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "docs/handoffs/T-20260829-089-c3-fourcore-prework.md",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-089-c3-pre-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:docs/handoffs/T-20260829-089-c3-fourcore-prework.md"
+    }
+  ],
+  "known_limits": [
+    "纯设计/契约拆解任务，不运行 RTL 编译、L1-L4 或真实多核仿真。",
+    "C2 双核 MSI 未关闭：真实双核指令级 litmus/CAS/STXR/barrier/DC+IC+ISB 尚未通过；C2 系统接线分支未合入本 worktree。",
+    "MC-v2 global_seq 仅设计存在；C1 envelope 当前 global_seq=0。",
+    "多核 checkpoint v4 sidecar/manifest 未实现，仅列出字段和恢复顺序。",
+    "MPIDR、event 端口、TLB shootdown 可能需修改 lcvex_core.sv 等共享热点，需 I0 和集成者窗口。",
+    "4 核 Verilator/仿真资源未实测；仅记录风险与缓解。",
+    "本任务不代表 4 核功能已完成；C2 未关闭前不得派发 C3 实际功能实现。"
+  ],
+  "next": "集成者 review；先关闭 C2 并合入系统接线/真实双核证据；C2 关闭后按建议先派 C3-A 四核目录/仲裁参数化，再 C3-B/C3-C/C3-D。",
+  "report_head_sha": "c5afbc220bbdeeaff0215e16ae568c3643239f01",
+  "handoff_sha": "20dc0aeff7223b4765996bddb1968cc7b6461b6e",
+  "integrator_review": {
+    "received_at": "2026-08-29T08:15:20+08:00",
+    "status": "accepted",
+    "head_sha": "20dc0aeff7223b4765996bddb1968cc7b6461b6e",
+    "notes": "C3 四核前置设计/契约拆解已审阅并合并；仅文档改动；明确 C2 未关闭前不派 C3 RTL。下一步等 C2 关闭后按 C3-A/B/C/D 拆解派发。",
+    "merge_sha": "a436cc0",
+    "result_sha": "c5afbc220bbdeeaff0215e16ae568c3643239f01"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "a436cc0",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "20dc0aeff7223b4765996bddb1968cc7b6461b6e",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "c5afbc220bbdeeaff0215e16ae568c3643239f01",
+        "reason": "set explicit result head from evidence head_sha"
+      },
+      {
+        "field": "merge_sha",
+        "old": "a436cc0",
+        "new": "a436cc01b02ac5bbb2a42f7893deb81407a90294",
+        "reason": "expand to full merge SHA"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

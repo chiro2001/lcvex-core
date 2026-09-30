@@ -1,0 +1,20 @@
+# B4 独立 D-L1/L2 Cocotb 入口；不接入现有 SoC/filelist。
+
+SIM ?= verilator
+TOPLEVEL_LANG ?= verilog
+TOPLEVEL ?= lcvex_l1_d_wb_cocotb_tb
+COCOTB_TEST_MODULES ?= test_l1_d_wb
+SIM_BUILD ?= ../../build/agents/T-20260827-056/cocotb
+
+VERILOG_SOURCES = $(abspath ../../rtl/lcvex_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_cache_data_ram.sv) \
+                  $(abspath ../../rtl/lcvex_l2_wb.sv) \
+                  $(abspath ../../rtl/lcvex_l1_d_wb.sv) \
+                  $(abspath ../../rtl/lcvex_cluster_pkg.sv) \
+                  $(abspath ../../rtl/lcvex_l1_coherence.sv) \
+                  $(abspath ../../tb/sv/lcvex_l1_d_wb_bfm.sv) \
+                  $(abspath ../../tb/sv/lcvex_l1_d_wb_cocotb_tb.sv)
+
+EXTRA_ARGS += --timing --assert -Wall -Wno-fatal
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

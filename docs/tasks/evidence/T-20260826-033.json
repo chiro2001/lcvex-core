@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-033",
+  "base_sha": "e12cffe",
+  "head_sha": "87f69f3",
+  "candidate_status": "pass-local-replay",
+  "qemu": {
+    "release": "11.1.0",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "parent_plugin_sha256": "33f25bb7f07f7355470a0508833d55b9050a393bf1ae79b96c93da4ac7334b97"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-allint-lint-001",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only -Wno-fatal -Wall --top-module lcvex_core -f rtl/filelist.f",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l0-allint-test-001",
+      "level": "L0/L1",
+      "command": "make test",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "toolcheck、Verilator lint、SV core/backpressure、Cocotb ALU/regfile/backpressure/MMIO 与缓存/MMU 单元全绿。"
+    },
+    {
+      "run_id": "owner-l1-allint-directed-002",
+      "level": "L1/L2",
+      "command": "hard_allint.bin MAX_INSNS=20 run_lockstep_step.sh（base + I+D+L2 cache）",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "MSR/MRS ALLINT、SPSR bit13、异常入口/ERET 往返均与 QEMU 一致。"
+    },
+    {
+      "run_id": "owner-l4-allint-replay-001",
+      "level": "L4",
+      "command": "从 T-031 fresh-root-r3 seq=24999999 恢复，MAX_INSNS=9000000 CKPT_EVERY=500000；T-033 kernel/nofp coordinator，QEMU/协调器物理核 9/8",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "覆盖原始 seq=8394952 失败点；9M 全部通过，QEMU log 重新记录 /init marker，child manifest finalized。",
+      "chain": "build/tmp/T-20260826-033/repro-r4b/chain",
+      "manifest_sha256": "d1916c3433a458b821ce2e29ada76d6ab0f175f7ef8c82fcdd4c8af212bfd668",
+      "artifact_global_range": "25499999..33999999"
+    }
+  ],
+  "root_cause": {
+    "original_failure": "MRS SPSR_EL1（0xd5384017）在 T-031 r4 local seq=8394952：DUT=0x81000005、QEMU=0x81002005，差异为 PSTATE.ALLINT bit13。",
+    "secondary_failure": "首次修复把 ALLINT 无条件用于 IRQ 屏蔽；QEMU 仅在 SCTLR.NMI=1 时实际屏蔽普通 IRQ，故 MSR DAIF,xzr 路径出现异步 IRQ 取走差异。",
+    "fix": "加入 ALLINT PSTATE、SPSR/ERET/异常入口/restore sideband，并按 SCTLR.NMI 条件参与 IRQ mask。"
+  },
+  "known_limits": [
+    "尚未在包含 T-033 的新 SHA 上从 seq=0 重跑完整 25M fresh-root；本证据是同一输入链的修复后 checkpoint replay。",
+    "未实现完整 FEAT_NMI/EL2 trap，仅覆盖当前 QEMU virt 单核路径所需 ALLINT 语义。",
+    "Gate D 全量与 CI 仍需在集成 SHA 上重跑。"
+  ]
+}

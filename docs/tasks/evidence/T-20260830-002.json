@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-002",
+  "state": "done",
+  "base_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+  "head_sha": "6258da2b1319b744d9a81764b55b0f100f4bbe81",
+  "merge_sha": "5c10983d35dc5cb8285eee18149798042005108c",
+  "branch": "feature/T-20260830-002-fpga-b",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-002",
+  "sent_at": "2026-08-30T00:30:00+0800",
+  "received_at": "2026-08-30T00:30:00+0800",
+  "reported_at": "2026-08-30T01:00:00+0800",
+  "owner": "T-20260830-002-fpga-b-owner",
+  "model": "dsh-default",
+  "label": "FPGA-B-L2WB",
+  "title": "FPGA-B L2 writeback 降规模/多周期/partition 优化",
+  "scope": "针对 T-102 l2_wb 综合热点做只读参数/结构分析，并落地最小可验证改动（降低 FPGA A10 L2 geometry）；不启动 Quartus/full flow，不读 license，不影响 C2/CORE_COUNT=1。",
+  "files": [
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+    "docs/handoffs/T-20260830-002-fpga-b.md",
+    "docs/tasks/evidence/T-20260830-002.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "fpgab-l2wb-001",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_l2_wb_tb (cgroup MemoryMax=16G)",
+      "seed": null,
+      "wall_seconds": 25.812,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "lcvex_l2_wb_tb PASS: 93 operations / 903 accepted, maxRSS 401.8MB."
+    },
+    {
+      "run_id": "fpgab-l1msi-002",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_l1_msi_tb (cgroup MemoryMax=16G)",
+      "seed": null,
+      "wall_seconds": 25.402,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_L1_MSI_TB PASS, maxRSS 461.5MB."
+    },
+    {
+      "run_id": "fpgab-dual-003",
+      "source_sha": "69a71e1a06fb5ca93afcf3df54ed2b5e37640813",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -Wall -j 1 --top-module lcvex_c2_dualcore_tb (cgroup MemoryMax=16G)",
+      "seed": null,
+      "wall_seconds": 418.866,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_C2_DUALCORE_TB PASS, 51 commits, maxRSS 3372.2MB."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "fpgab-a10-top-diff",
+      "uri": "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv",
+      "sha256": "see-git-show",
+      "bytes": 0,
+      "owner": "T-20260830-002-fpga-b-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv"
+    }
+  ],
+  "known_limits": [
+    "未运行 Quartus/l2_wb standalone synthesis；预期收益来自结构/规模分析，未在 Quartus 下实测。",
+    "未实现多周期化、模块拆分或 Quartus partition；这些仍为后续候选。",
+    "降低 L2 到 64x1 是合成/起板配置，不宣称 Linux cache-capacity。"
+  ],
+  "next": "后续可在安静窗口运行 l2_wb standalone Quartus synthesis 对比 256x2 vs 64x1；若仍热点，再实施多周期/拆分/partition。",
+  "integrator_review": {
+    "received_at": "2026-08-30T01:02:59+08:00",
+    "status": "accepted",
+    "head_sha": "0b972a04db19aeafab57e2462750656aca064612",
+    "notes": "FPGA-B merged. lcvex_catapult_a10_top parameterized L1_SETS=64,L2_SETS=64,L2_WAYS=1; L2 data array 8x smaller. Verilator TBs PASS (l2_wb, L1_MSI, DUALCORE). No Quartus runtime yet.",
+    "merge_sha": "5c10983d35dc5cb8285eee18149798042005108c",
+    "result_sha": "6258da2b1319b744d9a81764b55b0f100f4bbe81"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "5c10983d35dc5cb8285eee18149798042005108c",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "6258da2b1319b744d9a81764b55b0f100f4bbe81",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

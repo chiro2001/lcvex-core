@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-042",
+  "label": "B25-QUARTUS-PHYSICAL",
+  "title": "Run fresh 25 MHz synthesis, fitter and signoff STA",
+  "kind": "physical-bringup-validation",
+  "priority": "critical",
+  "phase": "cancelled",
+  "dispatch_status": "superseded-by-T-20260909-013-final-fresh-physical",
+  "assigned_owner": "b25_physical",
+  "depends_on": ["T-20260907-037"],
+  "base_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+  "candidate_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+  "branch": "verify/T-20260907-042-b25-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-042",
+  "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260907-042-b25-physical",
+  "writes": [
+    "build/agents/T-20260907-042/** ignored preparation/runtime artifacts",
+    "fresh remote probe D:/Projects/fpga-altra/lcvex/build/T-20260907-042-b25-physical",
+    "docs/tasks/evidence/T-20260907-042.json",
+    "docs/handoffs/T-20260907-042-b25-quartus-physical.md"
+  ],
+  "scope": "Build an exact fresh B25 source/MIF/QSF/SDC manifest and run only synthesis, fitter, signoff STA and nonfatal clock/BRAM/CDC reports at the real 25 MHz logic clock.",
+  "launch_preconditions": [
+    "T-037 final candidate includes the completed T-045 EMIF resilience lane and is pushed to origin.",
+    "The exact candidate rebuilds boot.bin/boot.hex/boot.mif and passes check_skeleton.py --require-boot-image.",
+    "GamePC and the remote probe are acquired through resource-lock; no Quartus/JTAG owner is active."
+  ],
+  "physical_input_contract": {
+    "tracked_sources": "checkout/fresh-copy the exact candidate SHA; record a canonical candidate-relative manifest and verify it after transfer",
+    "generated_mif": "explicitly copy the candidate-generated fpga/catapult_a10/boot/build/boot.mif to the QSF-relative remote boot/build path; do not assume Git carries ignored build output",
+    "mif_evidence": "record boot ELF/BIN/HEX/MIF hashes and bytes, WIDTH=64, DEPTH=8192, 8192 records, generator hash, QSF assignment and remote post-copy hash",
+    "closure": "run check_platform.py and check_skeleton.py --require-boot-image before launch; physical source manifest must include the generated MIF as tracked=false/generated=true (at least 53 entries if no other inputs are added)",
+    "stale_database_guard": "use a new task-local remote output root and reject any pre-existing Quartus database or Loading-final-database reuse"
+  },
+  "validation": "Confirm MIF is consumed, sys_clk_25 is exactly 40 ns, Qsys/clk_y3 clocks remain valid, setup/hold/recovery/removal/min-pulse are nonnegative, DDR/metastability reports pass, and resources fit.",
+  "acceptance": "All allowed physical stages pass on the exact T-037 candidate and a frozen fit/STA database is safe to hand to separately authorized assembler task T-043.",
+  "resource": "Every remote stage acquires gamepc; >=16 GiB admission, free<14 GiB safety-stop, one Quartus process and fresh output root.",
+  "forbidden_regions": [
+    "RTL/QEMU/QSF/SDC semantic fixes during the run",
+    "assembler or any SOF/JIC/RBF/POF/JBC generation",
+    "JTAG/programming/power/board actions"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-07T09:28:00+08:00",
+    "agent_name": "b25_physical",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "e6506fe6911637effc7954c31fc38ada976ed385"
+  },
+  "created_at": "2026-09-07T00:23:34+08:00",
+  "updated_at": "2026-09-10T10:53:13+08:00",
+  "result_head": "732a39d796ed54225eda5f95f023b444111352e8",
+  "result_evidence": "docs/tasks/evidence/T-20260907-042.json",
+  "followup_task": "T-20260908-001",
+  "superseded_by": {
+    "task": "T-20260909-013",
+    "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+    "status": "fresh synthesis/fitter/STA and v2 invariant physical signoff PASS",
+    "evidence": "docs/tasks/evidence/T-20260909-013.json"
+  }
+}

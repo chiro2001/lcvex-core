@@ -1,0 +1,749 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-037",
+  "label": "B25-SEALED-RUNNER-FINAL-BOARD-CLOSEOUT",
+  "state": "blocked",
+  "acceptance_status": "blocked-golden-programmer-acceptance",
+  "partial": true,
+  "base_sha": "cee019bf5a976a33b6475fb23531312b8cec7126",
+  "head_sha": null,
+  "head_sha_note": "Self-referential evidence; final commit SHA is reported in the handoff and agent response.",
+  "evidence_parent_sha": "2e62a1d93fd29690373bb467f00804ef4c49db0c",
+  "branch": "verify/T-20260920-037-b25-sealed-runner-final-board-closeout",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-037",
+  "owner": "board_t037",
+  "sent_at": "2026-09-20T19:49:26+08:00",
+  "received_at": "2026-09-20T19:49:26+08:00",
+  "remote_window_started_at": "2026-09-20T19:53:17.4043759+08:00",
+  "artifact_sealed_at": "2026-09-20T19:54:21.0550461+08:00",
+  "reported_at": "2026-09-20T20:07:29+08:00",
+  "scope": {
+    "hardware_access": true,
+    "programmer_invocations": 2,
+    "candidate_programmer_success": true,
+    "golden_programmer_attempted": 1,
+    "golden_programmer_success": false,
+    "terminal_sessions": 1,
+    "jtagconfig_invocations": 2,
+    "fpga_configuration": 1,
+    "flash_actions": 0,
+    "jic_epcq_flash_actions": 0,
+    "reset_or_power_actions": 0,
+    "unknown_process_stopped": 0,
+    "standard_server_stopped": 0,
+    "task_owned_server_stops": 2
+  },
+  "source_contract": {
+    "source_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036",
+    "source_tools": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036/build/agents/T-20260920-036/tools",
+    "source_manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "source_manifest_path": "build/agents/T-20260920-036/script-manifest.json",
+    "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-037-b25-sealed-runner-final-board-closeout",
+    "remote_bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-037-prepare.ps1",
+    "remote_host": "192.168.101.5",
+    "candidate": {
+      "path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842105,
+      "sha256": "bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264",
+      "checksum": "0x315AC2B3",
+      "design_hash_metadata": "0CC907F3DD48A9C78864E3C5BD66B9AF"
+    },
+    "golden": {
+      "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F"
+    },
+    "jtag": {
+      "id": "0x02E060DD",
+      "cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+      "device": 1,
+      "instance": 0
+    }
+  },
+  "copy_provenance": {
+    "destination_tools": "build/agents/T-20260920-037/tools",
+    "source_hashes_checked_before_copy": true,
+    "byte_for_byte_cmp_all_nine": true,
+    "content_hashes_unchanged_after_runner": true,
+    "mode_note": "Source files were 0644; run_board_once.sh target was given execute bit 0755 solely so the exact requested direct invocation could exec. File bytes and manifest SHA are unchanged.",
+    "files": [
+      {
+        "path": "build/agents/T-20260920-037/tools/direct_terminal.py",
+        "bytes": 16101,
+        "sha256": "059bb54fa1f1d3c01209ead636ca5cfcc536d2e4b4a2d41819a3d18f9a4a2e66"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/postflight.ps1",
+        "bytes": 4558,
+        "sha256": "3bad7a13a6e3765982b16247602a814dac45d9dc6b34ddc9ca605d8941f540f8"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/preflight.ps1",
+        "bytes": 4120,
+        "sha256": "29f46fca907c56288ebb7cd0a99a57750f3e0c7e452b940f76e36f1ace5aad31"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/prepare_task_root.ps1",
+        "bytes": 1866,
+        "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/program_once.ps1",
+        "bytes": 16007,
+        "sha256": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/run_board_once.sh",
+        "bytes": 9819,
+        "sha256": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/seal_manifest.py",
+        "bytes": 1886,
+        "sha256": "e95f87a2e91b73202edca05b9b441ad6def328c9c061e86cb111dd5ebf7c2cde"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/validate_scripts.ps1",
+        "bytes": 2491,
+        "sha256": "73632da1b96e445df0302be273ee777e11da218e71f43183e7c33aebe1646592"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/verify_seal.ps1",
+        "bytes": 2871,
+        "sha256": "7fd26eac819fa141dbf9b7a2255bc8854cc5f6175c6ec42179e2edca30eeac85"
+      }
+    ],
+    "manifest": {
+      "path": "build/agents/T-20260920-037/script-manifest.json",
+      "task_id": "T-20260920-037",
+      "sha256": "30dc36ccff5d987bc9c9dcc7c8fa82830e0794bcaf182acf65877e294041fc9c",
+      "files": 9,
+      "records_match_t036_except_task_id": true
+    }
+  },
+  "invocation": {
+    "resource_lock": "gamepc",
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-037 board_t037 -- build/agents/T-20260920-037/tools/run_board_once.sh T-20260920-037 'D:/Projects/fpga-altra/lcvex/build/T-20260920-037-b25-sealed-runner-final-board-closeout' 'build/agents/T-20260920-037/run' final 'D:/Projects/fpga-altra/lcvex/build/T-20260920-037-prepare.ps1' 192.168.101.5",
+    "count": 1,
+    "window_exit": 1,
+    "runner_retried": false,
+    "candidate_retried": false,
+    "golden_retried": false,
+    "terminal_retried": false,
+    "remote_extra_access_after_runner": false
+  },
+  "remote": {
+    "freshness": {
+      "status": 0,
+      "bootstrap_absent": true,
+      "root_absent": true
+    },
+    "bootstrap_upload": {
+      "status": 0,
+      "count": 1,
+      "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d"
+    },
+    "bootstrap_prepare": {
+      "status": 0,
+      "result": "PREPARE_ROOT_RESULT=PASS"
+    },
+    "bundle_upload": {
+      "status": 0,
+      "count": 1,
+      "manifest_sha256": "30dc36ccff5d987bc9c9dcc7c8fa82830e0794bcaf182acf65877e294041fc9c"
+    },
+    "remote_ast": {
+      "status": 0,
+      "result": "PASS",
+      "files": 6,
+      "parse_failure_count": 0
+    },
+    "remote_seal": {
+      "status": 0,
+      "result": "PASS",
+      "checked_count": 9,
+      "all_bytes_match": true,
+      "all_sha256_match": true
+    },
+    "preflight": {
+      "status": 0,
+      "result": "PASS",
+      "busy_count": 0,
+      "port1310_count": 0,
+      "standard_server_count": 1,
+      "standard_server_pid": 5640,
+      "jtag_id": "0x02E060DD",
+      "initial_golden_chain_ok": true
+    },
+    "candidate": {
+      "status": 0,
+      "result": "VOLATILE_PROGRAM_PASS",
+      "marker_count": 1,
+      "quartus_pgm_invocation_count": 1
+    },
+    "terminal": {
+      "status": 0,
+      "result": "PASS",
+      "session_count": 1
+    },
+    "golden": {
+      "status": 1,
+      "result": "FAIL",
+      "marker_count": 1,
+      "quartus_pgm_attempt_count": 1,
+      "failure": "programming acceptance failed"
+    },
+    "postflight": {
+      "status": 0,
+      "result": "PASS_CACHED_STANDARD_OBSERVATION",
+      "observation_class": "cached-standard observation",
+      "golden_chain_ok": "cached-standard observation",
+      "golden_uart_phy_ok": "cached-standard observation",
+      "golden_bytes": 36844906,
+      "golden_sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "busy_count": 0,
+      "port1310_count": 0,
+      "standard_server_count": 1,
+      "standard_server_pid": 5640,
+      "live_fpga_golden_proven": false,
+      "live_final_state": "unproven",
+      "most_recent_proven_live_identity": "candidate functional session",
+      "postflight_exit_is_not_golden_recovery": true
+    }
+  },
+  "candidate_program": {
+    "program_result": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/program-result.json",
+    "program_result_sha256": "892b94926c1f7f47316b7ff563e05f261b3fcbc0c426cd0b3e899586f3833178",
+    "quartus_stdout": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/quartus_pgm.stdout.log",
+    "quartus_stdout_sha256": "0439f53b66f9a89b239284ba7273311930e50cf2561fe3f9863827a9393dfe94",
+    "quartus_stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52",
+    "programmer_pid": 33768,
+    "programmer_exit": 0,
+    "tool_success": true,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "jtag_id_match": true,
+    "programmer_stdout_markers": [
+      "Configuration succeeded -- 1 device(s) configured",
+      "Successfully performed operation(s)",
+      "Quartus Prime Programmer was successful. 0 errors, 0 warnings"
+    ],
+    "standard_server_preserved": true,
+    "post_busy_count": 0,
+    "post_port1310_count": 0,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "unknown_process_stopped": false
+  },
+  "terminal": {
+    "session_count": 1,
+    "remote_command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "transcript": "build/agents/T-20260920-037/run/final/direct-terminal-final-terminal.typescript",
+    "transcript_bytes": 948,
+    "transcript_sha256": "ad46839b50bcace8c9171d744c1696001712ef3259aac6f9233d22e67811ac7c",
+    "parsed_lines": "build/agents/T-20260920-037/run/final/direct-terminal-final-terminal-parsed-lines.json",
+    "parsed_lines_sha256": "39dbd5e9b5646fbfabcb627b803db6a24e189184966313f735eb4c3342779e24",
+    "result": "build/agents/T-20260920-037/run/final/direct-terminal-final-terminal-result.json",
+    "result_sha256": "baf3d8c4afa92db4d277107e20687e81be31ca21b3b6985b2efe420a28dd7f0e",
+    "inputs": [
+      {
+        "name": "status",
+        "byte_hex": "3f",
+        "command": "?",
+        "response": "CLOCK25 CAL-OK DDR-FAIL"
+      },
+      {
+        "name": "ping",
+        "byte_hex": "70",
+        "command": "p",
+        "response": "PONG"
+      },
+      {
+        "name": "debug",
+        "byte_hex": "64",
+        "command": "d",
+        "response": "RXDBG event_count=3 last_raw=0x64"
+      },
+      {
+        "name": "echo",
+        "byte_hex": "5a",
+        "command": "Z",
+        "response": "Z"
+      }
+    ],
+    "startup_order": [
+      "LCVEX25 BOOT",
+      "CAL-WAIT",
+      "DDR-FAIL",
+      "READY",
+      "zero RXDBG/TX drain"
+    ],
+    "startup_order_ok": true,
+    "startup_zero_rxdbg_ok": true,
+    "tx_drain_ok": true,
+    "clock25_status_ok": true,
+    "pong_ok": true,
+    "manual_debug_ok": true,
+    "z_echo_ok": true,
+    "rxdbg_final_event_ok": true,
+    "rxdbg_rows": [
+      [
+        0,
+        0
+      ],
+      [
+        1048576,
+        0
+      ],
+      [
+        1645291,
+        196964
+      ],
+      [
+        2613049,
+        262490
+      ]
+    ],
+    "rxpath_rows": [
+      [
+        42074,
+        42074,
+        42074,
+        67372032
+      ]
+    ],
+    "rxcpu_rows": [
+      [
+        0,
+        0,
+        4259910,
+        4260109
+      ],
+      [
+        304218,
+        263514,
+        15335494,
+        15335690
+      ]
+    ],
+    "rxpath_accept": true,
+    "rxcpu_accept": true,
+    "terminal_exit_code": 0
+  },
+  "golden_restore": {
+    "program_result": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/program-result.json",
+    "program_result_sha256": "4fda2d2f295ffc4ab345e7ce7dcc49fcc9b007517d780cf193c298af5c1c9973",
+    "marker": "build/agents/T-20260920-037/run/final/golden-quartus-pgm.once",
+    "marker_sha256": "c06cc83d4257556e4b5e69a9b7f059e15204703e481993aa4814f9de6f2508cc",
+    "marker_created": true,
+    "attempt_count": 1,
+    "success": false,
+    "quartus_stdout": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/quartus_pgm.stdout.log",
+    "quartus_stdout_sha256": "4978bfc2fb532885af195096507aea52af5a2577df77aba3174c52f3385ae1b5",
+    "quartus_stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52",
+    "terminal_finished_at": "2026-09-20T19:54:13.198585+08:00",
+    "golden_program_started_at": "2026-09-20T19:54:15.1161058+08:00",
+    "terminal_to_golden_gap_seconds_approx": 1.918,
+    "golden_shim_first_mpsse_sync_read": "FT_Read want=1 got=1; RX len=1 FF",
+    "golden_failure_causality": "Observed timing and shim bytes only; no root-cause claim.",
+    "failure_markers": [
+      "Error (213019): Can't scan JTAG chain. Error code 86.",
+      "Error (213002): Programming option p;... is illegal."
+    ],
+    "postflight_final_board_golden": "live final state unproven; most recent proven live identity is candidate functional session"
+  },
+  "artifacts": {
+    "inventory_complete": true,
+    "inventory_command": "find build/agents/T-20260920-037/run/final -type f; sha256sum each file",
+    "bundle": [
+      {
+        "path": "build/agents/T-20260920-037/script-manifest.json",
+        "bytes": 1639,
+        "sha256": "30dc36ccff5d987bc9c9dcc7c8fa82830e0794bcaf182acf65877e294041fc9c"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/direct_terminal.py",
+        "bytes": 16101,
+        "sha256": "059bb54fa1f1d3c01209ead636ca5cfcc536d2e4b4a2d41819a3d18f9a4a2e66"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/postflight.ps1",
+        "bytes": 4558,
+        "sha256": "3bad7a13a6e3765982b16247602a814dac45d9dc6b34ddc9ca605d8941f540f8"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/preflight.ps1",
+        "bytes": 4120,
+        "sha256": "29f46fca907c56288ebb7cd0a99a57750f3e0c7e452b940f76e36f1ace5aad31"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/prepare_task_root.ps1",
+        "bytes": 1866,
+        "sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/program_once.ps1",
+        "bytes": 16007,
+        "sha256": "d0a888b39bc255573290fe4c1d49fe7b9a48abedc6043b29332b94878a38978e"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/run_board_once.sh",
+        "bytes": 9819,
+        "sha256": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/seal_manifest.py",
+        "bytes": 1886,
+        "sha256": "e95f87a2e91b73202edca05b9b441ad6def328c9c061e86cb111dd5ebf7c2cde"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/validate_scripts.ps1",
+        "bytes": 2491,
+        "sha256": "73632da1b96e445df0302be273ee777e11da218e71f43183e7c33aebe1646592"
+      },
+      {
+        "path": "build/agents/T-20260920-037/tools/verify_seal.ps1",
+        "bytes": 2871,
+        "sha256": "7fd26eac819fa141dbf9b7a2255bc8854cc5f6175c6ec42179e2edca30eeac85"
+      }
+    ],
+    "run": [
+      {
+        "path": "build/agents/T-20260920-037/run/final/bash-n.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/bootstrap-upload.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/bootstrap.log",
+        "bytes": 878,
+        "sha256": "0eab4ad58144c607d89b0da546835aaf0a5032ab30bc82113e9c8a100c9653ac"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/bundle-upload.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/candidate-program.log",
+        "bytes": 974,
+        "sha256": "4e8c60c203b1e809d1a1cf736cdb185f603d78fb83a112028eb24b3b7fa28f3c"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/candidate-quartus-pgm.once",
+        "bytes": 75,
+        "sha256": "29b5e7be14a8d01d337615469f75e3ea918a086181cb5c5a873ca7d0618ec177"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/direct-terminal-final-terminal-parsed-lines.json",
+        "bytes": 905,
+        "sha256": "39dbd5e9b5646fbfabcb627b803db6a24e189184966313f735eb4c3342779e24"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/direct-terminal-final-terminal-result.json",
+        "bytes": 3115,
+        "sha256": "baf3d8c4afa92db4d277107e20687e81be31ca21b3b6985b2efe420a28dd7f0e"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/direct-terminal-final-terminal.typescript",
+        "bytes": 948,
+        "sha256": "ad46839b50bcace8c9171d744c1696001712ef3259aac6f9233d22e67811ac7c"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/fetch-candidate.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/fetch-golden.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/fetch-markers.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/golden-quartus-pgm.once",
+        "bytes": 69,
+        "sha256": "c06cc83d4257556e4b5e69a9b7f059e15204703e481993aa4814f9de6f2508cc"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/golden-restore.log",
+        "bytes": 651,
+        "sha256": "5b967ff396f74a5951f187339d9b329f99b1c6ea3f497153db3a026ead86a2eb"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/local-seal.log",
+        "bytes": 1639,
+        "sha256": "30dc36ccff5d987bc9c9dcc7c8fa82830e0794bcaf182acf65877e294041fc9c"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/manifest-check.log",
+        "bytes": 5,
+        "sha256": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/postflight.log",
+        "bytes": 1812,
+        "sha256": "6d5e4271b1dc34c755176803232d8f09d1ba6c6fc6e6286133f8802efeb3990d"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/preflight.log",
+        "bytes": 1216,
+        "sha256": "394f88a4f855c55b673312c1a8e312d9e2768fcfeb1c848935d7158eece50901"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/python-compile.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-ast.log",
+        "bytes": 2026,
+        "sha256": "7460b25df5bc8ad40d19da55805436fa18b4c5b4bac4267da5e9a8e65ad8c119"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/owned-server.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/owned-server.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/program-result.json",
+        "bytes": 402,
+        "sha256": "4fda2d2f295ffc4ab345e7ce7dcc49fcc9b007517d780cf193c298af5c1c9973"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/quartus_pgm.stderr.log",
+        "bytes": 104,
+        "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/quartus_pgm.stdout.log",
+        "bytes": 231,
+        "sha256": "4978bfc2fb532885af195096507aea52af5a2577df77aba3174c52f3385ae1b5"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/runtime/server-manifest.json",
+        "bytes": 5428,
+        "sha256": "892391d66eeb634cf6df01e73c1b1b19e5507be80d8add6a381bc02eaf89ed10"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/ccl_ver.dll",
+        "bytes": 68000,
+        "sha256": "7c8f3719bac361e709232bc4098ba0f106f3f9f6a38427c8bbd9a9333c28e37e"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/client.conf",
+        "bytes": 139,
+        "sha256": "850870f8867409ed2917275f1150192eb36d66b3abf5f2ea00f74c09eb62bdeb"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/ftd2xx.dll",
+        "bytes": 151552,
+        "sha256": "e9129e61cc367914955bc6c1e479615bd1e9ad5884423aa64cb1f052ba0975a9"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/ftd2xx_real.dll",
+        "bytes": 808568,
+        "sha256": "52260f7751fbc545573ca29e4c27bfe005a97a98e9a7e5c28b77735568d6c5d5"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/ftd2xx_shim.log",
+        "bytes": 1037,
+        "sha256": "626147d2c2db90d7ae2f9d8cc886c1ce246339a3c8641384e8cb1950ab1c90ef"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/head_blaster.h",
+        "bytes": 2734,
+        "sha256": "715cab5e97025a0df62069606f9cfaa96d9ee70aaec255d4a36d6f1c1ace91a8"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/jtag_client.dll",
+        "bytes": 352672,
+        "sha256": "a987a40ebb2630c4f5296e86373484769e9d87f26fbbdda3f26ce9e940be1969"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/jtag_hw_microsoft_catapult.dll",
+        "bytes": 229376,
+        "sha256": "b7fe801ae91c50bd7ea159ea905d732a0b13ada9f7791b85384a6dc8167092f6"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/jtagserver.exe",
+        "bytes": 457120,
+        "sha256": "72562a0193aa2b4c0b6332256453f9f337ac61fb18cdac8895f30706228314ee"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/msftdi.cfg",
+        "bytes": 31,
+        "sha256": "36580939ab36d1b38a3a118c54b49529484b352b00d004f94fe0f7c8445f15ef"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/pgm_pgmdrv_apu_usb.dll",
+        "bytes": 93600,
+        "sha256": "799013d9ec21d1c1cb5af95ceb3fdf5b3bbe35303653486626bafcc6bb0f5c9a"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/program-golden-final-golden/server/port.txt",
+        "bytes": 6,
+        "sha256": "016dee8a428dcaaec688614fa773e7c11f38500736191bccaaf401ac610b15b3"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/owned-server.stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/owned-server.stdout.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/program-result.json",
+        "bytes": 8959,
+        "sha256": "892b94926c1f7f47316b7ff563e05f261b3fcbc0c426cd0b3e899586f3833178"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/quartus_pgm.stderr.log",
+        "bytes": 104,
+        "sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/quartus_pgm.stdout.log",
+        "bytes": 2414,
+        "sha256": "0439f53b66f9a89b239284ba7273311930e50cf2561fe3f9863827a9393dfe94"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/runtime/server-manifest.json",
+        "bytes": 5488,
+        "sha256": "3baa3342df4f45908559610545c0428fa97e205df5f4494ed340559d76507601"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/ccl_ver.dll",
+        "bytes": 68000,
+        "sha256": "7c8f3719bac361e709232bc4098ba0f106f3f9f6a38427c8bbd9a9333c28e37e"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/client.conf",
+        "bytes": 139,
+        "sha256": "850870f8867409ed2917275f1150192eb36d66b3abf5f2ea00f74c09eb62bdeb"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/ftd2xx.dll",
+        "bytes": 151552,
+        "sha256": "e9129e61cc367914955bc6c1e479615bd1e9ad5884423aa64cb1f052ba0975a9"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/ftd2xx_real.dll",
+        "bytes": 808568,
+        "sha256": "52260f7751fbc545573ca29e4c27bfe005a97a98e9a7e5c28b77735568d6c5d5"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/ftd2xx_shim.log",
+        "bytes": 103850366,
+        "sha256": "120080aa6eff257eb531198efa33ee28e8a276482439be96eb2e522738893741"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/head_blaster.h",
+        "bytes": 2734,
+        "sha256": "715cab5e97025a0df62069606f9cfaa96d9ee70aaec255d4a36d6f1c1ace91a8"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/jtag_client.dll",
+        "bytes": 352672,
+        "sha256": "a987a40ebb2630c4f5296e86373484769e9d87f26fbbdda3f26ce9e940be1969"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/jtag_hw_microsoft_catapult.dll",
+        "bytes": 229376,
+        "sha256": "b7fe801ae91c50bd7ea159ea905d732a0b13ada9f7791b85384a6dc8167092f6"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/jtagserver.exe",
+        "bytes": 457120,
+        "sha256": "72562a0193aa2b4c0b6332256453f9f337ac61fb18cdac8895f30706228314ee"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/msftdi.cfg",
+        "bytes": 31,
+        "sha256": "36580939ab36d1b38a3a118c54b49529484b352b00d004f94fe0f7c8445f15ef"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/pgm_pgmdrv_apu_usb.dll",
+        "bytes": 93600,
+        "sha256": "799013d9ec21d1c1cb5af95ceb3fdf5b3bbe35303653486626bafcc6bb0f5c9a"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-evidence/server/port.txt",
+        "bytes": 6,
+        "sha256": "016dee8a428dcaaec688614fa773e7c11f38500736191bccaaf401ac610b15b3"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-freshness.log",
+        "bytes": 222,
+        "sha256": "048e2ba89ae430962e02f5341cf60c694fb7e131cb417790075a56b32ca09992"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/remote-seal.log",
+        "bytes": 4815,
+        "sha256": "011548ae58d58fd3daa7be27e827021faaff0a29f24de425874e07a6b76bdafe"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/summary.txt",
+        "bytes": 1331,
+        "sha256": "93b8d78a373e12c16e5edd358d1b41b82899a1c8fbd4e25d46e5c3ee812e39aa"
+      },
+      {
+        "path": "build/agents/T-20260920-037/run/final/terminal-run.log",
+        "bytes": 3002,
+        "sha256": "f5b29a04f0696662a6d4328c28782cd7389d66e8132581134151cbe07d8d75a5"
+      }
+    ]
+  },
+  "blocker": {
+    "class": "golden-programmer-acceptance-failure",
+    "message": "The single golden restore attempt created its durable marker and invoked quartus_pgm, but acceptance failed with JTAG chain scan error 86 and illegal programming option p;...; no golden success record or successful configuration marker was produced. T-032 shows the preserved standard jtagserver can continue displaying cached golden hash/nodes while the candidate runs, so postflight's exact golden hash/design/UART/PHY is only a cached-standard observation and does not prove the live FPGA final state.",
+    "golden_programmer_attempted_once": true,
+    "golden_programmer_success": false,
+    "candidate_and_terminal_pass": true,
+    "final_postflight_golden": "live final state unproven; most recent proven live identity is candidate functional session",
+    "retry_forbidden_and_not_performed": true,
+    "board_left_in_final_postflight_golden_state": "live final state unproven; most recent proven live identity is candidate functional session",
+    "next": "Preserve this evidence; do not rerun or reconnect. A separately authorized golden recovery task is required before claiming a live golden final state."
+  },
+  "safety": {
+    "jic_epcq_flash": false,
+    "reset": false,
+    "power_cycle": false,
+    "standard_server_stopped": false,
+    "unknown_process_stopped": false,
+    "remote_extra_access_after_runner": false,
+    "all_hardware_actions_inside_gamepc_lock": true
+  },
+  "integration_review": {
+    "reviewed_at": "2026-09-20T20:15:12+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "evidence_merge_sha": "1e7bda989d7f4ab040e922b9b6c6b075c3cbdca9",
+    "evidence_merge_tree": "5342e4297b3a1e977f64cbceae820974f27d6b32",
+    "topic_evidence_head": "c61828f123e2b804dad82571acc3631a819679dd",
+    "artifact_hash_recheck": "PASS; all 70 accessible path/SHA256 pairs match",
+    "candidate_functional_acceptance": "PASS",
+    "golden_recovery_acceptance": "FAIL",
+    "live_final_state": "unproven; most recent proven live identity is candidate",
+    "result": "PARTIAL_BLOCKED_GOLDEN_RECOVERY"
+  },
+  "next": "Blocked; no retry. Review evidence and handoff, do not claim a live golden final state, and create a separately authorized golden recovery task before any further hardware action."
+}

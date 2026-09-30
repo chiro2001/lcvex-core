@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-023",
+  "label": "AUD-13FIX",
+  "parent": "T-20260829-118",
+  "title": "QEMU patch 集对账/重生成与 fresh replay 修复",
+  "kind": "qemu-fresh-replay-fix",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "cad3303dd1808ccd0727733641a96d565d954d75",
+  "branch": "feature/T-20260830-023-aud-13-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-023",
+  "scope": "重新对账当前 QEMU fork 与 qemu/patches；修正/补录 0012、LCVXSYS4/contextidr、helper.c timer kick；使干净 git apply + 构建 + 插件 + 锁步 smoke 通过，并同步 canonical combined hash。",
+  "writes": [
+    "qemu/patches/**",
+    "scripts/qemu_patch_hash.py",
+    "docs/handoffs/T-20260830-023-aud-13-fix.md",
+    "docs/tasks/evidence/T-20260830-023.json",
+    "docs/audit/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260829-118-aud-13.md",
+    "docs/handoffs/T-20260829-111-aud-06*.md",
+    "qemu/**",
+    "scripts/qemu_patch_hash.py"
+  ],
+  "validation": {
+    "l0": [
+      "干净 apply 12+ patches 成功",
+      "QEMU/plugin 构建成功",
+      "锁步 smoke PASS",
+      "combined hash 更新且可复现"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "fresh replay 真正通过，patch 集与当前 fork 一致，canonical hash 同步。",
+  "next": "关闭 AUD-13/外部审计 EXT-02-001。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T06:46:44+08:00",
+  "updated_at": "2026-08-30T06:46:44+08:00",
+  "known_limits": [
+    "不修改 RTL 功能/不引入 SVE；重型构建 cgroup <16GiB、VERILATOR_JOBS=1。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-023-aud-13-fix.md",
+  "evidence": "docs/tasks/evidence/T-20260830-023.json",
+  "merge_sha": "32f247c9fa787cbf90de5439bf7999ffbf587825",
+  "merged_at": "2026-08-30T07:07:49+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T07:07:49+08:00",
+    "head_sha": "19342464d792174d11c7602ade9c6cb21a8d1a24",
+    "notes": "AUD-13FIX merged. 13-patch clean replay idempotent; QEMU/plugin build PASS; trace+lockstep smoke PASS; new canonical hash b6b820..."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T13:40:00+0800",
+        "new": "2026-08-30T06:46:44+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T13:40:00+0800",
+        "new": "2026-08-30T06:46:44+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T14:00:00+0800",
+        "new": "2026-08-30T07:07:49+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T14:00:00+0800",
+        "new": "2026-08-30T07:07:49+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "64ecffd9457b91b03e876007f1d408c375841491",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "64ecffd9457b91b03e876007f1d408c375841491"
+}

@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-006",
+  "label": "B25-CDC-EXCEPTION-PRECEDENCE-AUDIT",
+  "state": "done-read-only-audit",
+  "acceptance_status": "non-conflicting-datapath-candidate-proven; physical-signoff-blocked; qdb-integrity-indeterminate",
+  "partial": true,
+  "base_sha": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "physical_source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "branch": "verify/T-20260909-006-b25-cdc-exception-precedence-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-006",
+  "scope": "在冻结 B25 final fitted database 上审计四组 Gray-pointer 与 T-045 poison 的 set_false_path/set_max_delay precedence，验证 Quartus 21.4 支持的非冲突 SDC 表达和实际 setup/hold/data-delay 路径。",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "fitted_probe": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-002-b25-physical",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-002-b25-physical\\fpga\\catapult_a10\\quartus",
+    "qdb_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-002-b25-physical\\fpga\\catapult_a10\\quartus\\qdb",
+    "output_files_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-002-b25-physical\\fpga\\catapult_a10\\quartus\\output_files",
+    "runtime_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260909-006\\runtime",
+    "quartus_sta": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sta.exe",
+    "quartus_version": "Quartus Prime Timing Analyzer Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+    "device": "10AX115N4F40E3SG",
+    "all_remote_operations_under_gamepc_lock": true,
+    "one_quartus_sta_at_a_time": true,
+    "busy_returns_waited": true
+  },
+  "input_identity": {
+    "formal_sdc_sha256": "b16247b74c6b07c7d0c4a0a50d4787072299b8b73e0caccce5fb273307ac078f",
+    "frozen_qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "frozen_qsf_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "remote_qsf_normalized_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "remote_qsf_raw_sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46",
+    "source_rtl_modified": false,
+    "formal_sdc_modified": false,
+    "qsf_modified": false,
+    "compile_fit_asm_run": false
+  },
+  "help_evidence": {
+    "quartus_sta_version_artifact": {
+      "path": "build/agents/T-20260909-006/runtime/local/quartus_sta_version.txt",
+      "sha256": "13b8fd1155e5edb6d84bd2f24cd6957632a49f49751350b82d8b9ede69e9e05b"
+    },
+    "loaded_db_help_artifact": {
+      "path": "build/agents/T-20260909-006/runtime/remote/t006_help_loaded_extended2.stdout.log",
+      "sha256": "24a9f81d02fa18e1420fec46b108ce291a663f237c9a2d199fc877b487147bef"
+    },
+    "set_false_path": {
+      "status": "supported",
+      "options": ["-hold", "-setup"],
+      "hold_semantics": "applies only to clock hold or removal checks",
+      "setup_semantics": "applies only to clock setup or recovery checks"
+    },
+    "set_max_delay": {
+      "status": "supported_without_datapath_only",
+      "options_from_loaded_help": ["-fall_from", "-fall_to", "-from", "-rise_from", "-rise_to", "-through", "-to", "value"],
+      "datapath_only_option": "unsupported; read_sdc error Unknown option: -datapath_only",
+      "setup_option": "unsupported; read_sdc error Unknown option: -setup"
+    },
+    "set_data_delay": {
+      "status": "supported",
+      "package": "::quartus::sdc_ext 2.0",
+      "semantics": "maximum datapath delay; default excludes launch/latch clock arrival; independent of set_false_path/set_clock_groups and cannot be overridden by other SDC constraints",
+      "report_command": "report_timing -setup -data_delay"
+    },
+    "set_max_skew": {
+      "status": "supported_but_clock_skew_command",
+      "not_used_as_register_datapath_substitute": true
+    },
+    "set_bus_skew": {
+      "status": "unsupported; invalid command name set_bus_skew"
+    }
+  },
+  "collection_cardinality": {
+    "count_api": "get_collection_size",
+    "pairs": [
+      {"label": "request_wr", "source": "*request_fifo|wr_ptr_gray_q*", "target": "*request_fifo|wr_ptr_gray_rd1_q*", "source_count": 3, "target_count": 3},
+      {"label": "request_rd", "source": "*request_fifo|rd_ptr_gray_q*", "target": "*request_fifo|rd_ptr_gray_wr1_q*", "source_count": 3, "target_count": 3},
+      {"label": "response_rd", "source": "*response_fifo|rd_ptr_gray_q*", "target": "*response_fifo|rd_ptr_gray_wr1_q*", "source_count": 3, "target_count": 3},
+      {"label": "response_wr", "source": "*response_fifo|wr_ptr_gray_q*", "target": "*response_fifo|wr_ptr_gray_rd1_q*", "source_count": 3, "target_count": 3},
+      {"label": "poison", "source": "*emif_adapter|emif_poisoned_q*", "target": "*emif_adapter|emif_poisoned_cpu_meta_q*", "source_count": 1, "target_count": 1}
+    ],
+    "rtl_crosscheck": "FIFO ADDR_WIDTH=2 gives PTR_WIDTH=3; poison is one bit followed by CPU-domain second stage"
+  },
+  "candidate_results": [
+    {
+      "id": "baseline",
+      "sdc": "build/agents/T-20260909-006/prep/t006_baseline.sdc",
+      "status": "pass_no_exceptions",
+      "corner": "3_slow_900mv_0c",
+      "normal_setup": {"request_wr": {"paths": 3, "violated": 3, "worst_slack_ns": -11.026}, "request_rd": {"paths": 3, "violated": 0, "worst_slack_ns": 9.289}, "response_rd": {"paths": 3, "violated": 3, "worst_slack_ns": -10.916}, "response_wr": {"paths": 3, "violated": 0, "worst_slack_ns": 9.565}, "poison": {"paths": 1, "violated": 0, "worst_slack_ns": 9.195}},
+      "normal_hold": {"request_wr": {"paths": 3, "violated": 0, "worst_slack_ns": 9.208}, "request_rd": {"paths": 3, "violated": 3, "worst_slack_ns": -11.108}, "response_rd": {"paths": 3, "violated": 0, "worst_slack_ns": 9.110}, "response_wr": {"paths": 3, "violated": 3, "worst_slack_ns": -11.567}, "poison": {"paths": 1, "violated": 1, "worst_slack_ns": -10.967}}
+    },
+    {
+      "id": "A_hold_datapath",
+      "sdc": "build/agents/T-20260909-006/prep/t006_hold_datapath.sdc",
+      "status": "rejected",
+      "read_sdc_exit": 1,
+      "quartus_exit": 3,
+      "error": "Unknown option: -datapath_only"
+    },
+    {
+      "id": "B_hold_setup",
+      "sdc": "build/agents/T-20260909-006/prep/t006_hold_setup.sdc",
+      "status": "pass_nonconflicting_ordinary_max",
+      "order": "set_false_path -hold then set_max_delay",
+      "false_paths": {"complete": 5, "ignored": 0},
+      "max_delays": {"complete": 5, "fully_overridden": 0, "ignored": 0},
+      "normal_setup": {"request_wr": {"paths": 3, "violated": 3, "worst_slack_ns": -10.276}, "request_rd": {"paths": 3, "violated": 0, "worst_slack_ns": 10.039}, "response_rd": {"paths": 3, "violated": 3, "worst_slack_ns": -10.166}, "response_wr": {"paths": 3, "violated": 0, "worst_slack_ns": 10.315}, "poison": {"paths": 1, "violated": 0, "worst_slack_ns": 9.945}},
+      "normal_hold": "all five no hold paths",
+      "limitation": "ordinary max includes cross-clock skew; not datapath-only"
+    },
+    {
+      "id": "C_full_false_max",
+      "sdc": "build/agents/T-20260909-006/prep/t006_full_false_max.sdc",
+      "status": "conflicting",
+      "false_paths": {"complete": 5},
+      "max_delays": {"complete": 0, "fully_overridden": 5, "ignored": 5},
+      "normal_setup": "all five no setup paths",
+      "normal_hold": "all five no hold paths",
+      "limitation": "2 ns max-delay bound is lost"
+    },
+    {
+      "id": "D_hold_only",
+      "sdc": "build/agents/T-20260909-006/prep/t006_hold_only.sdc",
+      "status": "incomplete_bound",
+      "false_paths": {"complete": 5},
+      "max_delay_rows": 0,
+      "normal_setup": "same as baseline",
+      "normal_hold": "all five no hold paths",
+      "limitation": "omitting a bound is observable and fail-closed"
+    },
+    {
+      "id": "E_max_first",
+      "sdc": "build/agents/T-20260909-006/prep/t006_max_first.sdc",
+      "status": "pass_nonconflicting_ordinary_max",
+      "order": "set_max_delay then set_false_path -hold",
+      "exceptions": "same counts and same setup/hold values as B_hold_setup",
+      "order_effect": "none observed"
+    },
+    {
+      "id": "F_setup_flag",
+      "sdc": "build/agents/T-20260909-006/prep/t006_setup_flag.sdc",
+      "status": "rejected",
+      "read_sdc_exit": 1,
+      "quartus_exit": 3,
+      "error": "Unknown option: -setup"
+    },
+    {
+      "id": "G1_full_false_data",
+      "sdc": "build/agents/T-20260909-006/prep/t006_full_false_data.sdc",
+      "status": "recommended_nonconflicting_datapath",
+      "order": "full set_false_path then set_data_delay",
+      "false_paths": {"complete": 5, "ignored": 0},
+      "normal_setup": "all five no setup paths because full false_path",
+      "normal_hold": "all five no hold paths because full false_path",
+      "data_delay_setup": {
+        "request_wr": {"paths": 3, "violated": 0, "worst_slack_ns": 1.145, "worst_data_delay_ns": 1.046},
+        "request_rd": {"paths": 3, "violated": 0, "worst_slack_ns": 1.158, "worst_data_delay_ns": 1.036},
+        "response_rd": {"paths": 3, "violated": 0, "worst_slack_ns": 1.365, "worst_data_delay_ns": 0.880},
+        "response_wr": {"paths": 3, "violated": 0, "worst_slack_ns": 1.327, "worst_data_delay_ns": 0.874},
+        "poison": {"paths": 1, "violated": 0, "worst_slack_ns": 0.984, "worst_data_delay_ns": 1.209}
+      },
+      "proof_marker": "Max Delay Exception (Datapath Only) ; 2.000"
+    },
+    {
+      "id": "G2_hold_data",
+      "sdc": "build/agents/T-20260909-006/prep/t006_hold_data.sdc",
+      "status": "pass_datapath_plus_normal_setup",
+      "false_paths": {"complete": 5, "ignored": 0},
+      "normal_setup": "same as baseline",
+      "normal_hold": "all five no hold paths",
+      "data_delay_setup": "same five passing data-delay rows as G1",
+      "limitation": "normal cross-clock setup remains visible and negative in request_wr/response_rd"
+    }
+  ],
+  "actual_path_report_artifacts": {
+    "A_datapath_syntax_reject": {"path": "build/agents/T-20260909-006/runtime/remote/A_hold_datapath_quartus.stdout.log", "sha256": "e13146196e3fb9de3da16e8f4bf9100e749f9bb273b7ec89a08d495d980773ea"},
+    "F_setup_syntax_reject": {"path": "build/agents/T-20260909-006/runtime/remote/F_setup_flag_quartus.stdout.log", "sha256": "91bfa0fb053e5b003e6fad7f6bc5b3c05996146ac88e2e8587f838e69c25668c"},
+    "G1_exceptions": {"path": "build/agents/T-20260909-006/runtime/remote/G1_full_false_data_exceptions.rpt", "sha256": "7dc90dc827eb4cb7f3adbb5198974ceef0308f6e8c90fb5addaaf7695828948e"},
+    "G1_ignored": {"path": "build/agents/T-20260909-006/runtime/remote/G1_full_false_data_ignored.rpt", "sha256": "805d64c7c067e161b1b48df7ac4b33c879355d036cbe4c2335d3cda4ef4db7f3"},
+    "G1_request_wr_data_delay": {"path": "build/agents/T-20260909-006/runtime/remote/G1_full_false_data_0_request_wr_data_delay.rpt", "sha256": "e862acfc3d40762cd9b6800bf450b57437072642f1b41c00b4ea3390109ccb96"},
+    "G1_request_rd_data_delay": {"path": "build/agents/T-20260909-006/runtime/remote/G1_full_false_data_1_request_rd_data_delay.rpt", "sha256": "004f5b97f5206c41c04332f67fd772e9ed7c29fafd550c51639c169f8da8ed2a"},
+    "G1_response_rd_data_delay": {"path": "build/agents/T-20260909-006/runtime/remote/G1_full_false_data_2_response_rd_data_delay.rpt", "sha256": "362f2c91b5a4a6a976167361f492d21c33bb5349cee10415e7a54bc0c83cd87f"},
+    "G1_response_wr_data_delay": {"path": "build/agents/T-20260909-006/runtime/remote/G1_full_false_data_3_response_wr_data_delay.rpt", "sha256": "593a7c5018adcec21cf47bc1d6358d6eb7559051935df99a332a0ee65d022ced"},
+    "G1_poison_data_delay": {"path": "build/agents/T-20260909-006/runtime/remote/G1_full_false_data_4_poison_data_delay.rpt", "sha256": "af1a5944407c7a0027701fd8db8c0d5ddfcf874f5a4b81a11683158b7f3e8cae"},
+    "B_exceptions": {"path": "build/agents/T-20260909-006/runtime/remote/B_hold_setup_exceptions.rpt", "sha256": "822fff3b8a81c300364fe1e593a9b1a78280f5cc7040752051c838537d7a4685"},
+    "C_exceptions": {"path": "build/agents/T-20260909-006/runtime/remote/C_full_false_max_exceptions.rpt", "sha256": "e23f684cc54a5555c78ece48193dccfbebb2b591c1efb72319125a59878100f0"},
+    "E_exceptions": {"path": "build/agents/T-20260909-006/runtime/remote/E_max_first_exceptions.rpt", "sha256": "7c83f380393d1a6f2a434bb211205e709f8526167993f46a0f5b3f2c6a8c3ec8"}
+  },
+  "future_sdc_regions": {
+    "section2": "保留四条 full set_false_path；source/target 仍为四组 Gray pointer 到 first synchronizer。",
+    "section3": "将四条 set_max_delay ... 2.000 原位替换为同 from/to 的 set_data_delay ... 2.000。",
+    "section4c": "保留 emif_reset_cpu_meta_q 与 cpu_rst_emif_meta_q false paths；poison pair 保留 full set_false_path，并紧随其后加 set_data_delay ... 2.000。",
+    "recommended_order": "full false path first, independent set_data_delay second",
+    "unsupported_options_not_to_use": ["set_max_delay -datapath_only", "set_max_delay -setup"]
+  },
+  "judgement": {
+    "gray_pointer": {
+      "width": 3,
+      "coherence_bound_ns": 2.0,
+      "decision": "retain",
+      "reason": "Gray pointer is multi-bit; 2 ns datapath bound constrains bit-to-bit routing/arrival coherence. G1 reports all 12 bit paths and positive slack."
+    },
+    "poison": {
+      "width": 1,
+      "coherence_bound_ns": 2.0,
+      "decision": "retain_until_explicit_contract_change",
+      "reason": "single-bit poison has no multi-bit coherence requirement, but current T-045 contract explicitly carries 2 ns and poison controls late-response drain/epoch safety. G1 proves its independent 2 ns data-delay path at +0.984 ns."
+    }
+  },
+  "verification_tcl": {
+    "path": "build/agents/T-20260909-006/prep/t006_future_verify.tcl",
+    "sha256": "1047fcb5d44c4c5d0d8a0928f05b5cdf0cf87f5a9b107c3f40e1e8faac400330",
+    "corners": ["3_slow_900mv_0c", "3_slow_900mv_100c", "MIN_fast_900mv_0c", "MIN_fast_900mv_100c"],
+    "checks": ["get_collection_size source/target nonzero and equal", "five false paths Complete", "no ignored/Fully overridden/unresolved", "normal setup/hold reports retained", "report_timing -setup -data_delay count equals source and WNS>=0", "Max Delay Exception (Datapath Only) 2.000 marker"]
+  },
+  "fail_closed": [
+    "source or target count zero/mismatch",
+    "read_sdc error or unclassified warning",
+    "any false/max/data-delay exception ignored or Fully overridden",
+    "missing normal setup/hold or data-delay report",
+    "data-delay path count not equal to source count",
+    "negative data-delay slack or missing 2 ns datapath marker",
+    "not all four corners checked for a future SDC signoff",
+    "no pristine pre/post fitted-DB manifest when claiming DB unchanged"
+  ],
+  "provenance_postflight": {
+    "preflight_utc": "2026-09-09T02:41:20.9033211Z",
+    "preflight_qdb_file_count": 227,
+    "final_utc": "2026-09-09T04:17:18.0526632Z",
+    "final_qdb_file_count": 227,
+    "final_qdb_manifest_sha256": "c64214e79a373e0bc81facf7dc085576b28e31f83c19d2d46fbc7cd42a4ba73b",
+    "initial_qdb_dir_mtime_observed": "2026-09-09T02:04:32Z (directory listing, no full manifest)",
+    "final_qdb_dir_mtime_observed": "2026-09-09T04:19:55.8927244Z",
+    "final_output_files_file_count": 13,
+    "final_output_files_manifest_sha256": "26251a54458cb5283161ac296b7ee87827c24aa9bf68e55f7e92f9b85f18d7c7",
+    "output_files_key_hashes_match_T002_frozen": true,
+    "eda_count": 0,
+    "forbidden_artifact_count": 0,
+    "qdb_unchanged": "indeterminate",
+    "qdb_note": "The shared fitted probe QDB directory mtime advanced while sibling report-only tasks also used the probe; this task had no pristine full QDB manifest before the first query. No intentional DB write, delete, restore or overwrite was performed, but strict QDB unchanged cannot be claimed.",
+    "postflight_artifacts": {
+      "stdout": {"path": "build/agents/T-20260909-006/runtime/remote/t006_postflight_final.stdout.log", "sha256": "b4483af25b9d3fe5b2cb699dc81101fe757c7cdd7af9bb081efeaa8eec146482"},
+      "qdb_manifest": {"path": "build/agents/T-20260909-006/runtime/remote/t006_postflight_qdb_sha256.txt", "sha256": "c64214e79a373e0bc81facf7dc085576b28e31f83c19d2d46fbc7cd42a4ba73b"},
+      "output_files_manifest": {"path": "build/agents/T-20260909-006/runtime/remote/t006_postflight_output_files_sha256.txt", "sha256": "26251a54458cb5283161ac296b7ee87827c24aa9bf68e55f7e92f9b85f18d7c7"}
+    }
+  },
+  "policy": {
+    "tracked_rtl_sdc_qsf_test_task_status_modified": false,
+    "remote_queries_only": true,
+    "quartus_compile_fit_asm": false,
+    "bitstream_or_programming": false,
+    "jtag_board_flash": false,
+    "unknown_process_killed": false,
+    "final_resource_status": "local FREE; gamepc FREE"
+  },
+  "artifacts": {
+    "handoff": "docs/handoffs/T-20260909-006-b25-cdc-exception-precedence-audit.md",
+    "prep": "build/agents/T-20260909-006/prep",
+    "remote_runtime": "build/agents/T-20260909-006/runtime/remote",
+    "local_runtime": "build/agents/T-20260909-006/runtime/local"
+  },
+  "checks": {
+    "git_diff_check": "PASS",
+    "json_parse": "PASS",
+    "formal_sdc_diff": "clean"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "T-20260828-064",
+  "title": "Catapult A10 真实顶层 full flow/STA 与 SFL 输入补齐",
+  "kind": "fpga-fullflow-sta",
+  "priority": "high",
+  "assigned_owner": "catapult-fullflow-dsv",
+  "agent_type": "implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；当前项目默认 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "model_scope": "将 T-062 的 lcvex_catapult_a10_top 顶层 shell 与 reset/calibration gate 同步到远端 D:\\Projects\\fpga-altra\\lcvex，补齐 SFL Qsys 输入（flash/sfl/sfl_sys.qsys），执行真实 quartus_sh --flow compile catapult_a10 full flow（synthesis/fit/STA/assembler）并保存报告与哈希；允许搜索在线 Quartus/Qsys 官方资料；不修改 Linux 集成线 RTL/QEMU，不读取 license 内容，不删除未知用户文件。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "仅在顶层/Qsys 生成边界或 full flow 阻断出现歧义时补充审查；不替代远端实际验证。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "本任务以远端工程执行为主，默认不阻塞；仅在写集、工具版本或生成边界发生实质变化时重审。"
+  },
+  "phase": "done",
+  "parent": "T-20260828-063",
+  "depends_on": [
+    "T-20260827-062",
+    "T-20260828-063"
+  ],
+  "input_note": "T-062 已提供 lcvex_catapult_a10_top 顶层 shell 与 QSF 锚点；T-063 已创建远端工程并打通 smoke full flow。本任务把两者合并为真实工程 full flow，并补齐 SFL 输入缺口。",
+  "writes": [
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/**",
+    "fpga/catapult_a10/**",
+    "docs/handoffs/T-20260828-064-catapult-fullflow.md",
+    "docs/tasks/evidence/T-20260828-064.json"
+  ],
+  "reads": [
+    "fpga/catapult_a10/**",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/active/T-20260827-062.json",
+    "docs/tasks/archive/T-20260828-063.json",
+    "docs/tasks/evidence/T-20260827-062.json",
+    "docs/tasks/evidence/T-20260828-063.json",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+    "ssh://192.168.101.5/D:/Software/intelFPGA_pro/21.4"
+  ],
+  "context_docs": [
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "fpga/catapult_a10/README.md",
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/skeleton_manifest.json",
+    "fpga/catapult_a10/tools/check_skeleton.py",
+    "fpga/catapult_a10/tools/regenerate_qsys.sh"
+  ],
+  "base_sha": "096900bd9aead7264a0dacdad4296a8970c7505b",
+  "branch": "feature/T-20260828-064-catapult-fullflow",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-064",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 4096,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true,
+    "extend_when": "owner 按 Asia/Shanghai 报告 sent_at/received_at/reported_at、文件、验证、阻断和剩余工作，且正在稳定推进 full flow 时延长。"
+  },
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "write_rule": "只允许在 project_root 内创建/修改工程与构建产物；project_root 以外只读；不得删除或覆盖未知用户文件。"
+  },
+  "validation": {
+    "l0": [
+      "顶层 shell 与 reset/calibration gate 同步到远端，QSF TOP_LEVEL_ENTITY 指向 lcvex_catapult_a10_top",
+      "SFL sfl_sys.qsys 输入补齐（来自 Quartus 21.4 官方可重生成来源或远端工具生成），并纳入平台 manifest/hash",
+      "json.tool、git diff --check、check_platform.py/check_skeleton.py 全绿"
+    ],
+    "l1": [
+      "真实 quartus_sh --flow compile catapult_a10 全流程执行，记录精确命令、版本、退出码、日志与报告路径",
+      "STA 报告记录 setup/hold/Fmax；SOF 产物与哈希保存"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [
+      "板级 DDR/上板验证由 Gate F-BOARD/B5 任务执行"
+    ]
+  },
+  "acceptance": "在远端 D:\\Projects\\fpga-altra\\lcvex 用 lcvex_catapult_a10_top 真实顶层执行 quartus_sh --flow compile catapult_a10 全流程并保存报告/哈希；补齐 SFL Qsys 输入并更新平台 manifest/hash；离线 L0/L1 在合并 SHA 全绿。若 full flow 因工具/边界阻塞，给出明确最小可执行清单并保持 blocked。不得宣称板测/DDR 稳定性完成。",
+  "created_at": "2026-08-28T01:18:00+08:00",
+  "updated_at": "2026-08-28T02:20:00+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-28T01:18:06+08:00",
+    "agent_name": "t064_catapult_fullflow",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-064"
+  },
+  "commits": [],
+  "evidence": "docs/tasks/evidence/T-20260828-064.json",
+  "handoff": "docs/handoffs/T-20260828-064-catapult-fullflow.md",
+  "known_limits": [
+    "本任务只做真实 full flow/STA 与 SFL 输入补齐，不宣称板级 DDR、Linux 或上板启动完成。",
+    "远端写操作严格限定在 D:\\Projects\\fpga-altra\\lcvex；不得删除未知用户文件或修改 reference_root 其他内容。",
+    "SFL Qsys 输入若只能从 Quartus GUI/IP 目录生成，须记录精确生成命令、来源版本与哈希，不得伪造 cleanroom 来源。"
+  ],
+  "next": "集成者确认 full flow/STA 证据后，解除 Gate F-BOARD 前置缺口并登记 B5-SoC/Boot。",
+  "merge_sha": "e389c53",
+  "integration": {
+    "status": "done",
+    "strategy": "cherry-pick e1cd34b + 6f4179a to feature/p7-fp-neon",
+    "merge_sha": "e389c53",
+    "validated_scope": "real Catapult A10 full compile + signoff STA on remote; SFL/EPCQ 39-file input completed; offline L0 all green on merge SHA",
+    "remaining_scope": "DDR March/board-level calibration/board test (Gate F-BOARD); B5 SoC/boot wiring; reset_gate CDC re-review when CPU added"
+  }
+}

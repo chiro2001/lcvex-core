@@ -1,0 +1,268 @@
+{
+  "base_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+  "limitations": [
+    "Generic 4-LUT mapping is not an FPGA architectural resource report.",
+    "LUT/FF are synth proxy counts, not Arria 10/ECP5 vendor results.",
+    "RAM/DSP/area are N/A: no device memory/DSP mapping was performed.",
+    "DO NOT use ABC delay as Fmax.",
+    "lcvex_l2 and lcvex_core not run in this task (see handoff for blockers)."
+  ],
+  "method": "Yosys read_verilog -sv flat view; synth -top <module> -lut 4; write_verilog; stat -json",
+  "modules": {
+    "lcvex_axi4_master": {
+      "config": {
+        "ADDR_WIDTH": 64,
+        "DATA_WIDTH": 128,
+        "ID_WIDTH": 4,
+        "MAX_BURST_LEN": 16
+      },
+      "flat_file": "fpga/opensynth/generated/lcvex_axi4_master_flat.v",
+      "flat_sha256": "ba808f6fe97f8fb34a0cdbc64cb3687a4b5e94adc1143284577f116d5b13baa7",
+      "runs": [
+        {
+          "exit_code": 0,
+          "metrics": {
+            "abc_report_lut": 1870,
+            "area": "N/A",
+            "dff": 2406,
+            "dsp": "N/A",
+            "lut4": 1870,
+            "num_cells": 4276,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 2400,
+              "$_DFFE_PN1P_": 1,
+              "$_DFF_PN0_": 4,
+              "$_DFF_PN1_": 1,
+              "$lut": 1870
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 3010,
+            "num_ports": 56,
+            "num_wire_bits": 7000,
+            "num_wires": 1646,
+            "ram_bits": 0
+          },
+          "netlist_bytes": 665059,
+          "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+          "run_id": "owner-lcvex_axi4_master-run01",
+          "wall_seconds": 3.257,
+          "yosys_log_sha256": "db6d0464358d2cca9b7df07fd57c0008c376119636070f1a4f638b76ec9a89a4"
+        },
+        {
+          "exit_code": 0,
+          "metrics": {
+            "abc_report_lut": 1870,
+            "area": "N/A",
+            "dff": 2406,
+            "dsp": "N/A",
+            "lut4": 1870,
+            "num_cells": 4276,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 2400,
+              "$_DFFE_PN1P_": 1,
+              "$_DFF_PN0_": 4,
+              "$_DFF_PN1_": 1,
+              "$lut": 1870
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 3010,
+            "num_ports": 56,
+            "num_wire_bits": 7000,
+            "num_wires": 1646,
+            "ram_bits": 0
+          },
+          "netlist_bytes": 665059,
+          "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+          "run_id": "owner-lcvex_axi4_master-run02",
+          "wall_seconds": 3.059,
+          "yosys_log_sha256": "fcb162e36461607cbdc236deb1a2508cd74d462e5b832a2276cfd140fd7f8034"
+        }
+      ],
+      "source_files": [
+        "rtl/lcvex_axi4_pkg.sv",
+        "rtl/lcvex_axi4_master.sv"
+      ],
+      "source_sha256": {
+        "rtl/lcvex_axi4_master.sv": "0fdaf8e151a1136e0641f8fc073757a1b9c7bc3b5a5248ca71f5b76171892fe2",
+        "rtl/lcvex_axi4_pkg.sv": "ef4b8b201e1c1fdf555d901a26ab5645d05845e94f211e2c26a750201972b8ae"
+      },
+      "stable_across_two_runs": true,
+      "tool": {
+        "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+        "python": "Python 3.12.10",
+        "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+      },
+      "top": "lcvex_axi4_master"
+    },
+    "lcvex_mem_arb": {
+      "config": {
+        "PORTS": 3
+      },
+      "flat_file": "fpga/opensynth/generated/lcvex_mem_arb_flat.v",
+      "flat_sha256": "a58f6a9916927c25f4ea9779a544f5036d826d42f23a256aef5b0084b6371729",
+      "runs": [
+        {
+          "exit_code": 0,
+          "metrics": {
+            "abc_report_lut": 20,
+            "area": "N/A",
+            "dff": 3,
+            "dsp": "N/A",
+            "lut4": 20,
+            "num_cells": 23,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 3,
+              "$lut": 20
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 432,
+            "num_ports": 14,
+            "num_wire_bits": 449,
+            "num_wires": 26,
+            "ram_bits": 0
+          },
+          "netlist_bytes": 5973,
+          "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+          "run_id": "owner-lcvex_mem_arb-run01",
+          "wall_seconds": 0.125,
+          "yosys_log_sha256": "3d764978aaceeb486e44ef4cebf4f099138d7e71aa325d0d9418de42cf76137c"
+        },
+        {
+          "exit_code": 0,
+          "metrics": {
+            "abc_report_lut": 20,
+            "area": "N/A",
+            "dff": 3,
+            "dsp": "N/A",
+            "lut4": 20,
+            "num_cells": 23,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 3,
+              "$lut": 20
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 432,
+            "num_ports": 14,
+            "num_wire_bits": 449,
+            "num_wires": 26,
+            "ram_bits": 0
+          },
+          "netlist_bytes": 5973,
+          "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+          "run_id": "owner-lcvex_mem_arb-run02",
+          "wall_seconds": 0.125,
+          "yosys_log_sha256": "1b92668442a0850e22438a2404d843c4d9ecd2a0a9fa2bc5b9936e52ef1a2fa5"
+        }
+      ],
+      "source_files": [
+        "rtl/lcvex_pkg.sv",
+        "rtl/lcvex_mem_arb.sv"
+      ],
+      "source_sha256": {
+        "rtl/lcvex_mem_arb.sv": "9d9a876b6b737ffd948b16746579801c3b950bb0e0d38cd178647c76f35c0918",
+        "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60"
+      },
+      "stable_across_two_runs": true,
+      "tool": {
+        "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+        "python": "Python 3.12.10",
+        "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+      },
+      "top": "lcvex_mem_arb"
+    },
+    "lcvex_mem_delay": {
+      "config": {
+        "DELAY_MODE": 1,
+        "RAND_MAX": 4,
+        "SEED": "8'hA5"
+      },
+      "flat_file": "fpga/opensynth/generated/lcvex_mem_delay_flat.v",
+      "flat_sha256": "bcf898b4c46a80dc315a83dd0bf68a79cf056f0b06f41669dbf5c6104543b559",
+      "runs": [
+        {
+          "exit_code": 0,
+          "metrics": {
+            "abc_report_lut": 63,
+            "area": "N/A",
+            "dff": 241,
+            "dsp": "N/A",
+            "lut4": 63,
+            "num_cells": 304,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 240,
+              "$_DFF_PN0_": 1,
+              "$lut": 63
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 424,
+            "num_ports": 14,
+            "num_wire_bits": 725,
+            "num_wires": 48,
+            "ram_bits": 0
+          },
+          "netlist_bytes": 48107,
+          "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+          "run_id": "owner-lcvex_mem_delay-run01",
+          "wall_seconds": 0.185,
+          "yosys_log_sha256": "3f66a201a9d1414b93807dfed3444093b4cef9ac9fdcc53294c1790927b7c602"
+        },
+        {
+          "exit_code": 0,
+          "metrics": {
+            "abc_report_lut": 63,
+            "area": "N/A",
+            "dff": 241,
+            "dsp": "N/A",
+            "lut4": 63,
+            "num_cells": 304,
+            "num_cells_by_type": {
+              "$_DFFE_PN0P_": 240,
+              "$_DFF_PN0_": 1,
+              "$lut": 63
+            },
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_port_bits": 424,
+            "num_ports": 14,
+            "num_wire_bits": 725,
+            "num_wires": 48,
+            "ram_bits": 0
+          },
+          "netlist_bytes": 48107,
+          "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+          "run_id": "owner-lcvex_mem_delay-run02",
+          "wall_seconds": 0.159,
+          "yosys_log_sha256": "cb34b552762378164a7a5d5faf87402f89571863f696a0c92932d899e1b2a717"
+        }
+      ],
+      "source_files": [
+        "rtl/lcvex_pkg.sv",
+        "rtl/lcvex_mem_delay.sv"
+      ],
+      "source_sha256": {
+        "rtl/lcvex_mem_delay.sv": "421f163c494ac630ec865154954c3a58d3560a63353f840130cb91a6f40bf51c",
+        "rtl/lcvex_pkg.sv": "dc4e267ff3d7068ac21788e4787217de59988a612ad2b0dffd46cc3031d1fe60"
+      },
+      "stable_across_two_runs": true,
+      "tool": {
+        "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+        "python": "Python 3.12.10",
+        "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+      },
+      "top": "lcvex_mem_delay"
+    }
+  },
+  "task": "T-20260829-080",
+  "title": "A1 generic Yosys/ABC synthesis proxy for LCVEX RTL",
+  "toolchain": {
+    "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+    "python": "Python 3.12.10",
+    "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+  },
+  "workspace": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-080"
+}

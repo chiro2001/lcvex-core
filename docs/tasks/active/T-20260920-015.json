@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-015",
+  "label": "B25-RX-CPU-OBSERVABILITY-GATE-D",
+  "title": "Run complete release-mode Gate D for the CPU-visible RX observability candidate",
+  "kind": "integration-gate",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "complete-release-mode-gate-d-pass",
+  "assigned_owner": "rx_verify_plan",
+  "depends_on": ["T-20260920-012"],
+  "base_sha": "17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b",
+  "candidate_sha": "17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b",
+  "candidate_tree_sha": "49ae77b46bac077d68cd5432a09eb64b51b07ebb",
+  "branch": "detached@17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-015-gate",
+  "writes": [
+    "build/** ignored Gate D outputs inside the detached gate worktree",
+    "obj_dir*/** ignored outputs inside the detached gate worktree",
+    "docs/tasks/evidence/T-20260920-015.json only by the integrator after receipt",
+    "docs/handoffs/T-20260920-015-b25-rx-cpu-observability-gate-d.md only by the integrator after receipt"
+  ],
+  "scope": "Run the complete release-mode Gate D on the exact frozen candidate. Assertions, QEMU comparisons, coverage, random lengths and baremetal remain enabled. The gate owner may not modify tracked source, tests, expected results or QEMU state.",
+  "acceptance": {
+    "gate": "sim/difftest/run_gate_d.sh --parallel exits 0 with the full Gate D pass marker",
+    "required": "make test, coverage, M2 base/cache, delay2 cache, P5A hardening/MMU, Gate C/P4B, random seeds 1/2/3 at requested length 100000, instruction coverage and baremetal C all pass",
+    "new_observability": "The frozen 2011-byte B25 monitor and observation-only RTL remain unchanged; targeted T-012 L2 evidence is a prerequisite, not a replacement for Gate D.",
+    "integrity": "No skipped group, disabled assertion/comparison, expected-output change, tracked worktree modification, orphan coordinator/QEMU process or shared artifact collision.",
+    "evidence": "Record source SHA/tree, tool/QEMU hashes, exact command, resource metadata, result counts and Gate log hash."
+  },
+  "resource": "Acquire local via /home/chiro/projects/.resource-locks/resource-lock with >=8192 MiB admission, VERILATOR_JOBS=1 and --parallel Gate runner. Return 75 means event-driven/one-hour wait, never unlocked fallback. No GamePC, Quartus, assembler or board action.",
+  "forbidden_regions": [
+    "all tracked RTL, firmware, test, QEMU and expected-result files",
+    "assertion/comparison disable or random-length reduction",
+    "baremetal or coverage skip",
+    "GamePC, Quartus, assembler, JTAG, Flash, reset or power actions"
+  ],
+  "created_at": "2026-09-20T09:32:01+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-20T09:33:14+08:00",
+    "agent_name": "rx_verify_plan",
+    "model": "dsh-default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max",
+    "monitoring": "event-driven with up to one-hour waits; no short polling"
+  },
+  "result": {
+    "status": "done",
+    "partial": false,
+    "outer_exit_code": 0,
+    "gate": "PASS; all release-mode groups, coverage, three 100k random seeds and baremetal",
+    "log_sha256": "467f957bfd18616723a657eb7f5d6af632034ce7c8c8495ac5d1d9ec5b175321",
+    "evidence": "docs/tasks/evidence/T-20260920-015.json",
+    "handoff": "docs/handoffs/T-20260920-015-b25-rx-cpu-observability-gate-d.md",
+    "next": "T-016 one-line no-FP board profile derivative"
+  },
+  "updated_at": "2026-09-20T09:57:38+08:00"
+}

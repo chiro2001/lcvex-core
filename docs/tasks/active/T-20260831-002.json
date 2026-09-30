@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "T-20260831-002",
+  "label": "FPGA-G6-PROV",
+  "parent": "T-20260828-067",
+  "title": "A10 platform/source provenance 重锁与 checker 加固",
+  "kind": "fpga-provenance-fix",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-a10-provenance",
+  "agent_type": "infrastructure-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260831-001"
+  ],
+  "base_sha": "4764d834c33055814846db46dc29c6fc74290358",
+  "branch": "infra/T-20260831-002-a10-provenance-relock",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-002",
+  "scope": "修复 T-20260831-001 发现的 A10 provenance 漂移：从只读参考仓 a10-linux-riscv@3db828e 重新计算 50 项 source raw blob SHA/bytes，更新 source.lock 与 platform_manifest 的 source 字段；从当前 LCVEX payload 重新计算 50 项 target SHA/bytes 和 SHA256SUMS，纳入有意更新后的 QSF/SDC。加固 check_platform.py，新增显式 strict source-repo/commit 校验而不破坏无参考仓的默认离线检查。只改 metadata/checker/docs，不改任何 QSF/SDC/Qsys/SFL/RTL/生成文件，不运行 Quartus或远端写操作。",
+  "planning_guidance": {
+    "source_lock": [
+      "reference repo 必须 clean 且 HEAD/被检 commit 为 3db828e74651fda377a33d84f2a2ca0e69901d72；逐项用 Git blob 原始字节计算 SHA256/size，不从工作树换行或文件系统属性推断。",
+      "保留 source_path/target_path/role 映射；source_sha256/source_bytes 绑定参考 Git blob，target sha256/bytes 绑定当前 LCVEX 文件。两者允许不同，但必须明确是 import/regenerate/LCVEX extension，而不是错误地要求字节相同。",
+      "QSF/SDC 参考 source 仍是 a10-linux-riscv fragment，target hash 更新为当前 B5/cache/CDC 版本；不得用重锁动作覆盖当前 target 内容。"
+    ],
+    "checker": [
+      "默认 `check_platform.py` 保持仓内离线自洽检查，不因外部参考仓不存在而失败。",
+      "新增显式 strict-source 模式/参数：验证 source repo clean、commit 存在、每个 source_path blob SHA/bytes 与 manifest/source.lock 一致；错误必须列精确 path/expected/actual。",
+      "同时验证 SHA256SUMS 文件集与 manifest target 文件集一致、50 项当前 target hash/bytes 全匹配；不得只检查 lock 与 manifest 相互抄写一致。",
+      "拒绝 path traversal、缺失 blob、重复 target/source mapping 和未声明文件；输出可机器解析 summary。"
+    ],
+    "verification": [
+      "更新后 target `sha256sum -c` 必须 50/50；strict source 必须 50/50；default offline checker 与 skeleton checker 全绿。",
+      "若 skeleton checker 暴露后续顶层的 hash/bytes 漂移，只更新 skeleton_manifest.json 对当前未修改 target 的 metadata；不得修改顶层/复位/QPF/QSF 实体来迎合旧 manifest。",
+      "用临时副本或测试 fixture 篡改一个 source hash、一个 target hash，严格模式必须分别拒绝；不得修改真实参考仓/target 文件制造负测。",
+      "确认 git diff 中没有 QSF/SDC/Qsys/SFL/RTL/生成 payload 内容变化。"
+    ]
+  },
+  "writes": [
+    "fpga/catapult_a10/platform_manifest.json",
+    "fpga/catapult_a10/skeleton_manifest.json",
+    "fpga/catapult_a10/source.lock",
+    "fpga/catapult_a10/SHA256SUMS",
+    "fpga/catapult_a10/tools/check_platform.py",
+    "fpga/catapult_a10/README.md",
+    "docs/FPGA_A10_PROVENANCE_RELOCK.md",
+    "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+    "docs/tasks/evidence/T-20260831-002.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/FPGA_A10_EXECUTION_PREFLIGHT.md",
+    "docs/tasks/evidence/T-20260831-001.json",
+    "fpga/catapult_a10/**",
+    "/home/chiro/projects/a10-linux-riscv/**"
+  ],
+  "validation": {
+    "l0": [
+      "python3 fpga/catapult_a10/tools/check_platform.py 默认离线模式",
+      "strict source-repo/commit 50/50 校验",
+      "cd fpga/catapult_a10 && sha256sum -c SHA256SUMS（50/50）",
+      "check_skeleton.py、JSON、git diff --check、写集和 payload-no-change 核对",
+      "source/target hash tamper negative fixtures 均拒绝"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "source.lock/platform_manifest 对 a10-linux-riscv@3db828e 的 50 个 raw blob 逐项真实匹配；SHA256SUMS/manifest 对当前 50 个 target 逐项匹配；platform 与 skeleton checker 全绿，strict source 模式能发现 source/target 篡改。只允许 skeleton manifest metadata 跟随当前顶层重锁；没有任何平台 payload/RTL/远端/Quartus 修改。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.1
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 30,
+    "max_minutes": 60,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-31T01:22:05+08:00",
+  "updated_at": "2026-08-31T02:20:27+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-31T01:23:22+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-20260831-001 的 gpt-5.6-luna(max) A10 agent；当前只持有 T-20260831-002。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-002"
+  },
+  "handoff": "docs/handoffs/T-20260831-002-a10-provenance-relock.md",
+  "evidence": "docs/tasks/evidence/T-20260831-002.json",
+  "merge_sha": "ea21c0da415571672c8b7fe6f2b76e23139292a1",
+  "merged_at": "2026-08-31T02:18:26+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-31T02:20:27+08:00",
+    "status": "accepted_provenance_relock",
+    "owner_head_sha": "18f25f6a46bbb99cec77a23628f67317eea73e34",
+    "technical_content_sha": "a2c811c50af953a3aee7faf1f685f88d4d9d0d7e",
+    "checks": [
+      "9-file metadata/checker write set and corrected Luna(max) provenance verified",
+      "merge SHA offline platform checker PASS files=50",
+      "merge SHA strict source checker PASS 50/50 against clean a10-linux-riscv@3db828e",
+      "merge SHA SHA256SUMS PASS 50/50 and skeleton checker PASS files=6",
+      "BASE..owner HEAD diff confirms QPF/QSF/SDC/Qsys/SFL/JTAG-UART/RTL payload content unchanged"
+    ],
+    "notes": "接受本地 provenance 重锁。未向远端同步、未运行 Quartus；full synthesis 资源 blocker、speed-grade、JTAG identity 仍未解除。"
+  },
+  "known_limits": [
+    "本任务不向远端同步 current candidate，不运行 Quartus，不解除 full synthesis 资源 blocker。",
+    "reduced/partition synthesis 仍需独立任务和 post-sync 资源快照。"
+  ],
+  "next": "登记远端隔离 current-candidate 同步任务，禁止覆盖旧工程/产物；同步 hash 闭合并复查资源/进程后，才执行 <=35GB reduced/partition synthesis。"
+}

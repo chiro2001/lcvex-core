@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-028",
+  "parent": "T-20260920-027",
+  "label": "B25-SLD-WARNING-PROVENANCE",
+  "title": "Prove the provenance and acceptance boundary of the Quartus-generated SLD warning 16788",
+  "kind": "fpga-physical-evidence",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-source-qualified-contract-adopted",
+  "assigned_owner": "sldwarn_t028",
+  "depends_on": ["T-20260920-027"],
+  "dependency_exception": "T-027 physical execution is terminal and its evidence is integrated, but its strict acceptance is blocked by the exact warning investigated here.",
+  "base_sha": "58f721194a8975d98b1b746513183faeeb305f13",
+  "branch": "verify/T-20260920-028-b25-sld-warning-provenance",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-028",
+  "writes": [
+    "build/agents/T-20260920-028/** ignored local analysis",
+    "docs/tasks/evidence/T-20260920-028.json",
+    "docs/handoffs/T-20260920-028-b25-sld-warning-provenance.md"
+  ],
+  "reads": [
+    "docs/tasks/active/T-20260920-027.json",
+    "docs/tasks/evidence/T-20260920-017.json",
+    "docs/tasks/evidence/T-20260920-020.json",
+    "docs/tasks/evidence/T-20260920-021.json",
+    "docs/tasks/evidence/T-20260920-023.json",
+    "docs/tasks/evidence/T-20260920-027.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-017/build/agents/T-20260920-017/** read-only artifacts",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-023/build/agents/T-20260920-023/** read-only artifacts",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-027/build/agents/T-20260920-027/** read-only artifacts"
+  ],
+  "scope": "Independently compare the T-017 and T-027 full-SoC raw synthesis reports, generated SLD topology metadata and the T-023 minimal logical-immediate probe. Prove whether the remaining warning is an unchanged Quartus 21.4 generated-fabric padding artifact or a tracked RTL/IP/QSF defect. Preserve raw warning visibility and propose only an exact, source-qualified acceptance correction if the evidence supports it.",
+  "acceptance": {
+    "warning_inventory": "Normalize detailed and summary occurrences into unique warning identities for T-017, T-023 old/fixed and T-027; prove that the decoder imm[63]_2 identity is absent from T-027 and that the only remaining identity is the generated SLD ir_in_2d[2][4] warning.",
+    "topology_identity": "Compare synthesized alt_sld_fab_0.sopcinfo from T-017 and T-027. Record raw and timestamp-normalized hashes/diff, COUNT, SETTINGS, endpoint hpaths, per-node IR widths, N_SEL_BITS and N_NODE_IR_BITS.",
+    "net_semantics": "Use raw Quartus reports and available generated metadata/source to explain the ir_in_2d[2][4] driver/consumer relationship and the corresponding irf/shadow_irf Lost fanout rows. Do not infer beyond available evidence; explicitly record any unavailable ephemeral generated VHDL.",
+    "functional_chain": "Check whether the unchanged SLD topology is the one used by the T-017 -> T-020 -> T-021 volatile-SOF/JTAG-UART BOOT/READY evidence chain; distinguish historical positive evidence from a new board test.",
+    "repair_decision": "Search tracked QSF/IP settings for a supported root-cause repair that preserves both EMIF JTAG and JTAG-UART nodes. Disabling either node, editing generated VHDL, message suppression, filtering or waiver is not a repair.",
+    "contract_decision": "Conclude either (a) a concrete tracked-source repair is required in a new task followed by fresh physical, or (b) the original T-027 global-zero contract mixed an unrelated deterministic vendor warning and should be superseded by a narrow source-qualified contract. Any proposed correction must retain raw reports, require zero decoder/tracked-RTL warning 16788, permit at most the exact canonical generated-SLD identity, and fail closed on any count/signature/topology drift.",
+    "artifacts": "Create evidence JSON and handoff with commands, SHA256 hashes, exact source SHA paths, conclusions and residual risks; make no RTL/QSF/SDC/IP/policy/task-ledger edits."
+  },
+  "resource": "Default work is local read-only analysis and lightweight hashing. If any GamePC read is necessary, it must hold resource-lock gamepc. Do not start Quartus compilation without a follow-up task and explicit integrator approval.",
+  "forbidden_regions": [
+    "tracked RTL, firmware, QSF, SDC, IP parameters, tests, policy or task ledger",
+    "editing another task worktree or remote root",
+    "warning suppression, filtering, waiver or generated-source patching",
+    "Quartus synthesis/fitter/STA/assembler or configuration artifact generation",
+    "JTAG, board configuration, Flash/JIC/EPCQ, reset or power actions",
+    "stopping unknown or pre-existing processes"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T16:40:18+08:00",
+    "agent_name": "sldwarn_t028",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "topic_evidence_head": "e4c71d59ea8f3a495f318d4ef21d88be79bd3df4",
+    "integration_evidence_sha": "e6c0e9bd1232a4d2beb8b089b50a18a0c6cde4ac",
+    "classification": "deterministic Quartus 21.4 generated SLD padding warning for the exact canonical two-node topology",
+    "contract": "raw warning visible; tracked RTL/IP 16788 zero; one exact generated identity; normalized topology SHA fixed; all drift fails closed",
+    "T027": "accepted under the superseding source-qualified contract",
+    "evidence": "docs/tasks/evidence/T-20260920-028.json",
+    "handoff": "docs/handoffs/T-20260920-028-b25-sld-warning-provenance.md",
+    "next": "assembler/SOF packaging from T-027"
+  },
+  "created_at": "2026-09-20T16:39:06+08:00",
+  "updated_at": "2026-09-20T17:13:14+08:00"
+}

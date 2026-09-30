@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-010",
+  "state": "done",
+  "partial": false,
+  "base_sha": "87777425e0a23c65763b847d39a2074f9bc77962",
+  "head_sha": "87777425e0a23c65763b847d39a2074f9bc77962",
+  "branch": "verify/T-20260902-010-a10-full-fp-synth-merge",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-010",
+  "scope": "在包含 T-20260902-008 NEON lane clamp 的合并 SHA 上，用仓库正式 RTL 在远端隔离 probe 重跑真实 A10 full-FP synthesis；确认无需 probe-only 补丁即可通过；采集 wall/峰值/退出/资源估计。",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "candidate_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-002\\candidate",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-010-probe",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-010-probe\\real_a10_full_fp",
+    "project_name": "real_a10_full_fp",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "license_read": false,
+    "original_candidate_modified": false,
+    "probe_only_rtl_patch_used": false
+  },
+  "preflight": {
+    "timestamp": "2026-09-02T18:28:00+08:00",
+    "candidate_exists": true,
+    "candidate_child_count": 4,
+    "t007_probe_exists": true,
+    "t010_probe_exists": false,
+    "physical_total_mb": 63092.3,
+    "physical_free_mb": 47841.7,
+    "pagefile_allocated_mb": 12800.0,
+    "pagefile_current_mb": 175.0,
+    "pagefile_available_mb": 12625.0,
+    "safe_window_mb": 47841.7,
+    "disk_d_free_gb": 86.59,
+    "eda_compile_processes": []
+  },
+  "source_sync": {
+    "verified": true,
+    "file_count": 50,
+    "groups": [
+      "rtl",
+      "fpga/catapult_a10/rtl"
+    ],
+    "all_sha256_match": true,
+    "key_files": {
+      "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv": "A165866E794D688AB5D99792FDCABF84D78B06701696102375FAFFA30620A191",
+      "rtl/lcvex_catapult_soc_top.sv": "580F167D691327E37E1B5F2BA0A0C59BF6F2EEB943313251A8906F656201E17D",
+      "rtl/lcvex_fp_scalar.sv": "E9AD934EDC8638A35CD28EA27D14DF8AD5A37D2C907AF83325C11E1885086AF1",
+      "rtl/lcvex_neon_fp.sv": "7FE04325421DDC9CB589F484FCB79B535A92145A250C327C561CB44CF344CB2C",
+      "rtl/lcvex_neon_int.sv": "46BD345A83FA6549A665C9450E5412A6A7E61FDD0C853E441FC7E988E5C34778"
+    },
+    "manifest": "build/agents/T-20260902-010/remote_manifest.json",
+    "note": "All 50 RTL files copied from worktree HEAD 87777425 to T-20260902-010-probe and verified byte/SHA-256 equal to local."
+  },
+  "runs": [
+    {
+      "run_id": "full-fp-merge-formal-rtl",
+      "stage": "synthesis",
+      "project": "real_a10_full_fp",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "result": "pass",
+      "started_at": "2026-09-02T18:31:14.1376538+08:00",
+      "finished_at": "2026-09-02T20:34:08.9779327+08:00",
+      "wall_s": 7374.84,
+      "exit_code": 0,
+      "peak_private_mb": 12533.1,
+      "peak_working_set_mb": 12152.4,
+      "peak_virtual_mb": 17537.0,
+      "samples": 6880,
+      "safety_stopped": false,
+      "safe_window_mb": 47228.2,
+      "stop_at_mb": 44866.8,
+      "pre_safe_window_mb": 48281.9,
+      "errors": 0,
+      "warnings": 38,
+      "resource": {
+        "estimate_alms": 482334,
+        "combinational_aluts": 720722,
+        "dedicated_logic_registers": 80925,
+        "io_pins": 144,
+        "mlab_bits": 0,
+        "block_memory_bits": 247276,
+        "dsp_blocks": 186,
+        "plls": 1,
+        "max_fanout_node": "sys_clk_div2",
+        "max_fanout": 73291,
+        "total_fanout": 3513505
+      },
+      "reports": [
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-010-probe\\real_a10_full_fp\\output_files\\real_a10_full_fp.syn.rpt",
+        "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-010-probe\\real_a10_full_fp\\output_files\\real_a10_full_fp.syn.summary"
+      ],
+      "note": "Formal repo RTL with T-008 full lane-width clamp; elaboration passed, no index 128 error, synthesis successful."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-010-a10-full-fp-synth-merge.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-010.json"
+    },
+    {
+      "id": "remote-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-010-probe\\real_a10_full_fp",
+      "artifacts": [
+        "monitor_result.json (sha256 D59493E5B39CC74EB24E5A70E1D727CB109B5B5F1367B572154C35F990BB7327)",
+        "output_files/real_a10_full_fp.syn.rpt (sha256 D38F1236627A96873C5AD03A52701008CCF0CC764D9DDB113B3A899E6EE1D97E)",
+        "output_files/real_a10_full_fp.syn.summary (sha256 C53D2D7C17FC9C74CFC94E45FBC8613F5066F0575A9715A0B93FEDCE0C046684)",
+        "output_files/real_a10_full_fp.syn.smsg (sha256 6435AD9061237D0A2C3ADBCBFB1D02E04C94B282869B221B7E5980E9AE9D48CC)",
+        "output_files/real_a10_full_fp.flow.rpt (sha256 06DC9D22E3E5C33D5BADD2D5229213B27E026047701CA24FB1BD1C7E2302F2FF)"
+      ]
+    },
+    {
+      "id": "local-build-evidence",
+      "path": "build/agents/T-20260902-010",
+      "artifacts": [
+        "remote_manifest.json",
+        "key_source_sha256.json",
+        "monitor_result.json",
+        "run_synth_monitor.log",
+        "run_synth_monitor.err.log",
+        "synth_monitor.pid"
+      ]
+    }
+  ],
+  "known_limits": [
+    "Only synthesis was run; no fitter/STA/assembler/SOF/JIC/programming.",
+    "Full-FP resource estimate is very large (ALM 482,334, DSP 186); fitter/STA must be run as individual single-job stages.",
+    "No license content read; no candidate original files modified; no non-EDA processes stopped; no files deleted.",
+    "No probe-only RTL patch was used; all RTL came from the repository merge SHA.",
+    "P7-2 Cocotb known unrelated failure remains (decode B2c DUP/SQADD overlap), not part of this task."
+  ],
+  "next": "Integrate this evidence, then proceed to fitter -> STA -> assembler/SOF as single-job staged full-FP queue.",
+  "timestamps": {
+    "sent_at": "2026-09-02T18:27:30+08:00",
+    "received_at": "2026-09-02T18:28:00+08:00",
+    "reported_at": "2026-09-02T20:35:00+08:00"
+  },
+  "merge_sha": "cfc0bc5415cc60205b6da473f3d6a81d7bc8b7f8",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T20:35:00+08:00",
+    "merged_at": "2026-09-02T20:39:20+08:00",
+    "recorded_at": "2026-09-02T20:39:20+08:00",
+    "notes": "Full-FP synthesis merge SHA PASS; accepted"
+  }
+}

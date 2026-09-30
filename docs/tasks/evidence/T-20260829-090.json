@@ -1,0 +1,372 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-090",
+  "state": "done",
+  "base_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+  "head_sha": "6fb1d5f0d19b543e26f6ce2d86a490c4e000b67f",
+  "merge_sha": "cb593722e3df3993a31e104b1002b62aea9969bd",
+  "branch": "feature/T-20260829-090-verilator-stuck-diagnose",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-090",
+  "sent_at": "2026-08-29T08:55:00+0800",
+  "received_at": "2026-08-29T08:55:00+0800",
+  "reported_at": "2026-08-29T09:12:20+0800",
+  "owner": "T-20260829-090-verilator-stuck-owner",
+  "model": "dsh-default",
+  "label": "V-DIAG",
+  "title": "Verilator 构建卡顿/极慢诊断",
+  "scope": "定位 LCVEX Verilator 5.050 elaboration 卡顿根因，记录环境、复现、分层测试、结论与规避建议；不修改 RTL。",
+  "files": [
+    "diag/verilator_stuck/findings.md",
+    "diag/verilator_stuck/repro.sh",
+    "diag/verilator_stuck/stubs/lcvex_fp_scalar_stub.sv",
+    "diag/verilator_stuck/run_core_lint.sh",
+    "diag/verilator_stuck/run_core_cluster_lint.sh",
+    "diag/verilator_stuck/run_module_timings.sh",
+    "diag/verilator_stuck/run_opt_experiments.sh",
+    "diag/verilator_stuck/run_nofp_core.sh",
+    "diag/verilator_stuck/run_nofp_cluster.sh",
+    "diag/verilator_stuck/run_l2_scale.sh",
+    "diag/verilator_stuck/run_dual_O0.sh",
+    "diag/verilator_stuck/run_dual_O0_nofatal.sh",
+    "diag/verilator_stuck/run_dual_default.sh",
+    "docs/handoffs/T-20260829-090-verilator-stuck-diagnose.md",
+    "docs/tasks/evidence/T-20260829-090.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "simulator": "verilator",
+    "os": "Linux",
+    "python": "3.12"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "diag-module-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_decode rtl/lcvex_pkg.sv rtl/lcvex_decode.sv",
+      "wall_seconds": 0.312,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "decode 单独 elaboration 很快"
+    },
+    {
+      "run_id": "diag-module-002",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_neon_int rtl/lcvex_pkg.sv rtl/lcvex_neon_int.sv",
+      "wall_seconds": 0.387,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "neon_int 单独 elaboration 很快"
+    },
+    {
+      "run_id": "diag-module-003",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_alu rtl/lcvex_pkg.sv rtl/lcvex_alu.sv",
+      "wall_seconds": 0.118,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "alu 很快"
+    },
+    {
+      "run_id": "diag-module-004",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_muldiv rtl/lcvex_pkg.sv rtl/lcvex_muldiv.sv",
+      "wall_seconds": 0.092,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "muldiv 很快"
+    },
+    {
+      "run_id": "diag-module-005",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_mmu rtl/lcvex_pkg.sv rtl/lcvex_mmu.sv",
+      "wall_seconds": 0.099,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "mmu 很快"
+    },
+    {
+      "run_id": "diag-module-006",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_fp_state rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv",
+      "wall_seconds": 0.108,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "fp_state 很快"
+    },
+    {
+      "run_id": "diag-module-007",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 300 verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_fp_scalar rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv",
+      "wall_seconds": 300.004,
+      "cpu_count": 1,
+      "exit_code": 124,
+      "result": "timeout",
+      "summary": "fp_scalar 单独默认优化 >300s 未完成；根因模块"
+    },
+    {
+      "run_id": "diag-core-real-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_core rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv",
+      "wall_seconds": null,
+      "cpu_count": 1,
+      "exit_code": null,
+      "result": "aborted_after_8min",
+      "summary": "真实单 core 默认优化 >8min 未完成，人工终止"
+    },
+    {
+      "run_id": "diag-core-o0-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -O0 -Wno-fatal --top-module lcvex_core rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv",
+      "wall_seconds": 2.889,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "-O0 后单 core lint 完成 2.889s"
+    },
+    {
+      "run_id": "diag-fp-o0-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -O0 -Wno-fatal --top-module lcvex_fp_scalar rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv",
+      "wall_seconds": 0.523,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "-O0 后 fp_scalar 单独 0.523s"
+    },
+    {
+      "run_id": "diag-nofp-core-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_core rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv diag/verilator_stuck/stubs/lcvex_fp_scalar_stub.sv rtl/lcvex_neon_fp.sv rtl/lcvex_neon_int.sv rtl/lcvex_alu.sv rtl/lcvex_muldiv.sv rtl/lcvex_decode.sv rtl/lcvex_mmu.sv rtl/lcvex_core.sv",
+      "wall_seconds": 1.167,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "stub 掉 fp_scalar 后单 core 1.167s，证明 fp_scalar 是瓶颈"
+    },
+    {
+      "run_id": "diag-nofp-cluster-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_cluster_top -GCORE_COUNT=1 [nofp source list]",
+      "wall_seconds": 1.262,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 fp_scalar 时 C1 单核壳层 1.262s"
+    },
+    {
+      "run_id": "diag-nofp-cluster-002",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_cluster_top -GCORE_COUNT=2 [nofp source list]",
+      "wall_seconds": 1.975,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 fp_scalar 时 C1 双核壳层 1.975s"
+    },
+    {
+      "run_id": "diag-nofp-cluster-coh-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --lint-only --no-assert --no-timing -Wno-fatal --top-module lcvex_cluster_top -GCORE_COUNT=2 -GCOHERENCE_ENABLE=1 [nofp source list + l1/l2]",
+      "wall_seconds": 2.715,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "无 fp_scalar 时 C2 coherent 双核壳层 2.715s"
+    },
+    {
+      "run_id": "diag-dual-o0-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -O0 -j2 --top-module lcvex_c2_dualcore_tb -Mdir tmp_build/dual_O0 ...",
+      "wall_seconds": 7.806,
+      "cpu_count": 1,
+      "exit_code": 1,
+      "result": "frontend_ok_warning_exit",
+      "summary": "-O0 下 Verilator 7.8s 生成全部 C++；因 UNOPTFLAT 未加 Wno-fatal 退出；证明默认优化才是卡点"
+    },
+    {
+      "run_id": "diag-dual-o0-nf-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "verilator --binary --timing --assert -O0 -Wno-fatal -Wno-UNOPTFLAT -j2 --top-module lcvex_c2_dualcore_tb -Mdir tmp_build/dual_O0_nf ...",
+      "wall_seconds": 117.993,
+      "cpu_count": 2,
+      "exit_code": 2,
+      "result": "generated_and_compiled_no_ar",
+      "summary": "前端+全部 C++ 编译 118s；仅因缺 x86_64-conda-linux-gnu-ar 链接失败"
+    },
+    {
+      "run_id": "diag-dual-o0-make-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make -C tmp_build/dual_O0_nf -f Vlcvex_c2_dualcore_tb.mk AR=ar -j2",
+      "wall_seconds": 0.262,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "用 AR=ar 完成链接，产出 14MB lcvex_c2_dualcore_tb"
+    },
+    {
+      "run_id": "diag-dual-o0-run-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 120 ./tmp_build/dual_O0_nf/lcvex_c2_dualcore_tb",
+      "wall_seconds": 20.159,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "fail",
+      "summary": "O0 binary 可运行但 directed TB FAIL:3，core 未观察到 flag，未作为功能通过证据"
+    },
+    {
+      "run_id": "diag-dual-default-001",
+      "source_sha": "86186e2649e9af9420fb216d36c7bf3d44781457",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "timeout 300 verilator --binary --timing --assert -j 2 --top-module lcvex_c2_dualcore_tb -Mdir tmp_build/dual_default -o lcvex_c2_dualcore_tb -f rtl/filelist.f rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv tb/sv/lcvex_c2_dualcore_tb.sv",
+      "wall_seconds": 300.003,
+      "cpu_count": 1,
+      "exit_code": 124,
+      "result": "timeout",
+      "summary": "090 内默认优化完整双核 300s 未产任何文件；与 T-086 1h+ 无产物一致"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "rtl/lcvex_fp_scalar.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-090-verilator-stuck-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:rtl/lcvex_fp_scalar.sv"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "diag/verilator_stuck/findings.md",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-090-verilator-stuck-owner",
+      "retain_until": "task-close",
+      "reproduce": "cat diag/verilator_stuck/findings.md"
+    },
+    {
+      "id": "artifact-003",
+      "uri": "diag/verilator_stuck/stubs/lcvex_fp_scalar_stub.sv",
+      "sha256": "see-git-show-reproduce",
+      "bytes": 0,
+      "owner": "T-20260829-090-verilator-stuck-owner",
+      "retain_until": "task-close",
+      "reproduce": "cat diag/verilator_stuck/stubs/lcvex_fp_scalar_stub.sv"
+    }
+  ],
+  "known_limits": [
+    "未修改 rtl/；实验 stub 仅在 diag/verilator_stuck/stubs/。",
+    "默认优化真实单 core 未跑完，因此没有精确默认 single-core 完成时间；已用 >8min 未完成和 -O0 2.889s、stub 1.167s 作对比。",
+    "T-086 默认双核构建仍在运行，未 kill/未修改。",
+    "-O0 下 C2 coherence 有 UNOPTFLAT 组合环警告，O0 binary 的 directed TB 失败，说明功能仍需单独处理。"
+  ],
+  "next": "集成者 review；建议 in-tree 构建脚本增加 -O0/AR=ar 规避并立项重构 lcvex_fp_scalar.sv。",
+  "handoff_sha": "cb593722e3df3993a31e104b1002b62aea9969bd",
+  "integrator_review": {
+    "received_at": "2026-08-29T09:27:29+08:00",
+    "status": "accepted",
+    "head_sha": "19d84c6",
+    "notes": "诊断结论已接受：根因为 lcvex_fp_scalar.sv 的 256-bit 宽位组合展开；-O0 可作为构建规避；已立 FP-OPT 任务处理长期修复。",
+    "merge_sha": "cb59372",
+    "result_sha": "6fb1d5f0d19b543e26f6ce2d86a490c4e000b67f"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "cb59372",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "cb593722e3df3993a31e104b1002b62aea9969bd",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "6fb1d5f0d19b543e26f6ce2d86a490c4e000b67f",
+        "reason": "set explicit result head from evidence head_sha"
+      },
+      {
+        "field": "merge_sha",
+        "old": "cb59372",
+        "new": "cb593722e3df3993a31e104b1002b62aea9969bd",
+        "reason": "expand to full merge SHA"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff.",
+    "monotonic_fixes": [
+      {
+        "field": "sent_at",
+        "old": "2026-08-29T08:53:00+0800",
+        "new": "2026-08-29T08:55:00+0800",
+        "reason": "align evidence event timestamp with active dispatch sent_at"
+      },
+      {
+        "field": "received_at",
+        "old": "2026-08-29T08:53:00+0800",
+        "new": "2026-08-29T08:55:00+0800",
+        "reason": "align evidence event timestamp with active dispatch sent_at"
+      }
+    ]
+  }
+}

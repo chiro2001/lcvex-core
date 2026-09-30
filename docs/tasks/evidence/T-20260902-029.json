@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-029",
+  "state": "done",
+  "partial": false,
+  "base_sha": "896fc46fb4c18d85c0a91c3844c27cd7c0298cbd",
+  "head_sha": "4b593ba2045d47dabcccb1dfa028d11cac25b4ce",
+  "branch": "fix/T-20260902-029-core-mmu-fault-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-029",
+  "scope": "CORE-MMU-FAULT-CUT: split MMU request capture from TLB/perm fault evaluation to break idex_d.inv_b -> mmu|fault_fsc_r combinational chain reported by T-20260902-028; preserve all exception/MMU semantics with fixed one-cycle MMU result delay.",
+  "dispatch": {
+    "sent_at": "2026-09-03T19:20:30+08:00",
+    "received_at": "2026-09-03T19:20:45+08:00",
+    "model": "dsh-default"
+  },
+  "implementation": {
+    "files": [
+      "rtl/lcvex_mmu.sv"
+    ],
+    "summary": "Added S_EVAL state after S_IDLE. S_IDLE only latches req_va/req_is_insn/req_is_write/access_el/pan into *_r registers and enters S_EVAL; S_EVAL uses the latched request to perform TLB hit permission, direct MMU-off passthrough, TxSZ/gap faults, or start page walk. tlb_hit and start_level_comb now use req_va_r instead of live req_va. Result registers (fault_fsc_r, fault_r, paddr_r, cacheable_r, par_attr_r, par_sh_r) are updated in S_EVAL, then S_IDLE with busy=1 produces done on the following cycle. All MMU translations gain exactly one result-cycle latency; core already freezes on data_trans_active/fetch_trans_busy and samples only at mmu_done."
+  },
+  "semantics": {
+    "exception_priority": "unchanged",
+    "esr_far_ifar_pc": "unchanged values; only one-cycle later availability through existing done handshake",
+    "mmu_fault_type": "unchanged FSC encodings and fault/PA attributes",
+    "exception_return_address": "unchanged",
+    "cache_memory_page_tables": "not touched",
+    "speculation": "none introduced",
+    "async_reset": "unchanged"
+  },
+  "runs": [
+    {
+      "name": "compile",
+      "command": "make compile",
+      "result": "pass",
+      "exit_code": 0,
+      "log": "/tmp/compile_final.log"
+    },
+    {
+      "name": "sim-sv",
+      "command": "make sim-sv",
+      "result": "pass",
+      "exit_code": 0,
+      "log": "/tmp/sim_sv_final.log"
+    },
+    {
+      "name": "sim-sv-mmu",
+      "command": "make sim-sv-mmu",
+      "result": "pass",
+      "exit_code": 0,
+      "log": "/tmp/sim_mmu_final.log"
+    },
+    {
+      "name": "difftest-rtl-core-cocotb",
+      "command": "QEMU_TRACE=build/difftest/rtl.trace make -C sim/cocotb SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_lcvex_core SIM_BUILD=sim_build_core",
+      "result": "pass",
+      "exit_code": 0,
+      "detail": "PASS: 33 条指令与 QEMU 完全一致 (TESTS=1 PASS=1 FAIL=0 SKIP=0)",
+      "log": "/tmp/cocotb_core_final.log"
+    },
+    {
+      "name": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "not_run": [
+    "A10 real_a10_full_fp synthesis/fitter/signoff STA",
+    "p6-maint-v82 / p6-maint-v82_mmu lockstep subset",
+    "Gate D"
+  ],
+  "known_risks": [
+    "STA not rerun in this worktree; actual timing improvement must be confirmed by next FP-P5/full-FP run.",
+    "The cut moves the endpoint from mmu|fault_fsc_r to mmu req_va_r/idex_d address registers; if the pre-MMU forwarding/address-generation cone remains critical, a future ID/EX ALU forward pipeline cut may be needed."
+  ],
+  "next": [
+    "Integrator rerun FP-P5 on merged SHA to observe STA top-N after this cut.",
+    "If pre-MMU address-generation path remains red, schedule a dedicated ALU/forwarding register-cut task.",
+    "Continue EMIF async FIFO gray-code setup/hold red items from T-20260902-028."
+  ],
+  "merge_sha": "6d7b019ac90fc637513ebb960199e9d64139f789",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T19:36:05+08:00",
+    "merged_at": "2026-09-03T19:37:20+08:00",
+    "recorded_at": "2026-09-03T19:37:20+08:00",
+    "notes": "Core/MMU fault cut merged and accepted"
+  }
+}

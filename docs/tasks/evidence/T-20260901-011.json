@@ -1,0 +1,648 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260901-011",
+  "label": "PE-F1J-FULL-MATRIX",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "196_of_196_pass_98_of_98_strict_98_of_98_guard_fifo_pass",
+  "base_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b",
+  "head_sha": "21e9d85ed706740293bec03244ea2f4fdb72120c",
+  "head_sha_note": "owner delivery tip; measurement source remains the frozen base f0edcd2528c01520eb4e4922266a7913c5c7539b",
+  "report_tip": "21e9d85ed706740293bec03244ea2f4fdb72120c",
+  "merge_sha": "18a8e1abfca25d7bc9bdb622aae61aa87110aea2",
+  "branch": "verify/T-20260901-011-f1a-full-matrix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-011",
+  "owner": "luna-f1a-full-matrix",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-09-01T16:32:45+08:00",
+    "reported_at": "2026-09-01T20:14:46+08:00"
+  },
+  "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b",
+  "matrix_schema": "lcvex-perf-matrix-f1c-v1",
+  "commit_digest_schema": "lcvex-commit-digest-v2-active-payload",
+  "scope": "在冻结 SHA 上完整运行 14 workloads × 7 bases × F0/F1a=196 canonical rows，确认 T-010 控制流 fence 的全矩阵正确性/FIFO/性能护栏。",
+  "writes": [
+    "docs/PERFORMANCE_F1J_FULL_MATRIX_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-011/f1j_full_matrix.json",
+    "docs/evidence/artifacts/T-20260901-011/f1j_full_matrix.csv",
+    "docs/handoffs/T-20260901-011-f1a-full-matrix.md",
+    "docs/tasks/evidence/T-20260901-011.json"
+  ],
+  "provenance": {
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-011",
+    "branch": "verify/T-20260901-011-f1a-full-matrix",
+    "source_tree_clean_before_run": true,
+    "source_tree_clean_after_run": true,
+    "old_task_artifacts_reused": false,
+    "configs": [
+      "nocache_d0_f0",
+      "nocache_d0_f1a",
+      "l1i_d0_f0",
+      "l1i_d0_f1a",
+      "l1id_l2_d0_f0",
+      "l1id_l2_d0_f1a",
+      "nocache_d1_f0",
+      "nocache_d1_f1a",
+      "nocache_d2_f0",
+      "nocache_d2_f1a",
+      "fullcache_d1_f0",
+      "fullcache_d1_f1a",
+      "fullcache_d2_f0",
+      "fullcache_d2_f1a"
+    ],
+    "config_count": 14,
+    "workloads": [
+      "alu_latency",
+      "alu_ilp",
+      "ctrl_branch",
+      "muldiv",
+      "mem_seq",
+      "mem_random",
+      "mem_ldst",
+      "fp_scalar",
+      "fp_fp16",
+      "neon_vect",
+      "kernel_crc",
+      "kernel_hash",
+      "kernel_matmul",
+      "kernel_sort"
+    ],
+    "workload_count": 14,
+    "rows": 196,
+    "pairs": 98,
+    "sha_unique": true,
+    "git_sha_unique": true,
+    "measurement_source_sha_unique": true,
+    "same_image_per_pair": true,
+    "same_workload_source_sha_per_pair": true,
+    "same_non_fifo_params_per_pair": true,
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cross_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "python": "3.12.10",
+    "perf_cflags": "-O2",
+    "max_cycles": 10000000
+  },
+  "matrix": {
+    "build_json": {
+      "path": "build/agents/T-20260901-011/f1j_full_matrix/matrix.json",
+      "bytes": 1355694,
+      "sha256": "018dc721307ed286136e0f1365efff13ea8fc3a3ed94fb53b0b2b4f65b436d88"
+    },
+    "build_csv": {
+      "path": "build/agents/T-20260901-011/f1j_full_matrix/matrix.csv",
+      "bytes": 80723,
+      "sha256": "796bbd4345bce19f411af65a992d5aa3cc69b9791ab2f0524d195b700e116b13"
+    },
+    "artifact_json": {
+      "path": "docs/evidence/artifacts/T-20260901-011/f1j_full_matrix.json",
+      "bytes": 1355694,
+      "sha256": "018dc721307ed286136e0f1365efff13ea8fc3a3ed94fb53b0b2b4f65b436d88"
+    },
+    "artifact_csv": {
+      "path": "docs/evidence/artifacts/T-20260901-011/f1j_full_matrix.csv",
+      "bytes": 80723,
+      "sha256": "796bbd4345bce19f411af65a992d5aa3cc69b9791ab2f0524d195b700e116b13"
+    },
+    "artifact_matches_build": true,
+    "csv_line_endings_normalized_to_lf": true
+  },
+  "runner_builds": [
+    {
+      "config": "nocache_d0_f0",
+      "binary": {
+        "path": "build/microbench_runner_nocache_d0_f0/microbench_runner",
+        "bytes": 12825696,
+        "sha256": "95fa9d552c40324115b06214213aa455ada561fcbf4e879b223b6bf9a9ff4c0c"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_nocache_d0_f0/runner_manifest.json",
+        "bytes": 260,
+        "sha256": "2927a6f1afb975bce2a6dc9ddc69c6855995eaf40b7589f54f1a9e8b259f9f30"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "nocache_d0_f1a",
+      "binary": {
+        "path": "build/microbench_runner_nocache_d0_f1a/microbench_runner",
+        "bytes": 12842880,
+        "sha256": "a3f0933009086ccfa5069ef704136d866c9941aed3dd641854040b84e83e9ba7"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_nocache_d0_f1a/runner_manifest.json",
+        "bytes": 262,
+        "sha256": "47aadb7a0b3fc380356da3d663a0de5472b3bcd3fe44cf5a488c49ae004d4bb9"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "l1i_d0_f0",
+      "binary": {
+        "path": "build/microbench_runner_l1i_d0_f0/microbench_runner",
+        "bytes": 12849528,
+        "sha256": "95e2bda4f1166fe3789073237c5dc744940db4428d83d6480fe11cda8bc7fe24"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_l1i_d0_f0/runner_manifest.json",
+        "bytes": 252,
+        "sha256": "b517a7c1b948f036c4fd714be6ecb142d59401a03212b615e713625482dc834b"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "l1i_d0_f1a",
+      "binary": {
+        "path": "build/microbench_runner_l1i_d0_f1a/microbench_runner",
+        "bytes": 12870712,
+        "sha256": "71d2e52f399d816920c9a0325133db25ea1423e547464583a4d61e9f6b0249ee"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_l1i_d0_f1a/runner_manifest.json",
+        "bytes": 254,
+        "sha256": "a702f5db4fbb8384ae18c4e0afcc26b3f551532c0edaeb46f031e3e56ff37ab5"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "l1id_l2_d0_f0",
+      "binary": {
+        "path": "build/microbench_runner_l1id_l2_d0_f0/microbench_runner",
+        "bytes": 12897608,
+        "sha256": "ce17f1dcbd35311e118179a4997d06b3c1ba3aa21fafe9ee94c8ae75c16be2f0"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_l1id_l2_d0_f0/runner_manifest.json",
+        "bytes": 260,
+        "sha256": "f8ce4b6138acdac4c93fac19400854959936efb50456cd708d6a439d5e77d76f"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "l1id_l2_d0_f1a",
+      "binary": {
+        "path": "build/microbench_runner_l1id_l2_d0_f1a/microbench_runner",
+        "bytes": 12918800,
+        "sha256": "d916b5e57d377cdf0d185da0f242ecbaaa52f636c9090df01fa4e492db32be1b"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_l1id_l2_d0_f1a/runner_manifest.json",
+        "bytes": 262,
+        "sha256": "0c984adf11a0eaffab2e5badaebbc496715a734979e0817faa9ec822010e1b4b"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "nocache_d1_f0",
+      "binary": {
+        "path": "build/microbench_runner_nocache_d1_f0/microbench_runner",
+        "bytes": 12829992,
+        "sha256": "62b5c6b426569fa9711d7cf336f7d7ea05b2d1730a077de2bb77ce296f1f36c9"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_nocache_d1_f0/runner_manifest.json",
+        "bytes": 260,
+        "sha256": "f666d147a9c85fa0fcb6239bbaebbf80d19ceb52cca00bad6b3d9870fe48ef08"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "nocache_d1_f1a",
+      "binary": {
+        "path": "build/microbench_runner_nocache_d1_f1a/microbench_runner",
+        "bytes": 12847080,
+        "sha256": "38f8efee4d90db3a885a319ff07abb79895690232bed0c1779bf9fd6cc36859f"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_nocache_d1_f1a/runner_manifest.json",
+        "bytes": 262,
+        "sha256": "3acb7c6ad60f640454186ed38a78c5867812aa56017e08da919144fd00f5864f"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "nocache_d2_f0",
+      "binary": {
+        "path": "build/microbench_runner_nocache_d2_f0/microbench_runner",
+        "bytes": 12829896,
+        "sha256": "05d8096e74201420ea3548adca675439695ee7399207a6818a5da758fbd316cf"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_nocache_d2_f0/runner_manifest.json",
+        "bytes": 260,
+        "sha256": "963caabd1680939efba575001970d2ef6fc7a27b82a97c0a1b72d256c5056add"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "nocache_d2_f1a",
+      "binary": {
+        "path": "build/microbench_runner_nocache_d2_f1a/microbench_runner",
+        "bytes": 12846976,
+        "sha256": "c7c291e2f57ac86e990fe23ce07c2f108c0f8a9f7b2d28aded24f3b3f7c86a59"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_nocache_d2_f1a/runner_manifest.json",
+        "bytes": 262,
+        "sha256": "36f3bd70eeffecb4321295b93402eb450bb5c78c2e45375dfb0324287beb0681"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "fullcache_d1_f0",
+      "binary": {
+        "path": "build/microbench_runner_fullcache_d1_f0/microbench_runner",
+        "bytes": 12901904,
+        "sha256": "3b0dec7fd048464790cd3687387a36beab80173f71e3489b4b0e6e80e5ff1d1a"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_fullcache_d1_f0/runner_manifest.json",
+        "bytes": 264,
+        "sha256": "6058e51bc1032c1937b4524195a99396fc4a03e0e312083e041834d5c7ce66a4"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "fullcache_d1_f1a",
+      "binary": {
+        "path": "build/microbench_runner_fullcache_d1_f1a/microbench_runner",
+        "bytes": 12923096,
+        "sha256": "e680079d6cc96873319025fba6d359ea3c4602c479a744a7cd36135e2ff52528"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_fullcache_d1_f1a/runner_manifest.json",
+        "bytes": 266,
+        "sha256": "831f6985d3a5508833ce962b9e70af4c5d04f66b591a67433bd55df92db14649"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "fullcache_d2_f0",
+      "binary": {
+        "path": "build/microbench_runner_fullcache_d2_f0/microbench_runner",
+        "bytes": 12901904,
+        "sha256": "c7433d01e8fc95d68492e231cff5a7869c09ddf3fd3e63eaacd6460d55c3b22b"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_fullcache_d2_f0/runner_manifest.json",
+        "bytes": 264,
+        "sha256": "644c4c220d81c58327cb90fb1631026a8553b7629da09017aecdbe578c94f212"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    },
+    {
+      "config": "fullcache_d2_f1a",
+      "binary": {
+        "path": "build/microbench_runner_fullcache_d2_f1a/microbench_runner",
+        "bytes": 12923096,
+        "sha256": "ffca0c8f9ba9e12ba4f89524183acc193728c7b5e70db1cd99cd20a6ee0167ea"
+      },
+      "manifest": {
+        "path": "build/microbench_runner_fullcache_d2_f1a/runner_manifest.json",
+        "bytes": 266,
+        "sha256": "af0bf9fd1229dbf82d4cd1b77f13d71a572947fde5ac6f311dcbd730c8b5d32a"
+      },
+      "measurement_source_sha": "f0edcd2528c01520eb4e4922266a7913c5c7539b"
+    }
+  ],
+  "images": [
+    {
+      "path": "build/microbench/perf_alu_latency.bin",
+      "bytes": 1096,
+      "sha256": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b",
+      "workload": "alu_latency",
+      "source_sha256": "6a42e7f5725dc0c21e3b4c53818dc7b444fb74c71836272e57549ce5dd2fada2"
+    },
+    {
+      "path": "build/microbench/perf_alu_ilp.bin",
+      "bytes": 1096,
+      "sha256": "0b5bcd16c774981a81fed5126ab94511a5e514a222b7bafb6c84cee39506bc03",
+      "workload": "alu_ilp",
+      "source_sha256": "ee5071f2ea85d04c7605e0f388bc3c441052f7167891c3f1fc323f8c42ba30fe"
+    },
+    {
+      "path": "build/microbench/perf_ctrl_branch.bin",
+      "bytes": 1192,
+      "sha256": "e193e924e846b0102cf58740dace1021d476fb6cdf56c732ec6d4a00a4f42890",
+      "workload": "ctrl_branch",
+      "source_sha256": "d7833e3308a67e3dac8fd2a709fa09fa4515f962d05c6d50b9a38b37ef7239a9"
+    },
+    {
+      "path": "build/microbench/perf_muldiv.bin",
+      "bytes": 1432,
+      "sha256": "8ffba56ab71aef16093baaabe809ae1077cf7dc87b1728cf7a306b405bcbee4f",
+      "workload": "muldiv",
+      "source_sha256": "15fd905d138a6df8354b7de56ac4d0a6571255e811da4bda28c623306ddd04b1"
+    },
+    {
+      "path": "build/microbench/perf_mem_seq.bin",
+      "bytes": 1048,
+      "sha256": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527",
+      "workload": "mem_seq",
+      "source_sha256": "91908b5c9bdb76219fb9c6e1e0315b90eb4572c2294ffaeed36559f5e10cf5a1"
+    },
+    {
+      "path": "build/microbench/perf_mem_random.bin",
+      "bytes": 984,
+      "sha256": "587353343730b0048d3c5fb51f3427d0720bf16b47bcc867790019daf049739e",
+      "workload": "mem_random",
+      "source_sha256": "a22a6581ca83718f4469eb6d2963301b70aad6f154d968a5ed1d14f76c17a012"
+    },
+    {
+      "path": "build/microbench/perf_mem_ldst.bin",
+      "bytes": 1216,
+      "sha256": "7c5d126f2e5f91595151f55118733d0eb9dad8c852b20c4ea36b261f144e09f8",
+      "workload": "mem_ldst",
+      "source_sha256": "9677a27db2ff1bdd5c3c1265859d0a4e3d2e2e982c5de578f9c6b3ddd6967bdb"
+    },
+    {
+      "path": "build/microbench/perf_fp_scalar.bin",
+      "bytes": 1904,
+      "sha256": "49fb782bb39c54c13ec9d34b1c028a749347fbc86c1a0b1a36aeca8e9fb5ac70",
+      "workload": "fp_scalar",
+      "source_sha256": "43f052447435fd53aaac2e950fa164d70ad3ec330184391c7fc51dece42b1e24"
+    },
+    {
+      "path": "build/microbench/perf_fp_fp16.bin",
+      "bytes": 1072,
+      "sha256": "e868b221ba0f6d069e08fd29e26aeed380346c54c140ceae23725d2cd4feb98f",
+      "workload": "fp_fp16",
+      "source_sha256": "7af526c8bceda1a75a49a3966ddd2ea2d3a4250d0cb308eea370d8a37e10a164"
+    },
+    {
+      "path": "build/microbench/perf_neon_vect.bin",
+      "bytes": 1864,
+      "sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf",
+      "workload": "neon_vect",
+      "source_sha256": "50503906eac74f96b4f66ac6bd268a5b8ad213619ef3aaa24c24a59132f6eba3"
+    },
+    {
+      "path": "build/microbench/perf_kernel_crc.bin",
+      "bytes": 2184,
+      "sha256": "a22f6ceaffd2b2c84c7bf85a875c5f1844b7d3d254818aea5fbb0d0f8b2362bc",
+      "workload": "kernel_crc",
+      "source_sha256": "fbac71a9245c9c9e8db76a55a9902403837768807c151238d9276d886231762a"
+    },
+    {
+      "path": "build/microbench/perf_kernel_hash.bin",
+      "bytes": 832,
+      "sha256": "e800011683cc5415427fbd451d41488be7051910b4abfb3c76c4082e59b42a58",
+      "workload": "kernel_hash",
+      "source_sha256": "cb582ed68582f9a3b3e5ef1eb386e98e0557da56ab12dcac0b535085ed381375"
+    },
+    {
+      "path": "build/microbench/perf_kernel_matmul.bin",
+      "bytes": 952,
+      "sha256": "591f07d83da50b47ba57760f75e2fffe40c0dfd0c3821973c300b7c7ae03a8c4",
+      "workload": "kernel_matmul",
+      "source_sha256": "1606fdfe0ce13e2c536aba641c075539fd5f99e6f856f4c75905280ea41811f5"
+    },
+    {
+      "path": "build/microbench/perf_kernel_sort.bin",
+      "bytes": 864,
+      "sha256": "184eb6e1d8ad80234110b30972e6f60cee240db23d210871690270b9d70518d5",
+      "workload": "kernel_sort",
+      "source_sha256": "e5b91adc9211d485cb0ab8e8961ec8d5af7a548874c124b767dd7f3b880d4e4d"
+    }
+  ],
+  "status_summary": {
+    "rows": 196,
+    "pairs": 98,
+    "status": {
+      "pass": 196
+    },
+    "returncode": {
+      "0": 196
+    },
+    "strict_equal_pairs": 98,
+    "strict_target_pairs": 98,
+    "cycle_guard_pass": 98,
+    "cycle_guard_total": 98
+  },
+  "cycle_guard": {
+    "formula": "f1a_cycles <= f0_cycles*1.02+64",
+    "pass": 98,
+    "total": 98,
+    "failures": []
+  },
+  "strict_fields": [
+    "status",
+    "returncode",
+    "retired_insn",
+    "commit_digest_schema",
+    "commit_digest",
+    "memory_digest",
+    "committed_memory_effects"
+  ],
+  "strict_equal_pairs": 98,
+  "strict_target_pairs": 98,
+  "base_summary": [
+    {
+      "base": "nocache_d0",
+      "rows": 28,
+      "pairs": 14,
+      "strict_equal_pairs": 14,
+      "guard_pass_pairs": 14
+    },
+    {
+      "base": "l1i_d0",
+      "rows": 28,
+      "pairs": 14,
+      "strict_equal_pairs": 14,
+      "guard_pass_pairs": 14
+    },
+    {
+      "base": "l1id_l2_d0",
+      "rows": 28,
+      "pairs": 14,
+      "strict_equal_pairs": 14,
+      "guard_pass_pairs": 14
+    },
+    {
+      "base": "nocache_d1",
+      "rows": 28,
+      "pairs": 14,
+      "strict_equal_pairs": 14,
+      "guard_pass_pairs": 14
+    },
+    {
+      "base": "nocache_d2",
+      "rows": 28,
+      "pairs": 14,
+      "strict_equal_pairs": 14,
+      "guard_pass_pairs": 14
+    },
+    {
+      "base": "fullcache_d1",
+      "rows": 28,
+      "pairs": 14,
+      "strict_equal_pairs": 14,
+      "guard_pass_pairs": 14
+    },
+    {
+      "base": "fullcache_d2",
+      "rows": 28,
+      "pairs": 14,
+      "strict_equal_pairs": 14,
+      "guard_pass_pairs": 14
+    }
+  ],
+  "focus_nocache_d2": {
+    "alu_latency": {
+      "pair": "nocache_d2/alu_latency",
+      "base": "nocache_d2",
+      "workload": "alu_latency",
+      "rows": 2,
+      "strict_equal": true,
+      "guard_pass": true,
+      "f0_cycles": 5795747,
+      "f1a_cycles": 4904275,
+      "guard_limit": 5911725.94,
+      "retired_insn": 750049,
+      "commit_digest": "ab7d672bf0489762",
+      "memory_digest": "0dd7f555d8ef95bf",
+      "memory_effects": 4
+    },
+    "ctrl_branch": {
+      "pair": "nocache_d2/ctrl_branch",
+      "base": "nocache_d2",
+      "workload": "ctrl_branch",
+      "rows": 2,
+      "strict_equal": true,
+      "guard_pass": true,
+      "f0_cycles": 5172730,
+      "f1a_cycles": 4599259,
+      "guard_limit": 5276248.6,
+      "retired_insn": 690074,
+      "commit_digest": "a555baec3f932af5",
+      "memory_digest": "0617c8083a02b214",
+      "memory_effects": 13
+    },
+    "mem_seq": {
+      "pair": "nocache_d2/mem_seq",
+      "base": "nocache_d2",
+      "workload": "mem_seq",
+      "rows": 2,
+      "strict_equal": true,
+      "guard_pass": true,
+      "f0_cycles": 7273882,
+      "f1a_cycles": 6664445,
+      "guard_limit": 7419423.64,
+      "retired_insn": 803657,
+      "commit_digest": "46e5ead18aa77a80",
+      "memory_digest": "6b40dea7a6ade5c3",
+      "memory_effects": 114714
+    }
+  },
+  "comparison_to_t004": {
+    "t004_rows": 196,
+    "t004_pairs": 98,
+    "t004_cycle_guard_pass": 95,
+    "t004_cycle_guard_total": 98,
+    "current_cycle_guard_pass": 98,
+    "current_cycle_guard_total": 98,
+    "closed_guard_failures": [
+      "nocache_d2/alu_latency",
+      "nocache_d2/ctrl_branch",
+      "nocache_d2/mem_seq"
+    ],
+    "t004_guard_failures": [
+      {
+        "pair": "nocache_d2/alu_latency",
+        "f0_cycles": 5795747,
+        "f1a_cycles": 6219933,
+        "limit": 5911725.94
+      },
+      {
+        "pair": "nocache_d2/ctrl_branch",
+        "f0_cycles": 5172730,
+        "f1a_cycles": 5749229,
+        "limit": 5276248.6
+      },
+      {
+        "pair": "nocache_d2/mem_seq",
+        "f0_cycles": 7273882,
+        "f1a_cycles": 7456315,
+        "limit": 7419423.64
+      }
+    ]
+  },
+  "fifo_audit": {
+    "f0_rows": 98,
+    "f0_all_counters_zero": true,
+    "f1a_rows": 98,
+    "occupancy_max": 2,
+    "peak_signal_max": 2,
+    "overflow_total": 0,
+    "push_total": 29886879,
+    "pop_total": 29886808,
+    "push_less_than_pop_rows": 0
+  },
+  "resource": {
+    "scope": "run-p1986779-i35557415.scope",
+    "started_at": "2026-09-01T16:35:58+08:00",
+    "finished_at": "2026-09-01T20:01:28+08:00",
+    "wall_seconds": 12329.89,
+    "cpu_seconds": 6164.976,
+    "memory_peak": "5.6G",
+    "memory_max": "15G",
+    "memory_swap_max": "0",
+    "cpu_quota": "50%",
+    "makeflags": "-j1",
+    "verilator_jobs": 1,
+    "heavy_builds_serialized": true,
+    "journal_evidence": "journalctl --user -u run-p1986779-i35557415.scope --no-pager -o short-iso"
+  },
+  "commands": {
+    "matrix": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -p CPUQuota=50% -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 scripts/run_perf_matrix.py --configs all --workloads all --max-cycles 10000000 --out-dir build/agents/T-20260901-011/f1j_full_matrix --artifact-dir docs/evidence/artifacts/T-20260901-011/raw",
+    "matrix_json_parse": "python3 -m json.tool build/agents/T-20260901-011/f1j_full_matrix/matrix.json",
+    "matrix_csv_audit": "Python csv.DictReader independent 196-row/98-pair audit",
+    "registry": "python3 scripts/test_registry.py --check --check-consistency",
+    "python": "python3 -m py_compile scripts/run_perf_matrix.py",
+    "diff": "git diff --check"
+  },
+  "strict_failures": [],
+  "provenance_failures": [],
+  "fifo_failures": [],
+  "tests": {
+    "matrix_run": "pass 196/196",
+    "strict_architecture": "pass 98/98",
+    "cycle_guard": "pass 98/98",
+    "fifo_bounds": "pass 98/98",
+    "source_provenance": "pass 196/196",
+    "matrix_json_csv_consistency": "pass",
+    "registry_consistency": "pass",
+    "python_compile": "pass",
+    "git_diff_check": "pass"
+  },
+  "not_run": [
+    "Gate D",
+    "Linux",
+    "QEMU lockstep",
+    "Quartus/FPGA"
+  ],
+  "known_limits": [
+    "Verilator cycle guard 不是 A10/Fmax 证据。",
+    "本任务不运行 Gate D、Linux、QEMU lockstep、Quartus 或板测。"
+  ],
+  "integrator_validation": {
+    "accepted_at": "2026-09-01T20:25:30+08:00",
+    "independent_review": "pass_no_blockers at 2026-09-01T20:25:05+08:00",
+    "recomputed": {
+      "rows_unique_pass": "196/196",
+      "pairs_unique": 98,
+      "strict_pairs": "98/98",
+      "provenance_pairs": "98/98",
+      "cycle_guard_pairs": "98/98",
+      "f1a_fifo": "98 rows; occupancy/peak<=2; overflow=0; no push<pop"
+    },
+    "merge_sha_l0": [
+      "python3 -m py_compile scripts/run_perf_matrix.py: pass",
+      "python3 scripts/test_registry.py --check --check-consistency: pass (68 entries)",
+      "matrix/evidence JSON parse, CSV 197 lines, artifact hashes and git diff --check: pass"
+    ]
+  },
+  "conclusion": "196 rows/98 pairs 完整，统一 v2 active-payload schema；196/196 pass、98/98 strict retired/commit/memory/effects、F1a FIFO bounds 和 98/98 cycles guard 全部通过。T-004 原 nocache_d2 三项 guard failure 全部闭合；建议进入 F1a 默认启用决策，但仍不替代 Gate D/Linux/板测。"
+}

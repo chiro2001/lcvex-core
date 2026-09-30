@@ -1,0 +1,21 @@
+Running as unit: t022-core1-l2.scope; invocation ID: 53091b4a4028433da7b138a289519a66
+%Warning-UNSIGNED: rtl/lcvex_l2_cluster.sv:360:35: Comparison is constant due to unsigned arithmetic
+                                                 : ... note: In instance 'lcvex_l2_cluster'
+  360 |             if (req[arb_sel].addr < MEM_BASE ||
+      |                                   ^
+                   ... For warning description see https://verilator.org/warn/UNSIGNED?v=5.050
+                   ... Use "/* verilator lint_off UNSIGNED */" and lint_on around source to disable this message.
+- V e r i l a t i o n   R e p o r t: Verilator 5.050 2026-07-01 rev conda-forge build 0
+- Verilator: Built from 0.150 MB sources in 4 modules, into 0.151 MB in 3 C++ files needing 0.000 MB
+- Verilator: Walltime 0.035 s (elab=0.005, cvt=0.019, bld=0.000); cpu 0.032 s on 1 threads; allocated 29.211 MB
+
+===== LCXEX MEASURE =====
+rc=0
+wall_s=0.887
+cgroup=/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/t022-core1-l2.scope
+memory.max=16106127360
+memory.swap.max=0
+memory.peak_before_bytes=2502656
+memory.peak_bytes=68149248
+memory.current_bytes=3149824
+=========================

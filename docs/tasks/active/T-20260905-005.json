@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-005",
+  "label": "MAINT-AT-FIFO-DEADLOCK",
+  "title": "Break SYS_MAINT AT and FIFO next-fetch circular wait",
+  "kind": "rtl-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-and-joint-validated",
+  "assigned_owner": "codex-r16-core-issue-cut",
+  "agent_type": "rtl-implementation",
+  "model_selection": "spawn_agent model omitted; user-confirmed default gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "batch_parent": "T-20260905-002",
+  "depends_on": [],
+  "base_sha": "8383cb05808393cc2ad391af261089321d0e2288",
+  "branch": "fix/T-20260905-005-maint-at-fifo-deadlock",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-005",
+  "reproduction": {
+    "candidate_sha": "955d9222a28c46d3a514f9b3bd91b8b83bfe6fdd",
+    "fp_only_sha": "f88078947ef0d4d419a0255608777f811f8c7815",
+    "test": "p6-maint-v82 hard_maint_v82_mmu base coordinator",
+    "failure": "seq=12 pc=0x44000030 insn=0xd5087800 AT S1E1R exceeds 1000 DUT cycles",
+    "signature": "pipeline empty; sys_at_id=1 sys_hold=1 sys_commit_ready=0; fetch_translated=1 fetch_next_settled=0; MMU idle req_valid=0",
+    "fp_only_step_fail_sha256": "fe497178a945bd4a4c636a16e97fd20fe7338120168d96a758347f02a0f8e2f9"
+  },
+  "scope": "先在冻结基线精确复现 FIFO-on AT deadlock，再以最小 RTL 改动解除 maint_done/fetch_next_settled 与 sys_maint_at_id fetch-owner 的循环等待。AT 数据翻译、PAR_EL1 commit、epoch/quarantine、异常与顺序提交语义必须保持。",
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/** only if a minimal directed regression is needed",
+    "docs/handoffs/T-20260905-005-maint-at-fifo-deadlock.md",
+    "docs/tasks/evidence/T-20260905-005.json",
+    "build/agents/T-20260905-005/**"
+  ],
+  "forbidden_regions": [
+    "rtl/lcvex_muldiv.sv",
+    "rtl/lcvex_fp_scalar.sv",
+    "Round16 PA2 derivation",
+    "QEMU fork/plugin source",
+    "QSF/SDC",
+    "JTAG/SOF/board actions"
+  ],
+  "acceptance": [
+    "reproduce the exact seq=12 failure on 8383cb0 before editing",
+    "hard_maint_v82_mmu base reaches at least 30/30",
+    "complete p6-maint-v82 six-window matrix passes",
+    "make compile and relevant core/MMU/fetch-FIFO L1 suites pass",
+    "AT updates PAR_EL1 only at architectural commit and produces exactly one commit",
+    "no global relaxation of maintenance ordering or fetch epoch checks"
+  ],
+  "integration": "After owner review, cherry-pick the atomic RTL/test commits onto the disposable Round16 candidate, then rerun the entire candidate L0-L2 union. The task is not done until the merged SHA rerun passes.",
+  "created_at": "2026-09-05T04:52:00+08:00",
+  "updated_at": "2026-09-05T06:05:48+08:00",
+  "merge_sha": "6a1c5539515a777382917451590c1ca89a626576",
+  "evidence": "docs/tasks/evidence/T-20260905-005.json",
+  "board_policy": "No JTAG programming, bitstream assembly, power-on, or board test without explicit user permission."
+}

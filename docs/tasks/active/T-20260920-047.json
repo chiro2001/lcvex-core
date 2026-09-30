@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-047",
+  "parent": "T-20260920-039",
+  "label": "B25-DDR-CONTROL-GOLDEN-ONLY-RECOVERY",
+  "title": "Restore exact golden after the successful DDR m control without rerunning candidate or terminal",
+  "kind": "board-recovery",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-live-exact-golden-proven",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-036", "T-20260920-038"],
+  "dependency_exception": "T-20260920-041 passed candidate and DDR acceptance but its sole golden attempt failed. This successor consumes that preserved failure and must not rerun candidate, terminal or m.",
+  "base_sha": "0cdfb2734eddc5e81715b665db06b3e375fe570b",
+  "branch": "verify/T-20260920-047-b25-ddr-golden-recovery",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-047",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-047-b25-ddr-golden-recovery",
+  "remote_bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-047-prepare.ps1",
+  "authorization": "Existing user authorization and active microbench goal require final exact golden; scope is exactly one volatile golden programmer transaction plus one final read-only chain enumeration.",
+  "writes": [
+    "build/agents/T-20260920-047/** ignored recovery artifacts",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-047-b25-ddr-golden-recovery/** task-owned root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-047-prepare.ps1 task-owned bootstrap",
+    "docs/handoffs/T-20260920-047-b25-ddr-golden-recovery.md",
+    "docs/tasks/evidence/T-20260920-047.json"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-041.json",
+    "docs/tasks/evidence/T-20260920-038.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036/build/agents/T-20260920-036/tools/** exact sealed recovery bundle"
+  ],
+  "scope": "Fresh-bootstrap one task-owned root, AST/seal the exact T-036 recovery bundle, invoke program_once.ps1 once in golden mode, fetch the result, and only after success enumerate jtagconfig -n once through the preserved standard server.",
+  "acceptance": "One durable golden marker and one successful golden programmer result with exact file/checksum/JTAG ID, followed by one final chain enumeration matching exact golden design hash and UART/PHY. Candidate, terminal and m counts remain zero.",
+  "failure_policy": "One attempt only. Any setup, program or enumeration failure ends with live state unproven; no retry, reset, power or Flash action.",
+  "forbidden_regions": ["candidate", "terminal", "m command", "retry", "JIC/EPCQ/Flash", "reset", "power cycle", "standard/unknown process stop"],
+  "resource": "One uninterrupted resource-lock gamepc window.",
+  "dispatch": {
+    "sent_at": "2026-09-20T22:19:25+08:00",
+    "agent_name": "root",
+    "model": "main-agent current session",
+    "monitoring": "single direct recovery; no polling restart or retry"
+  },
+  "result": {
+    "status": "done",
+    "golden_program": "PASS; PID 8044, exit0, configuration/operation/checksum/JTAG-ID all accepted",
+    "final_chain": "PASS; exact cable, 02E060DD, golden design hash, JTAG UART #0 and JTAG PHY #0",
+    "wrapper_note": "exit1 only because matcher required optional 0x prefix; raw final enumeration passes",
+    "final_board_state": "live exact golden proven",
+    "hardware_counts": "golden=1 candidate=0 terminal=0 m=0 Flash/reset/power/standard-or-unknown-stop=0",
+    "evidence": "docs/tasks/evidence/T-20260920-047.json",
+    "handoff": "docs/handoffs/T-20260920-047-b25-ddr-golden-recovery.md"
+  },
+  "created_at": "2026-09-20T22:18:19+08:00",
+  "updated_at": "2026-09-20T22:24:21+08:00"
+}

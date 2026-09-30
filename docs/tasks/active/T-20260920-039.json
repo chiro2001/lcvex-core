@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-039",
+  "label": "B25-POST-BRINGUP-MICROBENCH-BATCH",
+  "title": "Integrate reproducible B25 CPU microbench and CoreMark board milestone",
+  "kind": "bringup-batch-integration",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-and-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-038"],
+  "base_sha": "763622496991b5cd7c743c5ff05b9678b763483c",
+  "branch": "batch/T-20260920-039-b25-post-bringup",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-039",
+  "member_tasks": [
+    "T-20260920-040",
+    "T-20260920-041",
+    "T-20260920-042",
+    "T-20260920-043",
+    "T-20260920-044",
+    "T-20260920-045",
+    "T-20260920-046",
+    "T-20260920-047",
+    "T-20260920-048",
+    "T-20260920-049",
+    "T-20260920-050",
+    "T-20260920-051",
+    "T-20260920-052",
+    "T-20260920-053",
+    "T-20260920-054",
+    "T-20260920-055"
+  ],
+  "superseded_attempts": ["T-20260920-046", "T-20260920-048"],
+  "required_member_tasks": [
+    "T-20260920-040", "T-20260920-041", "T-20260920-042", "T-20260920-043",
+    "T-20260920-044", "T-20260920-045", "T-20260920-047", "T-20260920-049",
+    "T-20260920-050", "T-20260920-051", "T-20260920-052", "T-20260920-053",
+    "T-20260920-054", "T-20260920-055"
+  ],
+  "scope": "Track and parameterize the proven board runner, distinguish startup DDR status with one m-command control, implement a 64 KiB BRAM-resident correctness suite plus a standards-valid CoreMark port, fix the observed finite JTAG-UART TX drop behavior, then carry the corrected frozen payload through Gate D, fresh physical, assembler, volatile board validation and exact golden restoration.",
+  "writes": [
+    "docs/B25_POST_BRINGUP_MICROBENCH_PLAN.md",
+    "docs/tasks/active/T-20260920-039..046.json",
+    "docs/tasks/TASKS.md",
+    "docs/PROJECT_STATUS.md and docs/ROADMAP.md at batch closeout",
+    "integration-only conflict resolution and evidence review"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260919-001.json",
+    "docs/tasks/evidence/T-20260920-025.json",
+    "docs/tasks/evidence/T-20260920-027.json",
+    "docs/tasks/evidence/T-20260920-030.json",
+    "docs/tasks/evidence/T-20260920-036..038.json"
+  ],
+  "validation": {
+    "L0_L2": "Each implementation task runs its affected directed, image, CoreMark-port and full-SoC tests.",
+    "L3": "T-043 gates the original payload; T-050 runs complete Gate D on the UART-fixed payload candidate.",
+    "physical": "T-051 fresh Quartus synthesis/fitter/STA/UCP and T-052 one-shot assembler bind the corrected source/payload.",
+    "board": "T-053 records the user-attested Flash baseline, proves one candidate/t-v-c transaction with strict CoreMark raw-report parser, and restores exact golden; T-054 scopes the initial design-hash policy; T-055 normalizes the real terminal redraw. T-046/T-048 are retained superseded attempts; T-041 is the separate DDR m control."
+  },
+  "acceptance": "All required terminal tasks done; superseded T-046/T-048 blocked attempts remain preserved as history. Clean-clone build is offline and content-addressed; CoreMark validity is recomputed from the raw board transcript; final exact golden is proven; prohibited operation counts are zero.",
+  "forbidden_regions": [
+    "JIC/EPCQ/Flash write or erase",
+    "board reset or power cycle",
+    "standard or unknown process termination",
+    "claiming CoreMark score without official CRC/seed and >=10 second timed interval",
+    "using DDR as a hidden prerequisite for the first BRAM suite"
+  ],
+  "created_at": "2026-09-20T21:35:43+08:00",
+  "result": {
+    "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+    "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+    "microbench_signature": "8679CF21",
+    "coremark": {"iterations": 300, "cycles": 442800996, "hz": 25000000, "cms_x1000": 16937, "cmmhz_x1000": 677, "parser": "PASS"},
+    "final_live_state": "exact golden restored and postflight-proven",
+    "flash_epcq_reset_power_unknown_process_stop": 0,
+    "batch_branch_integration": {"branch": "batch/T-20260920-039-b25-post-bringup", "integrated_source_head": "4ba3ad2800aa4d1966a78cac2cbee9be9e9fad50", "status": "fast-forwarded"},
+    "evidence": [
+      "docs/tasks/evidence/T-20260920-049.json",
+      "docs/tasks/evidence/T-20260920-050.json",
+      "docs/tasks/evidence/T-20260920-051.json",
+      "docs/tasks/evidence/T-20260920-052.json",
+      "docs/tasks/evidence/T-20260920-053-attempt-02.json",
+      "docs/tasks/evidence/T-20260920-054.json",
+      "docs/tasks/evidence/T-20260920-055.json"
+    ]
+  },
+  "handoff": "docs/handoffs/T-20260920-039-b25-post-bringup-microbench-coremark.md",
+  "updated_at": "2026-09-27T22:17:07+08:00"
+}

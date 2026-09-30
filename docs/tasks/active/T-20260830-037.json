@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-037",
+  "label": "PE-F0",
+  "parent": "T-20260830-033",
+  "title": "性能计数与缓存配置矩阵基线",
+  "kind": "performance-baseline-matrix",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "d54a694",
+  "branch": "feature/T-20260830-037-pe-f0-baseline",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-037",
+  "scope": "按最终性能增强路线图 F0 执行：建立可复现的性能基线矩阵。覆盖配置：nocache、开启 I-L1、开启 D-L1、开启 I+D-L1、开启 L2、不同内存延迟；测量 IPC、周期、提交数、cache hit/miss、总线事务数、stall 分类。作为后续 F1/F3/F4 等优化的可验证基线。",
+  "writes": [
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/handoffs/T-20260830-037-pe-f0-baseline.md",
+    "docs/tasks/evidence/T-20260830-037.json",
+    "scripts/**",
+    "sim/**",
+    "tb/**"
+  ],
+  "reads": [
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/PERFORMANCE_ENHANCEMENT_ROADMAP.md",
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "docs/PERFORMANCE_SNAPSHOT.md",
+    "docs/C4_DUALCORE_BASELINE.md",
+    "rtl/**",
+    "sim/**",
+    "tb/**"
+  ],
+  "validation": {
+    "l0": [
+      "可重跑的矩阵脚本/JSON",
+      "至少 nocache 与 L1/L2 配置的测量结果"
+    ],
+    "l1": [
+      "工作量覆盖 P-line 14 workload 的关键子集",
+      "IPC/周期/hit-miss/总线事务明确"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可复现的缓存/延迟性能基线矩阵，作为后续优化对比基线。",
+  "next": "根据基线数据确认 F1/F3 的收益假设并并行/串行派发。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 90,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T23:00:00+0800",
+  "updated_at": "2026-08-30T23:00:00+0800",
+  "known_limits": [
+    "不修改核心 RTL 主要功能；如必须改测试/runner 需说明。",
+    "重型 Verilator 必须 cgroup <16GiB、一次一个。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-037-pe-f0-baseline.md",
+  "evidence": "docs/tasks/evidence/T-20260830-037.json",
+  "merge_sha": "ed72c10",
+  "merged_at": "2026-08-30T23:40:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-30T23:40:00+0800",
+    "status": "accepted",
+    "head_sha": "d555000",
+    "notes": "F0 baseline matrix merged; nocache anchor aligns with P-SNAPSHOT; cache mainly reduces transactions not cycles; F3 recommended over F1? pending final DAG."
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-014",
+  "state": "done",
+  "base_sha": "d50f0294d9b65089121aa99043a9c8b1c9412c85",
+  "head_sha": "d37f2ba0dc6636d5a0db9d2758a3962ff6d55656",
+  "merge_sha": "d37f2ba0dc6636d5a0db9d2758a3962ff6d55656",
+  "branch": "feature/T-20260830-014-perf-mc",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-014",
+  "sent_at": "2026-08-30T03:00:00+0800",
+  "received_at": "2026-08-30T03:00:00+0800",
+  "reported_at": "2026-08-30T03:06:53+08:00",
+  "owner": "T-20260830-014-p-mc-owner",
+  "model": "default",
+  "label": "P-MC",
+  "title": "双核/多核消息/竞争/伸缩 workload",
+  "scope": "基于现有 C2 双核 TB/共享内存机制交付可重复双核性能 workload：ping-pong、并行 reduction、同/异 cacheline 竞争；不修改共享热点 RTL，不启动 Quartus，不宣称 A10/Fmax。",
+  "files": [
+    "tb/sv/lcvex_c2_perf_mc.S",
+    "tb/sv/lcvex_c2_perf_mc.hex",
+    "tb/sv/lcvex_c2_perf_mc_tb.sv",
+    "tb/run_c2_perf_mc.sh",
+    "docs/handoffs/T-20260830-014-perf-mc.md",
+    "docs/tasks/evidence/T-20260830-014.json"
+  ],
+  "toolchain": {
+    "verilator": "5.050",
+    "aarch64_gcc": "16.1.0",
+    "simulator": "verilator",
+    "os": "Linux"
+  },
+  "qemu": {},
+  "runs": [
+    {
+      "run_id": "owner-l0-001",
+      "source_sha": "b11fc19cd7f71c03b32360ce0830af8cb2910353",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "提交后无 whitespace 错误（最终提交时确认）。"
+    },
+    {
+      "run_id": "owner-l0-002",
+      "source_sha": "b11fc19cd7f71c03b32360ce0830af8cb2910353",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "aarch64-linux-gnu-gcc -c -nostdlib -mabi=lp64 tb/sv/lcvex_c2_perf_mc.S -o /tmp/lcvex_c2_perf_mc.o && aarch64-linux-gnu-objcopy -O binary /tmp/lcvex_c2_perf_mc.o /tmp/lcvex_c2_perf_mc.bin",
+      "seed": null,
+      "wall_seconds": 1,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "AArch64 汇编可成功汇编并生成 9288 字节 flat binary；关键数据地址/指令反汇编核对通过。"
+    },
+    {
+      "run_id": "owner-l0-003",
+      "source_sha": "b11fc19cd7f71c03b32360ce0830af8cb2910353",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "verilator --lint-only --timing --assert --top-module lcvex_c2_perf_mc_tb -f rtl/filelist.f rtl/lcvex_cluster_pkg.sv rtl/lcvex_l2_cluster.sv rtl/lcvex_core_wrap.sv rtl/lcvex_cluster_top.sv tb/sv/lcvex_c2_perf_mc_tb.sv -Wno-fatal -Wno-MODDUP ...",
+      "seed": null,
+      "wall_seconds": 102,
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator lint/elaboration 通过（仅有非致命 warning；未执行链接/仿真）。"
+    },
+    {
+      "run_id": "owner-l1-001",
+      "source_sha": "b11fc19cd7f71c03b32360ce0830af8cb2910353",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "VERILATOR_BIN=/home/chiro/miniforge3/envs/lcvex/bin/verilator VERILATOR_JOBS=1 tb/run_c2_perf_mc.sh",
+      "seed": null,
+      "wall_seconds": null,
+      "cpu_count": null,
+      "exit_code": null,
+      "result": "not-run",
+      "summary": "因同一时刻存在 C3 fourcore 重型 Verilator binary 构建，按项目约束暂停完整双核 binary build/run；交付可运行脚本，待重型队列串行执行。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-001",
+      "uri": "tb/sv/lcvex_c2_perf_mc.S",
+      "sha256": "see-git-head",
+      "bytes": 0,
+      "owner": "T-20260830-014-p-mc-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_perf_mc.S"
+    },
+    {
+      "id": "artifact-002",
+      "uri": "tb/sv/lcvex_c2_perf_mc.hex",
+      "sha256": "see-git-head",
+      "bytes": 20898,
+      "owner": "T-20260830-014-p-mc-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_perf_mc.hex"
+    },
+    {
+      "id": "artifact-003",
+      "uri": "tb/sv/lcvex_c2_perf_mc_tb.sv",
+      "sha256": "see-git-head",
+      "bytes": 0,
+      "owner": "T-20260830-014-p-mc-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/sv/lcvex_c2_perf_mc_tb.sv"
+    },
+    {
+      "id": "artifact-004",
+      "uri": "tb/run_c2_perf_mc.sh",
+      "sha256": "see-git-head",
+      "bytes": 0,
+      "owner": "T-20260830-014-p-mc-owner",
+      "retain_until": "task-close",
+      "reproduce": "git show HEAD:tb/run_c2_perf_mc.sh"
+    }
+  ],
+  "known_limits": [
+    "完整双核 binary build/run 尚未在本任务执行，原因是与 C3 fourcore 重型构建并发冲突，遵守资源/串行约束。",
+    "cycle 数据待集成者或后续串行实测补充；当前仅交付可重复 workload/TB。",
+    "不实现 ACE/CHI/SVE、coherent DMA、Linux SMP、C3 四核扩展；不宣称 A10/Fmax 或完整 ARM memory model。"
+  ],
+  "next": "集成者合入后在无重型构建窗口串行运行 tb/run_c2_perf_mc.sh，记录实际 MC_PERF cycle 并补 evidence。",
+  "status": "done",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "reported_at",
+        "old": "2026-08-30T03:20:00+0800",
+        "new": "2026-08-30T03:06:53+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "d37f2ba0dc6636d5a0db9d2758a3962ff6d55656",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "active",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "d37f2ba0dc6636d5a0db9d2758a3962ff6d55656",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:07:06+08:00",
+    "head_sha": "0feffa89a3232531cd679f30a9875dcd40848055",
+    "notes": "P-MC merged via cherry-pick. Delivered C2 dual-core perf TB (pingpong/reduction/contention). Runtime measurement deferred to serial window due C3 heavy build.",
+    "merge_sha": "d37f2ba0dc6636d5a0db9d2758a3962ff6d55656",
+    "result_sha": "d37f2ba0dc6636d5a0db9d2758a3962ff6d55656"
+  }
+}

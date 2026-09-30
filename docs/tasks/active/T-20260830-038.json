@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-038",
+  "label": "FPGA-G5",
+  "parent": "T-20260828-067",
+  "title": "L1D/L2 cache data 显式 M20K RAM wrapper",
+  "kind": "fpga-cache-ram-integration",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-cache-ram",
+  "agent_type": "implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "model_scope": "按主/规划 Agent 给出的缓存 RAM 边界完成实现、定向验证与隔离 Quartus 映射；不得扩大到性能 F3/F4 或完整 B5 flow。",
+  "depends_on": [
+    "T-20260830-032"
+  ],
+  "base_sha": "fb41e24be449394615498c2ff72257954ddf28a8",
+  "branch": "feature/T-20260830-038-fpga-cache-ram",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-038",
+  "scope": "把 lcvex_l1_d_wb 与 lcvex_l2_wb 的行为级 byte-array data 阵列改为综合感知的显式 cache data RAM wrapper：Verilator/非综合路径保持权威行为，SYNTHESIS 路径显式实例化 altera_syncram 并映射 A10 M20K（必要时有证据地选择 MLAB）。适配同步读延迟和逐字节写使能，保持 hit/miss、dirty victim、refill、probe、maintenance、checkpoint/fault 的提交边界。只做模块实现、定向回归和远端隔离 standalone synthesis，不启动真实 SoC/B5 full flow。",
+  "planning_guidance": {
+    "recommended_structure": [
+      "优先把每条 64B cache line 组织为一个 packed 512-bit RAM word；L1 地址为 set，L2 地址可为 {set,way}，逐字节 byte-enable 支持 partial store/refill merge。",
+      "wrapper 放在 lcvex_l1_d_wb.sv/lcvex_l2_wb.sv 内或使用独立文件均可；若新增文件，必须同步全部 filelist/QSF/Cocotb 入口且不得遗漏 standalone 编译。",
+      "非 SYNTHESIS 分支使用可被 Verilator 验证的行为模型；SYNTHESIS 分支参考 lcvex_bram_boot_altsyncram，显式设置 intended_device_family、ram_block_type、width/depth、byte_size/byteena 和明确的 read-during-write 语义。",
+      "M20K 同步读会引入至少一拍；应在现有单阻塞 FSM 中增加/复用 lookup/read 等待状态并锁存 set/way/offset/request，不能用组合旁路伪装成异步 RAM。",
+      "当前 core 请求与 probe 在 ST_IDLE 互斥、refill/writeback 串行；先证明单口或简单双口足够，不为未来并发提前引入多 bank/MSHR。"
+    ],
+    "invariants": [
+      "reset 只清 valid/dirty/tag/事务状态；data RAM 不复位，valid=0 时内容不可见。",
+      "dirty victim 全部写回成功前保留旧 metadata/data；writeback/refill fault 不发布新 line。",
+      "refill 最后一个 beat 成功后才发布 valid/tag；partial store 的 strb/offset 语义与现有模型一致。",
+      "probe response 必须返回握手前冻结的完整 64B line，ready 前 payload/ID 保持；abort/clean/invalidate 的提交点不变。",
+      "checkpoint drain、maintenance、DC ZVA、WAYS=1 和 WAYS=2 都不得因 RAM 延迟或读写冲突改变语义。",
+      "不得依赖仿真层级窥探旧 data 数组来伪造通过；测试应从模块接口和下游副作用验证。"
+    ],
+    "decision_rule": "若 line-wide 512-bit byte-enable 在 Quartus 21.4 无法合法映射 M20K，先保留失败报告并评估 8x64-bit byte-lane/banked wrapper；任何改变 line 协议、增加 outstanding/MSHR、提前发布 refill 或削弱 fault/probe 语义的方案必须暂停回报主 Agent。"
+  },
+  "writes": [
+    "rtl/lcvex_l1_d_wb.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_cache_data_ram.sv",
+    "rtl/filelist.f",
+    "fpga/opensynth/filelist_soc_tieoff.f",
+    "fpga/catapult_a10/tb/filelist_soc.f",
+    "fpga/catapult_a10/quartus/catapult_a10.qsf",
+    "sim/cocotb/Makefile.l1_d_wb",
+    "sim/cocotb/Makefile.l2_wb",
+    "tb/sv/lcvex_cache_data_ram_tb.sv",
+    "tb/sv/lcvex_l1_d_wb_tb.sv",
+    "tb/sv/lcvex_l2_wb_tb.sv",
+    "tb/sv/lcvex_l2_l1_probe_tb.sv",
+    "docs/L2_WRITEBACK.md",
+    "docs/L1_COHERENCE.md",
+    "docs/handoffs/T-20260830-038-fpga-cache-ram.md",
+    "docs/tasks/evidence/T-20260830-038.json",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex/build/T-20260830-038/**"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/handoffs/T-20260830-029-fpga-g2.md",
+    "docs/handoffs/T-20260830-031-fpga-g2-int.md",
+    "docs/handoffs/T-20260830-032-fpga-g4.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "rtl/lcvex_bram_boot.sv",
+    "rtl/lcvex_bram_boot_altsyncram.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_l2_probe.sv",
+    "tb/sv/lcvex_l1_d_wb_bfm.sv",
+    "tb/sv/lcvex_l2_wb_bfm.sv",
+    "fpga/catapult_a10/tools/lint_soc.sh",
+    "fpga/catapult_a10/tools/run_soc_smoke.sh"
+  ],
+  "context_docs": [
+    "docs/handoffs/T-20260830-029-fpga-g2.md",
+    "docs/handoffs/T-20260830-031-fpga-g2-int.md",
+    "docs/handoffs/T-20260830-032-fpga-g4.md",
+    "docs/L2_WRITEBACK.md",
+    "docs/L1_COHERENCE.md",
+    "docs/L1_L2_PROBE_CONTRACT.md"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check；所有受影响 filelist/QSF 引用完整",
+      "新增 wrapper 定向 SV TB（若采用独立 wrapper）覆盖整行写读、逐字节使能、不同地址、同址读写约定与 reset 后 valid 隔离",
+      "lcvex_l1_d_wb_tb 与 lcvex_l2_wb_tb 在 cgroup MemoryMax<16GiB、MemorySwapMax=0、-j1 下通过"
+    ],
+    "l1": [
+      "lcvex_l2_l1_probe_tb 通过，覆盖 dirty probe/clean/invalidate/abort/hold",
+      "现有 L1D-WB/L2-WB Cocotb 定向回归通过",
+      "Catapult SoC lint 与 boot smoke 串行通过；不得并发重型 Verilator"
+    ],
+    "l2": [],
+    "l3": [
+      "远端隔离目录只对 L1D SETS=64 与 L2 SETS=64/WAYS=1 做 standalone Quartus synthesis；报告明确出现 M20K/MLAB RAM block、Block Memory Bits>0，并记录 ALM/寄存器/RAM、wall/RSS 与 report 路径"
+    ],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "本地非综合行为回归全绿，cache data 不再以直接 byte array 作为 SYNTHESIS 实现；远端隔离 synthesis 对 L1D 64x64B 与 L2 64x1x64B 明确映射 block RAM 且资源证据可复现。保持 reset、partial store、dirty victim、refill/fault、probe/maintenance/checkpoint 提交边界；若仅本地通过而 Quartus 未证明 block RAM 映射，任务只能 review/blocked，不能 done。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-038",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "write_rule": "只允许在 experiment_root 创建隔离工程/报告；原始 rtl/qsf/sdc/ip 全部只读；不得读取或复制 license；不得启动真实 SoC 或 B5 full flow；不得删除未知文件。"
+  },
+  "created_at": "2026-08-30T15:07:23+08:00",
+  "updated_at": "2026-08-30T16:25:11+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T15:10:45+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-038"
+  },
+  "handoff": "docs/handoffs/T-20260830-038-fpga-cache-ram.md",
+  "evidence": "docs/tasks/evidence/T-20260830-038.json",
+  "merge_sha": "b3dd898a3faef5a7642cb6ebe33a0088251e2eb8",
+  "merged_at": "2026-08-30T16:25:11+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T16:25:11+08:00",
+    "status": "accepted",
+    "owner_head_sha": "12d638e96686b1935b6cee498d5cbfa22dc6aa68",
+    "checks": [
+      "owner worktree clean; branch/base/final head and declared write set matched",
+      "source and artifact hashes matched evidence",
+      "remote L1D/L2 Quartus report SHA256 and M20K/64x512/32768-bit resource lines independently verified read-only",
+      "merge-SHA wrapper/L1D/L2/probe/WAYS1/Cocotb/SoC lint/smoke all passed under 15G cgroup and serial execution",
+      "no full SoC synthesis/fitter/STA/assembler/SOF or board test was run"
+    ],
+    "notes": "G5 acceptance complete. DONT_CARE same-address read/write remains safe only under the current single-blocking serialized controller contract."
+  },
+  "known_limits": [
+    "不启动完整 B5 full flow、真实 SoC synthesis/fitter/STA/assembler；后者需本任务合入后由集成者另行授权。",
+    "不修改 core/pkg/QEMU/性能 F3-F8，不引入 MSHR、多 outstanding、多 bank 或 line 协议变化。",
+    "所有本地重型 Verilator 一次一个、-j1、cgroup 物理内存小于 16GiB。",
+    "不读取 license，不修改远端原始工程，不宣称板测/STA/SOF。"
+  ],
+  "next": "通过并合入后，由集成者另立真实 A10 SoC synthesis→fitter→STA→assembler 任务；不得自动续跑。"
+}

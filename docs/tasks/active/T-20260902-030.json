@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-030",
+  "label": "EMIF-ASYNC-FIFO-GRAY-CDC2",
+  "title": "EMIF async FIFO gray pointer setup/hold closure (round2)",
+  "kind": "rtl-cdc-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-emif-fifo-gray-cdc2",
+  "agent_type": "local-rtl-sim",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-027",
+    "T-20260902-028"
+  ],
+  "base_sha": "896fc46fb4c18d85c0a91c3844c27cd7c0298cbd",
+  "branch": "fix/T-20260902-030-emif-async-fifo-gray-cdc2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-030",
+  "scope": "闭合 EMIF async FIFO 灰码跨域 setup/hold：request_fifo wr_ptr_gray_q->rd1_q 与 response_fifo rd_ptr_gray_q->wr1_q 双向首级 setup（-6.9ns）及 request_fifo rd_ptr_bin_q->rd_ptr_gray_wr1_q hold（-5.7ns）。",
+  "reads": [
+    "docs/handoffs/T-20260902-027-emif-fifo-reset-cdc-deep.md",
+    "docs/handoffs/T-20260902-028-fp-p5-rerun-round3.md",
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "rtl/lcvex_axi4_avalon_pkg.sv",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "tb/**",
+    "sim/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "rtl/lcvex_axi4_avalon_pkg.sv",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "docs/handoffs/T-20260902-030-emif-async-fifo-gray-cdc2.md",
+    "docs/tasks/evidence/T-20260902-030.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS"
+    ],
+    "l1": [
+      "lint_soc.sh PASS",
+      "lint_platform.sh PASS",
+      "B2 AXI4→Avalon SV regression PASS"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "本地 lint/回归全绿；灰码源寄存器/同步器路径在 RTL 中硬化；后续 FP-P5 rerun 观察 EMIF setup/hold 是否闭合。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T19:20:00+08:00",
+  "updated_at": "2026-09-03T19:27:50+08:00",
+  "known_limits": [
+    "不修改 Qsys 生成物；不删除远端文件；不以纯 false_path 掩盖真实 CDC；不改变功能语义"
+  ],
+  "handoff": "docs/handoffs/T-20260902-030-emif-async-fifo-gray-cdc2.md",
+  "evidence": "docs/tasks/evidence/T-20260902-030.json",
+  "next": "合并后重跑 FP-P5；若 EMIF setup/hold 闭合且 core/MMU 也闭合则进入 assembler/SOF 门",
+  "dispatch": {
+    "sent_at": "2026-09-03T19:21:00+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "95eb1ccf-c4a9-42ea-8a6d-25c4cee6f579",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-030",
+    "branch": "fix/T-20260902-030-emif-async-fifo-gray-cdc2"
+  },
+  "head_sha": "6819f892a90251dff64509d180ddcefafb206071",
+  "merge_sha": "c9a2de0d0ce2fa2d4c405dd5953cfd543a525d8f",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T19:27:33+08:00",
+    "merged_at": "2026-09-03T19:27:50+08:00",
+    "recorded_at": "2026-09-03T19:27:50+08:00",
+    "notes": "EMIF async FIFO gray pointer CDC round2 merged; compile passes. FP-P5 rerun next with T-030 (+T-029 when ready)."
+  }
+}

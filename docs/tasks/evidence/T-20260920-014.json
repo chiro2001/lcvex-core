@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-014",
+  "label": "B25-RX-FIRMWARE-COMMAND-TRACE",
+  "state": "done-lightweight-validation-heavy-deferred",
+  "acceptance_status": "firmware-observability-implemented-image-contract-pass",
+  "partial": true,
+  "base_sha": "84cee3f202889fcfc036ea4545c51d1d36f9bca5",
+  "branch": "verify/T-20260920-014-b25-rx-firmware-command-trace",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-014",
+  "owner": "monitor_disasm",
+  "received_at": "2026-09-20T06:19:59+08:00",
+  "reported_at": "2026-09-20T09:20:58+08:00",
+  "implementation": {
+    "files": {
+      "boot": "fpga/catapult_a10/boot/boot.S",
+      "readme": "fpga/catapult_a10/boot/README.md",
+      "checker": "fpga/catapult_a10/boot/check_image_contract.py",
+      "soc_tb": "fpga/catapult_a10/tb/sv/lcvex_catapult_soc_tb.sv"
+    },
+    "source_sha256": {
+      "boot.S": "9d6685a95b5136d0cb34ff0671e48d1f6c1face0eb2973a56af046f8c05443a6",
+      "README.md": "b2d1adcc5a6d6e3bb0c37a4c7157bbb070ecd7e4789abe1fdd770d59d94ca18d",
+      "check_image_contract.py": "1aacc7242b9d589b9c94831e3c839a807f90653a12ed346503dcde2e232a322f",
+      "lcvex_catapult_soc_tb.sv": "2df139c9ce9b3026e97e327a32aed6b61290d93f3fe9afb1728a8ade8d3e1923"
+    },
+    "abi": {
+      "hardware_offsets": {
+        "0x18": "last matching RVALID=1 bridge response low 32 bits; empty polls do not overwrite",
+        "0x20": "last matching RVALID=1 PoC response low 32 bits; empty polls do not overwrite",
+        "0x28": "last matching RVALID=1 core dmem response low 32 bits; empty polls do not overwrite",
+        "0x30": "bits31:24 bridge, 23:16 PoC, 15:8 dmem; bit2 dmem fault, bit1 PoC fault, bit0 bridge fault",
+        "0x38": "accepted TX DATA-write count/seen/last byte"
+      },
+      "pages": {
+        "RXDBG": {"bytes": 25, "fields": 2},
+        "RXPATH": {"bytes": 44, "fields": 4},
+        "RXCPU": {"bytes": 43, "fields": 4}
+      },
+      "rotation": "startup RXDBG without advancing; autonomous RXDBG -> RXPATH -> RXCPU -> RXDBG",
+      "manual_debug": "d emits one RXDBG without advancing autonomous rotation",
+      "software_fields": {
+        "getc": "bits31:16 valid count, bits15:0 last valid raw DATA low16 including generated vendor status/RVALID bits; d=0xA464",
+        "dispatch": "bits31:16 dispatch count, bits15:8 class, bits7:0 byte",
+        "putc": "bits31:16 successful DATA writes, bits15:0 timeout drops"
+      },
+      "command_classes": {
+        "0": "ignored control",
+        "1": "ping",
+        "2": "status",
+        "3": "memory",
+        "4": "debug",
+        "5": "printable echo"
+      }
+    },
+    "boundaries": {
+      "command_comparisons_changed": false,
+      "uart_getc_load_width_changed": false,
+      "uart_putc_retry_limit_changed": false,
+      "ddr_or_calibration_policy_changed": false,
+      "rtl_changed": false,
+      "vendor_hdl_changed": false,
+      "test_registry_changed": false,
+      "task_json_changed": false
+    }
+  },
+  "artifacts": {
+    "boot_elf": {
+      "bytes": 70976,
+      "sha256": "cb75626365299b3dbc7fe60f2c42f8192d8dc29baf098d382716f4b06304e94f"
+    },
+    "boot_bin": {
+      "bytes": 2011,
+      "sha256": "96f1b8484b30c33adac0a1562b897647a1f937cd4ac64539bad687538d19ad79"
+    },
+    "boot_hex": {
+      "sha256": "e6649fb2a0a162a2e2bc1d213a4c116d0769c853309ff859ac60739e050f0c8a"
+    },
+    "boot_mif": {
+      "sha256": "e6de0c384489e6a31dc519b20f41cbefa8f3145e0f14872ecf39a9df1e11eaff"
+    },
+    "expected_image": {
+      "sha256": "872c3cbfdf9b1be3da2ef47f42543add6bb186e09e22169d1b169cc60918851"
+    },
+    "image_manifest": {
+      "path": "build/agents/T-20260920-014/oracle/image_manifest.json",
+      "sha256": "5174c22be48096a75f4a5776327bbc039b4d4ca3f01c493d137e426d6b6da8d2"
+    }
+  },
+  "verification": {
+    "review_fix": {
+      "result": "PASS in static contract and TB expectation review; RXCPU getc d event is 0004A464",
+      "reason": "last raw DATA low16 retains the generated vendor status/RVALID bits; vendor DATA word is 0xA400|byte",
+      "build_log_sha256": "c5bcfb5da754498724e43ff99a3fb8e0e7d24bad818b3d3c48075c2ce4d84746",
+      "contract_emit_log_sha256": "427873a826cad4834932d483535fd7e4fc72d983052d7961e51fe694cd3837e2",
+      "contract_check_log_sha256": "1d75938b5360c7abcca1d167bab70221209af53fd71c5274e50b0f1c5448842f"
+    },
+    "combined_r3_oracle_correction": {
+      "classification": "test-oracle correction",
+      "result": "PASS; response trace passed and RXCPU getc_event observed as 0004A464",
+      "vendor_payload_rule": "0xA400|byte",
+      "r3_smoke_log_sha256_prefix": "941e7775"
+    },
+    "boot_build": {
+      "command": "bash fpga/catapult_a10/boot/build.sh",
+      "result": "PASS; 2011-byte AArch64 image, image below 0x10000"
+    },
+    "image_contract_emit": {
+      "command": "python3 fpga/catapult_a10/boot/check_image_contract.py --emit ...",
+      "result": "PASS",
+      "manifest_sha256": "5174c22be48096a75f4a5776327bbc039b4d4ca3f01c493d137e426d6b6da8d2"
+    },
+    "image_contract_check": {
+      "command": "python3 fpga/catapult_a10/boot/check_image_contract.py --check ...",
+      "result": "PASS"
+    },
+    "static_abi": {
+      "result": "PASS; RXDBG=25B RXPATH=44B RXCPU=43B; all below 64B; source ABI tokens present",
+      "command": "Python line-length/ABI assertion plus git diff --check"
+    },
+    "aarch64_disassembly": {
+      "result": "PASS; explicit _start resets, page functions, getc/dispatch/putc counters and frozen offset literals present",
+      "command": "aarch64-linux-gnu-nm -n and aarch64-linux-gnu-objdump -d -M no-aliases"
+    },
+    "iverilog_probe": {
+      "result": "DEFERRED/NOT_AUTHORITATIVE; exit 138 before elaboration due pre-existing repository RTL unsupported inside/SVA constructs",
+      "build_log": "build/agents/T-20260920-014/iverilog/build.log",
+      "build_log_sha256": "944216f74f2bada5d1edf04b855cd1692c173b886a2b68f4f1b9dfc25eca3ec4"
+    },
+    "vendor_timed_verilator": {
+      "result": "DEFERRED; resource-lock returned 75 on first attempt, no polling",
+      "command": "/home/chiro/projects/.resource-locks/resource-lock run local mycpu T-20260920-014 monitor_disasm --meta phase=vendor-timed-verilator --meta output=build/agents/T-20260920-014/soc-vendor -- bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "lock_observation": "local BUSY pid=395804 project=pypto-x task=u5-region-readonly agent=58feb10b",
+      "exit_code": 75
+    }
+  },
+  "resource": {
+    "local_heavy_lock_required": true,
+    "local_heavy_lock_attempted": true,
+    "local_heavy_lock_status": "BUSY; deferred after first 75; no retry",
+    "gamepc_used": false,
+    "quartus_used": false,
+    "board_or_jtag_used": false
+  },
+  "handoff": "docs/handoffs/T-20260920-014-b25-rx-firmware-command-trace.md",
+  "next": "After local lock is available, run vendor-timed Verilator/full-SoC once; if it passes, integrate with T-013 temporary batch candidate and run the affected L0-L2 union. Do not alter RTL functional response paths based on this lane alone."
+}

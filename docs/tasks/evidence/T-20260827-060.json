@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-060",
+  "state": "done",
+  "base_sha": "884db7d572e6f72340e63218ded3cc2906230e68",
+  "implementation_head": "f37670d",
+  "verification_head": "6fbc620",
+  "docs_head": "41a837d",
+  "merge_sha": "9c6adee",
+  "branch": "feature/T-20260827-060-p7-3-neon-fp",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-060",
+  "owner": "p7-3-neon-fp-luna",
+  "model": "gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "owner_dispatch": {
+    "sent_at": "2026-08-27T21:13:38+08:00",
+    "received_at": "2026-08-27T21:14:03+08:00",
+    "reported_at": "2026-08-27T22:47:14+08:00",
+    "elapsed_seconds": 5616,
+    "timezone": "Asia/Shanghai",
+    "elapsed_basis": "reported_at - dispatch_sent_at"
+  },
+  "latest_user_update": {
+    "sent_at": "2026-08-27T22:35:48+08:00",
+    "received_at": "2026-08-27T22:36:16+08:00",
+    "reported_at": "2026-08-27T22:47:14+08:00",
+    "elapsed_seconds": 686,
+    "summary": "补齐 A76 完整矩阵、FZ/RMode 和 evidence run 绑定"
+  },
+  "scope": "P7-3 2S/4S/2D Advanced SIMD FADD/FSUB/FMUL/quiet FCMEQ；复用 V raw state、FPCR DN/FZ/RMode、FPSR sticky、FPEN、commit/backpressure 和 P7-2 pipeline。",
+  "excluded": [
+    "FMA、FP16、vector conversion、sqrt、estimate、min/max",
+    "完整 FP exception-enable、structured/lane/pair memory、SVE",
+    "Cache、AXI4、EMIF、FPGA 和 QEMU fork 修改"
+  ],
+  "files": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/filelist.f",
+    "Makefile",
+    "sim/cocotb/Makefile",
+    "sim/cocotb/Makefile.fp_scalar",
+    "sim/cocotb/Makefile.p7_2_neon",
+    "sim/cocotb/Makefile.p7_3_neon_fp",
+    "sim/cocotb/test_p7_2_neon.py",
+    "sim/cocotb/test_p7_3_neon_fp.py",
+    "sim/difftest/test_program.py",
+    "tb/sv/lcvex_neon_fp_tb.sv",
+    "docs/P7-3_NEON_FP.md",
+    "docs/handoffs/T-20260827-060-p7-3-neon-fp.md"
+  ],
+  "file_sha256": {
+    "rtl/lcvex_pkg.sv": "68e44897aeced40763552f34558246e02777d7a75cd5e81074813bea13cc7100",
+    "rtl/lcvex_decode.sv": "1ca20c3168565ba6717e60b98968af5c7efab190c4149c420f180392a64b0448",
+    "rtl/lcvex_core.sv": "28e0c746f451c402debacff952dfd2d984a089c36d11a6fc1792c7e5fde3dc67",
+    "rtl/lcvex_neon_fp.sv": "55dae8a367d2957df4995969b186fef2a1d3fa928d96ad6973628aa725538e26",
+    "rtl/filelist.f": "cd2eb57590490fb45df1799d762b323c0eb28430ed936d5bc061826d12d89818",
+    "Makefile": "e4b56516c53be97cea327268f7fde3377d761f0b9ae1cb1af23f8da9fdd5dbe4",
+    "sim/cocotb/Makefile": "a3fbeffc1ffc5c22e573906d7dc449e591a2786677e5480a9f692d3b2ce9ad2d",
+    "sim/cocotb/Makefile.fp_scalar": "36efc596872a94567f3f5f19dc7af738cdea4b3d68da1e5def789d810c6770f5",
+    "sim/cocotb/Makefile.p7_2_neon": "6b96c1ece29bc8ed23a36baa18b810582cc482983b6872c6485525e0fb152095",
+    "sim/cocotb/Makefile.p7_3_neon_fp": "dc74eddbf374c165a5b00af6ff967b9f269bcb2af99860e579ae87af9f849fa3",
+    "sim/cocotb/test_p7_2_neon.py": "044cef9d183b342d83329547d0f15ed235701b640b6d72a2ec6d271f1a4c71af",
+    "sim/cocotb/test_p7_3_neon_fp.py": "a5c94016dddd550ebaa5942e43a3cec9cc6c48fda357b0ac90b7eab93d1bb1d6",
+    "sim/difftest/test_program.py": "e3b643e254d180065c1a14a2643f70136e8505146ceddc910652a790add92d08",
+    "tb/sv/lcvex_neon_fp_tb.sv": "9157bb138be9c87af2c3ad80b4ef96655f26fc3bae9a2a6b443c452dc2ce275a",
+    "docs/P7-3_NEON_FP.md": "637d017725696fd78635ca75c2acedc36cba2a911a73bd7dd83861f86a00d438"
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "qemu_release": "11.1.0",
+    "qemu_profile": "cortex-a76,cntfrq=1000000000,has_el3=false,has_el2=false",
+    "qemu_icount": "shift=0,align=off,sleep=off"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "fork_commit": "ccd819d",
+    "binary_sha256": "f0accfb67c2b4b79e39e40768b3c522a5f960515424839d90654d514c31f3aca",
+    "plugin_sha256": "df63add6b6bb256c26ad2b34c72d0f556f38e10edd7de762eebddedacd8cc8f2",
+    "source_changes": "none"
+  },
+  "runs": [
+    {"run_id":"owner-l0-final-001","level":"L0","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":0,"command":"python3 -m py_compile sim/difftest/test_program.py sim/cocotb/test_p7_3_neon_fp.py && git diff --check","exit_code":0,"result":"pass","log":"build/agents/T-20260827-060/final/l0/l0-final.log","log_sha256":"81d0774829ce3869999c888ebf257ab2894988f3511037adb23a6ad3657a2245"},
+    {"run_id":"owner-l1-compile-002","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":2,"command":"make compile","exit_code":0,"result":"pass","summary":"Verilator -Wall core lint/elaboration。","log":"build/agents/T-20260827-060/final/l0/compile.log","log_sha256":"6579024a7d1ef001820848f1c598b4eb49f8676f4225ac675683028871a05895"},
+    {"run_id":"owner-l1-p7-3-sv-003","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":1,"command":"make sim-sv-p7-3-neon-fp","exit_code":0,"result":"pass","summary":"2S/4S/2D raw arithmetic、FCMEQ、NaN/zero、DN/FZ/RMode、FPSR。","log":"build/agents/T-20260827-060/final/l1-p7-3/sv.log","log_sha256":"45348aa720a44b616141f687ec826b20264e4a0db7c1db0c2cd98bb693e4471e"},
+    {"run_id":"owner-l1-p7-3-cocotb-004","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":3,"command":"make sim-cocotb-p7-3-neon-fp","exit_code":0,"result":"pass","summary":"Cocotb 4/4：pipeline、forwarding、FPEN、backpressure、UDEF。","log":"build/agents/T-20260827-060/final/l1-p7-3/cocotb.log","log_sha256":"ad97618a79bcf03e1e6de5a8cfb42cbee82ee5b4c2cea394d7daab4eb83ba996"},
+    {"run_id":"owner-l1-p7-3-cocotb-delay2-005","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":3,"command":"make sim-cocotb-p7-3-neon-fp P7_NEON_FP_MEM_DELAY_MODE=2 P7_NEON_FP_SIM_BUILD=sim_build_p7_3_neon_fp_delay2","exit_code":0,"result":"pass","summary":"MEM_DELAY_MODE=2 Cocotb 4/4。","log":"build/agents/T-20260827-060/final/l1-p7-3/cocotb-delay2.log","log_sha256":"6d03cce3699d50052a7edb596ae28ed1100e37c97cb9b9e5e3e4c984212dd96a"},
+    {"run_id":"owner-l2-p7-3-matrix-006","level":"L2","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":62,"command":"FP_NEON=required IMAGE=$PWD/build/agents/T-20260827-060/hard_neon_fp.bin MAX_INSNS=48 COORD=$PWD/build/verilator_lockstep/lockstep_coordinator PLUGIN=$PWD/qemu/plugins/lcvex_difftest.so QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 SOCK=$PWD/build/agents/T-20260827-060/final/l2-p7-3-matrix/step.sock DUMP=$PWD/build/agents/T-20260827-060/final/l2-p7-3-matrix/fail.txt COORD_LOG=$PWD/build/agents/T-20260827-060/final/l2-p7-3-matrix/coord.log QEMU_LOG=$PWD/build/agents/T-20260827-060/final/l2-p7-3-matrix/qemu.log bash sim/difftest/run_lockstep_step.sh","exit_code":0,"result":"pass","summary":"Cortex-A76 FP_NEON=required 完整矩阵 48/48；seq 0..47 全部 OK。","log":"build/agents/T-20260827-060/final/l2-p7-3-matrix/run.log","log_sha256":"7070843fc8a4b065b871284366f51bd589ddd40d0536b45883759d31a4e89a1e","coord_log":"build/agents/T-20260827-060/final/l2-p7-3-matrix/coord.log","coord_log_sha256":"ffa69fe2212f78a46edf748f92ba1ac0e1c284a7ddbf145ed98cf5fa580e7ea5","qemu_log":"build/agents/T-20260827-060/final/l2-p7-3-matrix/qemu.log","qemu_log_sha256":"d5ec9550288ebd607940718e39fef6371303b8941286be26b5d5aef4fc7d2cb4","artifact":"build/agents/T-20260827-060/hard_neon_fp.bin","artifact_sha256":"b260ccb7cbe2ed67e2c32eac8b3345284a2c3d66f33a819c6bdb896faac76a22"},
+    {"run_id":"owner-l1-p7-2-sv-007","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":0,"command":"make sim-sv-p7-2-neon","exit_code":0,"result":"pass","log":"build/agents/T-20260827-060/final/l1-p7-2/sv.log","log_sha256":"ed81eb439f0c59df45d88422610a004fbcc4619fcafc4ee8d79f8de807832246"},
+    {"run_id":"owner-l1-p7-2-cocotb-008","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":4,"command":"make sim-cocotb-p7-2-neon","exit_code":0,"result":"pass","summary":"P7-2 Cocotb 8/8。","log":"build/agents/T-20260827-060/final/l1-p7-2/cocotb.log","log_sha256":"b25d6c7de03d3515a5357dcbe0fa1c909e22871a255d8c9696ab6ac746d53f65"},
+    {"run_id":"owner-l1-p7-2-cocotb-delay2-009","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":4,"command":"make sim-cocotb-p7-2-neon P7_NEON_MEM_DELAY_MODE=2 P7_NEON_SIM_BUILD=sim_build_p7_2_neon_delay2","exit_code":0,"result":"pass","summary":"P7-2 MEM_DELAY_MODE=2 Cocotb 8/8。","log":"build/agents/T-20260827-060/final/l1-p7-2/cocotb-delay2.log","log_sha256":"7a678330f4ae5581c9da5d3c31c64a2806a05477fb645864dc2936c80a5a5cbd"},
+    {"run_id":"owner-l2-p7-2-int-010","level":"L2","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":3,"command":"make p7-2-neon-int","exit_code":0,"result":"pass","summary":"A76 required strict lockstep 31/31。","log":"build/agents/T-20260827-060/final/l2-p7-2/neon-int.log","log_sha256":"6b2f192e84ae1d914f15d620009d7c9bb62f6cd573379ca09dae3626c466b030","artifact":"build/difftest/hard_neon_int.bin","artifact_sha256":"5fa1a1107f4d3857c7b3169f74657d79b8dca8be2ffa8304c234d96c5d61a84d"},
+    {"run_id":"owner-l2-p7-2-fetch-fault-011","level":"L2","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":3,"command":"make p7-2-neon-fetch-fault","exit_code":0,"result":"pass","summary":"A76 required fetch-fault 20/20。","log":"build/agents/T-20260827-060/final/l2-p7-2/fetch-fault.log","log_sha256":"5dd5be4f0e6a8b0902fac5048238aa89ff1ae225e0df5159c4b6543251d49366","artifact":"build/difftest/hard_neon_fetch_fault.bin","artifact_sha256":"b0f80713a25f460e8ae6e750b883beeacfb2c6d3d67fbd671edd65ccaa2802c3"},
+    {"run_id":"owner-l1-p7-1-sv-012","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":1,"command":"make sim-sv-fp-scalar","exit_code":0,"result":"pass","log":"build/agents/T-20260827-060/final/l1-p7-1/sv.log","log_sha256":"2ec5be05c356fff517eaef29c451648ac0e5bd8f8edd512ba78588dd6bce2e31"},
+    {"run_id":"owner-l1-p7-1-cocotb-013","level":"L1","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":3,"command":"make sim-cocotb-fp-scalar","exit_code":0,"result":"pass","summary":"P7-1 Cocotb 5/5。","log":"build/agents/T-20260827-060/final/l1-p7-1/cocotb.log","log_sha256":"8e29cc54d81ea293092c9a5c1cf4fb5f683314a35abd571b52cda9e4c03e4f9e"},
+    {"run_id":"owner-l2-p7-1-014","level":"L2","source_sha":"f37670d","runner_role":"owner","seed":1,"elapsed_seconds":10,"command":"make p7-1-fp-scalar p7-1-fp-scalar-edge p7-1-fp-scalar-rounding p7-1-fp-scalar-sequence","exit_code":0,"result":"pass","summary":"A76 required 28/38/18/388。sequence seed=1。","log":"build/agents/T-20260827-060/final/l2-p7-1/lockstep.log","log_sha256":"2e4789fbedf6a5e2fd24fc9ee814fe8b8702d9b918ce6b4dfcecd1d4d08950c8"},
+    {"run_id":"owner-l2-p6-015","level":"L2","source_sha":"f37670d","runner_role":"owner","seed":null,"elapsed_seconds":3,"command":"MAX_INSNS=40 make lockstep","exit_code":0,"result":"pass","summary":"P6 scalar 40 条 required-compatible lockstep。","log":"build/agents/T-20260827-060/final/l2-p6/lockstep-40.log","log_sha256":"1801646f1b89e6a559bfb65f8eb80103beb9deb0867c0ba21b3047d77ef2d0d5"}
+  ],
+  "artifacts": [
+    {"id":"hard-neon-fp","uri":"build/agents/T-20260827-060/hard_neon_fp.bin","sha256":"b260ccb7cbe2ed67e2c32eac8b3345284a2c3d66f33a819c6bdb896faac76a22","reproduce":"conda run --no-capture-output -n lcvex python3 -c 'import sys;sys.path.insert(0,\"sim/difftest\");import test_program;assert test_program.build_hard_neon_fp_program(\"build/agents/T-20260827-060/hard_neon_fp.bin\") == 48'"},
+    {"id":"qemu-plugin","uri":"qemu/plugins/lcvex_difftest.so","sha256":"df63add6b6bb256c26ad2b34c72d0f556f38e10edd7de762eebddedacd8cc8f2","note":"owner worktree build artifact；QEMU fork source unchanged"}
+  ],
+  "integration": {
+    "runner_role": "root-integrator",
+    "line": "feature/p7-fp-neon",
+    "source_sha": "9c6adee",
+    "merge_sha": "9c6adee",
+    "status": "pass_l0_l2",
+    "timezone": "Asia/Shanghai",
+    "validated": "合并 SHA 9c6adee 上 compile、P7-3 SV/Cocotb 普通与 delay2、48 条 lockstep、P7-2 SV/Cocotb/lockstep/fetch-fault、P7-1 和 P6 回归全部通过。",
+    "runs": [
+      {"observed_at":"2026-08-27T22:55:39+08:00","level":"L0/L1","source_sha":"9c6adee","runner_role":"root-integrator","seed":null,"elapsed_seconds":2,"command":"make compile","exit_code":0,"result":"pass"},
+      {"observed_at":"2026-08-27T22:55:51+08:00","level":"L1","source_sha":"9c6adee","runner_role":"root-integrator","seed":null,"elapsed_seconds":6,"command":"make sim-sv-p7-3-neon-fp","exit_code":0,"result":"pass"},
+      {"observed_at":"2026-08-27T22:56:05+08:00","level":"L1","source_sha":"9c6adee","runner_role":"root-integrator","seed":1787842602,"elapsed_seconds":32,"command":"P7_NEON_FP_MEM_DELAY_MODE=0 P7_NEON_FP_SIM_BUILD=sim_build_p7_3_neon_fp_merge9c6adee make sim-cocotb-p7-3-neon-fp","exit_code":0,"result":"pass","summary":"4/4"},
+      {"observed_at":"2026-08-27T22:57:55+08:00","level":"L1","source_sha":"9c6adee","runner_role":"root-integrator","seed":1787842677,"elapsed_seconds":3,"command":"P7_NEON_FP_MEM_DELAY_MODE=2 P7_NEON_FP_SIM_BUILD=sim_build_p7_3_neon_fp_delay2_merge9c6adee make sim-cocotb-p7-3-neon-fp","exit_code":0,"result":"pass","summary":"4/4"},
+      {"observed_at":"2026-08-27T22:58:09+08:00","level":"L2","source_sha":"9c6adee","runner_role":"root-integrator","seed":null,"elapsed_seconds":14,"command":"make p7-3-neon-fp","exit_code":0,"result":"pass","summary":"A76 required 48/48"},
+      {"observed_at":"2026-08-27T22:58:32+08:00","level":"L1","source_sha":"9c6adee","runner_role":"root-integrator","seed":null,"elapsed_seconds":8,"command":"make sim-sv-p7-2-neon","exit_code":0,"result":"pass"},
+      {"observed_at":"2026-08-27T22:58:49+08:00","level":"L1","source_sha":"9c6adee","runner_role":"root-integrator","seed":1787842768,"elapsed_seconds":33,"command":"P7_NEON_MEM_DELAY_MODE=0 P7_NEON_SIM_BUILD=sim_build_p7_2_neon_merge9c6adee make sim-cocotb-p7-2-neon","exit_code":0,"result":"pass","summary":"8/8"},
+      {"observed_at":"2026-08-27T22:59:39+08:00","level":"L1","source_sha":"9c6adee","runner_role":"root-integrator","seed":1787842817,"elapsed_seconds":30,"command":"P7_NEON_MEM_DELAY_MODE=2 P7_NEON_SIM_BUILD=sim_build_p7_2_neon_delay2_merge9c6adee make sim-cocotb-p7-2-neon","exit_code":0,"result":"pass","summary":"8/8"},
+      {"observed_at":"2026-08-27T23:00:26+08:00","level":"L2","source_sha":"9c6adee","runner_role":"root-integrator","seed":null,"elapsed_seconds":6,"command":"make p7-2-neon-int p7-2-neon-fetch-fault","exit_code":0,"result":"pass","summary":"31/31、20/20"},
+      {"observed_at":"2026-08-27T23:00:42+08:00","level":"L2","source_sha":"9c6adee","runner_role":"root-integrator","seed":1,"elapsed_seconds":10,"command":"make p7-1-fp-scalar p7-1-fp-scalar-edge p7-1-fp-scalar-rounding p7-1-fp-scalar-sequence","exit_code":0,"result":"pass","summary":"28/38/18/388"},
+      {"observed_at":"2026-08-27T23:01:01+08:00","level":"L2","source_sha":"9c6adee","runner_role":"root-integrator","seed":null,"elapsed_seconds":3,"command":"MAX_INSNS=40 make lockstep","exit_code":0,"result":"pass","summary":"P6 scalar 40/40"}
+    ]
+  },
+  "known_limits": [
+    "只支持 2S/4S/2D FADD/FSUB/FMUL/quiet FCMEQ；FCMGE/FCMGT、FMA、FP16、转换及未列 FP 族保持 UDEF。",
+    "完整 FP exception-enable、结构化/lane/pair memory、SVE、Cache/AXI/FPGA 和 Gate D/F 后置。",
+    "任务已在合并 SHA 9c6adee 通过要求的 L0-L2；Gate D/Gate-F 仍由阶段门统一执行。"
+  ]
+}

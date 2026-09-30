@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260908-004",
+  "label": "B25-REGISTER-OFFSET-STORE-HAZARD",
+  "state": "done",
+  "acceptance_status": "pass",
+  "partial": false,
+  "source_sha": "5b2f4e6becf8dde9120f50efc8dcb9c4a9cdfc6a",
+  "implementation_commit": "88ea12c8c56b530c1aabe1151e02695e03e894bb",
+  "branch": "fix/T-20260908-004-b25-regoffset-store-hazard",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260908-004",
+  "owner": "b25_emif_resilience_impl",
+  "sent_at": "2026-09-08T11:50:10+08:00",
+  "received_at": "2026-09-08T11:50:10+08:00",
+  "reported_at": "2026-09-08T12:12:10+08:00",
+  "timezone": "Asia/Shanghai",
+  "objective": "修复 register-offset STR/STRB/STRH/STRW 同时保留 rn、rm 索引和 rt store-data 依赖，消除紧邻 index producer 后的陈旧地址计算。",
+  "scope_boundary": {
+    "modified_files": [
+      "rtl/lcvex_decode.sv",
+      "sim/difftest/run_t004_regoffset_store_hazard.sh"
+    ],
+    "decode_region": "M3 register-offset single load/store block dependency metadata only",
+    "unchanged": [
+      "pre/post-index decode blocks",
+      "rtl/lcvex_core.sv",
+      "common typedefs, ports and helpers",
+      "QEMU/reference/test expectations",
+      "GamePC/Quartus/JTAG/board files"
+    ]
+  },
+  "root_cause": {
+    "first_failure": {
+      "seed": 1,
+      "insn_index": 2807,
+      "pc": "0x440044c4",
+      "encoding": "0x78377a80",
+      "disassembly": "strh w0, [x20, x23, lsl #1]",
+      "pre_x20": "0x44080000",
+      "pre_x23": "0x0000000000000007",
+      "qemu_store_address": "0x4408000e",
+      "rtl_store_address": "0x44080000"
+    },
+    "mechanism": "The decoder first records rm as rs2 for the register-offset address, then the STR branch overwrote rs2 with rt. id_reads/ex_id_gpr_hazard therefore missed a producer of rm.",
+    "source_lines": "rtl/lcvex_decode.sv:2433-2450; rtl/lcvex_core.sv:2022-2080",
+    "triage_evidence": "build/agents/T-20260908-003/triage/source-context.txt and build/agents/T-20260908-003/triage/trace-window.txt"
+  },
+  "implementation": {
+    "change": "Keep d.rs2/d.rs2_en as rm index dependency; assign d.rs3/d.rs3_en to rt store-data dependency.",
+    "decode_sha256_before": "1b01f3c482db2b5e509899740306806e094ee803b6f18dbe5239e80dfa262edf",
+    "decode_sha256_after": "d1a1d2fbcf865a34aa33cca4e8586804bacd02f5f3853af1839a96be1febcc67",
+    "runner_sha256": "92bba100fa46e88b6e747dd73176c19fefe581a35fa8823e63d86bee5c472a7f"
+  },
+  "validation": {
+    "command": "/home/chiro/projects/.resource-locks/resource-lock run local mycpu T-20260908-004 b25_regoffset_store_hazard --min-local-available-mib 8192 --meta verilator_jobs=1 --meta matrix=base_cache_delay2 -- bash -lc '.../sim/difftest/run_t004_regoffset_store_hazard.sh'",
+    "started_at": "2026-09-08T11:59:49+08:00",
+    "finished_at": "2026-09-08T12:05:35+08:00",
+    "exit_code": 0,
+    "matrix": [
+      {
+        "name": "existing-base",
+        "image": "hard_reg_offset.bin",
+        "max_insns": 45,
+        "result": "pass",
+        "log": "build/agents/T-20260908-004/runs/existing-base/run.log",
+        "log_sha256": "8adf711054bf4a6a4c4a80322b2e8ccb5fcda15c494fb17f0a23147d0c641292"
+      },
+      {
+        "name": "existing-cache",
+        "image": "hard_reg_offset.bin",
+        "max_insns": 45,
+        "result": "pass",
+        "log": "build/agents/T-20260908-004/runs/existing-cache/run.log",
+        "log_sha256": "8adf711054bf4a6a4c4a80322b2e8ccb5fcda15c494fb17f0a23147d0c641292"
+      },
+      {
+        "name": "existing-delay2",
+        "image": "hard_reg_offset.bin",
+        "max_insns": 45,
+        "result": "pass",
+        "log": "build/agents/T-20260908-004/runs/existing-delay2/run.log",
+        "log_sha256": "8adf711054bf4a6a4c4a80322b2e8ccb5fcda15c494fb17f0a23147d0c641292"
+      },
+      {
+        "name": "focused-base",
+        "image": "t004_regoffset_store_hazard.bin",
+        "max_insns": 45,
+        "result": "pass",
+        "log": "build/agents/T-20260908-004/runs/focused-base/run.log",
+        "log_sha256": "292b8fcc2f85ad81442e6af74c2e473b8f25ce32ad21cad5eeea9b04ae693bc3"
+      },
+      {
+        "name": "focused-cache",
+        "image": "t004_regoffset_store_hazard.bin",
+        "max_insns": 45,
+        "result": "pass",
+        "log": "build/agents/T-20260908-004/runs/focused-cache/run.log",
+        "log_sha256": "292b8fcc2f85ad81442e6af74c2e473b8f25ce32ad21cad5eeea9b04ae693bc3"
+      },
+      {
+        "name": "focused-delay2",
+        "image": "t004_regoffset_store_hazard.bin",
+        "max_insns": 45,
+        "result": "pass",
+        "log": "build/agents/T-20260908-004/runs/focused-delay2/run.log",
+        "log_sha256": "292b8fcc2f85ad81442e6af74c2e473b8f25ce32ad21cad5eeea9b04ae693bc3"
+      }
+    ],
+    "focused_coverage": [
+      "STRB/STRH/STRW/STR",
+      "rm != rt and rm == rt",
+      "XZR index",
+      "base and store-data adjacent producer hazards",
+      "exact encoding 0x78377a80"
+    ],
+    "verilator": {
+      "version": "Verilator 5.050 2026-07-01",
+      "configurations": {
+        "base": {
+          "build_log": "build/agents/T-20260908-004/coordinators/base.build.log",
+          "build_log_sha256": "f8174ce855e8f1ac420ebb3a57c58772d66734b5609e9da8311f59526048493c",
+          "walltime_s": 49.103,
+          "allocated_mb": 179.902
+        },
+        "cache": {
+          "build_log": "build/agents/T-20260908-004/coordinators/cache.build.log",
+          "build_log_sha256": "4b35a355b400235f1280001b3bff73437a45820e7d9ab283a25ea6f7d337c186",
+          "walltime_s": 50.929,
+          "allocated_mb": 181.836
+        },
+        "delay2": {
+          "build_log": "build/agents/T-20260908-004/coordinators/delay2.build.log",
+          "build_log_sha256": "a17cd3a6507c8da9757636e3db7bdc954472e56f48d3d622024d4c3237c881d0",
+          "walltime_s": 51.638,
+          "allocated_mb": 182.004
+        }
+      }
+    }
+  },
+  "artifacts": {
+    "focused_image": {
+      "path": "build/agents/T-20260908-004/images/t004_regoffset_store_hazard.bin",
+      "sha256": "1f1b8df42357fb9be3a08de5d1cc889f33130f800179abd2d64d5504172c3940",
+      "words": 45
+    },
+    "focused_meta": {
+      "path": "build/agents/T-20260908-004/images/t004_regoffset_store_hazard.meta",
+      "sha256": "f0fe984f9fa16e89cc037ff70716306a351a9411c3394de48f0c7a9c86ad58f"
+    },
+    "focused_objdump": {
+      "path": "build/agents/T-20260908-004/images/t004_regoffset_store_hazard.objdump",
+      "sha256": "44c743db076a536686e9a800c7b24adf32dc53c216c968c5a4898bc0f541909d"
+    },
+    "existing_image": {
+      "path": "build/agents/T-20260908-004/images/hard_reg_offset.bin",
+      "sha256": "db9e5b919903a0716f03eaa1d70f8f1b3cb09051c0daab7530b8fd840e3dcb1f"
+    },
+    "runner_log": {
+      "path": "build/agents/T-20260908-004/runner.log",
+      "sha256": "69e273aa6f09cec40bf17c65c6856de5342a483fbd4b5b09fc12230c6738694d"
+    },
+    "before_after_audit": {
+      "path": "build/agents/T-20260908-004/audit/before-after.txt",
+      "sha256": "fa4d6b0c0b6047adf4a0bd40cd0e79671e072fe46ef870b3f7d7315c617502fb"
+    },
+    "qemu_plugin": {
+      "path": "build/agents/T-20260908-004/tools/lcvex_difftest.so",
+      "sha256": "bbb1e2c15ba11e3fb3a045fc117ef8cf6b22cc42523245dd17ddce863e6f7eae",
+      "read_only": true
+    },
+    "qemu_system_aarch64_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "qemu_version": "11.1.0"
+  },
+  "resource_lock": {
+    "resource": "local",
+    "min_local_available_mib": 8192,
+    "verilator_jobs": 1,
+    "status_after": "local FREE; gamepc FREE",
+    "all_compile_and_lockstep_runs_locked": true,
+    "task_local_artifacts": true,
+    "max_rss_kib": null,
+    "rss_note": "The completed runner was not wrapped with a per-process /usr/bin/time -v recorder; no reliable retroactive peak RSS is available. Verilator reports allocated 179.902/181.836/182.004 MB for the three coordinator builds.",
+    "system_tmp_used": false,
+    "gamepc_used": false
+  },
+  "policy": {
+    "assertions_disabled": false,
+    "difftest_comparisons_disabled": false,
+    "reference_or_golden_modified": false,
+    "test_expectations_modified": false,
+    "full_gate_d_run": false,
+    "random_100k_run": false,
+    "gamepc_quartus_jtag_board_flash_used": false,
+    "all_generated_artifacts_under_task_build": true
+  },
+  "batch_validation": {
+    "batch_task": "T-20260907-037",
+    "candidate_sha": "3ffd0c119f691ab0aef98984cddf1ba0c5ab208a",
+    "status": "pass",
+    "command_scope": "串行 T-002/T-004 affected directed union；未运行 100k random 或 full Gate D",
+    "started_at": "2026-09-08T12:29:49+08:00",
+    "finished_at": "2026-09-08T12:32:54+08:00",
+    "run_root": "build/agents/T-20260907-037/combined-t002-t004-rerun",
+    "t002_union": {
+      "base": "180/180 pass",
+      "cache": "180/180 pass",
+      "delay2": "180/180 pass",
+      "summary_log": "build/agents/T-20260907-037/combined-t002-t004-rerun/postpre/summary.log",
+      "summary_log_sha256": "5e6bbb41bff365d5691e02e1da58a3217d10dff9e98f9db4d8a51fa7179f0d84",
+      "base_run_log_sha256": "b5d9ed823da926c13d5be129cc61e3bc5a5bc929b71f58c86f218eb195453609",
+      "cache_run_log_sha256": "cad990a7b255b79ab110a376b3ccbdb534bf360aa072cd698e09a8555821bd4e",
+      "delay2_run_log_sha256": "c5e5818731e774766282ef321475cdb0f10e47c7b9a8ae8beba3ac6f5b79ce17"
+    },
+    "t004_union": {
+      "existing_base": "45/45 pass",
+      "existing_cache": "45/45 pass",
+      "existing_delay2": "45/45 pass",
+      "focused_base": "45/45 pass",
+      "focused_cache": "45/45 pass",
+      "focused_delay2": "45/45 pass",
+      "runner_log": "build/agents/T-20260907-037/combined-t002-t004-rerun/regoffset.runner.log",
+      "runner_log_sha256": "0dc018d1ab91f26092f1fc93c631acc1543c9cb4f71c564a04c7ce4c806c5b5f",
+      "run_log_sha256": {
+        "existing": "94ef680d94f6de329448536301e83a13fa4c03e36c5af3f240d654cdcc259d07",
+        "focused": "77795de91b41c7e64276e4c81a5505c0925afa5767f69711824e095d2cbf54bf"
+      },
+      "focused_image_sha256": "1f1b8df42357fb9be3a08de5d1cc889f33130f800179abd2d64d5504172c3940"
+    },
+    "socket_path_correction": "初次 combined 的 T-004 尝试因绝对 socket 路径超过 sun_path 被截断并返回 EADDRINUSE；该尝试不计入结果。短相对路径重跑无 socket 残留且退出码 0。",
+    "resource_lock": {
+      "command_meta": "verilator_jobs=1,matrix=t002_t004_union_short_socket,memory_policy=exclusive-no-hard-cap,cpu_policy=adaptive",
+      "inside_status": "local BUSY pid=1411106 project=mycpu task=T-20260907-037 agent=b25_batch_combined",
+      "after_status": "local FREE; gamepc FREE",
+      "max_rss_kib": null,
+      "rss_note": "环境没有外部 /usr/bin/time；本次以时间戳记录时段，并以 Verilator allocated 报告作为构建内存证据（T-004 base/cache/delay2=179.934/181.887/181.914 MB）。"
+    }
+  },
+  "risks": [
+    "This is a focused L0-L2 closure only; seed 1/2/3 100k and full Gate D remain integration-lane work.",
+    "The coordinator run logs report strict commit equality but do not print the individual store address; the exact encoding and pre-fix address discrepancy are preserved in the triage/audit artifacts.",
+    "T-20260908-002 remains the independent pre/post-index writeback lane and must be integrated separately."
+  ],
+  "blockers": [],
+  "next": "On candidate 3ffd0c11, regenerate seed 1/2/3 and run full Gate D; only after that consider physical/board flow.",
+  "handoff": "docs/handoffs/T-20260908-004-b25-regoffset-store-hazard.md"
+}

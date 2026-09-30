@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-038",
+  "label": "B25-CLOCK",
+  "title": "Implement the real 100-to-25 MHz logic clock and constraints",
+  "kind": "fpga-clock-timing-lane",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-focused-pass",
+  "assigned_owner": "b25_clock",
+  "depends_on": ["T-20260906-035", "T-20260907-036"],
+  "batch_parent": "T-20260907-037",
+  "base_sha": "689959472faf59844fb486834fad27f8fedb2ca6",
+  "branch": "fpga/T-20260907-038-b25-clock",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-038",
+  "cone_id": "catapult-clk-u59-to-logic-clk25",
+  "write_regions": [
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv::board clock generator and Qsys clock-port wiring only",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc::primary/generated clock definitions only",
+    "tb/sv/lcvex_catapult_clock25_tb.sv",
+    "docs/tasks/evidence/T-20260907-038.json",
+    "docs/handoffs/T-20260907-038-b25-clock.md"
+  ],
+  "forbidden_regions": [
+    "BRAM/BOOT parameters owned by T-039",
+    "JTAG-UART bridge owned by T-040",
+    "clk_y3 or EMIF PLL/reference frequency changes",
+    "shared manifests/checkers/test registry, QEMU, assembler and board actions"
+  ],
+  "scope": "Produce an actual 25 MHz CPU/SoC clock from clk_u59=100 MHz, retain the required Qsys auxiliary and clk_y3 EMIF reference clocks, update TimeQuest generated-clock constraints, and document reset timing at 25 MHz.",
+  "validation": "Focused simulation proves divide-by-four period/duty/reset behavior; static checks prove sys_clk_25 exists in RTL and SDC and that EMIF reference clocks were not silently reduced.",
+  "acceptance": "Hardware and SDC describe the same real 25 MHz clock; no new unsynchronized functional crossing is introduced; LOGIC_POR_CYCLES=65536 is documented as about 2.62 ms.",
+  "resource": "No heavy or remote job in the lane; parent owns merged validation and T-042 owns physical measurement.",
+  "dispatch": {
+    "sent_at": "2026-09-07T03:07:03+08:00",
+    "agent_name": "b25_clock",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true
+  },
+  "result": {
+    "owner_head": "ab92f921792503dc1cbe8aea71935a928a6263d2",
+    "implementation_merge": "1f24eb787fedd1cafb154f685f37c2f5842323cd",
+    "evidence_merge": "1ac249b9ce11a50bdfeaa983461eee3d202de782",
+    "metadata_merge": "fce89b6adea735d54ef429b51c23aef4425af9eb",
+    "status": "accepted; Verilator and Icarus integration focused rerun pass",
+    "evidence": "docs/tasks/evidence/T-20260907-038.json"
+  },
+  "created_at": "2026-09-07T00:23:34+08:00",
+  "updated_at": "2026-09-07T03:26:16+08:00"
+}

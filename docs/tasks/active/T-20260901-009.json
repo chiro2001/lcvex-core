@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-009",
+  "label": "PE-F1H-D2-EVENT-PROBE",
+  "parent": "T-20260830-033",
+  "title": "F1a nocache delay2 三 workload 有界事件因果 probe",
+  "kind": "performance-dynamic-diagnosis",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted",
+  "assigned_owner": "luna-f1a-d2-event-probe",
+  "agent_type": "verification-instrumentation-and-diagnosis",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260901-006", "T-20260901-008"],
+  "base_sha": "b8a7294204de06b3c00f3abc02e181f6d035ac23",
+  "branch": "verify/T-20260901-009-f1a-d2-event-probe",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-009",
+  "scope": "为 MEM_DELAY_MODE=2 的 fetch stale-quarantine/backpressure 增加可选只读、有界的性能事件观测，在 own worktree 重建 nocache_d2 F0/F1a 两个 runner，运行 alu_latency、ctrl_branch、mem_seq 共 6 行（10M cap），复现三项 cycle guard 回退并确定事件级因果。不得修改 cache/fetch/memory 功能、workload、2%+64 阈值、commit digest schema、QEMU/comparator/reference；不运行完整矩阵、Gate D、Linux 或 Quartus。",
+  "planning_guidance": {
+    "instrumentation": [
+      "优先给 lcvex_mem_delay 增加纯组合 read-only 观测输出（req_pending/rsp_pending/delay_cnt/LFSR phase 或等价必要集合），由 lcvex_soc_tb 显式连接；不新增状态/reset，不依赖不稳定 C++ 层次名。",
+      "microbench runner 的 probe 必须 opt-in，默认输出和性能 counters 不变；禁止逐周期无限 trace。使用聚合直方图、事件计数和固定上限窗口，达到上限必须标记 truncated 而非静默丢失。",
+      "至少统计 frontend_kill/flush 到 stale response drop/drain 结束的延迟，stale_drain 与 delay req/rsp pending 重叠，fetch issue 被阻塞周期，imem request duplication，commit starvation run-length，以及 mem_stall 重叠。",
+      "保留 commit/architecture digest；六行必须与 T-004 对应最终 retired/commit/memory digest 一致，避免 probe 改变仿真语义。"
+    ],
+    "execution": [
+      "只构建 nocache_d2_f0 与 nocache_d2_f1a 两个 runner、三个 workload image；所有生成物在本任务 build，禁止访问 T-004/T-007/T-008 build。",
+      "统一 max_cycles=10000000、相同 image/source/tool/LFSR seed；每一 pair F0/F1a 串行运行。",
+      "probe artifact 采用紧凑 JSON，Git 只保存汇总与有限首事件窗口；完整日志/大 trace 留 build，不进 Git。"
+    ],
+    "analysis": [
+      "对每 pair 建立 cycles delta 与事件周期的可核算关系，说明已解释比例和未解释余量；不能把重叠 counter 直接相加。",
+      "验证 alu_latency/ctrl_branch 是否共享同一 fetch-wait 放大链；单独判断 mem_seq 为什么总 fetch_wait/mem_stall 下降仍净回退。",
+      "若发现功能/提交差异、FIFO overflow、单 outstanding 违例或 probe truncation 妨碍结论，停止并报告；不在本任务修 RTL。",
+      "交付单一最小后继修复写集和定向矩阵；若证据否定统一根因，明确拆为两个任务。"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_mem_delay.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/F1A_D2_EVENT_PROBE_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-009/f1a_d2_event_summary.json",
+    "docs/handoffs/T-20260901-009-f1a-d2-event-probe.md",
+    "docs/tasks/evidence/T-20260901-009.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/F1A_D2_PERFORMANCE_REGRESSION_DIAGNOSIS.md",
+    "docs/PERFORMANCE_F1F_V2_RESULTS.md", "docs/tasks/evidence/T-20260901-006.json",
+    "docs/tasks/evidence/T-20260901-008.json", "rtl/lcvex_core.sv", "baremetal/perf/**"
+  ],
+  "validation": {
+    "l0": ["probe default-off/schema/JSON/record-limit self-test；mem_delay read-only port lint；registry consistency"],
+    "l1": ["nocache_d2 F0/F1a runner build；六行 pass、architecture digests unchanged、probe untruncated"],
+    "l2": ["三 pair event-causality/cycle accounting；原 3 guard failures deterministic reproduction"],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "六行在同一冻结 source 下完成并复现 3 个 guard failure，架构摘要不变；有界 probe 给出可审计的事件重叠/延迟/饥饿分解和已解释 cycle 比例，足以定义一个或两个最小修复任务。",
+  "resource": {"cpu": 2, "memory_mb": 4096, "memory_cgroup_limit_mb": 15360, "disk_mb": 8192, "timeout_s": 7200, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 90, "extension_increment_minutes": 60, "max_minutes": 240, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-09-01T11:08:01+08:00", "released_at": "2026-09-01T12:20:08+08:00", "reason": "两个 runner、三个 workload、六行 probe 全部完成；6/6 pass，scope inactive", "rule": "本地唯一重型任务；15G/no-swap/50%-CPU/-j1；不与 Gate/Linux/Quartus 并发"},
+  "created_at": "2026-09-01T11:06:57+08:00",
+  "updated_at": "2026-09-01T12:38:16+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T11:08:01+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-20260901-006 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-009。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-009"
+  },
+  "handoff": "docs/handoffs/T-20260901-009-f1a-d2-event-probe.md",
+  "evidence": "docs/tasks/evidence/T-20260901-009.json",
+  "implementation_merge_sha": "bb926515c927df08211a334b93eed76ed771be78",
+  "final_merge_tip": "06db8dd0ef90e991c2b2d1c286e675f51f20130a",
+  "integrator_review": {
+    "accepted_at": "2026-09-01T12:38:16+08:00",
+    "status": "accepted_event_probe_and_causal_diagnosis",
+    "owner_implementation_tip": "b52f05c3e5008c5b5fa25d929bac537a85a7bc5d",
+    "owner_final_tip": "4d793d0d26866dd85d5cf97148768628c659fd02",
+    "independent_review": {
+      "model": "gpt-5.6-luna(max)",
+      "reviewed_commit": "b52f05c3e5008c5b5fa25d929bac537a85a7bc5d",
+      "reported_at": "2026-09-01T12:36:26+08:00",
+      "result": "pass_no_blockers"
+    },
+    "checks": [
+      "四个 delay probe 端口均为纯组合镜像；runner probe 默认关闭，不改变功能握手、默认 JSON 或周期",
+      "六行原始 report/probe 哈希闭合，并与 T-004 的 cycles、retired、v2 commit digest、memory digest 逐项一致",
+      "event window 与 kill tracking 均未截断；FIFO occupancy/peak 不超过 2，overflow 为 0，push 等于 pop",
+      "合并 SHA 上 probe selftest、Python 编译、registry 67 项及 Makefile/runner 一致性检查全绿",
+      "handoff 末尾重复行已在独立文档修正提交中删除"
+    ],
+    "boundary": "T-009 只确认 stale quarantine 与 delay2 的共同事件链，不证明单一 RTL 赋值错误；F1a 默认开关继续关闭。"
+  },
+  "known_limits": ["诊断任务不修功能或性能 RTL。", "标准 Gate D 已通过，但 F1a 默认启用仍受性能护栏阻塞。"],
+  "next": "登记统一的分支边界取指节流与 stale-delay2 恢复最小修复任务；先保留三个 workload 做六行验收，再决定是否进入完整矩阵。"
+}

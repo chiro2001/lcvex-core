@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-049",
+  "base_sha": "d07f08df5546d8a369b6691faf8b51a71f222c59",
+  "head_sha": "c320f110d571090c532946d1df196981efbd1131",
+  "merge_sha": "48ab8aa1fc2a5e004ecbcda3923ab8d98e77de2f",
+  "candidate_status": "human-approved",
+  "scope": "只冻结 P7 FP/NEON 架构状态、QEMU 差分、提交、trace、checkpoint 和验收契约；未修改 RTL、QEMU fork、协议代码、checkpoint.py、生成器或参考结果。",
+  "decision": {
+    "canonical_gate_f_cpu": "cortex-a76,has_el3=false,has_el2=false",
+    "p6_linux_compatibility": "现有 max 线保持不变；P7 plugin 定义 z-low128 adapter 供无 SVE 的兼容 smoke，adapter 禁止发布 P7 checkpoint。",
+    "scalar_protocol": "header.version=1 及原 HELLO/CONFIG/INIT/PRE/GO/COMMIT/ACK payload 不变；仅 required capability 后为 INIT 追加一次 FP_INIT，并为普通 COMMIT 追加无损 FP state delta。",
+    "fp_state": "V0-V31 raw 128-bit，Vn 为未来 Zn[127:0]；FPCR/FPSR reset=0，CPACR.FPEN reset=0；FPCR mask=0x07c80000，FPSR mask=0xf800009f。",
+    "checkpoint": "独立 LCVXFP01（552B little-endian raw、含TSV seq、gzip）并追加 manifest.tsv 第13列；本行 raw/tmp/final 与TSV均原子发布，压缩成功删除raw .fp，P7 restore 缺 fp sidecar 必须拒绝，旧 P6 chain 仍可读。",
+    "memory_boundary": "RTL一次预留4个V写和8个8B store slot；P7首批仅单Q register、至多两个连续8B store，超限编码明确拒绝。",
+    "comparison": "V/FPCR/FPSR/NaN payload/signed zero/FPSR sticky flags 均 raw-bit；DN=1 bit-exact，DN=0仅逐指令允许集合/掩码，无epsilon。"
+  },
+  "qemu_audit": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "plugin_header_task_path": "/home/chiro/projects/mycpu/qemu/include/qemu/qemu-plugin.h",
+    "plugin_header_actual_path": "/home/chiro/projects/mycpu/qemu/include/plugins/qemu-plugin.h",
+    "task_path_result": "not-found；实际 QEMU 11.1 plugin 公共头位于 include/plugins，已按实际路径审计。",
+    "facts": [
+      "plugins/api.c:qemu_plugin_get_registers() 调用 gdb_get_register_list(current_cpu)。",
+      "target/arm/gdbstub64.c 在无 SVE/SME 时注册 aarch64-fpu.xml（v0..v31 各128位、fpsr/fpcr各32位）；有 SVE/SME 时注册动态 z0..z31（arm_max_vq()*16 字节）。",
+      "target/arm/gdbstub64.c 的 V/Z getter 按低字在前导出；P7 固定 little-endian lo/hi raw 格式。",
+      "target/arm/cpu.c system reset 清零 CPUARMState；target/arm/helper.c 的 FPEN 语义为 00/10 trap EL0+EL1、01 trap EL0、11 no trap；translate-a64.c 发 syn_a64_fp_access_trap。",
+      "target/arm/vfp_fpscr.c 明确 FP exception enable RAZ/WI；FPCR/FPSR exact P7 masks 由 cpu.h 宏和 A76 feature profile 导出。",
+      "现有 fork hook 仅保存 dev/sys/timer/gic；P7 冻结新增可重放 fork API qemu_lcvex_difftest_read_fp_state，一次返回FPCR/FPSR、32xlow128、vector_bytes和upper_nonzero；plugin descriptor只作启动preflight。"
+    ],
+    "source_sha256": {
+      "qemu/plugins/lcvex_protocol.h": "f54a5b85a41d62fcb8465d814ddb2c2a395943be7f2b6936533b83f35d8f4594",
+      "qemu/plugins/lcvex_difftest.c": "8e9a8ba9ef4fce3044423db6faf09532fbda5c92bbf1f4fa204d66c239d452a2",
+      "sim/difftest/lockstep_coordinator.cc": "321d2bc12e32227858051cf67c6f952a96eb7c194dfb5d55852ed5650e218d5f",
+      "sim/difftest/checkpoint.py": "d4ed3bacf6fcaa861c9300c680079ffeacae15e9916a87e5b8670de255f3fff4",
+      "qemu/include/plugins/qemu-plugin.h": "8d1b9146415633d278416960c5f2d4d44f62a925c8c96e80ab675dce70a8e96e",
+      "qemu/plugins/api.c": "19a75a3596b6739be9892d59637698adfae932284f35d3d5d78c6e8bdb71c5d0",
+      "qemu/target/arm/gdbstub64.c": "77a2bbacfc741c20bc6aab62ee41be63937b2c03e03e67f8d8290feb7f3dbd80",
+      "qemu/target/arm/cpu.h": "1bafa6cddb4bc46e35fedca33b92c4a258a5d7f231309f8744fd484ddad37fb4",
+      "qemu/target/arm/vfp_fpscr.c": "0a7348ccd9d4f5bd236c7659139d3d1b31d8588765de1fbb70bfc51c32b05bfb",
+      "qemu/target/arm/tcg/cpu64.c": "4c661376f953932194ebe99d8c944238f8af3fca0c0e38b78d37ab3c9a8dfae6"
+    }
+  },
+  "documents": {
+    "docs/P7_FP_NEON_PROTOCOL.md": "5d76801f39fa325a08331481208ca087a58c1fa71d91304579e521de64c86cd3",
+    "docs/COMMIT_PACKET.md": "92d74422444217ce4f442b51c05d5eca4c9c65cc0364cf28b56d8a2411eeaa18",
+    "docs/ARCHITECTURE.md": "36f4d3dfe2cbff6c66086d5381b0d89a29229955c276f85e5092119303a7f998",
+    "docs/DIFFTEST.md": "2749ec603122a90212a4d79b92ea0250c86ad97a57863daba041613680c5df40",
+    "docs/VERIFICATION.md": "8fc51f39d85167290a35ac59081cde59a511e2e36ec1eb61cf8cf2526f9fcf4c",
+    "docs/DEVELOPMENT_PLAN.md": "4379975264a1923bf032ca0807f4171cdc1db1020213252001d8b57b59fceb1f"
+  },
+  "resource": {
+    "cpuset": [3],
+    "cpu_count": 1,
+    "memory_limit_mb": 2048,
+    "heavy_tests": false
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-qemu-cpu-source-and-qmp-001",
+      "level": "L0",
+      "command": "taskset -c 3 qemu-system-aarch64 -machine none -display none -qmp stdio: query-cpu-model-expansion(type=full, model=cortex-a76); source audit plugins/api.c, gdbstub64.c, cpu64.c, helper.c, vfp_fpscr.c",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "QMP full expansion 返回 cortex-a76 的 aarch64/pmu profile；源码确认其独立于 SVE/SME dynamic gdb feature。"
+    },
+    {
+      "run_id": "owner-l0-protocol-static-002",
+      "level": "L0",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY': assert LCVXFP01=552B, FP_INIT=520B, FP_COMMIT delta<=528B/flags-reserved=0/popcount<=4, required capability/matrix, CPACR-owned mask, atomic context/manual-review anchors; git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "所有固定 struct/无损 delta 小于既有4096B frame上限；文档含required fail-before-INIT、ASYNC规则、原子sidecar/TSV和人工审核清单。"
+    },
+    {
+      "run_id": "owner-l0-markdown-003",
+      "level": "L0",
+      "command": "rg -n '[[:blank:]]+$' docs/P7_FP_NEON_PROTOCOL.md docs/COMMIT_PACKET.md docs/ARCHITECTURE.md docs/DIFFTEST.md docs/VERIFICATION.md docs/DEVELOPMENT_PLAN.md",
+      "exit_code": 1,
+      "expected_result": "no-match",
+      "result": "pass",
+      "summary": "无尾随空白；Markdown 标题结构和跨文档链接经人工静态核对。"
+    }
+  ],
+  "review": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "status": "blocking-findings-applied",
+    "summary": "Sol 阻断了同值写effect oracle、FP_PRE双full、CPACR非FPEN误掩码、required协商/INIT前失败缺失、ASYNC死锁、544B无seq sidecar、非原子TSV、Gate D子集等风险；本次全部落实为state-only full-init/delta、owned FPEN、互操作矩阵、552B seq+原子发布和完整Gate D门。",
+    "review_commit": "aaaa2b95404010bb44222f9c6d6cc49a8ef5b134",
+    "preflight_fix_commit": "c320f110d571090c532946d1df196981efbd1131",
+    "next": "Sol 阻断项已全部落实，用户于 2026-08-27 明确批准人工审核。"
+  },
+  "human_approval": {
+    "status": "approved",
+    "date": "2026-08-27",
+    "scope": "批准 docs/P7_FP_NEON_PROTOCOL.md 的冻结决策，并允许按 P7-0 至 P7-3 进入任务拆分；不代表功能实现或 Gate F 通过。"
+  },
+  "integration_validation": {
+    "source_sha": "48ab8aa1fc2a5e004ecbcda3923ab8d98e77de2f",
+    "command": "taskset -c 3 conda run --no-capture-output -n lcvex python3 -c '<ABI/mask assertions>'；JSON、Markdown、docs-only diff、git diff --check、test-registry-check 与文档 SHA256 复核",
+    "exit_code": 0,
+    "result": "pass",
+    "summary": "独立复算 LCVXFP01 magic=8B、FP_INIT=520B、sidecar=552B、delta header=16B、FPCR/FPSR masks；确认 T-049 仅修改 docs，六份权威文档 SHA256 与 owner evidence 一致。",
+    "log": "build/agents/T-20260826-049/integration-review.log",
+    "log_sha256": "cc9186c74bcdfb72fc8b77a723c644d9a011576a15f35e867aa02cd8c4502ab4",
+    "log_bytes": 630
+  },
+  "known_limits": [
+    "这是协议设计，不是 FP/NEON 实现或 ISA 覆盖证据；没有运行 Gate F、Gate D、Linux 或任何 P7 RTL/QEMU 锁步。",
+    "A76 canonical profile 不能反向替代 P6/Linux max；max z-low128 adapter 只允许高半全零、无 checkpoint 的兼容 smoke。",
+    "P7 首批 ISA 是分批门；未列 FP/Advanced SIMD 族闭合前禁止声称完整 ARMv8.2-A FP/NEON 合规。",
+    "LCVXFP01/13列、FP frame、QEMU patch和restore port都是冻结的未来实现契约；旧工具对新链应显式拒绝，不能将其视为已经支持。"
+  ],
+  "handoff": "docs/handoffs/T-20260826-049-p7-protocol.md"
+}

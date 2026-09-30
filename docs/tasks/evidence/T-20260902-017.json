@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-017",
+  "state": "done",
+  "partial": false,
+  "base_sha": "f2a31a9e32883ae8a697c1039fa95dec11f6b337",
+  "head_sha": "f54b87a53abf87d1def7aed64b1b080901c26984",
+  "branch": "feature/T-20260902-017-fp-p3-iter-sqrt-div",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-017",
+  "scope": "FP-P3: convert FSQRT/FDIV to pause/kill/reset-capable iterative state machines in the shared 64-bit lane engine, remove scalar H dual-divider parallel copy, keep raw-bit/RMode/FPSR semantics and freeze a request-to-response latency table.",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "jobs": "VERILATOR_JOBS=1 for local"
+  },
+  "files": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "tb/sv/lcvex_fp_exec_tb.sv",
+    "docs/handoffs/T-20260902-017-fp-p3-iter-sqrt-div.md",
+    "docs/tasks/evidence/T-20260902-017.json"
+  ],
+  "design": {
+    "iter_engine": {
+      "divider": "one lcvex_fp_divider, 256 restoring iterations",
+      "sqrt": "new lcvex_fp_iter_sqrt, 64 restoring iterations",
+      "half_lanes": "FP16 H DIV/SQRT processed sequentially in one unit",
+      "kill": "iter_kill clears divider/sqrt FSM immediately",
+      "pause": "iter_pause input supported and held 0 in current wrapper",
+      "reset": "async rst_n clears FSM, no ghost response"
+    },
+    "sharing": "unpack_fp/div_finish/sqrt_finish_iter/round_pack/nan handling remain common within the single release scalar instantiation",
+    "release_hierarchy": "lcvex_core -> lcvex_fp_exec -> lcvex_fp_scalar#(FP_ITER=1) -> 1 divider + 1 sqrt FSM; no 4-lane lcvex_neon_fp in release config"
+  },
+  "latency_table_cycles": {
+    "scalar_noniter": 2,
+    "neon_2s_noniter": 3,
+    "scalar_fdiv_sd_finite": 258,
+    "scalar_fdiv_h": 515,
+    "scalar_fsqrt_sd": 66,
+    "scalar_fsqrt_h": 67,
+    "neon_fsqrt_2s": 131,
+    "special_div_sqrt": 2
+  },
+  "runs": [
+    {
+      "run_id": "compile",
+      "command": "make compile",
+      "result": "pass"
+    },
+    {
+      "run_id": "fp-exec-directed",
+      "command": "verilator --binary --timing --assert --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv",
+      "result": "pass",
+      "summary": "extended directed: FSQRT/FSQRT.D/FSQRT.H, FDIV.S/FDIV.H, NEON FSQRT.2S, special 1/0 0/0 -1, latency checks, mid-flight kill/reset, held response"
+    },
+    {
+      "run_id": "sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-4-fma-convert",
+      "result": "pass"
+    },
+    {
+      "run_id": "sv-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass"
+    },
+    {
+      "run_id": "cocotb-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "summary": "5/5 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "summary": "4/4 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "summary": "5/5 PASS"
+    },
+    {
+      "run_id": "cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "summary": "8/8 PASS"
+    }
+  ],
+  "known_limits": [
+    "No Quartus synthesis/fit/STA/SOF run; hierarchy and area reduction are not numerically measured.",
+    "Four-lane combinational lcvex_neon_fp remains as standalone reference only.",
+    "No L2 lockstep run in this task.",
+    "Latency table is implementation-fixed for FP-P3; FP-P4 may revisit after workload/STA data."
+  ],
+  "next": "FP-P4 full-function/workload and one/two-lane PPA evidence; then FP-P5 synthesis/fit/STA.",
+  "merge_sha": "1a5db4d4b6db62328675e5d11bc77824fbd555c8",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-03T04:16:14+08:00",
+    "merged_at": "2026-09-03T04:17:15+08:00",
+    "recorded_at": "2026-09-03T04:17:15+08:00",
+    "notes": "FP-P3 merged and accepted"
+  }
+}

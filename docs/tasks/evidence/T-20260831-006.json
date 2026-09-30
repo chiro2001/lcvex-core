@@ -1,0 +1,816 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260831-006",
+  "label": "PE-F1A-NEXTSETTLE",
+  "state": "done",
+  "partial": false,
+  "acceptance_status": "pass",
+  "base_sha": "87d26890f75e69b4cf74cd75925094aa1bc8a86f",
+  "source_sha": "87d26890f75e69b4cf74cd75925094aa1bc8a86f",
+  "head_sha": "48f8e7de1f897bc50611f8edb586e270016db731",
+  "head_sha_note": "包含 owner 三段功能/correction、集成者可重放 old-fault 镜像修正与长期设计文档的稳定技术 tip。",
+  "merge_sha": "48f8e7de1f897bc50611f8edb586e270016db731",
+  "branch": "feature/T-20260831-006-f1a-next-settled",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260831-006",
+  "owner": "luna-f1a-next-settled / t042_checkpoint_protocol_luna",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "provenance": {
+    "dispatch_sent_at": "2026-08-31T12:56:30+08:00",
+    "dispatch_base": "87d26890f75e69b4cf74cd75925094aa1bc8a86f",
+    "local_registration_json_base": "2baa063b9e5ed4f6096a34857afb8d6df6291e3f",
+    "base_selection": "以正式派发消息、feature/p7-final active record 和当前工作树 HEAD=87d 为准；2baa 是注册时的 stale record。",
+    "received_at": "2026-08-31T12:56:30+08:00",
+    "reported_at": "2026-08-31T17:24:00+08:00",
+    "budget_note_1": "2026-08-31T13:58:11+08:00，elapsed=62m，current_budget=120m；不中断。",
+    "budget_note_2": "2026-08-31T14:59:21+08:00，elapsed=123m，current_budget=180m；当前 base coordinator 完成后不再启动新重型矩阵。"
+  },
+  "scope": "仅修正 F1a system next-fetch outcome settled 栅栏；pending/translated 不得单独解除，normal 必须是 current-epoch matching FIFO entry，fault 必须是 matching fault context，并复用既有 sys_fetch_merge。",
+  "acceptance": {
+    "required": "pre-fix first-trace 因果成立；post-fix system commit 等待匹配 outcome 且 fault 单次合并；feature-off/T-046/T-004 不回归；hard_sys_fetch_fault 与 hard_neon_fetch_fault base/cache/delay2 strict lockstep 全绿。",
+    "status": "pass",
+    "passed": [
+      "pre-fix pending/translated 误 settle first-trace",
+      "post-fix SV MMU fault d0/d2",
+      "correction d0 SCTLR.M=0 old-fault-FIFO and normal probes",
+      "correction FIFO-off SCTLR.M=0 probe",
+      "MMU-off branch negative control",
+      "H-04 probe",
+      "feature-off system/commit backpressure",
+      "Cocotb fetch FIFO d0/d1/d2",
+      "base strict lockstep hard_sys 25/25",
+      "base strict lockstep hard_neon 20/20",
+      "integrator final-SHA d0/d2/FIFO-off binary and directed probes",
+      "integrator final-SHA feature-off commit/system backpressure",
+      "integrator final-SHA hard_sys 25/25 and hard_neon 20/20 across base/cache/delay2"
+    ],
+    "not_complete": "none within T-006 L0-L2 acceptance; F1c/Gate D/Linux/Quartus remain separate tasks",
+    "recommendation": "accepted; mark done and release the heavy-test/write lock"
+  },
+  "root_cause": {
+    "first_trace_log": {
+      "uri": "build/agents/T-20260831-006/pre_fix/mmu_first_trace.log",
+      "sha256": "71ea2862ead3445207d69510debebfa0469c3293c9c15133e13e7292cd939984"
+    },
+    "pre_fix_signature": "cycle 114：IFID PC=0x44000ffc、insn=0xd5181005（MSR SCTLR_EL1），d_next_pc/fetch_pc_r=0x44001000，fetch_pending=1、fetch_translated=0、fetch_fifo_has_target=0、fetch_faulted=0，但 fetch_next_settled=1、sys_commit_ready=1、sys_commit=1、sys_fetch_merge=0。",
+    "fault_signature": "cycle 142：head_pc=0x44001000、epoch=6、seq=18、FSC=0x07、fifo_count=1、pop=0、fetch_faulted=1；pre-fix 160 周期无 IABT。",
+    "protocol_effect": "MSR 在真实 MMU fault outcome 到达前普通提交；fault response 不能另造绕过 QEMU pending PRE/COMMIT 的 synthetic packet。"
+  },
+  "implementation": {
+    "files": [
+      "rtl/lcvex_core.sv",
+      "tb/sv/lcvex_fetch_fifo_tb.sv",
+      "sim/difftest/test_program.py"
+    ],
+    "fetch_next_settled": "FIFO-on 仅接受 fetch_fifo_has_target 或 current-epoch、PC matching 的 fetch_faulted context；FIFO-off 保留原 pending/translated settled 语义。",
+    "context_change": "新增 core-local sys_fetch_context_change，覆盖 SCTLR/TCR/TTBR0/TTBR1/MAIR；context-changing MSR 遇旧 matching pending/translated/fault/FIFO 时由 sys_fetch_redirect quarantine，下一请求按 mmu_en_eff 重发。",
+    "sva": "F1a SVA 要求 fetch_next_settled 必须由 matching FIFO target 或 matching fault context 证明，禁止 pending/translated 单独 settle。",
+    "testbench": "H03_SETTLED_TRACE 输出 d.next_pc、fetch_pc_r、fetch_pending、fetch_translated、fetch_fifo_has_target、fetch_faulted、fetch_next_settled、sys_commit、sys_fetch_merge 等；H03_CONTEXT 覆盖旧 fault FIFO 到 SCTLR.M=0 的 MMU-off fresh target；H03_NEGATIVE 收尾验证 MMU-off branch fault merge。",
+    "public_boundary": "未修改 rtl/lcvex_pkg.sv、mem_req_t/mem_rsp_t、MMU、arbiter、SoC memory ABI、QEMU/plugin/comparator；未新增 response UID 或 synthetic IFID packet。"
+  },
+  "artifacts": [
+    {
+      "id": "image-hard-sys-fetch-fault",
+      "uri": "build/agents/T-20260831-006/l2/images/hard_sys_fetch_fault.bin",
+      "sha256": "6ff3033ba3b8e7559442a4c3ddeb54968d517cb6faf3d89612433a23f97fb360",
+      "bytes": 90112
+    },
+    {
+      "id": "image-hard-neon-fetch-fault",
+      "uri": "build/agents/T-20260831-006/l2/images/hard_neon_fetch_fault.bin",
+      "sha256": "b0f80713a25f460e8ae6e750b883beeacfb2c6d3d67fbd671edd65ccaa2802c3",
+      "bytes": 90112
+    },
+    {
+      "id": "pre-fix-first-trace",
+      "uri": "build/agents/T-20260831-006/pre_fix/mmu_first_trace.log",
+      "sha256": "71ea2862ead3445207d69510debebfa0469c3293c9c15133e13e7292cd939984"
+    },
+    {
+      "id": "post-fix-d2-probe-binary",
+      "uri": "build/agents/T-20260831-006/post_fix/obj_d2_final4/lcvex_fetch_fifo_tb",
+      "sha256": "9462291f98431ddb7f11263a7e36fdfa429f438f22a77206acaf4f91b46945cd"
+    },
+    {
+      "id": "post-fix-d0-probe-binary",
+      "uri": "build/agents/T-20260831-006/post_fix/obj_d0_final/lcvex_fetch_fifo_tb",
+      "sha256": "8b3d772b157d9f717f0ccb5c038ef25568dee8c0d47177a766d8a64aaeb01fff"
+    },
+    {
+      "id": "base-coordinator",
+      "uri": "build/agents/T-20260831-006/l2/coord_base/lockstep_coordinator",
+      "sha256": "49c918b48b2b51a931f3f01d0c3da323abb7cd05d7aa12c1f469258c00a96dad"
+    },
+    {
+      "id": "qemu-plugin-read-only",
+      "uri": "/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so",
+      "sha256": "caf7f1223eabf24af032c4a685f50dbbaf59b80e5e336e708764beed7e8d09f5",
+      "note": "外部 QEMU/plugin 只读，未修改。"
+    }
+  ],
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12（conda lcvex）",
+    "qemu": "11.1.0（固定 release）",
+    "resource_policy": "MemoryMax=15G、MemorySwapMax=0、CPUQuota=50%、MAKEFLAGS=-j1、VERILATOR_JOBS=1；重型作业串行"
+  },
+  "runs": [
+    {
+      "run_id": "prefix-trace-build",
+      "level": "L0",
+      "result": "pass",
+      "unit": "lcvex-t006-prefix-trace-build.service",
+      "started_at": "2026-08-31T12:59:56+08:00",
+      "finished_at": "2026-08-31T13:05:51+08:00",
+      "wall_seconds": 354.761,
+      "cpu_seconds": 177.396,
+      "peak_rss": "3.2G",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260831-006/pre_fix/obj_d2 -o lcvex_fetch_fifo_tb -GFETCH_FIFO_ENABLE=1 -GMEM_DELAY_MODE=2 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc"
+    },
+    {
+      "run_id": "prefix-mmu-first-trace",
+      "level": "L0",
+      "result": "pass_expected_pre_fix_repro",
+      "exit_code": 0,
+      "unit": "lcvex-t006-prefix-mmu-trace.service",
+      "started_at": "2026-08-31T13:06:00+08:00",
+      "finished_at": "2026-08-31T13:06:03+08:00",
+      "wall_seconds": 2.914,
+      "cpu_seconds": 1.462,
+      "peak_rss": "130.1M",
+      "log": "build/agents/T-20260831-006/pre_fix/mmu_first_trace.log",
+      "log_sha256": "71ea2862ead3445207d69510debebfa0469c3293c9c15133e13e7292cd939984",
+      "summary": "pending-only fetch_next_settled=1 and sys_commit=1 before fault; H03_PRE_FIX_REPRO"
+    },
+    {
+      "run_id": "postfix-d2-context-build",
+      "level": "L0",
+      "result": "pass",
+      "unit": "lcvex-t006-postfix-context-build.service",
+      "started_at": "2026-08-31T13:17:39+08:00",
+      "finished_at": "2026-08-31T13:23:30+08:00",
+      "wall_seconds": 351.829,
+      "cpu_seconds": 175.934,
+      "peak_rss": "3.1G",
+      "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260831-006/post_fix/obj_d2_context -o lcvex_fetch_fifo_tb -GFETCH_FIFO_ENABLE=1 -GMEM_DELAY_MODE=2 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc"
+    },
+    {
+      "run_id": "postfix-context-mmu-probe",
+      "level": "L0",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-postfix-context-mmu-probe.service",
+      "started_at": "2026-08-31T13:23:46+08:00",
+      "finished_at": "2026-08-31T13:23:49+08:00",
+      "wall_seconds": 2.997,
+      "cpu_seconds": 1.502,
+      "peak_rss": "129.9M",
+      "summary": "context-change revision: MSR waits and later sys_fetch_merge commits; superseded by final4 probe"
+    },
+    {
+      "run_id": "postfix-d2-final4-probe",
+      "level": "L0",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-final4-d2-mmu-probe.service",
+      "started_at": "2026-08-31T13:52:51+08:00",
+      "finished_at": "2026-08-31T13:52:52+08:00",
+      "wall_seconds": 1.313,
+      "cpu_seconds": 0.680,
+      "peak_rss": "131.1M",
+      "log": "build/agents/T-20260831-006/post_fix/mmu_final4_trace.log",
+      "log_sha256": "88ca9ebdf22d10fbdfe5c02b9f3b4acb53a587b82f528f3a64655aaccd2c415b",
+      "summary": "cycle 114–141 settled=0/sys_commit=0; cycle 142 sys_commit=1/sys_fetch_merge=1; cycle 143 one IABT; H03_POST_FIX_PASS"
+    },
+    {
+      "run_id": "postfix-d0-mmu-probe",
+      "level": "L0",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-final-d0-mmu-probe.service",
+      "started_at": "2026-08-31T13:59:31+08:00",
+      "finished_at": "2026-08-31T13:59:32+08:00",
+      "wall_seconds": 1.312,
+      "cpu_seconds": 0.699,
+      "peak_rss": "130.6M",
+      "log": "build/agents/T-20260831-006/post_fix/mmu_d0_trace.log",
+      "log_sha256": "65ca4563cbeecd2cea47e3a66d1185367f44e15f4e881f607ac773e8f84c1ef0",
+      "summary": "H03_POST_FIX_PASS; fault cycle 52"
+    },
+    {
+      "run_id": "postfix-imem-branch-negative",
+      "level": "L0",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-final4-d2-negative-probe.service",
+      "started_at": "2026-08-31T13:53:01+08:00",
+      "finished_at": "2026-08-31T13:53:02+08:00",
+      "wall_seconds": 1.185,
+      "cpu_seconds": 0.627,
+      "peak_rss": "129.9M",
+      "log": "build/agents/T-20260831-006/post_fix/imem_negative_final4_trace.log",
+      "log_sha256": "c7af6f115ba9e5c787a717d022651a12bfc6d54488b7a50cd4edc2db7c0f6636",
+      "summary": "MMU-off BR->0x5000 first IABT merged by existing fetch_merge_wb; EXC=0x21/ESR=0x86000010/FAR=0x5000; H03_NEGATIVE_PASS"
+    },
+    {
+      "run_id": "h04-regression",
+      "level": "L1",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-final2-d2-h04-probe.service",
+      "started_at": "2026-08-31T14:00:06+08:00",
+      "finished_at": "2026-08-31T14:00:07+08:00",
+      "wall_seconds": 1.166,
+      "cpu_seconds": 0.614,
+      "peak_rss": "129.6M",
+      "log": "build/agents/T-20260831-006/post_fix/h04_d2_trace.log",
+      "log_sha256": "52c7bca4ba6fa10e619199058b4e37060081c0b15ba5be582a928d3fbaf83240",
+      "summary": "WB-empty ready-low window retained IFID and atomically transferred FIFO head to IFID/IDEX"
+    },
+    {
+      "run_id": "feature-off-sv",
+      "level": "L1",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-feature-off-sv-rerun.service",
+      "started_at": "2026-08-31T14:32:00+08:00",
+      "finished_at": "2026-08-31T14:38:51+08:00",
+      "wall_seconds": 410.980,
+      "cpu_seconds": 205.244,
+      "peak_rss": "3.1G",
+      "binary": "build/agents/T-20260831-006/feature_off/obj_bp/lcvex_commit_backpressure_tb",
+      "binary_sha256": "b565b73355b9ce79b1a20e57a1916e321342c8311aa0d325deb63c430011a90f",
+      "summary": "commit backpressure + system MSR atomicity PASS"
+    },
+    {
+      "run_id": "feature-off-sv-probe",
+      "level": "L1",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-feature-off-sv-probe.service",
+      "started_at": "2026-08-31T14:39:01+08:00",
+      "finished_at": "2026-08-31T14:39:02+08:00",
+      "wall_seconds": 1.143,
+      "cpu_seconds": 0.582,
+      "peak_rss": "133.9M",
+      "log": "build/agents/T-20260831-006/feature_off/backpressure.log",
+      "log_sha256": "0f79f65ed82ba147593595cbb31d858b4b606ea48399934b4d2901b609f36a9a"
+    },
+    {
+      "run_id": "cocotb-fetch-fifo-d0",
+      "level": "L1",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-cocotb-d0.service",
+      "started_at": "2026-08-31T14:00:38+08:00",
+      "finished_at": "2026-08-31T14:10:04+08:00",
+      "wall_seconds": 566.515,
+      "cpu_seconds": 283.262,
+      "peak_rss": "1.2G",
+      "log": "build/agents/T-20260831-006/evidence/cocotb_d0.journal.log",
+      "log_sha256": "00a4da6395770336b143e8079c13943f6cea965a2c49721fcb3571fe24c62eca",
+      "command": "make -C sim/cocotb -f Makefile.fetch_fifo SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_fetch_fifo SIM_BUILD=../../build/agents/T-20260831-006/cocotb_d0 MEM_DELAY_MODE=0",
+      "summary": "TESTS=2 PASS=2 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "cocotb-fetch-fifo-d1",
+      "level": "L1",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-cocotb-d1.service",
+      "started_at": "2026-08-31T14:19:56+08:00",
+      "finished_at": "2026-08-31T14:30:06+08:00",
+      "wall_seconds": 609.371,
+      "cpu_seconds": 304.706,
+      "peak_rss": "1.2G",
+      "log": "build/agents/T-20260831-006/evidence/cocotb_d1.journal.log",
+      "log_sha256": "3551d3a81cd9359cb2b27a628fd4a92abb5602e97d6efacefecb5014225fd501",
+      "command": "make -C sim/cocotb -f Makefile.fetch_fifo SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_fetch_fifo SIM_BUILD=../../build/agents/T-20260831-006/cocotb_d1 MEM_DELAY_MODE=1",
+      "summary": "TESTS=2 PASS=2 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "cocotb-fetch-fifo-d2",
+      "level": "L1",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-cocotb-d2.service",
+      "started_at": "2026-08-31T14:10:16+08:00",
+      "finished_at": "2026-08-31T14:19:44+08:00",
+      "wall_seconds": 568.917,
+      "cpu_seconds": 284.491,
+      "peak_rss": "1.2G",
+      "log": "build/agents/T-20260831-006/evidence/cocotb_d2.journal.log",
+      "log_sha256": "3491696c8dfd386288d7a25c4b7e6d173fca4b96aaeccb1dd003ae5c7b4d992b",
+      "command": "make -C sim/cocotb -f Makefile.fetch_fifo SIM=verilator TOPLEVEL=lcvex_soc_tb COCOTB_TEST_MODULES=test_fetch_fifo SIM_BUILD=../../build/agents/T-20260831-006/cocotb_d2 MEM_DELAY_MODE=2",
+      "summary": "TESTS=2 PASS=2 FAIL=0 SKIP=0"
+    },
+    {
+      "run_id": "base-coordinator-build",
+      "level": "L2",
+      "result": "pass",
+      "unit": "lcvex-t006-l2-coord-base-build-rerun.service",
+      "started_at": "2026-08-31T14:50:56+08:00",
+      "finished_at": "2026-08-31T15:00:22+08:00",
+      "wall_seconds": 565.883,
+      "cpu_seconds": 282.954,
+      "peak_rss": "4.7G",
+      "binary": "build/agents/T-20260831-006/l2/coord_base/lockstep_coordinator",
+      "binary_sha256": "49c918b48b2b51a931f3f01d0c3da323abb7cd05d7aa12c1f469258c00a96dad",
+      "command": "verilator --cc --exe --build --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_soc_tb -GFETCH_FIFO_ENABLE=1 -GFETCH_FIFO_DEPTH=2 -GFETCH_EPOCH_W=8 -GMEM_DELAY_MODE=0 -Mdir build/agents/T-20260831-006/l2/coord_base -o lockstep_coordinator --public-flat-rw -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv sim/mmio/lcvex_mmio_fabric.cc -CFLAGS '-I/usr/include' -LDFLAGS '-lz' sim/difftest/lockstep_coordinator.cc"
+    },
+    {
+      "run_id": "base-lockstep-hard-sys",
+      "level": "L2",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-l2-base-hard-sys.service",
+      "started_at": "2026-08-31T15:00:48+08:00",
+      "finished_at": "2026-08-31T15:00:52+08:00",
+      "wall_seconds": 3.502,
+      "cpu_seconds": 1.755,
+      "peak_rss": "248.6M",
+      "logs": {
+        "run": "build/agents/T-20260831-006/l2/base/hard_sys/run.log",
+        "run_sha256": "7c9ab3c6b87a38c30a32a54661288ffae923d9b0839324b9eff23b358f20a02d",
+        "coord": "build/agents/T-20260831-006/l2/base/hard_sys/coord.log",
+        "coord_sha256": "a675d72aa6bad15f6c848661e882bf5162d8c38f62b3e9ee7b36026f40ea47a9",
+        "qemu": "build/agents/T-20260831-006/l2/base/hard_sys/qemu.log",
+        "qemu_sha256": "50b7eec089a4d55a2db04d4595a92e211a1d8876d13441817a9a543224d1bd26"
+      },
+      "summary": "hard_sys_fetch_fault 25/25；seq 11 PC=0x44000ffc exception next=0x44010200 与 QEMU 一致"
+    },
+    {
+      "run_id": "base-lockstep-hard-neon",
+      "level": "L2",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-l2-base-hard-neon.service",
+      "started_at": "2026-08-31T15:01:10+08:00",
+      "finished_at": "2026-08-31T15:01:13+08:00",
+      "wall_seconds": 3.432,
+      "cpu_seconds": 1.725,
+      "peak_rss": "168.5M",
+      "logs": {
+        "run": "build/agents/T-20260831-006/l2/base/hard_neon/run.log",
+        "run_sha256": "18419927d180783457aef2935c82d009cf961fcb5614a0e91d8b264863f5760d",
+        "coord": "build/agents/T-20260831-006/l2/base/hard_neon/coord.log",
+        "coord_sha256": "1ed1a72a14bdeac3d9eddf41a3654442407b130bc1ec10f39e089e98f7617b87",
+        "qemu": "build/agents/T-20260831-006/l2/base/hard_neon/qemu.log",
+        "qemu_sha256": "c515fe86b9cbde16dc11575873ede104f231f8a148b79d9a78be84b6285ca510"
+      },
+      "summary": "hard_neon_fetch_fault 20/20；seq 10 PC=0x44000028 exception next=0x44010200 与 QEMU 一致"
+    },
+    {
+      "run_id": "final-source-lint",
+      "level": "L0",
+      "result": "pass",
+      "exit_code": 0,
+      "unit": "lcvex-t006-context-final-lint.service",
+      "started_at": "2026-08-31T15:02:59+08:00",
+      "finished_at": "2026-08-31T15:03:54+08:00",
+      "wall_seconds": 54.689,
+      "cpu_seconds": 27.389,
+      "peak_rss": "413.1M",
+      "command": "verilator --lint-only --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_soc_tb -GFETCH_FIFO_ENABLE=1 -GFETCH_FIFO_DEPTH=2 -GFETCH_EPOCH_W=8 -GMEM_DELAY_MODE=2 -Mdir build/agents/T-20260831-006/lint_context_final -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+      "summary": "最终 source cleanup 后 lint PASS；未重建 binary"
+    }
+  ],
+  "diagnostic_failures": [
+    {
+      "run_id": "postfix-build-missing-dir",
+      "unit": "lcvex-t006-postfix-build.service",
+      "started_at": "2026-08-31T13:07:15+08:00",
+      "finished_at": "2026-08-31T13:08:10+08:00",
+      "exit_code": 1,
+      "peak_rss": "752.1M",
+      "reason": "未预创建 obj_d2 目录，Verilator Can't write file；非 RTL 错误。"
+    },
+    {
+      "run_id": "feature-off-invalid-parameter",
+      "unit": "lcvex-t006-feature-off-sv.service",
+      "started_at": "2026-08-31T14:31:37+08:00",
+      "finished_at": "2026-08-31T14:31:39+08:00",
+      "exit_code": 1,
+      "peak_rss": "91.6M",
+      "reason": "backpressure top 不暴露 FETCH_FIFO_ENABLE/MEM_DELAY_MODE，手工 -G 参数无效；随后去掉参数重跑成功。"
+    },
+    {
+      "run_id": "base-coordinator-missing-mmio-source",
+      "unit": "lcvex-t006-l2-coord-base-build.service",
+      "started_at": "2026-08-31T14:39:56+08:00",
+      "finished_at": "2026-08-31T14:50:22+08:00",
+      "exit_code": 2,
+      "peak_rss": "4.5G",
+      "reason": "手工 coordinator 命令漏传 sim/mmio/lcvex_mmio_fabric.cc，链接出现既有 fabric undefined references；补齐后重跑成功。"
+    },
+    {
+      "run_id": "correction-sctlr-disable-oldfault-fifo-monitor-retry",
+      "unit": "direct SV probe (pre-final2 monitor)",
+      "started_at": "2026-08-31T17:00:20+08:00",
+      "finished_at": "2026-08-31T17:00:21+08:00",
+      "exit_code": 1,
+      "log": "build/agents/T-20260831-006/correction/sctlr_disable_oldfault_fifo_final3.log",
+      "log_sha256": "491803e25cc134a77a33acf8bf56d0ac2557a035acef9a9bb560164605397c32",
+      "reason": "探针仍要求 IFID target 与 FIFO head 同拍；实际 FIFO head 在 cycle 157、IFID target 在 cycle 158，DUT 已在 MMU-off 正常取指。最终 monitor 改为 commit 后匹配 FIFO head/IFID 时序并复跑 PASS。"
+    },
+    {
+      "run_id": "correction-sctlr-disable-fifo-off-inapplicable",
+      "unit": "direct FIFO-off SV probe",
+      "started_at": "2026-08-31T17:22:30+08:00",
+      "finished_at": "2026-08-31T17:22:38+08:00",
+      "exit_code": 1,
+      "log": "build/agents/T-20260831-006/correction/sctlr_disable_fifo_off.log",
+      "log_sha256": "890949e2be9043c693c98f31343fddffba527b77833480ebbb160bac3f263bcd",
+      "reason": "FIFO-off 不产生 FIFO entry，FIFO 专用 disable_fault 收尾条件必然不满足；日志仍显示 SCTLR commit 的 sys_fetch_merge=0。改用 FIFO-off kind=disable 语义复跑 PASS。"
+    }
+  ],
+  "static_checks": [
+    {
+      "check": "verilator final lint",
+      "result": "pass",
+      "unit": "lcvex-t006-context-final-lint.service"
+    },
+    {
+      "check": "git diff --check",
+      "result": "pass",
+      "summary": "实现与文档提交前执行"
+    },
+      {
+        "check": "JSON parse",
+        "result": "pass",
+        "summary": "python3 -m json.tool docs/tasks/evidence/T-20260831-006.json"
+      },
+      {
+        "check": "final correction source checks",
+        "result": "pass",
+        "summary": "python3 -m py_compile sim/difftest/test_program.py；python3 -m json.tool docs/tasks/evidence/T-20260831-006.json；git diff --check"
+      }
+  ],
+  "not_run": [
+    "L2 cache coordinator/lockstep",
+    "L2 delay2 coordinator/lockstep",
+    "完整 196-row F1c",
+    "Gate D",
+    "Linux",
+    "Quartus/FPGA",
+    "QEMU/plugin/公共 ABI 修改"
+  ],
+  "known_limits": [
+    "standalone reset-PC/vector 二次 fault、通用 H-01 UID、F1b/F1c 不在范围。",
+    "完整 F1c、Gate D、Linux、Quartus/FPGA 未在 T-006 中运行。"
+  ],
+  "next": "独立登记完整 196-row F1c，并以 48f8e7d 重建 A10 resource candidate。",
+  "correction": {
+    "base_tip": "16a549d4737dedbf2ddb50b4ac94c33a68b8b523",
+    "source_tip": null,
+    "source_tip_note": "correction commit SHA 在 FINAL 报告；不在自身 evidence 中自引用。",
+    "reported_at": "2026-08-31T17:24:00+08:00",
+    "status": "review_ready",
+    "implementation": {
+      "refresh_needed": "sys_fetch_context_change && effective MMU && fetch_epoch == ifid_token_epoch；SCTLR.M=0 不触发。",
+      "exactly_once": "refresh_needed 且无 fetch_trans_busy 时强制 sys_fetch_redirect；epoch bump 后 fetch_epoch != ifid_token_epoch，fresh outcome 才能 settle。",
+      "merged_msr_effect": "sys_fetch_merge 的 sys_exc 分支对 SCTLR/TCR/TTBR0/TTBR1/MAIR 显式保留 MSR 写效果；内部 SVA 与 TB 在 commit 后检查寄存器值。",
+      "public_boundary": "不修改 UID/QEMU/plugin/comparator/pkg/MMU/arbiter/mem ABI，不新增 synthetic packet。"
+    },
+    "artifacts": {
+      "correction_d0_binary": {
+        "uri": "build/agents/T-20260831-006/correction/obj_d0_final2/lcvex_fetch_fifo_tb",
+        "sha256": "8e846c33068a137bafaac235a49e01d399229e1b9cd4a4f84c0aa75565930ec1"
+      },
+      "correction_fifo_off_d0_binary": {
+        "uri": "build/agents/T-20260831-006/correction/obj_fifo_off_d0/lcvex_fetch_fifo_tb",
+        "sha256": "36f471fc6b53f24a67e6f1fa6be3ec5ca4796452aca9dfd0dd37548c4dbb69e9"
+      },
+      "images": {
+        "tcr_normal.bin": "8d758e9da5869143dcc6d3d45b50495f911da655e553bc1eaba60bd8b6ce840f",
+        "tcr_normal.bin.hex": "a3ac0a5493b53df463d8c763b024a14cedde8f6600e2ac64b782b9eb28081e13",
+        "ttbr0_fault.bin": "2417e6c3716846181392720ae5d9b6b5dffda0b72f62a8aa6826d2f3a0464050",
+        "ttbr0_fault.bin.hex": "b6567e54cfdc25da6b0b808ddd1b5a52738293b67598328e80dbda4086a87f2c",
+        "ttbr1_normal.bin": "5a52210bb57e73aa1a9afb3ce54be336ddbdf60c8c6da839660509db5e4f21bd",
+        "ttbr1_normal.bin.hex": "4058b032fc5b120f1502198a978d6d40af729cd57496f6bfd9af7152d6d08b92",
+        "mair_normal.bin": "60e1797c079b56ce031bd0301d3c1b4810c242138dbf89c9aa390cfd409da79d",
+        "mair_normal.bin.hex": "eddc053e2af2ffdec52afda94ad3b902d40b062532123b52b2f12ef4a7b504b9",
+        "sctlr_disable.bin": "4c142ae4d0373669ec661caba0431eafd67dc900ac95aa08a244ea725f512f6d",
+        "sctlr_disable.bin.hex": "e8b0bcb8082ff865d9cf4a28b0dc5b4817b96dca8ffc6fff25e7d11e62a741c4",
+        "tcr_fifo.bin": "5283af3f8e51d7a4000a2ca07d7851a0f5604c3c703996213ed366ebb406830b",
+        "tcr_fifo.bin.hex": "43b8cfd4be06342f67c5b7527412398f26eb0f802751d2d7ba26b4e2b2031947",
+        "ttbr1_fifo.bin": "e47e5cf7a2f6d27bf6738385cd9bbc7877c9822eef11fc30b82db91b21f63494",
+        "ttbr1_fifo.bin.hex": "f564c3bebd2c14a20e3291d1d23a8121b387af5e58829155d5c3fa97e3ef622c",
+        "mair_fifo.bin": "09dda5cf2c2902c76124927ba6e611d21a26a89d7bb4b764da68bc938500828c",
+        "mair_fifo.bin.hex": "5acf3253fa07a0787b37c7ad8078902f1ad2d4b0a50038f36cc1e09c0c869d4d"
+      }
+    },
+    "runs": [
+      {
+        "run_id": "correction-sv-d0-build-rerun9",
+        "level": "L0",
+        "result": "pass",
+        "unit": "lcvex-t006-correction-sv-d0-build-rerun9.service",
+        "started_at": "2026-08-31T16:23:42+08:00",
+        "finished_at": "2026-08-31T16:29:38+08:00",
+        "wall_seconds": 356.676,
+        "cpu_seconds": 178.363,
+        "peak_rss": "3.2G",
+        "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260831-006/correction/obj_d0 -o lcvex_fetch_fifo_tb -GFETCH_FIFO_ENABLE=1 -GMEM_DELAY_MODE=0 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+        "binary_sha256": "2c245cc57084b6dd052864809a5d16b2913652da84dea374540e2d1ec3645e54"
+      },
+      {
+        "run_id": "correction-old-pending",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-old-pending-final2.service",
+        "started_at": "2026-08-31T16:05:08+08:00",
+        "finished_at": "2026-08-31T16:05:09+08:00",
+        "wall_seconds": 1.252,
+        "cpu_seconds": 0.654,
+        "peak_rss": "129.9M",
+        "log": "build/agents/T-20260831-006/correction/old_pending_final2.log",
+        "log_sha256": "f0e7a309eede5c2996c427ea17a7c4fdff593743488f0b743f68d7040975975c",
+        "summary": "old_pending=1, redirects=1, refresh=1, fresh=1, fresh sys_fetch_merge=1, SCTLR write effect c50839"
+      },
+      {
+        "run_id": "correction-old-translated",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-context-tcr-translated.service",
+        "started_at": "2026-08-31T16:17:27+08:00",
+        "finished_at": "2026-08-31T16:17:28+08:00",
+        "wall_seconds": 1.362,
+        "cpu_seconds": 0.701,
+        "peak_rss": "129.9M",
+        "log": "build/agents/T-20260831-006/correction/tcr_translated.log",
+        "log_sha256": "145fc25c2226f7ddfdc46e9f34769a8f0c6b07c08ee6f4d8cc3ec4c2793cd658",
+        "summary": "old_translated=1; refresh 后 cycle 78 FIFO=0，cycle 79 发 fresh request，TCR normal write effect"
+      },
+      {
+        "run_id": "correction-old-fault-fifo",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-context-ttbr0-fault.service",
+        "started_at": "2026-08-31T16:17:50+08:00",
+        "finished_at": "2026-08-31T16:17:52+08:00",
+        "wall_seconds": 1.315,
+        "cpu_seconds": 0.677,
+        "peak_rss": "130M",
+        "log": "build/agents/T-20260831-006/correction/ttbr0_fault.log",
+        "log_sha256": "ee46e59196dcd350916f2e269ec59c062f66b1b6976e809cc67d1195681c498f",
+        "summary": "old_fault=1, redirects=1, refresh=1, fresh=1, sys_fetch_merge=1, TTBR0 write effect=0x44018000"
+      },
+      {
+        "run_id": "correction-old-normal-fifo-tcr",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-context-tcr-fifo.service",
+        "started_at": "2026-08-31T16:20:46+08:00",
+        "finished_at": "2026-08-31T16:20:47+08:00",
+        "wall_seconds": 1.304,
+        "cpu_seconds": 0.656,
+        "peak_rss": "129.9M",
+        "log": "build/agents/T-20260831-006/correction/tcr_fifo.log",
+        "log_sha256": "e69195c0981c22d39638e0c7ff0476d36c503c7fc57edc77f9f40107f535208c",
+        "summary": "old_normal=1, redirects=1, refresh=1, fresh=1, TCR write effect"
+      },
+      {
+        "run_id": "correction-old-normal-fifo-ttbr1",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-context-ttbr1-fifo.service",
+        "started_at": "2026-08-31T16:21:16+08:00",
+        "finished_at": "2026-08-31T16:21:17+08:00",
+        "wall_seconds": 1.292,
+        "cpu_seconds": 0.660,
+        "peak_rss": "129.9M",
+        "log": "build/agents/T-20260831-006/correction/ttbr1_fifo.log",
+        "log_sha256": "250c4ccee17e8afeb5d0b55bca9bfc031093b0f424a54bc360468f6f68ea9640",
+        "summary": "old_normal=1, redirects=1, refresh=1, fresh=1, TTBR1 write effect"
+      },
+      {
+        "run_id": "correction-old-normal-fifo-mair",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-context-mair-fifo.service",
+        "started_at": "2026-08-31T16:21:32+08:00",
+        "finished_at": "2026-08-31T16:21:34+08:00",
+        "wall_seconds": 1.315,
+        "cpu_seconds": 0.684,
+        "peak_rss": "129.9M",
+        "log": "build/agents/T-20260831-006/correction/mair_fifo.log",
+        "log_sha256": "94f591c603ac130b152b2394f8deb0e03531f1fd7d72a6de2fb18dab10b1614a",
+        "summary": "old_normal=1, redirects=1, refresh=1, fresh=1, MAIR write effect"
+      },
+      {
+        "run_id": "correction-sctlr-disable-negative",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-context-disable-final2.service",
+        "started_at": "2026-08-31T16:29:52+08:00",
+        "finished_at": "2026-08-31T16:29:53+08:00",
+        "wall_seconds": 1.324,
+        "cpu_seconds": 0.670,
+        "peak_rss": "130M",
+        "log": "build/agents/T-20260831-006/correction/sctlr_disable_final2.log",
+        "log_sha256": "e43174d958b0f7e91653271865f654f91f9e8107c5070b1f62c5046782d1379a",
+        "summary": "SCTLR.M=0 refresh_needed=0, redirects=0, normal commit, write effect=0"
+      },
+      {
+        "run_id": "correction-sv-d0-build-final2",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-sv-d0-build-final2.service",
+        "started_at": "2026-08-31T17:09:18+08:00",
+        "finished_at": "2026-08-31T17:15:13+08:00",
+        "wall_seconds": 355.011,
+        "cpu_seconds": 177.528,
+        "peak_rss": "3.2G",
+        "binary": "build/agents/T-20260831-006/correction/obj_d0_final2/lcvex_fetch_fifo_tb",
+        "binary_sha256": "8e846c33068a137bafaac235a49e01d399229e1b9cd4a4f84c0aa75565930ec1",
+        "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260831-006/correction/obj_d0_final2 -o lcvex_fetch_fifo_tb -GFETCH_FIFO_ENABLE=1 -GMEM_DELAY_MODE=0 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+        "summary": "最终 H03 probe 条件（FIFO head/IFID 时序兼容）编译 PASS"
+      },
+      {
+        "run_id": "correction-sctlr-disable-oldfault-fifo-final4",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "started_at": "2026-08-31T17:15:15+08:00",
+        "finished_at": "2026-08-31T17:15:23+08:00",
+        "log": "build/agents/T-20260831-006/correction/sctlr_disable_oldfault_fifo_final4.log",
+        "log_sha256": "0aac939f1adc820fd7f5b6393c05bddef1d28517eb309bb4c5c5646fc8d1d50b",
+        "command": "build/agents/T-20260831-006/correction/obj_d0_final2/lcvex_fetch_fifo_tb +H03_CONTEXT +H03_CONTEXT_KIND=disable_fault +H03_CONTEXT_REG=5 +H03_CONTEXT_VALUE=0 +H03_LABEL=sctlr_disable_oldfault_fifo +PROBE_HEX=build/agents/T-20260831-006/correction/images/sctlr_disable_fault_fifo.bin.hex +PROBE_WORDS=22528",
+        "summary": "old_fault=1；SCTLR commit 后 sys_fetch_merge=0、sys_fetch_merge_allowed=0、mmu_en_eff=0；fresh normal target 观察到且无异常"
+      },
+      {
+        "run_id": "correction-sctlr-disable-final3",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "started_at": "2026-08-31T17:15:32+08:00",
+        "finished_at": "2026-08-31T17:15:41+08:00",
+        "log": "build/agents/T-20260831-006/correction/sctlr_disable_final3.log",
+        "log_sha256": "4f79bf9bd63156dbaf576dabcfa58c5cb457f061143fe5527b4d6a85539bc50a",
+        "command": "build/agents/T-20260831-006/correction/obj_d0_final2/lcvex_fetch_fifo_tb +H03_CONTEXT +H03_CONTEXT_KIND=disable +H03_CONTEXT_REG=5 +H03_CONTEXT_VALUE=0 +H03_LABEL=sctlr_disable_final3 +PROBE_HEX=build/agents/T-20260831-006/correction/images/sctlr_disable.bin.hex +PROBE_WORDS=22528",
+        "summary": "SCTLR.M=0 普通 commit，sys_fetch_merge=0、commit_exc=0、mmu_en_eff=0"
+      },
+      {
+        "run_id": "correction-sv-fifo-off-d0-build",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "unit": "lcvex-t006-correction-sv-fifo-off-d0-build.service",
+        "started_at": "2026-08-31T17:16:28+08:00",
+        "finished_at": "2026-08-31T17:22:20+08:00",
+        "wall_seconds": 351.228,
+        "cpu_seconds": 175.630,
+        "peak_rss": "3.2G",
+        "binary": "build/agents/T-20260831-006/correction/obj_fifo_off_d0/lcvex_fetch_fifo_tb",
+        "binary_sha256": "36f471fc6b53f24a67e6f1fa6be3ec5ca4796452aca9dfd0dd37548c4dbb69e9",
+        "command": "verilator --binary --timing --assert -Wall -Wno-fatal -Wno-UNUSEDPARAM -j 1 --top-module lcvex_fetch_fifo_tb -Mdir build/agents/T-20260831-006/correction/obj_fifo_off_d0 -o lcvex_fetch_fifo_tb -GFETCH_FIFO_ENABLE=0 -GMEM_DELAY_MODE=0 -f rtl/filelist.f tb/sv/lcvex_soc_tb.sv tb/sv/lcvex_fetch_fifo_tb.sv sim/mmio/lcvex_mmio_fabric.cc",
+        "summary": "FIFO-off correction binary 编译 PASS"
+      },
+      {
+        "run_id": "correction-sctlr-disable-oldfault-fifo-off",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "started_at": "2026-08-31T17:23:30+08:00",
+        "finished_at": "2026-08-31T17:23:40+08:00",
+        "log": "build/agents/T-20260831-006/correction/sctlr_disable_oldfault_fifo_off.log",
+        "log_sha256": "d82430a878f3762aec1dbbfd9b04c515aaf4a3efac080cf18b726854742e2f6a",
+        "command": "build/agents/T-20260831-006/correction/obj_fifo_off_d0/lcvex_fetch_fifo_tb +H03_CONTEXT +H03_CONTEXT_KIND=disable +H03_CONTEXT_REG=5 +H03_CONTEXT_VALUE=0 +H03_LABEL=sctlr_disable_oldfault_fifo_off +PROBE_HEX=build/agents/T-20260831-006/correction/images/sctlr_disable_fault_fifo.bin.hex +PROBE_WORDS=22528",
+        "summary": "FIFO-off old-fault image 的 SCTLR.M=0 commit 为 sys_fetch_merge=0、commit_exc=0、mmu_en_eff=0"
+      },
+      {
+        "run_id": "correction-sctlr-disable-fifo-off",
+        "level": "L0",
+        "result": "pass",
+        "exit_code": 0,
+        "started_at": "2026-08-31T17:23:08+08:00",
+        "finished_at": "2026-08-31T17:23:18+08:00",
+        "log": "build/agents/T-20260831-006/correction/sctlr_disable_fifo_off_final2.log",
+        "log_sha256": "581edd54aa1d7f8f215049def9a352bd9094c75b1026a85b0c263cef85efda80",
+        "command": "build/agents/T-20260831-006/correction/obj_fifo_off_d0/lcvex_fetch_fifo_tb +H03_CONTEXT +H03_CONTEXT_KIND=disable +H03_CONTEXT_REG=5 +H03_CONTEXT_VALUE=0 +H03_LABEL=sctlr_disable_fifo_off +PROBE_HEX=build/agents/T-20260831-006/correction/images/sctlr_disable_fault.bin.hex +PROBE_WORDS=22528",
+        "summary": "FIFO-off SCTLR.M=0 普通 commit，日志无 sys_fetch_merge=1，目标 MMU-off 取指继续"
+      }
+    ],
+    "static_checks": [
+      {
+        "check": "python3 -m py_compile sim/difftest/test_program.py",
+        "result": "pass"
+      },
+      {
+        "check": "git diff --check",
+        "result": "pass"
+      }
+    ],
+    "not_run": [
+      "correction 后 cache/delay2 strict lockstep",
+      "correction 后完整 F1c/Gate D/Linux/Quartus"
+    ]
+  },
+  "integrator_validation": {
+    "status": "pass",
+    "accepted_at": "2026-08-31T20:13:47+08:00",
+    "technical_tip": "48f8e7de1f897bc50611f8edb586e270016db731",
+    "rtl_tb_merge_tip": "2c149402614c6562021a60aac568e568840ae058",
+    "replayable_probe_tip": "ee9c28f6477252fd0ab9170ba914db7dc7e95ea6",
+    "review_chain": [
+      {
+        "reviewed_tip": "16a549d4737dedbf2ddb50b4ac94c33a68b8b523",
+        "reported_at": "2026-08-31T15:14:38+08:00",
+        "result": "blocking: old context FIFO/fault outcome could bypass quarantine and merged fault lost the translation-context MSR write effect"
+      },
+      {
+        "reviewed_tip": "cc3325c5ca97f7bff72eb5678ac223f8e6190dd3",
+        "reported_at": "2026-08-31T16:44:31+08:00",
+        "result": "blocking: SCTLR.M=0 could still merge an old-context fault"
+      },
+      {
+        "reviewed_tip": "ec2388a8985187743e68863da8d8ba8004f30aa8",
+        "reported_at": "2026-08-31T17:32:54+08:00",
+        "result": "accept_with_required_rerun"
+      }
+    ],
+    "resource_policy": {
+      "heavy_jobs": "serial only",
+      "MemoryMax": "15G",
+      "MemorySwapMax": "0",
+      "CPUQuota": "50%",
+      "jobs": 1,
+      "observed_max_peak": "4.7G",
+      "observed_swap_peak": "0B"
+    },
+    "artifacts": {
+      "sv_fifo_on_d0": {"path": "build/agents/T-20260831-006/integrator/obj_d0/lcvex_fetch_fifo_tb", "sha256": "8e846c33068a137bafaac235a49e01d399229e1b9cd4a4f84c0aa75565930ec1"},
+      "sv_fifo_on_d2": {"path": "build/agents/T-20260831-006/integrator/obj_d2/lcvex_fetch_fifo_tb", "sha256": "75568b0bfb54f273fb37273060a9a9c2ef2bb21c28729b9c3cb5ee7bc2c245bf"},
+      "sv_fifo_off_d0": {"path": "build/agents/T-20260831-006/integrator/obj_f0_d0/lcvex_fetch_fifo_tb", "sha256": "36f471fc6b53f24a67e6f1fa6be3ec5ca4796452aca9dfd0dd37548c4dbb69e9"},
+      "sv_backpressure": {"path": "obj_dir_bp/lcvex_commit_backpressure_tb", "sha256": "92cbb48a68552cb90b63af03e720e95ef17382697389ee990da5e7c99ba97192"},
+      "coordinator_base": {"path": "build/agents/T-20260831-006/integrator/coord_base/lockstep_coordinator", "sha256": "c61760cf13ac70e10dab41b0ae635fec77e7457f860d4ec3f833637f2100124d"},
+      "coordinator_cache": {"path": "build/agents/T-20260831-006/integrator/coord_cache/lockstep_coordinator", "sha256": "b03a642d5018849bf7f147cae35bf1599fe33349372267c3ad359656716fa929"},
+      "coordinator_delay2": {"path": "build/agents/T-20260831-006/integrator/coord_delay2/lockstep_coordinator", "sha256": "3316efa158e6391cc419a433c7dce738fee5885e35c1b4a70cc6b49f42b31eb8"},
+      "old_fault_v2_image": {"path": "build/agents/T-20260831-006/integrator/images/sctlr_disable_fault_fifo_v2.bin", "sha256": "642c33e2104c50c26d3a4d2bf3e964a40e7e8b93abe38372f3090f1eff2c672f"},
+      "old_fault_v2_hex": {"path": "build/agents/T-20260831-006/integrator/images/sctlr_disable_fault_fifo_v2.bin.hex", "sha256": "0f6894d617fe03e672986028bc8bcc95616173bfcd44cef04bcaad95ec98c412"},
+      "qemu_binary": {"path": "/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64", "sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e"},
+      "qemu_plugin": {"path": "qemu/plugins/lcvex_difftest.so", "sha256": "caf7f1223eabf24af032c4a685f50dbbaf59b80e5e336e708764beed7e8d09f5"}
+    },
+    "build_runs": [
+      {"unit": "lcvex-t006-int-sv-d0.service", "started_at": "2026-08-31T17:38:05+08:00", "finished_at": "2026-08-31T17:44:07+08:00", "wall": "6min 2.017s", "peak": "3.2G", "swap": "0B", "result": "pass"},
+      {"unit": "lcvex-t006-int-sv-d2.service", "started_at": "2026-08-31T17:45:23+08:00", "finished_at": "2026-08-31T17:51:41+08:00", "wall": "6min 17.565s", "peak": "3.1G", "swap": "0B", "result": "pass"},
+      {"unit": "lcvex-t006-int-sv-f0-d0.service", "started_at": "2026-08-31T19:21:59+08:00", "finished_at": "2026-08-31T19:28:04+08:00", "wall": "6min 4.945s", "peak": "3.1G", "swap": "0B", "result": "pass"},
+      {"unit": "lcvex-t006-int-feature-off-bp.service", "started_at": "2026-08-31T19:29:31+08:00", "finished_at": "2026-08-31T19:35:32+08:00", "wall": "6min 0.121s", "peak": "3.2G", "swap": "0B", "result": "pass"},
+      {"unit": "lcvex-t006-int-coord-base.service", "started_at": "2026-08-31T19:36:05+08:00", "finished_at": "2026-08-31T19:46:43+08:00", "wall": "10min 37.840s", "peak": "4.5G", "swap": "0B", "result": "pass"},
+      {"unit": "lcvex-t006-int-coord-cache.service", "started_at": "2026-08-31T19:47:10+08:00", "finished_at": "2026-08-31T19:56:37+08:00", "wall": "9min 27.768s", "peak": "4.7G", "swap": "0B", "result": "pass"},
+      {"unit": "lcvex-t006-int-coord-delay2.service", "started_at": "2026-08-31T19:57:02+08:00", "finished_at": "2026-08-31T20:06:28+08:00", "wall": "9min 26.487s", "peak": "4.7G", "swap": "0B", "result": "pass"}
+    ],
+    "directed_results": {
+      "fifo_on_d0": "smoke/H04/T046-duplicate/MMU-fault/old-fault-v2 pass",
+      "fifo_on_d2": "smoke/H04/T046-duplicate/MMU-fault/old-fault-v2 pass",
+      "fifo_off_d0": "old-fault image SCTLR.M=0 normal commit pass",
+      "feature_off_backpressure": "no loss/duplication and system MSR commit-ready atomicity pass",
+      "old_fault_v2_d0_log_sha256": "0f860fc9d4b5803f55ad5b338c811834343f69698ce4bedb2797930145106a5c",
+      "old_fault_v2_d2_log_sha256": "896c8b2a376497df3252efbc522d723e5858302871766cbc31d116880b5002c7",
+      "fifo_off_old_fault_log_sha256": "408e73e05d82312040bf468ecda5c5175dcdc081fd15fe57ce04e5fc5b08e066",
+      "feature_off_backpressure_log_sha256": "18c81f0d0f05563f1113765d6f15a663efc438da2b84cd152f410570e58d3619"
+    },
+    "strict_lockstep": {
+      "unit": "lcvex-t006-int-lockstep6-rerun.service",
+      "started_at": "2026-08-31T20:09:16+08:00",
+      "finished_at": "2026-08-31T20:09:39+08:00",
+      "wall": "22.889s",
+      "peak": "184.3M",
+      "swap": "0B",
+      "result": "6/6 pass",
+      "cases": [
+        {"config": "base", "image": "hard_sys_fetch_fault", "commits": "25/25", "run_sha256": "37b412793d3eddce576cc3d3d4a5242b960ee2c42ea96c65dd3456221885f364"},
+        {"config": "base", "image": "hard_neon_fetch_fault", "commits": "20/20", "run_sha256": "e8f599395305a36d7bc92379f4f9207b2a189438c74713b4808383702abe38ce"},
+        {"config": "cache", "image": "hard_sys_fetch_fault", "commits": "25/25", "run_sha256": "37b412793d3eddce576cc3d3d4a5242b960ee2c42ea96c65dd3456221885f364"},
+        {"config": "cache", "image": "hard_neon_fetch_fault", "commits": "20/20", "run_sha256": "e8f599395305a36d7bc92379f4f9207b2a189438c74713b4808383702abe38ce"},
+        {"config": "delay2", "image": "hard_sys_fetch_fault", "commits": "25/25", "run_sha256": "37b412793d3eddce576cc3d3d4a5242b960ee2c42ea96c65dd3456221885f364"},
+        {"config": "delay2", "image": "hard_neon_fetch_fault", "commits": "20/20", "run_sha256": "e8f599395305a36d7bc92379f4f9207b2a189438c74713b4808383702abe38ce"}
+      ]
+    },
+    "diagnostic_failures": [
+      {
+        "unit": "lcvex-t006-int-sv-d2-probes.service",
+        "result": "expected test-precondition failure",
+        "reason": "original old-fault image placed MUL too early and did not produce old_fault under d2; no RTL assertion failed",
+        "failed_log_sha256": "b673a3633702b6827c8b564fcedfd53c07dceef2c8e9cc6c1dcec7db7f09911c",
+        "correction": "move MUL immediately before page-end MSR; v2 passes d0/d2"
+      },
+      {
+        "unit": "lcvex-t006-int-lockstep6.service",
+        "result": "orchestration failure before DUT/QEMU launch",
+        "reason": "tool layer expanded ${cfg} to empty and produced coord_/lockstep_coordinator; read-only path probe confirmed $cfg form before rerun",
+        "correction": "lcvex-t006-int-lockstep6-rerun.service passed 6/6"
+      }
+    ],
+    "decision": "all T-006 L0-L2 acceptance gates passed; mark done, release heavy-test and write locks; full F1c and FPGA work remain separate"
+  }
+}

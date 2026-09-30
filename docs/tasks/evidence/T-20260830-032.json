@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-032",
+  "state": "effective",
+  "partial": true,
+  "base_sha": "f9b26efbc0be7570b1c4cab19ed2adb67bcee1c9",
+  "head_sha": null,
+  "branch": "feature/p7-final",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "scope": "真实 LCVEX SoC A10 顶层 synthesis/fit 实验；主 RTL 显式 M20K BRAM；不使用 core/coh/AXI stub。",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "ipgenerate_start": "2026-08-30T11:27:44+08:00",
+    "ipgenerate_end": "2026-08-30T11:27:54+08:00",
+    "synthesis_start": "2026-08-30T11:42:34+08:00",
+    "synthesis_end": "2026-08-30T12:28:50+08:00",
+    "fitter_start": "2026-08-30T12:29:38+08:00",
+    "fitter_killed": "2026-08-30T13:33:59+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "powershell.exe -NoProfile -NonInteractive (via OpenSSH default cmd)",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "experiment_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-032",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-032\\projects\\real_a10",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "original_modified": false,
+    "license_read": false
+  },
+  "design": {
+    "top": "lcvex_catapult_a10_top",
+    "internal": "lcvex_catapult_soc_top / lcvex_core / coherent + AXI + L1/L2 (no stubs)",
+    "bram": "main RTL SYNTHESIS-aware explicit altera_syncram M20K wrapper",
+    "parameters": {
+      "A64_FP_SIMD": 0,
+      "L1_SETS": 64,
+      "L2_SETS": 64,
+      "L2_WAYS": 1,
+      "BRAM_BYTES": 65536
+    }
+  },
+  "runs": [
+    {
+      "run_id": "ipgenerate",
+      "stage": "ipgenerate",
+      "result": "pass",
+      "command": "quartus_sh --flow compile real_a10 -c real_a10 -start ipgenerate -end ipgenerate",
+      "wall_s": 9,
+      "flow_wall_s": 10,
+      "peak_pm_mb": 367.4,
+      "peak_ws_mb": 449.5,
+      "errors": 0,
+      "warnings": 0,
+      "summary": "Qsys/IP generation PASS; existing default generation policy skipped regeneration of read-only platform IP."
+    },
+    {
+      "run_id": "synthesis",
+      "stage": "synthesis",
+      "result": "pass",
+      "command": "quartus_sh --flow compile real_a10 -c real_a10 -start synthesis -end synthesis",
+      "wall_s": 2770,
+      "flow_wall_s": 2777,
+      "peak_pm_mb": 13538.9,
+      "peak_ws_mb": 12675.5,
+      "quartus_peak_vm_mb": 13665,
+      "errors": 0,
+      "warnings": 31,
+      "resource": {
+        "estimate_alms": 342341,
+        "combinational_aluts": 412158,
+        "dedicated_logic_registers": 143360,
+        "io_pins": 144,
+        "mlab_bits": 0,
+        "block_memory_bits": 181740,
+        "dsp_blocks": 21,
+        "plls": 1,
+        "bram_m20k": "soc|bram|u_impl|u_ram true dual port 8192x64, 524288 bits"
+      },
+      "summary": "Real SoC synthesis PASS; explicit M20K BRAM confirmed; cache data arrays still not M20K, causing ~342k ALM estimate."
+    },
+    {
+      "run_id": "fitter",
+      "stage": "fitter",
+      "result": "incomplete_killed",
+      "command": "quartus_sh --flow compile real_a10 -c real_a10 -start fitter -end fitter",
+      "wall_s": 3861.7,
+      "peak_pm_mb": 15434,
+      "peak_ws_mb": 15179.8,
+      "errors": 0,
+      "warnings": null,
+      "stopped": "manual kill after no final fit report in 64m21s; no fit.summary/fit.rpt",
+      "summary": "Fitter did not complete; placement/routing burden from LUT-implemented cache data arrays. Peak memory is not the blocker."
+    },
+    {
+      "run_id": "sta",
+      "stage": "sta_signoff",
+      "result": "not_run",
+      "summary": "Requires completed fitter."
+    },
+    {
+      "run_id": "assembler",
+      "stage": "assembler",
+      "result": "not_run",
+      "summary": "Requires completed fitter."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-032-fpga-g4.md",
+      "owner": "T-20260830-032",
+      "retain_until": "task-close",
+      "reproduce": "cat docs/handoffs/T-20260830-032-fpga-g4.md"
+    },
+    {
+      "id": "remote-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-032\\projects\\real_a10",
+      "owner": "T-20260830-032",
+      "retain_until": "task-close",
+      "reproduce": "Quartus project real_a10; QSF/SDC isolated copies under equal root"
+    },
+    {
+      "id": "remote-synth-rpt",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-032\\projects\\real_a10\\output_files\\real_a10.syn.rpt",
+      "owner": "T-20260830-032",
+      "retain_until": "task-close",
+      "reproduce": "Synthesis report with M20K BRAM and resource summary"
+    },
+    {
+      "id": "remote-synth-summary",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-032\\projects\\real_a10\\output_files\\real_a10.syn.summary",
+      "owner": "T-20260830-032",
+      "retain_until": "task-close",
+      "reproduce": "Synthesis status successful"
+    },
+    {
+      "id": "monitor-script",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260830-032\\run_flow_monitor.ps1",
+      "owner": "T-20260830-032",
+      "retain_until": "task-close",
+      "reproduce": "Same PM/WS sampler used for ipgenerate/synthesis/fitter"
+    }
+  ],
+  "known_limits": [
+    "Fitter not completed; no fit resources/STA/assembler/SOF in this task.",
+    "L1D/L2 cache data arrays still not mapped to M20K; only BRAM and platform FIFO/EMIF block memory present.",
+    "Current main RTL required several Quartus 21.4 compatibility patches in the isolated experiment; these are not yet merged/verified in Verilator.",
+    "Experiment uses A64_FP_SIMD=0 and reduced L2 geometry; not a full-B5 signoff.",
+    "No original remote QSF/SDC/RTL modified; no license read."
+  ],
+  "next": "Create explicit M20K/data-RAM wrappers for L1D and L2 cache arrays, then rerun synthesis/fitter/STA/assembler."
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-036",
+  "parent": "T-20260920-035",
+  "label": "B25-BOARD-RUNNER-AST-COMPAT-SEAL",
+  "title": "Remove PowerShell AST/seal binder ambiguity and complete remote no-hardware bundle validation",
+  "kind": "board-runner-infrastructure",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "done-remote-ast-and-seal-pass",
+  "assigned_owner": "runner_t036",
+  "depends_on": ["T-20260920-032"],
+  "triggered_by": "T-035 successfully bootstrapped and uploaded the corrected bundle, then failed in validate_scripts.ps1 with Argument types do not match before parse results or seal.",
+  "base_sha": "f75b42f8b5aa2de606af7b28d198ec295ae329c5",
+  "branch": "infra/T-20260920-036-b25-board-runner-ast-compat-seal",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-036-b25-board-runner-ast-compat-seal",
+  "remote_bootstrap": "D:/Projects/fpga-altra/lcvex/build/T-20260920-036-prepare.ps1",
+  "writes": [
+    "build/agents/T-20260920-036/** ignored corrected bundle/logs",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-036-b25-board-runner-ast-compat-seal/** task-owned no-hardware root",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-036-prepare.ps1 task-owned bootstrap",
+    "docs/tasks/evidence/T-20260920-036.json",
+    "docs/handoffs/T-20260920-036-b25-board-runner-ast-compat-seal.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-035.json",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-035/build/agents/T-20260920-035/tools/** exact source bundle",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-035/build/agents/T-20260920-035/script-manifest.json"
+  ],
+  "source_contract": {
+    "manifest_sha256": "40b9c0b4bad3c2979d36694e547c4831411886299d350511ee2a6bdd3a988e48",
+    "prepare_sha256": "9e292639a9430760752caa4d247c5d8a8e482452ff8f2ec6af13e5353b0a866d",
+    "run_board_once_sha256": "f27bf274b062a67022ee3f974476b380f88c5700f45b37d45b3c2ba59fd6b018"
+  },
+  "scope": "Copy and hash-verify the exact T-035 bundle, change only validate_scripts.ps1 and verify_seal.ps1 to remove PowerShell dynamic binder ambiguity, then complete fresh GamePC AST and hash validation. All hardware paths remain unexecuted.",
+  "required_corrections": {
+    "validate_scripts": "Use explicitly typed System.Management.Automation.Language.Token[] and ParseError[] variables for Parser::ParseFile refs. Use ordinary PowerShell arrays for records/failures and never Generic.List with @($list).",
+    "verify_seal": "Use ordinary PowerShell arrays for records and direct array serialization; remove Generic.List/@($list) binder ambiguity.",
+    "unchanged": "The other seven reusable bundle files remain byte-identical to T-035, including the compatible bootstrap and preflight fail-closed gate."
+  },
+  "acceptance": {
+    "provenance": "All T-035 source hashes checked before copy; exact two-file diffs and seven unchanged hashes recorded.",
+    "local": "bash -n, py_compile, manifest, consumer/root, transport prohibition and single-use/preflight control-flow audits pass.",
+    "freshness": "T-036 remote root/bootstrap absent and never overwrite/delete; bootstrap exactly once through pwsh -File and one sealed bundle upload.",
+    "ast": "validate_scripts.ps1 invoked only with pwsh -File; all six PowerShell files have parse_error_count=0 and result PASS.",
+    "seal": "verify_seal.ps1 invoked only with pwsh -File; all nine bundle file bytes/SHA match manifest and result PASS.",
+    "boundary": "Only filesystem/AST/SHA operations. Hardware/JTAG/process enumeration, programmer, terminal, server, FPGA configuration, Flash/reset/power counts all zero.",
+    "consumer": "Evidence freezes exact final bundle directory, manifest/hash and per-file hashes for byte-identical consumption by the next board task."
+  },
+  "resource": "One gamepc lock window for fresh filesystem/AST/hash validation; no heavy EDA.",
+  "forbidden_regions": [
+    "tracked design/test/policy/expected modification",
+    "hardware/JTAG/process query, quartus_pgm, nios2-terminal, server start/stop or FPGA configuration",
+    "JIC/EPCQ/Flash, reset, power or process termination",
+    "reuse/overwrite T-035 remote paths, inline PowerShell, replacement upload or retry",
+    "any semantic change outside validate_scripts.ps1 and verify_seal.ps1"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T19:34:40+08:00",
+    "agent_name": "runner_t036",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "partial": false,
+    "topic_evidence_head": "aba0d91185ef3fec620b4f19fccbd47ad96d8d95",
+    "integration_evidence_sha": "15046cdf17c8ff213e874f524eebf8e0764de506",
+    "bundle_manifest_sha256": "2972d24292de061ed06e98aa68ce3f4443ca041caa3cba1bca632e223542dfcc",
+    "remote_ast": "PASS; 6/6 PowerShell files parse_error_count=0",
+    "remote_seal": "PASS; 9/9 bundle bytes and SHA256 match",
+    "hardware_counts": "all zero",
+    "bundle_source": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-036/build/agents/T-20260920-036/tools",
+    "evidence": "docs/tasks/evidence/T-20260920-036.json",
+    "handoff": "docs/handoffs/T-20260920-036-b25-board-runner-ast-compat-seal.md",
+    "next": "byte-identical single-attempt board closeout"
+  },
+  "created_at": "2026-09-20T19:33:45+08:00",
+  "updated_at": "2026-09-20T19:46:40+08:00"
+}

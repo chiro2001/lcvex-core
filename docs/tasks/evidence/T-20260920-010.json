@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-010",
+  "label": "B25-RX-OBSERVABILITY-VOLATILE-SOF",
+  "state": "done",
+  "acceptance_status": "quartus-assembler-success-and-volatile-sof-frozen",
+  "partial": false,
+  "physical_candidate_sha": "05ea248845f0b94b226ffe554e082980d89e452c",
+  "physical_candidate_tree_sha": "23e4c5158732e90439a0d426c5eca8371d296f1a",
+  "branch": "verify/T-20260920-010-b25-rx-observability-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-010",
+  "owner": "root",
+  "dependencies": {
+    "gate_d": {
+      "task": "T-20260920-006",
+      "status": "PASS"
+    },
+    "physical": {
+      "task": "T-20260920-007",
+      "status": "PASS",
+      "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260920-007-b25-rx-observability-fresh-physical"
+    },
+    "ucp_invariant": {
+      "task": "T-20260920-009",
+      "status": "PASS"
+    }
+  },
+  "timestamps": {
+    "run_started_at": "2026-09-20T05:29:07.2090995+08:00",
+    "copy_started_at": "2026-09-20T05:29:10.2461555+08:00",
+    "copy_finished_at": "2026-09-20T05:29:10.7557832+08:00",
+    "assembler_started_at": "2026-09-20T05:29:12.5591317+08:00",
+    "assembler_finished_at": "2026-09-20T05:30:00.7332566+08:00",
+    "reported_at": "2026-09-20T05:31:00+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "source": "D:/Projects/fpga-altra/lcvex/build/T-20260920-007-b25-rx-observability-fresh-physical/fpga/catapult_a10",
+    "target": "D:/Projects/fpga-altra/lcvex/build/T-20260920-010-b25-rx-observability-volatile-sof/fpga/catapult_a10",
+    "quartus": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "pre_eda_count": 0,
+    "post_eda_count": 0,
+    "pre_free_physical_mib": 31849.6,
+    "assembler_pre_free_physical_mib": 31667.8,
+    "source_bytes": 469756276,
+    "pre_disk_d_free_bytes": 71515328512
+  },
+  "source_identity": {
+    "qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "qsf_remote_raw_sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46",
+    "qsf_lf_normalized_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "fit_report_sha256": "74c01b43069217c61a0280594195fc95bea06ce9e5a2b9cf772ab682f76403e2",
+    "sta_report_sha256": "1db466e143b06579fc7d4cae6bd39c24b15069eb11ff81d9c365b31c3d4b91f9",
+    "source_project_files": 297,
+    "source_project_manifest_sha256": "e43e85c326f64b3b93e80600b90f83fa86c13994d4b2200bfa53c53a023021c7",
+    "source_full_files": 539,
+    "source_pre_manifest_sha256": "efce9b353bc917ce623e0c414e5831ab2005a6222338de81d95d13f7169c078c",
+    "source_post_manifest_sha256": "efce9b353bc917ce623e0c414e5831ab2005a6222338de81d95d13f7169c078c",
+    "clone_pre_manifest_sha256": "efce9b353bc917ce623e0c414e5831ab2005a6222338de81d95d13f7169c078c",
+    "copy_diff_count": 0,
+    "source_immutability_diff_count": 0,
+    "source_preexisting_config_count": 0,
+    "source_post_config_count": 0
+  },
+  "assembler": {
+    "invocation_count": 1,
+    "command": "quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10",
+    "pid": 44700,
+    "process_exit_code": null,
+    "wrapper_exit_code": 0,
+    "exit_code_note": "PowerShell Process.ExitCode was blank after redirected-stream completion, but the synchronous SSH wrapper exited 0 and both stdout and asm.rpt contain the exact Successful/0 errors/0 warnings marker.",
+    "elapsed": "00:00:47",
+    "peak_virtual_memory_mib": 7065,
+    "result": "Successful",
+    "errors": 0,
+    "warnings": 0,
+    "loaded_snapshots": [
+      "root_partition/final",
+      "auto_fab_0/final"
+    ],
+    "runner": {
+      "bytes": 26829,
+      "sha256": "2782a9f725840545c478d1aee4955e59facf3048307272bf5a55466481977425"
+    },
+    "stdout_sha256": "dc9bd220557da5f97baa1121c0001faa783940b27df5da95c3a1b70a7179d764",
+    "stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52"
+  },
+  "database_postflight": {
+    "pre_files": 225,
+    "post_files": 228,
+    "pre_manifest_sha256": "dd1c6e585ab888e030535c7957f789ae897e8a202c680d5e2535d054b7bee41b",
+    "post_manifest_sha256": "0dd2ebdd06c5159f3814a0256566ed8c2dd9d9fe766c9854e90d0b5e0c9bb0e0",
+    "added_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.asm.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/catapult_a10.asm.qmsgdb"
+    ],
+    "changed_paths": [
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.model",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/_all/1/report.cmp.rdb",
+      "qdb/_compiler/catapult_a10/_flat/21.4.0/legacy/1/runlog.db"
+    ],
+    "removed_paths": [],
+    "added_allowlist_diff_count": 0,
+    "changed_allowlist_diff_count": 0,
+    "physical_database_change_count": 0
+  },
+  "artifacts": {
+    "sof": {
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-010-b25-rx-observability-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "local_path": "build/agents/T-20260920-010/sof/catapult_a10.sof",
+      "bytes": 36842100,
+      "sha256": "7e9c60641c48fb4afff047f97f1d84865d32d24bd92aead26041035fd985a2f2",
+      "quartus_checksum": "0x316ED173",
+      "design_hash": "18B51F1418BE0B12479B55B745396DBF",
+      "jtag_usercode": "0xFFFFFFFF"
+    },
+    "assembler_report": {
+      "path": "build/agents/T-20260920-010/sof/catapult_a10.asm.rpt",
+      "bytes": 10379,
+      "sha256": "c6aa3ccaf44f1307ae1d9a62fa57c191a267c2d2d48cfa40a918d98e6d249143"
+    },
+    "flow_report": {
+      "path": "build/agents/T-20260920-010/sof/catapult_a10.flow.rpt",
+      "bytes": 17933,
+      "sha256": "fef5a91caae5cb163fceb3aab897abf2a713f1aecd32dc0e79baeb1738352f5d"
+    },
+    "result_json": {
+      "path": "build/agents/T-20260920-010/remote-evidence/runtime/result.json",
+      "bytes": 6789,
+      "sha256": "8379dcd7b71a57ba14abba2cc9611701c720e6b430edb11777612d421a73d8ab"
+    }
+  },
+  "artifact_cardinality": {
+    "sof": 1,
+    "pof": 0,
+    "jic": 0,
+    "rbf": 0,
+    "jbc": 0,
+    "svf": 0,
+    "jam": 0
+  },
+  "resource_lock": {
+    "resource": "gamepc",
+    "all_remote_actions_locked": true,
+    "final_status": "gamepc FREE"
+  },
+  "safety_and_scope": {
+    "source_project_modified": false,
+    "synthesis_fitter_sta_rerun": false,
+    "quartus_pgm_or_jtag": false,
+    "nios2_terminal": false,
+    "fpga_configured": false,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "unknown_process_stopped": false
+  },
+  "handoff": "docs/handoffs/T-20260920-010-b25-rx-observability-volatile-sof.md",
+  "next": "T-20260920-011 may use only this exact SOF identity for the already authorized volatile configuration and RXDBG/status/PONG/echo board test."
+}

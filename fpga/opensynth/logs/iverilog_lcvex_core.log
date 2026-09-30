@@ -1,0 +1,48 @@
+rtl/lcvex_core.sv:738: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1148: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1200: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1205: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1212: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1213: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1234: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1299: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1351: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1474: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1489: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:1536: syntax error
+rtl/lcvex_core.sv:1536: error: Syntax error in continuous assignment
+rtl/lcvex_core.sv:1544: syntax error
+rtl/lcvex_core.sv:1544: error: Syntax error in continuous assignment
+rtl/lcvex_core.sv:1633: syntax error
+rtl/lcvex_core.sv:1633: error: Syntax error in continuous assignment
+rtl/lcvex_core.sv:1644: syntax error
+rtl/lcvex_core.sv:1642: error: Syntax error in continuous assignment
+rtl/lcvex_core.sv:2770: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:3475: sorry: "inside" expressions not supported yet.
+rtl/lcvex_core.sv:3563: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3566: syntax error
+rtl/lcvex_core.sv:3567: error: Malformed statement
+rtl/lcvex_core.sv:3565: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_core.sv:3568: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3570: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3573: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3575: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3583: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3587: syntax error
+rtl/lcvex_core.sv:3586: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_core.sv:3591: syntax error
+rtl/lcvex_core.sv:3590: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_core.sv:3599: syntax error
+rtl/lcvex_core.sv:3603: error: Malformed statement
+rtl/lcvex_core.sv:3597: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_core.sv:3606: syntax error
+rtl/lcvex_core.sv:3604: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_core.sv:3613: syntax error
+rtl/lcvex_core.sv:3615: error: Malformed statement
+rtl/lcvex_core.sv:3611: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_core.sv:3618: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3620: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.
+rtl/lcvex_core.sv:3625: syntax error
+rtl/lcvex_core.sv:3626: error: Malformed statement
+rtl/lcvex_core.sv:3624: error: Error in property_spec of concurrent assertion item.
+rtl/lcvex_core.sv:3628: sorry: concurrent_assertion_item not supported. Try -gno-assertions or -gsupported-assertions to turn this message off.

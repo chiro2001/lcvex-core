@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-016",
+  "label": "R18-CORE-SYSKILL-CUT",
+  "title": "Cut the system-commit feedback path into FP TX_DONE",
+  "kind": "rtl-timing-optimization",
+  "priority": "critical",
+  "phase": "active",
+  "dispatch_status": "assigned",
+  "assigned_owner": "codex-r18-core",
+  "agent_type": "rtl-implementation",
+  "depends_on": ["T-20260905-013", "T-20260905-014"],
+  "base_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "branch": "timing/T-20260905-016-r18-core-syskill-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-016",
+  "timing_source": {
+    "task": "T-20260905-014",
+    "cone": "core.idex_valid -> fp_exec.state.TX_DONE",
+    "top50_paths": 50,
+    "slack_range_ns": [-3.256, -3.180],
+    "worst_data_delay_ns": 23.509,
+    "logic_levels": 26,
+    "path_cause": "idex_valid -> live FP-to-GPR forwarding/decode -> sys_commit_ready/sys_commit -> fp_tx_kill -> fp_rsp_ready/rsp_ready -> TX_DONE D"
+  },
+  "scope": "Prove and remove or locally decouple the redundant sys_commit feedback into fp_tx_kill so the current decode/system-commit network cannot drive the FP wrapper TX_DONE transition. Preserve precise system/exception/IRQ/restore kills, held response, single outstanding transaction, FP-to-GPR RAW behavior and commit order. Add invariants proving a system commit cannot coexist with an FP owner/response; do not use false paths or weaken assertions.",
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "focused core SV/Cocotb tests only",
+    "docs/tasks/evidence/T-20260905-016.json",
+    "docs/handoffs/T-20260905-016-r18-core-syskill-cut.md",
+    "build/agents/T-20260905-016/**"
+  ],
+  "forbidden_regions": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "QEMU/plugin/reference results",
+    "QSF/SDC/timing exceptions",
+    "assembler/bitstream/JTAG/board actions"
+  ],
+  "validation": [
+    "static proof/SVA of sys_commit and FP owner mutual exclusion",
+    "TX_DONE held response under WB backpressure",
+    "system MSR/ERET/UDEF/WFI after FP response",
+    "FCVTZS/FCVTZU immediate GPR RAW and branch use",
+    "T-012 FP/data-MMU overlap plus IRQ-young and P7 regressions"
+  ],
+  "acceptance": "The RTL no longer contains a same-cycle sys_commit/decode path into fp_tx_kill or FP TX_DONE D; all real kill boundaries remain precise; no response is lost or duplicated; focused and joint regressions pass. Physical improvement is not claimed until a new post-fit STA query shows the idex_valid-to-TX_DONE cone removed or moved.",
+  "resource": "Owner may edit and run only lightweight/static checks initially. All Verilator/QEMU heavy validation is released serially by the integrator; CPU<=50%, MemoryMax=16G, MemorySwapMax=0, VERILATOR_JOBS=1.",
+  "created_at": "2026-09-05T19:46:11+08:00",
+  "updated_at": "2026-09-05T19:46:11+08:00",
+  "board_policy": "No Quartus assembler, bitstream, JTAG, programming, power-on or board test without explicit user permission."
+}

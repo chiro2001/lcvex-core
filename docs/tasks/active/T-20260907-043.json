@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-043",
+  "label": "B25-SOF-PACKAGE",
+  "title": "Generate and freeze the volatile B25 SOF",
+  "kind": "assembler-artifact-gate",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260909-013"],
+  "base_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+  "branch": "verify/T-20260907-043-b25-sof-package",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-043",
+  "writes": [
+    "build/agents/T-20260907-043/** ignored artifact manifests",
+    "fresh remote clone D:/Projects/fpga-altra/lcvex/build/T-20260907-043-b25-sof-package/**",
+    "docs/tasks/evidence/T-20260907-043.json",
+    "docs/handoffs/T-20260907-043-b25-sof-package.md"
+  ],
+  "scope": "After explicit user authorization and green T-013 timing/invariant signoff, run the Quartus assembler once on the frozen T-013 database and record the SOF, input, tool and database hashes.",
+  "validation": "Clone the frozen T-013 fitted platform without modifying its source probe; verify pre-assembler source/QDB/report hashes, run assembler once, require exit 0 and exactly one SOF, then prove only assembler/report/SOF artifacts changed and no programmer/JTAG process was started.",
+  "acceptance": "One auditable volatile SOF is ready for T-044; no Flash-persistent format is generated or written.",
+  "resource": "Acquire gamepc for assembler and postflight. Return 75 means wait.",
+  "authorization_gate": "Do not dispatch or run assembler until the user explicitly authorizes SOF generation.",
+  "forbidden_regions": [
+    "RTL/QSF/SDC or fitter/STA changes",
+    "quartus_pgm/JTAG/programming",
+    "JIC/EPCQ/Flash/RBF/POF/JBC generation or write",
+    "power-on or board test"
+  ],
+  "created_at": "2026-09-07T00:23:34+08:00",
+  "updated_at": "2026-09-10T11:46:08+08:00",
+  "user_authorization": {
+    "authorized_at": "2026-09-10T11:07:32+08:00",
+    "response": "y",
+    "scope": "Run T-043 assembler once and generate/freeze a volatile SOF from the signed-off T-013 fitted database",
+    "excluded": "quartus_pgm, FPGA configuration, nios2-terminal, reset/power, JIC/EPCQ/Flash/RBF/POF/JBC"
+  },
+  "physical_dependency": {
+    "task": "T-20260909-013",
+    "candidate_sha": "d2f5cfdd2791945a82d47300b94debd0e40a96d6",
+    "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260909-013-b25-final-fresh-physical",
+    "status": "PASS; consumed read-only through an isolated T-043 clone"
+  },
+  "result": {
+    "status": "PASS; Quartus assembler Successful with 0 errors/0 warnings and one volatile SOF frozen",
+    "owner_commit": "2c443711f0e790cc8d1b99d4f80a83e2cfa0655e",
+    "merge_commit": "32d615ba8b033761cb44e96d26ed50d8b80ba040",
+    "integrated_at": "2026-09-10T11:46:08+08:00",
+    "sof": {
+      "bytes": 36842093,
+      "sha256": "032c82dd88f99c5e19b845d199e6ef6d205e4be6b62c8171a2f9370a0032920b",
+      "quartus_checksum": "0x33878BC3",
+      "design_hash": "D0A92611070EB56A44CBE4BF1B8F9C4B"
+    },
+    "source_immutability_diff_count": 0,
+    "physical_database_change_count": 0,
+    "persistent_format_count": 0,
+    "evidence": "docs/tasks/evidence/T-20260907-043.json",
+    "handoff": "docs/handoffs/T-20260907-043-b25-sof-package.md",
+    "next": "T-044 remains blocked on separate explicit authorization for volatile FPGA configuration."
+  }
+}

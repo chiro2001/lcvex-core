@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "T-20260907-045",
+  "label": "B25-EMIF-RESILIENCE",
+  "title": "Complete in-flight EMIF abort, timeout and response-hold semantics",
+  "kind": "fpga-cdc-protocol-hardening",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "integrated-parent-pass",
+  "assigned_owner": "b25_emif_resilience",
+  "depends_on": ["T-20260907-038", "T-20260907-039", "T-20260907-040"],
+  "batch_parent": "T-20260907-037",
+  "functional_base_sha": "fbec08af334fafc3f9aa7801399f409301c20618",
+  "dispatch_head_sha": "fc730d33adca5fd103cc634a0b2920c9da42ad1b",
+  "branch": "verify/T-20260907-045-b25-emif-resilience",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-045",
+  "scope": "Harden only the AXI4-to-Avalon EMIF adapter so every accepted transaction completes exactly once with OKAY or an error across in-flight calibration failure, EMIF-only reset and bounded backend stalls; preserve AXI response VALID under backpressure and prevent late responses from crossing reset/timeout epochs.",
+  "writes": [
+    "rtl/lcvex_axi4_avalon_adapter.sv",
+    "tb/sv/lcvex_axi4_avalon_bfm.sv",
+    "tb/sv/lcvex_axi4_avalon_tb.sv",
+    "sim/cocotb/test_axi4_avalon.py",
+    "docs/tasks/evidence/T-20260907-045.json",
+    "docs/handoffs/T-20260907-045-b25-emif-resilience.md"
+  ],
+  "reads": [
+    "rtl/lcvex_axi4_master.sv",
+    "rtl/lcvex_async_fifo.sv",
+    "rtl/lcvex_catapult_soc_top.sv",
+    "sim/cocotb/Makefile.axi4_avalon",
+    "docs/handoffs/T-20260830-026-ext-03-fix.md"
+  ],
+  "required_semantics": [
+    "An accepted normal transaction receives exactly one B/R response even if cal_fail arrives in-flight; the response is an AXI error, not success.",
+    "EMIF-only reset cannot silently drop an outstanding CPU-side transaction while cpu_rst_n remains asserted.",
+    "Permanent Avalon waitrequest and missing readdatavalid terminate through a bounded, parameterized timeout and return an error.",
+    "Once BVALID/RVALID is asserted it and its payload/ID/RLAST remain stable until BREADY/RREADY, including a later calibration abort.",
+    "A late backend response after timeout/reset is drained or the link remains poisoned; it must never satisfy a new epoch request.",
+    "Reset values are documented; timeout/abort state does not fabricate an OKAY response or duplicate side effects."
+  ],
+  "validation": {
+    "L1_SV": "Extend lcvex_axi4_avalon_tb with in-flight cal_fail at issue/wait/response-backpressure points, EMIF-only reset, permanent waitrequest, missing readdatavalid, timeout plus late response, reset/re-arm and exactly-one response checks.",
+    "L1_Cocotb": "Update the existing test that currently treats no response after in-flight cal_fail as success; require a held DECERR and add bounded timeout/reset epoch cases.",
+    "regression": "Existing normal read/write, randomized CDC, payload stability, no-DDR-before-calibration and duplicate_response_count tests remain green."
+  },
+  "acceptance": "SV and Cocotb independently prove liveness/error and no-stale-response semantics without weakening assertions. T-037 parent reruns the affected L1 plus B25 SoC smoke before candidate freeze.",
+  "resource": {
+    "timeout_s": 3600,
+    "heavy": false,
+    "local_policy": "Use the task worktree and task-local TMPDIR/SIM_BUILD; if a run becomes heavy, acquire local through resource-lock. Never use system /tmp."
+  },
+  "forbidden_regions": [
+    "core, DDR bridge, cache, MMU, QEMU, QSF/SDC or platform clock changes",
+    "JTAG, GamePC, Quartus, assembler, SOF/JIC/EPCQ/Flash or board actions",
+    "unbounded wait accepted as success, suppressed assertions or skipped reference checks"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-07T04:46:21+08:00",
+    "agent_name": "b25_emif_resilience",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true
+  },
+  "result": {
+    "owner_head": "a99fe45bb35f489cc1cbaef54558503d74901917",
+    "parent_source_sha": "259188ac33322a74a8911c9c37edc6302f6d6169",
+    "status": "accepted; owner SV/Cocotb and parent SV/Cocotb/SoC/static reruns pass",
+    "evidence": "docs/tasks/evidence/T-20260907-045.json",
+    "handoff": "docs/handoffs/T-20260907-045-b25-emif-resilience.md"
+  },
+  "created_at": "2026-09-07T04:45:00+08:00",
+  "updated_at": "2026-09-07T09:22:41+08:00"
+}

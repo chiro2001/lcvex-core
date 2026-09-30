@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "T-20260909-005",
+  "label": "B25-ASYNC-FIFO-PAYLOAD-HOLD-AUDIT",
+  "title": "Enumerate and classify asynchronous FIFO payload hold paths",
+  "kind": "report-only-physical-diagnosis",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted-sdc-fix-classification",
+  "assigned_owner": "b25_hold_endpoint_audit",
+  "depends_on": ["T-20260909-002", "T-20260909-004"],
+  "base_sha": "2a10d23740e67850cdae7e91fd834c53c7746cac",
+  "physical_source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+  "branch": "verify/T-20260909-005-b25-async-fifo-payload-hold-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-005",
+  "remote_database": "D:/Projects/fpga-altra/lcvex/build/T-20260909-002-b25-physical/fpga/catapult_a10/quartus",
+  "scope": "Use the frozen T-002 final fitted database for report-only queries that enumerate every async FIFO memory/payload path and destination in both directions. Determine whether the -10.338 ns hold failures are protocol-justified asynchronous payload paths with incomplete SDC coverage or require an RTL read-domain register/latency change. No source implementation in this task.",
+  "writes": [
+    "build/agents/T-20260909-005/** ignored scripts/reports",
+    "remote probe runtime/T-20260909-005/** report-only scripts/results",
+    "docs/tasks/evidence/T-20260909-005.json",
+    "docs/handoffs/T-20260909-005-b25-async-fifo-payload-hold-audit.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260909-002.json and T-004 matrix",
+    "rtl/lcvex_axi4_avalon_adapter.sv async FIFO and CPU/EMIF consumer logic",
+    "fpga/catapult_a10/quartus/catapult_a10.sdc",
+    "frozen T-002 fitted database, read-only"
+  ],
+  "validation": [
+    "Query get_collection_size and all from/to endpoint families for request_fifo|mem* and response_fifo|mem*; preserve launch/latch clocks, setup/hold slack and existing exception status.",
+    "Prove or reject the two-Gray-pointer-cycle data-stability argument for each payload direction from RTL protocol and focused test evidence.",
+    "Evaluate a hypothetical precise endpoint-only exception overlay on the loaded database without modifying checked-in SDC or recompiling; show that only justified CDC payload paths disappear and unrelated synchronous hold checks remain.",
+    "Return SDC-fix / RTL-fix / indeterminate with exact minimum future write regions."
+  ],
+  "acceptance": "All payload endpoints are enumerated and an evidence-backed fix class is selected; no broad exception, source change, compile, fit, assembler or board action occurs.",
+  "resource": "Any remote report-only query acquires gamepc; no synthesis/fitter, one quartus_sta process, unique runtime output. Local analysis is light.",
+  "forbidden_regions": [
+    "all tracked RTL/SDC/QSF/test/task/status modifications",
+    "T-002 fitted database/output_files mutation or deletion",
+    "synthesis/fitter/assembler/bitstream/JTAG/board/Flash actions",
+    "another worktree"
+  ],
+  "created_at": "2026-09-09T10:32:34+08:00",
+  "updated_at": "2026-09-09T12:42:02+08:00",
+  "result_head": "8ddc3fc9339c6030159257b95582aff42dd5b94c",
+  "result_evidence": "docs/tasks/evidence/T-20260909-005.json",
+  "integrated_head": "934bd998",
+  "followup_task": "T-20260909-008",
+  "dispatch": {
+    "sent_at": "2026-09-09T10:35:01+08:00",
+    "agent_name": "b25_hold_endpoint_audit",
+    "model": "platform-default-confirmed-gpt-5.6-luna-max",
+    "model_argument_omitted": true,
+    "parent_head_before_dispatch": "27ff56b7dafee6c186761de93ea5cbe7e52588cf"
+  }
+}

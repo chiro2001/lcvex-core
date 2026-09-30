@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-119",
+  "label": "AUD-14",
+  "parent": "",
+  "title": "B5 full flow / DDR / 板级",
+  "kind": "external-audit-action",
+  "priority": "low",
+  "phase": "proposed",
+  "dispatch_status": "pending",
+  "base_sha": "5be2a1df42c76baaca3ff70391c2dbceea6c82ef",
+  "branch": "feature/T-20260829-119-aud-14",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-119",
+  "scope": "仍受 Quartus OOM/宿主资源约束；依赖 AUD-04 等。",
+  "writes": [
+    "docs/handoffs/T-20260829-119-aud-14.md",
+    "docs/tasks/evidence/T-20260829-119.json"
+  ],
+  "reads": [
+    "docs/audit/external-results/findings.md",
+    "docs/audit/external-results/action-items.md"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "necessary evidence/handoff recorded"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 2048,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.3
+  },
+  "budget_policy": {
+    "initial_minutes": 45,
+    "extension_increment_minutes": 20,
+    "max_minutes": 180,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T23:30:00+0800",
+  "updated_at": "2026-08-29T23:30:00+0800",
+  "known_limits": [
+    "所有重型 Verilator 必须 cgroup <16GiB。",
+    "不引入 SVE/POST-V82。",
+    "外部审计结果不作为唯一完成证据。"
+  ],
+  "handoff": "docs/handoffs/aud-14.md",
+  "evidence": "docs/tasks/evidence/T-20260829-119.json"
+}

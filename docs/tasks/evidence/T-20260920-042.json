@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-042",
+  "label": "B25-BRAM-CORE-MICROBENCH-COREMARK",
+  "state": "done",
+  "acceptance_status": "offline-reproducible-port-directed-l1-and-behavioral-vendor-full-soc-pass",
+  "partial": false,
+  "base_sha": "5b9833ead9ad5027d1c98fd6a0f69a0d0d2b1784",
+  "implementation_head": "84bebb3f66a80900940dffaf3bcd30b70a7c3a91",
+  "implementation_tree": "72773149ea6bb299a2b352d6a3e205962bf2ba1b",
+  "commits": [
+    "79e510aa77c87878555d6c6871d0192c1613220d cache: arbitrate simultaneous probe and upstream request",
+    "84bebb3f66a80900940dffaf3bcd30b70a7c3a91 fpga: add BRAM microbench and CoreMark monitor"
+  ],
+  "branch": "feature/T-20260920-042-b25-bram-coremark",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-042",
+  "owner": "root",
+  "reported_at": "2026-09-20T23:28:56+08:00",
+  "coremark_provenance": {
+    "repository": "https://github.com/eembc/coremark.git",
+    "tag": "v1.01",
+    "commit": "cfa9ab377835911f23d9b0831c7be302ed1f58de",
+    "upstream_manifest_sha256": "4c30429c9039b7d3875fc7be1fe5951f1200cf07d1be0ce4778c999e18940e84",
+    "license_sha256": "d72094a3cb629dc7712ae09b7b777416903c6670930928b5530f2ddfb2296888",
+    "upstream_files": 8,
+    "byte_identical_check": "PASS",
+    "normal_build_network_fetches": 0
+  },
+  "implementation": {
+    "commands": ["t correctness", "v one-iteration CRC self-check", "c automatically calibrated full CoreMark"],
+    "correctness_tests": 24,
+    "correctness_signature": "8679CF21",
+    "coremark_total_data_size": 2000,
+    "coremark_contexts": 1,
+    "coremark_seed_crc": "E9F5",
+    "coremark_list_crc": "E714",
+    "coremark_matrix_crc": "1FD7",
+    "coremark_state_crc": "8E3A",
+    "clock_hz": 25000000,
+    "minimum_valid_cycles": 250000000,
+    "timer": "read-only 64-bit PLAT_STATUS+0x40 logic clock counter; reset 0; atomic response sampling",
+    "forbidden_timer_sources": "CNTVCT/CNTPCT and host wall time absent",
+    "memory": "all code, CoreMark 2KiB static work area, observations and stack reside in 64KiB BRAM; DDR is not a dependency",
+    "parser": "recomputes fixed-point scores and cross-checks compact result against upstream raw size/ticks/seconds/iterations/CRC/compiler/memory/success fields"
+  },
+  "image": {
+    "load_bytes": 20448,
+    "bss_end": "0x58f8",
+    "stack_limit": "0xf000",
+    "stack_top": "0x10000",
+    "elf": {"bytes": 94632, "sha256": "4c6c040919d4a90e35f56bfdf4804dad2f951d0c78700533a9e73578b085330d"},
+    "bin": {"bytes": 20448, "sha256": "ddb27ff2ffdfb595c3821a20af262f4e3ae95c1e680bf5530e2865bf45b6c56d"},
+    "hex": {"bytes": 61344, "sha256": "23a8853a49424a4895070e0726eafe514391af9deb24cf5ad1373dbce3b378bc"},
+    "mif": {"bytes": 204942, "sha256": "d56386b0714c65bab955cb91112d510b31f4290f80281f86c7feabdd6988d7d0"},
+    "padded_64k_oracle_sha256": "1e691cc06094746464633929b2dea25be43c96305873bedfca82d3978c87ddb9",
+    "build_manifest": {"path": "build/agents/T-20260920-042/final-l0/boot/microbench-build-manifest.json", "bytes": 3641, "sha256": "985d186caf6dab652616221319eb38bffb3dbe69df89deeba12582fb68dd1d84"},
+    "deterministic_double_build": "PASS ELF/BIN/HEX/MIF/build-manifest byte-for-byte"
+  },
+  "discovered_rtl_defect": {
+    "symptom": "CoreMark stopped after commit PC 0x1e74; core dmem_req_issued=1 while coherence client=C_L1_WAIT and D-L1=ST_IDLE",
+    "root_cause": "D-L1 advertised u_req_ready and l1_probe_req_ready together but sequential priority captured only the probe",
+    "fix": "deassert u_req_ready whenever l1_probe_req_valid is asserted",
+    "assertion": "l1_probe_req_valid |-> !u_req_ready",
+    "directed_result": "PASS operations=11 accepted=66 with simultaneous miss probe and held upstream request"
+  },
+  "validation": {
+    "l0": {
+      "command": "LCVEX_MICROBENCH_TEST_DIR=build/agents/T-20260920-042/final-l0 make b25-microbench-test",
+      "result": "PASS: reproducible double build; host correctness/selfcheck/full fixed-point math; 7 parser tests; provenance/image/disassembly checks",
+      "markers": ["MICROBENCH_REPRODUCIBLE_BUILD_PASS", "LCVEX_BENCH_HOST_PASS", "MICROBENCH_PORT_PASS", "LCVEX_B25_MICROBENCH_L0_PASS"]
+    },
+    "l1_l1d": {
+      "command": "resource-lock run local ... -- make sim-sv-l1d-wb VERILATOR_JOBS=4",
+      "result": "PASS: lcvex_l1_d_wb_tb operations=11 accepted=66"
+    },
+    "status_and_jtag_focused": {
+      "command": "LCVEX_RX_RESPONSE_TRACE_DIR=build/agents/T-20260920-042/final-status-focused bash fpga/catapult_a10/tools/run_rx_response_trace.sh --focused",
+      "result": "PASS: CATAPULT_STATUS_OBSERVABILITY_TEST, RX_OBSERVER_UNIT, JTAG_UART_TEST and RX_RESPONSE_TRACE_FOCUSED",
+      "status_log": {"path": "build/agents/T-20260920-042/final-status-focused/status-iverilog-run.log", "bytes": 114, "sha256": "176b1f8b0dd0a4c98c15f912ac12fcba40867d5efae031f4eaeaa2fc5110894e"},
+      "bridge_log": {"path": "build/agents/T-20260920-042/final-status-focused/bridge-iverilog-run.log", "bytes": 272, "sha256": "6aedcc11eed588e080ffb026fb50f887446e8bceb4272acf79a5bb965e4435be"}
+    },
+    "l2_behavioral": {
+      "command": "resource-lock run local ... -- env LCVEX_SOC_SMOKE_DIR=build/agents/T-20260920-042/final-soc-behavioral VERILATOR_JOBS=4 bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "result": "PASS: CAL OK/WAIT/FAIL, legacy monitor, t, v and both transcript parsers",
+      "microbench": "MBPASS 24 8679CF21",
+      "coremark_self": "PASS seed/list/matrix/state=E9F5/E714/1FD7/8E3A iterations=1 cycles=1479468 score=INVALID",
+      "log": {"path": "build/agents/T-20260920-042/final-soc-behavioral/smoke.log", "bytes": 763, "sha256": "756c39b77c7624ce691992049fbab1177cd82881e605e9059021d3f3025d748a"}
+    },
+    "l2_vendor_timed": {
+      "command": "resource-lock run local ... -- env LCVEX_SOC_SMOKE_DIR=build/agents/T-20260920-042/final-soc-vendor LCVEX_SOC_SMOKE_VENDOR_TIMING=1 VERILATOR_JOBS=4 bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "result": "PASS: same t/v transcript plus Quartus-21.4 registered JTAG timing",
+      "empty_polls": 262144,
+      "poll_commits": 2359306,
+      "wall_seconds": 325.177,
+      "log": {"path": "build/agents/T-20260920-042/final-soc-vendor/smoke.log", "bytes": 834, "sha256": "64dee8e4309d3c87c403abbc29cda5146fc399543d5b496b2b8604f94ea8aa1a"}
+    },
+    "bram_oracle": {
+      "command": "env LCVEX_BRAM_BOOT_BUILD_DIR=... LCVEX_BRAM_INIT25_TEST_DIR=... VERILATOR_JOBS=4 bash fpga/catapult_a10/tools/run_bram_init25_test.sh",
+      "result": "PASS emit/check, 13/13 negative injections, focused Verilator BRAM init",
+      "manifest": {"path": "build/agents/T-20260920-042/final-bram-init/test/oracle/image_manifest.json", "bytes": 5122, "sha256": "2919f3dce546771a4e2937d44ed3745a0162aa131ea36d662ecf49d35bb605a7"},
+      "heavy_log": {"path": "build/agents/T-20260920-042/final-bram-init/test/heavy-wrapper.log", "bytes": 7954, "sha256": "6de76977b0fdcbe37a80a58061b9d52f8e3a1a7cb3bf5ad62ed66f40215c1999"}
+    },
+    "lint_registry_static": {
+      "commands": ["fpga/catapult_a10/tools/lint_soc.sh", "python3 scripts/test_registry.py --check --check-consistency", "bash -n", "python3 -m py_compile", "git diff --check excluding byte-identical upstream files"],
+      "result": "PASS; registry 91 entries; only pre-existing non-fatal UNUSEDPARAM lint warnings",
+      "lint_log": {"path": "build/agents/T-20260920-042/final-lint-soc/lint.log", "bytes": 1150, "sha256": "13179c0d260e3fe344819deb844c5b2c179a64c7a334ae2ca35416846bbf3c45"}
+    }
+  },
+  "resources": {
+    "heavy_slot": "all Verilator full-SoC, cache unit, lint and BRAM oracle heavy phases ran under resource-lock local",
+    "verilator_build_jobs": 4,
+    "final_local_state": "FREE",
+    "final_gamepc_state": "FREE"
+  },
+  "scope_counts": {
+    "gamepc_accesses": 0,
+    "quartus_invocations": 0,
+    "jtagconfig_invocations": 0,
+    "programmer_invocations": 0,
+    "terminal_sessions": 0,
+    "fpga_configurations": 0,
+    "jic_epcq_flash_actions": 0,
+    "reset_power_actions": 0,
+    "process_stops": 0
+  },
+  "known_limits": [
+    "Full c is deliberately not run for a ten-target-second window in Verilator; no CoreMark score is claimed by T-042.",
+    "Complete Gate D, fresh Quartus physical, assembler/SOF and live t/v/c remain T-043 through T-046 and must consume the frozen merged SHA.",
+    "Upstream CoreMark files contain their original trailing whitespace; diff whitespace checks exclude only that byte-identical pinned directory."
+  ],
+  "integration_review": {
+    "reviewed_at": "2026-09-20T23:33:02+08:00",
+    "batch_branch": "batch/T-20260920-039-b25-post-bringup",
+    "merged_code_sha": "06565f0484d204da7cedb31b70f17b24868b26e7",
+    "merged_code_tree": "05ebea4b937d4663d846c44a05f9d77b596c6e9f",
+    "topic_head": "2ae61df49195046b5c726900d0ae336bcffb66d7",
+    "code_diff_from_topic": 0,
+    "merged_l0": "PASS with identical build-manifest SHA-256 985d186caf6dab652616221319eb38bffb3dbe69df89deeba12582fb68dd1d84",
+    "merged_l1": "PASS lcvex_l1_d_wb_tb operations=11 accepted=66",
+    "merged_l2": "PASS MBPASS/CMSELF and both transcript parsers",
+    "merged_l2_log": {"path": "build/agents/T-20260920-042/merged-soc-behavioral/smoke.log", "bytes": 763, "sha256": "be509cf7b126d46c6523594693fb15efdc8cd0a9e9f3a4657b1b1831f50ffdec"},
+    "result": "PASS"
+  },
+  "next": "T-042 is integrated and closed; freeze the closing batch SHA and start T-043 complete Gate D."
+}

@@ -1,0 +1,465 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-014",
+  "state": "accepted_for_timing_observation_blocked",
+  "acceptance_status": "physical_flow_complete_setup_and_residual_directional_open",
+  "partial": false,
+  "base_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "physical_rtl_parent_sha": "0166ede4abab06aff35c06159acdde7570cafa6e",
+  "dispatch_head": "3ff8d708337b0eaa67f709e17ed641e5eeeb195c",
+  "owner_head_sha": "59d3942ebca2648e7af5cb1edde2fa645e3175da",
+  "head_sha": "59d3942ebca2648e7af5cb1edde2fa645e3175da",
+  "merge_sha": "8f88c05",
+  "branch": "verify/T-20260905-014-r17-quartus-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-014",
+  "scope": "从精确 738cc14 生成并绑定 52 项 source/project payload，在全新 T-014 probe 上完成 guarded synthesis、fitter、signoff STA、custom setup/hold/recovery/removal、EMIF clock-directional、directional cone 和 sys_clk_50 top-50；完成下载 marker、strict parser 和 final postflight。",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260905-014-r17-fp-acc-control-probe",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260905-014-r17-fp-acc-control-probe\\real_a10_full_fp",
+    "project_name": "real_a10_full_fp",
+    "accessed": true,
+    "probe_created": true,
+    "manifest_synced": true,
+    "quartus_started": true,
+    "remote_manifest": {
+      "artifact": "build/agents/T-20260905-014/runtime/sync/remote_manifest_after_emif_fix.stdout.txt",
+      "artifact_sha256": "fe0de290ddb986a54b62c735807f802ff8f6306d784280b52715739ef65cd518",
+      "count": 52,
+      "missing": 0,
+      "extra": 0,
+      "bad": 0,
+      "result": "pass"
+    },
+    "canonical_qsf_external_closure": {
+      "artifact": "build/agents/T-20260905-014/runtime/preflight/canonical_ip_closure.txt",
+      "artifact_sha256": "764023a7f79e67130eacf523ad3f698bd927aaef298a639bdb73b12c0987756a",
+      "count": 19,
+      "missing": 0,
+      "result": "pass"
+    }
+  },
+  "source_equivalence": {
+    "working_tree_vs_source_sha": {
+      "command": "git diff --quiet 738cc142c0dae5269dffe9b8020094cb77ec8094 -- rtl fpga",
+      "result": "pass",
+      "exit_code": 0
+    },
+    "physical_parent_vs_source": {
+      "command": "git diff --quiet 0166ede4abab06aff35c06159acdde7570cafa6e 738cc142c0dae5269dffe9b8020094cb77ec8094 -- rtl fpga",
+      "result": "pass",
+      "exit_code": 0,
+      "artifact": "build/agents/T-20260905-014/prep/diff/parent0166_to_source738_physical-input.name-status.txt",
+      "artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "source_delta": {
+    "comparison_base": "bab301e04f69cda154a8c9bb44f77af286ff579a",
+    "physical_input_files_changed": [
+      "rtl/lcvex_core.sv",
+      "rtl/lcvex_fp_scalar.sv",
+      "rtl/lcvex_neon_fp.sv"
+    ],
+    "functional_scope_files": [
+      "Makefile",
+      "rtl/lcvex_core.sv",
+      "rtl/lcvex_fp_scalar.sv",
+      "rtl/lcvex_neon_fp.sv",
+      "sim/cocotb/test_p7_3_neon_fp.py",
+      "sim/difftest/check_neon_fetch_fault.py",
+      "sim/difftest/test_program.py",
+      "tb/sv/lcvex_fetch_fifo_tb.sv",
+      "tb/sv/lcvex_fp_exec_tb.sv"
+    ],
+    "all_repo_delta_artifact": "build/agents/T-20260905-014/prep/diff/t008_to_t014_all.name-status.txt",
+    "all_repo_delta_artifact_sha256": "f05e34aa05d772440f4b421e6d8e7e76a906aa64c3004e97efbcaf708f7e7d29",
+    "functional_delta_artifact": "build/agents/T-20260905-014/prep/diff/t008_to_t014_functional-scope.name-status.txt",
+    "functional_delta_artifact_sha256": "33415c95c82119c337dca1f370ec32f45d3ee6cc389f654129baa7d67b010dbc",
+    "physical_delta_artifact": "build/agents/T-20260905-014/prep/diff/t008_to_t014_physical-input-scope.name-status.txt",
+    "physical_delta_artifact_sha256": "3adf7bde2b3067a96b144a21ef1c59ea728bc46433acceb5e8d50466258915b0"
+  },
+  "source_sync": {
+    "formal_rtl_files": 47,
+    "platform_rtl_files": 2,
+    "project_files": 3,
+    "expected_count": 52,
+    "expected_breakdown": "47 formal rtl/*.sv + 2 platform RTL + QPF/QSF/SDC",
+    "formal_manifest": "build/agents/T-20260905-014/prep/manifest/manifest_t014_formal_source.json",
+    "formal_manifest_sha256": "75e801d0f8719865b7f5581efa7e7f90da168292f1691a21f137900756e15c86",
+    "expected_manifest": "build/agents/T-20260905-014/prep/manifest/manifest_t014_expected.json",
+    "expected_manifest_sha256": "4dac97f2612bf19a7fa560b83fe815a0132a003a6203ba0118e5d5750f10794c",
+    "expected_manifest_sidecar": "build/agents/T-20260905-014/prep/manifest/manifest_t014_expected.sha256",
+    "expected_manifest_sidecar_sha256": "bc5bb985eac6cbaa12d3ab0b97889272433538c7abb0f2661642cbcebd646bb5",
+    "local_expected_tree": "build/agents/T-20260905-014/prep/expected",
+    "local_closure": {
+      "count": 52,
+      "missing": 0,
+      "extra": 0,
+      "bad": 0,
+      "unique_paths": true,
+      "result": "pass"
+    }
+  },
+  "inputs": {
+    "physical_project_template": {
+      "source_worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-008",
+      "template_stage": "build/agents/T-20260905-008/sync/project",
+      "qpf_sha256": "20d005d115c3bf2062125e862288e17300f5a55335eb50fca74b2d27ab6f3ca6",
+      "qsf_sha256": "a7f28ed986e26a3c62e700400b76bbe844f6203f93ff1447cc9bc15dd7733e50",
+      "sdc_sha256": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da",
+      "transform": "QPF/SDC copied; QSF receives only 31 old T-008 probe-root to T-014 probe-root substitutions",
+      "formal_qsf_or_sdc_modified": false
+    },
+    "generated_project": {
+      "root": "build/agents/T-20260905-014/prep/expected/project",
+      "real_a10_full_fp.qpf_sha256": "20d005d115c3bf2062125e862288e17300f5a55335eb50fca74b2d27ab6f3ca6",
+      "real_a10_full_fp.qsf_sha256": "2215a60b6c3a2a401f8620e7f3ec967989d2ada98dbad56564d40e11630cd99f",
+      "real_a10_full_fp.sdc_sha256": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da",
+      "qsf_transform_reversible": true,
+      "old_probe_root_remaining": false
+    }
+  },
+  "compatibility_copy": {
+    "source": "rtl/lcvex_fp_scalar.sv at 738cc142c0dae5269dffe9b8020094cb77ec8094",
+    "formal_bytes": 210225,
+    "formal_sha256": "d933d87907716b3428c40971e81405b0d465faac690d9a8e316359c0d319f8e6",
+    "patched_bytes": 210197,
+    "patched_sha256": "80bf7194e0a9a0c22c7a87b7d6df9738033722375a4472ad133921aa78d3ff43",
+    "copy": "build/agents/T-20260905-014/prep/compat/rtl/lcvex_fp_scalar.sv",
+    "diff": "build/agents/T-20260905-014/prep/compat/lcvex_fp_scalar.738cc14-to-quartus21.4.diff",
+    "diff_sha256": "de3fa07f81c6afc9466abb84c3158dfd5055122cb4a58a87bcbf58b1ff7db0d3",
+    "hash_capture": "build/agents/T-20260905-014/prep/compat/lcvex_fp_scalar.hashes.txt",
+    "hash_capture_sha256": "bb2ecf85046e656b4f1f29d704c0f6a77972854f471186ca7e645742b951f22e",
+    "removed_default_ports": [
+      "iter_kill",
+      "iter_pause",
+      "divider.kill",
+      "divider.pause"
+    ],
+    "removed_default_port_count": 4,
+    "diff_removed_line_count": 4,
+    "diff_added_line_count": 4,
+    "validation": "build/agents/T-20260905-014/prep/compat/validation.json",
+    "validation_sha256": "f4989d54ad3cabaf7358f982705137e21d5b323d7de350e6aad8a59f082b1c61",
+    "t008_patched_blob_reused": false,
+    "formal_source_modified": false
+  },
+  "preparation": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 build/agents/T-20260905-014/tools/prepare.py",
+    "result": "pass",
+    "summary": "build/agents/T-20260905-014/prep_summary.json",
+    "summary_sha256": "bd72c7a4f433cd10343ba833aec3305ccd1a2d879dadb42d86b4b043e69151a7",
+    "static_checks": [
+      {
+        "command": "python3 -m py_compile build/agents/T-20260905-014/tools/prepare.py",
+        "result": "pass"
+      },
+      {
+        "command": "bash -n build/agents/T-20260905-014/prep/scripts/tools/sync_candidate.sh build/agents/T-20260905-014/prep/scripts/tools/sync_custom_sta.sh build/agents/T-20260905-014/prep/scripts/tools/download_sta_artifacts.sh",
+        "result": "pass"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile build/agents/T-20260905-014/prep/scripts/sta/parse_top50.py build/agents/T-20260905-014/prep/scripts/tools/write_download_gate.py",
+        "result": "pass"
+      }
+    ],
+    "artifact_hashes": "build/agents/T-20260905-014/evidence/prep_artifact_hashes.txt",
+    "artifact_hashes_sha256": "1519b19b5ade89e8ce4a4387ec18a09d9b7879c11bef129f6a17bd6c7ad46115",
+    "artifact_hash_entries": 141,
+    "forbidden_physical_artifacts_seen": []
+  },
+  "future_flow": {
+    "scripts_root": "build/agents/T-20260905-014/prep/scripts",
+    "prepared_scripts": [
+      "preflight/remote_preflight.ps1",
+      "preflight/probe_create_guard.ps1",
+      "preflight/probe_layout.ps1",
+      "preflight/run_stage_monitor.ps1",
+      "preflight/run_custom_sta_monitor.ps1",
+      "preflight/post_stage_guard.ps1",
+      "preflight/final_postflight_guard.ps1",
+      "sync/remote_manifest.ps1",
+      "remote/run_synthesis.ps1",
+      "remote/run_fitter.ps1",
+      "remote/run_sta_signoff.ps1",
+      "remote/run_sta_custom.ps1",
+      "sta/report_top.tcl",
+      "sta/report_emif.tcl",
+      "sta/report_directional.tcl",
+      "sta/report_sys_clk_50_top50.tcl",
+      "sta/parse_top50.py",
+      "tools/ssh_ps.py",
+      "tools/sync_candidate.sh",
+      "tools/sync_custom_sta.sh",
+      "tools/download_sta_artifacts.sh",
+      "tools/write_download_gate.py"
+    ],
+    "stage_policy": "only ipgenerate->synthesis, fitter, sta_signoff and sequential custom quartus_sta Tcl; each stage/script uses a monitored process tree with MaxRunSeconds=43200 and MinFreeMb=16384; EDA pre/post=0",
+    "directional_queries": [
+      "old pp_pre -> pack_mid",
+      "pp_pre -> pack_pre",
+      "pack_pre -> pack_mid",
+      "pack_mid -> slot_result_r",
+      "slot_result_r -> acc",
+      "exmem_valid/memwb_wb_rd/exmem_wb_rd -> acc",
+      "exmem_valid/memwb_wb_rd/exmem_wb_rd -> acc_flags"
+    ],
+    "release_environment_guard": "LCVX_T014_RELEASE=1"
+  },
+  "timing_summary": {
+    "sta_summary": "build/agents/T-20260905-014/runtime/downloaded/real_a10_full_fp.sta.summary",
+    "sta_summary_sha256": "dd9f0fd7e6b460a309e1022cb28f9a73d6fc97516b1dacbd7fa87d96fb556b88",
+    "sta_report": "build/agents/T-20260905-014/runtime/downloaded/real_a10_full_fp.sta.rpt",
+    "sta_report_sha256": "3d8541d2a142ecb051d53ce28ce7b4aaa35535d544a8ee6b433fbf9337620a66",
+    "sys_clk_50": {
+      "fmax_mhz": 43.0,
+      "setup_slack_ns": -3.256,
+      "setup_tns_ns": -21736.217,
+      "setup_failing_endpoints": 18309,
+      "hold_slack_ns": 0.016,
+      "recovery_slack_ns": 1.396,
+      "removal_slack_ns": 0.194,
+      "minimum_pulse_width_slack_ns": 9.396
+    },
+    "baseline_t008": {
+      "source_sha": "bab301e04f69cda154a8c9bb44f77af286ff579a",
+      "fmax_mhz": 40.33,
+      "setup_slack_ns": -4.797,
+      "setup_tns_ns": -34241.243,
+      "setup_failing_endpoints": 20559
+    },
+    "delta_vs_t008": {
+      "fmax_mhz": 2.67,
+      "fmax_percent": 6.62,
+      "setup_slack_ns": 1.541,
+      "setup_tns_ns": 12505.026,
+      "setup_failing_endpoints": -2250
+    },
+    "closure": "FAIL_setup_only; hold/recovery/removal/min-pulse/DDR/metastability pass in downloaded STA summary"
+  },
+  "directional_acceptance": {
+    "old_pp_pre_to_pack_mid": {
+      "result": "pass_zero_paths",
+      "from_registers": 1012,
+      "to_registers": 1174,
+      "paths": 0
+    },
+    "core_control_to_acc": {
+      "result": "open_residual_paths",
+      "exmem_valid_to_acc": {"paths": 50, "violated": 50, "worst_slack_ns": -0.410},
+      "exmem_valid_to_acc_flags": {"paths": 50, "violated": 50, "worst_slack_ns": -0.259},
+      "memwb_wb_rd_to_acc": {"paths": 50, "violated": 0, "worst_slack_ns": 0.093},
+      "memwb_wb_rd_to_acc_flags": {"paths": 50, "violated": 0, "worst_slack_ns": 0.244},
+      "exmem_wb_rd_to_acc": {"paths": 50, "violated": 24, "worst_slack_ns": -0.054},
+      "exmem_wb_rd_to_acc_flags": {"paths": 50, "violated": 0, "worst_slack_ns": 0.097},
+      "note": "The Round17 TX_DONE cleanup path left the global top-50, but the broad core-control directional requirement is not zero-path and is carried into T-018."
+    }
+  },
+  "runs": [
+    {
+      "stage": "preflight_and_sync",
+      "result": "pass",
+      "admission": "build/agents/T-20260905-014/runtime/preflight/admission_guard.txt",
+      "probe_create": "build/agents/T-20260905-014/runtime/preflight/probe_create_guard.txt",
+      "probe_layout": "build/agents/T-20260905-014/runtime/preflight/probe_layout.txt",
+      "canonical_ip_closure": {
+        "artifact": "build/agents/T-20260905-014/runtime/preflight/canonical_ip_closure.txt",
+        "artifact_sha256": "764023a7f79e67130eacf523ad3f698bd927aaef298a639bdb73b12c0987756a",
+        "count": 19,
+        "missing": 0
+      },
+      "remote_manifest": {
+        "artifact": "build/agents/T-20260905-014/runtime/sync/remote_manifest_after_emif_fix.stdout.txt",
+        "artifact_sha256": "fe0de290ddb986a54b62c735807f802ff8f6306d784280b52715739ef65cd518",
+        "count": 52,
+        "missing": 0,
+        "extra": 0,
+        "bad": 0
+      }
+    },
+    {
+      "stage": "synthesis",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "start": "2026-09-05T14:14:52.0477556+08:00",
+      "finish": "2026-09-05T18:04:17.2570092+08:00",
+      "wall_s": 13765.209,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "timeout": false,
+      "peak_private_mb": 11788.7,
+      "monitor_result": "build/agents/T-20260905-014/runtime/downloaded/synthesis.monitor_result.json",
+      "monitor_result_sha256": "406d9240b0b1dc01ec8b944fb23ea555ee81a4202da71a1d8e5d786b0c353923",
+      "post_guard": "build/agents/T-20260905-014/runtime/stages/synthesis.wrapper.stdout.log",
+      "post_guard_sha256": "f258317508901c5913428ffef57f6cb844c211b3dd748e2589fb20d6312fe5f2"
+    },
+    {
+      "stage": "fitter",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start fitter -end fitter",
+      "start": "2026-09-05T18:30:07.3733845+08:00",
+      "finish": "2026-09-05T19:00:59.7706137+08:00",
+      "wall_s": 1852.397,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "timeout": false,
+      "peak_private_mb": 12608.3,
+      "monitor_result": "build/agents/T-20260905-014/runtime/downloaded/fitter.monitor_result.json",
+      "monitor_result_sha256": "67536b889981d6ace9f86f675ef2a929fbdb6d7c4607a6151ccaf30bef966da6",
+      "post_guard": "build/agents/T-20260905-014/runtime/stages/fitter.wrapper.stdout.log",
+      "post_guard_sha256": "113482b33d421285f0a228814ce68788550dd5ea63695d9c46b79e9f30421ed7"
+    },
+    {
+      "stage": "sta_signoff",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start sta_signoff -end sta_signoff",
+      "start": "2026-09-05T19:03:50.7550498+08:00",
+      "finish": "2026-09-05T19:04:33.5206967+08:00",
+      "wall_s": 42.766,
+      "exit_code": 0,
+      "safety_stopped": false,
+      "timeout": false,
+      "peak_private_mb": 6494.8,
+      "monitor_result": "build/agents/T-20260905-014/runtime/downloaded/sta_signoff.monitor_result.json",
+      "monitor_result_sha256": "ec2c7016013e07b52ca4fc66eb0f69fc3744308e7e53798486a688ae6949304a",
+      "post_guard": "build/agents/T-20260905-014/runtime/stages/sta_signoff.wrapper.stdout.log",
+      "post_guard_sha256": "ccc4fb0358d3c7e99b45ce4a9a73cdcb9a9bde9b05e823c06e8d1a85f0576df2"
+    },
+    {
+      "stage": "custom_sta",
+      "scripts": [
+        {"script": "report_top.tcl", "exit_code": 0, "monitor_result_sha256": "2bed3c106a0cee831502abab98e4bd7c819bbfdd584d6eb45697a20061856afb"},
+        {"script": "report_emif.tcl", "exit_code": 0, "monitor_result_sha256": "c28899ffd228347583bc5f8bad3c3428e8b9f88f73f30365ca1c6a02c17a0421"},
+        {"script": "report_directional.tcl", "exit_code": 0, "monitor_result_sha256": "30d861666d389b8aa1f17f5339be0600bd1968fd8a93a958e8eddebf4911e913"},
+        {"script": "report_sys_clk_50_top50.tcl", "exit_code": 0, "monitor_result_sha256": "c8e4eb6fcb8ff0b0833fc14685b524489fd42f189f3e07894cf6b340ef567648"}
+      ],
+      "directional": {
+        "old_pp_pre_to_pack_mid_paths": 0,
+        "pp_pre_to_pack_pre_paths": 50,
+        "pack_pre_to_pack_mid_paths": 50,
+        "pack_mid_to_slot_result_paths": 50,
+        "slot_result_to_acc_paths": 50,
+        "exmem_valid_to_acc_paths": 50,
+        "exmem_valid_to_acc_flags_paths": 50,
+        "memwb_wb_rd_to_acc_paths": 50,
+        "memwb_wb_rd_to_acc_flags_paths": 50,
+        "exmem_wb_rd_to_acc_paths": 50,
+        "exmem_wb_rd_to_acc_flags_paths": 50,
+        "acc_all_registers": 134,
+        "acc_flags_registers": 6,
+        "acc_registers_after_separation": 128
+      },
+      "emif": {
+        "sys_clock_count": 1,
+        "emif_user_clock_count": 1,
+        "emif_wildcard_clock_count": 24,
+        "canonical_clock_count": 24,
+        "distinct_clock_pairs": 552,
+        "pairs_with_paths": 6,
+        "reported_paths_across_pairs": 300,
+        "emif_to_sys_paths": 0,
+        "sys_to_emif_paths": 0
+      },
+      "post_guard": "build/agents/T-20260905-014/runtime/stages/custom_sta_r2.wrapper.stdout.log",
+      "post_guard_sha256": "06bc6b801075b43cf16184466ffca6dcbbade716efda41b7ee09ddc1f858a1ab"
+    },
+    {
+      "stage": "download_and_parser",
+      "downloaded_file_count": 58,
+      "downloaded_bytes": 46202344,
+      "download_gate": "build/agents/T-20260905-014/runtime/downloaded/t014_download_gate.json",
+      "download_gate_sha256": "4e1ef1ba0041eb38135f2564b1d11aab832a155d6f3c0aa1aeb3bc0211a02b70",
+      "parser": "build/agents/T-20260905-014/runtime/downloaded/t014_top50_parsed.json",
+      "parser_sha256": "41c712c0ae844bf69bf44e115ca80821527c7fae64aaf6d68812506a031a677b",
+      "parser_result": "pass",
+      "path_count": 50,
+      "rank_sequence": "1..50",
+      "launch_latch_clock_check": "50/50 sys_clk_50",
+      "metadata_check": "50/50 logic_levels and SDC_exception present"
+    },
+    {
+      "stage": "final_postflight",
+      "result": "pass",
+      "artifact": "build/agents/T-20260905-014/runtime/final_postflight_guard.stdout",
+      "artifact_sha256": "801833b04ac0a45033506c0769efed8ff2bdeaf7b670dbaaa4e4882d08e084aa",
+      "eda_count": 0,
+      "forbidden_artifact_count": 0,
+      "jtagserver": "PID 5476 observed and untouched"
+    }
+  ],
+  "not_run": [
+    "Verilator, QEMU or full L0-L2 union",
+    "assembler and SOF/JIC/RBF/POF/JBC/SVF/JAM generation",
+    "quartus_pgm, JTAG/Flash programming, power-on and board test"
+  ],
+  "release_gate": {
+    "status": "physical-validation-complete-no-board-release",
+    "integrator_confirmation": "R17 release GO was received before remote execution; exact source/project manifest and corrected T-015 guard were bound by the integrator candidate.",
+    "timing_result": "setup closure remains negative on sys_clk_50; record as an honest physical result and return to the next RTL timing batch.",
+    "board_policy": "No assembler, bitstream, JTAG, programming, power-on or board test without explicit user permission."
+  },
+  "integrator_dependency_evidence": {
+    "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+    "joint_l0_l1_log_sha256": "1e273176e9c366664233d22b6cfa1de572cdbd4ccc1a39fa83b917c2807ecf62",
+    "l2_logs_sha256": {
+      "batch_a": "45a075edd30f8a1246b817f6c99780ec565acd9f0ecc8a90b1ecadb4ac09665f",
+      "batch_b": "efad4f10ad1eafadc40b97cf813c1eff79aeb9c2ae04f9677a422d84abe61785",
+      "batch_c": "b93e1e64a66fc1d9b9ed3afd109ea0314ba7c8bf3a3fca14c846219221f9589f",
+      "batch_d": "1f9039416df6ee6dd4192c4e307f36cf32c3a5c67bb845fa706a50eab90f1bb5",
+      "batch_e": "77cbfb480235313ccd3fc6581ef26b6041d0bdb97b8d2a3f7980149b6be47cc1",
+      "batch_f": "8b96608367c574f20bf31c8c2e96a2f9692d393764c5f42403ac54b95611ebd2"
+    },
+    "t015_dynamic_log_sha256": "83085d934db2f4b8db4c57f02e68e6b40510b9a16646e66e706029d2e392b056",
+    "result": "pass"
+  },
+  "policy": {
+    "remote_access": true,
+    "probe_created": true,
+    "quartus_started": true,
+    "verilator_started": false,
+    "qemu_started": false,
+    "formal_rtl_modified": false,
+    "formal_qsf_sdc_modified": false,
+    "qemu_modified": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false,
+    "unknown_files_deleted": false,
+    "custom_scripts_only_resync": true,
+    "source_project_payload_modified_after_manifest": false
+  },
+  "known_limits": [
+    "sys_clk_50 setup 仍为负 slack，T-014 不构成 timing closure，也不授权 assembler/SOF/JTAG/板测。",
+    "Quartus 21.4 的 get_attribute 对 timing-path 对象返回 NA；setup/hold/recovery/removal 的完整 report_timing 文件和 STA summary 是权威数值来源，*_top.txt 仅作辅助输出。",
+    "EMIF 21.4 clock 对象没有 get_object_name；24 个 canonical 名称来自同一 final DB 的 report_clocks 实测并逐项重新解析，未把同一 clock collection 当作 cross。"
+  ],
+  "validation": {
+    "evidence_json_parse": "pass",
+    "local_manifest_closure": "pass",
+    "remote_manifest_closure": "pass_52_52",
+    "canonical_qsf_external_closure": "pass_19_19",
+    "compatibility_exact_four_line_diff": "pass",
+    "source_738_tree_match": "pass",
+    "parent_0166_physical_equivalence": "pass",
+    "generator_reproducibility": "pass_hash_stable_twice_excluding_pyc",
+    "fitter": "pass_exit0_postguard",
+    "sta_signoff": "pass_exit0_postguard",
+    "custom_sta": "pass_all_four_scripts_exit0_postguard",
+    "top50_parser_hard_gate": "pass_50_rows_rank_clock_metadata_marker_hash",
+    "final_postflight": "pass_eda0_forbidden0",
+    "no_assembler_jtag_board_action": "pass"
+  },
+  "timestamps": {
+    "preparation_completed_at": "2026-09-05T18:25:35+08:00",
+    "remote_probe_created_at": "2026-09-05T14:12:36+08:00",
+    "synthesis_completed_at": "2026-09-05T18:04:17+08:00",
+    "fitter_completed_at": "2026-09-05T19:00:59+08:00",
+    "sta_signoff_completed_at": "2026-09-05T19:04:33+08:00",
+    "custom_sta_completed_at": "2026-09-05T19:16:13+08:00",
+    "download_parser_completed_at": "2026-09-05T19:17:00+08:00",
+    "final_postflight_completed_at": "2026-09-05T19:18:47+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260905-014-r17-quartus-physical.md",
+  "next": "回到下一轮 RTL timing batch：以 sys_clk_50 的 idex_valid -> fp_exec.state.TX_DONE top cone 和 directional report 重新排序；禁止把本次 negative setup 结果推进 assembler、JTAG 或板测。"
+}

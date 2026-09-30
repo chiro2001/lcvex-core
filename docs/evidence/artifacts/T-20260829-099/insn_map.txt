@@ -1,0 +1,72 @@
+# lcvex 指令覆盖记账（QEMU trace 助记符归一统计）
+# traces: build/difftest/random_1.trace, build/difftest/random_2.trace, build/difftest/random_3.trace
+# expect: random（62 族）
+
+# expected_hit: 62/62
+# observed_families: 63
+
+add        9190
+adds       2886
+adr        2578
+adrp       2511
+and        1857
+ands       1851
+b          78912
+b.cond     53637
+bfm        2975
+bic        1892
+bics       1806
+bti        1669
+cbnz       5849
+cbz        5939
+ccmn       2520
+ccmp       2438
+clrex      405
+clz        1830
+csel       2589
+csinc      2611
+csinv      2485
+csneg      2551
+eon        1785
+eor        1944
+ldp        1339
+ldr        4588
+ldrb       2062
+ldrh       2052
+ldrsb      417
+ldrsh      416
+ldrsw      2317
+ldxr       3372
+madd       799
+movk       7190
+movn       4360
+movz       17601
+msr        1764
+msub       835
+mul        1690
+nop        179
+orn        1929
+orr        1871
+prfm       187
+rbit       878
+rev        2238
+sbfm       1016
+sdiv       1721
+smaddl     409
+smsubl     431
+stp        1374
+str        4824
+strb       2105
+strh       2157
+stxr       4425
+sub        6158
+subs       5747
+tbnz       5829
+tbz        5813
+ubfm       1018
+udiv       1679
+umaddl     429
+umsubl     407
+umulh      1670
+
+# 未见（期望但缺失）

@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-011",
+  "label": "R17-FP-ACC-CONTROL-CUT",
+  "state": "review",
+  "partial": false,
+  "acceptance_status": "owner_static_review_candidate_validation_pending",
+  "base_sha": "4816285977748596d3ede6b72ac1e8cc5c4cd3ff",
+  "upstream_candidate_sha": "b9b1121ffc2c8fff0da9f752a4172159e8d95e62",
+  "source_head_sha": "2d0d43e737ec1d9f837c345ded90242c49d59a12",
+  "test_head_sha": "0f39b61b0a31ca5a4d905edb869618cd363263d9",
+  "branch_head_sha": "final-documentation-tip",
+  "merge_sha": null,
+  "branch": "timing/T-20260905-011-r17-fp-acc-control-cut",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-011",
+  "batch_parent": "T-20260905-002",
+  "depends_on": [
+    "T-20260905-009"
+  ],
+  "cone_id": "R17-CORE-PIPE-FP-ACC",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-09-05T09:26:26+08:00",
+    "received_at": "2026-09-05T09:26:26+08:00",
+    "reported_at": "2026-09-05T11:22:00+08:00",
+    "implementation_commit_at": "2026-09-05T09:55:55+08:00",
+    "test_commit_at": "2026-09-05T09:56:02+08:00",
+    "test_correction_commit_at": "2026-09-05T10:10:21+08:00",
+    "test_window_correction_commit_at": "2026-09-05T11:20:07+08:00"
+  },
+  "scope": "Remove the rsp_ready-controlled TX_DONE accumulator/flags cleanup from lcvex_fp_exec while preserving request/response ownership, FMA operand_c, single outstanding transaction, kill/reset and commit ordering.",
+  "timing_input": {
+    "source_task": "T-20260905-008 retry3",
+    "raw_top50_report": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-008/build/agents/T-20260905-008/retry3/sta/extended/t008r3_sys_clk_50_setup_top50.rpt",
+    "raw_top50_sha256": "07236136ddb69b73c2bc7e30d61e647b1738baa4e52683c90e18a26c51d594cf",
+    "parsed_top50": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-008/build/agents/T-20260905-008/retry3/sta/extended/top50_parsed.json",
+    "parsed_top50_sha256": "58248726ffbb646193cfae1276baddf8fdef51853df7ac2ab2e3a62617082ffa",
+    "path_count": 50,
+    "clock": "sys_clk_50",
+    "worst_slack_ns": -4.797,
+    "target": "fp_exec.acc[*].ena",
+    "clusters": {
+      "exmem_valid_to_acc": {"count": 18, "slack_range_ns": [-4.767, -4.685], "logic_levels": 27},
+      "memwb_wb_rd_to_acc": {"count": 3, "slack_ns": -4.706, "logic_levels": 27},
+      "exmem_wb_rd_to_acc": {"count": 3, "slack_ns": -4.698, "logic_levels": 27}
+    },
+    "common_chain": "exmem_valid|memwb_wb_rd[4]~DUPLICATE|exmem_wb_rd[3] -> reduce_nor_229~1/reduce_nor_230~3 -> gprv[22][0]~49 -> gprv[22][0]~842 -> gprv[22][0]~843 -> decode i16159~199/~207/~208 -> Mux_5958~0 -> shift_left_18~14 -> add_48~57/125/113/117/161/165/177/181 -> d.mem_addr[0]~228/~398 -> LessThan_16~9/~10/~11/~14 -> LessThan_35~1 -> i107614~3 -> d.exc_code[2]~2 -> i1060 -> i21303~42/~43/~51 -> sys_commit_ready~0 -> i22625~0 -> fp_rsp_ready~0 -> fp_exec i8721~2 -> acc[*].ena"
+  },
+  "implementation": {
+    "commits": [
+      {
+        "sha": "2d0d43e737ec1d9f837c345ded90242c49d59a12",
+        "scope": "lcvex_fp_exec TX_DONE retains non-architectural acc/acc_flags after rsp_ready handshake"
+      },
+      {
+        "sha": "00310826a06561fbadd6ad7c94f6d1bb02721487",
+        "scope": "Cocotb P7-3 held-response and consecutive FMLA/FADD transaction checks"
+      },
+      {
+        "sha": "4cbc5ae6760cc6c8afba46875d982f40c0432e2e",
+        "scope": "Correction: require older MEM/WB and EX/MEM occupancy with exmem_can_accept=0 before held-response assertion"
+      },
+      {
+        "sha": "0f39b61b0a31ca5a4d905edb869618cd363263d9",
+        "scope": "Correction: hold commit_ready high until the natural IF/ID FMLA + ID/EX + EX/MEM older-stage window, then arm backpressure"
+      }
+    ],
+    "files": [
+      "rtl/lcvex_neon_fp.sv",
+      "sim/cocotb/test_p7_3_neon_fp.py",
+      "docs/handoffs/T-20260905-011-r17-fp-acc-control-cut.md",
+      "docs/tasks/evidence/T-20260905-011.json"
+    ],
+    "summary": "TX_DONE still releases rsp_valid/req ownership on rsp_ready, but no longer clears acc/acc_flags. TX_IDLE request acceptance, reset and kill retain their existing clearing behavior; no core, interface, latency or architectural commit path changed.",
+    "reset_kill_hold": {
+      "reset": "state TX_IDLE, req/rsp/slot/acc/acc_flags cleared",
+      "kill": "state TX_IDLE, req/rsp/slot/acc/acc_flags cleared",
+      "tx_done": "rsp_ready clears ownership and slot bookkeeping, retains rsp_r/acc/acc_flags",
+      "next_request": "req_valid && req_ready in TX_IDLE clears acc/acc_flags before TX_RUN"
+    },
+    "source_sha256": "6f1d40b9064cdb0c615f83e928082a2bd65864ad0864fadc5bfd3feb36ba0f27",
+    "test_sha256": "936380bf853840ac7132f135e28d1686abddb89d0a9fdec574e69786d1b0e6d4",
+    "core_modified": false,
+    "public_interface_modified": false,
+    "false_path_added": false,
+    "assertions_disabled": false,
+    "reference_results_modified": false
+  },
+  "test_update": {
+    "function": "test_p7_3_accumulator_cleanup_and_consecutive_fmla",
+    "coverage": [
+      "ready remains high until IF/ID FMLA(BASE+8), ID/EX MOVZ(BASE+4), EX/MEM MOVZ(BASE) natural window",
+      "ready-low edge confirms MEM/WB+EX/MEM occupancy, FMLA ID/EX delivery and exmem_can_accept=0 before held-response assertion",
+      "TX_DONE held response and stable acc/acc_flags",
+      "FMLA V2.2S captured operand_c and V RAW dependency",
+      "TX_DONE handshake retains acc/acc_flags",
+      "next FP request clears acc/acc_flags before slot execution",
+      "consecutive V2/V3 raw commit packet expectations"
+    ],
+    "internal_handle": "dut.core.g_fp_simd_enabled.fp_exec"
+  },
+  "runs": [
+    {
+      "run_id": "owner-git-diff-check",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "00310826a06561fbadd6ad7c94f6d1bb02721487",
+      "command": "git diff --check 4816285977748596d3ede6b72ac1e8cc5c4cd3ff..00310826a06561fbadd6ad7c94f6d1bb02721487",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T09:56:14+08:00",
+      "finished_at": "2026-09-05T09:56:14+08:00"
+    },
+    {
+      "run_id": "owner-python-syntax",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "00310826a06561fbadd6ad7c94f6d1bb02721487",
+      "command": "python3 -m py_compile sim/cocotb/test_p7_3_neon_fp.py",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T09:56:14+08:00",
+      "finished_at": "2026-09-05T09:56:14+08:00"
+    },
+    {
+      "run_id": "owner-write-scope-review",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "00310826a06561fbadd6ad7c94f6d1bb02721487",
+      "command": "static review of active write_regions, source diff and forbidden rtl/lcvex_core.sv boundary",
+      "result": "pass",
+      "exit_code": 0,
+      "notes": "Only rtl/lcvex_neon_fp.sv TX_DONE cleanup and sim/cocotb/test_p7_3_neon_fp.py were changed; active JSON was not modified."
+    },
+    {
+      "run_id": "owner-test-correction-static",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "4cbc5ae6760cc6c8afba46875d982f40c0432e2e",
+      "command": "git diff --check 7f11664223efad61bc0a05535cbb9463a2605a3a..4cbc5ae6760cc6c8afba46875d982f40c0432e2e; python3 -m py_compile sim/cocotb/test_p7_3_neon_fp.py",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T10:13:12+08:00",
+      "finished_at": "2026-09-05T10:13:12+08:00",
+      "notes": "Correction requires two older instructions and explicitly checks memwb_valid/exmem_valid/exmem_can_accept before asserting held response."
+    },
+    {
+      "run_id": "owner-test-window-correction-static",
+      "runner_role": "owner",
+      "level": "L0",
+      "source_sha": "0f39b61b0a31ca5a4d905edb869618cd363263d9",
+      "command": "git diff --check 7f11664223efad61bc0a05535cbb9463a2605a3a..0f39b61b0a31ca5a4d905edb869618cd363263d9; python3 -m py_compile sim/cocotb/test_p7_3_neon_fp.py",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T11:20:18+08:00",
+      "finished_at": "2026-09-05T11:20:18+08:00",
+      "notes": "T-013 correction arms commit_ready=0 only after the natural IF/ID FMLA + ID/EX older + EX/MEM older window; no RTL change."
+    }
+  ],
+  "not_run": [
+    "Verilator compile and all SV directed tests",
+    "Cocotb test_p7_3_neon_fp runtime",
+    "P7-1/P7-3/P7-4/P7-5 SV/Cocotb suites",
+    "QEMU build and strict lockstep",
+    "IRQ/fault/restore runtime matrices",
+    "Quartus synthesis/fitter/signoff STA and new raw top-50",
+    "assembler/bitstream/JTAG/programming/board actions"
+  ],
+  "known_limits": [
+    "Owner stops at review while T-009 heavy validation occupies the queue; no functional or physical green result is claimed.",
+    "The focused Cocotb test is source-level coverage only until the integrator runs it on the merged candidate; its internal handle is dut.core.g_fp_simd_enabled.fp_exec.",
+    "The timing claim is structural intent only; the next physical run must confirm fp_exec.acc[*].ena no longer receives rsp_ready through the reported core control cone and must report any new top paths/area/latency cost."
+  ],
+  "policy": {
+    "active_json_modified": false,
+    "core_modified": false,
+    "qemu_modified": false,
+    "qsf_sdc_modified": false,
+    "heavy_validation_run": false,
+    "generated_artifacts_created": false
+  },
+  "integrator_fields_pending": [
+    "active task final source_sha/head_sha/merge_sha/merged_at/integrator_validation",
+    "batch candidate merge SHA and source/artifact/log hashes",
+    "joint FP L0-L2 command/results and affected IRQ/fault/restore results",
+    "new physical top-50/STA and resource/timing deltas"
+  ],
+  "handoff": "docs/handoffs/T-20260905-011-r17-fp-acc-control-cut.md",
+  "next": "Integrator waits for T-009 completion, merges this lane into the registered timing batch candidate, runs the complete FP L0-L2 union, then reruns physical synthesis/fitter/signoff STA."
+}

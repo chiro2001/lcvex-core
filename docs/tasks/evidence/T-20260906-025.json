@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260906-025",
+  "state": "done",
+  "base_sha": "8d35b6d61669a7b61c8b2fb49e3665bf0e585db4",
+  "registration_sha": "c7670c8e",
+  "implementation_head": "f9792d12d42d6bd8323f8ce311b7136c74d4d034",
+  "branch": "infra/T-20260906-025-resource-lock-policy",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260906-025",
+  "external_artifacts": {
+    "root": "/home/chiro/projects/.resource-locks",
+    "README.md": "1ba100d846d63a9873abbab05f4032cfeefa79a4644063587a9488d391b8748f",
+    "resource-lock": "582f2fdd527ffe17ec5f762bbd35d0b6ff3932dcfa70b48998591e67f750817a",
+    "test-resource-lock": "533d2be59a8e33edba717f2dd426e2915097fec5e9d8b4cc3d0db99241d49467"
+  },
+  "changes": [
+    "A wrapper supervisor now retains guard locks even when the child closes inherited file descriptors.",
+    "Status combines guard-lock state with PID, boot ID and start-tick identity.",
+    "Local admission is optional through --min-local-available-mib; there is no fixed 16 GiB or 50% limit after exclusive acquisition.",
+    "Arbitrary audited --meta key=value fields record task-specific resource policy.",
+    "Normal exits propagate the child status and remove only the wrapper's own PID files.",
+    "LCVEX normative workflow now requires shared local/gamepc locks and a recorded dynamic budget. Historical evidence was not rewritten."
+  ],
+  "validation": [
+    {
+      "command": "bash -n /home/chiro/projects/.resource-locks/resource-lock /home/chiro/projects/.resource-locks/test-resource-lock",
+      "result": "pass"
+    },
+    {
+      "command": "/home/chiro/projects/.resource-locks/test-resource-lock",
+      "result": "pass",
+      "coverage": [
+        "free and busy status",
+        "atomic collision returns 75",
+        "metadata visibility",
+        "child closes inherited FDs while supervisor retains lock",
+        "child exit code 42 propagation and PID cleanup",
+        "optional admission failure returns 69",
+        "invalid local admission on gamepc returns 64",
+        "combined local,gamepc acquisition and cleanup"
+      ]
+    },
+    {
+      "command": "git diff --check; jq empty task/evidence; timestamp checker scoped to T-20260906-025",
+      "result": "pass",
+      "note": "The repository-wide live checker retains pre-existing historical issues; filtering its JSON output found no T-20260906-025 issue."
+    }
+  ],
+  "production_status": {
+    "captured_at": "2026-09-06T07:48:55+08:00",
+    "local": "FREE",
+    "gamepc": "BUSY pid=128838 project=lcvex task=T-20260906-024 agent=r19_physical_prep started_at=2026-09-06T07:48:22+08:00 command=ssh_ps.py",
+    "note": "The pre-protocol R19 fitter is now represented by a synchronous adopted watcher; it was not restarted."
+  },
+  "policy": {
+    "production_lock_acquired_by_selftest": false,
+    "heavy_job_started": false,
+    "historical_evidence_rewritten": false,
+    "fixed_local_memory_cap_required": false,
+    "task_specific_admission_and_evidence_required": true
+  },
+  "timestamps": {
+    "started_at": "2026-09-06T07:46:53+08:00",
+    "validated_at": "2026-09-06T07:48:55+08:00",
+    "reported_at": "2026-09-06T07:49:12+08:00"
+  },
+  "handoff": "docs/handoffs/T-20260906-025-resource-lock-policy.md"
+}

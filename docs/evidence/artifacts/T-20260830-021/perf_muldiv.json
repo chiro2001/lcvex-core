@@ -1,0 +1,31 @@
+{
+  "name": "muldiv",
+  "sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "git_sha": "0055eaf10f9050eef6a2f852ef80e94aba5c5ef1",
+  "source_hash": "da340bd42fc50d53e343dcd77b4255b82696917a3eefe40caf4c9eaf7811385c",
+  "source_sha256": "da340bd42fc50d53e343dcd77b4255b82696917a3eefe40caf4c9eaf7811385c",
+  "image_hash": "8ffba56ab71aef16093baaabe809ae1077cf7dc87b1728cf7a306b405bcbee4f",
+  "image_sha256": "8ffba56ab71aef16093baaabe809ae1077cf7dc87b1728cf7a306b405bcbee4f",
+  "toolchain": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+  "cycles": 848421,
+  "wall_sec": 6.050293,
+  "rss_kb": 139332,
+  "rss": 136.066,
+  "status": "pass",
+  "params": "",
+  "runner": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+  "command": [
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench_runner/microbench_runner",
+    "--image",
+    "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021/build/microbench/perf_muldiv.bin",
+    "--name",
+    "muldiv",
+    "--max-cycles",
+    "5000000"
+  ],
+  "max_cycles": 5000000,
+  "returncode": 0,
+  "rc": 0,
+  "runner_stdout": "PASS: muldiv (848421 cycles)\n",
+  "runner_stderr": ""
+}

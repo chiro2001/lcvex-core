@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-013",
+  "label": "R17-TIMING-BATCH",
+  "state": "accepted_for_next_timing_batch",
+  "partial": false,
+  "source_sha": "738cc142c0dae5269dffe9b8020094cb77ec8094",
+  "rtl_parent_sha": "0166ede4abab06aff35c06159acdde7570cafa6e",
+  "branch": "batch/T-20260905-013-r17",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260905-013",
+  "scope": "R17 combines the ordinary round-pack split, FP accumulator-control cleanup, repaired EX/MEM/FP-response handshake, branch-IABT fence and the corrected NEON page-end fetch-fault semantic guard. All registered L0-L2 runs were restarted on one exact SHA before fresh physical validation.",
+  "members": [
+    {"task": "T-20260905-010", "result": "accepted", "summary": "pp_pre -> pack_pre -> pack_mid register split; old pp_pre->pack_mid direct physical path is now zero."},
+    {"task": "T-20260905-011", "result": "accepted_partial_physical", "summary": "TX_DONE rsp_ready cleanup no longer clears acc/acc_flags and the old control cone left global top-50; broader core-control directional paths remain and are carried into T-018."},
+    {"task": "T-20260905-012", "result": "accepted", "summary": "EX/MEM acceptance and FP response/data-MMU overlap are repaired; the directed overlap test is green."},
+    {"task": "T-20260905-015", "result": "accepted", "summary": "NEON fetch-fault image enables FPEN, maps the Q-store page EL1-RW and requires EC=0x21 plus mem/mem2 semantic proof."}
+  ],
+  "source_delta_from_r16_physical": {
+    "baseline_sha": "bab301e04f69cda154a8c9bb44f77af286ff579a",
+    "physical_rtl_files": ["rtl/lcvex_core.sv", "rtl/lcvex_fp_scalar.sv", "rtl/lcvex_neon_fp.sv"]
+  },
+  "tools": {
+    "qemu_version": "QEMU 11.1.0 (v11.1.0-dirty)",
+    "qemu_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "plugin_sha256": "b0dc0fd7d60032668be926ec04d96f322f386449970a433b1ca728743e39d3a8",
+    "verilator_version": "5.050 2026-07-01 rev conda-forge build 0",
+    "coordinators_sha256": {
+      "base": "26ce681b772aec447e75daced34933f006d7ba01083e00ef320a285acaad9bb6",
+      "cache": "7035d3c256ae6289d46aa7864b469b30ecc32616d94cb1cffab3f5d2c061d30f",
+      "delay2": "5cae11d19e87bedef0123eb7e7cb3c888b8fcb553d643d45fae3fd226c74c6f5",
+      "fifo_off": "05a96eba4449d39d54c06623b4bc5ee20a1dfa4bc0b094684c2dbb6d44ff99e0"
+    }
+  },
+  "local_validation": {
+    "resource": "one heavy queue; CPUQuota=50%; MemoryMax=16G; MemorySwapMax=0; VERILATOR_JOBS=1",
+    "l0_l1": {
+      "result": "pass",
+      "exit_code": 0,
+      "log": "build/agents/T-20260905-013/joint-l0-l1-738cc14.log",
+      "sha256": "1e273176e9c366664233d22b6cfa1de572cdbd4ccc1a39fa83b917c2807ecf62",
+      "bytes": 81509,
+      "lines": 1022,
+      "summary": "registry 77; semantic negative selftest; lint/core/backpressure/FIFO/MMU; IRQ young 4/4 and atomic 4/4; FP wrapper; P7-1..P7-5 SV+Cocotb; muldiv; maintenance owner 2/2; T-012 data-MMU overlap."
+    },
+    "expected_fail": {
+      "result": "pass_expected_fail",
+      "outer_exit_code": 2,
+      "program_exit_code": 1,
+      "log": "build/agents/T-20260905-013/738cc14/expected-fail/p7-2-neon-fault-bfm.log",
+      "sha256": "decd23f5dcf231fe1fc914a3fe96301a9f6d383753466311fa83a90fed2d3c56",
+      "assert_log": "build/agents/T-20260827-059/fault-bfm-assert.log",
+      "assert_log_sha256": "86c5c95723becdb1863cb735a44226f43b1c2befe1290c996354f73a60aef508",
+      "assertion": "rtl/lcvex_core.sv:4752 Q-store second-half response fault"
+    },
+    "l2": [
+      {"batch": "A", "result": "pass", "log": "build/agents/T-20260905-013/738cc14/l2/batch-a.log", "sha256": "45a075edd30f8a1246b817f6c99780ec565acd9f0ecc8a90b1ecadb4ac09665f", "summary": "p5a 24/26/40; muldiv 16; rtl 33; hazard 34; pair 30; 203 strict commits"},
+      {"batch": "B", "result": "pass", "log": "build/agents/T-20260905-013/738cc14/l2/batch-b.log", "sha256": "efad4f10ad1eafadc40b97cf813c1eff79aeb9c2ae04f9677a422d84abe61785", "summary": "LSE 100x2; LSE128 120x2; maintenance 19x2/30x2/24x2; 586 strict commits"},
+      {"batch": "C", "result": "pass", "log": "build/agents/T-20260905-013/738cc14/l2/batch-c.log", "sha256": "b93e1e64a66fc1d9b9ed3afd109ea0314ba7c8bf3a3fca14c846219221f9589f", "environment": "RUN_T054=0 for T055 after the standalone complete T054 matrix", "summary": "T054 570 plus T055 716 strict commits; total 1286; protocol and WFI sidecar probes pass"},
+      {"batch": "D", "result": "pass", "log": "build/agents/T-20260905-013/738cc14/l2/batch-d.log", "sha256": "1f9039416df6ee6dd4192c4e307f36cf32c3a5c67bb845fa706a50eab90f1bb5", "summary": "P7-2 NEON integer 31/31; corrected fetch-fault 20/20 with static image guard"},
+      {"batch": "E", "result": "pass", "log": "build/agents/T-20260905-013/738cc14/l2/batch-e.log", "sha256": "77cbfb480235313ccd3fc6581ef26b6041d0bdb97b8d2a3f7980149b6be47cc1", "summary": "13 P7 targets: P7-1 472, P7-3 48, P7-4 317, P7-5 267; total 1104 strict commits"},
+      {"batch": "F", "result": "pass", "log": "build/agents/T-20260905-013/738cc14/l2/batch-f-branch-fence.log", "sha256": "8b96608367c574f20bf31c8c2e96a2f9692d393764c5f42403ac54b95611ebd2", "summary": "p5a2 FIFO on/off 40x2; system fetch fault base/cache 25x2; NEON fetch fault base/cache 20x2; semantic guard 2/2"}
+    ],
+    "neon_fetch_fault_semantic": {
+      "result": "pass",
+      "image_sha256": "42b5b256fee8d5be1d78dba376cdfe42a868a15478f687352139a581572a21ef",
+      "summary": "base/cache seq18 STR Q @0x44000ffc -> 0x44010200 exc=1; strict QEMU EC=0x21; each trace stores=2 with 8-byte halves at 0x44002000/0x44002008; no EC=0x07/0x25"
+    }
+  },
+  "physical_validation": {
+    "task": "T-20260905-014",
+    "result": "accepted_for_timing_observation_blocked",
+    "quartus": "Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "manifest": "52/52, missing=0, extra=0, bad=0; canonical external inputs 19/19",
+    "stages": "synthesis/fitter/sta_signoff exit 0; all resource and forbidden-artifact guards pass",
+    "sys_clk_50": {"fmax_mhz": 43.0, "setup_slack_ns": -3.256, "tns_ns": -21736.217, "failing_endpoints": 18309},
+    "delta_vs_t008": {"fmax_mhz": 2.67, "setup_slack_ns": 1.541, "tns_ns": 12505.026, "failing_endpoints": -2250},
+    "top50": "50/50 core.idex_valid -> fp_exec.state.TX_DONE, -3.256..-3.180 ns, 26 levels",
+    "directional": "old pp_pre->pack_mid is 0 paths; pp_pre->pack_pre worst -2.103 ns; residual exmem_valid->acc/flags and exmem_wb_rd->acc remain negative"
+  },
+  "decision": {
+    "result": "accepted_for_next_timing_batch",
+    "timing_closure": false,
+    "next_tasks": ["T-20260905-016 R18 core system-kill control cut", "T-20260905-017 R18 FP prescan cut", "T-20260905-018 R18 accumulator kill-control cut"]
+  },
+  "policy": {
+    "assertions_disabled": false,
+    "reference_results_modified": false,
+    "assembler_or_bitstream": false,
+    "programming_or_jtag": false,
+    "power_on_or_board_test": false
+  },
+  "handoff": "docs/handoffs/T-20260905-013-r17-timing-batch.md",
+  "completed_at": "2026-09-05T19:48:39+08:00"
+}

@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-089",
+  "label": "C3-pre",
+  "parent": "T-20260828-073",
+  "title": "C3 四核系统前置：GIC/PSCI/Timer/IPI/SMP 契约与任务拆解",
+  "kind": "multicore-fourcore-prework-contract",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+  "branch": "feature/T-20260829-089-c3-fourcore-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-089",
+  "scope": "在 C2 尚未关闭前，只做 C3 四核系统的只读前置契约/设计/任务拆解：梳理 GIC/PSCI/Timer、IPI/SEV/WFE、TLB shootdown、启动次序、共享 MMIO 路由、公平仲裁、每核事件序列与 checkpoint 扩展；明确哪些依赖 C2/C3 的实际 RTL，哪些可先独立实现。禁止实例化 4 核功能 RTL、禁止修改 rtl/ 功能代码、禁止改动 QEMU/checkpoint 协议。",
+  "writes": [
+    "docs/handoffs/T-20260829-089-c3-fourcore-prework.md",
+    "docs/tasks/evidence/T-20260829-089.json",
+    "docs/C3_FOURCORE_PREWORK.md"
+  ],
+  "reads": [
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/LCVX_DIFF_MC_V2.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/L2_WRITEBACK.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "docs/handoffs/T-20260829-076-c0-cluster-contract.md",
+    "docs/handoffs/T-20260829-077-d0-mc-diff-feasibility.md",
+    "docs/handoffs/T-20260829-079-c1-dualcore-shell.md",
+    "docs/handoffs/T-20260829-086-c2-dualcore-msi.md",
+    "rtl/**",
+    "tb/**",
+    "sim/difftest/**"
+  ],
+  "validation": {
+    "l0": [
+      "json 合法、git diff --check、文档可审阅"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付 C3 前置契约/拆分文档：每核异步事件全局序列、C3 子任务顺序、与 C2/C4/checkpoint 的接口和已知风险；明确不当作 4 核功能已完成。",
+  "next": "C2 关闭并集成后，按该前置文档派发 C3 实际实现。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 90,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T08:08:06+08:00",
+  "updated_at": "2026-08-29T08:08:06+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T08:08:06+08:00",
+    "agent_name": "c3_fourcore_prework",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "high",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-089"
+  },
+  "known_limits": [
+    "C2 未关闭前不实现/实例化 4 核功能 RTL。",
+    "不修改 QEMU/checkpoint/GIC 功能代码；只做契约文档。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-089-c3-fourcore-prework.md",
+  "evidence": "docs/tasks/evidence/T-20260829-089.json",
+  "merge_sha": "a436cc01b02ac5bbb2a42f7893deb81407a90294",
+  "merged_at": "2026-08-29T08:15:20+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T08:15:20+08:00",
+    "status": "accepted",
+    "head_sha": "20dc0aeff7223b4765996bddb1968cc7b6461b6e",
+    "notes": "C3 四核前置设计/契约拆解已审阅并合并；仅文档改动；明确 C2 未关闭前不派 C3 RTL。下一步等 C2 关闭后按 C3-A/B/C/D 拆解派发。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T08:20:00+0800",
+        "new": "2026-08-29T08:15:20+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T08:20:00+0800",
+        "new": "2026-08-29T08:15:20+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "c5afbc220bbdeeaff0215e16ae568c3643239f01",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ],
+    "merge_sha_expansion": [
+      {
+        "old": "a436cc0",
+        "new": "a436cc01b02ac5bbb2a42f7893deb81407a90294",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  },
+  "head_sha": "c5afbc220bbdeeaff0215e16ae568c3643239f01"
+}

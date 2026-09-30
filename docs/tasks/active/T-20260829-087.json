@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-087",
+  "label": "A4",
+  "parent": "T-20260828-071",
+  "title": "A4：开源综合趋势回归（轻量阈值/差分报告）",
+  "kind": "opensynth-trend-regression",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "7c847561d3de3edeee0f7f8937fd3929fc101ba6",
+  "branch": "feature/T-20260829-087-a4-trend-regression",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-087",
+  "scope": "在 A3 相关性报告基础上建立轻量 opensynth 趋势/差分报告脚本与阈值守卫：比较同一组输入在各运行之间的资源/统计差异，生成可复现报告；阈值失败只阻止 opensynth proxy 合入，不改变 Gate F、不替代 Quartus、不解除 T-067。禁止做 ECP5/Yosys→A10 线性换算，禁止新增大型 P&R 或 Quartus 作业。",
+  "writes": [
+    "fpga/opensynth/**",
+    "scripts/opensynth/**",
+    "docs/handoffs/T-20260829-087-a4-trend-regression.md",
+    "docs/tasks/evidence/T-20260829-087.json"
+  ],
+  "reads": [
+    "fpga/opensynth/a1_generic_synth_stats.json",
+    "fpga/opensynth/a2_soc_stub_stats.json",
+    "fpga/opensynth/a3_correlation_report.md",
+    "fpga/opensynth/a3_correlation_data.json",
+    "docs/handoffs/T-20260829-080-a1-generic-synth.md",
+    "docs/handoffs/T-20260829-081-a2-soc-stub.md",
+    "docs/handoffs/T-20260829-083-a3-correlation-report.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "脚本可复现、输入 SHA/工具版本记录、json 合法"
+    ],
+    "l1": [
+      "从 clean SHA 重放 A1/A2/A3 已存在 artifact，生成趋势/阈值报告；无重型综合"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "轻量趋势脚本和阈值报告可从当前主线 artifact 重复生成；报告明确非 A10 signoff、不替代 Quartus、不解除 T-067；若因数据不足则注明 N/A 并给输入限制。",
+  "next": "A4 作为可选 A 线收尾；后续 A 线工作仅在有新工具/器件证据时再开。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 90,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T08:08:06+08:00",
+  "updated_at": "2026-08-29T08:08:06+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T08:08:06+08:00",
+    "agent_name": "a4_trend_regression",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "medium",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-087"
+  },
+  "known_limits": [
+    "禁止修改 rtl/、tb/、sim/difftest/、Makefile 核心目标或 QEMU。",
+    "不得把 opensynth 数据写成 A10 签核结果。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-087-a4-trend-regression.md",
+  "evidence": "docs/tasks/evidence/T-20260829-087.json",
+  "merge_sha": "9d96ed07c943e3002b1ad3121db2f31343635f09",
+  "merged_at": "2026-08-29T08:15:51+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T08:15:51+08:00",
+    "status": "accepted",
+    "head_sha": "9af5ffd",
+    "notes": "A4 趋势/阈值脚本已审阅并合并；轻量只读，未新增 A10/Fmax 声明；当前仅首次 baseline，时间趋势 N/A。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T08:10:00+0800",
+        "new": "2026-08-29T08:08:06+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T08:25:00+0800",
+        "new": "2026-08-29T08:15:51+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T08:25:00+0800",
+        "new": "2026-08-29T08:15:51+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "3a1c66e7786391d8f3cde287c72c7e986115e384",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ],
+    "merge_sha_expansion": [
+      {
+        "old": "9d96ed0",
+        "new": "9d96ed07c943e3002b1ad3121db2f31343635f09",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  },
+  "head_sha": "3a1c66e7786391d8f3cde287c72c7e986115e384"
+}

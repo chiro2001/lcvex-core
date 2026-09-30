@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260907-036",
+  "label": "B25-BRINGUP-PLAN",
+  "state": "done",
+  "acceptance_status": "plan-and-task-dag-accepted",
+  "partial": false,
+  "base_sha": "70e090a4a64d5743dcb0d3734fb13094ffe2355f",
+  "registration_sha": "8038835afd4db44c928c29d568d43b798cc95244",
+  "implementation_head": "this commit",
+  "branch": "docs/T-20260907-036-bringup-plan",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-036",
+  "owner": "codex-integrator",
+  "objective": "Record a compression-safe, executable 25 MHz Catapult A10 bring-up plan through deterministic BRAM boot and polling JTAG-UART interaction without granting assembler or board permissions.",
+  "inputs": {
+    "lcvex_candidate": "80b1f813de47a1223dd135117650419a0b6c05fc",
+    "lcvex_local_validation": "T-20260907-037 will inherit R21 focused 6/6, affected L1 8/8 and strict lockstep 1155 commits as its functional base",
+    "r21_physical_task": "T-20260906-035",
+    "local_reference": {
+      "path": "/home/chiro/projects/mycpu/a10-linux-riscv",
+      "head": "b2ffcc9",
+      "clean": true
+    },
+    "remote_reference": {
+      "path": "D:/Projects/fpga-altra/a10-linux-riscv",
+      "head": "b2ffcc9",
+      "clean": true
+    },
+    "lcvex_platform_source_lock": "3db828e74651fda377a33d84f2a2ca0e69901d72",
+    "reference_delta": "3db828e..b2ffcc9 contains 12 commits and 28 changed paths; no wholesale import is authorized"
+  },
+  "read_only_agents": [
+    {
+      "name": "board40_readiness",
+      "result": "25 MHz direction GO; current uninitialized board image NO-GO"
+    },
+    {
+      "name": "a10_linux_gap_audit",
+      "result": "reference Linux/JTAG-UART success confirmed; LCVEX gap separated into boot, DDR, payload and Linux layers"
+    },
+    {
+      "name": "bringup_ref_playbook",
+      "result": "local/remote b2ffcc9 evidence, successful transcripts, stale failures, cable/server and rollback lessons classified"
+    },
+    {
+      "name": "bringup_lcvex_dag",
+      "result": "write-region, validation, resource and permission-gated task DAG proposed"
+    }
+  ],
+  "reference_evidence": {
+    "successful_sof_logs": [
+      "GamePC a10-linux-riscv/build/burn_golden_accept.log",
+      "GamePC a10-linux-riscv/build/burn_freshclone.log"
+    ],
+    "successful_boot_transcripts": [
+      "GamePC a10-linux-riscv/build/accept_term.txt",
+      "GamePC a10-linux-riscv/build/accept_freshclone.txt",
+      "GamePC a10-linux-riscv/build/console_probe.txt"
+    ],
+    "successful_bidirectional_transcript": "GamePC a10-linux-riscv/build/console_tx.txt",
+    "diagnostic_failures": [
+      "tty_out.txt/tty_diag.txt/tty_13.txt data==ctrl and bootconsole stop",
+      "burn_jic_sync.log Can't find JTAG Server",
+      "console_reset.txt does not independently prove stable reset-to-shell"
+    ],
+    "jic_boundary": "JIC logs prove programming exit 0, but a standalone complete power-cycle transcript was not found; JIC is outside B25 scope"
+  },
+  "outputs": [
+    "docs/BRINGUP_25MHZ_PLAN.md",
+    "docs/tasks/active/T-20260907-037.json",
+    "docs/tasks/active/T-20260907-038.json",
+    "docs/tasks/active/T-20260907-039.json",
+    "docs/tasks/active/T-20260907-040.json",
+    "docs/tasks/active/T-20260907-041.json",
+    "docs/tasks/active/T-20260907-042.json",
+    "docs/tasks/active/T-20260907-043.json",
+    "docs/tasks/active/T-20260907-044.json",
+    "docs/HANDOFF_20260907_BRINGUP_TO_CODEX.md",
+    "docs/tasks/TASKS.md",
+    "docs/PROJECT_STATUS.md",
+    "docs/ROADMAP.md"
+  ],
+  "dag": {
+    "parent": "T-20260907-037",
+    "parallel_lanes": ["T-20260907-038", "T-20260907-039", "T-20260907-040"],
+    "read_only_board_preflight": "T-20260907-041",
+    "physical_no_assembler": "T-20260907-042",
+    "assembler_permission_gate": "T-20260907-043",
+    "jtag_permission_gate": "T-20260907-044",
+    "critical_path": "T-035 -> T-037 lanes/integration -> T-042 -> explicit assembler authorization -> T-043 -> explicit JTAG authorization plus T-041 -> T-044"
+  },
+  "frozen_scope": {
+    "target_clock_mhz": 25,
+    "bram_bytes": 65536,
+    "boot_pc": "0x00000000",
+    "stack_range": "0x0000F000..0x00010000",
+    "ddr_range": "0x40000000..0x48000000",
+    "jtag_data": "0x09000000",
+    "jtag_control": "0x09000004",
+    "plat_status": "0x09003000",
+    "interaction": "BRAM-resident polling PING/PONG, status, DDR retry and printable echo",
+    "not_in_scope": ["Linux", "UART IRQ", "payload downloader", "Flash loader", "JIC/EPCQ write", "persistent boot"]
+  },
+  "policy": {
+    "files_modified_outside_documentation_and_task_registry": false,
+    "local_or_remote_build_started": false,
+    "quartus_or_assembler_started": false,
+    "jtag_or_terminal_started": false,
+    "remote_files_or_processes_modified": false,
+    "license_read": false,
+    "board_or_power_state_changed": false,
+    "subagent_model_arguments_omitted": true,
+    "sol_subagent_used": false
+  },
+  "validation": [
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "jq empty docs/tasks/active/T-20260907-{036..044}.json docs/tasks/evidence/T-20260907-036.json",
+      "result": "pass"
+    },
+    {
+      "command": "manual DAG/write-region/permission/resource consistency review",
+      "result": "pass"
+    }
+  ],
+  "known_limits": [
+    "T-035 was still running when the plan was written; T-037 must wait for its accepted completion and use the exact integrator-selected base.",
+    "Qsys clk_100 consumer semantics must be proven by T-038 before choosing the final 100/25 clock wiring.",
+    "T-043 and T-044 are registered permission gates, not current authorization to run assembler or touch hardware."
+  ],
+  "plan": "docs/BRINGUP_25MHZ_PLAN.md",
+  "handoff": "docs/HANDOFF_20260907_BRINGUP_TO_CODEX.md"
+}

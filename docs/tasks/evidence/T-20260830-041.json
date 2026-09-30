@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-041",
+  "label": "PE-F1A",
+  "state": "done",
+  "partial": false,
+  "base_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+  "head_sha": "8e91df54ae251869779b3e7ebcaaf735df158aa0",
+  "content_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+  "merge_sha": "372b4a9fa92bd17584e196844d55526df8f7563b",
+  "branch": "feature/T-20260830-041-pe-f1a-fetch-fifo",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-041",
+  "owner": "luna-f1a-impl",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "sent_at": "2026-08-30T16:15:06+08:00",
+  "received_at": "2026-08-30T16:16:16+08:00",
+  "reported_at": "2026-08-30T18:49:13+08:00",
+  "followup_sent_at": "2026-08-30T16:51:53+08:00",
+  "followup_received_at": "2026-08-30T16:52:32+08:00",
+  "test_slot_released_at": "2026-08-30T16:51:53+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-08-30T16:15:06+08:00",
+    "received_at": "2026-08-30T16:16:16+08:00",
+    "reported_at": "2026-08-30T18:49:13+08:00",
+    "followup_sent_at": "2026-08-30T16:51:53+08:00",
+    "followup_received_at": "2026-08-30T16:52:32+08:00",
+    "test_slot_released_at": "2026-08-30T16:51:53+08:00"
+  },
+  "scope": "F1a：core 内默认关闭的 2-entry fetch FIFO、local epoch/seq、flush 后 stale MMU/IMEM quarantine，以及 SV/Cocotb/QEMU 定向测试入口骨架；不修改公共 mem_req_t/mem_rsp_t、I-L1、MMU、仲裁器或 commit packet。",
+  "files_written": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "sim/cocotb/Makefile.fetch_fifo",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run_f1a.sh",
+    "Makefile",
+    "docs/handoffs/T-20260830-041-pe-f1a-fetch-fifo.md",
+    "docs/tasks/evidence/T-20260830-041.json"
+  ],
+  "implementation": {
+    "fifo_depth": 2,
+    "feature_default": 0,
+    "epoch_width": 8,
+    "seq_width": 16,
+    "inflight_limits": {
+      "fetch_translation": 1,
+      "imem_request": 1
+    },
+    "entry_fields": [
+      "valid",
+      "epoch",
+      "seq",
+      "pc_va",
+      "insn",
+      "fault",
+      "fault_fsc"
+    ],
+    "kill_sources": [
+      "branch_redirect",
+      "system_redirect_or_commit",
+      "maintenance_start",
+      "tlbi",
+      "fetch_or_data_exception_boundary",
+      "irq",
+      "wfi_wake",
+      "checkpoint_restore"
+    ],
+    "debug_signals": [
+      "fetch_epoch",
+      "fetch_stale_drain",
+      "fetch_stale_rsp_drop",
+      "fetch_fifo_valid",
+      "fetch_fifo_occupancy",
+      "fetch_fifo_push",
+      "fetch_fifo_pop",
+      "fetch_fifo_flush",
+      "fetch_fifo_peak"
+    ]
+  },
+  "test_slot": {
+    "status": "released",
+    "reason": "integrator follow-up released the unique test slot",
+    "test_slot_requested": true,
+    "followup_sent_at": "2026-08-30T16:51:53+08:00",
+    "followup_received_at": "2026-08-30T16:52:32+08:00",
+    "test_slot_released_at": "2026-08-30T16:51:53+08:00",
+    "release_rule": "integrator follow-up with Asia/Shanghai sent_at after T-038 active heavy work ends"
+  },
+  "tests_not_run": "none_after_release; prior checkpoint was test_slot_withheld",
+  "static_checks": {
+    "git_diff_check": "pass",
+    "json_parse": "pass",
+    "shell_syntax": "pass"
+  },
+  "runs": [
+    {
+      "run_id": "l0-f1a-sv-final",
+      "level": "L0/L1",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260830-041 MAKEFLAGS=-j1 VERILATOR_JOBS=1 test-f1a",
+      "parameters": {
+        "FETCH_FIFO_ENABLE": 1,
+        "FETCH_FIFO_DEPTH": 2,
+        "FETCH_EPOCH_W": 8,
+        "MEM_DELAY_MODE": 2,
+        "verilator_jobs": 1,
+        "memory_max_mb": 15360,
+        "memory_swap_max_mb": 0
+      },
+      "result": "pass",
+      "exit_code": 0,
+      "verilator_wall_seconds": 181.225,
+      "verilator_allocated_mb": 731.250,
+      "simulation_wall_seconds": 0.059,
+      "simulation_allocated_mb": 146,
+      "summary": "Dedicated F1a SV TB PASS: FIFO bound, branch flush/epoch, delayed response and commit-ready backpressure; reset clears frontend."
+    },
+    {
+      "run_id": "l1-f1a-cocotb-final",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260830-041 MAKEFLAGS=-j1 VERILATOR_JOBS=1 cocotb-f1a",
+      "parameters": {
+        "FETCH_FIFO_ENABLE": 1,
+        "FETCH_FIFO_DEPTH": 2,
+        "FETCH_EPOCH_W": 8,
+        "MEM_DELAY_MODE": 2,
+        "verilator_jobs": 1,
+        "memory_max_mb": 15360,
+        "memory_swap_max_mb": 0,
+        "cocotb": "2.0.1"
+      },
+      "result": "pass",
+      "exit_code": 0,
+      "verilator_wall_seconds": 37.279,
+      "verilator_allocated_mb": 969.180,
+      "simulation_wall_seconds": 0.950,
+      "summary": "Cocotb test_fetch_fifo 1/1 PASS at 470ns; FIFO occupancy/epoch, taken-branch wrong-path suppression, backpressure and reset checks."
+    },
+    {
+      "run_id": "feature-off-compile-final",
+      "level": "L0",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260830-041 MAKEFLAGS=-j1 VERILATOR_JOBS=1 compile",
+      "parameters": {
+        "FETCH_FIFO_ENABLE": 0,
+        "verilator_jobs": 1,
+        "memory_max_mb": 15360,
+        "memory_swap_max_mb": 0
+      },
+      "result": "pass",
+      "exit_code": 0,
+      "verilator_wall_seconds": 28.605,
+      "verilator_allocated_mb": 390.504,
+      "summary": "Default feature-off lcvex_core lint PASS; FIFO declarations are warning-suppressed without changing legacy logic."
+    },
+    {
+      "run_id": "feature-off-core-smoke-final",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260830-041 MAKEFLAGS=-j1 VERILATOR_JOBS=1 sim-sv",
+      "parameters": {
+        "FETCH_FIFO_ENABLE": 0,
+        "verilator_jobs": 1,
+        "memory_max_mb": 15360,
+        "memory_swap_max_mb": 0
+      },
+      "result": "pass",
+      "exit_code": 0,
+      "verilator_wall_seconds": 175.076,
+      "verilator_allocated_mb": 730.000,
+      "simulation_wall_seconds": 0.058,
+      "simulation_allocated_mb": 146,
+      "summary": "Existing lcvex_core_tb scalar + FPCR/FPSR smoke PASS."
+    },
+    {
+      "run_id": "feature-off-backpressure-final",
+      "level": "L1",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- make -C /home/chiro/projects/mycpu/lcvex-wt-T-20260830-041 MAKEFLAGS=-j1 VERILATOR_JOBS=1 sim-sv-backpressure",
+      "parameters": {
+        "FETCH_FIFO_ENABLE": 0,
+        "verilator_jobs": 1,
+        "memory_max_mb": 15360,
+        "memory_swap_max_mb": 0
+      },
+      "result": "pass",
+      "exit_code": 0,
+      "verilator_wall_seconds": 178.610,
+      "verilator_allocated_mb": 730.914,
+      "simulation_wall_seconds": 0.059,
+      "simulation_allocated_mb": 146,
+      "summary": "Existing normal/system commit backpressure TB PASS: no loss/duplication and system MSR atomicity."
+    },
+    {
+      "run_id": "l2-f1a-lockstep-matrix-final",
+      "level": "L2",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so F1A_BUILD_DIR=/home/chiro/projects/mycpu/lcvex-wt-T-20260830-041/build/difftest/f1a_final bash /home/chiro/projects/mycpu/lcvex-wt-T-20260830-041/sim/difftest/run_f1a.sh",
+      "parameters": {
+        "coordinators": {
+          "base": "build/verilator_lockstep_f1a/lockstep_coordinator",
+          "cache": "build/verilator_lockstep_f1a_cache/lockstep_coordinator",
+          "delay2": "build/verilator_lockstep_f1a_delay2/lockstep_coordinator"
+        },
+        "FETCH_FIFO_ENABLE": 1,
+        "FETCH_FIFO_DEPTH": 2,
+        "FETCH_EPOCH_W": 8,
+        "MEM_DELAY_MODE": "0/2 by coordinator variant",
+        "MAX_INSNS": 32,
+        "memory_max_mb": 15360,
+        "memory_swap_max_mb": 0
+      },
+      "result": "pass",
+      "exit_code": 0,
+      "case_count": 12,
+      "summary": "hard_fetch_epoch, hard_fetch_4k, hard_fetch_line, hard_fetch_reset each passed base/I-L1-cache/delay2 (12/12)."
+    },
+    {
+      "run_id": "l2-f1a-extra-boundaries-final",
+      "level": "L2",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "run_lockstep_step.sh with final base feature-on coordinator and read-only integration QEMU plugin; one cgroup invocation per image",
+      "parameters": {
+        "coordinator": "build/verilator_lockstep_f1a/lockstep_coordinator",
+        "FETCH_FIFO_ENABLE": 1,
+        "memory_max_mb": 15360,
+        "memory_swap_max_mb": 0
+      },
+      "result": "pass",
+      "exit_code": 0,
+      "cases": [
+        {"image": "mmu_data.bin", "max_insns": 20, "summary": "MMU-on data load/store"},
+        {"image": "hard_tlbi.bin", "max_insns": 30, "summary": "TLBI and maintenance"},
+        {"image": "hard_selfmod.bin", "max_insns": 30, "summary": "IC/self-modifying"},
+        {"image": "q6_svc.bin", "max_insns": 14, "summary": "SVC/ERET"},
+        {"image": "hard_irq.bin", "max_insns": 45, "summary": "IRQ"},
+        {"image": "hard_wfi.bin", "max_insns": 2, "summary": "WFI"}
+      ],
+      "summary": "All 6 additional feature-on boundary lockstep runs passed."
+    },
+    {
+      "run_id": "owner-debug-regression-diagnosis",
+      "level": "L2-diagnostic",
+      "runner_role": "owner",
+      "source_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+      "command": "Temporary F1A_DEBUG coordinator on mmu_data.bin, then removed before final source",
+      "result": "diagnosed_and_fixed",
+      "summary": "Initial feature-on failure dropped/untranslated MMU data op when fetch mmu_done coincided; data_wait_for_translation + trans_done_pc_r fixed it. Post-fix debug lockstep 14/14 PASS. Temporary debug block is absent from final tree."
+    }
+  ],
+  "diagnostic_failures": [
+    {
+      "run_id": "l0-initial-reserved-word",
+      "command": "make test-f1a",
+      "exit_code": 2,
+      "result": "fixed",
+      "reason": "SV testbench array used reserved identifier program",
+      "fix": "renamed array to prog_words"
+    },
+    {
+      "run_id": "l1-initial-source-list",
+      "command": "make cocotb-f1a",
+      "exit_code": 2,
+      "result": "fixed",
+      "reason": "Cocotb Makefile omitted optional lcvex_l1_d/lcvex_l1_i/lcvex_l2 sources",
+      "fix": "added all SoC optional cache sources to Makefile.fetch_fifo"
+    },
+    {
+      "run_id": "f1a-mmu-data-regression",
+      "command": "run_lockstep_step.sh with feature-on coordinator on hard_tlbi/mmu_data",
+      "exit_code": 1,
+      "result": "fixed",
+      "reason": "fetch mmu_done coincident with IF/ID data op allowed wrong FIFO pop/untranslated EX/MEM entry",
+      "fix": "added data_wait_for_translation and trans_done_pc_r binding",
+      "failure_artifacts": [
+        "build/difftest/f1a_extra/tlbi.fail",
+        "build/difftest/f1a_extra/mmu_data.fail",
+        "build/difftest/f1a_extra/mmu_debug2.fail"
+      ],
+      "artifact_sha256": {
+        "build/difftest/f1a_extra/tlbi.fail": "06fe8af466ac6ee38a23473df2a0ba91114c79d5a36d94b73c7a8973d5e81ade",
+        "build/difftest/f1a_extra/mmu_data.fail": "917a1761a76a909167d76b0e21b02edda146cf5ac7f2847662ef946a3e7d8111",
+        "build/difftest/f1a_extra/mmu_debug2.fail": "53b5f94d8370ce7c84565c3a28bcfeeaeab73865d3ed11a563e5e2eeac1ac2a"
+      }
+    },
+    {
+      "run_id": "f1a-coordinator-initial-build-dir",
+      "command": "lockstep-build-f1a",
+      "exit_code": 1,
+      "result": "fixed",
+      "reason": "Verilator -Mdir parent build directory did not exist",
+      "fix": "created explicit task build/verilator_lockstep_f1a* directories before build"
+    }
+  ],
+  "validation": {
+    "tests_run": true,
+    "build_run": true,
+    "simulation_run": true,
+    "cocotb_run": true,
+    "qemu_run": true,
+    "generator_run": true,
+    "verilator_run": true,
+    "cross_compile_run": false,
+    "test_slot_withheld": false,
+    "required_l0_l2": "pass",
+    "feature_on": true,
+    "feature_off_regression": "pass"
+  },
+  "conclusion": "F1a implementation and directed validation are ready for integration review. Feature-on FIFO/epoch/quarantine passed required L0-L2 plus MMU, TLBI/IC, IRQ, WFI and ERET boundary cases; feature-off lint/core/backpressure regression passed. No F1b or performance gain is claimed.",
+  "blockers": [],
+  "risks": [
+    "公共 mem_rsp_t 无 response ID，正确性依赖 single-outstanding contract 和 local quarantine。",
+    "standalone reset-vector fetch fault 仍无 predecessor merge path，保持预研契约限制。",
+    "完整 Gate D/Linux 未运行；不宣称 F1b 或性能收益。"
+  ],
+  "integrator_correction": {
+    "recorded_at": "2026-08-30T19:17:56+08:00",
+    "old_handoff_reported_at": "2026-08-30T18:35:38+08:00",
+    "old_evidence_reported_at": "2026-08-30T18:43:32+08:00",
+    "corrected_reported_at": "2026-08-30T18:49:13+08:00",
+    "basis": "harness final receipt after owner final commit 8e91df5 at 2026-08-30T18:48:33+08:00",
+    "owner_head_sha": "8e91df54ae251869779b3e7ebcaaf735df158aa0",
+    "content_sha": "d14aab0025acbd6a347b7f8c5ef0759ccaba2e49",
+    "merge_sha": "372b4a9fa92bd17584e196844d55526df8f7563b"
+  },
+  "integration_review": {
+    "reviewed_at": "2026-08-30T19:17:56+08:00",
+    "result": "accepted",
+    "resource_policy": "all local Verilator/Cocotb/coordinator/lockstep runs serialized with MemoryMax=15G, MemorySwapMax=0 and -j1/MAKEFLAGS=-j1",
+    "runs": [
+      {"run_id": "integrator-f1a-sv", "result": "pass", "summary": "feature-on FIFO/epoch/quarantine SV TB PASS on merge SHA"},
+      {"run_id": "integrator-f1a-cocotb", "result": "pass", "summary": "feature-on MEM_DELAY_MODE=2 Cocotb PASS at 470 ns"},
+      {"run_id": "integrator-feature-off-compile", "result": "pass", "summary": "default feature-off core lint PASS"},
+      {"run_id": "integrator-feature-off-backpressure", "result": "pass", "summary": "normal/system commit backpressure PASS"},
+      {"run_id": "integrator-feature-on-coordinator-build", "result": "pass", "summary": "merge-SHA coordinator built with FETCH_FIFO_ENABLE=1/FETCH_FIFO_DEPTH=2/FETCH_EPOCH_W=8"},
+      {"run_id": "integrator-feature-on-lockstep", "result": "pass", "summary": "hard_fetch_epoch/4k/line/reset + mmu_data + hard_tlbi, 6/6 strict lockstep PASS"},
+      {"run_id": "integrator-feature-off-coordinator-build", "result": "pass", "summary": "merge-SHA legacy/default coordinator build PASS"},
+      {"run_id": "integrator-feature-off-mmu-boundaries", "result": "pass", "summary": "mmu_data and hard_tlbi strict lockstep, 2/2 PASS"},
+      {"run_id": "integrator-catapult-soc-lint", "result": "pass", "summary": "combined G5+F1a Catapult SoC lint PASS"}
+    ],
+    "diagnostic": "An initial integrator shell loop was rejected by systemd-run environment expansion before any test case started; six explicit commands were then executed and passed. This was command wrapping, not an RTL failure.",
+    "known_warnings": "Dedicated/legacy testbenches have pre-existing or newly exposed optional unconnected output PINMISSING warnings; they are non-fatal and no functional failure was observed."
+  },
+  "next": "F1a is merged and accepted. Keep F1b blocked behind the later-beat-fault safety gate; do not claim measured performance gain until F1c same-SHA baseline/results task.",
+  "artifacts": []
+}

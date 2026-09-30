@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-021",
+  "label": "B25-RX-CPU-OBSERVABILITY-BOARD-INTERACTION",
+  "state": "done-functional-fail-golden-rollback-pass",
+  "acceptance_status": "candidate-volatile-config-pass-boot-ready-rxpath-partial-cpu-visible-rx-fail-golden-rollback-pass",
+  "partial": true,
+  "base_sha": "7e7cef6586583c4d421b29fc01c226d4c021bb09",
+  "branch": "verify/T-20260920-021-b25-rx-cpu-observability-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-021-b25-rx-cpu-observability-board-interaction",
+  "owner": "board_t021",
+  "reported_at": "2026-09-20T13:40:00+08:00",
+  "input_contract": {
+    "candidate_sof": {
+      "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-020-b25-rx-cpu-observability-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842101,
+      "sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd",
+      "quartus_checksum": "0x3159F8A0",
+      "design_hash": "4DAED3C37174544441E6912B371092CA",
+      "jtag_usercode": "0xFFFFFFFF"
+    },
+    "golden_sof": {
+      "remote_path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "quartus_checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F"
+    },
+    "jtag_id": "0x02E060DD",
+    "cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "device": 1,
+    "instance": 0
+  },
+  "preflight": {
+    "result": "PASS",
+    "candidate_and_golden_identity": "PASS",
+    "standard_server": {
+      "pid": 5640,
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\jtagserver.exe",
+      "preserved": true
+    },
+    "busy_process_count": 0,
+    "port_1310_listener_count": 0,
+    "jtagconfig_exit": 0,
+    "jtag_nodes": ["Virtual JTAG #0", "Signal Tap #0", "JTAG UART #0", "JTAG PHY #0"],
+    "log": {
+      "path": "build/agents/T-20260920-021/preflight/preflight.log",
+      "bytes": 1180,
+      "sha256": "8d9d43ba608562e23e1f0fd667d72799b3c278fce63beb5191273c8bbe90f7a4"
+    }
+  },
+  "programming_server": {
+    "source": "D:/Projects/fpga-altra/jtag-30mhz",
+    "frequency": "15000000",
+    "channel": 0,
+    "port": 1310,
+    "server_manifest_sha256": "fc7e286f455e15683f7bb15e9cf5c005f2b1bc318a8595afee6362714bd5222d",
+    "jtagserver_sha256": "72562a0193aa2b4c0b6332256453f9f337ac61fb18cdac8895f30706228314ee",
+    "driver_sha256": "b7fe801ae91c50bd7ea159ea905d732a0b13ada9f7791b85384a6dc8167092f6",
+    "client_conf_sha256": "850870f8867409ed2917275f1150192eb36d66b3abf5f2ea00f74c09eb62bdeb",
+    "msftdi_cfg_sha256": "36580939ab36d1b38a3a118c54b49529484b352b00d004f94fe0f7c8445f15ef"
+  },
+  "candidate_configuration": {
+    "result": "PASS",
+    "programmer_exit": 0,
+    "tool_success": true,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "jtag_id_match": true,
+    "owned_server_pid": 39600,
+    "owned_server_stopped": true,
+    "standard_server_preserved": true,
+    "post_busy_count": 0,
+    "post_port_1310_count": 0,
+    "remote_result": {
+      "path": "build/agents/T-20260920-021/remote-evidence/program-candidate-final/runtime/program-result.json",
+      "bytes": 4156,
+      "sha256": "8331659715fa526c85590bc95180ff25a555e5a9f7284e379436a432293a0a15"
+    },
+    "program_stdout_sha256": "b3a7250d3eeae7e4316b03fd2d296cba2f0b4ba17477b8b24f71275302d33059",
+    "program_stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52",
+    "log": {
+      "path": "build/agents/T-20260920-021/final/candidate-final.log",
+      "bytes": 1748,
+      "sha256": "d0c0c2ed43865db6ed9f0206a04af8ea877a0ef8115c88741f6fd1de44124ac8"
+    }
+  },
+  "direct_terminal": {
+    "command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+    "method": "one live SSH-PTY session; raw one-byte writes from a local PTY; no ordinary-file stdin",
+    "connected": true,
+    "startup": {
+      "boot": "LCVEX25 BOOT",
+      "calibration": "CAL-WAIT",
+      "ddr": "DDR-FAIL",
+      "ready": true,
+      "startup_rxdbg": "RXDBG 00000000 00000000",
+      "tx_drain_control": "later RXDBG with nonzero read count and zero event observed"
+    },
+    "input_rule": "wait for READY/TX drain, send each character only after the preceding response; stop at first missing response",
+    "sent_raw_bytes": ["?"],
+    "not_sent_due_to_first_failure": ["p", "d", "Z"],
+    "status_response": {
+      "sent": "?",
+      "expected": "CLOCK25 CAL-(OK|WAIT|FAIL) DDR-(OK|FAIL)",
+      "observed": false,
+      "timeout_seconds": 300
+    },
+    "hardware_observation": {
+      "rxdbg_rows": 208,
+      "rxdbg_first_after_input": "RXDBG 001FACFA 0001013F",
+      "rxdbg_last": "RXDBG 09BBACFA 0001013F",
+      "rxpath_rows": 207,
+      "rxpath_unique_row": "RXPATH 0000A43F 0000A43F 0000A43F 01010100",
+      "bridge_poc_dmem_equal": true,
+      "raw_response": "0x0000A43F",
+      "valid_event_counts": {"bridge": 1, "poc": 1, "dmem": 1},
+      "fault_bits": 0,
+      "final_A45A": false
+    },
+    "firmware_observation": {
+      "rxcpu_rows": 207,
+      "first_row": "RXCPU 00010000 00010000 009E0000 009E010A",
+      "last_row": "RXCPU 00010000 00010000 5ABE0000 5ABE010A",
+      "getc_event": "0x00010000",
+      "getc_valid_count": 1,
+      "getc_last_raw_low16": "0x0000",
+      "dispatch_event": "0x00010000",
+      "dispatch_count": 1,
+      "dispatch_class": 0,
+      "dispatch_byte": "0x00",
+      "putc_progress": true,
+      "tx_progress": true,
+      "four_command_acceptance": false
+    },
+    "acceptance": {
+      "boot_ready": true,
+      "clock25": false,
+      "pong": false,
+      "debug": false,
+      "z_echo": false,
+      "rxpath_three_layer_final_A45A": false,
+      "rxcpu_four_getc_dispatch_final_A45A": false,
+      "overall": false
+    },
+    "transcript": {
+      "path": "build/agents/T-20260920-021/terminal/direct-terminal.typescript",
+      "bytes": 23917,
+      "sha256": "2ac376a0390252f514405e5c48fe99f23a381e80d48a0ef0a5891f8b0d956f4e"
+    },
+    "result": {
+      "path": "build/agents/T-20260920-021/terminal/direct-terminal-result.json",
+      "bytes": 29623,
+      "sha256": "af5326366a57521d4fb62996aeaff6ceb47f35741609dbdbc08dd0c0b740d9b4"
+    },
+    "terminal_runner_log": {
+      "path": "build/agents/T-20260920-021/final/terminal-run.log",
+      "bytes": 15776,
+      "sha256": "240ea011667dae76a789feab7eb679d00cb7cc3d04c9d23c45ce428ef7e6e94a"
+    }
+  },
+  "golden_rollback": {
+    "result": "PASS",
+    "programmer_exit": 0,
+    "tool_success": true,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "jtag_id_match": true,
+    "owned_server_pid": 2760,
+    "owned_server_stopped": true,
+    "standard_server_preserved": true,
+    "final_design_hash_verified": "193DE4BC8A30F3ED5F1F",
+    "remote_result": {
+      "path": "build/agents/T-20260920-021/remote-evidence/program-golden-rollback-retry/runtime/program-result.json",
+      "bytes": 4559,
+      "sha256": "585525032633de17a0e9838bcf4f9b66b84b5184ceb72b412256d1f4afaaf631"
+    },
+    "program_stdout_sha256": "c57a4e702f62e1da43aee3805958b3737eba69eb13603756b3e5e25dff23f6b7",
+    "program_stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52",
+    "retry_reason": "first rollback guard rejected an omitted candidate design-hash line; no programming occurred in that attempt; corrected retry accepted exact JTAG ID/cable and verified Golden design hash",
+    "log": {
+      "path": "build/agents/T-20260920-021/final/golden-rollback-retry.log",
+      "bytes": 2356,
+      "sha256": "649e5eae90bd4bd44b31a3a25612db1cc04cb99f9a8997f00a1a92b954c82bac"
+    },
+    "postflight": {
+      "path": "build/agents/T-20260920-021/final/postflight-golden.log",
+      "bytes": 971,
+      "sha256": "2570399386c849185b46c72ff84bf7a119640b575806b499cf5818e91a9f979c"
+    }
+  },
+  "safety_and_resources": {
+    "all_gamepc_actions_locked": true,
+    "final_gamepc_status": "FREE",
+    "final_board_state": "golden SOF running",
+    "standard_jtagserver_stopped": false,
+    "unknown_or_preexisting_process_stopped": false,
+    "persistent_flash_action": false,
+    "jic_epcq_flash_action": false,
+    "power_cycle": false,
+    "board_or_soc_reset": false,
+    "synthesis_fitter_sta_assembler": false,
+    "terminal_task_process_stopped": true,
+    "candidate_program_server_stopped": true,
+    "rollback_program_server_stopped": true
+  },
+  "conclusion": "The exact T-020 SOF configured successfully and the monitor reached BOOT/READY. The production bridge, PoC and core-dmem observation taps all captured the ? response as 0x0000A43F with one event and no fault, but CPU-visible RXCPU remained getc=00010000/dispatch=00010000 with raw low16=0, so CLOCK25 was not emitted and the paced sequence stopped before p/d/Z. This is direct physical evidence of a remaining response-data/load-writeback alignment fault between the observed core-dmem response and firmware-visible load data. The board was restored to and independently verified on Golden.",
+  "evidence_files": {
+    "candidate_program_log": "build/agents/T-20260920-021/final/candidate-final.log",
+    "terminal_transcript": "build/agents/T-20260920-021/terminal/direct-terminal.typescript",
+    "golden_program_log": "build/agents/T-20260920-021/final/golden-rollback-retry.log",
+    "golden_postflight_log": "build/agents/T-20260920-021/final/postflight-golden.log"
+  },
+  "handoff": "docs/handoffs/T-20260920-021-b25-rx-cpu-observability-board-interaction.md"
+}

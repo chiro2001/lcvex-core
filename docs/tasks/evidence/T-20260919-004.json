@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260919-004",
+  "label": "B25-NOFP-FRESH-PHYSICAL",
+  "state": "done",
+  "acceptance_status": "fresh-synthesis-fitter-sta-and-custom-physical-pass",
+  "partial": false,
+  "candidate_sha": "d00d566da86e034d6cf1651cdfb8ec50074ead13",
+  "candidate_tree_sha": "d5baa6b05f5f8824236c816980ab6e6d48578594",
+  "branch": "verify/T-20260919-004-b25-nofp-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260919-004",
+  "remote_probe": "D:/Projects/fpga-altra/lcvex/build/T-20260919-004-b25-nofp-fresh-physical",
+  "owner": "root",
+  "timestamps": {
+    "created_at": "2026-09-19T22:27:35+08:00",
+    "synthesis_started_at": "2026-09-19T22:41:36.2532073+08:00",
+    "synthesis_finished_at": "2026-09-19T22:49:16.1552154+08:00",
+    "fitter_started_at": "2026-09-19T23:06:42.0575912+08:00",
+    "fitter_finished_at": "2026-09-19T23:20:52.8942001+08:00",
+    "sta_started_at": "2026-09-19T23:27:29.4420072+08:00",
+    "sta_finished_at": "2026-09-19T23:28:00.0513245+08:00",
+    "custom_acceptance_started_at": "2026-09-19T23:34:44.8698144+08:00",
+    "custom_acceptance_finished_at": "2026-09-19T23:37:38.8276468+08:00",
+    "ucp_profile_accepted_at": "2026-09-19T23:45:49+08:00",
+    "reported_at": "2026-09-19T23:50:49+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "profile_boundary": {
+    "a64_fp_simd": 0,
+    "purpose": "Fast first-board PC=0 -> polling JTAG-UART -> DDR diagnostic feedback",
+    "dependency": "T-20260919-003 local L0-L2 PASS",
+    "limit": "This proves the scalar no-FP bring-up profile only; it is not full-FP/P7 release closure and software must not execute FP/NEON."
+  },
+  "source_identity": {
+    "files": 174,
+    "qsf_references": 50,
+    "stage_manifest": {"path": "build/agents/T-20260919-004/sync/stage-manifest.json", "bytes": 40345, "sha256": "d4c1f64969dce5f9aba040e72b9269ac23a903180688042435493796329fded0"},
+    "stage_archive": {"path": "build/agents/T-20260919-004/sync/stage-v2.tar.gz", "bytes": 767095, "sha256": "841084a9211aae2f1b7a63515a103bb4ae1e7e8531b522c644347a81b0bc2f2f"},
+    "board_top_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+    "m20k_rtl_sha256": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+    "input_verification": "Post-synthesis, post-fitter and post-STA all PASS 174/174 with input_bad_count=0. QSF and Qsys_bb are LF-normalization-only differences; no content drift.",
+    "freshness": "The remote probe did not exist before this task and contained no database or forbidden configuration artifact before synthesis."
+  },
+  "boot_image": {
+    "elf": {"bytes": 68832, "sha256": "618d66ee57e1206f71376478f9db714b135f61efaffc348cbc4ec6393c5b4231"},
+    "bin": {"bytes": 957, "sha256": "aa4a8bbe2a71affe281c8b60922ee27dfc0b2a99a7f645d5ed53767ff192f0c6"},
+    "hex": {"bytes": 2871, "sha256": "c3ce37d62c5dd92171a88484669e433ae311df8860cf72cc2bc54be518989ffa"},
+    "mif": {"bytes": 204942, "sha256": "614d4505f8a6836eeb73e92ff5f2ba43ed9e3be27df6ef450675e651db280cd7", "width": 64, "depth": 8192, "records": 8192}
+  },
+  "stage_runs": [
+    {
+      "stage": "synthesis",
+      "status": "PASS",
+      "quartus_elapsed": "00:06:15",
+      "wrapper_elapsed": "00:07:38",
+      "errors": 0,
+      "warnings": 241,
+      "peak_virtual_memory_mib": 3794,
+      "estimated_alms": 79546,
+      "block_memory_bits": 247316,
+      "dsp_blocks": 21,
+      "report": {"path": "build/agents/T-20260919-004/prep/synthesis-remote/catapult_a10.syn.rpt", "bytes": 2732350, "sha256": "c7a41b6764b9a163428252369cb75f025206114a983726bca1a045368b726e11"},
+      "summary_sha256": "f033ab247e9cbed19c7495e2e483ad7a2650e521e08884463cbd7ae58b542263"
+    },
+    {
+      "stage": "fitter",
+      "status": "PASS",
+      "quartus_elapsed": "00:13:52",
+      "errors": 0,
+      "warnings": 12,
+      "peak_virtual_memory_mib": 11134,
+      "resources": {"alms": "74,652 / 427,200 (17%)", "registers": 80449, "pins": "141 / 826 (17%)", "ram_blocks": "121 / 2,713 (4%)", "dsp_blocks": "21 / 1,518 (1%)", "plls": "3 / 112 (3%)"},
+      "report": {"path": "build/agents/T-20260919-004/reports/fitter/catapult_a10.fit.rpt", "bytes": 2201624, "sha256": "49c2cf4a09d6d4a8ee297412887e17fe291ae6117bf8469fc5ce063d1473bc84"},
+      "summary_sha256": "da6d290e0f9f618772c431f6767c04f6f261f895f2118d93242a98819261bb4a",
+      "audit": "FITTER_AUDIT_PASS"
+    },
+    {
+      "stage": "sta_signoff",
+      "status": "PASS",
+      "quartus_elapsed": "00:00:22",
+      "errors": 0,
+      "warnings": 2,
+      "peak_virtual_memory_mib": 4688,
+      "report": {"path": "build/agents/T-20260919-004/reports/sta/catapult_a10.sta.rpt", "bytes": 17755873, "sha256": "4f90ac713553ebf4afdf4e0dad5d7c35c1c445b8aacd1b8f17bdc60d46039764"},
+      "summary_sha256": "2b33e32e50187389f96876587712fa2b2e4e0c73957037c5e39f9dd524e7b21a",
+      "flow_report_sha256": "172b2738fcb5f72cd23cef73bde81c33aeecd7bf670f2efb2b9297b3e2d92f99",
+      "audit": "STA_SIGNOFF_AUDIT_PASS"
+    }
+  ],
+  "bram_inventory": {
+    "instance": "soc|bram|u_impl|u_ram|auto_generated|altsyncram1|ALTSYNCRAM",
+    "mode": "True Dual Port",
+    "clock_mode": "Single Clock",
+    "depth": 8192,
+    "width": 64,
+    "logical_bits": 524288,
+    "m20k_blocks": 32,
+    "mif": "../boot/build/boot.mif"
+  },
+  "timing": {
+    "sys_clk_25": {"period_ns": 40.0, "frequency_mhz": 25.0, "setup_wns_ns": 7.336, "hold_wns_ns": 0.019, "recovery_wns_ns": 13.589, "removal_wns_ns": 0.166, "tns_ns": 0.0},
+    "global": {"setup_wns_ns": 0.263, "hold_wns_ns": 0.0, "recovery_wns_ns": 0.657, "removal_wns_ns": 0.154, "min_pulse_wns_ns": 0.120, "all_tns_ns": 0.0, "violations": 0},
+    "ddr": {"status": "Pass", "read_capture_ns": 0.014, "write_ns": 0.031, "address_command_ns": 0.184, "dqs_gating_ns": 0.588, "write_levelling_ns": 0.11},
+    "metastability": {"status": "Pass", "corners": 4, "synchronizer_chains": 27, "shortest_chain_registers": 2, "timing_violation_chains": 0, "excluded_chains": 23, "worst_case_mtbf_years": "1e+09", "settling_ns": {"slow_900mv_100c": 3.511, "slow_900mv_0c": 3.601, "fast_900mv_100c": 5.061, "fast_900mv_0c": 5.424}}
+  },
+  "custom_acceptance": {
+    "remote_result": "T004_ACCEPTANCE_PASS",
+    "source_pre_manifest_sha256": "e87c4dd5ec9548fa20bd0071b7305306c8dd2a2619cf106454526c7c9eaf62e6",
+    "source_post_manifest_sha256": "e87c4dd5ec9548fa20bd0071b7305306c8dd2a2619cf106454526c7c9eaf62e6",
+    "source_query_diff_rows": 0,
+    "clone_baseline_manifest_sha256": "e87c4dd5ec9548fa20bd0071b7305306c8dd2a2619cf106454526c7c9eaf62e6",
+    "clone_post_manifest_sha256": "bc106b0480ea5078a91e8d33b8d07baff4b73048e0700a71e42683edb1dadb18",
+    "clone_query_diff_objects": 22,
+    "bundle": {"files": 118, "bytes": 50087292, "canonical_sha256": "fe8a2afc43f25a98de2e19181df8d59b3ce76999b3eb2af3bf89321c017cfb16"},
+    "overall": {"sys_setup_ns": 7.336, "sys_hold_ns": 0.019, "sys_recovery_ns": 13.589, "sys_removal_ns": 0.166, "min_pulse_ns": 0.120, "cross_clock_queries": "both directions completed; empty queries were recorded without claiming positive margin"},
+    "fifo_payload": {"families": 6, "models": 2, "reports": 24, "nothing_to_report": 24, "complete_exception_rows_per_model": 6, "ignored_exception_rows": 0, "result": "PASS"},
+    "cdc_data_delay": {"corners": 4, "routes": 5, "groups": 20, "path_cardinality": "3/3/3/3/1", "violations": 0, "worst_slack_ns": 1.307, "datapath_only_ns": 2.0, "complete_false_path_rows_per_corner": 5, "ignored_target_rows": 0, "result": "PASS"},
+    "local_fail_closed_analysis": {"path": "build/agents/T-20260919-004/runtime/custom-acceptance-analysis-final.log", "bytes": 20349, "sha256": "c0552d6a10f89d1e2dd4e2d0468aa05391734f61316dea09f0a8b22d8e34a180", "result": "T004_ACCEPTANCE_ANALYSIS_PASS"},
+    "static_fault_matrices": {"fifo": "positive PASS and 6/6 faults rejected", "data_delay": "positive PASS and 10/10 faults rejected"}
+  },
+  "ucp_invariant": {
+    "task": "T-20260919-005",
+    "implementation_sha": "4ef63a70acef32dcf140c377eb6059ff3cd5c9cd",
+    "result": "PASS",
+    "normalized_ucp_input_paths": 60,
+    "normalized_reset_paths": 624,
+    "raw_reset_paths_each": 628,
+    "raw_reset_duplicates_each": 4,
+    "violations": 0,
+    "worst_recovery_slack_ns": 1.086,
+    "worst_removal_slack_ns": 0.179,
+    "fixture": "2/2 positive PASS; 27/27 negative rejected",
+    "historical_replay": "T-20260909-011 and T-20260909-013 PASS"
+  },
+  "harness_attempts": [
+    {
+      "stage": "fitter-audit-initial",
+      "classification": "audit-harness-only",
+      "detail": "fit.summary has Successful status but no Total errors line; authoritative fit report says Fitter successful, 0 errors, 12 warnings. Audit was corrected to consume that report marker and passed without rerunning fitter."
+    },
+    {
+      "stage": "sta-runner-initial",
+      "classification": "redirected-stream-flush-race",
+      "detail": "The short STA process exited before the redirected stdout reader drained, so the wrapper emitted STA_SIGNOFF_FAIL. Retrieved stdout/report show Timing Analyzer successful, 0 errors; a corrected postflight audit passed without rerunning STA."
+    },
+    {
+      "stage": "custom-acceptance-powershell5",
+      "classification": "runner-shell-only",
+      "detail": "Windows PowerShell 5 promoted the known Quartus TBBmalloc stderr warning to a terminating NativeCommandError after a 0-diff clone. That attempt is preserved. A new acceptance-v2 clone under pwsh completed all four report families; no failed clone was deleted or reused."
+    }
+  ],
+  "resource_and_safety": {
+    "all_remote_actions_under_gamepc_lock": true,
+    "processor_limit": "16 of 24",
+    "minimum_observed_free_physical_mib": 39066.7,
+    "source_rtl_qsf_sdc_modified": false,
+    "assembler": false,
+    "sof_or_persistent_format_generated": false,
+    "quartus_pgm_or_jtag": false,
+    "board_reset_or_power": false,
+    "unknown_process_stopped": false,
+    "final_eda_process_count": 0,
+    "final_forbidden_artifact_count": 0
+  },
+  "reports": {
+    "synthesis_runner_sha256": "7180543821827f6446433769b047e9a485bdf90db49d9e75da2ad1e0023e554a",
+    "fitter_runner_sha256": "74bd084092c30a3ed3e2ab3e75414487db888afb1513e5773f1f4abcba9169ab",
+    "fitter_audit_sha256": "526e9d26812776db8ac82b77fe88742d6902ba617ec5b17119230c56cbe54d60",
+    "sta_runner_sha256": "ec72cd5b7df49d705e85978badadb9d1fcf1893831297dbc414037fe5c1a2e03",
+    "sta_audit_sha256": "fa57453ce2a0b1b3277efedeacf3cad09310c58cfc58034139df9e6a14dc1f57",
+    "custom_runner_sha256": "1b92cdb7e704f95ba5b3d40e16ace9161ad24499243c567702b487a4645cc35d"
+  },
+  "handoff": "docs/handoffs/T-20260919-004-b25-nofp-fresh-physical.md",
+  "next": "T-20260919-002 Gate D and this fresh physical task are both accepted. Register a one-shot assembler task that clones this exact remote project, generates only catapult_a10.sof, then perform the already-authorized volatile JTAG/UART board interaction."
+}

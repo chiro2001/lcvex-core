@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-044",
+  "label": "FP-DIVPRE-SLOTRES-CUT2",
+  "title": "FP div_pre->slot_result_r further cut (54L/25.6ns)",
+  "kind": "rtl-timing-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "dsh-fp-divpre-slotres-cut2",
+  "agent_type": "local-rtl-sim",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-043"
+  ],
+  "base_sha": "cf0414c0cc2e5ec8dc9a07fc8333826268cb0f94",
+  "branch": "fix/T-20260902-044-fp-divpre-slotres-cut2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-044",
+  "scope": "打断 sys_clk_50 setup top-1: fp_exec g_iter.div_pre.sig[245] -> slot_result_r[9]（54 逻辑级 / 25.589ns / -5.047ns），保持 FP/NEON raw-bit 语义与迭代 DIV/SQRT 时序。",
+  "reads": [
+    "docs/handoffs/T-20260902-043-fp-p5-rerun-round10.md",
+    "docs/handoffs/T-20260902-042-fp-slotidx-slotres-cut.md",
+    "docs/handoffs/T-20260902-040-fp-mac-ppprehi-cut.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/**",
+    "sim/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260902-044-fp-divpre-slotres-cut2.md",
+    "docs/tasks/evidence/T-20260902-044.json"
+  ],
+  "validation": {
+    "l0": [
+      "make compile PASS"
+    ],
+    "l1": [
+      "lcvex_fp_exec_tb PASS",
+      "sim-sv-fp-scalar/sim-sv-p7-3/4/5 PASS",
+      "cocotb P7-1/3/4/5 尽量 PASS"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "本地 FP/NEON 功能/回归全绿；latency 更新；后续 FP-P5 rerun 观察 div_pre->slot_result 离开 top。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 14400,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 30,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T06:34:00+08:00",
+  "updated_at": "2026-09-04T06:50:40+08:00",
+  "known_limits": [
+    "不改变 FPCR/FPSR/FCMP/raw-bit 语义；不引入猜测执行；不改 FP 单在途/顺序提交；不做 false_path；避免不必要新增 DSP"
+  ],
+  "handoff": "docs/handoffs/T-20260902-044-fp-divpre-slotres-cut2.md",
+  "evidence": "docs/tasks/evidence/T-20260902-044.json",
+  "next": "合并后重跑 FP-P5；若 setup 闭合则 assembler/SOF 门",
+  "dispatch": {
+    "sent_at": "2026-09-04T06:35:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "subagent_id": "6339b197-fdbd-4a9d-bae9-7ed071a39eb7",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-044",
+    "branch": "fix/T-20260902-044-fp-divpre-slotres-cut2"
+  },
+  "head_sha": "895b8431b915ea1922d6c7c546c939d60eb5546f",
+  "merge_sha": "af9f9635559ec639518ff9db59d627e3879411bc",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T06:50:02+08:00",
+    "merged_at": "2026-09-04T06:50:40+08:00",
+    "recorded_at": "2026-09-04T06:50:40+08:00",
+    "notes": "FP leading-one predecode div/sqrt round cut merged; compile passes. Next FP-P5 rerun with T-044."
+  }
+}

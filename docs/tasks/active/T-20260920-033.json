@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-033",
+  "parent": "T-20260920-031",
+  "label": "B25-COMPOSITE-IDENTITY-BOARD-CLOSEOUT",
+  "title": "Run one fail-closed candidate interaction under the adopted composite live identity contract",
+  "kind": "board-bringup-acceptance",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "blocked-before-preflight-parser-transport",
+  "assigned_owner": "board_t033",
+  "depends_on": ["T-20260920-030", "T-20260920-032"],
+  "triggered_by": "T-031 stopped before terminal on an unobservable candidate design-hash gate; T-032 adopted exact programmer evidence plus candidate-unique pre-input startup as a fail-closed live identity contract.",
+  "base_sha": "4d7f6ea23cc868ffc8cdbbc81aab24db26e57ce7",
+  "branch": "verify/T-20260920-033-b25-composite-identity-board-closeout",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-033",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-033-b25-composite-identity-board-closeout",
+  "authorization": {
+    "user_statement": "许可使用Quartus和JTAG来烧写和测试设备；直接使用给定nios2-terminal命令读取和交互。",
+    "scope": "Exactly one volatile candidate configuration, one live terminal session and exactly one volatile golden restoration.",
+    "excluded": ["JIC/EPCQ/Flash write or erase", "power cycle", "board or SoC reset", "stopping unknown or pre-existing processes"]
+  },
+  "writes": [
+    "build/agents/T-20260920-033/** ignored programming/terminal/control evidence",
+    "D:/Projects/fpga-altra/lcvex/build/T-20260920-033-b25-composite-identity-board-closeout/** task-owned remote root",
+    "docs/tasks/evidence/T-20260920-033.json",
+    "docs/handoffs/T-20260920-033-b25-composite-identity-board-closeout.md"
+  ],
+  "reads": [
+    "docs/tasks/evidence/T-20260920-003.json",
+    "docs/tasks/evidence/T-20260920-030.json",
+    "docs/tasks/evidence/T-20260920-031.json",
+    "docs/tasks/evidence/T-20260920-032.json",
+    "T-021/T-031 task-local runner artifacts as templates only",
+    "exact T-030 candidate SOF and exact golden SOF read-only"
+  ],
+  "frozen_identity": {
+    "candidate": {
+      "path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842105,
+      "sha256": "bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264",
+      "checksum": "0x315AC2B3",
+      "design_hash_metadata": "0CC907F3DD48A9C78864E3C5BD66B9AF",
+      "usercode": "0xFFFFFFFF"
+    },
+    "golden": {
+      "path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F"
+    },
+    "jtag_id": "0x02E060DD",
+    "console_cable": "JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]",
+    "program_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310",
+    "device": 1,
+    "instance": 0,
+    "server_bundle": "D:/Projects/fpga-altra/jtag-30mhz",
+    "server_channel": 0,
+    "server_frequency_hz": 15000000
+  },
+  "scope": "In one uninterrupted gamepc ownership window, prove initial golden state, execute one exact candidate programmer transaction, use the first live terminal's candidate-unique startup as the live identity gate, run the paced command and RX observability acceptance, then always execute one exact golden restoration. No internal retry is allowed.",
+  "acceptance": {
+    "preflight": "Remote root absent; candidate/golden hashes exact; no conflicting EDA/programmer/terminal or port-1310 owner; exactly one preserved standard jtagserver; initial read-only chain is exact golden with JTAG UART/PHY.",
+    "script_seal": "Before any hardware action, syntax-check/hash the exact local and uploaded remote scripts and record a manifest. Scripts are immutable after sealing.",
+    "single_use_guards": "Create task-owned durable candidate/golden invocation markers immediately before each quartus_pgm call. Candidate marker must be absent then written once; golden marker likewise. Any pre-existing marker or attempted second call fails without invoking programmer. Final counts must be candidate=1 and golden=1.",
+    "candidate_program": "One task-owned 15 MHz/channel-0 server and one exact quartus_pgm candidate transaction. Require exact path/checksum/JTAG-ID, exit 0, configuration/operation success and 0 errors/0 warnings; stop only the owned server. Programmer PASS is not live identity or functional PASS.",
+    "live_identity": "Immediately start the first and only live direct terminal. Before sending any byte require, in order, LCVEX25 BOOT, CAL-(OK|WAIT|FAIL), DDR-(OK|FAIL), READY, RXDBG 00000000 00000000 and a later nonzero-read/zero-event RXDBG TX-drain page. If absent, send zero bytes and proceed directly to golden restoration. Cached standard-server design hash is diagnostic only.",
+    "paced_commands": "In the same session send raw bytes strictly in order and only after the preceding response: ? -> CLOCK25 CAL-* DDR-*; p -> PONG; d -> a new immediate RXDBG whose event count/last byte reflect d; Z -> an echo observed after the Z send offset. Stop at first missing response.",
+    "observability": "Require final RXDBG event count=4/last byte=0x5A; RXPATH bridge=PoC=dmem with low16=0xA45A, each valid count at least four and fault bits zero; RXCPU getc/dispatch count=4, getc low16=0xA45A, dispatch class=5/byte=0x5A and positive putc/TX progress.",
+    "golden_restore": "On success or any failure, stop only the task-owned terminal and execute exactly one golden quartus_pgm transaction with a fresh owned server. Require golden programmer/checksum/JTAG-ID success, final golden design hash and UART/PHY nodes, preserved standard server, zero residual task processes and free port 1310. Final board state must be golden.",
+    "overall": "Only the full candidate startup + paced commands + RXDBG/RXPATH/RXCPU predicates and successful golden restoration constitute PASS. Programmer/startup-only evidence is insufficient."
+  },
+  "failure_policy": "No internal debug retry. Any setup, candidate, terminal, parser or golden failure terminates this task after the single allowed golden attempt. Preserve artifacts and report; do not rebuild root, upload a replacement script, reprogram candidate, reset, power-cycle or stop global processes.",
+  "resource": "Hold resource-lock gamepc across preflight, both single-use programming phases, terminal, fetch and postflight. One external ownership window only; no other GamePC task overlaps. Event-driven external waits up to one hour.",
+  "forbidden_regions": [
+    "tracked RTL/firmware/QSF/SDC/IP/policy/test/expected changes",
+    "synthesis, fitter, STA or assembler",
+    "more than one candidate programmer invocation, more than one golden programmer invocation, terminal reconnect or internal retry",
+    "using cached standard-server candidate design hash as an acceptance gate or identity proof",
+    "ordinary-file stdin, batching ?/p/d/Z or sending any byte before startup identity/TX-drain gates",
+    "JIC/EPCQ/Flash, reset, power cycle, standard-jtagserver stop or unknown/pre-existing process stop"
+  ],
+  "budget_policy": {
+    "initial_minutes": 30,
+    "checkpoint_increment_minutes": 15,
+    "max_minutes": 60,
+    "max_is_hard_stop": false
+  },
+  "dispatch": {
+    "sent_at": "2026-09-20T18:30:22+08:00",
+    "agent_name": "board_t033",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max by user-confirmed default channel",
+    "monitoring": "event-driven; one-hour maximum wait; no frequent polling"
+  },
+  "result": {
+    "status": "blocked",
+    "partial": false,
+    "topic_evidence_head": "f916aee6087cffc353e23069b80a212772159a0a",
+    "integration_evidence_sha": "b17a8e3d76283a3de28ce8ac7f6ebef3c1743cd8",
+    "blocker": "Windows command layer split the inline PowerShell parser pipeline before preflight",
+    "parser_invocations": "five distinct ps1 files, one parser call each, all status 255; no script retry",
+    "hardware_counts": "candidate programmer=0, golden programmer=0, terminal=0, JTAG configuration=0",
+    "board_state": "not re-read by T-033; inherited last proven T-031 golden state because T-033 made no hardware call",
+    "safety": "resource lock released; no root prepare, Flash/JIC/EPCQ, reset/power or process stop",
+    "evidence": "docs/tasks/evidence/T-20260920-033.json",
+    "handoff": "docs/handoffs/T-20260920-033-b25-composite-identity-board-closeout.md",
+    "next": "separate no-hardware remote parser transport validation before another board task"
+  },
+  "created_at": "2026-09-20T18:29:07+08:00",
+  "updated_at": "2026-09-20T18:50:17+08:00"
+}

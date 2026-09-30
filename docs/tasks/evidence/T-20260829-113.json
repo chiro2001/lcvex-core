@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-113",
+  "state": "done",
+  "base_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+  "head_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+  "merge_sha": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+  "branch": "feature/T-20260829-113-aud-08-evidence-correction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "sent_at": "2026-08-29T23:35:00+0800",
+  "received_at": "2026-08-29T23:35:00+0800",
+  "reported_at": "2026-08-29T23:55:00+0800",
+  "owner": "audit-action-dsv",
+  "model": "dsh-default",
+  "label": "AUD-08",
+  "title": "evidence 定稿核查与 T-104 correction",
+  "scope": "只读核查 done 任务 evidence 缺失字段，为 T-104 生成不可变 correction record；不修改历史 handoff/evidence，不修改 RTL。",
+  "files": [
+    "docs/handoffs/T-20260829-113-aud-08.md",
+    "docs/tasks/evidence/T-20260829-113.json"
+  ],
+  "correction_record": {
+    "task": "T-20260829-104",
+    "material_source_sha": "5f78319234a603f522af407e5378b7ef786fa1d1",
+    "material_head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+    "integration_merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+    "active_json_wrong_merge_sha": "5b2b0ba92904c60bdc3b006a63dfdf526899bc8e",
+    "active_json_right_head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+    "artifact": {
+      "path": "docs/audit",
+      "material_head": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+      "git_tree_sha": "3605d8b18d5f6160538aab69a8565cf0d59e1d76",
+      "combined_content_sha256": "0b7f940ac863ff5926e2eab5d00ac6d2fd51a8c60e28b9fe2708dcdd5d45a6e0",
+      "combined_all_t104_files_sha256": "3995796efa30b6faadb38205103d81c00fd3688a64a8d7b628a21720afd24d27",
+      "file_sha256": {
+        "docs/audit/README.md": "a5bdbe547c2b2c51a1e41d62558d37f80aa3983b71c03aa66e8c12bcfdea2446",
+        "docs/audit/01-governance.md": "76aaa5af7b9013c7878df2c4953f966dee601737a27f364eacde7e29f808e614",
+        "docs/audit/02-reproducibility.md": "dacac01fbfaa6569c1c249f5a36163affa728c238a0d4028a8dc37b86f5da852",
+        "docs/audit/03-rtl-quality.md": "dd1e5f6510e7a2f97bc2d8bd828aebff3a72eff40530d51941473bbba0f763e6",
+        "docs/audit/04-isa-architecture.md": "79ef9ba690c5845893ab9ac7af617dd81e1b701bda654a5c394902c413e63b22",
+        "docs/audit/05-verification.md": "7f0925abe8728d180faf4a720192e653cb823036ac02c1b263773fa106839af2",
+        "docs/audit/06-multicore.md": "6872025fb30491f11beb5f39422c2fe0a5e21f2e6fdcef7dcb00763a6343d821",
+        "docs/audit/07-fpga.md": "dd0e8b5771ddfb9bc8dbea62f7ec517c9ad0a987db1932254a80bc7c55fd84f2",
+        "docs/audit/08-security-boundary.md": "bf77fc85619960f1aa395bc51c3e0bc33808109fc49991897eabe6aa16a88e99",
+        "docs/audit/09-risks.md": "11beb4732da6a064fe66730298404009c591ccd3f361a03131350fcb8e141b66",
+        "docs/audit/evidence-index.md": "ea53510daa6836dccd02195462b058a59a066e324142549f0475a5857b5872e2",
+        "docs/audit/self-assessment.md": "af8eb230299701a25fda2f71dd2dc02c5ab43663eb64454bf81da43aa5403d3b",
+        "docs/audit/external-results/README.md": "7f405de6ad794f0b9cec87ebe8143bcbe4a6507ce415634d40c258644f469005",
+        "docs/audit/external-results/action-items.md": "6210c2842598c99feb287dfeae56963a1aefd297f839f4bcfe96408b952674e1",
+        "docs/handoffs/T-20260829-104-external-audit.md": "45c429d0d414bf510e4bc8dd5a2716f28e75b5644300e91b64695335405de72f",
+        "docs/tasks/evidence/T-20260829-104.json": "50d3cad6a8a3b67494a941b8cf5c50de636fd48eb2bb9cf3bbf499d0ba25b94e"
+      }
+    },
+    "old_values_preserved": true,
+    "notes": "T-104 evidence/active/handoff 均未在本任务中改写；correction 只作为不可变补充记录。",
+    "tasks_md_merge_sha": "8e3bfb5",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "ceb8af4b37e090f22215e14b6590d33886fb83d5",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "t113-aud08-handoff",
+        "uri": "docs/handoffs/T-20260829-113-aud-08.md",
+        "sha256": "ad7bb8a516ed559a63035214c87c522fa5e0ac3224836d92f9c7b679956066bc",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "t113-aud08-evidence",
+        "uri": "docs/tasks/evidence/T-20260829-113.json",
+        "sha256": "25d50730a791c4e2183e11c1deca0ca6200170dccbdd30e8394b3027fbd3efd8",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ]
+  },
+  "audit_table": [
+    {
+      "task": "T-20260829-086",
+      "evidence_state": "active",
+      "evidence_merge_sha": "",
+      "authoritative_merge_sha": "8bea8de66e17cff80419f1a9efa47accc5ac32af",
+      "authoritative_head_sha": "90a5aa58cfb9672979d89dbffd5788d0bcea76de",
+      "missing": [
+        "merge_sha",
+        "integrator_review",
+        "artifact_hash"
+      ]
+    },
+    {
+      "task": "T-20260829-092",
+      "evidence_state": "review",
+      "evidence_merge_sha": "",
+      "authoritative_merge_sha": "c18ba3c5983976e94bed5dc56129c83332e9254d",
+      "authoritative_head_sha": "71c743f74a7edd314e67ab45871057e5d0baaaa0",
+      "missing": [
+        "merge_sha",
+        "integrator_review",
+        "artifact_hash"
+      ]
+    },
+    {
+      "task": "T-20260829-093",
+      "evidence_state": "review",
+      "evidence_merge_sha": null,
+      "authoritative_merge_sha": "8b4348d30aca6f30af541a71d1da2effb4615fc1",
+      "authoritative_head_sha": "d76bc0a18df0c914abececb5c796dcb13aae3c44",
+      "missing": [
+        "merge_sha",
+        "integrator_review"
+      ]
+    },
+    {
+      "task": "T-20260829-096",
+      "evidence_state": "review",
+      "evidence_merge_sha": null,
+      "authoritative_merge_sha": "fb687e039eb937c3dee1f34244e676271e635726",
+      "authoritative_head_sha": "86a2d7bfdf6efc34ca83f6f0a8c7d452399504de",
+      "missing": [
+        "merge_sha",
+        "integrator_review"
+      ]
+    },
+    {
+      "task": "T-20260829-098",
+      "evidence_state": "review",
+      "evidence_merge_sha": null,
+      "authoritative_merge_sha": "3681e6e821c60250d810b648f7c65cbe1c17d5b2",
+      "authoritative_head_sha": "6a53705b69cd9eda417258676608585c63658da8",
+      "missing": [
+        "merge_sha",
+        "integrator_review",
+        "artifact_hash(b5_profile_matrix)"
+      ]
+    },
+    {
+      "task": "T-20260829-100",
+      "evidence_state": "review",
+      "evidence_merge_sha": "",
+      "authoritative_merge_sha": "937750183321f35cfe5a256cf7d4f91868e22c2b",
+      "authoritative_head_sha": "0ec8df63907b5b945840b41112f1926fa2eac50e",
+      "missing": [
+        "merge_sha",
+        "integrator_review",
+        "artifact_hash"
+      ]
+    },
+    {
+      "task": "T-20260829-103",
+      "evidence_state": "review",
+      "evidence_merge_sha": "",
+      "authoritative_merge_sha": "cd43247f7367a1d390a82f3e3273c5022b2023a3",
+      "authoritative_head_sha": "eff8c776e662bba1cbca325ee42c8a8887516f27",
+      "missing": [
+        "merge_sha",
+        "integrator_review",
+        "artifact_hash"
+      ]
+    },
+    {
+      "task": "T-20260829-104",
+      "evidence_state": "review",
+      "evidence_merge_sha": "",
+      "authoritative_merge_sha": "8e3bfb53d1ccadc0743a4f80eb2869c32759ea0f",
+      "authoritative_head_sha": "4214a5e09012b0c090e9252a59d9245c8d5bfafe",
+      "missing": [
+        "merge_sha",
+        "integrator_review",
+        "artifact_hash",
+        "evidence_head_sha_was_source_not_material"
+      ],
+      "note": "active JSON merge_sha is wrong (5b2b0ba...); TASKS.md and correction use 8e3bfb5."
+    },
+    {
+      "task": "T-20260829-105",
+      "evidence_state": "done",
+      "evidence_merge_sha": "72e026d15bc6e3c27d748dec11963f7385bf7307",
+      "authoritative_merge_sha": "72e026d15bc6e3c27d748dec11963f7385bf7307",
+      "authoritative_head_sha": "66ce5a4fe95544d374e3f78ebce6bb6c22dc70d4",
+      "missing": [],
+      "note": "Reference example of finalized evidence with integrator_review/result_sha/merge_sha."
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "t113-audit-evidence-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 static scan of docs/tasks/active/*.json and docs/tasks/evidence/*.json for done tasks missing merge_sha/integrator_review/artifact_hash",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Confirmed EXT-01-001: most done task evidence lack merge_sha/integrator_review; T-104 additionally has wrong head/merge/artifact placeholder."
+    },
+    {
+      "run_id": "t113-correction-hash-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git ls-tree -r --name-only 4214a5e docs/audit | sort | xargs ... | sha256sum; git rev-parse 4214a5e:docs/audit",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Computed docs/audit tree SHA 3605d8b... and combined SHA256 0b7f940...; all file SHA256s recorded."
+    },
+    {
+      "run_id": "t113-json-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-113.json",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Evidence JSON legal."
+    },
+    {
+      "run_id": "t113-diff-check-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace errors; only new handoff/evidence added."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t113-aud08-handoff",
+      "uri": "docs/handoffs/T-20260829-113-aud-08.md",
+      "owner": "T-20260829-113",
+      "retain_until": "repository-history",
+      "sha256": "ad7bb8a516ed559a63035214c87c522fa5e0ac3224836d92f9c7b679956066bc",
+      "bytes": null,
+      "reproduce": "git show HEAD:docs/handoffs/T-20260829-113-aud-08.md"
+    },
+    {
+      "id": "t113-aud08-evidence",
+      "uri": "docs/tasks/evidence/T-20260829-113.json",
+      "owner": "T-20260829-113",
+      "retain_until": "repository-history",
+      "sha256": "25d50730a791c4e2183e11c1deca0ca6200170dccbdd30e8394b3027fbd3efd8",
+      "bytes": null,
+      "reproduce": "python3 -m json.tool docs/tasks/evidence/T-20260829-113.json"
+    }
+  ],
+  "known_limits": [
+    "本任务只生成 correction record，未回填 T-086/T-092/T-093/T-096/T-098/T-100/T-103 等 evidence 的 merge_sha/integrator_review/artifact hash。",
+    "T-104 active JSON 的错误 merge_sha 未修改（不在本任务写集）。",
+    "T-104 evidence 本身未修改；旧值/占位 hash 保留。",
+    "未运行任何重型 Verilator/Quartus/Gate；未修改 RTL。"
+  ],
+  "next": "集成者引用本 correction 回填 T-104；其余 done 任务 evidence 由后续定稿任务按 T-105 样例补全；EXT-01-001 在 T-104 correction 合入及批量 evidence 定稿后关闭。",
+  "integrator_review": {
+    "received_at": "2026-08-29T23:40:00+0800",
+    "status": "accepted",
+    "head_sha": "55b997bdb47a0dac87d99271f9d6e5134acc0197",
+    "notes": "AUD-08 evidence correction merged.",
+    "merge_sha": "2ea26bbc05d7bbd8bc03f231bfd31c423a0d531e",
+    "result_sha": "ceb8af4b37e090f22215e14b6590d33886fb83d5"
+  }
+}

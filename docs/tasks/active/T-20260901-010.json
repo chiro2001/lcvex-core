@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-010",
+  "label": "PE-F1I-CONTROL-FLOW-FETCH-FENCE",
+  "parent": "T-20260830-033",
+  "title": "F1a 控制流边界取指节流与 delay2 性能修复",
+  "kind": "rtl-performance-correctness-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "accepted",
+  "assigned_owner": "luna-f1a-control-flow-fetch-fence",
+  "agent_type": "rtl-and-verification-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260901-009"],
+  "base_sha": "c44a4bce153904631574141a8b0c7d2c71e6ef88",
+  "branch": "feature/T-20260901-010-f1a-control-flow-fetch-fence",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-010",
+  "scope": "在不放宽 epoch/旧响应隔离、不增加公开响应 ID、不改变 feature-off 路径的前提下，为 F1a depth-2 取指 FIFO 增加控制流边界的保守取指节流：当 current-epoch FIFO/IFID 已持有尚未由既有 decode/flush 路径解析的 B/BL、B.cond、CBZ/CBNZ、TBZ/TBNZ、BR/BLR/RET 时，禁止继续接受更年轻的顺序取指；控制流指令解析后由现有 redirect/flush 或顺序路径恢复。目标是避免 delay2 下在 taken control-flow 后必然进入 stale quarantine 的 wrong-path 请求。不得修改 memory delay 分布、性能阈值、workload、commit digest、QEMU/reference 或默认 FETCH_FIFO_ENABLE=0。",
+  "planning_guidance": {
+    "preferred_design": [
+      "优先在 lcvex_core.sv 内实现一个仅依赖 32-bit 指令编码的最小 control-flow predecode predicate，并用 current-epoch FIFO entries 与 IF/ID 状态形成 fetch fence；编码分类必须与 lcvex_decode.sv 已支持的六类控制流精确对齐，reserved BR-family encoding 不得误判为可执行分支。",
+      "只节流尚未解析控制流之后的更年轻顺序请求；不得提前改变 d.next_pc、不得引入分支预测、BTB/RAS、不得把 predecode 当成架构 decode，也不得在 taken/not-taken 结果确定前伪造 redirect。",
+      "保留 frontend_kill、fetch_epoch、fetch_stale_mmu/fetch_stale_imem、stale response drop 和单 outstanding 契约；禁止用允许 current/stale 同时在途、跳过 drain 或接收未知响应来换取周期。",
+      "若现有 FIFO/IFID 状态不足以无歧义实现 fence，先报告具体组合环/生命周期缺口；允许增加最小本地状态，但必须写明 reset=0、仅 feature-on 更新和 flush/reset 清除时机。"
+    ],
+    "verification": [
+      "定向覆盖 unconditional direct、conditional taken/not-taken、CBZ/CBNZ、TBZ/TBNZ、BR/BLR/RET：控制流进入 FIFO 后不得再接受 younger sequential request；not-taken 必须在既有 decode 解析后恢复，taken 必须只从 d.next_pc 恢复。",
+      "加入/收紧 SVA：fence 有效时无普通 fetch_req_accept/imem_req_accept；frontend_kill/stale_drain 既有隔离断言继续成立；FIFO occupancy<=2、overflow=0、current epoch push 不变。",
+      "feature-off 必须保持原周期与 digest；feature-on 的控制流定向测试同时覆盖 commit_ready backpressure、cache on 和 MEM_DELAY_MODE=2，防止 fence 与 H-04/system next-fetch 修复回归。",
+      "使用 T-009 opt-in probe 重跑 nocache_d2 的 alu_latency、ctrl_branch、mem_seq 三 workload × F0/F1a 六行，统一 10M、相同 image/tool/seed；逐项比较 status、retired、v2 commit digest、memory digest、FIFO bounds、stale drain、imem request 与 2%+64 guard。"
+    ],
+    "decision_rules": [
+      "若六行出现任何架构摘要差异、FIFO/epoch 违例、timeout 或 stale 隔离削弱，停止并报告，不进入完整矩阵。",
+      "只有三项 guard 全部通过，或失败项相对 T-009 明确改善且能定义更小的第二步，才提交 review；不得降低 2%+64、筛掉 workload 或把 F0 变慢作为收益。",
+      "如果保守 fence 使其他已纳入定向回归的分支密集 workload 超过 2%+64，完整记录并回退该候选，不把策略默认化。"
+    ]
+  },
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "tb/sv/lcvex_fetch_fifo_tb.sv",
+    "sim/cocotb/test_fetch_fifo.py",
+    "tb/sv/lcvex_soc_tb.sv",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/F1A_CONTROL_FLOW_FETCH_FENCE_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-010/f1a_control_flow_fence_summary.json",
+    "docs/handoffs/T-20260901-010-f1a-control-flow-fetch-fence.md",
+    "docs/tasks/evidence/T-20260901-010.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/F1A_D2_EVENT_PROBE_RESULTS.md",
+    "docs/evidence/artifacts/T-20260901-009/f1a_d2_event_summary.json",
+    "docs/tasks/evidence/T-20260901-009.json",
+    "docs/PERFORMANCE_F1F_V2_RESULTS.md",
+    "docs/tasks/evidence/T-20260830-041.json",
+    "docs/tasks/evidence/T-20260830-046.json",
+    "docs/tasks/evidence/T-20260831-004.json",
+    "docs/tasks/evidence/T-20260831-006.json",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_pkg.sv",
+    "baremetal/perf/**"
+  ],
+  "validation": {
+    "l0": ["git diff --check；新增 control-flow predecode 编码 fixture；Python/registry consistency"],
+    "l1": ["make test-f1a；make cocotb-f1a；feature-off/F1a branch directed SV+Cocotb；受影响 cache/delay2 smoke"],
+    "l2": ["nocache_d2 三 workload × F0/F1a 六行 10M；三对严格架构摘要、FIFO bounds、probe event 与 2%+64 guard"],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "控制流边界 fence 只抑制未解析分支后的 younger sequential fetch，不改变 redirect、epoch/quarantine 或 feature-off 语义；定向 SV/Cocotb 全绿，六行全部 pass 且三对 retired/commit/memory digest 严格相同、FIFO 无违例，三项原性能护栏全部通过。若只部分改善，任务可交付 review 但 F1a 继续默认关闭，并给出可证伪的最小下一步。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 12288, "timeout_s": 14400, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 120, "extension_increment_minutes": 60, "max_minutes": 360, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-09-01T12:41:40+08:00", "released_at": "2026-09-01T16:25:47+08:00", "reason": "最终功能/探针定向验证与 d69 provenance 六行重跑全部完成；无运行中 scope", "preflight": "本机无运行中的 Gate/Verilator/Quartus scope；29GiB RAM、15GiB available；保留现有进程不停止、不暂停、不降优先级", "rule": "本地唯一重型任务；MemoryMax=15G、MemorySwapMax=0、CPUQuota=50%、MAKEFLAGS=-j1、VERILATOR_JOBS=1；不得与 Gate/Linux/Quartus/其他 Verilator 并发"},
+  "created_at": "2026-09-01T12:40:19+08:00",
+  "updated_at": "2026-09-01T16:27:48+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T12:41:40+08:00",
+    "agent_name": "t038_fpga_cache_ram_luna",
+    "agent_reuse_note": "复用已完成 T-20260901-009 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-010。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-010"
+  },
+  "blocking_review": {
+    "reviewed_commit": "fbf367ae1ca1eafd6ecaf31cc0dc05008b4acd96",
+    "reported_at": "2026-09-01T14:34:48+08:00",
+    "result": "correction_required",
+    "required": [
+      "IF/ID control-flow fence qualification must exclude d.exc; add a dynamic branch-target-IABT negative control.",
+      "Replace the ambiguous pending-fetch probe classification with stale-context semantics: only fetch_pending or fetch_trans_busy imply an outstanding response; fetch_translated alone must not.",
+      "Bump the diagnostic artifact to a human-readable v2 stale-context schema, update perf_runner selftest/documentation/summary/evidence, and rerun the six rows so generated evidence matches final code."
+    ]
+  },
+  "integrator_provenance_correction": {
+    "requested_at": "2026-09-01T16:05:59+08:00",
+    "result": "correction_required",
+    "reason": "correction runner contains T-010 RTL but all six raw reports and summary label measurement_source_sha/git_sha/sha as pre-fix base c44a4bc; source_sha256 does not cover RTL and cannot repair the attribution",
+    "required": "reuse only the final-code runner binaries whose hashes are already recorded; rerun all six rows in a 15G/no-swap/50%-CPU scope with implementation_source_sha d69f5bd08a6d87452ce96617520e5c4d7fe82ff0, regenerate raw reports/probes/summary/evidence/report/handoff, and prove no c44 measurement-source label remains on current rows"
+  },
+  "implementation_merge_sha": "b94dbe730cbbac0f91df36c9f5f3d9a8ee42120e",
+  "correction_merge_sha": "0a23363192386a89df648d4945cba5d4030478b2",
+  "final_merge_tip": "fe49bbfa879f0448b71d12836e75f31da802bf05",
+  "integrator_review": {
+    "accepted_at": "2026-09-01T16:27:48+08:00",
+    "status": "accepted_control_flow_fetch_fence_v2_probe_and_provenance",
+    "owner_initial_tip": "fbf367ae1ca1eafd6ecaf31cc0dc05008b4acd96",
+    "owner_correction_tip": "d69f5bd08a6d87452ce96617520e5c4d7fe82ff0",
+    "owner_provenance_tip": "575cff592499e73bd4b7cee768ea1c2fc519fe32",
+    "final_blocker_review": {
+      "model": "gpt-5.6-luna(max)",
+      "reported_at": "2026-09-01T16:03:26+08:00",
+      "result": "pass_no_blockers"
+    },
+    "checks": [
+      "raw control-flow predecode 与 decoder 支持编码一致；IF/ID 排除 d.exc，branch-target IABT 动态负控通过",
+      "fence 只门控普通 fetch request，不改变 FIFO pop/space、data MMU、redirect、epoch/quarantine 或 feature-off",
+      "probe 使用 lcvex-f1a-d2-event-v2-stale-context，排除 translated-only 并保留 repeated-kill stale flags；partition/selftest/文档一致",
+      "最终 d69 六行 6/6 pass；三对 retired、commit/memory digest、request/response 严格相等；FIFO 无 overflow，三项 2%+64 guard 全部通过",
+      "六行 current raw report 的 sha/git_sha/measurement_source_sha 均为 d69 全 SHA；summary SHA256 9e6dc986... 匹配，旧 c44 误标 artifacts 明确 excluded",
+      "所有 accepted 重型作业均受 15G/no-swap/50%-CPU/-j1 scope 限制；误启动 plain make 未采用或复用",
+      "合并 SHA 上 probe selftest、Python 编译、registry 68 项及 Makefile/runner 一致性、JSON、diff 检查全绿"
+    ],
+    "boundary": "F1a 默认开关仍保持关闭；只有新冻结 SHA 的完整 196-row/98-pair 矩阵全绿后才进入默认启用决策。"
+  },
+  "handoff": "docs/handoffs/T-20260901-010-f1a-control-flow-fetch-fence.md",
+  "evidence": "docs/tasks/evidence/T-20260901-010.json",
+  "known_limits": ["这是 F1a-on 的性能/正确性候选，不启用 F1a 默认开关。", "本任务不运行完整 196-row 矩阵、Gate D、Linux、Quartus 或上板。"],
+  "next": "冻结包含本修复的新 SHA，登记并串行运行完整 196-row/98-pair 回归。"
+}

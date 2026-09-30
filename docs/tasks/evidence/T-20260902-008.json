@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-008",
+  "state": "done",
+  "partial": false,
+  "base_sha": "20639c8defd66407af87292844fd902b6bf00f6a",
+  "head_sha": "39f7a4a1858cdf88e9bf273aa718f6b89af9f291",
+  "branch": "fix/T-20260902-008-neon-lane-clamp",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-008",
+  "scope": "将 T-20260902-007 probe 已验证的全 lane-width 合法 index 钳位正式合入 rtl/lcvex_neon_int.sv 的 set_lane 与 lane_unsigned；保持合法 NEON 整数 lane 功能语义不变。",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cocotb": "2.0.1",
+    "python": "3.12.4",
+    "os": "Linux",
+    "jobs": "VERILATOR_JOBS=1 for all local builds"
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-compile-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "make compile",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "RTL lint compile target passed after full lane-width clamps.",
+      "source_sha": "39f7a4a1858cdf88e9bf273aa718f6b89af9f291",
+      "log": "build/agents/T-20260902-008/compile.log"
+    },
+    {
+      "run_id": "owner-l1-sv-neon-int-002",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-sv-p7-2-neon",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P7-2 NEON integer raw-bit directed TB PASS.",
+      "source_sha": "39f7a4a1858cdf88e9bf273aa718f6b89af9f291",
+      "log": "build/agents/T-20260902-008/sim-sv-p7-2-neon.log"
+    },
+    {
+      "run_id": "owner-l1-cocotb-neon-int-003",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-2-neon",
+      "exit_code": 2,
+      "result": "fail_known_unrelated",
+      "summary": "TESTS=10 PASS=9 FAIL=1. Only test_p7_2_neon.test_p7_2_unsupported_udef fails on SQADD (0x4E220C20 captured by existing B2c DUP decode branch); same known limit as T-20260902-004, not caused by this RTL change.",
+      "source_sha": "39f7a4a1858cdf88e9bf273aa718f6b89af9f291",
+      "log": "build/agents/T-20260902-008/sim-cocotb-p7-2-neon.log"
+    },
+    {
+      "run_id": "owner-l1-diff-check-004",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Whitespace/error check clean.",
+      "source_sha": "39f7a4a1858cdf88e9bf273aa718f6b89af9f291"
+    },
+    {
+      "run_id": "owner-l1-static-clamp-005",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "static scan: all index*N +: N dynamic part-selects in rtl/lcvex_neon_int.sv are guarded by the matching lane-width limit (8-bit <16, 16-bit <8, 32-bit <4, 64-bit <2)",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "8 dynamic part-selects found, 0 unguarded; includes both lane_unsigned and set_lane.",
+      "source_sha": "39f7a4a1858cdf88e9bf273aa718f6b89af9f291"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handoff",
+      "owner": "T-20260902-008",
+      "uri": "docs/handoffs/T-20260902-008-neon-lane-clamp.md",
+      "reproduce": "cat docs/handoffs/T-20260902-008-neon-lane-clamp.md",
+      "retain_until": "task-close"
+    },
+    {
+      "id": "evidence",
+      "owner": "T-20260902-008",
+      "uri": "docs/tasks/evidence/T-20260902-008.json",
+      "reproduce": "cat docs/tasks/evidence/T-20260902-008.json",
+      "retain_until": "task-close"
+    }
+  ],
+  "known_limits": [
+    "No remote Quartus full-FP synthesis was run in this task; only local Verilator validation and static compatibility check.",
+    "sim-cocotb-p7-2-neon has the same unrelated pre-existing failure as T-20260902-004: test_p7_2_unsupported_udef SQADD is captured by the existing B2c DUP decode branch.",
+    "No fit/STA/SOF/programming run.",
+    "This task does not modify rtl/lcvex_decode.sv or rtl/lcvex_core.sv, per write-set scope."
+  ],
+  "next": "Integrate this branch, then rerun remote real full-FP synthesis on the merge SHA; if P7-2 cocotb all-green is required, open a separate decode B2c DUP/SQADD overlap fix.",
+  "timestamps": {
+    "sent_at": "2026-09-02T18:12:00+08:00",
+    "received_at": "2026-09-02T18:12:30+08:00",
+    "reported_at": "2026-09-02T18:24:53+08:00"
+  },
+  "merge_sha": "c4e79047b980ac6819f25af4a860d8e5f8b78f20",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-02T18:25:00+08:00",
+    "merged_at": "2026-09-02T18:26:20+08:00",
+    "recorded_at": "2026-09-02T18:26:20+08:00",
+    "notes": "NEON lane clamp merged"
+  }
+}

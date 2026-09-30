@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-044",
+  "state": "done",
+  "partial": false,
+  "base_sha": "cf0414c0cc2e5ec8dc9a07fc8333826268cb0f94",
+  "head_sha": "e57780aef322f5df2b9fb1330baf552e8485c785",
+  "branch": "fix/T-20260902-044-fp-divpre-slotres-cut2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-044",
+  "scope": "FP-DIVPRE-SLOTRES-CUT2: break T-20260902-043 signoff setup top scalar_unit g_iter.div_pre.sig[245] -> fp_exec slot_result_r[9] (54 levels, 25.589 ns, -5.047 ns) by predecoding the 256-bit leading-one index into div_pre/sqrt_pre capture and using the registered index in round_pack; no new pipeline latency, no DSP, no SDC false_path.",
+  "implementation": {
+    "files": [
+      "rtl/lcvex_fp_scalar.sv",
+      "docs/handoffs/T-20260902-044-fp-divpre-slotres-cut2.md",
+      "docs/tasks/evidence/T-20260902-044.json"
+    ],
+    "summary": "In release FP_ITER=1 g_iter, added lead[7:0]/lead_valid to fp_pre_t and predecode the highest set bit of the iterative FDIV/FSQRT quotient in div_finish_pre/sqrt_finish_pre at the same cycle div_pre/sqrt_pre is captured. The original round_pack was split into round_pack_h (takes a precomputed leading-one index) and a public round_pack wrapper that preserves the old scan for all non-iterative callers. finish_pre uses round_pack_h when lead_valid is set, removing the 256-bit priority scan from div_pre.sig -> slot_result_r while keeping exact rounding semantics.",
+    "latency_table": {
+      "scalar_fdiv_s": {
+        "before": 260,
+        "after": 260
+      },
+      "scalar_fsqrt_s": {
+        "before": 68,
+        "after": 68
+      },
+      "scalar_fsqrt_d": {
+        "before": 68,
+        "after": 68
+      },
+      "scalar_fsqrt_h": {
+        "before": 69,
+        "after": 69
+      },
+      "scalar_fdiv_h": {
+        "before": 517,
+        "after": 517
+      },
+      "neon_fsqrt_2s": {
+        "before": 135,
+        "after": 135
+      },
+      "other_non_iterative": {
+        "before": "unchanged",
+        "after": "unchanged"
+      }
+    },
+    "semantics": {
+      "raw_bit": "unchanged; round_pack_h is line-for-line the original round_pack body with the leading-one supplied from the registered index; all existing round_pack callers use the unchanged public wrapper",
+      "commit_order": "unchanged; no new pipeline state or latency; single outstanding fp_exec transaction and one held response preserved",
+      "fpsr_fpcr": "unchanged; FPCR snapshot at acceptance and FPSR sticky OR preserved",
+      "fcmp_nzcv": "unchanged; CMP remains on existing pp_other path",
+      "fp_to_gpr": "unchanged; FCVTZS/FCVTZU int_result path unaffected",
+      "kill_reset": "unchanged; lead/lead_valid are part of existing fp_pre_t registers and are cleared with those registers on reset/kill"
+    },
+    "notes": "No DSP added. Storage increase is 9 bits per fp_pre_t instance (lead[7:0] + lead_valid). No latency change, so no testbench latency updates were required. The priority scan is moved earlier in the iterative path instead of being duplicated."
+  },
+  "runs": [
+    {
+      "run_id": "make-compile",
+      "command": "make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "notes": "Verilator lint-only top lcvex_core; 0 errors."
+    },
+    {
+      "run_id": "lcvex-fp-exec-tb",
+      "command": "verilator --binary --timing --assert --top-module lcvex_fp_exec_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_scalar.sv rtl/lcvex_neon_fp.sv tb/sv/lcvex_fp_exec_tb.sv && ./obj_dir_fp_exec/lcvex_fp_exec_tb",
+      "result": "pass",
+      "notes": "PASS all directed transaction/latency/kill/reset vectors; measured FDIV.S=260, FSQRT.S=68, FSQRT.D=68, FSQRT.H=69, FDIV.H=517, NEON FSQRT.2S=135 (unchanged)."
+    },
+    {
+      "run_id": "sim-sv-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-sv-fp-scalar sim-sv-p7-3-neon-fp sim-sv-p7-4-fma-convert sim-sv-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "notes": "PASS: P7-1 FP scalar raw-bit; P7-3 NEON FP raw; P7-4 FP scalar and NEON FMA/conversion; P7-5 FP scalar H/sqrt/minmax/frint/fcvt and NEON FP16/sqrt/minmax/frint raw-bit vectors."
+    },
+    {
+      "run_id": "cocotb-fp-scalar",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "notes": "TESTS=5 PASS=5 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "cocotb-p7-3-neon-fp",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-3-neon-fp",
+      "result": "pass",
+      "notes": "TESTS=4 PASS=4 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "cocotb-p7-4-fma-convert",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-4-fma-convert",
+      "result": "pass",
+      "notes": "TESTS=5 PASS=5 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "cocotb-p7-5-fp16-sqrt-minmax-round",
+      "command": "make VERILATOR_JOBS=1 sim-cocotb-p7-5-fp16-sqrt-minmax-round",
+      "result": "pass",
+      "notes": "TESTS=8 PASS=8 FAIL=0 SKIP=0."
+    },
+    {
+      "run_id": "git-diff-check",
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "not_run": [
+    "Quartus full-FP synthesis/fitter/signoff STA (requires integrator on merged SHA with same QSF/SDC)",
+    "assembler/SOF",
+    "FPGA programming/JTAG/board"
+  ],
+  "merge_sha": "af9f9635559ec639518ff9db59d627e3879411bc",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T06:50:02+08:00",
+    "merged_at": "2026-09-04T06:50:40+08:00",
+    "recorded_at": "2026-09-04T06:50:40+08:00",
+    "notes": "FP leading-one predecode div/sqrt round cut merged and accepted"
+  }
+}

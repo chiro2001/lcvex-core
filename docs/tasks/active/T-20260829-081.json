@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-081",
+  "label": "A2",
+  "parent": "T-20260828-071",
+  "title": "A2 SoC stub/tie-off 与顶层开源 elaboration",
+  "kind": "opensynth-soc-stub",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "def2c4baa69706d64f674f7551bf21df5d670a48",
+  "branch": "feature/T-20260829-081-a2-soc-stub",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-081",
+  "scope": "对 lcvex_catapult_soc_top 建立最小 tie-off/stub（calibration、Avalon、JTAG/EPCQ、EMIF 等外部边界），先做 verilator lint/elaboration，再沿用 A1 的 flat/generic synth 方法尝试顶层或分层 generic synth；只有存在 ECP5 device pack 才尝试 nextpnr，且不伪造 Fmax。",
+  "writes": [
+    "fpga/opensynth/**",
+    "scripts/opensynth/**",
+    "build/tmp/opensynth/**",
+    "docs/handoffs/T-20260829-081-a2-soc-stub.md",
+    "docs/tasks/evidence/T-20260829-081.json"
+  ],
+  "reads": [
+    "fpga/opensynth/capability.json",
+    "fpga/opensynth/a1_generic_synth_stats.json",
+    "fpga/opensynth/scripts/**",
+    "fpga/catapult_a10/**",
+    "rtl/lcvex_catapult_soc_top.sv",
+    "rtl/lcvex_catapult_soc_pkg.sv",
+    "rtl/lcvex_catapult_soc_axi.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "stub/filelist/脚本可重放；外部 IP 边界列全"
+    ],
+    "l1": [
+      "verilator lint/elaboration 通过或明确记录 warning/error；若可行，Yosys flat/ generic synth"
+    ],
+    "l2": []
+  },
+  "acceptance": "顶层可 elaboration 或明确列出所有未支持 IP/stub；nextpnr 不可用时不伪造 Fmax；不修改通用 RTL 语义；A2 handoff/evidence 可审计。",
+  "next": "A2 通过后进入 A3 相关性报告。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "disk_mb": 8192,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 120,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T02:43:10+08:00",
+  "updated_at": "2026-08-29T03:00:46+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T02:43:10+08:00",
+    "agent_name": "a2_soc_stub",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-081"
+  },
+  "known_limits": [
+    "A10/Quartus 不是 A2 目标；ECP5 仅代理。",
+    "不修改 rtl/lcvex_core.sv、rtl/lcvex_pkg.sv、rtl/filelist.f、Makefile、QEMU。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-081-a2-soc-stub.md",
+  "evidence": "docs/tasks/evidence/T-20260829-081.json",
+  "merge_sha": "7c7868cacf9b4f8656947d946d7b597bcc413857",
+  "merged_at": "2026-08-29T03:00:46+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T02:59:50+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "050e0c47d73a6ff971cb673ea77e0fd15981301f",
+    "implementation_sha": "9377f43ae8ee327a55d12d8fb89bd65d313d6706",
+    "notes": "A2 完成真实 SoC tie-off Verilator elaboration；Yosys 对边界 stub 双跑稳定；nextpnr-ecp5 因 2627 port bits > 365 I/O 失败，Fmax N/A。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T02:48:00+0800",
+        "new": "2026-08-29T02:43:10+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T03:01:00+0800",
+        "new": "2026-08-29T03:00:46+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T02:48:00+0800",
+        "new": "2026-08-29T02:43:10+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T03:01:00+0800",
+        "new": "2026-08-29T03:00:46+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "9377f43ae8ee327a55d12d8fb89bd65d313d6706",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "9377f43ae8ee327a55d12d8fb89bd65d313d6706"
+}

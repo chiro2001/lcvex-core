@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260827-054",
+  "state": "done",
+  "base_sha": "6200343f4f9610ebf5670f002f66b2eb5b65c298",
+  "head_sha": "b028f449c47d21ae933d8c5fe967c03fbb995e90",
+  "merge_sha": "e6f0dfb005770c19089f6dfe15753d6940a5d1a2",
+  "branch": "feature/T-20260827-054-b2-emif",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-054",
+  "scope": "B2 模块级 AXI4 Full 128-bit 到 512-bit Avalon-MM EMIF adapter、双时钟 CDC、calibration gate 及独立 SV/Cocotb L1 验证",
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "python": "3.12.14",
+    "cocotb": "2.0.1",
+    "git": "2.55.0"
+  },
+  "qemu": {
+    "status": "not in scope",
+    "release": "",
+    "commit": "",
+    "patches_sha256": "",
+    "binary_sha256": ""
+  },
+  "rtl_filelist_sha256": null,
+  "runs": [
+    {
+      "run_id": "owner-l0-verilator-lint-001",
+      "source_sha": "b028f44",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall --top-module lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv",
+      "seed": null,
+      "wall_seconds": 0.065,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "B2 package/FIFO/gate/adapter/BFM/SVA/TB 静态 lint 通过。"
+    },
+    {
+      "run_id": "owner-l1-sv-build-run-002",
+      "source_sha": "b028f44",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "mkdir -p build/agents/T-20260827-054/sv/obj_dir_final && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_axi4_avalon_tb -Mdir build/agents/T-20260827-054/sv/obj_dir_final -o lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv && build/agents/T-20260827-054/sv/obj_dir_final/lcvex_axi4_avalon_tb",
+      "seed": "0x00b2054",
+      "clock_domains": "cpu=10ns, emif=6ns",
+      "wall_seconds": 14.216,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Verilator 5.050 build/run 通过；SV 仿真至 995ns，SVA 无失败。"
+    },
+    {
+      "run_id": "owner-l1-cocotb-003",
+      "source_sha": "b028f44",
+      "runner_role": "owner",
+      "level": "L1",
+      "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.axi4_avalon SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-T-20260827-054/build/agents/T-20260827-054/cocotb_final SEED=0x00b2054",
+      "seed": "0x00b2054",
+      "clock_domains": "test1 cpu=10ns/emif=6ns; test2 cpu=8ns/emif=14ns; test3 cpu=10ns/emif=6ns",
+      "wall_seconds": 13.131,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Cocotb 3/3 PASS，仿真总时长 1800.01ns；覆盖随机 wait、4-beat/byteenable、窗口/跨线 DECERR、reset、readdatavalid、calibration success/not-ready/fail 和 post-accept abort。"
+    },
+    {
+      "run_id": "owner-l0-scope-json-004",
+      "source_sha": "b028f44",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260827-054.json && git diff --check && git diff b028f44^..b028f44 --name-only",
+      "seed": null,
+      "wall_seconds": 0.2,
+      "cpu_count": null,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "evidence JSON/空白检查通过；implementation commit 仅包含 T-054 白名单文件。"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "sv-executable",
+      "uri": "build/agents/T-20260827-054/sv/obj_dir_final/lcvex_axi4_avalon_tb",
+      "sha256": "192080d30b529707fcb2d2d510fd9ee595eccaf701ad15b9cb1768d530db60c4",
+      "bytes": 420488,
+      "owner": "b2-emif-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-sv-build-run-002"
+    },
+    {
+      "id": "cocotb-executable",
+      "uri": "build/agents/T-20260827-054/cocotb_final/Vtop",
+      "sha256": "a80c84a3a20b1bdd957f9736948a9b249a8c6ba92dc8afdf0df17ad5f9fe51",
+      "bytes": 530464,
+      "owner": "b2-emif-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-003"
+    },
+    {
+      "id": "cocotb-results",
+      "uri": "sim/cocotb/results.xml",
+      "sha256": "ec57a11edbe45b6375e9358c81c05219dc52d95d813e2a135c37408e38822ab8",
+      "bytes": 990,
+      "owner": "b2-emif-luna",
+      "retain_until": "review",
+      "reproduce": "owner-l1-cocotb-003"
+    }
+  ],
+  "known_limits": [
+    "首版固定 single-ID/single-outstanding 和 128-bit canonical AXI；不支持跨 64B line 静默拆分。",
+    "Qsys Avalon 接口没有 error/response port；BFM 与 adapter 对正常 accepted backend 统一映射 OKAY，本地检查错误映射 DECERR。",
+    "BFM 是 4096-word 有限仿真内存，不代表 Qsys/EMIF 厂商 IP、Quartus regenerate、STA、板级校准或 DDR 稳定性。",
+    "未修改 fpga/catapult_a10/**、B0/B1/P7/core/pkg/filelist、顶层 Makefile、Cache/L2/CPU/SoC、QEMU 或 scripts/test_registry；未接入平台。",
+    "集成者已在 clean FPGA line 的 merge SHA 重跑本任务 L0/L1 并填写 merge_sha；B0 exact Qsys/Quartus、Gate F-BOARD 和 B3 Cache/L2 接线仍后置。"
+  ],
+  "transient_validation_notes": [
+    "早期 Cocotb phase 与 AXI 最后一拍采样问题均为 test driver 时序缺陷，已修正；最终 3/3 回归使用稳定 driver。"
+  ],
+  "integration_validation": {
+    "runner_role": "root-integrator",
+    "line": "feature/fpga-catapult-a10",
+    "source_sha": "e6f0dfb005770c19089f6dfe15753d6940a5d1a2",
+    "result": "pass_l0_l1",
+    "runs": [
+      {
+        "run_id": "integrator-l0-json-diff-005",
+        "level": "L0",
+        "command": "python3 -m json.tool docs/tasks/evidence/T-20260827-054.json && git diff --check",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-l0-verilator-lint-006",
+        "level": "L0",
+        "command": "conda run --no-capture-output -n lcvex verilator --lint-only --timing --assert -Wall --top-module lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-l1-sv-007",
+        "level": "L1",
+        "seed": "0x00b2054",
+        "command": "mkdir -p build/agents/T-20260827-054/fpga-line/sv/obj_dir && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_axi4_avalon_tb -Mdir build/agents/T-20260827-054/fpga-line/sv/obj_dir -o lcvex_axi4_avalon_tb rtl/lcvex_axi4_pkg.sv rtl/lcvex_axi4_avalon_pkg.sv rtl/lcvex_async_fifo.sv rtl/lcvex_calibration_gate.sv rtl/lcvex_axi4_avalon_adapter.sv tb/sv/lcvex_axi4_avalon_bfm.sv tb/sv/lcvex_axi4_avalon_tb.sv && build/agents/T-20260827-054/fpga-line/sv/obj_dir/lcvex_axi4_avalon_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "SV/SVA 回归 PASS，995ns。"
+      },
+      {
+        "run_id": "integrator-l1-cocotb-008",
+        "level": "L1",
+        "seed": "0x00b2054",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.axi4_avalon SIM_BUILD=/home/chiro/projects/mycpu/lcvex-wt-fpga-catapult-a10/build/agents/T-20260827-054/fpga-line/cocotb SEED=0x00b2054",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "Cocotb 3/3 PASS，1800.01ns。"
+      }
+    ],
+    "remaining_limits": [
+      "B2 不接入真实 Qsys/EMIF、CPU/Cache/L2 或 SoC。",
+      "B0 exact Quartus/Qsys regenerate、STA 和 Gate F-BOARD 仍后置。"
+    ]
+  },
+  "finalized_at": "2026-08-27T05:06:58+08:00"
+}

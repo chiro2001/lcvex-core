@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-057",
+  "title": "Catapult Windows Quartus 21.4 CLI 环境调研与综合路径验证",
+  "kind": "fpga-environment-synthesis",
+  "priority": "high",
+  "assigned_owner": "catapult-windows-survey-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只调研用户指定 Windows Catapult/Quartus 环境、既有 fpga-altra/lcvex 工程和 CLI synthesis/fitter/STA 路径；不修改 Linux 集成线 RTL，不复制其他 PoC，不暴露 license 内容，不操作 D:\\Projects\\fpga-altra 以外的目标。",
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": false,
+    "scope": "仅在工程拓扑、器件或生成边界出现歧义时审查报告；不替代用户 Windows 环境验证。"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "环境调研默认不重复审核；仅在工程边界、工具版本或综合证据发生实质变化时重审。"
+  },
+  "disabled_profiles": [
+    "deepseek-v4-flash[max]"
+  ],
+  "phase": "done",
+  "execution": {
+    "agent_id": "01a0408f-0523-73b1-8b4a-f746eb114c2b",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "dispatch_sent_at": "2026-08-27T08:11:28+08:00",
+    "budget_minutes": 30,
+    "budget_policy": "initial=30m; extension=+15m by timestamped progress; max=60m",
+    "state": "blocked",
+    "received_at": "2026-08-27T08:25:49+08:00",
+    "reported_at": "2026-08-27T08:25:49+08:00",
+    "elapsed_seconds": 861,
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": "2026-08-27T08:25:49+08:00"
+    }
+  },
+  "parent": "T-20260827-052",
+  "depends_on": [
+    "T-20260827-050"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260827-057-catapult-windows.md",
+    "docs/tasks/evidence/T-20260827-057.json"
+  ],
+  "reads": [
+    "docs/FPGA_PLAN.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/tasks/active/T-20260827-052.json",
+    "docs/handoffs/T-20260827-052-b0-platform.md",
+    "/home/chiro/projects/a10-linux-riscv/AGENTS.md",
+    "ssh://192.168.101.5/D:/Projects/fpga-altra/lcvex",
+    "ssh://192.168.101.5/D:/Software/intelFPGA_pro/21.4"
+  ],
+  "context_docs": [
+    "docs/FPGA_PLAN.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/tasks/active/T-20260827-052.json"
+  ],
+  "base_sha": "6cb57ff26dec455b84062b1b7f97fe82c0ba70f5",
+  "branch": "verify/T-20260827-057-catapult-windows",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-057",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 60,
+    "extend_when": "owner 在自然检查点报告实际时间戳、工程/工具事实、已完成阶段和剩余验证，且正在稳定推进综合/布线。",
+    "control": "集成者按 reported_at - dispatch_sent_at 动态延长；不因等待窗口到期中断 owner。"
+  },
+  "remote_scope": {
+    "host": "192.168.101.5",
+    "shell": "pwsh",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "reference_root": "D:\\Projects\\fpga-altra",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "write_rule": "只允许在 project_root 内创建或修改调研/构建产物；reference_root 其他目录只读；不得删除或覆盖未知用户文件。"
+  },
+  "validation": {
+    "l0": [
+      "带 Asia/Shanghai sent_at/received_at/reported_at 的 SSH/PowerShell 连通性与环境报告",
+      "确认 Quartus/Qsys/IP/STA 可执行文件版本、器件和 license 路径可读；不记录 license 内容",
+      "枚举 lcvex 工程、QSF/SDC/Qsys/IP、顶层和来源 hash，检查是否误收编 RISC-V/VexRiscv 资产"
+    ],
+    "l1": [
+      "在 D:\\Projects\\fpga-altra\\lcvex 内以命令行执行可行的 qsys/ip regenerate、quartus synthesis、fit/place-route 和 STA dry-run/full-run",
+      "记录每个阶段精确命令、版本、退出码、报告路径、器件/时钟/约束和失败现场；验证 license 被正确使用",
+      "若可用则保存 synthesis/fitter/STA 摘要；若工程不完整则给出最小可执行补齐清单，不擅自改 Linux RTL"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "形成可审计的 Windows Catapult/Quartus 21.4 CLI 环境报告：确认 SSH/PowerShell、安装路径和 license 可用性、lcvex 工程拓扑与器件/顶层/QSF/SDC/Qsys 输入；实际执行或明确阻断 qsys/IP regenerate、synthesis、fitter/place-route、STA 命令并记录退出码与报告路径；给出 B 线从当前模块级缓存到可综合顶层的下一步。不得以环境可用性宣称 RTL/Cache/AXI4/SoC 或板测完成。",
+  "created_at": "2026-08-27T08:10:04+08:00",
+  "updated_at": "2026-08-28T01:13:30+08:00",
+  "progress_reports": [
+    {
+      "type": "owner_final",
+      "sent_at": "2026-08-27T08:11:28+08:00",
+      "received_at": "2026-08-27T08:25:49+08:00",
+      "reported_at": "2026-08-27T08:25:49+08:00",
+      "elapsed_seconds": 861,
+      "files": [
+        "docs/handoffs/T-20260827-057-catapult-windows.md",
+        "docs/tasks/evidence/T-20260827-057.json"
+      ],
+      "tests": "SSH/pwsh 可用；Quartus Pro 21.4.0 Build 67 固定路径工具可启动；license 路径存在但未读取内容。",
+      "blockers": "D:\\Projects\\fpga-altra\\lcvex 不存在；未执行目标工程 regenerate、synthesis、fit/place-route 或 STA。",
+      "remaining_minutes": 19,
+      "extension_request": "none",
+      "measurement": "按 dispatch_sent_at=2026-08-27T08:11:28+08:00 与 reported_at 计算实际耗时。"
+    },
+    {
+      "type": "integrator-ninja-install-verification",
+      "sent_at": "2026-08-27T12:04:19+08:00",
+      "received_at": "2026-08-27T12:04:19+08:00",
+      "reported_at": "2026-08-27T12:04:19+08:00",
+      "elapsed_seconds": 0,
+      "files": [],
+      "tests": "远端 conda.bat run -n base ninja --version 返回 1.13.2，exit_code=0；target_exists=False。",
+      "blockers": "D:\\Projects\\fpga-altra\\lcvex 仍不存在；Ninja 安装不解除 B0 exact regenerate 阻断。",
+      "remaining_minutes": 0,
+      "extension_request": "none",
+      "measurement": "按同一远端验证命令的 sent_at/received_at/reported_at 记录；无子 Agent 执行预算。"
+    }
+  ],
+  "integration": {
+    "status": "done",
+    "strategy": "environment survey evidence archived; synthesis/fit/STA path validation completed by T-20260828-063",
+    "merge_sha": "01028a8",
+    "validated_scope": "SSH/pwsh + Quartus Pro 21.4 Build 67 toolchain probe; target project missing blocker resolved by T-063",
+    "remaining_scope": "SFL sfl_sys.qsys input and real LCVEX wrapper full flow/STA remain for T-052/B5"
+  },
+  "handoff": "docs/handoffs/T-20260827-057-catapult-windows.md",
+  "evidence": "docs/tasks/evidence/T-20260827-057.json",
+  "known_limits": [
+    "本任务不修改 Linux 集成线、Catapult 平台源文件或 QEMU；远程工程改动必须限于用户指定 lcvex 目录并可追溯。",
+    "license 文件只验证路径/工具可用性，不读取或提交其内容。",
+    "full Quartus compile 可能超出 owner 初始预算，必须按时间戳自然检查点动态延长或保存 checkpoint。"
+  ],
+  "next": "基于已创建远程工程完成 Quartus synthesis/fit/STA 命令行验证并提交 evidence/handoff",
+  "unblocked": {
+    "unblocked_at": "2026-08-28T01:12:00+08:00",
+    "reason": "T-20260828-063 已创建远程工程并验证工具链；可继续 synthesis/fit/STA 路径验证"
+  },
+  "merge_sha": "01028a8"
+}

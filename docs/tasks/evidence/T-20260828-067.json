@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260828-067",
+  "state": "blocked",
+  "base_sha": "23218fb4",
+  "head_sha": "344a8247792c55bdc36d59d8e13388450a068943",
+  "merge_sha": null,
+  "branch": "verify/T-20260828-067-b5-fullflow-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-067",
+  "scope": "宿主重启/清理后在远端 Windows Quartus 21.4 上重跑 B5 SoC/Boot Catapult A10 完整 full flow + signoff STA，并采集 fit/STA/SOF 证据",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-08-28T22:58:00+08:00",
+    "received_at": "2026-08-28T23:00:00+08:00",
+    "l0_check_at": "2026-08-28T23:00:30+08:00",
+    "fullflow1_start": "2026-08-28T23:01:40+08:00",
+    "fullflow1_hang_observed": "2026-08-28T23:43:00+08:00",
+    "fullflow1_killed_before_rerun": "2026-08-28T23:48:00+08:00",
+    "fullflow2_start": "2026-08-28T23:49:13+08:00",
+    "fullflow2_hang_observed": "2026-08-29T00:30:00+08:00",
+    "fullflow2_killed": "2026-08-29T00:34:00+08:00",
+    "fullflow3_start": "2026-08-29T00:40:15+08:00",
+    "fullflow3_hang_observed": "2026-08-29T01:20:00+08:00",
+    "fullflow3_oom_serv_req": "2026-08-29T01:15:00+08:00",
+    "documents_written_at": "2026-08-29T01:22:30+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive -EncodedCommand <UTF-16LE base64>",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "license_path_exists": true,
+    "license_content_read": false,
+    "memory_total_gb": 61.6,
+    "memory_free_gb_before_fullflow1": 44.57,
+    "memory_free_gb_after_stop": 52.26,
+    "quartus_syn_residual_at_start": false,
+    "project_exists": true,
+    "catapult_a10_project_exists": true,
+    "remote_source_match_local": true,
+    "remote_source_match_note": "rtl/*.sv、rtl/lcvex_catapult_a10_top.sv、rtl/lcvex_catapult_a10_reset_gate.sv、quartus/catapult_a10.qsf/sdc/qpf 均与本地 344a824 工作树 SHA256 一致"
+  },
+  "toolchain": {
+    "quartus_sh": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe",
+      "version": "Quartus Prime Shell Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10"
+    },
+    "ip_generation": {
+      "result": "0 errors / 0 warnings at start of all three full-flow attempts"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-connect-001",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -NoProfile -NonInteractive -EncodedCommand <base64>: Get-Process quartus_syn; Get-CimInstance Win32_OperatingSystem; Test-Path D:\\Projects\\fpga-altra\\lcvex; Test-Path D:\\Projects\\fpga-altra\\lcvex\\quartus\\catapult_a10.qpf",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SSH/pwsh 可达；无 quartus_syn 残留；工程存在；Free 44.57GB"
+    },
+    {
+      "run_id": "owner-source-match-002",
+      "level": "L0",
+      "command": "sha256sum local files; Get-FileHash remote files",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "远端 B5 RTL/QSF/SDC 与本地 344a824 全部 SHA256 一致"
+    },
+    {
+      "run_id": "owner-fullflow-b5l-001",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 (single long SSH session, Start-Process -Wait)",
+      "exit_code": null,
+      "result": "blocked",
+      "summary": "IP Generation pass (0/0)，Analysis & Synthesis 运行约 38 分钟后 CPU 冻结在 2268s，线程全部 Wait/ExecutionDelay；未产生 fit/STA/SOF；为释放资源已强制停止",
+      "started_at": "2026-08-28T23:01:40+08:00",
+      "observed_hang_at": "2026-08-28T23:43:00+08:00",
+      "killed_at": "2026-08-28T23:48:00+08:00",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l.err.log"
+    },
+    {
+      "run_id": "owner-fullflow-b5l-002",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 (single long SSH session, Start-Process -Wait, rerun after forced stop; external quartus_pgm from another session had completed)",
+      "exit_code": null,
+      "result": "blocked",
+      "summary": "与第一次相同：IP Generation pass，Analysis & Synthesis 运行约 40 分钟后 CPU 冻结在 2356s，线程全部 Wait/ExecutionDelay；未产生 fit/STA/SOF；已强制停止",
+      "started_at": "2026-08-28T23:49:13+08:00",
+      "observed_hang_at": "2026-08-29T00:30:00+08:00",
+      "killed_at": "2026-08-29T00:34:00+08:00",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l_rerun.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l_rerun.err.log"
+    },
+    {
+      "run_id": "owner-fullflow-b5l-003",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 (single long SSH session, Start-Process -Wait, clean attempt not available: quartus_sh --flow clean unsupported in this version; third run after write_rule relaxation)",
+      "exit_code": null,
+      "result": "blocked",
+      "summary": "IP Generation pass，Analysis & Synthesis 运行约 40 分钟后 CPU 冻结在 2140.75s，线程全部 Wait/ExecutionDelay；serv_req_info 记录 quartus_syn OOM (75425 MB used) at 2026-08-29 01:15:00；未产生 fit/STA/SOF；按集成者指示保留现场未强制停止",
+      "started_at": "2026-08-29T00:40:15+08:00",
+      "observed_hang_at": "2026-08-29T01:20:00+08:00",
+      "oom_serv_req_at": "2026-08-29T01:15:00+08:00",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l_third.log",
+      "err_log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l_third.err.log"
+    }
+  ],
+  "full_flow": {
+    "exit_code": null,
+    "result": "blocked",
+    "errors": null,
+    "warnings": null,
+    "fit_summary": null,
+    "sta_summary": null,
+    "sof": null,
+    "blocker": "Quartus Prime Pro 21.4 Analysis & Synthesis 在 B5 SoC/Boot 工程上三次可复现失败/挂起：前两次 CPU 冻结（2268s/2356s），第三次 CPU 冻结 2140.75s；serv_req_info 出现 quartus_syn Out of Memory @ 76291MB (2026-08-28 23:38:48)、74962MB (00:27:31)、75425MB (01:15:00)。日志停在 Qsys-generate/debug fabric 之后，未写出 syn.rpt/flow.rpt/fit/STA/SOF。第三次按集成者指示保留现场未强杀。"
+  },
+  "blocked_reason": "远端 full flow 无法完成：Quartus 21.4 Synthesis 在 B5 SoC/Boot 工程上可复现达到约 75GB+ 私有内存并触发内部 OOM（serv_req_info），随后进程挂起（线程 Wait/ExecutionDelay）。宿主与工程可达、源码匹配；不是简单 Session 0 挂起，而是合成内存需求超过当前可用/可提交内存，需要增大物理内存/页文件、减少设计规模或工具链侧优化后才能重试。",
+  "write_rule_observation": "集成者已放宽 write_rule，允许 Quartus 工程内部构建产物（qdb/tmp-clearbox/output_files/db 及 .rpt/.summary/.sof/.sld/.pin/.done 等）。本任务未删除/覆盖既有 compile_b5l*.log，未改 QSF/SDC/RTL，未读 license。",
+  "needs_integrator_write_rule": false,
+  "known_limits": [
+    "没有任何本轮 full flow 的 fit/STA/SOF；output_files 中仍是 T-064 旧平台证据，不得当作 B5 结果",
+    "远端 build/T-20260828-067 下保留了三次 full flow 的 stdout/err 日志",
+    "Quartus serv_req_info.txt 记录三次 Synthesis OOM（76291MB / 74962MB / 75425MB used）",
+    "第三次挂起现场按集成者指示保留（quartus_sh/quartus_syn 未强杀）",
+    "DDR March、Linux 板测、实际上板不在本任务范围",
+    "未读取/复制 license 文件内容",
+    "未修改 QSF/SDC/RTL，未删除或覆盖远端工程中未知文件"
+  ],
+  "recovery_steps": [
+    "当前第三次 full flow 现场已保留（quartus_sh PID 36652, quartus_syn PID 37916, 均为 Wait/ExecutionDelay）；如需继续排查先确认是否还有该现场",
+    "增大远端可用内存/页文件后重试：当前 Quartus syn 峰值约 75GB 私有内存并 OOM，建议至少提供 80GB+ 可用/可提交内存或增大系统页文件",
+    "若需排除数据库影响，可手工清理 Quartus 生成目录 qdb/tmp-clearbox/output_files/db（注意不要碰 compile_b5l*.log/QSF/SDC/RTL）；本环境 `quartus_sh --flow clean` 不是受支持 flow（exit 3）",
+    "分离步骤定位：先 D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_ipgenerate.exe catapult_a10 -c catapult_a10 --run_default_mode_op，再直接运行 D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_syn.exe --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10（不带 --ipc_flow）观察是否仍 OOM",
+    "收集 Quartus runlog/qdb 时间戳、serv_req_info.txt 和 Windows 事件，提交 Intel/工具支持；重点怀疑 B5 SoC 综合内存规模或 Quartus 21.4 对超大设计的处理限制",
+    "在工具链/内存修复前不应将任何 B5 fit/STA/SOF 视为验收证据"
+  ],
+  "artifacts": [
+    {
+      "id": "remote-log-b5l-1",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l.log",
+      "sha256": null,
+      "bytes": 16513,
+      "owner": "T-20260828-067",
+      "retain_until": "task closed",
+      "reproduce": "quartus_sh --flow compile catapult_a10 -c catapult_a10"
+    },
+    {
+      "id": "remote-log-b5l-2",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l_rerun.log",
+      "sha256": null,
+      "bytes": 16513,
+      "owner": "T-20260828-067",
+      "retain_until": "task closed",
+      "reproduce": "quartus_sh --flow compile catapult_a10 -c catapult_a10"
+    },
+    {
+      "id": "remote-log-b5l-3",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-067\\fullflow_b5l_third.log",
+      "sha256": null,
+      "bytes": 16513,
+      "owner": "T-20260828-067",
+      "retain_until": "task closed",
+      "reproduce": "quartus_sh --flow compile catapult_a10 -c catapult_a10"
+    },
+    {
+      "id": "remote-serv-req-oom",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\quartus\\serv_req_info.txt",
+      "sha256": null,
+      "bytes": null,
+      "owner": "T-20260828-067",
+      "retain_until": "task closed",
+      "reproduce": "read lines containing 76291/74962/75425 megabytes used"
+    }
+  ],
+  "integration_review": null
+}

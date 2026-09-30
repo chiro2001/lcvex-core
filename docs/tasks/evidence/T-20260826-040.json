@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-040",
+  "base_sha": "a2dd21669584dcc0a19852e6164d62a2476c81e2",
+  "head_sha": "a2dd21669584dcc0a19852e6164d62a2476c81e2",
+  "merge_sha": null,
+  "candidate_status": "pass-local",
+  "qemu": {
+    "release": "11.1.0",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "plugin_sha256": "a48a33f4127f82137a3e299d056b21f46c4c5c126dbe090efad778e9d54ca58c"
+  },
+  "rtl": {
+    "filelist_sha256": "5adf9f91bc31c27c4dfbdf466a21f0a013c51689860d605a11fe5fca26534cbb",
+    "coordinator_sha256": "e1bc4ad2320e77243b49704614c8bbefbf09fac4270f3476b0ebac3e6791e28e"
+  },
+  "resource": {
+    "cpuset": [0, 1, 2, 3, 4, 5],
+    "verilator_jobs": 3,
+    "allocation_ratio": 0.75,
+    "planner_note": "与 T-041 并行时内部 runner 按本地 50% 规则自动降至 parallel=1，未超资源上限"
+  },
+  "run": {
+    "run_id": "owner-l3-gate-d-current-a2dd216-001",
+    "level": "L3",
+    "command": "taskset -c 0-5 env VERILATOR_JOBS=3 bash sim/difftest/run_gate_d.sh --parallel",
+    "exit_code": 0,
+    "result": "pass",
+    "log": "build/agents/T-20260826-040/gate-d.log",
+    "log_sha256": "257654bbb10dd2e42e0482fe6f277b5177786b806568edb5b70643abef0b3fb0"
+  },
+  "results": {
+    "make_test": "pass",
+    "coverage": {"covered_points": 8611, "result": "pass"},
+    "m2_r1": {"base": 39, "cache": 39, "result": "pass"},
+    "delay2_cache": {"tests": 32, "result": "pass"},
+    "p5a_hardening": {"tests": 26, "result": "pass"},
+    "gate_c": {"groups": 7, "result": "pass"},
+    "p5a": {"groups": 3, "result": "pass"},
+    "p4b": {"groups": 5, "result": "pass"},
+    "random": {"seeds": [1, 2, 3], "length": 100000, "result": "pass"},
+    "baremetal_c": {"commits": 200, "result": "pass"},
+    "orphan_process_check": {"worktree_processes": 0, "result": "pass"}
+  },
+  "known_limits": [
+    "这是候选 a2dd216 的本地 Gate D；可信 CI/QEMU patch replay 尚未在该 SHA 完成。",
+    "Gate D 与 T-041 分别在不同 worktree 构建插件，哈希需在最终 Gate E 审计中说明或统一。",
+    "完整 coverage/trace/RAM 产物只保留在该 worktree build/tmp/build。"
+  ]
+}

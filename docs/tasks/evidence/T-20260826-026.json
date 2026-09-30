@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-026",
+  "base_sha": "aff4a33be9bb2137757a776acb72f7ef6f38981d",
+  "head_sha": "aff4a33be9bb2137757a776acb72f7ef6f38981d",
+  "merge_sha": "64a262f",
+  "toolchain": {"environment": "conda:lcvex", "bash": "5.x"},
+  "runs": [
+    {"run_id": "owner-l0-shell-001", "level": "L0", "command": "bash -n sim/difftest/run_lockstep_resume.sh", "cpuset": "0-1", "cpu_count": 1, "exit_code": 0, "result": "pass"},
+    {"run_id": "owner-l0-resource-zero-001", "level": "L0", "command": "COORD_PIN/QEMU_PIN pin selection smoke with MAX_INSNS=1 resume", "cpuset": "0-1", "cpu_count": 2, "exit_code": 0, "result": "pass", "summary": "协调器与 QEMU 分别使用 COORD_PIN=0、QEMU_PIN=1；旧 PIN=7 不覆盖显式 pin。parent plugin/input hash 验证通过。", "log": "build/agents/T-20260826-026/pin-smoke.log", "log_sha256": "01d9a082606e311792c1f06dab79910f66705617a2a306a668cdde3271938c50"}
+  ],
+  "known_limits": ["本任务只改 runner pin 绑定；75% 是资源上限策略，不强行让单线程 QEMU/Verilator 虚耗未使用核心。T-027 负责新 child 链长跑。"]
+}

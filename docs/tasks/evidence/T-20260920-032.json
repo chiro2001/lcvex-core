@@ -1,0 +1,513 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-032",
+  "label": "B25-CANDIDATE-LIVE-IDENTITY-CONTRACT-AUDIT",
+  "state": "done",
+  "acceptance_status": "audit-complete-composite-live-identity-contract-adopted",
+  "partial": false,
+  "base_sha": "32303ba2340d32ec8b953294434cc9e41a704972",
+  "head_sha": null,
+  "head_sha_note": "Self-referential evidence; commit SHA is reported in the handoff and agent response.",
+  "branch": "verify/T-20260920-032-b25-candidate-live-identity-contract",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-032",
+  "owner": "identity_t032",
+  "sent_at": "2026-09-20T18:09:42+08:00",
+  "received_at": "2026-09-20T18:09:42+08:00",
+  "reported_at": "2026-09-20T18:24:23+08:00",
+  "artifact_sealed_at": "2026-09-20T18:21:00+08:00",
+  "evidence_parent_sha": "c32467d2b4d5e053b0af057667be92f7a3d6149f",
+  "scope": {
+    "read_only_inputs": [
+      "docs/tasks/evidence/T-20260920-003.json",
+      "docs/tasks/evidence/T-20260920-004.json",
+      "docs/tasks/evidence/T-20260920-021.json",
+      "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/**",
+      "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/**",
+      "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/docs/tasks/evidence/T-20260920-031.json"
+    ],
+    "hardware_access": false,
+    "gamepc_access": false,
+    "network_access": false,
+    "tracked_source_or_policy_changes": false
+  },
+  "t021_historical_candidate_audit": {
+    "identity_contract_as_declared": {
+      "candidate_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-020-b25-rx-cpu-observability-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "candidate_bytes": 36842101,
+      "candidate_sha256": "d9bc9a964be9b0c0e98b16643a5d9ca44a4bce00b3694915c84714552a0ed2fd",
+      "candidate_quartus_checksum": "0x3159F8A0",
+      "candidate_design_hash_declared": "4DAED3C37174544441E6912B371092CA",
+      "jtag_id": "0x02E060DD",
+      "source": {
+        "path": "docs/tasks/active/T-20260920-021.json",
+        "sha256": "cade1f88718db30c8743763032979650e2358b986ba4dcff47df0c947d12354c",
+        "lines": "39-45"
+      }
+    },
+    "raw_candidate_program_chain": {
+      "candidate_log": {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/final/candidate-final.log",
+        "sha256": "d0c0c2ed43865db6ed9f0206a04af8ea877a0ef8115c88741f6fd1de44124ac8",
+        "lines": "20-36",
+        "observations": [
+          "Lines 20-21 record the initial standard-server expected hashes and INITIAL_DESIGN_HASH_OK=True.",
+          "Lines 24-29 record programmer exit=0, tool/configuration/operation/checksum/JTAG-ID all true.",
+          "Lines 30-33 record owned-server stop and preserved standard server.",
+          "Lines 34-36 record the program-result path/hash and VOLATILE_PROGRAM_PASS, but no FINAL_STANDARD_JTAG, FINAL_DESIGN_HASH_OK, or candidate post-program design-hash line."
+        ]
+      },
+      "program_result": {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/remote-evidence/program-candidate-final/runtime/program-result.json",
+        "sha256": "8331659715fa526c85590bc95180ff25a555e5a9f7284e379436a432293a0a15",
+        "lines": "9-30,87-110",
+        "observations": [
+          "Lines 9-19 bind target/candidate path, bytes and SHA-256.",
+          "Lines 26-30 record candidate checksum 0x3159F8A0, candidate/golden design-hash values as metadata, and JTAG ID 0x02E060DD.",
+          "Lines 87-104 record quartus_pgm exit_code=0 and all five programmer predicates true.",
+          "Lines 106-110 record cleanup and safety only; the JSON has no final_chain or final_design_hash_ok field."
+        ]
+      },
+      "quartus_stdout": {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/remote-evidence/program-candidate-final/runtime/candidate-quartus_pgm.stdout.log",
+        "sha256": "b3a7250d3eeae7e4316b03fd2d296cba2f0b4ba17477b8b24f71275302d33059",
+        "lines": "20-29",
+        "observations": [
+          "The captured transaction names the candidate SOF and checksum 0x3159F8A0 (line 22), JTAG ID 0x02E060DD (line 25), configuration success (line 26), operation success (line 27), and 0 errors/0 warnings (line 29).",
+          "No design-hash enumeration is emitted by quartus_pgm itself."
+        ]
+      }
+    },
+    "raw_live_candidate_chain": {
+      "terminal_transcript": {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/terminal/direct-terminal.typescript",
+        "sha256": "2ac376a0390252f514405e5c48fe99f23a381e80d48a0ef0a5891f8b0d956f4e",
+        "lines": "4-10",
+        "observations": "The first live session connects to the JTAG UART and emits LCVEX25 BOOT, CAL-WAIT, DDR-FAIL, READY and startup RXDBG before any command input."
+      },
+      "terminal_result": {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/terminal/direct-terminal-result.json",
+        "sha256": "af5326366a57521d4fb62996aeaff6ceb47f35741609dbdbc08dd0c0b740d9b4",
+        "lines": "1-2511",
+        "observations": "The runner reports connected=true, boot_ok=true, ready_ok=true, input byte 0x3f, and then stops on the first missing status response; p/d/Z are not sent."
+      },
+      "evidence_summary": {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/docs/tasks/evidence/T-20260920-021.json",
+        "sha256": "21b050d72e702285b19289b8936d361b96b2b139dfce5e46a5694e4adaa2f80e",
+        "lines": "64-88,90-162",
+        "observations": "The recorded historical chain is candidate programmer PASS followed by BOOT/READY and terminal evidence; the candidate configuration section has no candidate post-program design-hash predicate."
+      }
+    },
+    "script_vs_execution": {
+      "script": {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/build/agents/T-20260920-021/tools/program_sof.ps1",
+        "sha256": "ecfbcbe37388dd76479b6ec1f42424409bbde95bdb072ec9a41e400ff542a639",
+        "lines": "248-258,260-277",
+        "observation": "The ignored local script artifact contains an intended final design-hash check and result fields. No remote script hash is included in T-021 evidence, and the captured candidate log/result do not contain those final fields."
+      },
+      "conclusion": "T-021's actual accepted candidate run proves exact SOF identity, quartus_pgm/configuration/JTAG-ID success, and a subsequent candidate-specific BOOT/READY/live-terminal chain. It does not prove that a post-program candidate design hash was an executed acceptance prerequisite. The intended script gate and the raw execution artifacts are inconsistent; the raw execution must govern this audit."
+    }
+  },
+  "t031_attempt_audit": {
+    "evidence": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/docs/tasks/evidence/T-20260920-031.json",
+      "sha256": "d2afccef22dc0ededd3412b3536114ebf5ff64f6f2d327d4b628f316a51161d1",
+      "lines": "48-59,251-375,401-420"
+    },
+    "attempts": [
+      {
+        "run": "initial",
+        "summary": {
+          "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/final/summary.txt",
+          "sha256": "2437c40d1139b809bddc19faa3dcb42603f37390a0e192cc068df533d11b078a",
+          "lines": "8-14",
+          "observation": "Both wrapper commands were invoked, candidate/golden wrapper status=1, and terminal was skipped."
+        },
+        "candidate": {
+          "programmer_invocations": 0,
+          "transaction": "none",
+          "log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/final/candidate-program.log",
+            "sha256": "b5d4adbdf72328400f740c7ba4cbebe023d150f7f4b2912747d49db84ffec3b6",
+            "lines": "4-11"
+          },
+          "reason": "PowerShell output-object capture failure before owned-server/programmer start; no PROGRAMMER_PID or quartus_pgm markers."
+        },
+        "golden": {
+          "programmer_invocations": 0,
+          "transaction": "none",
+          "log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/final/golden-restore.log",
+            "sha256": "e77359adb9d7f6bb086983e2a15e180128626a63a6bd1294276fde06583472ba",
+            "lines": "4-11"
+          },
+          "reason": "Same pre-program PowerShell output-object capture failure; no quartus_pgm transaction."
+        }
+      },
+      {
+        "run": "retry-v2",
+        "summary": {
+          "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry/summary.txt",
+          "sha256": "b2e8198bda51133ec788c341ae1a8b88f12eecc7db21047e1ea4b1b6492d6f00",
+          "lines": "6-12",
+          "observation": "Both wrapper commands were invoked, candidate/golden wrapper status=1, and terminal was skipped."
+        },
+        "candidate": {
+          "programmer_invocations": 0,
+          "transaction": "none",
+          "log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry/candidate-program.log",
+            "sha256": "c947308306c8093dfa5283e265333186cdd6658d05089ce4598dbcc6e9e0606e",
+            "lines": "4-22"
+          },
+          "reason": "PowerShell inline-if syntax failure before owned-server/programmer start; no quartus_pgm transaction."
+        },
+        "golden": {
+          "programmer_invocations": 0,
+          "transaction": "none",
+          "log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry/golden-restore.log",
+            "sha256": "31d3b82830f50c7b6c2a013b914d03f0872c00bd887fc3e80a2235794644ebcd",
+            "lines": "4-22"
+          },
+          "reason": "Same inline-if syntax failure before owned-server/programmer start; no quartus_pgm transaction."
+        }
+      },
+      {
+        "run": "retry-v3",
+        "summary": {
+          "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v3/summary.txt",
+          "sha256": "4ac39671706e3d13bde367dc721f498687b40634723030871a36f672a98282fd",
+          "lines": "6-17"
+        },
+        "candidate": {
+          "programmer_invocations": 1,
+          "transaction": "PASS: quartus_pgm exit=0, tool/configuration/operation/checksum/JTAG-ID all PASS",
+          "wrapper_exit": 1,
+          "wrapper_reason": "final standard design-hash identity gate",
+          "wrapper_log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v3/candidate-program.log",
+            "sha256": "44f1b1e3dc9ad4764206acd25ced6228b21c55fb0d340666755fdcf4c92eadd0",
+            "lines": "24-46"
+          },
+          "quartus_stdout": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v3/remote-evidence/program-candidate-retry-v3/runtime/candidate-quartus_pgm.stdout.log",
+            "sha256": "d707affeeb784acb20e4b35a53cebf572c2ba961cb9069a8b5948b01aade9ba4",
+            "lines": "20-29"
+          }
+        },
+        "golden": {
+          "programmer_invocations": 1,
+          "transaction": "PASS: quartus_pgm exit=0, tool/configuration/operation/checksum/JTAG-ID all PASS",
+          "wrapper_exit": 0,
+          "wrapper_log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v3/golden-restore.log",
+            "sha256": "a6dc1a5b5f01cf1f01fd8991f99f6b0c1ac99662211e3675e718f8ad9461fa17",
+            "lines": "22-48"
+          },
+          "quartus_stdout": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v3/remote-evidence/program-golden-retry-v3-restore/runtime/golden-quartus_pgm.stdout.log",
+            "sha256": "b7e8092d7662cfcfd82bf09bbd676349fd01f614b8a1eba23769bdc51a606cc6",
+            "lines": "20-29"
+          }
+        }
+      },
+      {
+        "run": "retry-v4",
+        "summary": {
+          "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v4/summary.txt",
+          "sha256": "c464002cbfbd0896cb3799e09e51f3b3a46cb10c7cc25f1b2d2b064973c43a5d",
+          "lines": "6-17"
+        },
+        "candidate": {
+          "programmer_invocations": 1,
+          "transaction": "PASS: quartus_pgm exit=0, tool/configuration/operation/checksum/JTAG-ID all PASS",
+          "wrapper_exit": 1,
+          "wrapper_reason": "owned and standard-rescan candidate design-hash identity gate",
+          "wrapper_log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v4/candidate-program.log",
+            "sha256": "2421d62934e1a29c6421ea415ba1ce48b5901f23b96518233bed81c077c8a3f1",
+            "lines": "24-61"
+          },
+          "quartus_stdout": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v4/remote-evidence/program-candidate-retry-v4/runtime/candidate-quartus_pgm.stdout.log",
+            "sha256": "3f20d307327de76bb213610132bf6b01d461df592ab3a79349eb1646fc78d35e",
+            "lines": "20-29"
+          }
+        },
+        "golden": {
+          "programmer_invocations": 1,
+          "transaction": "PASS: quartus_pgm exit=0, tool/configuration/operation/checksum/JTAG-ID all PASS",
+          "wrapper_exit": 1,
+          "wrapper_reason": "owned-chain design-hash gate; final standard golden identity was captured",
+          "wrapper_log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v4/golden-restore.log",
+            "sha256": "e14816f6b4b92480820f6973a6bd4b09ae65f0eeb9e61c71d8e129882f3baa2d",
+            "lines": "22-52"
+          },
+          "quartus_stdout": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v4/remote-evidence/program-golden-retry-v4-restore/runtime/golden-quartus_pgm.stdout.log",
+            "sha256": "b0f1a217e5547c97d556442c17376f0e2299d89c1b2e7ef7500c1a0c6d363cd8",
+            "lines": "20-29"
+          }
+        }
+      },
+      {
+        "run": "retry-v5",
+        "summary": {
+          "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/summary.txt",
+          "sha256": "61b3e2bbe97ded5fcffa34229c4fd93e96ef483e5d7815c8929e4043d9fea52d",
+          "lines": "6-17"
+        },
+        "candidate": {
+          "programmer_invocations": 1,
+          "transaction": "PASS: quartus_pgm exit=0, tool/configuration/operation/checksum/JTAG-ID all PASS",
+          "wrapper_exit": 1,
+          "wrapper_reason": "owned/standard-while-owned/final-rescan candidate design-hash identity gate",
+          "wrapper_log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/candidate-program.log",
+            "sha256": "87200725c7e1340a3d8435f30da3ace2db1079fa3d7ced8a350c0f69bb54dca8",
+            "lines": "24-72"
+          },
+          "quartus_stdout": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/remote-evidence/program-candidate-retry-v5/runtime/candidate-quartus_pgm.stdout.log",
+            "sha256": "ef725651a80f6a909fe815a0dbd031c1bd3c1daa0089c31fcc7febb6870ffc43",
+            "lines": "20-29"
+          }
+        },
+        "golden": {
+          "programmer_invocations": 1,
+          "transaction": "PASS: quartus_pgm exit=0, tool/configuration/operation/checksum/JTAG-ID all PASS",
+          "wrapper_exit": 0,
+          "wrapper_log": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/golden-restore.log",
+            "sha256": "6d4261078f7f0fa1e012f9cf5ed5e7564e649f5ceeca94621c737d4167d667d4",
+            "lines": "22-55"
+          },
+          "quartus_stdout": {
+            "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/remote-evidence/program-golden-retry-v5-restore/runtime/golden-quartus_pgm.stdout.log",
+            "sha256": "d01c94459ea174529ca72d8335b162a5b75ef14327faed0696ef6c33115189de",
+            "lines": "20-29"
+          }
+        }
+      }
+    ],
+    "totals": {
+      "candidate_programmer_invocations": 3,
+      "candidate_transaction_successes": 3,
+      "candidate_wrapper_exit1_identity_gates": 3,
+      "golden_programmer_invocations": 3,
+      "golden_transaction_successes": 3,
+      "golden_wrapper_exit0": 2,
+      "golden_wrapper_exit1_owned_identity_gate": 1,
+      "policy_deviation": "The requested one-candidate policy was exceeded by v3/v4/v5 debugging retries; this is recorded as process deviation and never as candidate acceptance."
+    }
+  },
+  "t031_jtag_observability": {
+    "preflight_golden": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/preflight/preflight.log",
+      "sha256": "38f6ea893470e9344e96e98f959e66e425bc4872b140811a436354769b458ae3",
+      "lines": "14-21",
+      "observation": "Read-only standard jtagconfig before programming reports golden design hash 193DE4BC8A30F3ED5F1F and all four Virtual JTAG/Signal Tap/JTAG UART/JTAG PHY nodes."
+    },
+    "candidate_retry_v5": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/candidate-program.log",
+      "sha256": "87200725c7e1340a3d8435f30da3ace2db1079fa3d7ced8a350c0f69bb54dca8",
+      "owned_server": {
+        "lines": "32-37",
+        "result": "jtagconfig exit=0 and JTAG ID 0x02E060DD, but no design-hash line; OWNED_DESIGN_HASH_OK=False"
+      },
+      "standard_while_owned": {
+        "lines": "38-47",
+        "result": "jtagconfig exit=0 reports golden hash 193DE4BC8A30F3ED5F1F and only JTAG UART/PHY nodes; candidate hash absent"
+      },
+      "standard_after_owned_stop": {
+        "lines": "48-70",
+        "result": "final and delayed-rescan standard server still report golden hash 193DE4BC8A30F3ED5F1F with only UART/PHY; FINAL_DESIGN_HASH_OK=False"
+      }
+    },
+    "golden_restore_v5": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/golden-restore.log",
+      "sha256": "6d4261078f7f0fa1e012f9cf5ed5e7564e649f5ceeca94621c737d4167d667d4",
+      "lines": "30-52",
+      "observation": "Owned server again has no design-hash line, while the preserved standard server reports golden hash and all four nodes; final golden identity gate is true."
+    },
+    "postflight": {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/retry-v5/postflight-golden.log",
+      "sha256": "abfb17eab8dc60f04540722e42d355091617fa34ed11a388d47bad842af004cc",
+      "lines": "4-23",
+      "observation": "Final board is independently golden with UART/PHY, no busy process and free port 1310."
+    },
+    "proof_boundary": {
+      "proven": [
+        "The candidate quartus_pgm transactions configured the exact frozen SOF according to tool/configuration/operation/checksum/JTAG-ID markers.",
+        "The task-owned jtagconfig path can see cable/JTAG ID but did not expose a candidate design hash.",
+        "The preserved standard server can keep reporting the old golden hash and UART/PHY after candidate programming.",
+        "Golden restore and postflight are independently proven."
+      ],
+      "not_proven": [
+        "The candidate live design hash after configuration.",
+        "That the preserved standard-server golden hash is the live candidate identity.",
+        "Any candidate BOOT/READY/RX evidence in T-031; terminal was correctly skipped."
+      ]
+    }
+  },
+  "supported_live_hash_search": {
+    "searched": [
+      {
+        "path": "docs/FPGA_A10_JTAG_BURN_SOP.md",
+        "sha256": "a80e71fb88ea0ad8f31d4407ac290ab251d372b5c836477045c2e17e6855b841",
+        "lines": "64-90,125-138,251-268",
+        "finding": "The documented reads are ordinary jtagconfig and owned-server jtagconfig via QUARTUS_JTAG_CLIENT_CONFIG/NO_LOCAL_SERVER. quartus_pgm -l is explicitly marked unexecuted/unverified and only concerns cable listing."
+      },
+      {
+        "path": "docs/tasks/evidence/T-20260920-003.json",
+        "sha256": "ae4f533e37437a3ac04a0a1cf919352861b0c1f25512bdf032b6a15124bead17",
+        "lines": "42-44,81-82",
+        "finding": "Read-only standard jtagconfig rescan can recover JTAG UART without restarting the standard server, but the evidence is golden-only and gives no candidate live-hash method."
+      },
+      {
+        "path": "docs/tasks/evidence/T-20260920-004.json",
+        "sha256": "7f41c1ec8297f984cad0282f0107cb28b2ee7f5e07dbb2e43d9847dee0b800a9",
+        "lines": "27-43,104-115",
+        "finding": "Two delayed standard-server rescans after candidate configuration still report golden hash and UART, explicitly excluding stale-node recovery as a candidate identity proof."
+      },
+      {
+        "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/build/agents/T-20260920-031/tools/program_sof_v5.ps1",
+        "sha256": "1083f495899e18927b574edb78036973d8c4fbe11e0edc1a57d6ccdadf2d66d2",
+        "lines": "103-109,204-227,232-246",
+        "finding": "T-031 exhausted owned, standard-while-owned, final standard and one delayed rescan using jtagconfig -n; none exposed the candidate hash without changing/terminating the preserved standard server."
+      }
+    ],
+    "conclusion": "No supported, evidenced method was found for reading a candidate live design hash while preserving the standard server and avoiding reset/power. The known read-only rescan is diagnostic only; absence of evidence is not replaced by an invented method."
+  },
+  "decision": {
+    "mode": "composite_live_identity",
+    "pre_hash_requirement": false,
+    "why": "A strict prior candidate-hash gate would block the next board test on an observability limitation that T-021 did not actually require and T-031 could not satisfy. The alternative is a fail-closed composite proof; it is not a waiver and does not treat the standard-server cache or programmer success as candidate identity.",
+    "candidate_frozen_identity": {
+      "sof_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-030-b25-logic-imm-repair-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842105,
+      "sha256": "bb292699cced5ba988c20b852914c2478f6ef2e5385695e299558bbc582fd264",
+      "quartus_checksum": "0x315AC2B3",
+      "design_hash": "0CC907F3DD48A9C78864E3C5BD66B9AF",
+      "jtag_usercode": "0xFFFFFFFF",
+      "source": "docs/tasks/evidence/T-20260920-031.json:62-85"
+    },
+    "golden_frozen_identity": {
+      "sof_path": "D:/Projects/fpga-altra/a10-linux-riscv/dist/golden/vex_soc_ddr.sof",
+      "bytes": 36844906,
+      "sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+      "quartus_checksum": "0x31510BB6",
+      "design_hash": "193DE4BC8A30F3ED5F1F",
+      "source": "docs/tasks/evidence/T-20260920-031.json:71-78"
+    },
+    "program_gate": {
+      "candidate_program_count": 1,
+      "golden_restore_count": 1,
+      "task_owned_server_count_per_phase": 1,
+      "standard_server": "Preserve the single identified standard jtagserver; do not stop it.",
+      "quartus_pgm_path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_pgm.exe",
+      "program_cable": "MBFTDI-Blaster v2.1b (64) on 127.0.0.1:1310",
+      "channel": 0,
+      "frequency_hz": 15000000,
+      "required_markers": [
+        "exit=0",
+        "Quartus Prime Programmer was successful. 0 errors, 0 warnings",
+        "Configuration succeeded -- 1 device(s) configured",
+        "Successfully performed operation(s)",
+        "candidate checksum 0x315AC2B3",
+        "JTAG ID code 0x02E060DD"
+      ],
+      "programmer_success_is_not_functional_acceptance": true
+    },
+    "live_terminal_identity_gate": {
+      "terminal_command": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+      "order": [
+        "Stop only the candidate task-owned programming server and preserve the standard server.",
+        "Start the first and only candidate live terminal session.",
+        "Before sending any byte, require the candidate-unique startup sequence: LCVEX25 BOOT; CAL-(OK|WAIT|FAIL); DDR-(OK|FAIL); READY; startup/autonomous RXDBG.",
+        "Require the initial RXDBG 00000000 00000000 and a later nonzero-read/zero-event RXDBG TX-drain page before the first '?'."
+      ],
+      "bytes_sent_before_startup_gate": [],
+      "fail_closed": "If any startup marker is absent, out of order, or the live session cannot connect, send no byte, stop only task-owned terminal/server, and perform the one golden restore. A preserved standard-server hash cannot rescue this failure."
+    },
+    "paced_functional_gates": {
+      "sequence": [
+        "? -> CLOCK25 CAL-(OK|WAIT|FAIL) DDR-(OK|FAIL)",
+        "p -> PONG",
+        "d -> immediate RXDBG",
+        "Z -> printable Z echo"
+      ],
+      "rule": "Send one raw byte only after the preceding response; stop at the first missing response.",
+      "rxdbg_gate": "Retain startup/autonomous RXDBG and final RXDBG count/byte evidence.",
+      "rxpath_gate": "Retain bridge=PoC=dmem, final low16 0xA45A, four valid events per layer and zero fault bits.",
+      "rxcpu_gate": "Retain four valid getc/dispatch events, final getc low16 0xA45A, dispatch class=5/byte=0x5A and positive putc/TX progress.",
+      "programmer_or_boot_only_is_not_functional_pass": true
+    },
+    "rollback_and_retry_policy": {
+      "golden_on_success": true,
+      "golden_on_failure": true,
+      "golden_identity_after_restore": "Require exact golden SOF bytes/SHA/checksum, JTAG ID, final golden design hash, JTAG UART/PHY nodes, preserved standard server, zero residual task processes and free port 1310.",
+      "candidate_program_retries": 0,
+      "golden_restore_retries": 0,
+      "internal_debug_retries": 0,
+      "standard_server_rescan_as_identity": false,
+      "note": "The next task is allowed exactly one candidate program and exactly one golden restore. A failure is terminal for that task; do not hide retries in wrapper/debug scripts."
+    },
+    "preserved_standard_hash_policy": "The standard server's cached golden hash and UART/PHY enumeration are diagnostic context only. They must never be recorded as the candidate live identity."
+  },
+  "risks": [
+    "The candidate-unique BOOT marker must remain part of the frozen candidate firmware contract; if a future candidate or golden emits the same marker, the contract must be re-reviewed rather than silently accepted.",
+    "T-021's ignored script artifact and raw execution disagree about post-program hash output; future tasks must hash and archive the exact remote script before execution.",
+    "T-031's three successful quartus_pgm transactions show that programmer success alone cannot establish live candidate identity or functional acceptance.",
+    "No candidate terminal evidence exists in T-031 because its identity gate failed; no RXDBG/RXPATH/RXCPU result may be backfilled from T-021."
+  ],
+  "artifacts": [
+    {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-021/docs/tasks/evidence/T-20260920-021.json",
+      "sha256": "21b050d72e702285b19289b8936d361b96b2b139dfce5e46a5694e4adaa2f80e",
+      "lines": "14-20,64-88,90-162,164-193"
+    },
+    {
+      "path": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-031/docs/tasks/evidence/T-20260920-031.json",
+      "sha256": "d2afccef22dc0ededd3412b3536114ebf5ff64f6f2d327d4b628f316a51161d1",
+      "lines": "48-59,62-85,135-196,198-249,315-375,401-420"
+    },
+    {
+      "path": "docs/tasks/evidence/T-20260920-003.json",
+      "sha256": "ae4f533e37437a3ac04a0a1cf919352861b0c1f25512bdf032b6a15124bead17",
+      "lines": "24-44,81-103"
+    },
+    {
+      "path": "docs/tasks/evidence/T-20260920-004.json",
+      "sha256": "7f41c1ec8297f984cad0282f0107cb28b2ee7f5e07dbb2e43d9847dee0b800a9",
+      "lines": "27-43,104-115"
+    }
+  ],
+  "verification": {
+    "commands": [
+      "jq empty docs/tasks/evidence/T-20260920-032.json",
+      "git diff --check",
+      "git status --short --branch"
+    ],
+    "hardware_commands": false,
+    "gamepc_commands": false,
+    "network_commands": false
+  },
+  "integration_decision": {
+    "reviewed_at": "2026-09-20T18:28:14+08:00",
+    "branch": "batch/T-20260907-037-b25-bringup",
+    "evidence_merge_sha": "d9694ce3c4ed2e0abcd8ef7c0fd476ca863a82fb",
+    "evidence_merge_tree": "c25dc3b47821fdb18c8d14ba72e55b3a788c9885",
+    "topic_evidence_head": "bd3516eae8a84e683ab829ad1f0f305be7ccf798",
+    "artifact_hash_recheck": "PASS; all accessible path/SHA256 pairs match",
+    "contract_adopted": true,
+    "classification": "fail-closed live identity observability correction, not a waiver",
+    "next_board_limits": "exactly one candidate quartus_pgm transaction, one live terminal session and one golden restore; zero internal retries",
+    "result": "PASS"
+  },
+  "conclusion": "Use the composite live identity contract for the next board test: freeze candidate bytes/SHA/checksum/design-hash metadata; perform one exact task-owned quartus_pgm transaction with path/cable/JTAG-ID/configuration/0-error markers; then require the first live terminal to emit candidate-unique LCVEX25 BOOT, CAL, DDR, READY and startup/autonomous RXDBG before any byte. Preserve the paced ?/p/d/Z, RXDBG/RXPATH/RXCPU gates and always perform exactly one golden restore. The contract is fail-closed, does not waive the absent candidate live hash, and never treats a preserved standard-server cache or programmer PASS as live identity or functional PASS.",
+  "blockers": [],
+  "next": "Parent review; only then dispatch a new board task with one candidate program, one golden restore, and no internal debug retries.",
+  "handoff": "docs/handoffs/T-20260920-032-b25-candidate-live-identity-contract.md"
+}

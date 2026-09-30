@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-043",
+  "label": "PE-F1C",
+  "state": "review",
+  "partial": false,
+  "base_sha": "93cc773db8832f7e25e2b1d561b8c9ee14ae1c55",
+  "head_sha": "88d1ad295cbebd06dbffe6a413bcd9826a1d6643",
+  "measurement_source_sha": "b2b0a96894596ade51e8409fc7b9d4eb566cfe63",
+  "content_sha": "b30356a92d44beb48c048726d2e3ecff8257ba7a9a49b65ea86c76f50146a792",
+  "branch": "verify/T-20260830-043-pe-f1c-results",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-043",
+  "owner": "luna-f1c-measurement",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "sent_at": "2026-08-30T19:32:19+08:00",
+  "received_at": "2026-08-30T19:33:18+08:00",
+  "reported_at": "2026-08-30T21:56:01+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "sent_at": "2026-08-30T19:32:19+08:00",
+    "received_at": "2026-08-30T19:33:18+08:00",
+    "reported_at": "2026-08-30T21:56:01+08:00"
+  },
+  "scope": "在同一 measurement source SHA、同一 workload image/tool/参数下，对 7 个 cache/delay base 分别运行 FETCH_FIFO_ENABLE=0 (f0) 与 1 (f1a)；采集 2-entry FIFO/epoch/stale 只读计数以及稳定 commit/memory digest。F1b、RTL/TB/QEMU 修改和硬件签核不在范围内。",
+  "files_written": [
+    "Makefile",
+    "scripts/run_perf_matrix.py",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "docs/PERFORMANCE_F1_RESULTS.md",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.json",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.csv",
+    "docs/handoffs/T-20260830-043-pe-f1c-results.md",
+    "docs/tasks/evidence/T-20260830-043.json"
+  ],
+  "implementation": {
+    "infrastructure_commit": "b2b0a96894596ade51e8409fc7b9d4eb566cfe63",
+    "result_commit": "2da02d43429a852129604dea95fcd42ecfd6ca84",
+    "head_sha_semantics": "首次交付 tip/correction input；measurement_source_sha 与 result_commit 分别标识冻结测量输入和结果数据提交",
+    "fifo_modes": {
+      "f0": {"FETCH_FIFO_ENABLE": 0, "FETCH_FIFO_DEPTH": 2},
+      "f1a": {"FETCH_FIFO_ENABLE": 1, "FETCH_FIFO_DEPTH": 2}
+    },
+    "canonical_identity": "<base_config>_<f0|f1a>",
+    "stable_digests": ["commit_packet", "memory_side_effect"],
+    "feature_default_unchanged": true,
+    "rtl_or_qemu_modified": false
+  },
+  "toolchain": {
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "cross_gcc": "aarch64-linux-gnu-gcc (GCC) 16.1.0",
+    "perf_cflags": "-O2",
+    "python": "3.12",
+    "max_cycles": 5000000,
+    "git_clean_at_measurement": true
+  },
+  "resources": {
+    "reserved_cpu": 2,
+    "memory_max_mb": 15360,
+    "memory_swap_max_mb": 0,
+    "cgroup": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0",
+    "makeflags": "-j1",
+    "verilator_jobs": 1,
+    "heavy_builds_serialized": true,
+    "runner_build_count": 14,
+    "runner_peak_allocated_mb_approx": 1045.45,
+    "runner_peak_rss_mb_approx": 136.4
+  },
+  "matrix": {
+    "schema": "lcvex-perf-matrix-f1c-v1",
+    "artifact_json": "docs/evidence/artifacts/T-20260830-043/f1c_matrix.json",
+    "artifact_csv": "docs/evidence/artifacts/T-20260830-043/f1c_matrix.csv",
+    "configs": [
+      "nocache_d0_f0", "nocache_d0_f1a",
+      "l1i_d0_f0", "l1i_d0_f1a",
+      "l1id_l2_d0_f0", "l1id_l2_d0_f1a",
+      "nocache_d1_f0", "nocache_d1_f1a",
+      "nocache_d2_f0", "nocache_d2_f1a",
+      "fullcache_d1_f0", "fullcache_d1_f1a",
+      "fullcache_d2_f0", "fullcache_d2_f1a"
+    ],
+    "workloads": [
+      "alu_latency", "alu_ilp", "ctrl_branch", "muldiv",
+      "mem_seq", "mem_random", "mem_ldst", "fp_scalar",
+      "fp_fp16", "neon_vect", "kernel_crc", "kernel_hash",
+      "kernel_matmul", "kernel_sort"
+    ],
+    "row_count": 196,
+    "status_counts": {"pass": 177, "timeout": 19, "fail": 0},
+    "measurement_source_sha_unique": 1,
+    "toolchain_unique": 1,
+    "max_cycles_unique": 1,
+    "source_hashes_unique_per_workload": true,
+    "image_hashes_unique_per_workload": true,
+    "non_fifo_parameters_equal_per_pair": true
+  },
+  "workload_hashes": {
+    "alu_latency": {"source_sha256": "1261070b988c19252dcf1d8cce98534b3063e805cb5441667c93f09c63b3f0ec", "image_sha256": "fd70bfab998b564fd78b6dddd0e29ec3814f31409118868c50511cfb3cae6b4b"},
+    "alu_ilp": {"source_sha256": "be322a7643ad53ced979dd9923909ae20d27069229b457adc74f6e6096e74add", "image_sha256": "0b5bcd16c774981a81fed5126ab94511a5e514a222b7bafb6c84cee39506bc03"},
+    "ctrl_branch": {"source_sha256": "a3057b9614525ba9a99781270a4633dc98038758f37e20f47d521e76314eebd6", "image_sha256": "e193e924e846b0102cf58740dace1021d476fb6cdf56c732ec6d4a00a4f42890"},
+    "muldiv": {"source_sha256": "2091088fd15518e2fb040f36e39be9b150545bc59ea451783905d7de2a922dd4", "image_sha256": "8ffba56ab71aef16093baaabe809ae1077cf7dc87b1728cf7a306b405bcbee4f"},
+    "mem_seq": {"source_sha256": "0ec7d04220098363c2635e36c72691b8e560212d50470ef2498c9d7044be9d0a", "image_sha256": "92c4cf43107a173345475b6ced3048356a6a1f56a4bacbe563e2a5eddf5b9527"},
+    "mem_random": {"source_sha256": "440a167cb828ed8793643865ef51546148b5dc37ebc5827c0d193e71b28dbf18", "image_sha256": "587353343730b0048d3c5fb51f3427d0720bf16b47bcc867790019daf049739e"},
+    "mem_ldst": {"source_sha256": "89cec4d393f90e0e254a449cf81da9ffb36fdfc5c85600c976bf3db8e393b6b4", "image_sha256": "7c5d126f2e5f91595151f55118733d0eb9dad8c852b20c4ea36b261f144e09f8"},
+    "fp_scalar": {"source_sha256": "0e6e90f8c644b753d77c1e294bcccdc076d5e67351541478dad3f09677c77db6", "image_sha256": "49fb782bb39c54c13ec9d34b1c028a749347fbc86c1a0b1a36aeca8e9fb5ac70"},
+    "fp_fp16": {"source_sha256": "49cd61603b3531e8929acdc02aa1820142725eccb80de17e740102586a97d2a1", "image_sha256": "e868b221ba0f6d069e08fd29e26aeed380346c54c140ceae23725d2cd4feb98f"},
+    "neon_vect": {"source_sha256": "2a0000d4ad7ca7ff0de4b473ea689c9c3a3ae9a0078f3fc495312f912496d095", "image_sha256": "6ebbd4c33bce14151a78f318bb2a352f496f9def93b6cdd417b91d057db1f7bf"},
+    "kernel_crc": {"source_sha256": "9643ef091fa36507aceb39fa1ab11749b771849c8ff5e5f687ee335fca351d59", "image_sha256": "a22f6ceaffd2b2c84c7bf85a875c5f1844b7d3d254818aea5fbb0d0f8b2362bc"},
+    "kernel_hash": {"source_sha256": "fd1f07b2d289f754cb5debe63bd76279c494a7fe68985ff2ca2b4163b50f8a45", "image_sha256": "e800011683cc5415427fbd451d41488be7051910b4abfb3c76c4082e59b42a58"},
+    "kernel_matmul": {"source_sha256": "0e38843b19859cd27b642f5e114c8e79d4587eb02d4e7fd44132fabe86d1354f", "image_sha256": "591f07d83da50b47ba57760f75e2fffe40c0dfd0c3821973c300b7c7ae03a8c4"},
+    "kernel_sort": {"source_sha256": "0f5ebff6a2eebcb6c7f3d3bb6dd961f202a1a5b27c496851b096bd248d6bf1ff", "image_sha256": "184eb6e1d8ad80234110b30972e6f60cee240db23d210871690270b9d70518d5"}
+  },
+  "pair_audit": {
+    "strict_fields": ["status", "returncode", "retired_insn", "commit_digest", "memory_digest"],
+    "strict_equal_pairs": 56,
+    "total_pairs": 98,
+    "pass_pass_pairs": 88,
+    "pass_pass_cycle_guard_pass": 88,
+    "timeout_timeout_pairs": 9,
+    "timeout_pass_pairs": 1,
+    "pass_pass_digest_mismatch_pairs": 32,
+    "timeout_timeout_digest_mismatch_pairs": 9,
+    "status_mismatch_pairs": ["nocache_d1/mem_random"],
+    "status_mismatch_count": 1,
+    "retired_mismatch_count": 42,
+    "memory_digest_or_effect_count_mismatch": 6,
+    "commit_only_mismatch_count": 0,
+    "pass_pass_digest_mismatch_all_have_retired_mismatch": true,
+    "strict_equal_by_base": {
+      "nocache_d0": 7,
+      "l1i_d0": 7,
+      "l1id_l2_d0": 7,
+      "nocache_d1": 12,
+      "nocache_d2": 9,
+      "fullcache_d1": 7,
+      "fullcache_d2": 7
+    },
+    "pass_pass_digest_mismatch_by_base": {
+      "nocache_d0": ["mem_seq", "mem_random", "mem_ldst", "fp_scalar", "fp_fp16", "neon_vect", "kernel_sort"],
+      "l1i_d0": ["mem_seq", "mem_random", "mem_ldst", "fp_scalar", "fp_fp16", "neon_vect", "kernel_sort"],
+      "l1id_l2_d0": ["mem_seq", "mem_ldst", "fp_scalar", "fp_fp16", "neon_vect", "kernel_sort"],
+      "nocache_d1": [],
+      "nocache_d2": [],
+      "fullcache_d1": ["mem_seq", "mem_ldst", "fp_scalar", "fp_fp16", "neon_vect", "kernel_sort"],
+      "fullcache_d2": ["mem_seq", "mem_ldst", "fp_scalar", "fp_fp16", "neon_vect", "kernel_sort"]
+    },
+    "timeout_rows": [
+      "l1id_l2_d0_f0/mem_random", "l1id_l2_d0_f1a/mem_random",
+      "nocache_d1_f0/mem_seq", "nocache_d1_f0/mem_random", "nocache_d1_f1a/mem_seq",
+      "nocache_d2_f0/alu_latency", "nocache_d2_f0/alu_ilp", "nocache_d2_f0/ctrl_branch",
+      "nocache_d2_f0/mem_seq", "nocache_d2_f0/mem_random",
+      "nocache_d2_f1a/alu_latency", "nocache_d2_f1a/alu_ilp", "nocache_d2_f1a/ctrl_branch",
+      "nocache_d2_f1a/mem_seq", "nocache_d2_f1a/mem_random",
+      "fullcache_d1_f0/mem_random", "fullcache_d1_f1a/mem_random",
+      "fullcache_d2_f0/mem_random", "fullcache_d2_f1a/mem_random"
+    ]
+  },
+  "fifo_audit": {
+    "f0_all_counters_zero": true,
+    "f1a_rows": 98,
+    "occupancy_max_over_rows": 2,
+    "peak_signal_max_over_rows": 2,
+    "overflow_total": 0,
+    "push_total": 29476582,
+    "pop_total": 28935387,
+    "flush_total": 6580600,
+    "epoch_bumps_total": 6580600,
+    "stale_drop_total": 5595112,
+    "stale_drain_cycles_total": 5269955,
+    "push_less_than_pop_rows": 0,
+    "stale_drop_positive_rows": 98,
+    "stale_drain_positive_rows": 44
+  },
+  "tests": [
+    {
+      "run_id": "l0-static",
+      "level": "L0",
+      "command": "python3 -m py_compile scripts/run_perf_matrix.py sim/microbench/perf_runner.py && python3 scripts/run_perf_matrix.py --help && git diff --check",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "run_id": "l0-aggregate-empty",
+      "level": "L0",
+      "command": "python3 scripts/run_perf_matrix.py --configs nocache_d0 --workloads alu_latency,ctrl_branch --aggregate-only --out-dir build/f1c_smoke_empty",
+      "result": "pass",
+      "exit_code": 0,
+      "rows": 0
+    },
+    {
+      "run_id": "l1-pair-smoke",
+      "level": "L1/L2",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 scripts/run_perf_matrix.py --configs nocache_d0 --workloads alu_latency,ctrl_branch --max-cycles 5000000 --out-dir build/f1c_smoke",
+      "result": "pass",
+      "exit_code": 0,
+      "rows": 4,
+      "strict_equal_pairs": 2,
+      "cycle_guard_pairs": 2
+    },
+    {
+      "run_id": "l2-full-matrix",
+      "level": "L2",
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 scripts/run_perf_matrix.py --configs all --workloads all --max-cycles 5000000 --out-dir build/f1c_matrix --artifact-dir docs/evidence/artifacts/T-20260830-043",
+      "result": "pass_with_recorded_timeout_rows",
+      "exit_code": 0,
+      "rows": 196,
+      "pass": 177,
+      "timeout": 19,
+      "fail": 0
+    }
+  ],
+  "artifact_sha256": {
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.json": "5f08726819567b6fb096d4fa44e94b5733a46fa7b5fbb8d4fdc8886235d0dfce",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.csv": "9d3afbaf24bdc75483a311a0ff543f989e0d4a65c96922cfc5ba39f1f4a01351",
+    "docs/PERFORMANCE_F1_RESULTS.md": "223aa09cee0b3273290c0366cd31b75f4ecb05bb60810cd2f6bebca5492e6cad",
+    "docs/handoffs/T-20260830-043-pe-f1c-results.md": "b30356a92d44beb48c048726d2e3ecff8257ba7a9a49b65ea86c76f50146a792",
+    "Makefile": "7e5f1ec25d76707a17eea93f44a457fbb0c25f8823a179dc9482dbf120cab88a",
+    "scripts/run_perf_matrix.py": "4a6805a300fa976ef719e0f53c0db9e3da3b0670fb2d6b46586056cbba8d182d",
+    "sim/microbench/microbench_runner.cc": "b65274e89c6f5578868f4e737c9345c344ca6963463eabe7dc2db3dcaf0e97df",
+    "sim/microbench/perf_runner.py": "f2068cccc666478809e8ab5036a29a6a4271808d856deddfb332037e5702b30c"
+  },
+  "blockers": [
+    "严格架构摘要仅 56/98 pairs 一致；32 个 pass/pass pairs 的 retired/commit digest 不一致。",
+    "9 个 timeout/timeout pairs 的摘要不一致，且 nocache_d1/mem_random 为 timeout/pass。",
+    "集成者独立 jq 审计：status mismatch=1、retired mismatch=42、memory digest/effect-count mismatch=6、commit-only mismatch=0；32 个 pass/pass 摘要不一致 pair 全部也有 retired mismatch，因此不是 inactive commit payload 哈希的假阳性。",
+    "周期护栏只说明数值周期关系；摘要不一致的 pair 不得作为安全性能收益签核。"
+  ],
+  "risks": [
+    "F1a 数据/FP/NEON/sort 路径存在 commit sequence 差异，当前证据不足以区分 FIFO flush/quarantine 实现问题与观测边界问题。",
+    "timeout 受 5M cycle 上限影响；Verilator cycle/wall time 是仿真代理，不代表 A10/Fmax 或 FPGA 性能。",
+    "F1b later-beat-fault gate、Gate D、Linux、Quartus、完整 B5 和 QEMU 均未运行。"
+  ],
+  "integrator_review": {
+    "received_at": "2026-08-30T22:10:00+08:00",
+    "merge_sha": "3a1c74f97dc9e23970b20844135cffc3bc1c3a30",
+    "status": "accepted_measurement_gate_failed",
+    "review_source_sha": "88d1ad295cbebd06dbffe6a413bcd9826a1d6643",
+    "rebuild": {
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 scripts/run_perf_matrix.py --configs nocache_d0 --workloads alu_latency,mem_seq --max-cycles 5000000 --out-dir build/integrator_t043_pair",
+      "result": "pass",
+      "rows": 4,
+      "runner_binary_sha256": {
+        "nocache_d0_f0": "532c6cede9652239983e9324cde2bf3edc20fe6a676febc4816150ec20c118ca",
+        "nocache_d0_f1a": "457c54a07ddd3b5715601420488e1ad967f76c777a19530b941406f45b85436d"
+      },
+      "summary": "alu_latency off/on retired=750049 且 commit/memory digest 相同；mem_seq off/on retired=803657/803667，commit digest 不同而 memory digest/effect count 相同。四行 cycles/hash/counters 与 owner artifact 完全一致。"
+    },
+    "merge_sha_rerun": {
+      "command": "systemd-run --user --scope -p MemoryMax=15G -p MemorySwapMax=0 -- env MAKEFLAGS=-j1 VERILATOR_JOBS=1 python3 scripts/run_perf_matrix.py --configs nocache_d0 --workloads alu_latency,mem_seq --max-cycles 5000000 --skip-build --out-dir build/integrator_t043_merge_pair",
+      "result": "pass",
+      "rows": 4,
+      "binary_provenance": "复用 review SHA 重建的 runner；git diff 证明 merge SHA 3a1c74f 的 Makefile/scripts/sim/RTL/TB 与 review SHA 88d1ad2 字节完全相同，未宣称 merge SHA 重新编译。",
+      "summary": "measurement_source_sha=3a1c74f；四行结果再次逐字段复现 owner artifact。"
+    },
+    "decision": "验收 T-043 测量与证据，拒绝 F1a 安全/性能签核；保持 FETCH_FIFO_ENABLE=0，后续任务先定位 commit sequence 首分歧。"
+  },
+  "next": "保持 FETCH_FIFO_ENABLE 默认关闭；针对非等价 pair 保存提交级差异并修复/验证，再以新的冻结 source SHA 重跑完整 F0/F1a 矩阵；F1b 继续阻断。"
+}

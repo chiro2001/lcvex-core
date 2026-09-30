@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "T-20260901-003",
+  "label": "PE-F1E-DIGEST-CANON",
+  "parent": "T-20260830-033",
+  "title": "性能 runner 提交摘要 inactive payload 规范化",
+  "kind": "verification-infrastructure-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-commit-digest-canonicalization",
+  "agent_type": "verification-infrastructure-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "depends_on": ["T-20260901-001", "T-20260901-002"],
+  "base_sha": "e65005c2beab3e2b1fc25e8bc0f49a868b3c16ff",
+  "branch": "infra/T-20260901-003-commit-digest-canonical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-003",
+  "scope": "修复 sim/microbench 性能 runner 的 commit digest：继续哈希退休序号、PC、指令、next PC、所有 enable/count 以及全部有效架构载荷，仅把 enable=0 或 vector slot 超出 write_count 的无效载荷按原宽度规范化为零。将生产摘要逻辑提取为可直接单测的 helper，显式版本化 digest schema，并把 schema 传播到 perf runner、矩阵 JSON/CSV 和 pair provenance。不得修改 RTL、QEMU、workload、参考结果或正式 commit trace comparator；不运行完整 196-row、Gate D、Linux 或 Quartus。",
+  "planning_guidance": {
+    "semantics": [
+      "PC、insn、next PC、retired seq 无条件参与摘要；每个 write-enable/valid/count 自身无条件参与摘要。",
+      "GPR1/2/3 的 rd/data、SP/NZCV payload、mem1/2 addr/data/strb、exception code/ESR/FAR、monitor valid/addr/data、FPCR/FPSR data 仅在各自顶层 enable 有效时保留，否则以相同字节宽度哈希零。",
+      "vector write_count 原值必须参与摘要；只保留 index < min(write_count,4) 的 rd/lo/hi，其余槽归零。write_count>4 不得被静默视为合法，测试或运行时必须保留可检测性。",
+      "monitor 在 mon_we=1 时保持现有 trace 契约的 valid/addr/data 全部有效；mon_we=0 时全部载荷归零。"
+    ],
+    "tests": [
+      "单元 fixture 必须直接调用生产 helper：active packet 相同但每类 inactive payload 不同应得到相同摘要。",
+      "反向 fixture：逐类改变 enable/count、PC/insn/next PC 或任一 active payload，摘要必须改变；不得只测正向相等。",
+      "加入固定 golden vector 和重复运行确定性；验证字段顺序、宽度和小端 byte feed 不随 host struct layout 改变。"
+    ],
+    "schema": [
+      "定义明确的人类可读 schema，例如 lcvex-commit-digest-v2-active-payload；runner JSON 和 trace footer 均记录。",
+      "perf_runner.py 与 run_perf_matrix.py 必须保留 schema；F0/F1a pair schema 不同视为 provenance mismatch/拒绝严格比较，不能默默比较 digest。",
+      "历史 v1 artifact 保持不改写；新测试只在同一 v2 schema 内比较。"
+    ],
+    "dynamic": [
+      "在本任务 own worktree 重建 nocache_d0 和 fullcache_d1 的 F0/F1a runner 与同一 neon_vect image，四个运行全部 pass。",
+      "两组必须 status、retired_insn、v2 commit_digest、memory_digest/effect count 全相等；active trace 仍逐条相等。",
+      "若摘要仍不同，停止并扩展 opt-in raw inactive payload 观测，不得删除更多字段或改预期结果。"
+    ]
+  },
+  "writes": [
+    "sim/microbench/commit_digest.h",
+    "sim/microbench/commit_digest_test.cc",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "scripts/run_perf_matrix.py",
+    "scripts/test_registry.json",
+    "Makefile",
+    "docs/F1A_COMMIT_DIGEST_CANONICALIZATION.md",
+    "docs/handoffs/T-20260901-003-commit-digest-canonical.md",
+    "docs/tasks/evidence/T-20260901-003.json"
+  ],
+  "reads": [
+    "AGENTS.md", "docs/MULTI_AGENT_WORKFLOW.md", "docs/F1A_NEON_COMMIT_DIVERGENCE_DIAGNOSIS.md",
+    "docs/F1A_TIMEOUT_EQUIVALENCE_AUDIT.md", "docs/tasks/evidence/T-20260901-001.json",
+    "docs/tasks/evidence/T-20260901-002.json", "scripts/compare_commit_traces.py", "baremetal/perf/t_neon_vect.c"
+  ],
+  "validation": {
+    "l0": ["C++ production-helper fixture 正/反/golden；py_compile；registry 校验；matrix aggregate/schema provenance 负测"],
+    "l1": ["nocache_d0 与 fullcache_d1 各 F0/F1a neon_vect，同镜像、v2 digest 严格相等"],
+    "l2": ["两组 active trace 逐条相等；compare_commit_traces.py --self-test"],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "生产摘要 helper 对所有 inactive payload 变化不敏感、对所有 active 架构字段和 enable/count 变化敏感；schema 在 runner/matrix 中可审计且跨 schema 比较被拒绝；两个代表性 neon_vect pair 的 v2 严格字段全部相等。",
+  "resource": {"cpu": 2, "memory_mb": 8192, "memory_cgroup_limit_mb": 15360, "disk_mb": 8192, "timeout_s": 3600, "allocation_ratio": 0.5},
+  "budget_policy": {"initial_minutes": 60, "extension_increment_minutes": 60, "max_minutes": 180, "max_is_hard_stop": false, "background_after_max": true},
+  "test_slot": {"status": "released", "reserved_at": "2026-09-01T01:44:32+08:00", "released_at": "2026-09-01T02:51:49+08:00", "reason": "四个代表性 runner 串行构建/运行完成；每个构建约 1.05GB，未与 Gate/Linux/Quartus 并发", "rule": "本地唯一重型任务；15G/no-swap/50%-CPU/-j1；不与 Gate/Linux/Quartus 并发"},
+  "created_at": "2026-09-01T01:42:55+08:00",
+  "updated_at": "2026-09-01T03:00:37+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-01T01:44:32+08:00",
+    "agent_name": "t042_checkpoint_protocol_luna",
+    "agent_reuse_note": "复用已完成 T-20260901-001 的 gpt-5.6-luna(max) agent；当前只持有 T-20260901-003。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260901-003"
+  },
+  "handoff": "docs/handoffs/T-20260901-003-commit-digest-canonical.md",
+  "evidence": "docs/tasks/evidence/T-20260901-003.json",
+  "merge_sha": "b77955c2483ba598143ff91fbfabdaf443734198",
+  "merged_at": "2026-09-01T03:00:08+08:00",
+  "integrator_review": {
+    "received_at": "2026-09-01T02:53:28+08:00",
+    "correction_requested_at": "2026-09-01T02:55:08+08:00",
+    "corrected_at": "2026-09-01T02:56:41+08:00",
+    "accepted_at": "2026-09-01T03:00:37+08:00",
+    "status": "accepted_commit_digest_v2",
+    "implementation_tip": "5254184fb09bb02cec9b2f404ec48a55b609bfcf",
+    "owner_final_tip": "f4d80ca38c3d30e73a7e64c2bd2942942877ddae",
+    "checks": [
+      "生产 helper 保留 seq/PC/insn/next PC、enable/count 和 active payload，只按原宽度归零 inactive payload；vector count>4 返回 invalid",
+      "correction 后每个 active 子字段均独立变异，inactive vector tail 也单独验证，golden 为 8b782b3f31381149",
+      "nocache_d0/fullcache_d1 两组 F0/F1a 均 66721 retired、v2 commit digest 5c1d4f0a0f31cfe7、memory digest/effects 相等，active trace 逐条相等",
+      "合并 SHA 上 production helper、py_compile、registry 64 项/一致性、legacy schema guard 和 comparator self-test 全绿"
+    ]
+  },
+  "known_limits": ["只修验证摘要语义，不构成 F1a RTL 修复。", "完整 Gate D 仍只在新矩阵达到 98/98 后运行。"],
+  "next": "在新冻结 SHA 上以 own-worktree runner 运行所有 15 个旧 mismatch 的闭合复测；全部通过后用同一 runner 执行完整 196-row 高上限矩阵。"
+}

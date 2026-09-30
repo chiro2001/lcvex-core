@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-024",
+  "parent": "T-20260920-022",
+  "label": "B25-LOGIC-IMM-QUARTUS-SAFE-RTL",
+  "title": "Rewrite AArch64 logical-immediate decoding into a Quartus-safe pure expression",
+  "kind": "rtl-functional-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged-rtl-and-fixed-synthesis-pass",
+  "assigned_owner": "logicimm_rtl",
+  "depends_on": ["T-20260920-021"],
+  "base_sha": "1ce74e9c81c40812ea93a161d52cad8dda807a0d",
+  "branch": "fix/T-20260920-024-b25-logic-imm-quartus-safe-rtl",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-024",
+  "writes": [
+    "rtl/lcvex_decode.sv::logic_imm_valid/logic-immediate decode region only",
+    "build/agents/T-20260920-024/** ignored validation outputs",
+    "docs/tasks/evidence/T-20260920-024.json",
+    "docs/handoffs/T-20260920-024-b25-logic-imm-quartus-safe-rtl.md"
+  ],
+  "scope": "Replace the output-argument/local-temporary logical-immediate decoder with a pure, fully assigned Quartus-safe return value and fixed-width selection. Preserve every valid/reserved AArch64 encoding and all public pipeline latency/interfaces.",
+  "implementation_constraints": [
+    "No output/inout function argument for the mask and no partially driven automatic local returned to always_comb.",
+    "Every returned valid and mask bit is assigned on every path; avoid variable-step loops, break-dependent priority and undefined full-width shifts.",
+    "Keep W-form zero-extension and X-form 64-bit masks exact; reserved encodings remain d.valid=0.",
+    "Do not modify dmem, load/writeback, firmware, QSF/SDC, tests or expected results in this lane."
+  ],
+  "acceptance": "Existing decode/ISA L0-L2 and lint pass in the isolated worktree; independent exhaustive or broad reference comparison covers valid/reserved logical immediates; the exact A43F masks produce A43F and 3F. Quartus semantic/warning acceptance is owned by T-023 and the merged batch.",
+  "resource": "Use local only; any heavy generated test must hold resource-lock local. Do not access GamePC or board in this lane.",
+  "forbidden_regions": [
+    "rtl/lcvex_core.sv or any dmem/writeback change",
+    "firmware, QSF, SDC, testbench, runner, expected-result or registry changes",
+    "disabling assertions, weakening UDEF checks or special-casing only the two firmware opcodes",
+    "GamePC/Quartus/JTAG/board/Flash/reset/power"
+  ],
+  "dispatch": {
+    "sent_at": "2026-09-20T14:03:44+08:00",
+    "agent_name": "logicimm_rtl",
+    "model": "default (user-confirmed gpt-5.6-luna[max])",
+    "monitoring": "event-driven, up to one-hour waits, no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "implementation_commit": "92bd167b71ce675969bad8235142d59db2f66e20",
+    "evidence_commit": "4e340641ba0497649d5b593049b7cffbefc9a25a",
+    "integration_logic_commit": "a51d9972336ac85cb4e1ae587f9b2a67dba9980f",
+    "integration_evidence_commit": "276b2ffa23d77fab488d8cfbe1ef4b3a84208cee",
+    "candidate_sha": "c31b3aea754769304ab7c9a24ef2f78c8120bc2a",
+    "rtl": "PASS; pure 65-bit return, all paths assigned, no output argument/break/variable-step/full-width shift",
+    "quartus": "PASS; fresh synthesis Successful/0 errors and warning 16788 count 0",
+    "evidence": "docs/tasks/evidence/T-20260920-024.json",
+    "handoff": "docs/handoffs/T-20260920-024-b25-logic-imm-quartus-safe-rtl.md"
+  },
+  "created_at": "2026-09-20T14:00:39+08:00",
+  "updated_at": "2026-09-20T14:51:49+08:00"
+}

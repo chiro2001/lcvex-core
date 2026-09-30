@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-031",
+  "label": "FPGA-G2-INT",
+  "parent": "T-20260828-067",
+  "title": "将显式 altsyncram/M20K BRAM wrapper 正式纳入主 RTL",
+  "kind": "fpga-bram-main-rtl-integration",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "26ce4f1",
+  "branch": "feature/T-20260830-031-fpga-g2-int",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-031",
+  "scope": "把 G2/G3 已验证的显式 BRAM 方案纳入主 RTL：替换 rtl/lcvex_bram_boot.sv 中行为级 byte-address 数组。要求：Quartus 综合下能明确形成 M20K/True Dual Port；Verilator 仿真路径保持功能等价（可通过 ifdef/独立行为模型/参数化 wrapper 实现）；保留 boot 程序加载、prog_we、debug 读端口与字节使能语义；未对齐访问若无法完全等价，必须显式记录并给出 lane 处理方案。",
+  "writes": [
+    "rtl/lcvex_bram_boot.sv",
+    "rtl/lcvex_bram_boot_altsyncram.sv",
+    "rtl/lcvex_bram_boot_shim.sv",
+    "tb/sv/**",
+    "docs/handoffs/T-20260830-031-fpga-g2-int.md",
+    "docs/tasks/evidence/T-20260830-031.json"
+  ],
+  "reads": [
+    "fpga/quartus_exp/T-20260830-029/**",
+    "fpga/quartus_exp/T-20260830-030/**",
+    "docs/handoffs/T-20260830-029-fpga-g2.md",
+    "docs/handoffs/T-20260830-030-fpga-g3.md",
+    "rtl/lcvex_bram_boot.sv",
+    "rtl/**",
+    "tb/**"
+  ],
+  "validation": {
+    "l0": [
+      "make compile 默认优化通过",
+      "BRAM 相关 Verilator smoke/SoC boot smoke 通过"
+    ],
+    "l1": [
+      "Quartus 隔离工程重新验证 M20K 映射（若可远端跑）"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "主 RTL 中 BRAM 使用显式同步 RAM wrapper，本地 Verilator 回归不回归；record 中明确 Quartus 是否形成 M20K；未对齐/字节 lane 风险有描述。",
+  "next": "完成后在 A10 黑盒+shim 基础上逐步换回真实 core/coh/AXI 或导入 partition QDB。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T21:05:00+0800",
+  "updated_at": "2026-08-30T21:05:00+0800",
+  "known_limits": [
+    "不改远端原始 QSF/SDC；不启动完整 B5 full flow；不读 license。",
+    "本地重型 Verilator 必须 cgroup <16GiB、一次一个。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-031-fpga-g2-int.md",
+  "evidence": "docs/tasks/evidence/T-20260830-031.json",
+  "merge_sha": "726f7ca",
+  "merged_at": "2026-08-30T21:30:00+0800",
+  "integrator_review": {
+    "received_at": "2026-08-30T21:30:00+0800",
+    "status": "accepted",
+    "head_sha": "feceba35acc199e022e23ee4731cdf667b52cbdd",
+    "notes": "Main RTL now chooses explicit altera_syncram M20K BRAM in SYNTHESIS and behavioral fallback in Verilator. make compile PASS on branch; BRAM TB, soc lint, boot smoke PASS per handoff. Unaligned cross-word returns fault in synth path; behavioral remains authoritative."
+  }
+}

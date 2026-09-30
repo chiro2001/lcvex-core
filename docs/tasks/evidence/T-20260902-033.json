@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-033",
+  "state": "blocked",
+  "partial": false,
+  "base_sha": "ed1a0b92cf2427a82ca19cd39c7f832c100dca88",
+  "head_sha": "ed1a0b92cf2427a82ca19cd39c7f832c100dca88",
+  "branch": "verify/T-20260902-033-fp-p5-rerun-round5",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-033",
+  "scope": "FP-P5 rerun round5 after T-20260902-032 ID/EX GPR forwarding cut: full-FP synthesis -> fitter -> signoff STA on merged SHA; assembler/SOF only if all setup/hold/recovery/removal/min-pulse non-negative and DDR pass.",
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GAMEPC",
+    "shell": "pwsh.exe -NoLogo -NoProfile -NonInteractive -EncodedCommand",
+    "probe_root": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-033-probe",
+    "project_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-033-probe\\real_a10_full_fp",
+    "project_name": "real_a10_full_fp",
+    "quartus_version": "Quartus Prime Pro 21.4.0 Build 67",
+    "device": "10AX115N4F40E3SG",
+    "license_read": false,
+    "non_eda_processes_stopped": false,
+    "files_deleted": false,
+    "programming_jtag_touched": false
+  },
+  "preflight": {
+    "timestamp": "2026-09-03T20:58:20+08:00",
+    "t033_probe_exists": false,
+    "eda_processes": [],
+    "jtagserver_running": true,
+    "jtagserver_pid": 5476,
+    "physical_free_mb": 44890.9,
+    "physical_total_mb": 63092.3,
+    "disk_d_free_gb": 75.9
+  },
+  "source_sync": {
+    "verified": true,
+    "rtl_file_count": 47,
+    "platform_file_count": 2,
+    "project_file_count": 3,
+    "remote_manifest_count": 52,
+    "all_sha256_match": true,
+    "remote_bad_count": 0,
+    "local_manifest_path": "build/agents/T-20260902-033/sync/manifest_t033.json",
+    "local_manifest_sha256": "4a38609291c91355ed33c337b91848421034af43c91a0201afd6b73849a845c0",
+    "key_files": {
+      "rtl/lcvex_core.sv": "e261d8a3604d97e1d9b31bc1ec7f1ce20fb52b4dc72c6eb34b1679c8d2eee722",
+      "rtl/lcvex_mmu.sv": "2095d5f12c3b083e4cfd043fcb36e9f6dfccbd377afdb2bbe93b09a70b111df1",
+      "rtl/lcvex_axi4_avalon_adapter.sv": "9108a1c5fb8d99b4f42200669f71918418179ff6d99fb2cd44d720a3cd55265d",
+      "fpga/catapult_a10/quartus/catapult_a10.sdc": "2fad1663e7e10d282b1f8ee968ec224d8ddc7985bb0f54c130e524e8f6cfb2da",
+      "rtl/lcvex_fp_scalar.sv (formal)": "c9de754bfb627c91fe1ef3d2ed3d3b9b40c6efbc3b58ba57e0d4d4ee8796dba5",
+      "rtl/lcvex_fp_scalar.sv (remote patched)": "9953097c55f63fffb877bcb4739c6406247d59e68c2f885589f46b4a470a579d"
+    },
+    "patch_note": "Isolated Quartus-compatibility patch applied to remote lcvex_fp_scalar.sv only: removed default values on iter_kill/iter_pause/kill/pause input ports (same as previous FP-P5 rounds). No formal RTL modified."
+  },
+  "runs": [
+    {
+      "run_id": "full-fp-synthesis",
+      "stage": "synthesis",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start ipgenerate -end synthesis",
+      "result": "pass",
+      "started_at": "2026-09-03T21:08:06+08:00",
+      "finished_at": "2026-09-03T21:29:16+08:00",
+      "wall_s": 1270.157,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 230,
+      "critical_warnings": 0,
+      "peak_private_mb": 4651.8,
+      "peak_working_set_mb": 4446.7,
+      "peak_virtual_mb": 9540.5,
+      "samples": 1185,
+      "safety_stopped": false,
+      "resource": {
+        "estimate_alms": 145146,
+        "combinational_aluts": 180106,
+        "dedicated_logic_registers": 83473,
+        "block_memory_bits": 247272,
+        "total_dsp_blocks": 27,
+        "total_plls": 1,
+        "io_pins": 144,
+        "max_fanout_node": "sys_clk_div2",
+        "max_fanout": 75835,
+        "total_fanout": 1270727,
+        "max_lut_depth": 79.4,
+        "average_lut_depth": 24.45
+      },
+      "hierarchy": {
+        "soc_core_alut": 121522,
+        "soc_core_reg": 22711,
+        "soc_core_dsp": 18,
+        "soc_core_mmu_alut": 3672,
+        "soc_core_mmu_reg": 5972,
+        "fp_exec_alut": 60642,
+        "fp_exec_reg": 3132,
+        "fp_exec_dsp": 6,
+        "scalar_unit_alut": 58441,
+        "scalar_unit_reg": 2142,
+        "scalar_unit_dsp": 6,
+        "it_divider_alut": 235,
+        "it_divider_reg": 433,
+        "it_sqrt_alut": 791,
+        "it_sqrt_reg": 390,
+        "neon_int_alut": 8528,
+        "emif_adapter_alut": 20221,
+        "emif_adapter_reg": 2998,
+        "emif_adapter_dsp": 9,
+        "calibration_gate_alut": 3,
+        "calibration_gate_reg": 6
+      },
+      "artifacts": {
+        "monitor_result.json": "04c0e54dd9a5b10f62183c9f22ce2a2061b33084dbefcd0ad0a161179a9fb65c",
+        "real_a10_full_fp.syn.rpt": "f3c5df049ad1c50cc8e9b5ba2ce6d8c6eea1acd61c152e7ec5458b506b038bae",
+        "real_a10_full_fp.syn.summary": "bc7b132bd25aee4d431cd4ae173de473486faa6040565d1d47e43393736206f8",
+        "real_a10_full_fp.syn.smsg": "3e80f05a6fca5b3693e663bbfc43f265858a4f8d2d4c85236cb5e584e91bbab5",
+        "real_a10_full_fp.flow.rpt": "d8d047003ddce2396b6673e5ef40e018061e65e005ff2c509b73cd38611111e1"
+      }
+    },
+    {
+      "run_id": "full-fp-fitter",
+      "stage": "fitter",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start fitter -end fitter",
+      "result": "pass",
+      "started_at": "2026-09-03T21:31:47+08:00",
+      "finished_at": "2026-09-03T21:56:52+08:00",
+      "wall_s": 1504.671,
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 11,
+      "critical_warnings": [
+        "No exact pin location assignment(s) for 9 pins of 130 total pins",
+        "There are 48 unused RX channels in the design",
+        "There are 48 unused TX channels in the design"
+      ],
+      "peak_private_mb": 13130.8,
+      "peak_working_set_mb": 12948.6,
+      "peak_virtual_mb": 20808.3,
+      "samples": 1388,
+      "safety_stopped": false,
+      "resource": {
+        "logic_utilization_alms": 142817,
+        "device_alms": 427200,
+        "logic_utilization_percent": 33.4,
+        "total_registers": 85837,
+        "total_pins": "141 / 826 (17%)",
+        "total_block_memory_bits": "245608 / 55562240 (<1%)",
+        "total_ram_blocks": "121 / 2713 (4%)",
+        "total_dsp_blocks": "26 / 1518 (2%)",
+        "total_plls": "3 / 112 (3%)"
+      },
+      "artifacts": {
+        "monitor_result.json": "23c45e714a951f8a52040834788245cb677e92ed6157c0daf534b8300120d2d0",
+        "real_a10_full_fp.fit.rpt": "6976ce31b2b3d3826e0881ed80c2be0e954ad7a1faa9a1cc2be18c485ce1cc20",
+        "real_a10_full_fp.fit.summary": "810005836646abd631f22e592b7aadc6f9d096423064657960732a9aa1ebf974",
+        "real_a10_full_fp.fit.plan.rpt": "7ba724832554f9ed7777676bade45f03356685c96eb0b6708eb1083707d3cb6d",
+        "real_a10_full_fp.fit.place.rpt": "c32428edb21174c7adc950c834aca989d4c82cce41251beb32a2df635cd91d54",
+        "real_a10_full_fp.fit.route.rpt": "df77fedc4c5e95ee8f49150e20c18343a7ed4cd4369d602bdf3f556b380cc7c4",
+        "real_a10_full_fp.fit.finalize.rpt": "069ae81aef00c34c15342520426ac76e74ed2d753aa8f0392ac4d250d842f509",
+        "real_a10_full_fp.flow.rpt": "319f9d41f64b611d7335e7e6a74ecf0621e9b9d0d18070bd6bad21c2d66e0180"
+      }
+    },
+    {
+      "run_id": "full-fp-sta-signoff",
+      "stage": "sta_signoff",
+      "command": "quartus_sh --flow compile real_a10_full_fp -c real_a10_full_fp -start sta_signoff -end sta_signoff",
+      "result": "fail_timing_closure",
+      "exit_code": 0,
+      "tool_message": "Timing Analyzer successful, 0 errors, 3 warnings, but Timing Closure Summary = Fail (Setup Fail; Hold/Recovery/Removal/Min-Pulse/DDR/Metastability Pass)",
+      "started_at": "2026-09-03T21:58:44+08:00",
+      "finished_at": "2026-09-03T21:59:18+08:00",
+      "wall_s": 34.536,
+      "peak_private_mb": 5845.1,
+      "peak_working_set_mb": 5760.5,
+      "peak_virtual_mb": 10702.9,
+      "samples": 32,
+      "safety_stopped": false,
+      "timing": {
+        "closure": "Fail",
+        "setup": {
+          "sys_clk_50": {
+            "slack": -8.734,
+            "tns": -104366.614,
+            "corner": "Slow 900mV 100C"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.387,
+            "tns": 0.0,
+            "corner": "Slow 900mV 100C"
+          }
+        },
+        "hold": {
+          "sys_clk_50": {
+            "slack": 0.012,
+            "corner": "Fast 900mV 0C"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.016,
+            "corner": "Fast 900mV 0C"
+          }
+        },
+        "recovery": {
+          "emif_core_usr_clk": {
+            "slack": 0.572,
+            "corner": "Slow 900mV 100C"
+          },
+          "sys_clk_50": {
+            "slack": 2.995,
+            "corner": "Slow 900mV 0C"
+          }
+        },
+        "removal": {
+          "worst_any": {
+            "slack": 0.179,
+            "clock": "emif_core_usr_clk",
+            "corner": "Fast 900mV 0C"
+          },
+          "sys_clk_50": {
+            "slack": 0.185,
+            "corner": "Fast 900mV 0C"
+          },
+          "emif_core_usr_clk": {
+            "slack": 0.179,
+            "corner": "Fast 900mV 0C"
+          }
+        },
+        "min_pulse_width": {
+          "slack": 0.12,
+          "result": "Pass"
+        },
+        "ddr": {
+          "result": "Pass"
+        },
+        "metastability": "Pass",
+        "fmax": {
+          "sys_clk_50": "34.8 MHz",
+          "emif_core_usr_clk": "297.35 MHz",
+          "emif_core_cal_master_clk": "197.08 MHz",
+          "emif_core_cal_slave_clk": "322.79 MHz",
+          "clk_y3": "606.8 MHz"
+        }
+      },
+      "custom_top": {
+        "notes": "Quartus STA report_timing -setup/-hold/-recovery/-removal -npaths 10 on final netlist (3_slow_900mv_100c).",
+        "setup_top1": {
+          "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+          "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]~DUPLICATE",
+          "slack": -8.734,
+          "data_delay": 28.908,
+          "logic_levels": 54,
+          "launch_clock": "sys_clk_50",
+          "latch_clock": "sys_clk_50",
+          "sdc_exception": "No SDC Exception on Path",
+          "note": "FP scalar_unit pre-round/iterative path; includes slot_b/reduce_or/mult_2 DSP chain. T-032 target i_l1|rsp_data_r no longer appears in setup top-10."
+        },
+        "setup_top10": [
+          {
+            "slack": -8.734,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]~DUPLICATE"
+          },
+          {
+            "slack": -8.732,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]"
+          },
+          {
+            "slack": -8.726,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]~DUPLICATE"
+          },
+          {
+            "slack": -8.724,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]"
+          },
+          {
+            "slack": -8.703,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]~DUPLICATE"
+          },
+          {
+            "slack": -8.701,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]"
+          },
+          {
+            "slack": -8.697,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]~DUPLICATE"
+          },
+          {
+            "slack": -8.695,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]~DUPLICATE"
+          },
+          {
+            "slack": -8.695,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]"
+          },
+          {
+            "slack": -8.693,
+            "from": "soc|core|g_fp_simd_enabled.fp_exec|req_r.kind[1]",
+            "to": "soc|core|g_fp_simd_enabled.fp_exec|scalar_unit|g_iter.pp_pre.sig[120]"
+          }
+        ],
+        "hold_top1": {
+          "from": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_interface_fifo_inst|data_reg[1][154]",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|internal_master_rd_data[137]",
+          "slack": 0.075,
+          "data_delay": 0.658,
+          "logic_levels": 1,
+          "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "violated": 0
+        },
+        "recovery_top1": {
+          "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_encoder_input_data[4][53]",
+          "slack": 0.572,
+          "data_delay": 2.896,
+          "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "violated": 0
+        },
+        "removal_top1": {
+          "from": "emif|emif_bot|emif_bot|arch|arch_inst|non_hps.core_clks_rsts_inst|reset_sync_pri_sdc_anchor",
+          "to": "emif|emif_bot|emif_bot|ecc_core|core|ecc|io_hmc_ecc_inst|int_master_cmd_data[40]",
+          "slack": 0.434,
+          "data_delay": 0.528,
+          "logic_levels": 0,
+          "launch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "latch_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+          "violated": 0
+        }
+      },
+      "artifacts": {
+        "monitor_result.json": "3a9ffc1e9614e72169fcc9c005b9014226da062b2ad2bee1da0ed5ccaa9b7028",
+        "real_a10_full_fp.sta.rpt": "ebfb0c0bbda9381da15deb1023f412c5c5a3ffbe9ff1a5996afc90785b6d6f85",
+        "real_a10_full_fp.sta.summary": "ac5f6a4297c3c785b517dcfb5ac2f4862df963f23167d36c653125c78a89dff2",
+        "real_a10_full_fp.flow.rpt": "d9779053b28c284a3b3c4403bc999cad136df8367b37b6b987c815095144b08b"
+      },
+      "custom_files": {
+        "t033_setup_top.txt": "eaf6fcaa7ec89527e3564ae4b80b3bda3934e5e97b372f491cfab168029634c1",
+        "t033_hold_top.txt": "037836e1ec931390e75432c7e0cd856246e56eac912719d84a7e9c44e832962a",
+        "t033_recovery_top.txt": "151cb8853703bf126f8db3ae81f58b4c3a100a9dc06b12b1c0229b1eb3bbab9b",
+        "t033_removal_top.txt": "1911c0d0b3a6bd765ec4089e2a6f3888e29d4b31eaeef26c7b716e0b95e0ba36",
+        "report_top.tcl": "4194645d4b7e4f71b89b8d17ba98dfd35ed7670162b2f1697d736c4ee1e3d099",
+        "report_emif_cross.tcl": "e25c9c2d8856d0fe0d43c11c8975696722269d938b69b81630a2398026af8433",
+        "report_emif_setup.tcl": "8e3f9aff1ae1b86f0e35cc3e16e4dbf9581585ba6630978f8adfc7b738fa6611"
+      }
+    }
+  ],
+  "assembler_sof": {
+    "run": false,
+    "reason": "signoff STA setup summary still fails (sys_clk_50 -8.734 ns); task requires all setup/hold/recovery/removal/min-pulse non-negative and DDR pass before assembler/SOF.",
+    "remote_artifacts_check": {
+      "sof": [],
+      "jic": [],
+      "rbf": [],
+      "pof": [],
+      "jbc": [],
+      "checked_at": "2026-09-03T22:01:00+08:00"
+    }
+  },
+  "artifacts": [
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-033-fp-p5-rerun-round5.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260902-033.json"
+    },
+    {
+      "id": "remote-project",
+      "uri": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-033-probe\\real_a10_full_fp"
+    },
+    {
+      "id": "local-synth",
+      "uri": "build/agents/T-20260902-033/artifacts/synth/**"
+    },
+    {
+      "id": "local-fit",
+      "uri": "build/agents/T-20260902-033/artifacts/fit/**"
+    },
+    {
+      "id": "local-sta",
+      "uri": "build/agents/T-20260902-033/artifacts/sta/**"
+    },
+    {
+      "id": "local-custom-sta",
+      "uri": "build/agents/T-20260902-033/sta_custom/**"
+    }
+  ],
+  "known_limits": [
+    "No assembler/SOF was generated because setup is not green.",
+    "No board programming/jtag/burn was performed.",
+    "No license read, no remote files deleted, no non-EDA processes stopped.",
+    "Remote probe is isolated; formal repository RTL was not modified."
+  ],
+  "next": "Next FP-P5 rerun should target the new sys_clk_50 setup top: fp_exec req_r.kind[1] -> scalar_unit g_iter.pp_pre.sig[120] (54 logic levels / 28.908 ns / -8.734 ns). Avoid SDC false_path; consider register-cutting FP scalar pre-round/iterative input or req decoding. T-032 ID/EX cut has successfully removed i_l1|rsp_data_r from setup top-N.",
+  "timestamps": {
+    "sent_at": "2026-09-03T20:59:00+08:00",
+    "received_at": "2026-09-03T20:59:30+08:00",
+    "reported_at": "2026-09-03T22:02:10+08:00"
+  },
+  "merge_sha": "f7855752f27d019f7d73c651594922a1dbc76336",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-03T22:03:44+08:00",
+    "merged_at": "2026-09-03T22:04:00+08:00",
+    "recorded_at": "2026-09-03T22:04:00+08:00",
+    "notes": "FP-P5 rerun round5 blocked and accepted"
+  }
+}

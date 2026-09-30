@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260828-064",
+  "state": "done",
+  "base_sha": "096900b9aead7264a0dacdad4296a8970c7505b",
+  "head_sha": "e1cd34b8fd02502f86303cc203515b9a034f9f0a",
+  "merge_sha": null,
+  "branch": "feature/T-20260828-064-catapult-fullflow",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-064",
+  "scope": "补齐 Catapult A10 真实顶层 full flow 所需的 SFL/EPCQ 生成输入，在远端 Windows Quartus 21.4 工程执行 full compile + signoff STA，并同步 manifest/SHA256SUMS/检查器/README",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-28T01:18:00+08:00",
+    "sfl_rebuild_and_probe": "2026-08-28T01:20:00+08:00 .. 2026-08-28T01:39:00+08:00",
+    "compile1_fail": "2026-08-28T01:39:48+08:00 .. 2026-08-28T01:40:47+08:00",
+    "authoritative_sfl_sync": "2026-08-28T01:50:00+08:00 .. 2026-08-28T01:52:00+08:00",
+    "compile5_pass": "2026-08-28T01:52:58+08:00 .. 2026-08-28T01:59:47+08:00",
+    "sdc_fix": "2026-08-28T02:00:00+08:00 .. 2026-08-28T02:02:00+08:00",
+    "compile6_pass": "2026-08-28T02:02:55+08:00 .. 2026-08-28T02:10:06+08:00",
+    "documents_written_at": "2026-08-28T02:14:00+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive -EncodedCommand <UTF-16LE base64>",
+    "powershell_version": "7.6.3",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "license_path": "D:\\Software\\intelFPGA_pro\\21.4\\Lic_Q21+IP.dat",
+    "license_path_exists": true,
+    "license_content_read": false,
+    "memory_total_gb": 61.6,
+    "free_memory_gb_before_compile6": 37.6,
+    "sfl_authoritative_source": "D:\\Projects\\fpga-altra\\a10-linux-riscv\\hw\\ip\\sfl",
+    "sfl_backup": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-064\\sfl_authoritative_pre_backup\\sfl_20260828_015219"
+  },
+  "toolchain": {
+    "quartus_sh": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_sh.exe",
+      "version": "Quartus Prime Shell Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "exit_code": 0
+    },
+    "quartus_ipgenerate": {
+      "path": "D:\\Software\\intelFPGA_pro\\21.4\\quartus\\bin64\\quartus_ipgenerate.exe",
+      "version": "21.4.0 Build 67",
+      "note": "used for QIP-only and QSYS+IP experiments; final flow uses QIP_FILE + explicit HDL sources so ipgenerate only handles DDR4 Qsys"
+    },
+    "python3": {
+      "command": "python3 --version",
+      "version": "Python 3.12.10",
+      "exit_code": 0
+    },
+    "verilator": {
+      "command": "conda run --no-capture-output -n lcvex verilator --version",
+      "version": "Verilator 5.050 2026-07-01 rev conda-forge build 0",
+      "exit_code": 0
+    }
+  },
+  "sfl_input": {
+    "decision": "使用权威完整生成目录 a10-linux-riscv/hw/ip/sfl（39 文件），QSF 采用 QIP_FILE + 8 个显式生成 HDL，与已验证工程 vex_soc_ddr 引用方式一致",
+    "file_count": 39,
+    "local_lf_normalized": true,
+    "old_snapshot_match_after_lf": {
+      "sfl_sys.qip": "920c8241d89c620d441d8c74792a7124b54f44efeb348071165d32db7f835708",
+      "sfl_sys_bb.v": "7947931e932500140e69f37be5371a7acf03da722ac0df64b91f4fb39d779e60",
+      "sfl_sys_inst.v": "c9c0baa5bf99fecb88be118d5540a5dafcc099937b8af334d4c3e0a59a1d04a1",
+      "epcq.ip": "63e8f8b0e160cd085fd5bfa9a3af1acac064ac342fc128149f36db2a213c8364"
+    },
+    "rebuilt_qsys_attempt": {
+      "status": "not_used",
+      "reason": "重建 sfl_sys.qsys 将 clock bridge 声明为 100 MHz，qsys-generate 对 EPCQ 报最大输入时钟 25 MHz 校验失败；且 QSYS_FILE 与 QIP_FILE 同名冲突"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-ssh-pwsh-connect-001",
+      "level": "L0",
+      "command": "ssh 192.168.101.5 pwsh -NoProfile -NonInteractive -EncodedCommand <base64>",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SSH/pwsh 7.6.3 OK; host GamePC; tokenjet quartus_syn resource pressure monitored before final compile"
+    },
+    {
+      "run_id": "owner-compile1-002",
+      "level": "L2",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 (QIP_FILE + QSYS_FILE conflict)",
+      "exit_code": 1,
+      "result": "fail",
+      "summary": "Synthesis failed: Error 19021 same IP name sfl_sys via QIP_FILE and QSYS_FILE; sfl_sys_clk/epcq/rst undefined (12 errors)",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-064\\fail1_compile.log"
+    },
+    {
+      "run_id": "owner-compile4-003",
+      "level": "L2",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 (QSYS_FILE + component IP_FILE, EPCQ 100MHz)",
+      "exit_code": 3,
+      "result": "fail",
+      "summary": "IP Generation failed: sfl_sys_epcq.ip max input clock frequency 25 MHz (clkFreq=100000000) -> 4 errors",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-064\\compile4.log"
+    },
+    {
+      "run_id": "owner-ipgen-qiponly-004",
+      "level": "L1",
+      "command": "quartus_ipgenerate catapult_a10 -c catapult_a10 --run_default_mode_op (QIP_FILE only)",
+      "exit_code": 0,
+      "result": "pass_with_findings",
+      "summary": "0 errors / 0 warnings, but SFL QIP is not processed by ipgenerate; generated sources must already exist"
+    },
+    {
+      "run_id": "owner-compile5-005",
+      "level": "L2",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 (authoritative SFL + QIP + explicit HDL)",
+      "exit_code": 0,
+      "result": "pass_with_findings",
+      "summary": "Full compile pass 0 errors / 82 warnings; STA worst-case setup -2.970 (CDC set_clock_groups ignored: EMIF clock not resolvable in user SDC), DDR Core -1.754",
+      "started_at": "2026-08-28T01:52:58+08:00",
+      "ended_at": "2026-08-28T01:59:47+08:00",
+      "elapsed": "00:06:49",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-064\\compile5.log"
+    },
+    {
+      "run_id": "owner-compile6-006",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10 (final SDC false_path fix)",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Full compile pass 0 errors / 68 warnings; STA setup +0.220 hold +0.017; DDR Core +1.772",
+      "started_at": "2026-08-28T02:02:55+08:00",
+      "ended_at": "2026-08-28T02:10:06+08:00",
+      "elapsed": "00:07:11",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-064\\compile6.log"
+    },
+    {
+      "run_id": "owner-l0-platform-check-007",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PLATFORM_CHECK_PASS files=50"
+    },
+    {
+      "run_id": "owner-l0-skeleton-check-008",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_skeleton.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SKELETON_CHECK_PASS files=5; TOOLCHAIN_MISSING recovery report expected offline"
+    },
+    {
+      "run_id": "owner-l0-misc-009",
+      "level": "L0",
+      "command": "json.tool manifests; bash -n lint_platform.sh; git diff --check; sha256sum -c SHA256SUMS",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "all offline checks pass"
+    }
+  ],
+  "sta_summary": {
+    "tool_errors": 0,
+    "tool_warnings": 19,
+    "worst_setup_slack_ns": 0.22,
+    "worst_setup_clock": "emif|emif_bot|emif_bot_core_usr_clk",
+    "worst_setup_corner": "Slow 900mV 100C",
+    "worst_hold_slack_ns": 0.017,
+    "worst_hold_clock": "sys_clk_50",
+    "worst_hold_corner": "Fast 900mV 0C",
+    "worst_recovery_slack_ns": 0.53,
+    "worst_removal_slack_ns": 0.112,
+    "worst_min_pulse_slack_ns": 0.12,
+    "fmax_mhz": {
+      "sys_clk_50": 213.49,
+      "clk_y3": 499.25,
+      "emif_core_user_clk": 283.29,
+      "emif_core_cal_master_clk": 266.88
+    },
+    "ddr_report": {
+      "core_setup_ns_fast_0c": 1.772,
+      "core_hold_ns_fast_0c": 0.018,
+      "address_command_setup_hold_ns": [0.184, 0.184],
+      "dqs_gating_ns": 0.588,
+      "read_capture_ns": 0.014,
+      "write_ns": 0.031,
+      "write_levelling_ns": 0.11,
+      "requirements_met": true
+    },
+    "sdc_note": "用户 SDC 读取早于 EMIF 生成时钟，set_clock_groups 无法命名 EMIF 时钟（Quartus 332174/332054）；改为 reset_gate 两条 CDC 同步器输入的寄存器级 set_false_path"
+  },
+  "fit_summary": {
+    "status": "Successful - Fri Aug 28 02:08:51 2026",
+    "device": "10AX115N4F40E3SG",
+    "alms": 4468,
+    "registers": 8641,
+    "pins": 141,
+    "ram_blocks": 27,
+    "dsp_blocks": 0,
+    "plls": 3
+  },
+  "artifacts": {
+    "sof_remote": "D:\\Projects\\fpga-altra\\lcvex\\quartus\\output_files\\catapult_a10.sof",
+    "sof_bytes": 36842105,
+    "sof_sha256": "04130f9d0cf8b42afe1fe56a428d6a6af0bdc9b510bf72fd00eccabe60896028",
+    "remote_compile6_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-064\\compile6_out",
+    "remote_compile5_dir": "D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260828-064\\compile5_out",
+    "local_evidence_dir": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-064/build/t064/compile6_out",
+    "local_evidence_dir5": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-064/build/t064/compile5_out",
+    "repo_handoff": "docs/handoffs/T-20260828-064-catapult-fullflow.md",
+    "repo_evidence": "docs/tasks/evidence/T-20260828-064.json"
+  },
+  "known_limits": [
+    "DDR March、板级校准与上板测试不在范围；STA 为 signoff 报告",
+    "9 pins 无精确位置、48 HSSI RX/TX 未使用、CLKUSR 自动保留为 Critical Warning（非时序违规）",
+    "本地 SFL 文件 LF 规范化；远端编译现场保留原始 CRLF 权威目录与备份",
+    "重建 sfl_sys.qsys 因 EPCQ 25 MHz 校验未采用；当前编译输入为权威完整生成目录，QSF 不引用 .qsys"
+  ],
+  "integration_review": null
+}

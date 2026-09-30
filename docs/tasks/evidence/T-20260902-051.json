@@ -1,0 +1,493 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260902-051",
+  "state": "done",
+  "partial": false,
+  "base_sha": "80de28596a33c900ab0f73daa7a19ce3a4ef341b",
+  "head_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+  "merge_sha": "1c3b05cc2a343d99c24f3f575812a10a0fd2806e",
+  "branch": "fix/T-20260902-051-irq-young-squash",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-051",
+  "sent_at": "2026-09-04T14:15:18+08:00",
+  "received_at": "2026-09-04T14:15:20+08:00",
+  "reported_at": "2026-09-04T17:06:30+08:00",
+  "files": "rtl/lcvex_core.sv; rtl/lcvex_mmu.sv; tb/sv/lcvex_irq_young_squash_tb.sv; tb/sv/lcvex_mmu_tb.sv; docs/handoffs/T-20260902-051-irq-young-squash.md; docs/tasks/evidence/T-20260902-051.json",
+  "tests": "compile; MMU unit; IRQ FIFO/delay matrix; core/backpressure/FIFO/NEON SV; FP/NEON Cocotb; rebuilt strict QEMU IRQ/WFI/LSE/FP/NEON lockstep",
+  "blockers": "无；自然 QEMU CASP/STXR/DC ZVA overlap 与 Quartus/STA 仍为后续验证",
+  "next": "集成者在合并 SHA 重跑任务 L0-L2 并补 merge_sha；另登记自然原子 IRQ overlap 回归",
+  "scope": "普通 irq_taken 精确边界的年轻流水级、dmem/atomic/MMU/maintenance/FP transaction squash 与不可回滚写排空",
+  "implementation": {
+    "commits": [
+      "884578fd0d9a8d9dfe221cdd69f63ff05ed4e943",
+      "879ef70e6e824ebc63d648d54bc402a681213221",
+      "da47a8032dc3cbba0f7fad3dfa2f296163821bc7"
+    ],
+    "files": [
+      "rtl/lcvex_core.sv",
+      "rtl/lcvex_mmu.sv",
+      "tb/sv/lcvex_irq_young_squash_tb.sv",
+      "tb/sv/lcvex_mmu_tb.sv",
+      "Makefile",
+      "scripts/test_registry.json"
+    ],
+    "summary": "irq_irrevocable_pending fences accepted writes/maintenance/muldiv; irq_taken gates requests, uses dedicated MMU abort/quarantine without clearing TLB, and clears all younger stages/transaction flags; FP commit access prioritizes the retiring older entry; dmem_pending commit marker is shared by FIFO on/off."
+  },
+  "source_hashes": {
+    "rtl/lcvex_core.sv": "9b846758c8c61c946e44920235c280ca5e9ad72bf26bee0ac78a129a514d60ed",
+    "rtl/lcvex_mmu.sv": "5d19da9c23fca3803931d698399c6ed610f33c2e4fd78978b4f46e56dc1afcc5",
+    "tb/sv/lcvex_irq_young_squash_tb.sv": "54e71b3d7b08b3e827a08ac38e751b88b6b1434de66ae2689960b2db43db98a0",
+    "tb/sv/lcvex_mmu_tb.sv": "239e3c70b17b792908da31ab69be738672f9936c10d5a96ea111240544bbd518",
+    "Makefile": "63e11996d511ef787df6f608f1daa8549206dcc4fc65eef14967289ce7d93b83",
+    "scripts/test_registry.json": "a0e4592426aa6e42c42fe13f4e44c77b2092658ea6197e96582128dc15065e65"
+  },
+  "resource_policy": {
+    "heavy_verilator_wrapper": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0",
+    "verilator_jobs": 1,
+    "quartus_run": false,
+    "qemu_fork_modified": false,
+    "qemu_version": "11.1.0",
+    "qemu_binary_sha256": "bfc67ee45b0cf41bffa8b166517ed6dc6f6b41b636682dfe7d58b3700bc3587e",
+    "qemu_plugin_sha256": "caf7f1223eabf24af032c4a685f50dbbaf59b80e5e336e708764beed7e8d09f5"
+  },
+  "runs": [
+    {
+      "run_id": "compile-final",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T15:38:31+08:00",
+      "finished_at": "2026-09-04T15:38:34+08:00",
+      "notes": "Verilator core lint/elaboration."
+    },
+    {
+      "run_id": "compile-after-mmu-kill",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T15:47:30+08:00",
+      "finished_at": "2026-09-04T15:47:33+08:00",
+      "notes": "Verilator core lint/elaboration after wiring ordinary IRQ to existing MMU abort input."
+    },
+    {
+      "run_id": "irq-young-matrix",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-irq-young-squash",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T15:35:47+08:00",
+      "finished_at": "2026-09-04T15:37:34+08:00",
+      "tests": "FIFO off/on x MEM_DELAY_MODE 0/2; each 5 directed cases (ALU ID/EX, store unaccepted/accepted guard, FP held response, NEON integer, muldiv mid/done)",
+      "notes": "Each build/run was serialized; all used cgroup MemoryMax=16G/MemorySwapMax=0 and Verilator -j 1."
+    },
+    {
+      "run_id": "irq-young-matrix-after-mmu-kill",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-irq-young-squash",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-04T15:47:54+08:00",
+      "finished_at": "2026-09-04T15:51:28+08:00",
+      "tests": "FIFO off/on x MEM_DELAY_MODE 0/2; each 5 directed cases after MMU abort wiring",
+      "notes": "All four parameter builds/runs serialized under MemoryMax=16G, MemorySwapMax=0, Verilator -j 1."
+    },
+    {
+      "run_id": "sim-sv-core-smoke",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "scalar + FPCR/FPSR wiring smoke"
+    },
+    {
+      "run_id": "sim-sv-backpressure",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-backpressure",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "commit-ready/backpressure and system MSR atomicity"
+    },
+    {
+      "run_id": "sim-sv-fetch-fifo",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-fetch-fifo",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "FIFO bounds, flush/epoch, delayed response quarantine and backpressure"
+    },
+    {
+      "run_id": "sim-sv-mmu",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-mmu",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "MMU/TLB walk, hit, fault, permission, TLBI and MAIR"
+    },
+    {
+      "run_id": "sim-sv-neon-fp",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "P7-3 NEON FP raw unit"
+    },
+    {
+      "run_id": "cocotb-fp-scalar",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "5/5: scalar FP pipeline, FPEN trap, load fault, backpressure, unsupported encodings",
+      "started_at": "2026-09-04T15:21:07+08:00",
+      "finished_at": "2026-09-04T15:22:03+08:00"
+    },
+    {
+      "run_id": "cocotb-neon",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-p7-2-neon",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "10/10: NEON integer, DUP/LD1R, FPEN/fault, Q memory, hazards, unsupported and backpressure",
+      "started_at": "2026-09-04T15:19:55+08:00",
+      "finished_at": "2026-09-04T15:20:50+08:00"
+    },
+    {
+      "run_id": "qemu-hard-irq-base",
+      "command": "IMAGE=build/difftest/hard_irq.bin MAX_INSNS=30 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "strict step 30/30",
+      "started_at": "2026-09-04T15:38:56+08:00",
+      "finished_at": "2026-09-04T15:38:58+08:00"
+    },
+    {
+      "run_id": "qemu-hard-irq-daif-base",
+      "command": "IMAGE=build/difftest/hard_irq_daif.bin MAX_INSNS=40 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "strict step 40/40",
+      "started_at": "2026-09-04T15:39:16+08:00",
+      "finished_at": "2026-09-04T15:39:18+08:00"
+    },
+    {
+      "run_id": "qemu-hard-irq-cache",
+      "command": "IMAGE=build/difftest/hard_irq.bin MAX_INSNS=30 COORD=build/verilator_lockstep_l1dl2/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "strict step 30/30, I+D+L2"
+    },
+    {
+      "run_id": "qemu-hard-irq-delay2",
+      "command": "IMAGE=build/difftest/hard_irq.bin MAX_INSNS=30 COORD=build/verilator_lockstep_d2/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "strict step 30/30, MEM_DELAY_MODE=2",
+      "started_at": "2026-09-04T15:40:00+08:00",
+      "finished_at": "2026-09-04T15:40:01+08:00"
+    },
+    {
+      "run_id": "qemu-wfi-base",
+      "command": "IMAGE=build/difftest/hard_wfi_timer_irq.bin MAX_INSNS=45 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "strict step 45/45; WFI/timer IRQ/ERET",
+      "started_at": "2026-09-04T15:40:21+08:00",
+      "finished_at": "2026-09-04T15:40:23+08:00"
+    },
+    {
+      "run_id": "qemu-wfi-cache",
+      "command": "IMAGE=build/difftest/hard_wfi_timer_irq.bin MAX_INSNS=45 COORD=build/verilator_lockstep_l1dl2/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "strict step 45/45; WFI/timer IRQ/ERET, I+D+L2",
+      "started_at": "2026-09-04T15:40:49+08:00",
+      "finished_at": "2026-09-04T15:40:51+08:00"
+    },
+    {
+      "run_id": "qemu-lse-base",
+      "command": "IMAGE=build/difftest/hard_lse_atomic.bin MAX_INSNS=100 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "strict step 100/100 LSE atomic/CAS",
+      "started_at": "2026-09-04T15:41:11+08:00",
+      "finished_at": "2026-09-04T15:41:12+08:00"
+    },
+    {
+      "run_id": "qemu-fp-neon-required",
+      "command": "hard_fp_scalar.bin MAX_INSNS=28 and hard_neon_fp.bin MAX_INSNS=48 with FP_NEON=required and build/verilator_lockstep/lockstep_coordinator",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "scalar FP 28/28; NEON FP 48/48",
+      "started_at": "2026-09-04T15:41:37+08:00",
+      "finished_at": "2026-09-04T15:41:59+08:00"
+    },
+    {
+      "run_id": "final-compile",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "notes": "Core lint/elaboration after dedicated MMU abort/quarantine implementation."
+    },
+    {
+      "run_id": "final-sim-sv-mmu",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-mmu",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "MMU/TLB walk, accepted-PTW abort response quarantine, no done/fault, TLB preservation, fault/permission/TLBI/MAIR"
+    },
+    {
+      "run_id": "final-irq-young-matrix",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-irq-young-squash",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "FIFO off/on x MEM_DELAY_MODE 0/2; ALU/store/FP/NEON/muldiv plus natural MMU PTW accepted-abort/quarantine; all four configurations",
+      "notes": "The natural MMU case also asserts mmu_abort=1 and tlb_invalidate=0 at the ordinary IRQ boundary."
+    },
+    {
+      "run_id": "final-lockstep-build",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 lockstep-build",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "artifact": "build/verilator_lockstep/lockstep_coordinator",
+      "artifact_sha256": "46c757b80d0fdec4e935200f534a75b31c810954cb23fbdfe753ff1c8c8e6be4"
+    },
+    {
+      "run_id": "final-lockstep-build-l1dl2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 lockstep-build-l1dl2",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "artifact": "build/verilator_lockstep_l1dl2/lockstep_coordinator",
+      "artifact_sha256": "1b2c7b2b2090cb45564b04b9e284cfbd7dc9920a0459b41c48be2d76a435c247"
+    },
+    {
+      "run_id": "final-lockstep-build-delay2",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 lockstep-build-delay2",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "artifact": "build/verilator_lockstep_d2/lockstep_coordinator",
+      "artifact_sha256": "bf643fee2f8f46528c7cfde6cba078dbb50ec8cc2741522df5ad25f4ee3a5978"
+    },
+    {
+      "run_id": "final-core-smoke",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "scalar + FPCR/FPSR wiring smoke"
+    },
+    {
+      "run_id": "final-backpressure",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-backpressure",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "commit-ready/backpressure and system MSR atomicity"
+    },
+    {
+      "run_id": "final-fetch-fifo",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-fetch-fifo",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "FIFO bounds, flush/epoch, delayed response quarantine and backpressure"
+    },
+    {
+      "run_id": "final-neon-fp-sv",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-p7-3-neon-fp",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "P7-3 NEON FP raw unit"
+    },
+    {
+      "run_id": "final-cocotb-fp-scalar",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-fp-scalar",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "5/5: scalar FP pipeline, FPEN trap, load fault, backpressure, unsupported encodings"
+    },
+    {
+      "run_id": "final-cocotb-neon",
+      "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-cocotb-p7-2-neon",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "10/10: NEON integer, DUP/LD1R, FPEN/fault, Q memory, hazards, unsupported and backpressure"
+    },
+    {
+      "run_id": "final-qemu-hard-irq-base",
+      "command": "IMAGE=build/difftest/hard_irq.bin MAX_INSNS=30 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 30/30",
+      "coordinator_sha256": "46c757b80d0fdec4e935200f534a75b31c810954cb23fbdfe753ff1c8c8e6be4",
+      "image_sha256": "bfa5b4e8e235ed8a9fd9a14a7a5e0a56b1fab29351373dc4150fd5ce868de26d"
+    },
+    {
+      "run_id": "final-qemu-hard-irq-daif-base",
+      "command": "IMAGE=build/difftest/hard_irq_daif.bin MAX_INSNS=40 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 40/40",
+      "coordinator_sha256": "46c757b80d0fdec4e935200f534a75b31c810954cb23fbdfe753ff1c8c8e6be4",
+      "image_sha256": "1803959f277d2e5f094dd92b2adb89a380d01ce8674abeff157dbe0dbc88c5df"
+    },
+    {
+      "run_id": "final-qemu-hard-irq-cache",
+      "command": "IMAGE=build/difftest/hard_irq.bin MAX_INSNS=30 COORD=build/verilator_lockstep_l1dl2/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 30/30, I+D+L2",
+      "coordinator_sha256": "1b2c7b2b2090cb45564b04b9e284cfbd7dc9920a0459b41c48be2d76a435c247",
+      "image_sha256": "bfa5b4e8e235ed8a9fd9a14a7a5e0a56b1fab29351373dc4150fd5ce868de26d"
+    },
+    {
+      "run_id": "final-qemu-hard-irq-delay2",
+      "command": "IMAGE=build/difftest/hard_irq.bin MAX_INSNS=30 COORD=build/verilator_lockstep_d2/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 30/30, MEM_DELAY_MODE=2",
+      "coordinator_sha256": "bf643fee2f8f46528c7cfde6cba078dbb50ec8cc2741522df5ad25f4ee3a5978",
+      "image_sha256": "bfa5b4e8e235ed8a9fd9a14a7a5e0a56b1fab29351373dc4150fd5ce868de26d"
+    },
+    {
+      "run_id": "final-qemu-wfi-base",
+      "command": "IMAGE=build/difftest/hard_wfi_timer_irq.bin MAX_INSNS=45 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 45/45; WFI/timer IRQ/ERET",
+      "coordinator_sha256": "46c757b80d0fdec4e935200f534a75b31c810954cb23fbdfe753ff1c8c8e6be4",
+      "image_sha256": "1ef3d20913249163fa3d79cecc732ddf0e3d77b72fe897b3e35522008b60b491"
+    },
+    {
+      "run_id": "final-qemu-wfi-cache",
+      "command": "IMAGE=build/difftest/hard_wfi_timer_irq.bin MAX_INSNS=45 COORD=build/verilator_lockstep_l1dl2/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 45/45; WFI/timer IRQ/ERET, I+D+L2",
+      "coordinator_sha256": "1b2c7b2b2090cb45564b04b9e284cfbd7dc9920a0459b41c48be2d76a435c247",
+      "image_sha256": "1ef3d20913249163fa3d79cecc732ddf0e3d77b72fe897b3e35522008b60b491"
+    },
+    {
+      "run_id": "final-qemu-lse-base",
+      "command": "IMAGE=build/difftest/hard_lse_atomic.bin MAX_INSNS=100 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 100/100 LSE atomic/CAS",
+      "coordinator_sha256": "46c757b80d0fdec4e935200f534a75b31c810954cb23fbdfe753ff1c8c8e6be4",
+      "image_sha256": "d6110c0a3d1e163a7432374b80842d6d89c9291d926c02be2bf1aa468c3eea7b"
+    },
+    {
+      "run_id": "final-qemu-fp-scalar-required",
+      "command": "FP_NEON=required IMAGE=build/difftest/hard_fp_scalar.bin MAX_INSNS=28 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 28/28 scalar FP with FP_NEON=required",
+      "coordinator_sha256": "46c757b80d0fdec4e935200f534a75b31c810954cb23fbdfe753ff1c8c8e6be4",
+      "image_sha256": "ff2d734a20ce9c12e4251835f262c73b67285ab75340332da06c82ab9b02d7ac"
+    },
+    {
+      "run_id": "final-qemu-neon-fp-required",
+      "command": "FP_NEON=required IMAGE=build/difftest/hard_neon_fp.bin MAX_INSNS=48 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+      "result": "pass",
+      "exit_code": 0,
+      "source_sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7",
+      "tests": "strict step 48/48 NEON FP with FP_NEON=required",
+      "coordinator_sha256": "46c757b80d0fdec4e935200f534a75b31c810954cb23fbdfe753ff1c8c8e6be4",
+      "image_sha256": "b260ccb7cbe2ed67e2c32eac8b3345284a2c3d66f33a819c6bdb896faac76a22"
+    },
+    {
+      "run_id": "registry-diff-check",
+      "command": "make test-registry-check && git diff --check",
+      "result": "pass",
+      "exit_code": 0,
+      "tests": "69 registry entries and Makefile/runner consistency"
+    }
+  ],
+  "integrator_validation": {
+    "source_sha": "1c3b05cc2a343d99c24f3f575812a10a0fd2806e",
+    "recorded_at": "2026-09-04T19:25:52+08:00",
+    "resource_policy": "All Verilator builds/runs were serialized under systemd-run MemoryMax=16G, MemorySwapMax=0 with VERILATOR_JOBS=1.",
+    "runs": [
+      {
+        "run_id": "integrator-compile",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile",
+        "result": "pass",
+        "exit_code": 0
+      },
+      {
+        "run_id": "integrator-mmu",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-mmu",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "TLB preservation and accepted-PTW abort/response quarantine included"
+      },
+      {
+        "run_id": "integrator-irq-young-matrix",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 sim-sv-irq-young-squash",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "FIFO off/on x MEM_DELAY_MODE 0/2; ALU, store, held FP, NEON, muldiv and natural PTW quarantine"
+      },
+      {
+        "run_id": "integrator-lockstep-build",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 lockstep-build",
+        "result": "pass",
+        "exit_code": 0
+      },
+      {
+        "run_id": "integrator-hard-irq",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- env IMAGE=build/difftest/hard_irq.bin MAX_INSNS=30 COORD=build/verilator_lockstep/lockstep_coordinator QEMU_BIN=/home/chiro/projects/mycpu/qemu/build/qemu-system-aarch64 PLUGIN=/home/chiro/projects/mycpu/lcvex/qemu/plugins/lcvex_difftest.so bash sim/difftest/run_lockstep_step.sh",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "30/30 QEMU strict lockstep"
+      },
+      {
+        "run_id": "integrator-neon-fp",
+        "command": "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 p7-3-neon-fp",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "48/48 QEMU strict lockstep on combined T-051 + T-052 SHA"
+      },
+      {
+        "run_id": "integrator-registry-check",
+        "command": "make test-registry-check",
+        "result": "pass",
+        "exit_code": 0,
+        "tests": "69 registry entries and Makefile/runner consistency"
+      }
+    ]
+  },
+  "not_run": [
+    "Quartus synthesis/fitter/STA",
+    "assembler/SOF/programming",
+    "QEMU fork modification/build",
+    "Full natural QEMU IRQ overlap matrix for CASP/STXR/DC ZVA"
+  ],
+  "known_limits": [
+    "An already accepted PTW read remains a read-side protocol event and is drained in S_ABORT_WAIT; abort does not cancel the external memory operation or clear TLB entries",
+    "Store/FP/NEON direct fixture uses one-shot synthetic older commit_fire metadata only when the current small elastic schedule has no natural older WB overlap; real store acceptance is separately exercised",
+    "Full natural QEMU IRQ overlap for CASP/STXR/DC ZVA remains a follow-up regression task",
+    "Full natural QEMU IRQ overlap for CASP/STXR/DC ZVA is tracked by T-20260902-054; T-051 merge validation is recorded above"
+  ],
+  "timestamps": {
+    "sent_at": "2026-09-04T14:15:18+08:00",
+    "received_at": "2026-09-04T14:15:20+08:00",
+    "reported_at": "2026-09-04T17:06:30+08:00"
+  },
+  "artifacts": [
+    {
+      "id": "implementation-commit",
+      "sha": "da47a8032dc3cbba0f7fad3dfa2f296163821bc7"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260902-051-irq-young-squash.md"
+    }
+  ]
+}

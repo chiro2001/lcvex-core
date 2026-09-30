@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-011",
+  "label": "B25-RX-OBSERVABILITY-BOARD-INTERACTION",
+  "title": "Volatile-configure the RX observability SOF and close JTAG-UART interaction",
+  "kind": "board-bringup-gate",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "completed-delayed-direct-rx-pass-cpu-response-fail",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-010", "existing-user-volatile-JTAG-authorization"],
+  "base_sha": "9547bd953b6adb3169dd50116e2bf60fa14a15b3",
+  "base_tree_sha": "7ecbb7e2f39a4a4f218dc11c23deead775d889ac",
+  "branch": "verify/T-20260920-011-b25-rx-observability-board-interaction",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-011",
+  "writes": [
+    "build/agents/T-20260920-011/** ignored board logs/transcripts",
+    "remote task-local logs only",
+    "docs/tasks/evidence/T-20260920-011.json",
+    "docs/handoffs/T-20260920-011-b25-rx-observability-board-interaction.md"
+  ],
+  "scope": "After T-010 seals the SOF, program only FPGA volatile SRAM, attach the exact JTAG-MPSSE device 1 instance 0 console, capture startup/periodic RXDBG, and send deterministic status, PING, diagnostic and printable-echo input. Preserve a content-addressed golden volatile rollback path.",
+  "console_command": "D:/Software/intelFPGA_pro/21.4/quartus/bin64/nios2-terminal.exe -c \"JTAG-MPSSE-Blaster [00 Single RS232-HS (0403:6014)]\" -d 1 -i 0",
+  "input": "?\\np\\nd\\nZ\\n",
+  "expected": [
+    "LCVEX25 BOOT",
+    "CAL-OK|CAL-WAIT|CAL-FAIL",
+    "DDR-OK|DDR-FAIL",
+    "READY",
+    "RXDBG startup and periodic/dynamic snapshots",
+    "status response",
+    "PONG",
+    "Z echo"
+  ],
+  "acceptance": "The exact T-010 SOF configures successfully and the same first console session proves target output plus host-to-target status/PONG/diagnostic/echo. RXDBG classifies any remaining RX failure without guessing.",
+  "authorization": "User explicitly authorized Quartus and JTAG volatile programming/testing earlier in this bring-up session. This does not authorize persistent Flash, reset or power actions.",
+  "resource": "Every GamePC/JTAG action acquires gamepc and treats the cable as exclusive. Start/stop only task-owned processes by recorded PID; preserve standard jtagserver PID 5640 unless current identity proves it changed naturally.",
+  "forbidden_regions": [
+    "JIC/EPCQ/Flash write or erase and all persistent formats",
+    "power cycle, board/SoC reset or physical manipulation",
+    "broad process-name termination or stopping unknown/pre-existing processes",
+    "unverified SOF, cable, device or instance substitution"
+  ],
+  "created_at": "2026-09-20T05:25:33+08:00",
+  "sof": {
+    "remote_path": "D:/Projects/fpga-altra/lcvex/build/T-20260920-010-b25-rx-observability-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+    "bytes": 36842100,
+    "sha256": "7e9c60641c48fb4afff047f97f1d84865d32d24bd92aead26041035fd985a2f2",
+    "checksum": "0x316ED173"
+  },
+  "updated_at": "2026-09-20T06:17:59+08:00",
+  "result": {
+    "status": "blocked-cpu-visible-rx-consumption",
+    "partial": true,
+    "task_head_sha": "3685d10d8f7c753bf4af476b0ca120112e2695ea",
+    "integration_sha": "6930eedbe1dee20278a569e842fef93d290aac10",
+    "candidate_programming": "PASS",
+    "boot_ready": "PASS",
+    "bridge_rx": "PASS; delayed direct ?/p/d/Z produced 0001013F/00020170/00030164/0004015A",
+    "command_responses": "FAIL; no status, PONG, diagnostic response or Z echo",
+    "golden_rollback": "PASS",
+    "final_board_state": "golden SOF running",
+    "evidence": "docs/tasks/evidence/T-20260920-011.json",
+    "handoff": "docs/handoffs/T-20260920-011-b25-rx-observability-board-interaction.md",
+    "next": "T-20260920-012 coordinates parallel hardware-path and firmware-visible observability lanes before any functional RTL fix."
+  }
+}

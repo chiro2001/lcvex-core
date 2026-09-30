@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-043",
+  "parent": "T-20260920-039",
+  "label": "B25-MICROBENCH-COREMARK-GATE-D",
+  "title": "Run complete Gate D on the frozen BRAM microbench and CoreMark candidate",
+  "kind": "gate-d",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "complete-release-mode-gate-d-pass",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-042"],
+  "base_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_tree_sha": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+  "branch": null,
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-043-gate",
+  "writes": ["task-owned Gate D artifacts", "docs/handoffs/T-20260920-043-b25-coremark-gate-d.md", "docs/tasks/evidence/T-20260920-043.json"],
+  "reads": ["frozen T-042 integration SHA", "sim/difftest/run_gate_d.sh", "scripts/test_registry.json"],
+  "scope": "Freeze one detached candidate and run the unmodified complete release-mode Gate D plus the T-042 affected union.",
+  "acceptance": "Gate D final marker PASS; all required steps, random seeds, coverage and baremetal pass; skip flags, disabled assertions and reference modifications are absent.",
+  "resource": "Acquire resource-lock local for the complete heavy run.",
+  "command": "/home/chiro/projects/.resource-locks/resource-lock run local lcvex T-20260920-043 root -- bash sim/difftest/run_gate_d.sh",
+  "detached": true,
+  "dispatch": {
+    "sent_at": "2026-09-20T23:35:28+08:00",
+    "agent_name": "root",
+    "monitoring": "event-driven long waits; no frequent polling"
+  },
+  "result": {
+    "status": "done",
+    "outer_exit": 0,
+    "elapsed_seconds": 694,
+    "gate": "PASS; 151 green markers, 0 red, coverage 8760, random 3x100002, ISA 62/62, baremetal 200",
+    "affected_union": "PASS L0, L1D-WB and behavioral full-SoC t/v on exact candidate",
+    "evidence": "docs/tasks/evidence/T-20260920-043.json",
+    "handoff": "docs/handoffs/T-20260920-043-b25-coremark-gate-d.md",
+    "next": "T-20260920-044 fresh physical"
+  },
+  "created_at": "2026-09-20T21:35:43+08:00",
+  "updated_at": "2026-09-20T23:50:29+08:00"
+}

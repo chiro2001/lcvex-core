@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-100",
+  "label": "C4-pre",
+  "parent": "T-20260828-073",
+  "title": "C4 前置：8/16/32 核规模参数化/测量契约与风险拆解",
+  "kind": "multicore-c4-scale-prework",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "df3c8ba5fcb75632c31fd6f780a1861a2566eac4",
+  "branch": "feature/T-20260829-100-c4-scale-prework",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-100",
+  "scope": "只读 C4 前置设计：基于 C0/C1/C2/C3-pre，定义 CORE_COUNT 参数化扩展（cluster topology、目录位图宽度、仲裁树/队列、MMIO/中断路由、共享 L2 带宽模型），8/16/32 核验收口径（compile/elaboration、有限事务 smoke、资源/延迟趋势），C4/C3/C5/C6 依赖边界，以及 R-C4/R-C5 风险。禁止修改 RTL 功能代码、禁止启动 Quartus、禁止宣称 8/16/32 核功能完成。",
+  "writes": [
+    "docs/handoffs/T-20260829-100-c4-scale-prework.md",
+    "docs/tasks/evidence/T-20260829-100.json",
+    "docs/C4_SCALE_PREWORK.md"
+  ],
+  "reads": [
+    "docs/C3_FOURCORE_PREWORK.md",
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/L2_WRITEBACK.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "rtl/**",
+    "tb/**"
+  ],
+  "validation": {
+    "l0": [
+      "JSON 合法、git diff --check、文档可审阅"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可机检的 C4 规模前置契约/测量模板：8/16/32 核各自验收口径、资源/延迟趋势字段、已知限制和风险。",
+  "next": "C3/C4 实现派发前作为设计依据；C4 实际规模报告在 C3 后执行。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "disk_mb": 1024,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 90,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T16:37:54+08:00",
+  "updated_at": "2026-08-29T16:37:54+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T16:37:54+08:00",
+    "agent_name": "c4_scale_prework",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "high",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-100"
+  },
+  "known_limits": [
+    "不实现/实例化 8/16/32 核功能 RTL。",
+    "不启动 Quartus；不宣称 32 核规模为功能完成或板级目标。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-100-c4-scale-prework.md",
+  "evidence": "docs/tasks/evidence/T-20260829-100.json",
+  "merge_sha": "937750183321f35cfe5a256cf7d4f91868e22c2b",
+  "merged_at": "2026-08-29T16:41:54+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T16:41:54+08:00",
+    "status": "accepted",
+    "head_sha": "0ec8df63907b5b945840b41112f1926fa2eac50e",
+    "notes": "C4-pre docs-only accepted: C4_SCALE_PREWORK.md + handoff/evidence. No RTL/tb/sim/QEMU changes. Defines CORE_COUNT scaling, 8/16/32 acceptance, measurement template, R-C4/R-C5 risks."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T17:00:00+0800",
+        "new": "2026-08-29T16:37:54+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T17:00:00+0800",
+        "new": "2026-08-29T16:37:54+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T17:00:00+0800",
+        "new": "2026-08-29T16:37:54+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T17:20:00+0800",
+        "new": "2026-08-29T16:41:54+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T17:20:00+0800",
+        "new": "2026-08-29T16:41:54+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "d5c1cd8db7194a0c541038ab4e01e34cc38df1b3",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "d5c1cd8db7194a0c541038ab4e01e34cc38df1b3"
+}

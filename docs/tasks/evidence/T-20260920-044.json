@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-044",
+  "state": "done",
+  "acceptance_status": "fresh-physical-pass",
+  "candidate_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_tree_sha": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+  "branch": "verify/T-20260920-044-b25-coremark-fresh-physical",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-044",
+  "remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-044-b25-coremark-fresh-physical",
+  "started_at": "2026-09-21T00:18:25+08:00",
+  "finished_at": "2026-09-21T00:42:34+08:00",
+  "fresh_inputs": {
+    "stage_file_count": 190,
+    "qsf_reference_count": 50,
+    "stage_manifest_sha256": "d36d984a80c155023854b203395bcb899c68ab217cfa3e1341a0391b002f7db0",
+    "stage_archive_sha256": "e402ca86b7f73ba3771ff7a0d07a66f2accc87b55f82268dc142ebb2100ea313",
+    "boot_bin": {
+      "bytes": 20448,
+      "sha256": "ddb27ff2ffdfb595c3821a20af262f4e3ae95c1e680bf5530e2865bf45b6c56d"
+    },
+    "boot_hex_sha256": "23a8853a49424a4895070e0726eafe514391af9deb24cf5ad1373dbce3b378bc",
+    "boot_mif_sha256": "d56386b0714c65bab955cb91112d510b31f4290f80281f86c7feabdd6988d7d0",
+    "decoded_64k_image_sha256": "1e691cc06094746464633929b2dea25be43c96305873bedfca82d3978c87ddb9",
+    "microbench_build_manifest_sha256": "985d186caf6dab652616221319eb38bffb3dbe69df89deeba12582fb68dd1d84",
+    "rtl": {
+      "decode_sha256": "5e92ee65a817a55a7dc14f7cdb5066dc3f82510fc794a6aea129fb45b87da1df",
+      "bram_sha256": "10c16f8abea0c23cfd51e069918ee8b1fe78ddff68afb41d9aa8d89d7c576cbf",
+      "soc_pkg_sha256": "3b707be07c708c4096ecb2408ef13c55b91180ad1888fbae603478f9a276662d",
+      "soc_top_sha256": "3decb91ac0271ff74ee451857620ffb5e612352a17f238e38f5f8ea2a91f5ef0",
+      "board_top_sha256": "be178b9ea4dd9cfa884220fab71e4bfbf71fbe896a04ad5bf31f0cd273fc2c62",
+      "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5"
+    }
+  },
+  "resource": {
+    "lock": "gamepc",
+    "single_uninterrupted_lock_window": true,
+    "preflight_root_preexisting": false,
+    "preflight_eda_process_count": 0,
+    "preflight_free_physical_mib": 38936.2,
+    "preflight_disk_d_free_bytes": 62505906176,
+    "parallel_marker": "16 of the 24 processors detected",
+    "final_free_physical_mib": 40730.3,
+    "final_disk_d_free_bytes": 61734432768,
+    "lock_after_run": "FREE"
+  },
+  "stages": [
+    {
+      "stage": "preflight-source-closure",
+      "status": "PASS",
+      "source_hash_bad_count": 0,
+      "qsf_missing_count": 0,
+      "preexisting_database_dirs": 0,
+      "preexisting_configuration_artifacts": 0
+    },
+    {
+      "stage": "synthesis",
+      "status": "PASS_BY_INDEPENDENT_AUDIT",
+      "quartus_version": "21.4.0 Build 67 Pro",
+      "synthesis_elapsed": "00:05:49",
+      "shell_elapsed": "00:07:09",
+      "errors": 0,
+      "synthesis_warnings": 234,
+      "shell_warnings": 240,
+      "report_sha256": "a0c43c041ee59155fda70b1defd198946c3d02ef1cdeb1b14f60b25c346d500b",
+      "smsg_sha256": "edeacd000d5953f85601f94061b9258a9124dab901a851fe70c1f777b7176824",
+      "summary_sha256": "d20b3cc173ab5adc9a348565782396b72847cc199b26de2e679b96a60d15fabd",
+      "wrapper_exitcode_observation": "blank; wrapper printed bookkeeping SYNTHESIS_FAIL; no rerun",
+      "authoritative_audit_log_sha256": "c28b980898d47826ab17f1743203007e74c352a2276cabc6a80066a6419cd821"
+    },
+    {
+      "stage": "fitter",
+      "status": "PASS",
+      "errors": 0,
+      "report_sha256": "e15279e716888bb807e994b681cd2d7f9d76b4dac904fd854d7b23f2ea7dabd0",
+      "summary_sha256": "a343beea89915805fceca9c15b1cdb399a1252f5d43f7af11be1c77253731d0a",
+      "resources": {
+        "alms": 75804,
+        "registers": 80789,
+        "ram_blocks": 121,
+        "dsp_blocks": 21,
+        "plls": 3
+      }
+    },
+    {
+      "stage": "sta-signoff",
+      "status": "PASS",
+      "errors": 0,
+      "report_sha256": "2617c76a81a77aa729ad58f512d5ef2d780381fb5ee6c2543e6cc1dd75f35620",
+      "summary_sha256": "da0ff9c5a2efdd39f31b2f4a3ff5c7b6625f352f115a6e74960269cddb88e18a",
+      "global_worst_setup_ns": 0.320,
+      "global_worst_hold_ns": 0.000,
+      "all_slack_nonnegative": true
+    },
+    {
+      "stage": "report-only-acceptance-v3",
+      "status": "PASS",
+      "overall_exit": 0,
+      "fifo_payload_exit": 0,
+      "data_delay_exit": 0,
+      "ucp_exit": 0,
+      "source_diff": 0,
+      "clone_bad_diff": 0,
+      "configuration_artifacts": 0
+    },
+    {
+      "stage": "final-readonly-scan",
+      "status": "PASS",
+      "file_count": 1349,
+      "output_files": 26,
+      "acceptance_files": 675,
+      "eda_process_count": 0,
+      "configuration_artifacts": 0,
+      "source_pre_sha256": "533cb35732b27220a06e47f4fc5383f402cbbb4d9526f9cb2490110e15ea1f40",
+      "source_post_sha256": "533cb35732b27220a06e47f4fc5383f402cbbb4d9526f9cb2490110e15ea1f40"
+    }
+  ],
+  "warning_16788_contract": {
+    "status": "PASS",
+    "tracked_rtl_unique_identities": 0,
+    "generated_sld_unique_identities": 1,
+    "syn_rpt_summary_rows": 1,
+    "syn_smsg_detail_rows": 1,
+    "syn_summary_rows": 0,
+    "net": "ir_in_2d[2][4]",
+    "source_basename": "alt_sld_fab_0_altera_sld_jtag_hub_1920_oerl7dy.vhd",
+    "source_line": 243,
+    "canonical_hpath": "auto_fab_0|alt_sld_fab_0|alt_sld_fab_0|sldfabric",
+    "raw_sopcinfo_sha256": "4ef8843c1f72a3fa37d7475117d5a60a99b42a21bfe5aa5ebf7692f0e75840b3",
+    "normalized_sopcinfo_sha256": "b127700cfe079af2b01bfc5bcfea3926d2d97d7317d79cad943658d117ff532e",
+    "qsf_suppression_filter_waiver_count": 0
+  },
+  "physical": {
+    "sys_clk_25": {
+      "setup_ns": 9.398,
+      "hold_ns": 0.018,
+      "recovery_ns": 13.596,
+      "removal_ns": 0.197
+    },
+    "minimum_pulse_width_ns": 0.120,
+    "fifo_payload": {
+      "report_count": 24,
+      "nothing_to_report_count": 24,
+      "violations": 0
+    },
+    "cdc_data_delay": {
+      "report_count": 20,
+      "violations": 0,
+      "worst_slack_ns": 1.184
+    },
+    "normalized_invariant": {
+      "status": "PASS",
+      "ucp_input_paths": 60,
+      "ucp_output_paths": 4,
+      "clocks": 2,
+      "reset_paths": 624,
+      "family_counts": [606, 4, 13, 1],
+      "endpoint_digest": "8f7b6b7238c5fda2c9049c50bb105ebd613f6c341e694eade569d20221ff7efb",
+      "worst_recovery_ns": 1.101,
+      "worst_removal_ns": 0.181,
+      "violations": 0,
+      "measurement_sha256": "cc40688c3503d4cf30994998580ef2921b527deaab2e8536dc52b86e5f7bb108",
+      "policy_sha256": "474a907a0b1e4dfe7f6327ed582ffcad1d0deb6976d6ca080ace86b6a6d83df8"
+    }
+  },
+  "artifacts": {
+    "local_runtime_root": "build/agents/T-20260920-044/remote-collect",
+    "evidence_bundle": {
+      "path": "build/agents/T-20260920-044/remote-collect/t044-physical-evidence.tar.gz",
+      "bytes": 2109090,
+      "sha256": "b903493e1fdbad6891658d6576b93f4018336e1d0f9b8bf422d37adfee925f28"
+    },
+    "physical_summary": {
+      "path": "build/agents/T-20260920-044/analysis/physical-summary.json",
+      "sha256": "016a9f2f54816f41dea831450cacf81c9e951385aca0c52bbe2559de4cfdfdb2"
+    },
+    "key_logs": {
+      "preflight": "f97f5b1c6e8074f8b756110f7679d76a316be61167e1956e7060079aeb46343c",
+      "prepare_source": "b5449e701ff8265fffb7400a0c401a5aea606929e0dcb5df0b0dd9cbebe0b139",
+      "synthesis": "bb74d9072e6201fef1ad563dfdf857155776c8c77e1eb9f22247417ecaaf7be5",
+      "synthesis_audit": "c28b980898d47826ab17f1743203007e74c352a2276cabc6a80066a6419cd821",
+      "fitter": "2399f8d221d39dbd49c063b41c018ba08c71fd7654e8bff8d704e79f94637c10",
+      "sta": "c9a0cb6ad39ccf9abb482adda054647a57346fe099246eec9bac51fd3f052e55",
+      "acceptance": "9674c479f006a2161999eb51db52326127e342659376f488fbd8aa8f622e5b2e",
+      "final_scan": "5f375e5ce2815fd5a1ca34960538fed3479155a1760d26c49cd57345d90a73e3"
+    }
+  },
+  "commands": [
+    "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-044 root --meta stage=fresh_physical --meta candidate=f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d --meta remote_root=T-20260920-044-b25-coremark-fresh-physical -- bash build/agents/T-20260920-044/run_physical_flow.sh",
+    "python3 build/agents/T-20260920-044/measure_invariant.py build/agents/T-20260920-044/remote-collect/runtime/acceptance-v3 fpga/catapult_a10/physical_waivers_invariant.json build/agents/T-20260920-044/analysis/invariant-measurement.json",
+    "python3 build/agents/T-20260920-044/summarize_physical.py"
+  ],
+  "safety": {
+    "assembler": false,
+    "sof_pof_jic_rbf_jbc_svf_jam": 0,
+    "jtag": false,
+    "board_configuration": false,
+    "flash_epcq": false,
+    "reset_power": false,
+    "tracked_source_modified": false,
+    "unknown_process_stopped": false,
+    "live_fpga_identity": "unchanged exact golden"
+  },
+  "known_limits": [
+    "The synthesis wrapper observed a blank Start-Process ExitCode and printed a bookkeeping SYNTHESIS_FAIL marker. The raw Quartus stdout/report/summary, independent warning/topology audit and fitted database prove successful synthesis; synthesis was not rerun.",
+    "This task proves physical closure and exact payload/source identity only. It did not invoke assembler or exercise the CPU on hardware.",
+    "The generated SLD Warning 16788 remains visible and is accepted only under the exact T-028 source-qualified, topology-bound contract; no suppression, filtering or waiver is used."
+  ],
+  "next": "T-20260920-045: create a task-owned clone of this accepted fitted root and invoke assembler exactly once",
+  "handoff": "docs/handoffs/T-20260920-044-b25-coremark-fresh-physical.md"
+}

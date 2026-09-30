@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-091",
+  "label": "FP-OPT",
+  "parent": "T-20260828-072",
+  "title": "FP scalar Verilator elaboration 优化：降低 256-bit 组合展开/拆流水线",
+  "kind": "core-fp-verilator-optimization",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "cb59372",
+  "branch": "feature/T-20260829-091-fp-scalar-verilator-opt",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-091",
+  "scope": "针对诊断 T-20260829-090 发现的 Verilator 卡顿根因，优化 rtl/lcvex_fp_scalar.sv：降低 FP_W=256 的宽位组合展开、拆分 combin ational function/循环、或改为多周期/条件实例化，使默认 Verilator 优化下含真实 core 的 lint/build 可在可接受时限内完成，同时保持现有 FP 标量/NEON 功能不变。必须保留 raw-bit NaN/signed zero/FPSR/FPEN trap 语义；禁止改 QEMU/checkpoint、禁止引入 SVE。",
+  "writes": [
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-091-fp-scalar-verilator-opt.md",
+    "docs/tasks/evidence/T-20260829-091.json",
+    "diag/verilator_stuck/**"
+  ],
+  "reads": [
+    "diag/verilator_stuck/findings.md",
+    "rtl/lcvex_fp_scalar.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "rtl/lcvex_pkg.sv",
+    "docs/P7-0_FP_STATE.md",
+    "docs/P7-1_FP_SCALAR.md",
+    "docs/P7-4_FMA_CONVERT.md",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md",
+    "tb/sv/lcvex_neon_int_tb.sv",
+    "sim/cocotb/test_p7_2_neon.py"
+  ],
+  "validation": {
+    "l0": [
+      "lcvex_fp_scalar 单独 lint 默认优化在限定时间内完成（建议 <60s）",
+      "raw-bit FP 定向测试通过"
+    ],
+    "l1": [
+      "make compile / make test 受影响子集（如果资源允许；若仍被 C2/B2c 抢占则记录 blocker）",
+      "未引入新 SVE/POST-V82，未改变现有 FP raw-bit 位级结果"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "至少完成一项可验证的优化，使默认优化下的 fp_scalar 或 core lint 不再长卡；有 raw-bit/定向回归通过；如无法全量完成，交付具体重构方案和已验证的局部优化 + 剩余风险。",
+  "next": "若优化落地并经集成者合并，后续 C2/B2c/SoC 构建可恢复默认优化；否则继续使用 -O0 规避并另立重构任务。",
+  "resource": {
+    "cpu": 3,
+    "memory_mb": 12288,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T09:27:29+08:00",
+  "updated_at": "2026-08-29T09:27:29+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-29T09:27:29+08:00",
+    "agent_name": "fp_scalar_verilator_opt",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-091"
+  },
+  "known_limits": [
+    "不得修改 QEMU/checkpoint/顶层 filelist/Makefile 核心构建，除非在 handoff 中明确列出。",
+    "不得为了加速而省略 FP 语义或把不支持编码标为支持；不得引入 SVE。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-091-fp-scalar-verilator-opt.md",
+  "evidence": "docs/tasks/evidence/T-20260829-091.json",
+  "merge_sha": "5a81f8df5c31c57da86df1b49c5cc0b8b03c9bf1",
+  "merged_at": "2026-08-29T09:59:23+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T09:59:23+08:00",
+    "status": "accepted",
+    "head_sha": "68e3185",
+    "notes": "FP scalar Verilator 默认优化修复已合入：FP op 分派由 unique case 改为 if/else 链；集成者复跑 make compile（默认优化）通过，约 35.6s。未改变 FP raw-bit 语义；后续可减少 -O0 规避。"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T09:30:00+0800",
+        "new": "2026-08-29T09:27:29+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-29T09:30:00+0800",
+        "new": "2026-08-29T09:27:29+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T09:30:00+0800",
+        "new": "2026-08-29T09:27:29+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T10:00:00+0800",
+        "new": "2026-08-29T09:59:23+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T10:00:00+0800",
+        "new": "2026-08-29T09:59:23+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ],
+    "merge_sha_expansion": [
+      {
+        "old": "5a81f8d",
+        "new": "5a81f8df5c31c57da86df1b49c5cc0b8b03c9bf1",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  },
+  "head_sha": "0288e25af607c7f6abb7d7b7e7f0dead47c6cb26"
+}

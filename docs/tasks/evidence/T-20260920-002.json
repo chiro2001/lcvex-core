@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-002",
+  "label": "B25-FIRST-SESSION-FILE-INPUT",
+  "state": "blocked-board-rx-confirmed",
+  "acceptance_status": "configuration-and-first-console-pass-host-input-functional-fail",
+  "partial": true,
+  "source_sha": "ec8374ea39f1b08a6d3db760610bc0f4b5652bb3",
+  "branch": "verify/T-20260920-002-b25-first-session-file-input",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-002",
+  "owner": "root",
+  "timestamps": {
+    "run_started_at": "2026-09-20T01:35:08.7204890+08:00",
+    "candidate_program_started_at": "2026-09-20T01:35:12.1446472+08:00",
+    "candidate_program_finished_at": "2026-09-20T01:35:57.2976554+08:00",
+    "console_started_at": "2026-09-20T01:35:59.3282133+08:00",
+    "console_finished_at": "2026-09-20T01:36:29.0455985+08:00",
+    "rollback_started_at": "2026-09-20T01:36:33.1630768+08:00",
+    "rollback_finished_at": "2026-09-20T01:37:17.4414340+08:00",
+    "run_finished_at": "2026-09-20T01:37:18.6662555+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "authorization": {
+    "user_statement": "好，我们继续，许可使用Quartus和JTAG来烧写和测试设备。",
+    "scope": "one bounded corrected-candidate volatile configuration, first-session JTAG-UART interaction, and safe golden volatile rollback on failure",
+    "excluded": ["JIC/EPCQ/Flash", "power cycle", "board or SoC reset", "unknown/pre-existing process stop"]
+  },
+  "candidate": {
+    "sof": {
+      "path": "D:/Projects/fpga-altra/lcvex/build/T-20260919-006-b25-nofp-volatile-sof/fpga/catapult_a10/quartus/output_files/catapult_a10.sof",
+      "bytes": 36842110,
+      "sha256": "04218557c73f1c41b84ef8223a65af9049469e499f60422ce6f96df07bd0abb7",
+      "quartus_checksum": "0x31426358"
+    },
+    "programming": {
+      "server_pid": 29352,
+      "programmer_pid": 68612,
+      "programmer_exit_code": 0,
+      "configuration_success": true,
+      "operation_success": true,
+      "checksum_match": true,
+      "jtag_id_match": true,
+      "programmer_stdout_sha256": "a79dde4454be9d1f834d2ab60b68689daf14bb97d37fa2c659a7204ef73e4824"
+    },
+    "first_and_only_console": {
+      "method": "Start-Process with an ordinary file bound to RedirectStandardInput; no preliminary terminal probe",
+      "input_hex": "3f0a700a5a0a",
+      "input_sha256": "97988febf896c6066ca994f07cc7d349f0f5a7b25b2813982889431e8a11fced",
+      "terminal_pid": 16992,
+      "terminal_exit_code": 0,
+      "natural_timeout_exit": true,
+      "connected": true,
+      "boot_ok": true,
+      "cal_state": "CAL-WAIT",
+      "ddr_state": "DDR-FAIL",
+      "ready_ok": true,
+      "status_ok": false,
+      "pong_ok": false,
+      "echo_ok": false,
+      "stdout_sha256": "6b3116e8eb4741df62f67306d2aa99555f7319315f26d6c993050bd7bea99e23",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "functional_result": "FAIL; host-to-target commands produced no target response despite a clean first-session connection and complete startup transcript"
+  },
+  "rollback": {
+    "attempted": true,
+    "sof_bytes": 36844906,
+    "sof_sha256": "290ab3cfb18cfd6ee47e5a2bc9324e63882de51d0ae5ac6c2688d7d6a2385f92",
+    "quartus_checksum": "0x31510BB6",
+    "server_pid": 35076,
+    "programmer_pid": 34900,
+    "programmer_exit_code": 0,
+    "configuration_success": true,
+    "operation_success": true,
+    "checksum_match": true,
+    "jtag_id_match": true,
+    "programmer_stdout_sha256": "bb45715fe73a4e8df2c72d5975c86cee771ada6b3586639a2842d71935938be6",
+    "final_board_state": "golden SOF running"
+  },
+  "method_control": {
+    "resolved": true,
+    "excluded_explanations": [
+      "Python pipe semantics",
+      "a preliminary terminal consuming or locking the JTAG-UART instance",
+      "a later-session stale standard-server state",
+      "late terminal attachment",
+      "failed candidate configuration or wrong SOF identity"
+    ],
+    "remaining_scope": "candidate host-to-target fabric/software read path after the JTAG Atlantic endpoint"
+  },
+  "artifacts": {
+    "root": "build/agents/T-20260920-002/remote-evidence-attempt-v2/runtime",
+    "result": {
+      "path": "result.json",
+      "bytes": 7611,
+      "sha256": "6df1b02f9456842452bc13b7e951ff3c602303f79341f574da13ab4a5a65f92d"
+    },
+    "candidate_console": "candidate-console.stdout.log",
+    "candidate_programmer": "candidate-quartus_pgm.stdout.log",
+    "rollback_programmer": "rollback-quartus_pgm.stdout.log",
+    "server_manifest_sha256": "fc7e286f455e15683f7bb15e9cf5c005f2b1bc318a8595afee6362714bd5222d"
+  },
+  "safety_and_resources": {
+    "pre_program_script_attempt": "failed before quartus_pgm because an open task-server stdout handle could not be hashed; owned PID 67960 was stopped and no board state changed",
+    "volatile_configurations": 2,
+    "candidate_configurations": 1,
+    "golden_configurations": 1,
+    "persistent_flash_action": false,
+    "reset_or_power_action": false,
+    "unknown_or_preexisting_process_stopped": false,
+    "standard_server_pid": 5640,
+    "standard_server_preserved": true,
+    "task_owned_servers_stopped": true,
+    "residual_terminal_or_programmer": false,
+    "port_1310_released": true,
+    "all_gamepc_actions_held_resource_lock": true,
+    "final_resource_status": "gamepc FREE"
+  },
+  "blocker": "The corrected no-FP candidate reaches READY, but a clean first ordinary-file stdin session still cannot obtain status, PONG or printable echo.",
+  "handoff": "docs/handoffs/T-20260920-002-b25-first-session-file-input.md",
+  "next": "Continue T-20260920-001 vendor-faithful full-SoC RX reproduction. Do not repeat this board method-control attempt."
+}

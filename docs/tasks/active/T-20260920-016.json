@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-016",
+  "label": "B25-RX-CPU-OBSERVABILITY-NOFP-PROFILE",
+  "title": "Derive the scalar no-FP board profile from the Gate-D-passed CPU-visible RX candidate",
+  "kind": "board-profile",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "one-line-profile-and-affected-l0-l2-pass",
+  "assigned_owner": "monitor_disasm",
+  "depends_on": ["T-20260920-012", "T-20260920-015", "T-20260919-003"],
+  "base_sha": "17d8d6f2a4bbd560b7d3985ce0a4102e2039c92b",
+  "base_tree_sha": "49ae77b46bac077d68cd5432a09eb64b51b07ebb",
+  "branch": "fpga/T-20260920-016-b25-rx-cpu-observability-nofp-profile",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-016",
+  "writes": [
+    "fpga/catapult_a10/rtl/lcvex_catapult_a10_top.sv::A64_FP_SIMD board-top default parameter only",
+    "build/agents/T-20260920-016/** ignored logs/artifacts",
+    "docs/tasks/evidence/T-20260920-016.json",
+    "docs/handoffs/T-20260920-016-b25-rx-cpu-observability-nofp-profile.md"
+  ],
+  "scope": "Apply exactly the already accepted board diagnostic profile delta A64_FP_SIMD=1'b1 to 1'b0 to candidate 17d8d6f2. Preserve every response observer, firmware byte, M20K behavior, QSF and SDC. Freeze a content-addressed derivative SHA before any GamePC upload.",
+  "validation": {
+    "scope": "Exactly one tracked functional file and one added/removed line relative to base; no ledger file is counted as a functional delta.",
+    "static": "Core/SoC no-FP lint, board skeleton consuming default 0, platform lint and synthesis-selector contract pass.",
+    "focused": "2011-byte boot image contract, M20K vendor timing, JTAG vendor focused/status/observer and response-trace inputs remain valid.",
+    "soc": "Use content equivalence to T-012 clean r4 runs only if every SoC/boot/model/runner input is byte-identical and the board-top file is absent from those filelists; otherwise acquire local and rerun the affected no-FP full-SoC tests."
+  },
+  "acceptance": "A committed derivative has exactly the one intended functional line change and all affected L0-L2 checks/equivalence proofs pass. The result is explicitly a scalar diagnostic profile, not a full-FP release, and becomes the sole source for T-017 fresh physical.",
+  "resource": "Static/focused checks are light. Any heavy Verilator run acquires local; return 75 means wait without fallback. This task does not use GamePC, Quartus, assembler, JTAG or the board.",
+  "forbidden_regions": [
+    "all core/SoC/observer/firmware RTL and tests except the declared board-top parameter line",
+    "QSF/SDC/QEMU/reference/expected-result changes",
+    "GamePC/Quartus/assembler/JTAG/Flash/reset/power actions",
+    "claiming full-FP release equivalence"
+  ],
+  "created_at": "2026-09-20T10:01:37+08:00",
+  "dispatch": {
+    "sent_at": "2026-09-20T10:02:31+08:00",
+    "agent_name": "monitor_disasm",
+    "model": "dsh-default (user-confirmed gpt-5.6-luna[max])",
+    "reasoning_effort": "max"
+  },
+  "result": {
+    "status": "done",
+    "partial": false,
+    "profile_sha": "e91d20f15244e425fefaadeca8654fdfa1ebebc6",
+    "profile_tree_sha": "0f4110efbb8fbbc4ea51c147f6ff89e6cb27e2c7",
+    "evidence_head_sha": "1008d1038a177dd442b784f6c0e32f7da26a6062",
+    "functional_delta": "exactly A64_FP_SIMD board default 1'b1 -> 1'b0",
+    "validation": "boot/image, board/no-FP lint, platform/selector, M20K, vendor focused and T-012 r4 input equivalence PASS",
+    "evidence": "docs/tasks/evidence/T-20260920-016.json",
+    "handoff": "docs/handoffs/T-20260920-016-b25-rx-cpu-observability-nofp-profile.md",
+    "next": "T-017 fresh physical"
+  },
+  "updated_at": "2026-09-20T10:15:20+08:00"
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-086",
+  "label": "C2",
+  "parent": "T-20260828-073",
+  "title": "C2 双核共享 L2 目录式 MSI 一致性",
+  "kind": "multicore-msi-coherence",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "c1273235028a54f2d8213a9c8ca0040ff0def609",
+  "branch": "feature/T-20260829-086-c2-dualcore-msi",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-086",
+  "scope": "按 docs/MULTICORE_CLUSTER_CONTRACT.md 在共享 L2 上游实现双核目录式 MSI：I/S/M 目录、ReadShared/ReadUnique/Upgrade、I/D-L1 probe/失效、dirty owner、exclusive monitor、错误/重试；先 correctness 后性能，保持 C1 非一致性壳层和 CORE_COUNT=1 兼容。",
+  "writes": [
+    "rtl/lcvex_cluster_pkg.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "rtl/lcvex_l2_cluster.sv",
+    "rtl/lcvex_l2_probe.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_l2.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "docs/handoffs/T-20260829-086-c2-dualcore-msi.md",
+    "docs/tasks/evidence/T-20260829-086.json"
+  ],
+  "reads": [
+    "docs/MULTICORE_CLUSTER_CONTRACT.md",
+    "docs/LCVX_DIFF_MC_V2.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/L2_WRITEBACK.md",
+    "docs/ARCHITECTURE.md",
+    "docs/AXI4_PROFILE.md",
+    "rtl/**",
+    "tb/**",
+    "sim/difftest/**",
+    "docs/T-20260828-071-073-parallel-lines-plan-v2.md"
+  ],
+  "validation": {
+    "l0": [
+      "目录 invariant、协议 frame、reset/fault 定向"
+    ],
+    "l1": [
+      "SV/Cocotb BFM：message passing、store/load buffering、CAS/LDXR-STXR、barrier、随机延迟、reset/fault"
+    ],
+    "l2": [
+      "双核 MC-v2 或 reference-model/litmus 定向回放（集成者合并后跑）"
+    ],
+    "l3": []
+  },
+  "acceptance": "C2 双核 MSI litmus/原子/屏障定向证据通过；目录 dirty 唯一、probe 未握手不复用 tag、fault 无 stale response；C1/CORE_COUNT=1 不回归；不宣称完整 ARM memory model；不引入 ACE/CHI。",
+  "next": "C2 通过后进入 C3 四核系统或 C4 扩展性。",
+  "resource": {
+    "cpu": 3,
+    "memory_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-29T06:20:07+08:00",
+  "updated_at": "2026-08-29T06:45:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T06:20:07+08:00",
+    "agent_name": "c2_dualcore_msi",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-086"
+  },
+  "known_limits": [
+    "不引入 ACE/CHI；不声明完整 ARM memory model。",
+    "共享 core/pkg/commit/memory 改动需与 B 线热点协调；本任务若改动 rtl/lcvex_core.sv、rtl/lcvex_pkg.sv、filelist/Makefile/QEMU，必须在 handoff 中列明并等待集成者冲突窗口。"
+  ],
+  "handoff": "docs/handoffs/T-20260829-086-c2-dualcore-msi.md",
+  "evidence": "docs/tasks/evidence/T-20260829-086.json",
+  "merge_sha": "8bea8de66e17cff80419f1a9efa47accc5ac32af",
+  "merged_at": "2026-08-29T10:46:46+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-29T10:46:46+08:00",
+    "status": "accepted",
+    "head_sha": "90a5aa58cfb9672979d89dbffd5788d0bcea76de",
+    "implementation_sha": "a5375d5",
+    "notes": "C2 core MSI + coherent L1 wired; T-092 remainder directed tests merged. All known C2 directed slices now PASS: atomic fail/ok, maint/barrier, reset/fault plus dualcore and L1+MSI regressions. Known follow-ups: CORE_COUNT=1 full regression and running-reset-restart hardening remain external to C2 close."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-29T06:22:00+0800",
+        "new": "2026-08-29T06:20:07+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "dispatch.sent_at",
+        "old": "2026-08-29T06:22:00+0800",
+        "new": "2026-08-29T06:20:07+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-29T10:55:00+0800",
+        "new": "2026-08-29T10:46:46+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-29T10:55:00+0800",
+        "new": "2026-08-29T10:46:46+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "c4931b0a40298cbe35296051c7096f991b6b2b9f",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ],
+    "merge_sha_expansion": [
+      {
+        "old": "8bea8de",
+        "new": "8bea8de66e17cff80419f1a9efa47accc5ac32af",
+        "reason": "expand task merge SHA to full 40-character hash"
+      }
+    ]
+  },
+  "head_sha": "c4931b0a40298cbe35296051c7096f991b6b2b9f"
+}

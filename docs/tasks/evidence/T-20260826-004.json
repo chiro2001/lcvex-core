@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-004",
+  "base_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+  "head_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+  "merge_sha": "fd65511",
+  "toolchain": {
+    "python_conda": "3.12.14",
+    "verilator": "5.050 2026-07-01 rev conda-forge build 0",
+    "environment": "conda:lcvex"
+  },
+  "qemu": {
+    "release": "11.1.0",
+    "commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648",
+    "patches_sha256": "",
+    "binary_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6",
+    "plugin_sha256": "47262c590eb7e94d2bedbad2f53d3627b3307725ea0029899d9d46822962bdcb"
+  },
+  "checkpoints": {
+    "lite_source": {
+      "chain": "/home/chiro/projects/mycpu/lcvex/build/tmp/linux-lite-6.6/lite-scalar2-20260825/chain",
+      "resume_seq": 6999999,
+      "image_sha256": "2f61daa1af93fe64ed1be43c31d6ca6535818a5850750597cbafbf9166a46543",
+      "dtb_sha256": "0d1ac83292963e99d5e127b5ec8ebe4fb5027d4cbed9320cb0527540e7131941",
+      "qemu_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6"
+    },
+    "main_bootstrap": {
+      "chain": "build/tmp/T-20260826-004/main-bootstrap/chain",
+      "resume_seq": 19999,
+      "manifest_sha256": "4e1b883c3e34de45786cb3b0610134f8da0f009ad41da849e0aa7c8b73f4055a",
+      "tsv_sha256": "93b65ede0d423938e8e6b874a7e52fcd3df342855717273179f5f830535c0935",
+      "image_sha256": "5029ac9dd5b14a05ceaf1eb0645c5e0c4c01a000b5c68e37306b134e26bb5c68",
+      "dtb_sha256": "ce3ae0d2f76171d3eee59d3d096d75fcf1d024d68fce9975990eb01e660ac3c9",
+      "qemu_sha256": "4cf4a6ea420e67f222d9f175d2c0440125629ed472a21a4804d515edf538eba6"
+    }
+  },
+  "runs": [
+    {
+      "run_id": "owner-l0-manifest-preflight-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L0",
+      "command": "python3 -c 'import sys; from pathlib import Path; sys.path.insert(0, \"sim/difftest\"); import checkpoint; checkpoint.read_manifest(Path(\"<lite-chain>\")); checkpoint.read_manifest(Path(\"<main-bootstrap-chain>\"))'",
+      "seed": null,
+      "wall_seconds": 0.3,
+      "cpu_count": 1,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l1-build-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L1",
+      "command": "VERILATOR_JOBS=2 make lockstep-build-kernel-nofp && VERILATOR_JOBS=2 make lockstep-build-kernel && bash -n sim/difftest/run_lockstep_resume.sh",
+      "seed": null,
+      "wall_seconds": 40.0,
+      "cpu_count": 2,
+      "cpuset": "",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l2-lite-short-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L2",
+      "command": "CHAIN=<lite-scalar2> RESUME_SEQ=6999999 MAX_INSNS=10000 ... QEMU_CPU=max,has_el3=false,has_el2=false,vfp=off,neon=off,vfp-d32=off ... PIN=0 bash sim/difftest/run_lockstep_resume.sh",
+      "seed": null,
+      "wall_seconds": 33.0,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l2-main-old-chain-blocked-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L2",
+      "command": "main-scalar seq=7999999, MAX_INSNS=1；尝试 max/EL-off、max、pauth-off 组合",
+      "seed": null,
+      "wall_seconds": 180.0,
+      "cpu_count": 1,
+      "cpuset": "1",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 1,
+      "result": "blocked",
+      "note": "QEMU CPU vmstate post-load failed 或 incoming cpreg unknown，0 条提交；不改输入、不计通过。"
+    },
+    {
+      "run_id": "owner-l2-main-bootstrap-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L2",
+      "command": "taskset -c 1 KERNEL=1 DIFF_CKPT=1 CKPT_EVERY=10000 MAX_INSNS=20000 ... bash sim/difftest/run_lockstep_step.sh",
+      "seed": null,
+      "wall_seconds": 62.0,
+      "cpu_count": 1,
+      "cpuset": "1",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass",
+      "note": "当前 QEMU SHA/CPU 配置从头建立 2-entry main bootstrap chain，20,000 条全绿。"
+    },
+    {
+      "run_id": "owner-l2-main-bootstrap-resume-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L2",
+      "command": "CHAIN=<main-bootstrap> RESUME_SEQ=19999 MAX_INSNS=10000 QEMU_CPU=max,has_el3=false,has_el2=false PIN=1 bash sim/difftest/run_lockstep_resume.sh",
+      "seed": null,
+      "wall_seconds": 64.0,
+      "cpu_count": 1,
+      "cpuset": "1",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l4-lite-500k-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L4",
+      "command": "CHAIN=<lite-scalar2> RESUME_SEQ=6999999 MAX_INSNS=500000 QEMU_CPU=max,has_el3=false,has_el2=false,vfp=off,neon=off,vfp-d32=off PIN=0 bash sim/difftest/run_lockstep_resume.sh",
+      "seed": null,
+      "wall_seconds": 25.0,
+      "cpu_count": 1,
+      "cpuset": "0",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "owner-l4-main-bootstrap-500k-001",
+      "source_sha": "aac7daf2cfab4d024995ff65a229b9417d6f4d94",
+      "runner_role": "integrator-takeover",
+      "level": "L4",
+      "command": "CHAIN=<main-bootstrap> RESUME_SEQ=19999 MAX_INSNS=500000 QEMU_CPU=max,has_el3=false,has_el2=false PIN=1 bash sim/difftest/run_lockstep_resume.sh",
+      "seed": null,
+      "wall_seconds": 77.0,
+      "cpu_count": 1,
+      "cpuset": "1",
+      "peak_rss_mb": null,
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "main-bootstrap-chain",
+      "uri": "build/tmp/T-20260826-004/main-bootstrap/chain",
+      "sha256": "4e1b883c3e34de45786cb3b0610134f8da0f009ad41da849e0aa7c8b73f4055a",
+      "bytes": 14680064,
+      "owner": "integrator",
+      "retain_until": "下一次 main bootstrap 链确认前",
+      "reproduce": "KERNEL=1 DIFF_CKPT=1 CKPT_EVERY=10000 MAX_INSNS=20000 run_lockstep_step.sh"
+    }
+  ],
+  "known_limits": [
+    "lite 10k/500k 与 main 当前配置 bootstrap 10k 通过；旧 main-scalar seq=7999999 链在 CPU vmstate post-load 阶段 0 条失败，不能计为通过。",
+    "main bootstrap 目前为 20k 首跑 + 10k/500k 恢复窗口，尚未代表完整主线 Gate E；仍需扩展到更深启动阶段。",
+    "尝试 CKPT_EVERY=500000 生成的 main-extend 局部链没有自动 manifest/global provenance，未计入通过证据，也未作为后续输入。",
+    "QEMU 日志有 `Expected vmdescription section, but got 0` 清理提示，但协调器短/长窗口结果按退出码和提交数判定。",
+    "所有 QEMU/协调器均为单核；没有孤儿进程。原始 RAM 运行文件只在恢复/链生成期间保留，后续可清理。root merge 与 owner source 在 rtl/sim/qemu 路径无差异。"
+  ]
+}

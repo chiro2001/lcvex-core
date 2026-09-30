@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-021",
+  "label": "P-SNAPSHOT",
+  "parent": "T-20260830-009",
+  "title": "性能线全量快照：重建 runner+14 workload 实测+JSON 归档",
+  "kind": "perf-snapshot",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "2c4116197341a2b57f9832102215e88d27ddb899",
+  "branch": "feature/T-20260830-021-perf-snapshot",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-021",
+  "scope": "在当前主线重建 microbench_runner（cgroup <16GiB、VERILATOR_JOBS=1），运行全部 14 个 perf workload，输出每个 JSON，汇总 docs/evidence 或 docs/perf 快照；不声称性能为架构签核。",
+  "writes": [
+    "docs/PERFORMANCE_SNAPSHOT.md",
+    "docs/handoffs/T-20260830-021-perf-snapshot.md",
+    "docs/tasks/evidence/T-20260830-021.json",
+    "baremetal/perf/**",
+    "sim/microbench/**"
+  ],
+  "reads": [
+    "docs/PERFORMANCE_WORKLOAD_PLAN.md",
+    "baremetal/perf/**",
+    "sim/microbench/**",
+    "Makefile",
+    "scripts/build-microbench.sh"
+  ],
+  "validation": {
+    "l0": [
+      "14 workload 全部有 JSON cycles/status"
+    ],
+    "l1": [
+      "汇总表与边界"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付可复现性能快照 JSON/汇总；明确这是仿真性能代理。",
+  "next": "性能数据用于未来对比，不代表 A10/Fmax。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T04:43:37+08:00",
+  "updated_at": "2026-08-30T04:43:37+08:00",
+  "known_limits": [
+    "不把性能快照写成 A10/Fmax/架构签核；本地重型构建 cgroup <16GiB、VERILATOR_JOBS=1。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-021-perf-snapshot.md",
+  "evidence": "docs/tasks/evidence/T-20260830-021.json",
+  "merge_sha": "f6ea8142c5b1c2276b77b4f9140b66802a169596",
+  "merged_at": "2026-08-30T05:06:46+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T05:06:46+08:00",
+    "head_sha": "f4ab60e",
+    "notes": "P-SNAPSHOT merged. All 14 perf workloads PASS with JSON; runner rebuild 296s/3.59GB; total 419s. Data archived."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T11:40:00+0800",
+        "new": "2026-08-30T04:43:37+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T11:40:00+0800",
+        "new": "2026-08-30T04:43:37+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T12:00:00+0800",
+        "new": "2026-08-30T05:06:46+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T12:00:00+0800",
+        "new": "2026-08-30T05:06:46+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "f6ea8142c5b1c2276b77b4f9140b66802a169596",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "f6ea8142c5b1c2276b77b4f9140b66802a169596"
+}

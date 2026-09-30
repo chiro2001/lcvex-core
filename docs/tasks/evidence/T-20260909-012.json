@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260909-012",
+  "label": "B25-PHYSICAL-WAIVER-INVENTORY-EXPORTER",
+  "state": "implementation-complete",
+  "acceptance_status": "pass-after-correction",
+  "partial": false,
+  "base_sha": "fd318a6a620d5b585406088e9714a60a1e34f87e",
+  "head_sha": "4e10351efad4381a8298c8b3ebd02c1c31f9ba89",
+  "branch": "infra/T-20260909-012-b25-physical-inventory-exporter",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-012",
+  "owner": "b25_physical_inventory_exporter",
+  "timestamps": {
+    "sent_at": "2026-09-09T13:33:51+08:00",
+    "received_at": "2026-09-09T13:33:51+08:00",
+    "implementation_committed_at": "2026-09-09T14:03:39+08:00",
+    "reported_at": "2026-09-09T14:18:01+08:00",
+    "correction_at": "2026-09-09T14:18:01+08:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "objective": "从 T-007 风格 machine-readable summary 与显式 raw TimeQuest UCP/timing reports 导出 T-010 exact inventory；不手填实际观测，并对缺失、重复、歧义、额外 user row、计数漂移和 source SHA 漂移 fail closed。",
+  "source_contract": {
+    "task_id": "T-20260909-007",
+    "source_sha": "702bd8ee5295efe8a2ad9e094d6c12471a1d3089",
+    "policy": {
+      "path": "fpga/catapult_a10/physical_waivers.json",
+      "sha256": "284f9c140bba1c36992de222189f08c2b6b57d328949facee2d2128f0812c393"
+    },
+    "checker": {
+      "path": "fpga/catapult_a10/tools/check_physical_waivers.py",
+      "sha256": "91cb58cd3046a054a6b3d21e798406ffbebc4dfdeae7baff656689dfea2d57c7"
+    }
+  },
+  "implementation": {
+    "exporter": {
+      "path": "fpga/catapult_a10/tools/export_physical_waiver_inventory.py",
+      "sha256": "0b16b74b08307d9a67b88caf1594199079fe5f7f35766d6ec4b6c6320b7e41be",
+      "behavior": [
+        "strictly parses T-007 summary headers, report inventory, reset path indexes and path_detail slack",
+        "parses setup/hold raw UCP summaries, clock status, port tables and input/output path tables",
+        "parses all raw recovery/removal path rows and cross-checks header counts, violations and worst slack",
+        "derives path-group counts and witness hierarchies using the checked-in policy patterns",
+        "rejects duplicate JSON/header/path keys, missing rows, unknown objects, ambiguous classes and source drift",
+        "writes no inventory until all observations match the exact T-010 policy contract",
+        "requires every raw UCP unconstrained clock Clock field to be empty and rejects period/create_clock injection",
+        "rejects nine-field numeric timing rows after the Summary of Paths closing separator",
+        "rejects every unknown non-decorative UCP summary row"
+      ]
+    },
+    "fixture_runner": {
+      "path": "fpga/catapult_a10/tools/run_physical_inventory_exporter_fixture.py",
+      "sha256": "e9fec53fb37c7a800535f12991cf15782658f13a3625a9cf70e59070453a5204",
+      "output_root": "build/agents/T-20260909-012/physical-inventory-fixture-correction-final",
+      "ignored": true
+    }
+  },
+  "actual_positive": {
+    "t007_snapshot": {
+      "root": "/home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5",
+      "summary_sha256": "2b29a4e7ae5b94a06296a7f173ca16b69f8226fa4ab1461d55f5e4855d6fd6e6",
+      "ucp_fast_sha256": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906",
+      "ucp_slow_sha256": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906",
+      "recovery_fast_sha256": "1060545681f92186c9406ae5c628c1b78c6d2e4a44a8f2d0cb0bd3bc329ac20e",
+      "removal_fast_sha256": "db06a4b59c70049211bfac5ff78562993b8d718d419e606ca519dc2465b7a6cc",
+      "recovery_slow_sha256": "b467afea78f9aa87123b70f655dbd084fc5eca86174601d2b43be8e7ccfbd0f8",
+      "removal_slow_sha256": "5b9ea25a3cd1c13c7a7e9cc14aa136aa5fc6dea356e68c97220f00cebe4268b8",
+      "inventory_sha256": "b42e16f6de2bc40620122bdca9111c1cd4e5fa60be7d9b03a61caf6b7afde9f8",
+      "checker_status": "PASS"
+    },
+    "t011_merged_sdc_snapshot": {
+      "root": "/home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset",
+      "summary_sha256": "9462aef4168b595ca2cb24566168b9df5d36e205868e3924c00c9480dea21b6b",
+      "ucp_fast_sha256": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906",
+      "ucp_slow_sha256": "43ec91ecd408f8a17ae2edb1513c191d3a94edd0ef572b38ebe95f92986de906",
+      "recovery_fast_sha256": "c1f319fc7027e785dd1339af3bbb886cd16d3bdacb2fedeba6d82d3be8b266d5",
+      "removal_fast_sha256": "aad2210cecfac8f144f8b6589d9b3a8a7e7c2afb6001561e831a563d0cb5b84f",
+      "recovery_slow_sha256": "148a4244413ae5da57d93513ebaa6d637c8b74be8c78e26d5221ec68d586c88c",
+      "removal_slow_sha256": "d3ac4da2eae82b174e4750a4214ee34b0410c2a917ad20226c14f016703b82e9",
+      "inventory_sha256": "b42e16f6de2bc40620122bdca9111c1cd4e5fa60be7d9b03a61caf6b7afde9f8",
+      "checker_status": "PASS",
+      "source_task_header": "T-20260909-011",
+      "source_provenance_emitted": "T-20260909-007"
+    }
+  },
+  "synthetic_matrix": {
+    "root": "build/agents/T-20260909-012/physical-inventory-fixture-correction-final",
+    "matrix_sha256": "c0fe14363e41eb811345b99c4dbcf8ce0b3088fea54eec35f34ce0bf75408f02",
+    "positive_export": "PASS",
+    "positive_checker": "PASS",
+    "negative_count": 13,
+    "negative_cases": [
+      "missing-report",
+      "missing-ucp-row",
+      "malformed-summary",
+      "duplicate-key",
+      "extra-ucp-clock",
+      "extra-ucp-port",
+      "count-drift",
+      "source-sha-mismatch",
+      "missing-summary-row",
+      "duplicate-ucp-row",
+      "ucp-clock-period-create-clock",
+      "ucp-unknown-summary-row",
+      "timing-tail-path-row"
+    ],
+    "all_negative_exit_code": 1
+  },
+  "validation": [
+    {
+      "run_id": "pycompile",
+      "level": "L0",
+      "started_at": "2026-09-09T14:17:25+08:00",
+      "finished_at": "2026-09-09T14:17:25+08:00",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile fpga/catapult_a10/tools/export_physical_waiver_inventory.py fpga/catapult_a10/tools/run_physical_inventory_exporter_fixture.py",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "run_id": "synthetic-fault-matrix",
+      "level": "L0",
+      "started_at": "2026-09-09T14:22:37+08:00",
+      "finished_at": "2026-09-09T14:22:38+08:00",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 fpga/catapult_a10/tools/run_physical_inventory_exporter_fixture.py --output-dir build/agents/T-20260909-012/physical-inventory-fixture-correction-final",
+      "exit_code": 0,
+      "result": "positive export/checker PASS; 13/13 negative cases rejected",
+      "matrix_sha256": "c0fe14363e41eb811345b99c4dbcf8ce0b3088fea54eec35f34ce0bf75408f02",
+      "resource": "local light; no lock, Quartus, GamePC, network or DUT"
+    },
+    {
+      "run_id": "actual-t011-export-and-check",
+      "level": "L0",
+      "started_at": "2026-09-09T14:17:07+08:00",
+      "finished_at": "2026-09-09T14:17:07+08:00",
+      "command": "python3 fpga/catapult_a10/tools/export_physical_waiver_inventory.py --policy fpga/catapult_a10/physical_waivers.json --summary /home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/t007_summary.tsv --ucp-fast /home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/t007_fast_unconstrained_paths.rpt --ucp-slow /home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/t007_slow_unconstrained_paths.rpt --fast-recovery /home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/t007_fast_emif_reset_to_adapter_recovery.rpt --fast-removal /home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/t007_fast_emif_reset_to_adapter_removal.rpt --slow-recovery /home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/t007_slow_emif_reset_to_adapter_recovery.rpt --slow-removal /home/chiro/projects/mycpu/lcvex-wt-T-20260907-037/build/agents/T-20260909-011/runtime/remote/final/ucp_reset/t007_slow_emif_reset_to_adapter_removal.rpt --output build/agents/T-20260909-012/actual-correction/t011-inventory.json; python3 fpga/catapult_a10/tools/check_physical_waivers.py --policy fpga/catapult_a10/physical_waivers.json --inventory build/agents/T-20260909-012/actual-correction/t011-inventory.json --json",
+      "exit_code": 0,
+      "result": "export PASS; checker PASS",
+      "inventory_sha256": "b42e16f6de2bc40620122bdca9111c1cd4e5fa60be7d9b03a61caf6b7afde9f8",
+      "resource": "local light; read-only designated snapshot; no remote action"
+    },
+    {
+      "run_id": "actual-t007-export-and-check",
+      "level": "L0",
+      "started_at": "2026-09-09T14:17:07+08:00",
+      "finished_at": "2026-09-09T14:17:08+08:00",
+      "command": "python3 fpga/catapult_a10/tools/export_physical_waiver_inventory.py --policy fpga/catapult_a10/physical_waivers.json --summary /home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/t007_summary.tsv --ucp-fast /home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/t007_fast_unconstrained_paths.rpt --ucp-slow /home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/t007_slow_unconstrained_paths.rpt --fast-recovery /home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/t007_fast_emif_reset_to_adapter_recovery.rpt --fast-removal /home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/t007_fast_emif_reset_to_adapter_removal.rpt --slow-recovery /home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/t007_slow_emif_reset_to_adapter_recovery.rpt --slow-removal /home/chiro/projects/mycpu/lcvex-wt-T-20260909-007/build/agents/T-007/runtime/remote_final5/t007_slow_emif_reset_to_adapter_removal.rpt --output build/agents/T-20260909-012/actual-correction/t007-inventory.json; python3 fpga/catapult_a10/tools/check_physical_waivers.py --policy fpga/catapult_a10/physical_waivers.json --inventory build/agents/T-20260909-012/actual-correction/t007-inventory.json --json",
+      "exit_code": 0,
+      "result": "export PASS; checker PASS",
+      "inventory_sha256": "b42e16f6de2bc40620122bdca9111c1cd4e5fa60be7d9b03a61caf6b7afde9f8",
+      "resource": "local light; read-only designated snapshot; no remote action"
+    },
+    {
+      "run_id": "diff-check",
+      "level": "L0",
+      "started_at": "2026-09-09T14:17:25+08:00",
+      "finished_at": "2026-09-09T14:17:25+08:00",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "write_boundary": {
+    "allowed_tracked": [
+      "fpga/catapult_a10/tools/export_physical_waiver_inventory.py",
+      "fpga/catapult_a10/tools/run_physical_inventory_exporter_fixture.py",
+      "docs/tasks/evidence/T-20260909-012.json",
+      "docs/handoffs/T-20260909-012-b25-physical-inventory-exporter.md"
+    ],
+    "ignored_build": "build/agents/T-20260909-012/**",
+    "forbidden_unchanged": [
+      "RTL",
+      "SDC",
+      "QSF",
+      "platform_manifest.json",
+      "source.lock",
+      "SHA256SUMS",
+      "TASKS.md",
+      "PROJECT_STATUS.md",
+      "ROADMAP.md",
+      "QEMU",
+      "other worktrees"
+    ],
+    "quartus_or_gamepc": false,
+    "network": false,
+    "dut_output_consumed": false,
+    "absolute_path_dependency": false
+  },
+  "correction": {
+    "review_result": "NEEDS_CHANGES",
+    "pre_correction_head": "c888ad310037b7bb0a034ceab1b276ad5308ab03",
+    "correction_head": "4e10351efad4381a8298c8b3ebd02c1c31f9ba89",
+    "correction_at": "2026-09-09T14:18:01+08:00",
+    "tests_rerun": [
+      "synthetic exporter/checker: 13/13 negative cases rejected",
+      "T-007 actual snapshot exporter/checker PASS",
+      "T-011 actual snapshot exporter/checker PASS",
+      "py_compile PASS",
+      "git diff --check PASS"
+    ]
+  },
+  "known_limits": [
+    "T-007/T-011 summary and raw report grammar is intentionally strict; a future Quartus report-layout change fails closed",
+    "the exporter checks the frozen T-010 contract and does not create a new contract for changed physical observations",
+    "actual snapshots were consumed read-only; no new physical STA or board action was performed"
+  ]
+}

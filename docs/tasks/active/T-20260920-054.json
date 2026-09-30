@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-054",
+  "parent": "T-20260920-039",
+  "label": "B25-BOARD-USER-ATTESTED-FLASH-BOOT-PREFLIGHT",
+  "title": "Allow an explicit user-attested Flash boot baseline without treating cached JTAG design hash as live identity",
+  "kind": "board-runner-infrastructure",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-and-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-032", "T-20260920-040", "T-20260920-053"],
+  "base_sha": "0765594782d14a106769b4325376bb45cc408f50",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "branch": "infra/T-20260920-054-attested-flash-boot-preflight",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-054",
+  "writes": [
+    "fpga/catapult_a10/tools/board_runner/validate_contract.py",
+    "fpga/catapult_a10/tools/board_runner/contract_common.ps1",
+    "fpga/catapult_a10/tools/board_runner/preflight.ps1",
+    "fpga/catapult_a10/tools/test_board_runner.py",
+    "fpga/catapult_a10/tools/board_runner/README.md",
+    "docs/FPGA_A10_JTAG_BURN_SOP.md",
+    "docs/handoffs/T-20260920-054-attested-flash-boot-preflight.md",
+    "docs/tasks/evidence/T-20260920-054.json"
+  ],
+  "reads": [
+    "T-053 read-only preflight evidence and user confirmation of Flash-booted VexRiscv/Linux",
+    "T-032 cached standard-server design-hash audit",
+    "T-040 tracked B25 board runner/SOP and negative matrix"
+  ],
+  "scope": "Add an explicit fail-closed initial-chain policy. Default contracts continue requiring the frozen golden design hash. Only T-053 with its exact frozen candidate/golden identities and the fixed user-attested Flash-boot token may treat standard jtagconfig design hash as diagnostic while retaining cable/JTAG-ID/UART/PHY, EDA, port, SOF identity, candidate transaction, and final golden transaction checks.",
+  "acceptance": "Local board-runner matrix proves default golden-hash gate is unchanged; T-053's fixed user-attested policy validates only for exact task/candidate/golden identities and rejects missing/wrong attestation, other task IDs, changed SOF hashes, malformed paths, persistent formats, or other safety relaxation. Preflight logs the observed design hash and policy without claiming it is live identity. `make b25-board-runner-check` passes; no remote/Quartus/JTAG/terminal action occurs.",
+  "forbidden_regions": [
+    "Quartus programmer, JTAG programming, nios2-terminal, Flash/EPCQ, reset or power",
+    "changing candidate or golden SOF identities",
+    "disabling cable/JTAG-ID/UART/PHY or process/port safety checks",
+    "removing T-053 final golden restore requirement",
+    "accepting user-attested mode for tasks other than exact T-053 payload"
+  ],
+  "resource": "Local L0 contract tests only; no GamePC or hardware use.",
+  "dispatch": {"sent_at": "2026-09-27T19:10:52+08:00", "agent_name": "root", "monitoring": "integrator-owned sequential implementation; no subagent"},
+  "result": {"evidence": "docs/tasks/evidence/T-20260920-054.json", "status": "PASS", "local_board_runner_tests": "25/25", "remote_or_hardware_actions": 0},
+  "created_at": "2026-09-27T19:10:52+08:00",
+  "updated_at": "2026-09-27T20:59:44+08:00"
+}

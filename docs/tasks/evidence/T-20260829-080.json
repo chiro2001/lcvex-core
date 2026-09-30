@@ -1,0 +1,444 @@
+{
+  "artifacts": [
+    {
+      "bytes": 12674,
+      "id": "flat-lcvex_axi4_master",
+      "owner": "T-20260829-080",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a1.py",
+      "retain_until": "task-review",
+      "sha256": "ba808f6fe97f8fb34a0cdbc64cb3687a4b5e94adc1143284577f116d5b13baa7",
+      "uri": "fpga/opensynth/generated/lcvex_axi4_master_flat.v"
+    },
+    {
+      "bytes": 665059,
+      "id": "netlist-lcvex_axi4_master-run1",
+      "owner": "T-20260829-080",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a1.py",
+      "retain_until": "task-review",
+      "sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+      "uri": "build/tmp/opensynth/lcvex_axi4_master/run-001/netlist.v"
+    },
+    {
+      "bytes": 35613,
+      "id": "flat-lcvex_mem_arb",
+      "owner": "T-20260829-080",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a1.py",
+      "retain_until": "task-review",
+      "sha256": "a58f6a9916927c25f4ea9779a544f5036d826d42f23a256aef5b0084b6371729",
+      "uri": "fpga/opensynth/generated/lcvex_mem_arb_flat.v"
+    },
+    {
+      "bytes": 5973,
+      "id": "netlist-lcvex_mem_arb-run1",
+      "owner": "T-20260829-080",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a1.py",
+      "retain_until": "task-review",
+      "sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+      "uri": "build/tmp/opensynth/lcvex_mem_arb/run-001/netlist.v"
+    },
+    {
+      "bytes": 36663,
+      "id": "flat-lcvex_mem_delay",
+      "owner": "T-20260829-080",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a1.py",
+      "retain_until": "task-review",
+      "sha256": "bcf898b4c46a80dc315a83dd0bf68a79cf056f0b06f41669dbf5c6104543b559",
+      "uri": "fpga/opensynth/generated/lcvex_mem_delay_flat.v"
+    },
+    {
+      "bytes": 48107,
+      "id": "netlist-lcvex_mem_delay-run1",
+      "owner": "T-20260829-080",
+      "reproduce": "python3 scripts/opensynth/run_opensynth_a1.py",
+      "retain_until": "task-review",
+      "sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+      "uri": "build/tmp/opensynth/lcvex_mem_delay/run-001/netlist.v"
+    }
+  ],
+  "base_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+  "head_sha": "378b7a3a9442b1d8d7ab67b9984287ed4e8f0368",
+  "known_limits": [
+    "Generic 4-LUT mapping is not an FPGA architectural resource report.",
+    "LUT/FF are synth proxy counts, not Arria 10/ECP5 vendor results.",
+    "RAM/DSP/area are N/A: no device memory/DSP mapping was performed.",
+    "DO NOT use ABC delay as Fmax.",
+    "lcvex_l2 and lcvex_core not run in this task (see handoff for blockers)."
+  ],
+  "merge_sha": "0afa68bfbd6e5f3c8b7b0c0aa691ada410b63a73",
+  "metadata": {
+    "branch": "feature/T-20260829-080-a1-generic-synth",
+    "received_at": "2026-08-29T02:37:08+0800",
+    "reported_at": "2026-08-29T02:37:08+0800",
+    "sent_at": "2026-08-29T02:26:00+0800",
+    "state": "review",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-080"
+  },
+  "proxy_results": {
+    "module_summary": {
+      "lcvex_axi4_master": {
+        "config": {
+          "ADDR_WIDTH": 64,
+          "DATA_WIDTH": 128,
+          "ID_WIDTH": 4,
+          "MAX_BURST_LEN": 16
+        },
+        "flat_file": "fpga/opensynth/generated/lcvex_axi4_master_flat.v",
+        "flat_sha256": "ba808f6fe97f8fb34a0cdbc64cb3687a4b5e94adc1143284577f116d5b13baa7",
+        "runs": [
+          {
+            "dff": 2406,
+            "lut4": 1870,
+            "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+            "ram_bits": 0,
+            "run_id": "owner-lcvex_axi4_master-run01"
+          },
+          {
+            "dff": 2406,
+            "lut4": 1870,
+            "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+            "ram_bits": 0,
+            "run_id": "owner-lcvex_axi4_master-run02"
+          }
+        ],
+        "stable_across_two_runs": true
+      },
+      "lcvex_mem_arb": {
+        "config": {
+          "PORTS": 3
+        },
+        "flat_file": "fpga/opensynth/generated/lcvex_mem_arb_flat.v",
+        "flat_sha256": "a58f6a9916927c25f4ea9779a544f5036d826d42f23a256aef5b0084b6371729",
+        "runs": [
+          {
+            "dff": 3,
+            "lut4": 20,
+            "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+            "ram_bits": 0,
+            "run_id": "owner-lcvex_mem_arb-run01"
+          },
+          {
+            "dff": 3,
+            "lut4": 20,
+            "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+            "ram_bits": 0,
+            "run_id": "owner-lcvex_mem_arb-run02"
+          }
+        ],
+        "stable_across_two_runs": true
+      },
+      "lcvex_mem_delay": {
+        "config": {
+          "DELAY_MODE": 1,
+          "RAND_MAX": 4,
+          "SEED": "8'hA5"
+        },
+        "flat_file": "fpga/opensynth/generated/lcvex_mem_delay_flat.v",
+        "flat_sha256": "bcf898b4c46a80dc315a83dd0bf68a79cf056f0b06f41669dbf5c6104543b559",
+        "runs": [
+          {
+            "dff": 241,
+            "lut4": 63,
+            "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+            "ram_bits": 0,
+            "run_id": "owner-lcvex_mem_delay-run01"
+          },
+          {
+            "dff": 241,
+            "lut4": 63,
+            "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+            "ram_bits": 0,
+            "run_id": "owner-lcvex_mem_delay-run02"
+          }
+        ],
+        "stable_across_two_runs": true
+      }
+    },
+    "task": "T-20260829-080"
+  },
+  "qemu": {
+    "binary_sha256": "",
+    "commit": "N/A",
+    "patches_sha256": "",
+    "release": "N/A"
+  },
+  "rtl_filelist_sha256": "a28a62a38dcaba3f3752b01f9ba8cbb7b6d7ec81170aaac304bb5a6844fbb63c",
+  "runs": [
+    {
+      "command": "yosys -s build/tmp/opensynth/lcvex_axi4_master/lcvex_axi4_master-run01/synth.ys",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "abc_report_lut": 1870,
+        "area": "N/A",
+        "dff": 2406,
+        "dsp": "N/A",
+        "lut4": 1870,
+        "num_cells": 4276,
+        "num_cells_by_type": {
+          "$_DFFE_PN0P_": 2400,
+          "$_DFFE_PN1P_": 1,
+          "$_DFF_PN0_": 4,
+          "$_DFF_PN1_": 1,
+          "$lut": 1870
+        },
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 3010,
+        "num_ports": 56,
+        "num_wire_bits": 7000,
+        "num_wires": 1646,
+        "ram_bits": 0
+      },
+      "module": "lcvex_axi4_master",
+      "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-lcvex_axi4_master-run01",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "wall_seconds": 3.277
+    },
+    {
+      "command": "yosys -s build/tmp/opensynth/lcvex_axi4_master/lcvex_axi4_master-run02/synth.ys",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "abc_report_lut": 1870,
+        "area": "N/A",
+        "dff": 2406,
+        "dsp": "N/A",
+        "lut4": 1870,
+        "num_cells": 4276,
+        "num_cells_by_type": {
+          "$_DFFE_PN0P_": 2400,
+          "$_DFFE_PN1P_": 1,
+          "$_DFF_PN0_": 4,
+          "$_DFF_PN1_": 1,
+          "$lut": 1870
+        },
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 3010,
+        "num_ports": 56,
+        "num_wire_bits": 7000,
+        "num_wires": 1646,
+        "ram_bits": 0
+      },
+      "module": "lcvex_axi4_master",
+      "netlist_sha256": "fa60ea1e6c297a8e4754e2e677d5683f384c6c2bc111eafd60da1cbee45b981a",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-lcvex_axi4_master-run02",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "wall_seconds": 3.46
+    },
+    {
+      "command": "yosys -s build/tmp/opensynth/lcvex_mem_arb/lcvex_mem_arb-run01/synth.ys",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "abc_report_lut": 20,
+        "area": "N/A",
+        "dff": 3,
+        "dsp": "N/A",
+        "lut4": 20,
+        "num_cells": 23,
+        "num_cells_by_type": {
+          "$_DFFE_PN0P_": 3,
+          "$lut": 20
+        },
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 432,
+        "num_ports": 14,
+        "num_wire_bits": 449,
+        "num_wires": 26,
+        "ram_bits": 0
+      },
+      "module": "lcvex_mem_arb",
+      "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-lcvex_mem_arb-run01",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "wall_seconds": 0.17
+    },
+    {
+      "command": "yosys -s build/tmp/opensynth/lcvex_mem_arb/lcvex_mem_arb-run02/synth.ys",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "abc_report_lut": 20,
+        "area": "N/A",
+        "dff": 3,
+        "dsp": "N/A",
+        "lut4": 20,
+        "num_cells": 23,
+        "num_cells_by_type": {
+          "$_DFFE_PN0P_": 3,
+          "$lut": 20
+        },
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 432,
+        "num_ports": 14,
+        "num_wire_bits": 449,
+        "num_wires": 26,
+        "ram_bits": 0
+      },
+      "module": "lcvex_mem_arb",
+      "netlist_sha256": "771400d995de60b707838b694be6515c365cc0d1147aaffe77106beb1089c6ab",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-lcvex_mem_arb-run02",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "wall_seconds": 0.144
+    },
+    {
+      "command": "yosys -s build/tmp/opensynth/lcvex_mem_delay/lcvex_mem_delay-run01/synth.ys",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "abc_report_lut": 63,
+        "area": "N/A",
+        "dff": 241,
+        "dsp": "N/A",
+        "lut4": 63,
+        "num_cells": 304,
+        "num_cells_by_type": {
+          "$_DFFE_PN0P_": 240,
+          "$_DFF_PN0_": 1,
+          "$lut": 63
+        },
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 424,
+        "num_ports": 14,
+        "num_wire_bits": 725,
+        "num_wires": 48,
+        "ram_bits": 0
+      },
+      "module": "lcvex_mem_delay",
+      "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-lcvex_mem_delay-run01",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "wall_seconds": 0.199
+    },
+    {
+      "command": "yosys -s build/tmp/opensynth/lcvex_mem_delay/lcvex_mem_delay-run02/synth.ys",
+      "cpu_count": null,
+      "cpuset": "",
+      "disk_delta_mb": null,
+      "exit_code": 0,
+      "level": "opensynth-generic-synth",
+      "metrics": {
+        "abc_report_lut": 63,
+        "area": "N/A",
+        "dff": 241,
+        "dsp": "N/A",
+        "lut4": 63,
+        "num_cells": 304,
+        "num_cells_by_type": {
+          "$_DFFE_PN0P_": 240,
+          "$_DFF_PN0_": 1,
+          "$lut": 63
+        },
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_port_bits": 424,
+        "num_ports": 14,
+        "num_wire_bits": 725,
+        "num_wires": 48,
+        "ram_bits": 0
+      },
+      "module": "lcvex_mem_delay",
+      "netlist_sha256": "f91a7c9452b7c162cbdbb6a5c3c5d74defb779701e45fc444d0175a5eca8e365",
+      "peak_rss_mb": null,
+      "result": "pass",
+      "run_id": "owner-lcvex_mem_delay-run02",
+      "runner_role": "owner",
+      "seed": null,
+      "source_sha": "3d717e763209923f5ddaedeeeafa9d0b9985ba6c",
+      "wall_seconds": 0.201
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "T-20260829-080",
+  "toolchain": {
+    "abc": "UC Berkeley, ABC 1.01 (compiled Jun 19 2026 19:18:10)",
+    "python": "Python 3.12.10",
+    "yosys": "Yosys 0.66 (git sha1 86f2ddebc-dirty, g++ 16.1.1 -march=x86-64 -mtune=generic -O2 -fno-plt -fexceptions -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/yosys/src=/usr/src/debug/yosys -fPIC -O3) [startdir/yosys at makepkg]"
+  },
+  "state": "done",
+  "handoff_sha": "de20431bbeb975fdb72a46f4a1be1f3bbedb73ff",
+  "integrator_review": {
+    "received_at": "2026-08-29T02:40:40+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "c412c05df8f17eb6b04d588ff03f4d29fbfe8780",
+    "implementation_sha": "378b7a3a9442b1d8d7ab67b9984287ed4e8f0368",
+    "notes": "A1 完成三个真实模块 Yosys/ABC generic 4-LUT synth 双跑，LUT/FF/netlist hash 稳定；lcvex_core/l2 有明确 blocker；仅为逻辑代理，非 A10 signoff。",
+    "merge_sha": "0afa68bfbd6e5f3c8b7b0c0aa691ada410b63a73",
+    "result_sha": "378b7a3a9442b1d8d7ab67b9984287ed4e8f0368"
+  },
+  "correction_record": {
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "0afa68bfbd6e5f3c8b7b0c0aa691ada410b63a73",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "handoff_sha",
+        "old": "",
+        "new": "de20431bbeb975fdb72a46f4a1be1f3bbedb73ff",
+        "reason": "resolve handoff commit from active handoff path"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from active integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "378b7a3a9442b1d8d7ab67b9984287ed4e8f0368",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ],
+    "note": "Batch evidence finalization by T-20260830-027: added authoritative merge/state/handoff/review fields without rewriting historical handoff."
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-022",
+  "label": "FP-P5-RERUN-AFTER-P3T",
+  "title": "FP-P5 rerun：register cuts + SDC/CDC 修复后 full-FP synthesis/fit/STA",
+  "kind": "verify-fpga-physical",
+  "priority": "critical",
+  "phase": "blocked",
+  "dispatch_status": "reported",
+  "assigned_owner": "dsh-fp-p5-rerun",
+  "agent_type": "remote-quartus-full-flow",
+  "model": "deepseek-v4-flash",
+  "model_selection": "派单省略 model；dsh 默认通道 deepseek-v4-flash[max]",
+  "reasoning_effort": "max",
+  "depends_on": [
+    "T-20260902-020",
+    "T-20260902-021"
+  ],
+  "base_sha": "9f45bd24d319a53b2be3a50d1e4434f0f4c32431",
+  "branch": "verify/T-20260902-022-fp-p5-rerun",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-022",
+  "scope": "在包含 FP-P3T 寄存器切级与 A10 SDC/CDC 修复的合并 SHA 上，重跑 full-FP synthesis→fitter→signoff STA；若 setup/hold/recovery/removal 全部非负，则进入 assembler/SOF。",
+  "reads": [
+    "docs/handoffs/T-20260902-019-fp-p5-physical.md",
+    "docs/handoffs/T-20260902-020-fp-p3t-register-cuts.md",
+    "docs/handoffs/T-20260902-021-a10-cdc-sdc-fix.md",
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "fpga/catapult_a10/**",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "docs/handoffs/T-20260902-022-fp-p5-rerun.md",
+    "docs/tasks/evidence/T-20260902-022.json",
+    "build/agents/T-20260902-022/**",
+    "远端 D:\\Projects\\fpga-altra\\lcvex\\build\\T-20260902-022-probe\\**"
+  ],
+  "validation": {
+    "l0": [
+      "远端只读预检；source/QSF/SDC/IP/SHA 绑定"
+    ],
+    "l1": [
+      "synthesis/fit/STA 结果完整"
+    ],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "full-FP synthesis/fitter/STA 均有同 SHA 报告；若时序全绿则 assembler/SOF；若仍红则记录 top-N 路径并进入下一轮 FP-P3T/CDC 修复。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 16384,
+    "disk_mb": 16384,
+    "timeout_s": 43200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 180,
+    "extension_increment_minutes": 60,
+    "max_minutes": 720,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-03T07:30:00+08:00",
+  "updated_at": "2026-09-03T08:50:15+08:00",
+  "known_limits": [
+    "不编程/上板；不读取 license；不删除文件；不停止非 EDA 进程"
+  ],
+  "handoff": "docs/handoffs/T-20260902-022-fp-p5-rerun.md",
+  "evidence": "docs/tasks/evidence/T-20260902-022.json",
+  "next": "若通过进入 Gate F-BOARD/发布候选；若失败继续 FP-P3T/CDC",
+  "dispatch": {
+    "sent_at": "2026-09-03T07:30:30+08:00",
+    "agent_name": "dsh-subagent",
+    "model": "deepseek-v4-flash",
+    "model_selection": "dsh-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-022",
+    "branch": "verify/T-20260902-022-fp-p5-rerun"
+  },
+  "head_sha": "bf90d84c0e21d74c15e36429852d45a0e86d5046",
+  "merge_sha": "6eaaea30bca1e0cadfa19c744eb1d93012c869c3",
+  "integrator_review": {
+    "status": "accepted_blocked",
+    "received_at": "2026-09-03T08:50:00+08:00",
+    "merged_at": "2026-09-03T08:50:15+08:00",
+    "recorded_at": "2026-09-03T08:50:15+08:00",
+    "notes": "FP-P5 rerun still blocked at STA; setup/hold/recovery/removal negatives remain. Next: deeper fp_exec cuts + RTL CDC/reset sync."
+  }
+}

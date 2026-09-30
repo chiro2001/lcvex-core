@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260830-042",
+  "label": "CKPT-PROTO",
+  "state": "done",
+  "partial": false,
+  "owner": "t042_checkpoint_protocol_luna",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
+  "base_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+  "head_sha": "fb0c5f1dad81b6d822f1885aac19024c8a960177",
+  "content_sha": "9e7f373e816e71fd92e8d81afc344df33230b56b",
+  "merge_sha": "ee5d5582bcc7478879636ef1895c643b9c95d976",
+  "branch": "feature/T-20260830-042-checkpoint-protocol",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-042",
+  "sent_at": "2026-08-30T16:15:06+08:00",
+  "received_at": "2026-08-30T16:16:40+08:00",
+  "reported_at": "2026-08-30T16:49:52+08:00",
+  "followup_sent_at": "2026-08-30T16:44:45+08:00",
+  "followup_received_at": "2026-08-30T16:45:39+08:00",
+  "followup_reported_at": "2026-08-30T16:49:52+08:00",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "dispatch_sent_at": "2026-08-30T16:15:06+08:00",
+    "received_at": "2026-08-30T16:16:40+08:00",
+    "reported_at": "2026-08-30T16:49:52+08:00",
+    "followup_sent_at": "2026-08-30T16:44:45+08:00",
+    "followup_received_at": "2026-08-30T16:45:39+08:00",
+    "followup_reported_at": "2026-08-30T16:49:52+08:00"
+  },
+  "scope": "docs-only：收敛当前 B4 checkpoint drain、P2 sidecar v4/coordinator/manifest restore 与 F1/F3 必需扩展；不修改 RTL/TB/sim/scripts/Makefile，不运行构建、仿真、QEMU、生成器或 Quartus。",
+  "read_files": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "/home/chiro/projects/mycpu/lcvex/docs/tasks/active/T-20260830-042.json",
+    "docs/PERFORMANCE_F3_PREWORK.md",
+    "docs/handoffs/T-20260829-097-checkpoint-sidecar-v4.md",
+    "docs/L1_L2_PROBE_CONTRACT.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/handoffs/044-plan-diff-checkpoint.md",
+    "docs/handoffs/050-diff-checkpoint-implementation.md",
+    "docs/handoffs/051-checkpoint-joint-lockstep.md",
+    "docs/handoffs/052-generic-timer-checkpoint-sidecar.md",
+    "docs/handoffs/053-gic-checkpoint-sidecar.md",
+    "docs/handoffs/055-checkpoint-manifest-hash.md",
+    "docs/handoffs/056-linux-mmu-checkpoint-restore.md",
+    "docs/handoffs/084-linux-dtb-checkpoint-and-debug-monitor.md",
+    "docs/handoffs/092-lcvxsys3-complete-restore-20260825.md",
+    "docs/handoffs/T-20260826-002-trace-checkpoint.md",
+    "docs/handoffs/T-20260826-045-checkpoint-finalize-atomic.md",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/checkpoint_manifest_smoke.py",
+    "sim/difftest/checkpoint_resume_manifest_smoke.py",
+    "sim/difftest/checkpoint_v4_struct_smoke.py",
+    "sim/difftest/checkpoint_timer_smoke.sh",
+    "sim/difftest/checkpoint_sys_smoke.sh",
+    "sim/difftest/checkpoint_sys_v3_smoke.sh",
+    "sim/difftest/checkpoint_gic_smoke.sh",
+    "sim/difftest/checkpoint_mmio_smoke.sh",
+    "sim/difftest/checkpoint_sctlr_mask_smoke.sh",
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/run_lockstep_resume.sh",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_protocol.py",
+    "qemu/plugins/lcvex_difftest.c",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_l1_d_wb.sv",
+    "rtl/lcvex_l2_wb.sv",
+    "rtl/lcvex_l1_coherence.sv",
+    "rtl/lcvex_catapult_soc_coh.sv",
+    "rtl/lcvex_core_wrap.sv",
+    "rtl/lcvex_cluster_top.sv",
+    "tb/sv/lcvex_l2_l1_probe_tb.sv",
+    "tb/sv/lcvex_l1_d_wb_tb.sv",
+    "tb/sv/lcvex_l1_d_wb_cocotb_tb.sv",
+    "sim/cocotb/test_l1_d_wb.py",
+    "sim/mmio/lcvex_mmio_fabric.h"
+  ],
+  "read_only_commands": [
+    {
+      "run_id": "worktree-check-001",
+      "command": "date '+%Y-%m-%dT%H:%M:%S%z'; git status --short --branch; git rev-parse HEAD; git branch --show-current",
+      "source_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+      "result": "read-only-pass",
+      "summary": "2026-08-30T16:16:40+0800；专用 worktree clean，HEAD/base 与分支均正确。"
+    },
+    {
+      "run_id": "inventory-001",
+      "command": "wc -l required docs/RTL/tests; rg --files checkpoint-related; rg -n checkpoint/drain/restore/quiesce/manifest/sidecar/epoch",
+      "source_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+      "result": "read-only-pass",
+      "summary": "完成指定文档、历史 handoff、实现、checkpoint_* 测试脚本与协议符号索引。"
+    },
+    {
+      "run_id": "authority-read-001",
+      "command": "sed/nl 只读阅读 AGENTS.md、docs/MULTI_AGENT_WORKFLOW.md、T-042 JSON、PERFORMANCE_F3_PREWORK、sidecar/probe/commit 文档与历史 checkpoint handoff",
+      "source_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+      "result": "read-only-pass",
+      "summary": "确认任务写集、时间戳/evidence 口径、F3a-d 与 F1/G5/C2 交叉门、历史证据不迁移为当前 PASS。"
+    },
+    {
+      "run_id": "implementation-read-001",
+      "command": "sed/nl 只读阅读 sim/difftest/checkpoint.py、lockstep_coordinator.cc、qemu plugin protocol、run_lockstep_step/resume 与 checkpoint_* 相关段落",
+      "source_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+      "result": "read-only-pass",
+      "summary": "确认 CKPT_REQ/READY/ACK 顺序、sidecar v1-v4/timer/GIC/MMIO/FP 布局、pending/final manifest、parent/source/hash/seq 校验与 restore 顺序；未运行工具。"
+    },
+    {
+      "run_id": "rtl-drain-read-001",
+      "command": "nl/sed 只读阅读 lcvex_core restore/commit/reset、lcvex_l1_d_wb/lcvex_l2_wb drain/probe、lcvex_l1_coherence、catapult coherence、core_wrap/cluster_top 与联合 probe/drain TB",
+      "source_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+      "result": "read-only-pass",
+      "summary": "确认 B4 L1→L2→PoC drain、ack hold、probe abort、fault metadata 保留；发现 P2 soc_tb 无 quiesce、I-L1 gate/多核 drain/epoch/timeout 缺口。"
+    },
+    {
+      "run_id": "docs-diff-check-001",
+      "command": "git diff --check",
+      "source_sha": "0f4b4a18970219e719674edd6cb3ff91d4c7ac38",
+      "result": "pass",
+      "summary": "当前文档草稿无 whitespace error；未运行构建、仿真或生成器。"
+    },
+    {
+      "run_id": "docs-final-validation-001",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260830-042.json >/dev/null; git diff --check; git status --short --branch",
+      "source_sha": "ea70321cfdfd1d02364cddefa1da2744f2e302a5",
+      "result": "pass",
+      "summary": "技术内容提交后的 JSON/whitespace/写集复核；不运行构建、仿真或生成器。"
+    },
+    {
+      "run_id": "followup-base-head-check-001",
+      "command": "git diff --check 0f4b4a18970219e719674edd6cb3ff91d4c7ac38..HEAD; python3 -m json.tool docs/tasks/evidence/T-20260830-042.json >/dev/null; test -z \"$(git status --porcelain)\"",
+      "source_sha": "9e7f373e816e71fd92e8d81afc344df33230b56b",
+      "result": "pass",
+      "summary": "审计 follow-up：BASE..HEAD 全范围 whitespace、evidence JSON 和 clean worktree 均通过。"
+    }
+  ],
+  "files_written": [
+    "docs/CHECKPOINT_PROTOCOL.md",
+    "docs/handoffs/T-20260830-042-checkpoint-protocol.md",
+    "docs/tasks/evidence/T-20260830-042.json"
+  ],
+  "validation": {
+    "tests_run": false,
+    "build_run": false,
+    "simulation_run": false,
+    "qemu_run": false,
+    "quartus_run": false,
+    "generators_run": false,
+    "git_diff_check": "pass",
+    "json_validation": "pass",
+    "note": "docs-only；历史 handoff 中的测试结果仅作映射，不写成当前 source SHA 新 PASS。"
+  },
+  "conclusion": "已新增 CHECKPOINT_PROTOCOL.md，冻结 B4 drain/ready-valid/hold/fault、P2 sidecar/manifest provenance 与 restore 顺序，并明确 F1/F3/G5/C2 required extension、gap 和停止条件。",
+  "blockers": [
+    "实际 P2 lockstep soc_tb 未接 checkpoint_quiesce/drain，不能声称 capture 前 core/cache 已排空。",
+    "F3a 仍缺端到端 source/transaction/epoch/age/beat identity、stale-response quarantine、pipeline drain、I-L1 quiesce gate 和 checkpoint timeout。",
+    "C1/C2/multi-core checkpoint envelope 与 directory/global PoC drain 未接通。"
+  ],
+  "risks": [
+    "现有硬件 checkpoint_ack_valid 是 drain boundary ack，不是 sidecar/manifest final publication；当前 P2 host ACK 早于 run-end finalize marker。",
+    "arch 与 sys sidecar 同 row 的 payload 尚未交叉校验；restore 当前以 sys 注入、以 arch 做 INIT 期望。",
+    "cache/TLB/MSHR/store-buffer/fetch-FIFO 不在 sidecar，restore 只能依赖 drain/invalidate/epoch 门；SVE Z vector 和非零 timer offset 不在当前 profile。",
+    "legacy P6 manifest.tsv append 与逐 artifact rename 没有掉电级 bundle atomicity/目录 fsync。"
+  ],
+  "artifacts": [
+    {
+      "id": "checkpoint-protocol",
+      "uri": "docs/CHECKPOINT_PROTOCOL.md",
+      "sha256": "7c94c0fb6c4e927e6a564f06c7a94f0162cf382e507de4e3f49ad88e42b66920",
+      "bytes": 42013,
+      "owner": "T-20260830-042",
+      "retain_until": "f3a-implementation-start",
+      "reproduce": "sha256sum docs/CHECKPOINT_PROTOCOL.md"
+    },
+    {
+      "id": "handoff",
+      "uri": "docs/handoffs/T-20260830-042-checkpoint-protocol.md",
+      "sha256": "2fe0ff0586acf4c744e0d33e60360bbb36356eb59ae0a274e5dd6f3f7305782e",
+      "bytes": 4633,
+      "owner": "T-20260830-042",
+      "retain_until": "task-close",
+      "reproduce": "sha256sum docs/handoffs/T-20260830-042-checkpoint-protocol.md"
+    },
+    {
+      "id": "evidence",
+      "uri": "docs/tasks/evidence/T-20260830-042.json",
+      "sha256": "self-referential; bind via final Git tip",
+      "bytes": null,
+      "owner": "T-20260830-042",
+      "retain_until": "task-close",
+      "reproduce": "python3 -m json.tool docs/tasks/evidence/T-20260830-042.json"
+    }
+  ],
+  "head_semantics": {
+    "content_sha": "9e7f373e816e71fd92e8d81afc344df33230b56b (owner technical correction commit)",
+    "head_sha": "fb0c5f1dad81b6d822f1885aac19024c8a960177 (owner final branch tip)",
+    "final_tip_sha": "owner FINAL and integrator receipt verified fb0c5f1dad81b6d822f1885aac19024c8a960177",
+    "self_reference": "evidence artifact hash is intentionally self-referential; JSON syntax and final Git tip bind it"
+  },
+  "correction_record": {
+    "pre_correction_head_sha": "f6f0405be88fbd9f465f3b19b7f7bbad8b4cd21c",
+    "content_sha": "ea70321cfdfd1d02364cddefa1da2744f2e302a5",
+    "old_reported_at": "2026-08-30T16:41:35+08:00",
+    "metadata_commits": [
+      "dda6a2933c320865b766a7ecd7d15965e74e98e2",
+      "36a49ab4e380d1241f37679a1d13c4b4fc9edd5a",
+      "f6f0405be88fbd9f465f3b19b7f7bbad8b4cd21c"
+    ],
+    "note": "本次 metadata follow-up 会再次改变 branch tip；evidence 自身不能预写该最终 tip。FINAL 的 head 是最终 tip，content_sha/head_sha 保留技术内容提交。"
+  },
+  "followup_correction": {
+    "followup_sent_at": "2026-08-30T16:44:45+08:00",
+    "followup_received_at": "2026-08-30T16:45:39+08:00",
+    "reported_at": "2026-08-30T16:46:16+08:00",
+    "pre_correction_head_sha": "696ad28fea0f1f25fb8238bd795ae3424c840925",
+    "old_reported_at": "2026-08-30T16:42:40+08:00",
+    "findings": [
+      "删除 CHECKPOINT_PROTOCOL.md 第 3/5 行 trailing whitespace",
+      "将 TRANSACTION/PoC_DRAIN 改名并定义为 CORE_PTW_TRANSPORT_INFLIGHT_DRAIN，禁止误解为 cache dirty PoC drain"
+    ],
+    "required_commit": "docs: fix checkpoint protocol audit findings"
+  },
+  "integrator_correction": {
+    "recorded_at": "2026-08-30T16:52:33+08:00",
+    "old_reported_at": "2026-08-30T16:46:16+08:00",
+    "corrected_reported_at": "2026-08-30T16:49:52+08:00",
+    "basis": "harness final receipt after owner final commit fb0c5f1 at 2026-08-30T16:49:01+08:00",
+    "owner_head_sha": "fb0c5f1dad81b6d822f1885aac19024c8a960177",
+    "owner_content_sha": "9e7f373e816e71fd92e8d81afc344df33230b56b",
+    "merge_sha": "ee5d5582bcc7478879636ef1895c643b9c95d976"
+  },
+  "integration": {
+    "reviewed_at": "2026-08-30T16:52:33+08:00",
+    "result": "accepted_with_implementation_gates",
+    "checks": [
+      "owner worktree clean and three-file write set only",
+      "git diff --check BASE..HEAD passed after whitespace correction",
+      "JSON validation and artifact hashes passed",
+      "drain stage renamed to CORE_PTW_TRANSPORT_INFLIGHT_DRAIN and dirty order fixed as D-L1 then L2/PoC",
+      "historical tests were not misreported as current-SHA passes"
+    ],
+    "tests": "docs-only; no build or simulation required or claimed",
+    "gate": "Checkpoint documentation gate is closed; F3a implementation remains blocked until bridge, UID/epoch quarantine, pipeline/I-L1 drain and timeout are implemented and verified."
+  },
+  "next": "Checkpoint 文档门已闭合；实现并验证 P2↔B4 bridge、UID/epoch quarantine、pipeline/I-L1/transport drain 和 timeout 前，F3a implementation 保持 blocked。"
+}

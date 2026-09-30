@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "T-20260905-001",
+  "label": "TIMING-BATCH-PIPELINE",
+  "title": "Pipeline timing-path analysis, RTL batches, validation and physical implementation",
+  "kind": "workflow-governance",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-integrator",
+  "agent_type": "integration-process",
+  "review": {
+    "required": true,
+    "agent_type": "read-only-workflow-review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "只读检查 timing batch 的候选分支门、同文件 write_regions、安全回退、跨 SHA 证据和资源槽规则"
+  },
+  "depends_on": [],
+  "base_sha": "0f8802fd360ff031728075b3b6b218f2ba10ffcd",
+  "branch": "feature/p7-final",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "scope": "把当前一次只修一条 critical path、逐轮重复仿真和 Quartus 的串行时序收敛流程改为可审计的批次流水线：一次 top-N 聚类后并行推进 2-3 条独立 RTL 线，先汇入临时 batch candidate，再统一仿真和 physical；上一批验证/综合时并行准备下一批分析/原型，同时保持 SHA、写集、资源和发布门可信。",
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/handoffs/T-20260902-019-*.md",
+    "docs/handoffs/T-20260902-053-fp-p5-rerun-round14.md",
+    "docs/tasks/evidence/T-20260902-053.json"
+  ],
+  "writes": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/FP_NEON_PIPELINE_PLAN.md",
+    "docs/decisions/ADR-20260905-006-timing-closure-batch-pipeline.md",
+    "docs/tasks/active/T-20260905-001.json",
+    "docs/handoffs/T-20260905-001-timing-batch-pipeline.md",
+    "docs/tasks/evidence/T-20260905-001.json"
+  ],
+  "validation": {
+    "l0": [
+      "git diff --check",
+      "JSON parse and live timestamp check for the new task"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "文档必须明确 batch candidate 不是 main、top-N 需按共享锥聚类而非机械取前 N 条、每批 2-3 条线的独立性/同文件例外/集成顺序、合批后统一 L0-L2、远端 physical 单路、N 与 N+1 可重叠的允许范围、陈旧 timing 和过度切级护栏、失败归因/bisect/回退，以及 Gate D/CI/main 门保持不变。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 1024,
+    "disk_mb": 64,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.05
+  },
+  "created_at": "2026-09-05T00:28:54+08:00",
+  "updated_at": "2026-09-05T00:50:50+08:00",
+  "known_limits": [
+    "本任务只修改协作流程，不改变正在运行的 T-058 冻结 SHA、远端 probe 或验收门",
+    "流水化减少重复验证等待，但不能用跨 SHA 拼接证据或让未验证 batch 进入 main"
+  ],
+  "handoff": "docs/handoffs/T-20260905-001-timing-batch-pipeline.md",
+  "evidence": "docs/tasks/evidence/T-20260905-001.json",
+  "head_sha": "8e6a41f44523bfaea0f7b8bf7388502277a6344b",
+  "merge_sha": "8e6a41f44523bfaea0f7b8bf7388502277a6344b",
+  "next": "从 T-058 新 top-N 起登记并执行首个 Timing Batch",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-05T00:44:30+08:00",
+    "merged_at": "2026-09-05T00:48:16+08:00",
+    "recorded_at": "2026-09-05T00:50:50+08:00",
+    "notes": "Read-only review blockers were corrected: resource slots are consistent, the complete member L0-L2 union is mandatory, and long-lived promotion preserves the exact candidate SHA or requires rebuild/retest."
+  },
+  "review_dispatch": {
+    "sent_at": "2026-09-05T00:36:45+08:00",
+    "agent_name": "/root/timing_batch_workflow_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-integration-dirty-diff",
+    "final_review": {
+      "received_at": "2026-09-05T00:36:45+08:00",
+      "reported_at": "2026-09-05T00:44:30+08:00",
+      "head_sha": "266b27a7a5b40f6a192c020cb19b7ce07950cc46",
+      "status": "pass_after_corrections",
+      "corrected_blockers": 3
+    }
+  }
+}

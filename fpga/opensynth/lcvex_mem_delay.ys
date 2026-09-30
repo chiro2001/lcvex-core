@@ -1,0 +1,6 @@
+# A1 generic synth script for lcvex_mem_delay. Run from fpga/opensynth/:
+#   yosys -s lcvex_mem_delay.ys
+read_verilog -sv generated/lcvex_mem_delay_flat.v
+synth -top lcvex_mem_delay -lut 4
+write_verilog -noattr -noexpr netlist.v
+stat -json

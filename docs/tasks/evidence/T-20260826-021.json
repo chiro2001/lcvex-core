@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-021",
+  "base_sha": "643d5066cc2c683a880cc86cdbb62733e61d0afa",
+  "head_sha": "643d5066cc2c683a880cc86cdbb62733e61d0afa",
+  "merge_sha": "31cc981",
+  "toolchain": {"environment": "conda:lcvex", "python": "3.12.14", "verilator": "5.050 2026-07-01 rev conda-forge build 0"},
+  "rtl": {"test_program_sha256": "b4a5bb69a097454d8a18a733db15fe02efad06f1ee086feb68eb2049beecddb0"},
+  "runs": [
+    {
+      "run_id": "owner-l0-dit-builder-001",
+      "level": "L0",
+      "command": "python3 -c 'import test_program; test_program.build_hard_dit_program(...)'; python3 scripts/test_registry.py --check",
+      "cpuset": "2",
+      "cpu_count": 1,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "hard_dit builder 可导入并生成；registry 22 项通过。"
+    },
+    {
+      "run_id": "owner-l2-hard-dit-001",
+      "level": "L2",
+      "command": "taskset -c 0-1 env VERILATOR_JOBS=2 ONLY=hard_dit bash sim/difftest/run_m2_4b.sh",
+      "cpuset": "0-1",
+      "cpu_count": 2,
+      "wall_seconds": 4.884,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "base/cache 两配置各 32 条严格锁步通过；不再出现 AttributeError。",
+      "image_sha256": "9f719a23d97bd6a6e7fe5eb7cf44084b7d82cac3b78f58fcdbe862c4b7952c74",
+      "log": "build/agents/T-20260826-021/hard-dit.log",
+      "log_sha256": "7e4a162d45ed5df5b20a20111311be2ac9024954934d917571cb5a8531f95ca1"
+    }
+  ],
+  "merge_validation": {
+    "source_sha": "31cc98181de3eda8672092d0fc82d895543ce6f6",
+    "command": "taskset -c 0-1 env VERILATOR_JOBS=2 ONLY=hard_dit bash sim/difftest/run_m2_4b.sh",
+    "exit_code": 0,
+    "result": "pass",
+    "summary": "集成 SHA 上 base/cache hard_dit 各 32 条严格锁步通过。",
+    "log": "build/agents/T-20260826-021-merge-hard-dit.log",
+    "log_sha256": "7b724fc0d679441eab2168563ab44fab64a13fbd86bcbe70b4770b9d34fbb9a5"
+  },
+  "known_limits": ["仅恢复测试生成器；不改变 PSTATE.DIT RTL/QEMU 语义。"]
+}

@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260920-045",
+  "state": "done",
+  "acceptance_status": "single-assembler-pass",
+  "base_sha": "880517209700c76ca0d602ae8dbfd16dd930b373",
+  "candidate_sha": "f6633e70dd4d6b2f9a6aa932daee7c7e8252ac8d",
+  "candidate_tree_sha": "49fab30e4d8d49a5af24a81a49d8cf95f2cded8c",
+  "branch": "verify/T-20260920-045-b25-coremark-volatile-sof",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-045",
+  "source_remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-044-b25-coremark-fresh-physical",
+  "target_remote_root": "D:/Projects/fpga-altra/lcvex/build/T-20260920-045-b25-coremark-volatile-sof",
+  "started_at": "2026-09-21T00:51:44+08:00",
+  "finished_at": "2026-09-21T00:52:34+08:00",
+  "source_identity": {
+    "manifest_sha256": "533cb35732b27220a06e47f4fc5383f402cbbb4d9526f9cb2490110e15ea1f40",
+    "source_pre_sha256": "533cb35732b27220a06e47f4fc5383f402cbbb4d9526f9cb2490110e15ea1f40",
+    "source_post_sha256": "533cb35732b27220a06e47f4fc5383f402cbbb4d9526f9cb2490110e15ea1f40",
+    "clone_pre_sha256": "533cb35732b27220a06e47f4fc5383f402cbbb4d9526f9cb2490110e15ea1f40",
+    "qpf_sha256": "38ac01ac2dfc0dbf28fc5bb2be22e2323606c18716b46ec6c5d048e5fe4ec1dd",
+    "qsf_sha256": "1deb0042c54485e04a72bea71846718d3011ffb2ae7803d19f5a3485bc5bfa46",
+    "qsf_normalized_sha256": "3e0ef899e341f92d1fb6468bb34be55e07f5d5591f875b864954cd559171c5fe",
+    "sdc_sha256": "7ab96f705ffc81d1046d23ce704c0c55f0a8df7c1bd4c137b2ae13fe421eebd5",
+    "fit_report_sha256": "e15279e716888bb807e994b681cd2d7f9d76b4dac904fd854d7b23f2ea7dabd0",
+    "sta_report_sha256": "2617c76a81a77aa729ad58f512d5ef2d780381fb5ee6c2543e6cc1dd75f35620",
+    "boot_bin": {
+      "bytes": 20448,
+      "sha256": "ddb27ff2ffdfb595c3821a20af262f4e3ae95c1e680bf5530e2865bf45b6c56d"
+    },
+    "boot_mif": {
+      "bytes": 204942,
+      "sha256": "d56386b0714c65bab955cb91112d510b31f4290f80281f86c7feabdd6988d7d0"
+    },
+    "decoded_64k_image_sha256": "1e691cc06094746464633929b2dea25be43c96305873bedfca82d3978c87ddb9"
+  },
+  "assembler": {
+    "command": "quartus_asm --read_settings_files=on --write_settings_files=off catapult_a10 -c catapult_a10",
+    "invocation_count": 1,
+    "invocation_marker_sha256": "2e2bf40bf4935f43bdc3e62fd9398747b07d3d1ba2fbfbc569dee225d43dca00",
+    "runner_sha256": "4cae895912ee5565314daf4f72dd02d4fb3ad9dccb4b4f979ee97ad7847eea3b",
+    "stdout_success": true,
+    "report_success": true,
+    "command_exact": true,
+    "quartus_errors": 0,
+    "quartus_warnings": 0,
+    "observed_start_process_exit_code": -1,
+    "rerun": false,
+    "stdout_sha256": "c33ad48666fb8cc8cc8576a2124de7cbcbc084646bb286ac6c9e4fa76e6d7fd6",
+    "stderr_sha256": "29fa17e931c90fe8d26abdb72118d4eaa531db1a35629adeb4740f61bd264d52",
+    "report_sha256": "3b0303ecc8be244fb711134f1321dca4759aeaf210d9bdb0f6d14e40b97921d4",
+    "flow_report_sha256": "ba8f5cc3279d00d9997974c2749b48fad815f084fa64ce9fcdbb3bf987c9dc3b"
+  },
+  "database": {
+    "pre_count": 225,
+    "post_count": 228,
+    "added_count": 3,
+    "changed_count": 3,
+    "removed_count": 0,
+    "physical_final_partitioned_synthesized_change_count": 0,
+    "pre_manifest_sha256": "2d55ca54cf5fa557dd9d9fac0447b0452d95c2f56b13836c71db9116e7627fb2",
+    "post_manifest_sha256": "f953b653d2624d0ca704314551954ec84ce29e198f9f86e525b4f3dd659bb001"
+  },
+  "sof": {
+    "path": "build/agents/T-20260920-045/remote-evidence/catapult_a10.sof",
+    "bytes": 36842099,
+    "sha256": "c648f9fe1744d66f5e60f97a2aa706a36d295d1029e887d4f3155d292127df4f",
+    "quartus_checksum": "0x31585D80",
+    "design_hash": "BE249DE82456FE40F022D019CD23D8C9",
+    "jtag_usercode": "0xFFFFFFFF"
+  },
+  "configuration_artifacts": {
+    "sof": 1,
+    "pof": 0,
+    "jic": 0,
+    "rbf": 0,
+    "jbc": 0,
+    "svf": 0,
+    "jam": 0
+  },
+  "resource": {
+    "lock": "gamepc",
+    "single_uninterrupted_window": true,
+    "pre_eda_process_count": 0,
+    "post_eda_process_count": 0,
+    "preserved_standard_jtagserver_pid": 5640,
+    "lock_after_run": "FREE"
+  },
+  "artifacts": {
+    "local_root": "build/agents/T-20260920-045/remote-evidence",
+    "result_json_sha256": "3713127936847ca2bfaafc5aae0fe43814a12f272cb0004135119b91eabc960f",
+    "remote_runner_log_sha256": "8762a79987fa2e5ff20425da62e09da62f451cddddc21724de907c2479a4513d",
+    "final_scan_log_sha256": "4b6bc9ef94bae2f7e5fa50be5498fa7d075fd5089efd780515ac16ec2f39b71a"
+  },
+  "command": "/home/chiro/projects/.resource-locks/resource-lock run gamepc lcvex T-20260920-045 root --meta stage=single_assembler --meta source=T-20260920-044 --meta invocation_budget=1 -- bash build/agents/T-20260920-045/run_t045.sh",
+  "safety": {
+    "synthesis_fitter_sta": false,
+    "quartus_pgm": false,
+    "jtagconfig": false,
+    "nios2_terminal": false,
+    "board_configuration": false,
+    "persistent_flash_epcq": false,
+    "reset_power": false,
+    "standard_or_unknown_process_stopped": false,
+    "live_fpga_identity": "unchanged exact golden"
+  },
+  "known_limits": [
+    "Windows PowerShell Start-Process reported ExitCode=-1 after completion. No retry was made; exact stdout/report Successful 0 errors 0 warnings markers and all independent postconditions are authoritative.",
+    "The SOF is an authorized volatile candidate input for T-046 only. This task did not prove hardware function or configure the FPGA."
+  ],
+  "next": "T-20260920-046: one sealed candidate program/terminal t-v-c transaction followed by one exact-golden restoration",
+  "handoff": "docs/handoffs/T-20260920-045-b25-coremark-volatile-sof.md"
+}

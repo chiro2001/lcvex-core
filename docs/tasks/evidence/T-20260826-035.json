@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260826-035",
+  "base_sha": "a35d76a",
+  "head_sha": "7b4d820",
+  "candidate_status": "pass-local",
+  "runs": [
+    {
+      "run_id": "owner-l0-trace-timeout-001",
+      "level": "L0",
+      "command": "python3 -m py_compile sim/difftest/run_qemu.py; run_qemu(..., limit=16, timeout=1); parse_trace(trace)",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SIGTERM 后 plugin atexit 刷新 gzip trace；trace 存在 790 bytes，17 条记录，首条 init。"
+    },
+    {
+      "run_id": "owner-l3-difftest-qemu-001",
+      "level": "L3-subset",
+      "command": "make difftest-qemu",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "P1 两次 QEMU trace 均有 16 条 commit，与参考模型一致且两次 gzip 输出完全一致。"
+    }
+  ],
+  "ci_root_cause": {
+    "run": "32935884451",
+    "symptom": "PR-difftest artifacts 的 difftest-p1p2.log 缺少 p1_run0.trace；hazard/random 后续因 trace 缺失级联失败；lockstep 随后因 runner socket 超时。",
+    "cause": "run_qemu.py 使用 subprocess.run(timeout=10)，超时路径内部 SIGKILL QEMU，QEMU plugin 的 gzip atexit flush 未执行。",
+    "status": "CI run 最终被取消，不能作为通过/失败的 RTL 证据。"
+  },
+  "known_limits": [
+    "需要推送当前集成 SHA 后重新运行 PR-difftest/nightly，才能验证 GitHub runner 修复。",
+    "本任务只修复 trace 生成器的优雅终止，不改变 QEMU/RTL 语义。"
+  ]
+}

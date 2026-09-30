@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "id": "T-20260902-051",
+  "label": "IRQ-YOUNG-SQUASH",
+  "title": "Squash younger pipeline and transaction state on ordinary irq_taken",
+  "kind": "rtl-regression-fix",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "codex-irq-young-squash",
+  "agent_type": "rtl-implementation",
+  "model": "gpt-5.6-luna",
+  "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "review": {
+    "required": true,
+    "agent_type": "one-pass-blocking",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent 省略 model；用户已确认平台默认通道为 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "只读审查 irq_taken commit 边界、stage/transaction squash 优先级和测试矩阵；只报告阻断风险"
+  },
+  "depends_on": [
+    "T-20260902-048",
+    "T-20260902-050"
+  ],
+  "base_sha": "80de28596a33c900ab0f73daa7a19ce3a4ef341b",
+  "branch": "fix/T-20260902-051-irq-young-squash",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-051",
+  "scope": "修复普通 irq_taken 在最老 MEM/WB 指令提交 IRQ 边界时未清空年轻 ID/EX、EX/MEM、访存/原子/MMU 和 FP/NEON transaction 状态的问题；保证 IRQ commit 后无年轻 commit、dmem 请求/副作用、FP effect 或旧 token 泄漏。保持 WFI/sys_irq_taken/DAIF/ERET 既有语义，不混入 FIQ、嵌套中断、T-048 operand_c 时序或 T-049 物理验证。",
+  "reads": [
+    "docs/tasks/active/T-20260902-050.json",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/lcvex_neon_fp.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/**",
+    "scripts/test_registry.json",
+    "Makefile",
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md"
+  ],
+  "writes": [
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_mmu.sv",
+    "tb/sv/**",
+    "sim/cocotb/**",
+    "sim/difftest/test_program.py",
+    "sim/difftest/run*.sh",
+    "Makefile",
+    "scripts/test_registry.json",
+    "docs/handoffs/T-20260902-051-irq-young-squash.md",
+    "docs/tasks/evidence/T-20260902-051.json"
+  ],
+  "validation": {
+    "l0": [
+      "systemd-run --user --scope -p MemoryMax=16G -p MemorySwapMax=0 -- make VERILATOR_JOBS=1 compile"
+    ],
+    "l1": [
+      "直接 IRQ 注入的 SV/Cocotb 定向测试覆盖 FIFO off/on 与 delay 0/2",
+      "覆盖普通 ALU/muldiv、load/store/pair、exclusive/atomic、MMU translation/fault、NEON integer、scalar/NEON FP held response 与 FP/NEON load/store 中代表性同拍边界",
+      "断言 IRQ 后年轻 stage valid、dmem accept/write、FP effect 和旧 token 不得泄漏"
+    ],
+    "l2": [
+      "QEMU strict lockstep 覆盖 base/cache/delay2 的 ASYNC seq、exception packet 与内存副作用；若当前注入接口不足，须交付最小可信矩阵并记录阻断"
+    ],
+    "l3": [],
+    "l4": []
+  },
+  "acceptance": "reset/IRQ squash 后所有年轻 stage valid、dmem/atomic/MMU/FP transaction 状态按精确边界清空或隔离；commit_ready=0 时不得 irq_taken；IRQ commit 仅提交边界前最老 MEM/WB，ELR/向量/NZCV/SP 正确；同拍及之后无年轻 commit、请求、副作用、FP effect 或旧 token。新增定向测试与受影响 L0-L2 通过；不得关闭断言、跳过差分或修改参考结果。任何新增状态必须说明 reset 值、权限与提交时机。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 15360,
+    "disk_mb": 8192,
+    "timeout_s": 21600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 120,
+    "extension_increment_minutes": 60,
+    "max_minutes": 360,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-09-04T14:14:18+08:00",
+  "updated_at": "2026-09-04T19:25:52+08:00",
+  "known_limits": [
+    "与远端 T-049 并行但不共享写集；本任务不得运行 Quartus、修改 QSF/SDC 或使用 T-049 probe",
+    "不处理 FIQ、nested IRQ、DAIF/sys_irq_taken/WFI 语义扩展；发现独立问题另行登记",
+    "不得修改 QEMU fork；只读复用已校验 QEMU binary/plugin",
+    "2026-09-04 final review 扩写：允许增加独立 MMU abort/quarantine 接口与定向测试；禁止继续复用会清空 TLB 的 tlb_invalidate 作为普通 IRQ kill"
+  ],
+  "handoff": "docs/handoffs/T-20260902-051-irq-young-squash.md",
+  "evidence": "docs/tasks/evidence/T-20260902-051.json",
+  "head_sha": "3043cbd636b0734f8e3813490677d358c8d66276",
+  "implementation_commits": [
+    "884578fd0d9a8d9dfe221cdd69f63ff05ed4e943",
+    "879ef70e6e824ebc63d648d54bc402a681213221",
+    "da47a8032dc3cbba0f7fad3dfa2f296163821bc7"
+  ],
+  "merge_sha": "1c3b05cc2a343d99c24f3f575812a10a0fd2806e",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-09-04T17:06:30+08:00",
+    "merged_at": "2026-09-04T19:17:12+08:00",
+    "recorded_at": "2026-09-04T19:25:52+08:00",
+    "notes": "Rework final review found no code/test blockers. Integrator reran compile, MMU, IRQ FIFO/delay matrix, rebuilt lockstep, hard_irq 30/30, NEON FP 48/48 and registry consistency on the combined T-051 + T-052 SHA; all passed. Natural CASP/STXR/DC ZVA IRQ overlap remains a follow-up test gap."
+  },
+  "next": "集成后复跑受影响 L0-L2；后续物理候选需包含本修复并重新确认时序",
+  "dispatch": {
+    "sent_at": "2026-09-04T14:15:18+08:00",
+    "agent_name": "/root/t051_irq_young_squash",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260902-051",
+    "branch": "fix/T-20260902-051-irq-young-squash"
+  },
+  "review_dispatch": {
+    "sent_at": "2026-09-04T14:15:18+08:00",
+    "agent_name": "/root/t051_irq_boundary_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "mode": "read-only-shared-snapshot",
+    "received_at": "2026-09-04T14:15:18+08:00",
+    "reported_at": "2026-09-04T14:41:52+08:00",
+    "status": "conditional_go",
+    "blockers": [
+      "Accepted younger store/atomic/cache write side effects cannot be rolled back; IRQ must delay/drain them exactly once while only unaccepted requests may be squashed",
+      "MMU translation/fault and delayed memory responses require explicit priority or quarantine so stale completions cannot poison the IRQ vector",
+      "Muldiv has no kill port and must drain safely or require an explicitly approved write-set expansion",
+      "The oldest MEM/WB FP effect must survive the IRQ commit while younger FP/NEON transactions are killed",
+      "Raw IRQ fencing must preserve commit_ready backpressure and FIFO on/off forward progress"
+    ],
+    "final_review": {
+      "sent_at": "2026-09-04T16:01:57+08:00",
+      "received_at": "2026-09-04T16:01:57+08:00",
+      "reported_at": "2026-09-04T16:14:02+08:00",
+      "status": "rework_required",
+      "head_sha": "f3062624e270bab492c332f5ba02b6e7e4b2b40e",
+      "code_blockers": "irq_taken cannot reuse tlb_invalidate: it clears architectural TLB state and can strand an accepted PTW response, deadlocking the MMU/memory arbiter",
+      "test_blockers": "direct TB uses synthetic commit_fire for some cases and lacks natural MEM/WB plus PTW/atomic/CASP/STXR/DC ZVA IRQ overlap",
+      "required_fix": "add a dedicated TLB-preserving MMU abort/quarantine path that blocks same-edge PTW issue, drains/discards any accepted old PTW response, then permits vector translation; add natural overlap tests and repair handoff/evidence SHA chain"
+    },
+    "rework_final_review": {
+      "sent_at": "2026-09-04T17:08:20+08:00",
+      "received_at": "2026-09-04T17:08:20+08:00",
+      "reported_at": "2026-09-04T17:17:27+08:00",
+      "status": "accepted_for_integration",
+      "head_sha": "3043cbd636b0734f8e3813490677d358c8d66276",
+      "code_blockers": "none",
+      "test_blockers": "none",
+      "known_limits": "Synthetic older MEM/WB remains in some direct cases; natural CASP/STXR/DC ZVA IRQ overlap remains a separate regression task."
+    }
+  }
+}

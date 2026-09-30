@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1787982353" />
+    <testcase name="test_p2_difftest" classname="test_lcvex_core" file="/home/chiro/projects/mycpu/lcvex-wt-T-20260829-099/sim/cocotb/test_lcvex_core.py" lineno="162" time="21.162517309188843" sim_time_ns="6462390.0" ratio_time="305369.6261925327" />
+  </testsuite>
+</testsuites>

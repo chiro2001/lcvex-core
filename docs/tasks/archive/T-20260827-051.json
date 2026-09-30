@@ -1,0 +1,586 @@
+{
+  "schema_version": 1,
+  "id": "T-20260827-051",
+  "title": "P7-0 FP/NEON 架构状态、访问陷阱与 checkpoint 垂直实现",
+  "kind": "isa-rtl-difftest",
+  "priority": "high",
+  "assigned_owner": "p7-0-luna",
+  "agent_type": "slow-implementation-monitor",
+  "model": "",
+  "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+  "reasoning_effort": "max",
+  "model_scope": "只实现已批准协议的 P7-0：V0-V31 raw 128-bit 状态、FPCR/FPSR/CPACR.FPEN、访问陷阱、提交包效果、FP_INIT/FP_COMMIT、trace 与 LCVXFP01 checkpoint；保持 P6 max/scalar wire、QEMU 11.1.0 和既有 checkpoint 兼容，不实现 P7-1 至 P7-3 或 P8 SVE",
+  "complex_planner": {
+    "agent_type": "complex-task",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "xhigh",
+    "required": true,
+    "scope": "实现前只审查 P7-0 在 RTL、QEMU patch/plugin、commit wire、trace 和 checkpoint 之间的边界、写集与失败风险；不得代替 owner 实现或合并"
+  },
+  "review": {
+    "agent_type": "architecture-review",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "required": true,
+    "scope": "只审 task JSON、P7 冻结协议、目标 diff 和初版 evidence；检查 scalar 兼容、FPEN/trap 副作用、raw-bit 比较、checkpoint 原子性与写集，不提供逐行实现"
+  },
+  "review_policy": {
+    "cadence": "one-pass-blocking",
+    "rule": "审核只做一次简明阻断门；仅在写集、冻结协议或验收证据发生实质变化时重新审核",
+    "required_sequence": "Terra 边界审查完成后允许受限 RTL/SV/Cocotb 编码；Sol 只做一次并行方向审查，协议联调、锁步和合并仍须等 Sol 结论"
+  },
+  "review_records": [
+    {
+      "agent_id": "01a03f2c-ec89-7a13-9a0c-4cf30af72148",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "xhigh",
+      "source_sha": "c76cc28d53bcab4af0e42dcf4ca8dbb4426dcb6e",
+      "status": "go_restricted_coding",
+      "recorded_at": "2026-08-27T01:45:00+08:00",
+      "blocking_before_integration": [
+        "集成者必须串行完成 rtl/filelist.f、tb/sv/lcvex_soc_tb.sv、顶层构建接线和 restore 输入置零。",
+        "QEMU patch 必须提供单次 qemu_lcvex_difftest_read_fp_state API，并由集成者串行 replay/校验。",
+        "FP access trap 必须保留完整 EC=0x07 syndrome；FP frame 必须校验实际字节数与 payload_len。",
+        "LCVXFP01 552B sidecar、manifest 第13列、全行原子发布和恢复必须闭合。"
+      ],
+      "boundary": "P7-0 只允许 V/FPCR/FPSR/FPEN state、trap、wire/trace/checkpoint；V 动态指令写回、P7-1/2/3 和 P8 后置。"
+    },
+    {
+      "agent_id": "01a03f34-a977-7f12-bad9-348cf7452e7d",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "high",
+      "source_sha": "c76cc28d53bcab4af0e42dcf4ca8dbb4426dcb6e",
+      "status": "go_restricted_coding",
+      "recorded_at": "2026-08-27T01:55:00+08:00",
+      "blocking_before_protocol_integration": [
+        "FP access trap 必须比较完整 EC=0x07/IL/ISS syndrome，且 trap 不得改变 V/FPCR/FPSR。",
+        "FP_INIT 固定 520B；FP_COMMIT 必须按 16 + 16×popcount(v_mask) 校验，合法长度为 16/32/48/64/80B，528B 只可作接收缓冲上限。",
+        "WAIT/WAIT_RESUME、ASYNC、EXIT/DISCON 不得等待或携带 FP 帧；所有 datagram 必须严格校验实际长度。",
+        "LCVXFP01 固定 552B，小端、feature_bits=1、vector_bytes=16；manifest 第13列必须按单行事务原子发布并参与恢复校验。"
+      ],
+      "boundary": "允许 owner 继续受限 RTL/SV/Cocotb；QEMU/plugin、trace、checkpoint 联调和合并必须在上述协议门闭合后进行。"
+    },
+    {
+      "agent_id": "01a03f65-6800-78f0-86d0-e677742d29c3",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "high",
+      "source_sha": "d453e29f557701cefc53a4a6d70386d7cc938427",
+      "status": "pass_go",
+      "sent_at": "2026-08-27T12:09:52+08:00",
+      "received_at": "2026-08-27T12:10:20+08:00",
+      "reported_at": "2026-08-27T12:11:12+08:00",
+      "elapsed_seconds": 80,
+      "blocking_points": [],
+      "conclusion": "P7 required checkpoint 仅走 DIFF_CKPT=1 的 LCVXFP01 13 列；max adapter、legacy checkpoint 和未显式 1GHz profile 均正确拒绝；chain-relative sidecar/optional MMIO 解析和 P6 off 兼容通过。"
+    }
+  ],
+  "monitor": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "scope": "仅在资源允许时监控 P7-0 的构建、锁步和 checkpoint 长跑；QEMU 构建与 patch replay 由集成者串行安排"
+  },
+  "disabled_profiles": ["deepseek-v4-flash[max]"],
+  "phase": "done",
+  "execution": {
+    "agent_id": "01a03f34-a99c-7773-bc35-a20ac8e10733",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "started_at": "2026-08-27T01:46:00+08:00",
+    "scope": "先实现 P7-0 RTL state/FPEN/trap 与独立 SV/Cocotb；Sol 结论和集成者串行 QEMU/replay 仍是协议联调前置"
+  },
+  "continuation_execution": {
+    "agent_id": "01a03f53-b450-7421-b635-096f9f0896e2",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "model_resolution": "spawn 时省略 model，按项目路由解析为 gpt-5.6-luna[max]",
+    "started_at": "2026-08-27T02:36:00+08:00",
+    "budget_minutes": 30,
+    "budget_policy": {
+      "initial_minutes": 30,
+      "extension_increment_minutes": 15,
+      "max_minutes": 45,
+      "extend_when": "owner 在自然里程碑报告新增可审阅文件、验证结果和剩余工作，且写集/方向稳定",
+      "control": "由集成者根据 progress report 动态延长；不因等待窗口到期中断 owner",
+      "progress_report_fields": ["sent_at", "received_at", "reported_at", "elapsed_seconds", "files", "tests", "blockers", "remaining_minutes", "extension_request"]
+    },
+    "clock": {
+      "dispatch_sent_at": "2026-08-27T02:36:00+08:00",
+      "timezone": "Asia/Shanghai",
+      "source": "scheduler dispatch record",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": null
+    },
+    "scope": "在已集成状态边界上继续 P7-0 FP frame/trace/checkpoint/QEMU 协议实现；不得重做已通过状态测试或修改集成热点"
+  },
+  "wiring_execution": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "agent_id": "01a040b2-cace-7651-8c51-9383e8293808",
+    "dispatch_pending": false,
+    "dispatch_sent_at": "2026-08-27T08:49:45+08:00",
+    "state": "done",
+    "received_at": "2026-08-27T09:39:14+08:00",
+    "reported_at": "2026-08-27T09:39:14+08:00",
+    "elapsed_seconds": 2969,
+    "implementation_sha": "90efd1555246ee3887ab095890dced0181a76c3d",
+    "handoff_sha": "e4e963b82d8c37a15b40baee0b5025a1553a4f28",
+    "integration_merge_sha": "5045b193fbd58bce998c1e26b86851f11d311420",
+    "budget_minutes": 60,
+    "budget_history": [
+      {
+        "from_minutes": 45,
+        "to_minutes": 60,
+        "increment_minutes": 15,
+        "approved_at": "2026-08-27T09:37:09+08:00",
+        "reason": "wiring 文件和 required/fp_sysreg 验证产物已完成，尚待 owner commit 与 handoff/evidence 整理",
+        "basis": "scheduler observation at 2026-08-27T09:37:09+08:00; elapsed=2844s from dispatch"
+      }
+    ],
+    "base_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+    "branch": "feature/T-20260827-051-p7-wiring",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring",
+    "scope": "只完成 P7-0 FP state 的 filelist、core/decoder/SoC/TB restore/effect 接线和必要定向测试；不实现 P7-1 至 P7-3 FP/NEON 运算，不接 AXI/Cache/FPGA，不修改 QEMU fork 或双轨文档热点。",
+    "budget_policy": "initial=45m; extension=+15m by timestamped progress; max=60m",
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": null,
+      "last_scheduler_observation": {
+        "observed_at": "2026-08-27T09:37:09+08:00",
+        "elapsed_seconds": 2844,
+        "files": [
+          "rtl/filelist.f",
+          "rtl/lcvex_decode.sv",
+          "rtl/lcvex_core.sv",
+          "tb/sv/lcvex_soc_tb.sv",
+          "sim/difftest/lockstep_coordinator.cc",
+          "sim/cocotb/test_p7_wiring.py"
+        ],
+        "tests": "A76 required 14-step smoke 和 fp_sysreg 10-step smoke 产物存在；Cocotb test_p7_state_wiring 结果文件显示 testcase 已完成",
+        "blockers": "未收到 owner final report；worktree 尚未提交",
+        "measurement": "scheduler observation，不替代 owner reported_at"
+      }
+    }
+  },
+  "wiring_review": {
+    "agent_id": "01a040e2-53d7-7bb3-9b56-44eb623cd057",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "sent_at": "2026-08-27T09:42:25+08:00",
+    "received_at": "2026-08-27T09:43:06+08:00",
+    "reported_at": "2026-08-27T09:48:58+08:00",
+    "elapsed_seconds": 393,
+    "source_sha": "90efd1555246ee3887ab095890dced0181a76c3d",
+    "status": "resolved",
+    "blocking_points": [
+      "sys_commit 未受 commit_ready 约束，ID system commit 在提交消费者背压时可能更新 FP/系统状态而不保持提交包。",
+      "sim/microbench/microbench_runner.cc 未清零新增 FP restore 端口。",
+      "coordinator 尚未在 FP_INIT/FP_COMMIT mismatch 生成协议要求的 fail-fp.json 完整失败包。"
+    ],
+    "required_write_set_additions": [
+      "sim/microbench/microbench_runner.cc"
+    ],
+    "resolved_at": "2026-08-27T10:43:18+08:00",
+    "resolution_commit": "5045b193fbd58bce998c1e26b86851f11d311420",
+    "resolution_evidence": "docs/tasks/evidence/T-20260827-051-wiring-repair.json",
+    "resolution": "commit_ready 背压、microbench FP restore 清零和 fail-fp.json 已在 merge SHA 上复测通过",
+    "next": "三个 review blocker 已由 repair commit 修复，并在 merge SHA 5045b193 上完成集成复测；保留其历史阻断记录。"
+  },
+  "repair_execution": {
+    "agent_type": "slow-implementation-monitor",
+    "model": "",
+    "model_selection": "派单时省略 model；平台默认 gpt-5.6-luna[max]",
+    "reasoning_effort": "max",
+    "agent_id": "01a040ed-25d1-7ca2-9f75-cade72ec5d9a",
+    "dispatch_pending": false,
+    "dispatch_sent_at": "2026-08-27T09:54:13+08:00",
+    "state": "done",
+    "received_at": "2026-08-27T10:34:47+08:00",
+    "reported_at": "2026-08-27T10:34:47+08:00",
+    "elapsed_seconds": 2434,
+    "implementation_sha": "4e42205c39aba7584d0f4a3822dc20ba73504b92",
+    "integration_merge_sha": "5045b193fbd58bce998c1e26b86851f11d311420",
+    "budget_minutes": 45,
+    "budget_history": [
+      {
+        "from_minutes": 30,
+        "to_minutes": 45,
+        "increment_minutes": 15,
+        "approved_at": "2026-08-27T10:27:32+08:00",
+        "reason": "repair owner 已完成阻断修复并正在运行 wiring Cocotb/负路径验证",
+        "basis": "scheduler observation at 2026-08-27T10:27:32+08:00; elapsed=2019s from dispatch"
+      }
+    ],
+    "base_sha": "90efd1555246ee3887ab095890dced0181a76c3d",
+    "branch": "feature/T-20260827-051-p7-wiring-repair",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051-wiring-repair",
+    "scope": "只修复 wiring review 的三个 blocking points：system commit/commit_ready 原子边界及背压测试、microbench FP restore 输入清零、coordinator fail-fp.json 完整诊断；不实现 P7-1 至 P7-3，不接 AXI/Cache/FPGA，不修改 QEMU fork。",
+    "budget_policy": "initial=30m; extension=+15m by timestamped progress; max=60m",
+    "handoff": "docs/handoffs/T-20260827-051-wiring-repair.md",
+    "evidence": "docs/tasks/evidence/T-20260827-051-wiring-repair.json",
+    "clock": {
+      "timezone": "Asia/Shanghai",
+      "elapsed_basis": "reported_at - dispatch_sent_at",
+      "last_progress_report": null,
+      "last_scheduler_observation": {
+        "observed_at": "2026-08-27T10:27:32+08:00",
+        "elapsed_seconds": 2019,
+        "files": [
+          "rtl/lcvex_core.sv",
+          "sim/microbench/microbench_runner.cc",
+          "sim/difftest/lockstep_coordinator.cc",
+          "sim/difftest/fail_fp_smoke.py",
+          "tb/sv/lcvex_commit_backpressure_tb.sv",
+          "sim/cocotb/test_commit_backpressure.py"
+        ],
+        "tests": "backpressure build 已完成；wiring Cocotb 正在构建/运行",
+        "blockers": "未收到 repair owner final report",
+        "measurement": "scheduler observation，不替代 owner reported_at"
+      },
+      "last_owner_report": {
+        "reported_at": "2026-08-27T10:34:47+08:00",
+        "elapsed_seconds": 2434,
+        "state": "repair_ready",
+        "head_sha": "4e42205c39aba7584d0f4a3822dc20ba73504b92",
+        "tests": "compile、lockstep-build、sim-sv、sim-sv-backpressure、microbench、fail-fp-smoke、backpressure Cocotb 2/2、P7 wiring Cocotb 1/1 均 PASS",
+        "blockers": "真实外部 QEMU/A76 smoke 待集成者串行复跑",
+        "measurement": "owner final notification；按 dispatch_sent_at 计算"
+      }
+    }
+  },
+  "dispatch_notes": {
+    "last_sent_at": "2026-08-27T09:37:09+08:00",
+    "message": "已根据真实进度延长至 60 分钟；继续自然完成 commit/handoff/evidence，不中断。"
+  },
+  "progress_reports": [
+    {
+      "agent_id": "01a03f53-b450-7421-b635-096f9f0896e2",
+      "dispatch_sent_at": "2026-08-27T02:36:00+08:00",
+      "received_at": "2026-08-27T03:14:44+08:00",
+      "reported_at": null,
+      "scheduler_elapsed_seconds": 2324,
+      "actual_elapsed_seconds": null,
+      "measurement": "owner 最终通知未携带 reported_at；scheduler_elapsed 仅表示消息时间差，不冒充实际执行时长",
+      "state": "review",
+      "head_sha": "9e0950317c804e38f49b82f369eb1a366c3f48b9",
+      "summary": "协议/trace/checkpoint repository slice 已交付并完成 owner L0/L1；QEMU patch replay、顶层接线和真实 A76 L2 仍后置"
+    },
+    {
+      "type": "wiring_owner_final",
+      "agent_id": "01a040b2-cace-7651-8c51-9383e8293808",
+      "dispatch_sent_at": "2026-08-27T08:49:45+08:00",
+      "received_at": "2026-08-27T09:39:14+08:00",
+      "reported_at": "2026-08-27T09:39:14+08:00",
+      "elapsed_seconds": 2969,
+      "state": "review",
+      "base_sha": "36a878a9c2b202734570a76d73de7d4d7528a17e",
+      "head_sha": "e4e963b82d8c37a15b40baee0b5025a1553a4f28",
+      "implementation_sha": "90efd1555246ee3887ab095890dced0181a76c3d",
+      "files": [
+        "rtl/filelist.f",
+        "rtl/lcvex_decode.sv",
+        "rtl/lcvex_core.sv",
+        "rtl/lcvex_fp_state.sv",
+        "tb/sv/lcvex_soc_tb.sv",
+        "tb/sv/lcvex_core_tb.sv",
+        "tb/sv/lcvex_commit_backpressure_tb.sv",
+        "sim/cocotb/Makefile",
+        "sim/cocotb/test_lcvex_core.py",
+        "sim/cocotb/test_commit_backpressure.py",
+        "sim/cocotb/test_p7_wiring.py",
+        "sim/difftest/lockstep_coordinator.cc",
+        "docs/P7-0_FP_STATE.md"
+      ],
+      "tests": "make compile、make lockstep-build、SV scalar/P7/backpressure、Cocotb backpressure/P7 wiring、A76 required zero-FP 14 条、真实 FPCR/FPSR 10 条 raw lockstep 均 PASS",
+      "blockers": "owner 无；FP/NEON 算术/访存、P7-1~P7-3、13 列 resume runner 和 Gate D/F 后置",
+      "remaining_minutes": 0,
+      "extension_request": "none",
+      "measurement": "按 owner final notification 的 reported_at - dispatch_sent_at 计算"
+    },
+    {
+      "type": "wiring_repair_owner_final",
+      "agent_id": "01a040ed-25d1-7ca2-9f75-cade72ec5d9a",
+      "dispatch_sent_at": "2026-08-27T09:54:13+08:00",
+      "received_at": "2026-08-27T10:34:47+08:00",
+      "reported_at": "2026-08-27T10:34:47+08:00",
+      "elapsed_seconds": 2434,
+      "state": "review",
+      "base_sha": "90efd1555246ee3887ab095890dced0181a76c3d",
+      "head_sha": "4e42205c39aba7584d0f4a3822dc20ba73504b92",
+      "tests": "repair owner compile/lockstep-build/sim-sv/sim-sv-backpressure/microbench/fail-fp-smoke、backpressure Cocotb 2/2、P7 wiring Cocotb 1/1 均 PASS",
+      "blockers": "真实外部 QEMU/A76 smoke 待集成者复跑（已由集成者复跑通过）",
+      "remaining_minutes": 0,
+      "extension_request": "none",
+      "measurement": "按 repair owner final notification 的 reported_at - dispatch_sent_at 计算"
+    },
+    {
+      "type": "integrator_resume_runner",
+      "agent_id": "root-integrator",
+      "dispatch_sent_at": "2026-08-27T11:04:27+08:00",
+      "received_at": "2026-08-27T11:31:33+08:00",
+      "reported_at": "2026-08-27T11:31:33+08:00",
+      "elapsed_seconds": 1626,
+      "state": "review",
+      "base_sha": "5d460192dfb8a72173c76077cae5bd05251e9eb9",
+      "head_sha": "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+      "files": [
+        "sim/difftest/run_lockstep_step.sh",
+        "sim/difftest/run_lockstep_resume.sh",
+        "docs/P7_FP_NEON_PROTOCOL.md",
+        "docs/handoffs/T-20260827-051-resume-runner.md",
+        "docs/tasks/evidence/T-20260827-051-resume.json"
+      ],
+      "tests": "shell/diff check、manifest/trace smoke、P7 13-column fixture、kernel coordinator build、A76 1GHz root seq=6 finalize、explicit/default profile resume 1条均 PASS",
+      "blockers": "等待一次性 runner review；P7-1 arithmetic/memory 和 Gate D/F 不在本任务",
+      "remaining_minutes": 0,
+      "extension_request": "none",
+      "measurement": "集成者本地验证记录；非子 Agent 执行预算"
+    },
+    {
+      "type": "final_runner_review",
+      "agent_id": "01a03f65-6800-78f0-86d0-e677742d29c3",
+      "sent_at": "2026-08-27T12:09:52+08:00",
+      "received_at": "2026-08-27T12:10:20+08:00",
+      "reported_at": "2026-08-27T12:11:12+08:00",
+      "elapsed_seconds": 80,
+      "state": "done",
+      "tests": "max adapter/legacy checkpoint/path sentinel negative checks and static checks pass",
+      "blockers": "none",
+      "remaining_minutes": 0,
+      "extension_request": "none",
+      "measurement": "reviewer final notification；按 sent_at 到 reported_at 计算"
+    }
+  ],
+  "parent": "T-20260827-050",
+  "depends_on": ["T-20260826-049", "T-20260827-050"],
+  "writes": [
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/lcvex_fp_state.sv",
+    "rtl/filelist.f",
+    "sim/microbench/microbench_runner.cc",
+    "docs/handoffs/T-20260827-051-wiring-repair.md",
+    "docs/tasks/evidence/T-20260827-051-wiring-repair.json",
+    "docs/handoffs/T-20260827-051-wiring.md",
+    "docs/tasks/evidence/T-20260827-051-wiring.json",
+    "Makefile",
+    "sim/difftest/fail_fp_smoke.py",
+    "tb/sv/lcvex_fp_state_tb.sv",
+    "tb/sv/lcvex_fp_state_cocotb_tb.sv",
+    "tb/sv/lcvex_soc_tb.sv",
+    "tb/sv/lcvex_core_tb.sv",
+    "tb/sv/lcvex_commit_backpressure_tb.sv",
+    "sim/cocotb/test_fp_state.py",
+    "sim/cocotb/Makefile.fp_state",
+    "sim/cocotb/Makefile",
+    "sim/cocotb/test_lcvex_core.py",
+    "sim/cocotb/test_commit_backpressure.py",
+    "sim/cocotb/test_p7_wiring.py",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/qemu_trace.py",
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/run_lockstep_resume.sh",
+    "sim/difftest/test_program.py",
+    "scripts/trace_manifest.py",
+    "scripts/trace_slice.py",
+    "scripts/test_registry.json",
+    "qemu/plugins/lcvex_difftest.c",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_protocol.py",
+    "qemu/patches/0012-lcvex-fp-state.patch",
+    "docs/ARCHITECTURE.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/ISA_SCOPE.md",
+    "docs/P7-0_FP_STATE.md",
+    "docs/handoffs/T-20260827-051-p7-0-fp-state.md",
+    "docs/tasks/evidence/T-20260827-051.json",
+    "docs/handoffs/T-20260827-051-resume-runner.md",
+    "docs/tasks/evidence/T-20260827-051-resume.json",
+    "docs/handoffs/T-20260827-051-final.md",
+    "docs/handoffs/T-20260827-051-resume-review.md"
+  ],
+  "reads": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/tasks/archive/T-20260826-049.json",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "rtl/lcvex_pkg.sv",
+    "rtl/lcvex_decode.sv",
+    "rtl/lcvex_core.sv",
+    "rtl/filelist.f",
+    "tb/sv/lcvex_core_tb.sv",
+    "sim/difftest/lockstep_coordinator.cc",
+    "sim/difftest/checkpoint.py",
+    "sim/difftest/qemu_trace.py",
+    "sim/difftest/run_lockstep_step.sh",
+    "sim/difftest/run_lockstep_resume.sh",
+    "sim/difftest/test_program.py",
+    "qemu/VERSION",
+    "qemu/plugins/lcvex_difftest.c",
+    "qemu/plugins/lcvex_protocol.h",
+    "qemu/plugins/lcvex_protocol.py",
+    "qemu/patches/0001-tcg-arm-lcvex-difftest-step-hook.patch",
+    "qemu/patches/0002-lcvex-checkpoint-hook.patch",
+    "/home/chiro/projects/mycpu/qemu/include/plugins/qemu-plugin.h",
+    "/home/chiro/projects/mycpu/qemu/target/arm"
+  ],
+  "context_docs": [
+    "docs/P7_FP_NEON_PROTOCOL.md",
+    "docs/COMMIT_PACKET.md",
+    "docs/DIFFTEST.md",
+    "docs/VERIFICATION.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/P7_FPGA_PARALLEL_PLAN.md"
+  ],
+  "base_sha": "c76cc28d53bcab4af0e42dcf4ca8dbb4426dcb6e",
+  "branch": "feature/T-20260827-051-p7-0-fp-state",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260827-051",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 4096,
+    "disk_mb": 4096,
+    "timeout_s": 2700,
+    "allocation_ratio": 0.5
+  },
+  "validation": {
+    "l0": [
+      "新增/修改 JSON 通过 python3 -m json.tool；git diff --check",
+      "P7 descriptor preflight、FP mask、LCVXFP01 round-trip/corruption smoke",
+      "Verilator lint 与 P7-0 独立 SV/Cocotb testbench"
+    ],
+    "l1": [
+      "V reset/128-bit alias、FPEN 00/01/10/11 trap、FPCR/FPSR mask、CPACR 非 FPEN 保留",
+      "trap 无 V/FPCR/FPSR 副作用、commit packet effect 上限、同 edge restore 的 SVA/Cocotb"
+    ],
+    "l2": [
+      "Cortex-A76 strict lockstep 的 FP_INIT/FP_COMMIT required handshake、raw-bit state delta 与 P6 scalar 兼容",
+      "首条 FP_INIT checkpoint restore、max/z adapter 拒绝、trace v2 和失败包重放"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "P7-0 的 V0-V31、FPCR、FPSR 和 CPACR.FPEN 按冻结协议实现并有 reset/权限/提交时机说明；FPEN 禁止时访问产生正确 trap 且不改变任何 FP 状态；scalar PRE/COMMIT/seq 与旧 P6 max/checkpoint 保持兼容；FP_INIT/FP_COMMIT、raw-bit trace、LCVXFP01 552B sidecar、manifest 绑定和失败原子性通过 L0-L2。实现必须同时包含 RTL、SV/Cocotb、QEMU/plugin/patch、协调器/checkpoint 测试和 handoff/evidence；不得借此任务实现 P7-1 至 P7-3、完整 ARMv8.2 FP/NEON、P8 SVE 或绕过断言/差分。QEMU build/replay 与顶层 Makefile/filelist/soc_tb 接线由集成者串行完成。",
+  "created_at": "2026-08-27T01:28:00+08:00",
+  "updated_at": "2026-08-27T12:11:12+08:00",
+  "commits": [
+    "331cffdd9097528c0a19a68563631cbf151c54e8",
+    "484ce8e58a00b6dfae5477c08d1035063156fe02",
+    "9e0950317c804e38f49b82f369eb1a366c3f48b9",
+    "6c0c2f192b5c80c35da823d60a8f9c5e4ae86079",
+    "55a070e46189cfe73448638825c8c12099e907a4",
+    "d54bedad2cb37401a2649d13459948d51dc3a7f4",
+    "d453e29f557701cefc53a4a6d70386d7cc938427"
+  ],
+  "owner_handoff": {
+    "state": "done",
+    "source_sha": "331cffdd9097528c0a19a68563631cbf151c54e8",
+    "head_sha": "9e0950317c804e38f49b82f369eb1a366c3f48b9",
+    "continuation_source_sha": "484ce8e58a00b6dfae5477c08d1035063156fe02",
+    "owner_report_received_at": "2026-08-27T03:14:44+08:00",
+    "owner_reported_at": null,
+    "handoff": "docs/handoffs/T-20260827-051-p7-0-fp-state.md",
+    "evidence": "docs/tasks/evidence/T-20260827-051.json",
+    "scope_accepted_for_integration": "standalone P7-0 state boundary plus repository-side FP protocol/trace/checkpoint validation and L0/L1 evidence",
+    "scope_remaining": "真实 FP 指令 A76 arithmetic、P7-1~P7-3、Gate D/F 后置"
+  },
+  "integration": {
+    "status": "pass_l0_l2_p7_0",
+    "strategy": "按 owner commit 顺序 cherry-pick 到集成线；先复跑受影响 L0/L1，再决定是否继续协议接线",
+    "line": "feature/p7-fp-neon",
+    "previous_merge_sha": "95c8690b9fdf74a08c7db0e7c650f8c4ca40d6bb",
+    "pending_source_sha": "9e0950317c804e38f49b82f369eb1a366c3f48b9",
+    "merge_sha": "d453e29f557701cefc53a4a6d70386d7cc938427",
+    "validated_scope": "standalone P7-0 V/FPEN/trap/effect/restore boundary、filelist/core/decoder/SoC wiring、QEMU 0012 replay/build/plugin、A76 required scalar/exception smoke、真实 FPCR/FPSR MRS/MSR raw-state lockstep、system-commit backpressure、fail-fp.json 负路径、13列 LCVXFP01 root/resume runner 和 1GHz A76 timer profile",
+    "remaining_scope": "真实 FP/NEON arithmetic/memory、Linux 长跑、完整 Gate D/F",
+    "runs": [
+      {
+        "run_id": "integrator-l1-core-lint-008",
+        "level": "L1",
+        "source_sha": "95c8690b9fdf74a08c7db0e7c650f8c4ca40d6bb",
+        "command": "make compile",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-l1-sv-build-run-009",
+        "level": "L1",
+        "source_sha": "95c8690b9fdf74a08c7db0e7c650f8c4ca40d6bb",
+        "command": "mkdir -p build/agents/T-20260827-051/sv/obj_dir && conda run --no-capture-output -n lcvex verilator --binary --timing --assert -Wall --top-module lcvex_fp_state_tb -Mdir build/agents/T-20260827-051/sv/obj_dir -o lcvex_fp_state_tb rtl/lcvex_pkg.sv rtl/lcvex_fp_state.sv tb/sv/lcvex_fp_state_tb.sv && build/agents/T-20260827-051/sv/obj_dir/lcvex_fp_state_tb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "独立 SV 编译和运行通过，输出 P7-0 定向场景全部通过。"
+      },
+      {
+        "run_id": "integrator-l1-cocotb-010",
+        "level": "L1",
+        "source_sha": "95c8690b9fdf74a08c7db0e7c650f8c4ca40d6bb",
+        "command": "conda run --no-capture-output -n lcvex make -C sim/cocotb -f Makefile.fp_state SIM_BUILD=/home/chiro/projects/mycpu/lcvex/build/agents/T-20260827-051/cocotb",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "Cocotb 3/3 PASS，仿真 196ns。"
+      },
+      {
+        "run_id": "integrator-l0-qemu-replay-014",
+        "level": "L0",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "command": "FINAL2_REPLAY_ROOT=/home/chiro/projects/mycpu/qemu-replay-T051-final2-Im4ZGn; for patch in qemu/patches/0001-tcg-arm-lcvex-difftest-step-hook.patch qemu/patches/0002-lcvex-checkpoint-hook.patch qemu/patches/0003-lcvex-wfi-idle-plugin-hook.patch qemu/patches/0004-lcvex-timer-recalc-after-restore.patch qemu/patches/0005-lcvex-wfxt-idle-plugin-hook.patch qemu/patches/0006-lcvex-timer-offset-schedule.patch qemu/patches/0007-lcvex-generic-timer-step-kick.patch qemu/patches/0008-lcvex-wait-resume-cntvct.patch qemu/patches/0009-lcvex-sys-sidecar-v3.patch qemu/patches/0010-lcvex-plugin-exception-note-context.patch qemu/patches/0011-lcvex-aarch64-vfpd32-off.patch qemu/patches/0012-lcvex-fp-state.patch; do git -C \"$FINAL2_REPLAY_ROOT\" apply \"/home/chiro/projects/mycpu/lcvex/$patch\"; done; git -C \"$FINAL2_REPLAY_ROOT\" diff --check",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "QEMU 11.1.0 基线按 0001→0012 全量 clean replay，git diff --check 通过。"
+      },
+      {
+        "run_id": "integrator-l1-qemu-build-015",
+        "level": "L1",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "command": "make -C /home/chiro/projects/mycpu/qemu/build -j2 qemu-system-aarch64",
+        "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648 + 0001..0012",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "QEMU 11.1.0 重新编译并链接成功；确认使用新 API。"
+      },
+      {
+        "run_id": "integrator-l1-plugin-build-016",
+        "level": "L1",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "command": "make -C qemu/plugins clean && make -C qemu/plugins",
+        "exit_code": 0,
+        "result": "pass_with_existing_warning",
+        "summary": "plugin 编译成功；保留既有 QEMU_PLUGIN_MEM_VALUE_U128 switch warning。"
+      },
+      {
+        "run_id": "integrator-l2-p7-required-smoke-017",
+        "level": "L2",
+        "source_sha": "593e76798f7246e0a250e837c63b36a26d794dca",
+        "qemu_commit": "84f07211cc5b4fc6a371559bf8a5de4fb068e648 + 0001..0012",
+        "command": "FP_NEON=required QEMU_CPU='cortex-a76,has_el3=false,has_el2=false' MAX_INSNS=14 PROGRESS_EVERY=1 SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.sock DUMP=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.fail COORD_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.coord.log QEMU_LOG=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.qemu.log CKPT_DIR=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.ckpt MON_SOCK=/home/chiro/projects/mycpu/lcvex/build/tmp/p7-api-smoke-20260827.mon bash sim/difftest/run_lockstep_step.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "A76 required handshake、FP_INIT/FP_COMMIT 零状态路径和 14 条严格锁步通过，含同步异常；未覆盖真实 FP 指令。",
+        "artifacts": [
+          "build/tmp/p7-api-smoke-20260827.coord.log",
+          "build/tmp/p7-api-smoke-20260827.qemu.log"
+        ]
+      }
+    ]
+  },
+  "handoff": "docs/handoffs/T-20260827-051-final.md",
+  "evidence": "docs/tasks/evidence/T-20260827-051-resume.json",
+  "known_limits": [
+    "phase=done 表示 P7-0 实现与 runner 证据已集成并通过一次性 review；不表示完整 P7 FP/NEON 或 Gate F。",
+    "P7-1/P7-2/P7-3、完整 FP 异常使能、结构化多寄存器访存和 P8 SVE 后置。",
+    "QEMU fork 的构建、patch replay 和任何外部 fork 写入全局串行；不得与 Catapult 线并行写。",
+    "rtl/filelist.f、顶层 Makefile、tb/sv/lcvex_soc_tb.sv、PROJECT_STATUS.md、ROADMAP.md 由集成者接线和更新。"
+  ],
+  "next": "登记并派发 P7-1 FP32/FP64 标量算术垂直任务，同时维持 Catapult AXI4/Cache/上板线独立推进。"
+}

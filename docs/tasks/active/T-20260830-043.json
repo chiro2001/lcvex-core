@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-043",
+  "label": "PE-F1C",
+  "parent": "T-20260830-033",
+  "title": "F1c fetch FIFO 同 SHA 成对性能复测",
+  "kind": "performance-frontend-measurement",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "assigned_owner": "luna-f1c-measurement",
+  "agent_type": "implementation-and-measurement",
+  "model": "gpt-5.6-luna",
+  "model_selection": "用户指定 gpt-5.6-luna(max)",
+  "reasoning_effort": "max",
+  "model_scope": "扩展既有 F0 性能 runner 以支持 FETCH_FIFO_ENABLE 成对构建和 F1a 只读计数，然后在同一 measurement source SHA、同一 workload image/tool/参数下完成 off/on 复测；不得修改 RTL 或美化负收益。",
+  "depends_on": [
+    "T-20260830-037",
+    "T-20260830-039",
+    "T-20260830-041"
+  ],
+  "base_sha": "93cc773db8832f7e25e2b1d561b8c9ee14ae1c55",
+  "branch": "verify/T-20260830-043-pe-f1c-results",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-043",
+  "scope": "完成 F1c：为性能构建矩阵增加 FETCH_FIFO_ENABLE=0/1 维度，采集已暴露的 fetch FIFO/epoch/flush/stale/occupancy 计数和可比较的提交/内存副作用摘要；先提交测量基础设施形成冻结 measurement source SHA，再用完全相同的 14 个 workload 镜像、工具、参数、缓存/延迟配置成对运行 F0 与 F1a，输出可复现 JSON/CSV、结论文档、handoff 和 evidence。F1b 未实现，禁止创建或声称 f1ab 数据；不改 RTL/QEMU，不运行 Gate D、Linux、Quartus 或完整 B5 flow。",
+  "planning_guidance": {
+    "implementation": [
+      "Makefile 的 microbench-build-config 增加显式 PERF_FETCH_FIFO_ENABLE，默认 0，并传递 -GFETCH_FIFO_ENABLE；不得改变无参数旧入口的默认行为。",
+      "run_perf_matrix.py 的配置身份必须同时编码 cache/delay 与 fetch FIFO 开关，避免 off/on 复用同一 build 目录或错误 executable；聚合 JSON/CSV 保存完整参数和 measurement source SHA。",
+      "microbench_runner.cc 采集 tb/sv/lcvex_soc_tb.sv 已公开的 fetch_epoch、fetch_fifo_occupancy/push/pop/flush/stale_drop/peak；计数只读，不影响 commit、请求或时序。",
+      "为 off/on 架构等价提供稳定摘要：优先对不含 cycle 时间的 commit packet 序列和已提交内存副作用形成确定性 digest；若现有顶层端口不足，停止并报告，不得扩大到 RTL。",
+      "先完成并提交 runner/脚本/Makefile，记录该提交为 measurement_source_sha；所有成对 runner 与 workload image 均从该 SHA 构建。结果文档/evidence 可在测量后形成后续提交。",
+      "主对照至少覆盖 nocache_d0、l1i_d0、l1id_l2_d0、nocache_d1、nocache_d2、fullcache_d1、fullcache_d2 的 F0/F1a 成对配置和全部 14 个 F0 workload；如资源窗口不足，先完成 alu_latency、ctrl_branch、kernel_crc/hash/sort/matmul 及 mem_seq/mem_random/mem_ldst 负向对照并主动报告，剩余项不得伪报。"
+    ],
+    "measurement": [
+      "每对必须核对 git/source SHA、workload image SHA256、toolchain、运行参数与 max_cycles 完全一致；报告 cycles、retired_insn、ipc、stall_if、fetch_wait、branch_flush、ptw_stall、I-L1 事件、arb/RAM 请求和 fetch debug counters。",
+      "相同 workload/config 的 off/on status、退出码、retired_insn、commit/memory digest 必须一致，不得新增 timeout；fetch_fifo_peak 必须 <=2，且无 overflow/underflow/stale instruction 证据。",
+      "性能护栏为 cycles_f1a <= cycles_f0*1.02+64。护栏失败不等于测量任务失败：保存数据、明确标红并建议保持默认关闭；禁止改 workload、参考结果或过滤负值。",
+      "收益必须按每对 delta 和百分比报告，并明确标注 Verilator 仿真代理，不是 A10/Fmax/架构签核。零收益或负收益必须如实成为结论。"
+    ],
+    "stop_conditions": [
+      "需要修改 rtl/**、tb/sv/lcvex_soc_tb.sv、QEMU fork、workload 源码或既有参考结果",
+      "off/on 使用了不同源码 SHA、镜像 hash、工具或 workload 参数",
+      "同一构建目录被不同 FETCH_FIFO_ENABLE 参数复用",
+      "架构摘要、retired_insn、退出状态不一致，出现新增 timeout、FIFO 越界或 stale 计数异常",
+      "无法在现有顶层只读端口上完成所需观测"
+    ]
+  },
+  "writes": [
+    "Makefile",
+    "scripts/run_perf_matrix.py",
+    "sim/microbench/microbench_runner.cc",
+    "sim/microbench/perf_runner.py",
+    "docs/PERFORMANCE_F1_RESULTS.md",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.json",
+    "docs/evidence/artifacts/T-20260830-043/f1c_matrix.csv",
+    "docs/handoffs/T-20260830-043-pe-f1c-results.md",
+    "docs/tasks/evidence/T-20260830-043.json"
+  ],
+  "reads": [
+    "AGENTS.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md",
+    "docs/tasks/active/T-20260830-037.json",
+    "docs/tasks/active/T-20260830-039.json",
+    "docs/tasks/active/T-20260830-041.json",
+    "docs/tasks/evidence/T-20260830-037.json",
+    "docs/tasks/evidence/T-20260830-041.json",
+    "tb/sv/lcvex_soc_tb.sv",
+    "rtl/lcvex_core.sv"
+  ],
+  "context_docs": [
+    "docs/PERFORMANCE_F1_PREWORK.md",
+    "docs/PERFORMANCE_BASELINE_MATRIX.md",
+    "docs/PERFORMANCE_ENHANCEMENT_FINAL_PLAN.md"
+  ],
+  "validation": {
+    "l0": [
+      "python3 -m py_compile scripts/run_perf_matrix.py sim/microbench/perf_runner.py",
+      "git diff --check，并核对实际修改严格位于登记 writes",
+      "矩阵配置解析/aggregate-only 对 off/on 构建目录、参数与字段的静态/轻量 smoke"
+    ],
+    "l1": [
+      "在 measurement_source_sha 上按 15G cgroup、MemorySwapMax=0、VERILATOR_JOBS=1 串行构建 F0/F1a runner；一次只允许一个重型 Verilator",
+      "先跑 alu_latency、ctrl_branch、kernel_crc 和 mem_seq 成对 smoke，核对 status/retired/digest/provenance/fetch counters 后再扩展完整矩阵"
+    ],
+    "l2": [
+      "完成登记配置的 14-workload off/on 成对 Verilator 性能矩阵；不以本任务重复 T-041 strict QEMU lockstep"
+    ],
+    "l3": [],
+    "l4": [],
+    "seeds": []
+  },
+  "acceptance": "形成固定 measurement_source_sha 的 F0/F1a 成对可复现数据；所有已报告对的 provenance 一致，status/retired/commit-memory digest 等价，无新增 timeout/FIFO 越界；完整报告每项周期/IPC/计数差异及 2%+64 护栏结果。即使零收益、负收益或护栏失败，数据完整且结论诚实仍可交付 review，但 F1a 必须继续默认关闭并列出阻断；不得宣称 F1b、A10/Fmax 或架构签核。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 15360,
+    "disk_mb": 16384,
+    "timeout_s": 3600,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 60,
+    "max_minutes": 240,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "test_slot": {
+    "status": "released",
+    "reason": "当前无其它运行中的 subagent 或重型 Verilator 任务；T-043 独占本机重型测试队列",
+    "released_at": "2026-08-30T19:30:16+08:00",
+    "release_rule": "仅本任务可串行运行一个 MemoryMax=15G/MemorySwapMax=0、-j1 的重型 Verilator；不得并发 Gate/Quartus/QEMU 长跑"
+  },
+  "created_at": "2026-08-30T19:30:16+08:00",
+  "updated_at": "2026-08-30T22:10:00+08:00",
+  "dispatch": {
+    "sent_at": "2026-08-30T19:32:19+08:00",
+    "agent_name": "t041_pe_f1a_impl_luna",
+    "agent_reuse_note": "复用已完成 T-041 且已确认 model=gpt-5.6-luna reasoning_effort=max 的空闲 agent；本回合只持有 T-043。",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-043"
+  },
+  "handoff": "docs/handoffs/T-20260830-043-pe-f1c-results.md",
+  "evidence": "docs/tasks/evidence/T-20260830-043.json",
+  "merge_sha": "3a1c74f97dc9e23970b20844135cffc3bc1c3a30",
+  "merged_at": "2026-08-30T22:07:49+08:00",
+  "integrator_review": {
+    "received_at": "2026-08-30T22:10:00+08:00",
+    "status": "accepted_measurement_gate_failed",
+    "owner_head_sha": "a4b21b59e237320e08e8daadaa78463a2832af59",
+    "measurement_source_sha": "b2b0a96894596ade51e8409fc7b9d4eb566cfe63",
+    "checks": [
+      "owner worktree clean；9-file write set matched task reservation",
+      "196-row JSON/CSV hashes and 98-pair audit independently verified",
+      "retired mismatch=42、status mismatch=1、memory-effect mismatch=6；32 个 pass/pass mismatch 全部 retired 不同",
+      "detached review worktree rebuilt nocache_d0 f0/f1a under MemoryMax=15G/MemorySwapMax=0 and -j1",
+      "merge SHA 3a1c74f reused content-identical reviewed binaries and reproduced alu_latency strict equality plus mem_seq +10 retired mismatch exactly",
+      "merge SHA relevant Makefile/scripts/sim/RTL/TB content is byte-identical to rebuilt review SHA 88d1ad2"
+    ],
+    "notes": "T-043 作为同 SHA 测量与证据任务验收；F1a 正确性/性能 gate 明确失败，FETCH_FIFO_ENABLE 必须继续默认 0。结果不得解释为已签核性能收益。"
+  },
+  "known_limits": [
+    "F1b later-beat-fault gate 未闭合，本任务只测 F0/F1a。",
+    "性能结果只代表 Verilator 仿真周期和内部计数代理，不代表 FPGA Fmax、资源或板级性能。",
+    "不自动运行完整 B5/full flow、Gate D、Linux、Quartus 或读取 license。"
+  ],
+  "next": "登记并派发 F1a commit-sequence 首分歧诊断；先解释 mem_seq/fp/NEON/sort 的 retired 与 memory-effect 差异，修复且严格等价后才能重跑 F1c。F1b 继续阻断。"
+}

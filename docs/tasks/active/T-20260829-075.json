@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "T-20260829-075",
+  "label": "B0",
+  "parent": "T-20260828-072",
+  "title": "V82 非 SVE profile 审计与机器可检查清单",
+  "kind": "isa-profile-audit",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "reported",
+  "base_sha": "3d6fdfc4bfde7d9a0ebeb3609badffbdaa0bf6a2",
+  "branch": "feature/T-20260829-075-b0-profile-audit",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-075",
+  "scope": "从 ISA_SCOPE.md、ISA_GAPS.md、编译器反汇编、QEMU probe 生成机器可检查的 V82-BASE/V82-SELECTED-EXT/V82-SVE-EXCLUDED/POST-V82-DEFERRED 清单；标出已实现/shim/UDEF/blocked。",
+  "writes": [
+    "docs/V82_PROFILE_MANIFEST.md",
+    "docs/ISA_SCOPE.md",
+    "docs/ISA_GAPS.md",
+    "scripts/v82_profile_check.py",
+    "docs/handoffs/T-20260829-075-b0-profile-audit.md",
+    "docs/tasks/evidence/T-20260829-075.json"
+  ],
+  "acceptance": "清单可生成/校验；每行有 oracle 或明确 blocked；集成者批准 profile；不新增指令实现。",
+  "next": "B0 通过后作为 B1/B2/B3 的实现依据。",
+  "updated_at": "2026-08-29T02:08:00+0800",
+  "dispatch": {
+    "sent_at": "2026-08-29T01:47:44+0800",
+    "agent_name": "b0_profile_audit",
+    "model": "deepseek-v4-flash",
+    "reasoning_effort": "max",
+    "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-075",
+    "branch": "feature/T-20260829-075-b0-profile-audit"
+  },
+  "integrator_review": {
+    "received_at": "2026-08-29T02:01:30+0800",
+    "status": "accepted-as-candidate",
+    "head_sha": "dec2bd5390deda56af0e0368ce14ce52470e1e1a",
+    "implementation_sha": "a4050c002087582fd74bfc82cb904cb44eefffcb",
+    "notes": "B0 manifest 117 行，校验器通过；V82-BASE 68、SELECTED-EXT 28、SVE-EXCLUDED 5、DEFERRED 16；2 blocked（BASE-DP-018、EXT-FP-012）。可进入 G1 profile 批准；B1 应优先处理 BASE-DP-018，EXT-FP-012 由 B2 决策。"
+  },
+  "merge_sha": "739bd94ba25e88e909801fcff90d382d352136ee",
+  "merged_at": "2026-08-29T02:08:00+0800",
+  "head_sha": "a4050c002087582fd74bfc82cb904cb44eefffcb",
+  "correction_record": {
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "a4050c002087582fd74bfc82cb904cb44eefffcb",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  }
+}

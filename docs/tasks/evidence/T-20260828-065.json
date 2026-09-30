@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260828-065",
+  "state": "blocked",
+  "base_sha": "ebd0e8ca56b6818c840fc84dabf591407b0edd80",
+  "head_sha": "3b18a9d1017f0f90bba648ae78991c21cc9be0de",
+  "merge_sha": "23218fb9c94db449a5e2db9db8809694e1d2541b",
+  "branch": "feature/T-20260828-065-b5-soc-boot",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-065",
+  "scope": "B5 SoC/Boot：在 Catapult A10 平台 shell 接入 LCVEX SoC（core + I/D-L1 + L2 + AXI4 + EMIF + BRAM boot + JTAG-UART/EPCQ CSR），补齐本地 L0/L1 与远端 Quartus full flow",
+  "timestamps": {
+    "timezone": "Asia/Shanghai",
+    "received_at": "2026-08-28T03:25:00+08:00",
+    "local_smoke_pass": "2026-08-28T03:32:00+08:00",
+    "remote_compile_b5h_fail": "2026-08-28T03:19:00+08:00 .. 2026-08-28T03:23:56+08:00",
+    "remote_compile_b5i_fail": "2026-08-28T03:27:40+08:00 .. 2026-08-28T03:28:35+08:00",
+    "remote_compile_b5j_fail": "2026-08-28T03:33:03+08:00 .. 2026-08-28T03:41:01+08:00",
+    "remote_compile_b5k_run": "2026-08-28T03:41:52+08:00 .. 2026-08-28T03:57:00+08:00",
+    "documents_written_at": "2026-08-28T04:00:00+08:00"
+  },
+  "remote": {
+    "host": "192.168.101.5",
+    "hostname": "GamePC",
+    "shell": "pwsh.exe -NoProfile -NonInteractive -EncodedCommand <UTF-16LE base64>",
+    "project_root": "D:\\Projects\\fpga-altra\\lcvex",
+    "quartus_root": "D:\\Software\\intelFPGA_pro\\21.4",
+    "sync_policy": "scp rtl/*.sv -> D:/Projects/fpga-altra/lcvex/rtl/; qsf/sdc -> quartus/; wrapper -> rtl/ (平台 shell 与 QSF 均位于远端 rtl/)",
+    "compile_log": "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5k.log",
+    "blocked_reason": "Session 0 残留 quartus_syn（PID 28808/40532，约 44 GB）无法以当前用户/SYSTEM 计划任务终止；Free 内存 0.5-0.7 GB，b5k Synthesis 无法完成；需重启远端或由宿主清理进程后重跑",
+    "failed_logs": [
+      "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5h.log",
+      "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5i.log",
+      "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5j.log"
+    ]
+  },
+  "toolchain": {
+    "quartus_sh": {
+      "version": "Quartus Prime Shell Version 21.4.0 Build 67 12/06/2021 SC Pro Edition",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10"
+    },
+    "verilator": {
+      "command": "conda run --no-capture-output -n lcvex verilator --version",
+      "version": "Verilator 5.050 2026-07-01 rev conda-forge build 0"
+    },
+    "cross": {
+      "as": "aarch64-linux-gnu-as",
+      "ld": "aarch64-linux-gnu-ld",
+      "objcopy": "aarch64-linux-gnu-objcopy"
+    }
+  },
+  "boot_images": {
+    "boot.bin": {
+      "bytes": 149,
+      "sha256": "4e66fb3b71811ddc9d0dc51898457086237495fbd1b056c74aed57538c1a58e7"
+    },
+    "boot.hex": {
+      "bytes": 447,
+      "sha256": "e2133d1e0a4b5d3bdb2bdb7f7be6f1a843624c2e52b9d6e7c40ebc2c128221ae"
+    },
+    "ddr.bin": {
+      "bytes": 57,
+      "sha256": "e494472390183273c2af39495f008f7d7b47022c17917d3f67a0bd68cffdf665"
+    },
+    "ddr.hex": {
+      "bytes": 171,
+      "sha256": "10b54389ad97bbd2b71db1e012ba72164d1707a05063520fc1eae30728f6983d"
+    },
+    "note": "build/ 产物不入 Git；boot/build.sh 可重现"
+  },
+  "runs": [
+    {
+      "run_id": "owner-smoke-001",
+      "level": "L1",
+      "command": "bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "positive（JTAG marker + DDR 跳转 + DDR read）与 cal-blocked（无 DDR 流量 + marker）均 PASS；SOC_SMOKE_ALL_PASS",
+      "log": "/home/chiro/projects/mycpu/lcvex-wt-T-20260828-065/build/agents/T-20260828-065/smoke/smoke.log",
+      "finished_at": "2026-08-28T03:32:00+08:00"
+    },
+    {
+      "run_id": "owner-lint-soc-002",
+      "level": "L0",
+      "command": "bash fpga/catapult_a10/tools/lint_soc.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_CATAPULT_A10_SOC_LINT_PASS"
+    },
+    {
+      "run_id": "owner-lint-platform-003",
+      "level": "L0",
+      "command": "bash fpga/catapult_a10/tools/lint_platform.sh",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "LCVEX_CATAPULT_A10_SKELETON_LINT_PASS"
+    },
+    {
+      "run_id": "owner-check-platform-004",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_platform.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "PLATFORM_CHECK_PASS files=50"
+    },
+    {
+      "run_id": "owner-check-skeleton-005",
+      "level": "L0",
+      "command": "python3 fpga/catapult_a10/tools/check_skeleton.py",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "SKELETON_CHECK_PASS files=6；TOOLCHAIN_MISSING 为离线预期"
+    },
+    {
+      "run_id": "owner-l0-misc-006",
+      "level": "L0",
+      "command": "sha256sum -c SHA256SUMS; git diff --check",
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "payload 哈希与 diff whitespace 全部通过"
+    },
+    {
+      "run_id": "owner-compile-b5h-007",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10",
+      "exit_code": 3,
+      "result": "fail",
+      "summary": "远端旧文件：decode/fp_scalar 非固定循环、neon_int 128 位越界、bram_boot 敏感条件；8 errors",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5h.log"
+    },
+    {
+      "run_id": "owner-compile-b5i-008",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10",
+      "exit_code": 3,
+      "result": "fail",
+      "summary": "修复循环/BRAM 后 neon_int 动态 lane 切片仍越界；SSH 中断后旧子进程残留，log 不完整",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5i.log"
+    },
+    {
+      "run_id": "owner-compile-b5j-009",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10",
+      "exit_code": 3,
+      "result": "fail",
+      "summary": "移位改写后 BRAM mem 双 always 写口造成多驱动（13264/13265），4 errors",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5j.log"
+    },
+    {
+      "run_id": "owner-compile-b5k-010",
+      "level": "L3",
+      "command": "quartus_sh --flow compile catapult_a10 -c catapult_a10",
+      "exit_code": null,
+      "result": "blocked",
+      "summary": "BRAM 加载口 translate_off 后重跑；Synthesis 进程卡在内存耗尽（两个 Session 0 quartus_syn 共约 44 GB，Free 0.5-0.7 GB），SSH 会话被手动终止，无 fit/STA/SOF",
+      "log": "D:\\Projects\\fpga-altra\\lcvex\\quartus\\compile_b5k.log"
+    }
+  ],
+  "full_flow": {
+    "exit_code": null,
+    "result": "blocked",
+    "started_at": "2026-08-28T03:41:52+08:00",
+    "ended_at": "2026-08-28T03:57:00+08:00",
+    "errors": null,
+    "warnings": null,
+    "fit_summary": null,
+    "sta_summary": null,
+    "sof": null
+  },
+  "known_limits": [
+    "BRAM 程序加载口仅仿真可见；板级 boot 内容需 MIF/配置流固化",
+    "DDR 校准、March、上板测试不在本任务范围",
+    "EPCQ MEM 窗口保留未接；NEON/FP 未做完整 QEMU 差分",
+    "lcvex_core.sv 隐式声明 warning 来自 P7 线快照",
+    "neon_int 移位改写带 Quartus 16753 warning：调用侧索引受 lane 数量约束，语义不受影响",
+    "远端 full flow blocked：Session 0 残留 quartus_syn 无法终止导致内存耗尽；需清理/重启后重跑 b5l 才能取得 fit/STA/SOF"
+  ],
+  "integration_review": {
+    "reviewed_at": "2026-08-28T04:03:42+08:00",
+    "reviewer": "root-integrator",
+    "rechecks": [
+      {
+        "run_id": "integrator-soc-smoke-001",
+        "command": "bash fpga/catapult_a10/tools/run_soc_smoke.sh",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "SOC_SMOKE_ALL_PASS positive+cal-blocked"
+      },
+      {
+        "run_id": "integrator-lint-002",
+        "command": "lint_soc.sh + lint_platform.sh",
+        "exit_code": 0,
+        "result": "pass"
+      },
+      {
+        "run_id": "integrator-l0-003",
+        "command": "check_platform + check_skeleton + sha256sum + diff --check + json",
+        "exit_code": 0,
+        "result": "pass",
+        "summary": "PLATFORM 50/50, SKELETON 6/6"
+      }
+    ],
+    "blocker": "remote Quartus session-0 orphaned quartus_syn processes (~44GB) cannot be killed; full flow b5k stopped at synthesis; need host cleanup/reboot then rerun b5l"
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "integration_review.reviewed_at",
+        "old": "2026-08-28T04:05:00+08:00",
+        "new": "2026-08-28T04:03:42+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "23218fb",
+        "new": "23218fb9c94db449a5e2db9db8809694e1d2541b",
+        "reason": "expand to full merge SHA"
+      }
+    ]
+  }
+}

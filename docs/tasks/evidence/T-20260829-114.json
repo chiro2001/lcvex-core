@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260829-114",
+  "state": "done",
+  "base_sha": "59fa6e52d9605efa23579a1bb8c0bea1669ad6f3",
+  "head_sha": "75465d4d826f51bdca484283c83c2b01c58c4143",
+  "merge_sha": "24f5363770227c3e5bae9bf36919b217e7d213e0",
+  "branch": "feature/T-20260829-114-aud-09-timestamps",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260829-114",
+  "sent_at": "2026-08-30T00:10:00+0800",
+  "received_at": "2026-08-30T00:10:00+0800",
+  "reported_at": "2026-08-30T00:11:00+0800",
+  "owner": "audit-action-dsv",
+  "model": "dsh-default",
+  "label": "AUD-09",
+  "title": "任务时间戳单调性/事件时间字段",
+  "scope": "定义事件时间与台账回填时间；新增脚本检查 review/run/事件时间单调性与未来时间；为 T-099/T-104 建立不可变 correction；不改写历史 handoff/evidence，不修改 RTL。",
+  "files": [
+    "scripts/check_task_timestamps.py",
+    "docs/audit/01-governance.md",
+    "docs/MULTI_AGENT_WORKFLOW.md",
+    "docs/handoffs/T-20260829-114-aud-09.md",
+    "docs/tasks/evidence/T-20260829-114.json"
+  ],
+  "correction_record": {
+    "audit_finding": "EXT-01-002",
+    "old_values_preserved": true,
+    "note": "以下 correction 仅记录保留旧值，不修改原 active/evidence/handoff 文件；由集成者按此回填。",
+    "tasks": [
+      {
+        "task": "T-20260829-099",
+        "file": "docs/tasks/active/T-20260829-099.json",
+        "corrections": [
+          {
+            "field": "created_at",
+            "old_value": "2026-08-29T14:40:00+0800",
+            "corrected_value": "2026-08-29T13:06:00+0800",
+            "reason": "登记发生在 Gate 首轮运行前；首轮 run 13:06 开始，不得晚于承载提交 9dc3c50 (13:06:26)"
+          },
+          {
+            "field": "updated_at",
+            "old_value": "2026-08-29T14:40:00+0800",
+            "corrected_value": "2026-08-29T13:50:20+0800",
+            "reason": "active JSON 最后更新提交 64ec6eb 时间为 13:50:20"
+          },
+          {
+            "field": "dispatch.sent_at",
+            "old_value": "2026-08-29T14:40:00+0800",
+            "corrected_value": "2026-08-29T13:06:00+0800",
+            "reason": "与首轮 Gate 运行开始一致，并早于承载提交 9dc3c50 (13:06:26)"
+          },
+          {
+            "field": "integrator_review.received_at",
+            "old_value": "2026-08-29T14:00:00+0800",
+            "corrected_value": "2026-08-29T13:50:20+0800",
+            "reason": "与承载提交 64ec6eb 一致，且满足 review >= dispatch"
+          }
+        ],
+        "unchanged": {
+          "runs": "evidence 中 run 时间无需修改：13:06:00-13:18:40、13:25:00-13:46:40，均早于 evidence 提交且晚于修正后 dispatch"
+        }
+      },
+      {
+        "task": "T-20260829-104",
+        "file": "docs/tasks/active/T-20260829-104.json",
+        "corrections": [
+          {
+            "field": "created_at",
+            "old_value": "2026-08-29T21:30:00+0800",
+            "corrected_value": "2026-08-29T21:04:05+0800",
+            "reason": "任务登记提交 5f78319 时间 21:04:05"
+          },
+          {
+            "field": "updated_at",
+            "old_value": "2026-08-29T21:30:00+0800",
+            "corrected_value": "2026-08-29T21:15:16+0800",
+            "reason": "active JSON 最终更新提交 2edc757 时间 21:15:16"
+          },
+          {
+            "field": "dispatch.sent_at",
+            "old_value": "2026-08-29T21:30:00+0800",
+            "corrected_value": "2026-08-29T21:06:00+0800",
+            "reason": "T-104 evidence sent_at 为 21:06:00"
+          },
+          {
+            "field": "merged_at",
+            "old_value": "2026-08-29T22:00:00+0800",
+            "corrected_value": "2026-08-29T21:14:53+0800",
+            "reason": "实际集成 merge 提交 8e3bfb5 时间 21:14:53"
+          },
+          {
+            "field": "integrator_review.received_at",
+            "old_value": "2026-08-29T22:00:00+0800",
+            "corrected_value": "2026-08-29T21:15:16+0800",
+            "reason": "active JSON 标记 merged/review 的提交时间 2edc757"
+          }
+        ]
+      },
+      {
+        "task": "T-20260829-104",
+        "file": "docs/tasks/evidence/T-20260829-104.json",
+        "corrections": [
+          {
+            "field": "reported_at",
+            "old_value": "2026-08-29T21:20:00+0800",
+            "corrected_value": "2026-08-29T21:13:30+0800",
+            "reason": "evidence/材料承载提交 4214a5e 时间 21:13:30；reported 不得晚于承载提交"
+          }
+        ]
+      }
+    ],
+    "artifact_hash_fixes": [
+      {
+        "artifact": "t114-checker",
+        "uri": "scripts/check_task_timestamps.py",
+        "sha256": "a790cdcb114c39ea992c963f3ec407e5eb8a55101acbfbe64e48f21a52e2f975",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "t114-handoff",
+        "uri": "docs/handoffs/T-20260829-114-aud-09.md",
+        "sha256": "b33f7167b7c67e65fc978b0079f6770794e0820e2ffdb89b4ac506fbd4bd08d3",
+        "basis": "computed from git object at merge/head SHA"
+      },
+      {
+        "artifact": "t114-evidence",
+        "uri": "docs/tasks/evidence/T-20260829-114.json",
+        "sha256": "e4e67327a66e9c2d017da876fb1c1d49a3402c4b3c00510144f52fe5dd111aaf",
+        "basis": "computed from git object at merge/head SHA"
+      }
+    ],
+    "evidence_finalization": [
+      {
+        "field": "merge_sha",
+        "old": "",
+        "new": "24f5363770227c3e5bae9bf36919b217e7d213e0",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "state",
+        "old": "review",
+        "new": "done",
+        "reason": "task is done; evidence finalization"
+      },
+      {
+        "field": "integrator_review",
+        "old": "",
+        "new": "copied from task integrator_review",
+        "reason": "batch evidence finalization"
+      },
+      {
+        "field": "integrator_review.result_sha",
+        "old": "",
+        "new": "75465d4d826f51bdca484283c83c2b01c58c4143",
+        "reason": "set explicit result head from evidence head_sha"
+      }
+    ]
+  },
+  "remaining_issue_summary": {
+    "scope": "live (proposed + active + evidence), pre-fix record",
+    "errors": 103,
+    "warnings": 49,
+    "files_with_errors": 46,
+    "categories": [
+      "active T-074, T-078~T-093, T-096, T-098~T-104: dispatch/merged/integrator_review event times later than carrying commit; a few review/merged < dispatch",
+      "evidence T-063, T-065, T-066, T-068, T-070, T-082, T-086, T-089, T-090, T-092~T-100, T-103, T-104: sent/received/reported or run times later than carrying commit; T-099 runs before erroneous dispatch; T-104 reported_at later than material commit",
+      "proposed T-094, T-095, T-097: event times later than carrying commit",
+      "archive (scope all) has many ledger/backfill times later than carrying commit, reported as warnings"
+    ],
+    "reproduce": "python3 scripts/check_task_timestamps.py --scope live --json"
+  },
+  "runs": [
+    {
+      "run_id": "t114-py-compile-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m py_compile scripts/check_task_timestamps.py",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Checker script syntax OK."
+    },
+    {
+      "run_id": "t114-script-live-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 scripts/check_task_timestamps.py --scope live --json",
+      "seed": null,
+      "exit_code": 1,
+      "result": "expected-findings",
+      "summary": "103 errors, 49 warnings in existing live records; documents pre-AUD-09 inconsistencies, does not block this documentation/correction task."
+    },
+    {
+      "run_id": "t114-diff-check-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git diff --check",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "No whitespace errors."
+    },
+    {
+      "run_id": "t114-json-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "python3 -m json.tool docs/tasks/evidence/T-20260829-114.json",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Evidence JSON legal."
+    },
+    {
+      "run_id": "t114-write-scope-001",
+      "runner_role": "owner",
+      "level": "L0",
+      "command": "git status --short && git diff --name-only",
+      "seed": null,
+      "exit_code": 0,
+      "result": "pass",
+      "summary": "Only new checker/policy docs/handoff/evidence; no RTL/QEMU/task ledger changes."
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "t114-checker",
+      "uri": "scripts/check_task_timestamps.py",
+      "owner": "T-20260829-114",
+      "retain_until": "repository-history",
+      "sha256": "a790cdcb114c39ea992c963f3ec407e5eb8a55101acbfbe64e48f21a52e2f975",
+      "bytes": null,
+      "reproduce": "python3 scripts/check_task_timestamps.py --scope live --json"
+    },
+    {
+      "id": "t114-handoff",
+      "uri": "docs/handoffs/T-20260829-114-aud-09.md",
+      "owner": "T-20260829-114",
+      "retain_until": "repository-history",
+      "sha256": "b33f7167b7c67e65fc978b0079f6770794e0820e2ffdb89b4ac506fbd4bd08d3",
+      "bytes": null,
+      "reproduce": "git show HEAD:docs/handoffs/T-20260829-114-aud-09.md"
+    },
+    {
+      "id": "t114-evidence",
+      "uri": "docs/tasks/evidence/T-20260829-114.json",
+      "owner": "T-20260829-114",
+      "retain_until": "repository-history",
+      "sha256": "e4e67327a66e9c2d017da876fb1c1d49a3402c4b3c00510144f52fe5dd111aaf",
+      "bytes": null,
+      "reproduce": "python3 -m json.tool docs/tasks/evidence/T-20260829-114.json"
+    }
+  ],
+  "known_limits": [
+    "未修改 active/archive/proposed 或历史 evidence；correction 仅为不可变记录。",
+    "剩余 live 不一致 46 个文件，本任务未批量修复；已提供复现命令和分类清单。",
+    "脚本对近似/范围型时间（含 ~、..）不检查。",
+    "未运行重型 Verilator/Quartus/Gate；未修改 RTL/tb/sim/qemu/Makefile/CI。"
+  ],
+  "next": "集成者按 correction 回填 T-099/T-104；另立或扩展现有 correction 任务处理剩余清单；新记录需通过 scripts/check_task_timestamps.py --scope live --exit-code 后才能宣称 EXT-01-002 关闭。",
+  "integrator_review": {
+    "received_at": "2026-08-30T00:10:00+0800",
+    "status": "accepted",
+    "head_sha": "d96c08d4a4c370c6474873b557b4050c0506fbdc",
+    "notes": "AUD-09 merged. New check_task_timestamps.py with live/all scope, T-099/T-104 corrections, remaining 103 errors/49 warnings in live scope recorded for follow-up.",
+    "merge_sha": "24f5363770227c3e5bae9bf36919b217e7d213e0",
+    "result_sha": "75465d4d826f51bdca484283c83c2b01c58c4143"
+  }
+}

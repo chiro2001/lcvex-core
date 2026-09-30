@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-008",
+  "label": "FPGA-F2",
+  "parent": "T-20260828-067",
+  "title": "FPGA-F2：L1D/L2/soc_coh 深拆分与 block-based bottom-up 验证",
+  "kind": "fpga-line-deep-split",
+  "priority": "high",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "d638b056d151a234301b8dd22dd367f2e2a15d9a",
+  "branch": "feature/T-20260830-008-fpga-f2",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-008",
+  "scope": "承接 FPGA-F 步骤2 blocked：在隔离远程副本中继续做 L1D/L2/soc_coh 等重型模块结构性拆分与 Quartus block-based bottom-up 验证，目标绕过顶层单次 elaboration 峰值内存；不启动完整 B5 full flow，不修改原始工程 QSF/SDC/RTL，不读 license。",
+  "writes": [
+    "docs/handoffs/T-20260830-008-fpga-f2.md",
+    "docs/tasks/evidence/T-20260830-008.json",
+    "fpga/**",
+    "rtl/**",
+    "tb/**"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260830-006-fpga-f.md",
+    "docs/handoffs/T-20260830-005-fpga-e.md",
+    "docs/handoffs/T-20260830-001-fpga-a.md",
+    "docs/handoffs/T-20260830-004-fpga-d.md",
+    "fpga/catapult_a10/**",
+    "rtl/**"
+  ],
+  "validation": {
+    "l0": [
+      "独立模块/分区 synthesis 有明确退出码和峰值内存记录",
+      "git diff --check"
+    ],
+    "l1": [
+      "若 QDB bottom-up 实验成功，记录组装步骤与是否跳过顶层重综合"
+    ],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "交付能够绕过或显著降低顶层 elaboration 峰值内存的可复用方案/实测数据；若仍受阻，给出精确拆分明细和资源需求。",
+  "next": "方案稳定后重新派发 FPGA-F 缩减 full flow 尝试。",
+  "resource": {
+    "cpu": 2,
+    "memory_mb": 8192,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 8192,
+    "timeout_s": 7200,
+    "allocation_ratio": 0.5
+  },
+  "budget_policy": {
+    "initial_minutes": 60,
+    "extension_increment_minutes": 30,
+    "max_minutes": 300,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T02:22:45+08:00",
+  "updated_at": "2026-08-30T02:22:45+08:00",
+  "known_limits": [
+    "不启动完整 B5 full flow。",
+    "不修改原始正式 QSF/SDC/RTL；不读 license。",
+    "本地重型 Verilator 需 cgroup <16GiB。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-008-fpga-f2.md",
+  "evidence": "docs/tasks/evidence/T-20260830-008.json",
+  "merge_sha": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679",
+  "merged_at": "2026-08-30T03:20:32+08:00",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T03:20:32+08:00",
+    "head_sha": "517f854cca56872a3f6e93e7e8bc74da562e267f",
+    "notes": "FPGA-F2 merged. All heavy standalone modules PASS <16GB; black-box stub + QDB import + fitter only flow verified to skip top-level re-synthesis. Full B5 flow not yet run."
+  },
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T05:10:00+0800",
+        "new": "2026-08-30T02:22:45+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T05:10:00+0800",
+        "new": "2026-08-30T02:22:45+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "merged_at",
+        "old": "2026-08-30T08:40:00+0800",
+        "new": "2026-08-30T03:20:32+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "integrator_review.received_at",
+        "old": "2026-08-30T08:40:00+0800",
+        "new": "2026-08-30T03:20:32+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks.",
+    "evidence_fixes": [
+      {
+        "field": "head_sha",
+        "old": "",
+        "new": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679",
+        "reason": "backfill result/implementation head from evidence"
+      }
+    ]
+  },
+  "head_sha": "5a0b5a2d1901cf9ba5ac877d8b282afebe567679"
+}

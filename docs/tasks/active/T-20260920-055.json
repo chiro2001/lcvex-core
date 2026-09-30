@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "T-20260920-055",
+  "parent": "T-20260920-039",
+  "label": "B25-COREMARK-TERMINAL-WRAP-PARSER",
+  "title": "Normalize Windows JTAG-UART terminal edge redraw for strict CoreMark transcript parsing",
+  "kind": "validation-parser",
+  "priority": "critical",
+  "phase": "done",
+  "dispatch_status": "completed-and-integrated",
+  "assigned_owner": "root",
+  "depends_on": ["T-20260920-042"],
+  "base_sha": "6e4b595060ede58971089e4407656194710e5e1e",
+  "candidate_sha": "5b33c451317442f385dd828ece8c3bf829289d14",
+  "candidate_tree_sha": "e026b2ce52a673aeb526e0f9c3b508ccfa557d5e",
+  "branch": "fix/T-20260920-055-coremark-terminal-wrap-parser",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260920-055",
+  "writes": [
+    "fpga/catapult_a10/tools/parse_microbench.py",
+    "fpga/catapult_a10/tools/test_parse_microbench.py",
+    "fpga/catapult_a10/coremark/README.md",
+    "docs/handoffs/T-20260920-055-coremark-terminal-wrap-parser.md",
+    "docs/tasks/evidence/T-20260920-055.json"
+  ],
+  "reads": [
+    "T-053 direct-terminal transcript from the one authorized t/v/c session",
+    "T-042 strict CoreMark parser/README and upstream raw-field contract",
+    "T-054 board runner policy and T-053 task acceptance"
+  ],
+  "scope": "Handle only the Windows nios2-terminal 120-column CSI right-margin redraw observed at the end of a CMRESULT line. Normalize one verified duplicate-edge-character redraw before strict parsing; do not edit the captured transcript, waive fields, change expected CRCs/scores, or accept a firmware VALID token without raw upstream cross-check.",
+  "acceptance": "Positive synthetic regression reproduces the captured 120-column pattern and parses to the independently recomputed score; malformed cursor/duplicate/wrap data, short windows, CRC mismatch, score mismatch, missing upstream fields and error markers remain rejected. The exact T-053 transcript parses in full mode and reports cycles/score cross-checked against raw CoreMark output.",
+  "forbidden_regions": [
+    "any Quartus/JTAG/terminal/board access",
+    "rerunning T-053 candidate, t/v/c, or golden transactions",
+    "modifying expected CRCs, expected fixed-point formulas, or upstream source",
+    "silently stripping arbitrary ANSI/control sequences or generic whitespace"
+  ],
+  "resource": "Local parser/unit tests only; no GamePC or heavy local resource lock required.",
+  "dispatch": {"sent_at": "2026-09-27T21:08:23+08:00", "agent_name": "root", "monitoring": "integrator-owned sequential offline task; no hardware action"},
+  "result": {"evidence": "docs/tasks/evidence/T-20260920-055.json", "status": "PASS", "parser_tests": "9/9", "T053_transcript_parse": "VALID"},
+  "created_at": "2026-09-27T21:08:23+08:00",
+  "updated_at": "2026-09-27T22:12:11+08:00"
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "T-20260905-001",
+  "state": "done",
+  "partial": false,
+  "base_sha": "0f8802fd360ff031728075b3b6b218f2ba10ffcd",
+  "head_sha": "8e6a41f44523bfaea0f7b8bf7388502277a6344b",
+  "merge_sha": "8e6a41f44523bfaea0f7b8bf7388502277a6344b",
+  "branch": "feature/p7-final",
+  "worktree": "/home/chiro/projects/mycpu/lcvex",
+  "scope": "把 post-fit/STA 驱动的单点串行时序优化改为 top-N 聚类、2-3 lane、batch candidate 联合验证和单次 physical 的流水线。",
+  "implementation": {
+    "commit": "8e6a41f44523bfaea0f7b8bf7388502277a6344b",
+    "files": [
+      "AGENTS.md",
+      "docs/MULTI_AGENT_WORKFLOW.md",
+      "docs/FP_NEON_PIPELINE_PLAN.md",
+      "docs/decisions/ADR-20260905-006-timing-closure-batch-pipeline.md"
+    ],
+    "gates": [
+      "top-N grouped by shared cone/endpoints/module before lane selection",
+      "maximum three independent lanes; one dominant cone falls back to one lane",
+      "simulation-before-merge means merge into disposable batch candidate only",
+      "candidate runs the complete union of all member L0-L2 acceptance sets",
+      "long-lived feature promotion is ff-only to exact candidate SHA; otherwise rebuild and retest",
+      "same-file lanes require parent ownership and disjoint write_regions",
+      "local heavy and remote Quartus are separate single-entry resource slots",
+      "speculative next-batch work must be re-ranked against the newest matching STA",
+      "Gate D/CI/main and assembler/SOF gates are unchanged"
+    ]
+  },
+  "review": {
+    "agent_name": "/root/timing_batch_workflow_review",
+    "model": "gpt-5.6-luna",
+    "model_selection": "spawn_agent-model-omitted-user-confirmed-default",
+    "reasoning_effort": "max",
+    "sent_at": "2026-09-05T00:36:45+08:00",
+    "received_at": "2026-09-05T00:36:45+08:00",
+    "reported_at": "2026-09-05T00:44:30+08:00",
+    "result": "pass_after_corrections",
+    "corrected_blockers": [
+      "separated local heavy slot from remote Quartus slot in legacy section 9",
+      "replaced representative L2 with the complete union of member acceptance L0-L2",
+      "required ff-only exact candidate SHA promotion or candidate rebuild and full retest"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "workflow-static-validation",
+      "stage": "L0",
+      "command": "git diff --check; jq empty docs/tasks/active/T-20260905-001.json; python3 scripts/check_task_timestamps.py --scope live --json | jq task filter; rg stale conflicting phrases",
+      "result": "pass",
+      "exit_code": 0,
+      "started_at": "2026-09-05T00:34:00+08:00",
+      "finished_at": "2026-09-05T00:50:50+08:00",
+      "notes": "Repository-wide timestamp checker retains unrelated historical findings; the T-20260905-001 filtered result was empty."
+    }
+  ],
+  "known_limits": [
+    "T-058 was already frozen and running before this decision and is not changed retroactively",
+    "the first concrete Timing Batch can only be formed after T-058 returns a new matching top-N report",
+    "manual write_regions review remains required; no automatic SystemVerilog scope ownership checker was added"
+  ],
+  "handoff": "docs/handoffs/T-20260905-001-timing-batch-pipeline.md",
+  "decision": "docs/decisions/ADR-20260905-006-timing-closure-batch-pipeline.md",
+  "next": "Use the T-058 top-N report to register the first parent batch and up to three cone lanes."
+}

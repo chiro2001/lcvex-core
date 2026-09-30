@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "T-20260830-027",
+  "label": "HIST-EVID-FIX",
+  "parent": "T-20260830-025",
+  "title": "历史任务 evidence 批量定稿与时间戳 live 残留清理",
+  "kind": "audit-evidence-cleanup",
+  "priority": "medium",
+  "phase": "done",
+  "dispatch_status": "merged",
+  "base_sha": "3ae420dbd292d7a679fe58b4b2a4c1b78184c4e5",
+  "branch": "feature/T-20260830-027-hist-evid-fix",
+  "worktree": "/home/chiro/projects/mycpu/lcvex-wt-T-20260830-027",
+  "scope": "继续 EXT-01 已知残留：批量给历史 done 任务补齐 evidence 权威 head/merge/artifact hash/correction；执行 check_task_timestamps.py --scope live，尽量减少历史错误/警告，保留无法修改的旧值。",
+  "writes": [
+    "docs/tasks/active/**",
+    "docs/tasks/evidence/**",
+    "docs/tasks/TASKS.md",
+    "docs/audit/**",
+    "scripts/check_task_timestamps.py",
+    "docs/handoffs/T-20260830-027-hist-evid-fix.md",
+    "docs/tasks/evidence/T-20260830-027.json"
+  ],
+  "reads": [
+    "docs/handoffs/T-20260830-025-ext-01-fix.md",
+    "docs/tasks/**",
+    "scripts/check_task_timestamps.py",
+    "docs/audit/**"
+  ],
+  "validation": {
+    "l0": [
+      "check_task_timestamps.py 运行通过或记录明确残留",
+      "git diff --check"
+    ],
+    "l1": [],
+    "l2": [],
+    "l3": []
+  },
+  "acceptance": "尽可能批量收敛历史 evidence/时间戳残留，明确无法自动修复项。",
+  "next": "作为审计治理收尾。",
+  "resource": {
+    "cpu": 1,
+    "memory_mb": 2048,
+    "memory_cgroup_limit_mb": 16384,
+    "disk_mb": 2048,
+    "timeout_s": 1800,
+    "allocation_ratio": 0.2
+  },
+  "budget_policy": {
+    "initial_minutes": 30,
+    "extension_increment_minutes": 15,
+    "max_minutes": 90,
+    "max_is_hard_stop": false,
+    "background_after_max": true
+  },
+  "created_at": "2026-08-30T07:35:08+08:00",
+  "updated_at": "2026-08-30T07:35:08+08:00",
+  "known_limits": [
+    "不改写历史 handoff；保留旧值；不碰 RTL/QEMU。"
+  ],
+  "handoff": "docs/handoffs/T-20260830-027-hist-evid-fix.md",
+  "evidence": "docs/tasks/evidence/T-20260830-027.json",
+  "correction_record": {
+    "timestamp_fixes": [
+      {
+        "path": "created_at",
+        "old": "2026-08-30T17:20:00+0800",
+        "new": "2026-08-30T07:35:08+08:00",
+        "basis": "carrying_git_commit"
+      },
+      {
+        "path": "updated_at",
+        "old": "2026-08-30T17:20:00+0800",
+        "new": "2026-08-30T07:35:08+08:00",
+        "basis": "carrying_git_commit"
+      }
+    ],
+    "note": "Timestamp normalization for T-20260830-027: preserve old values; corrected planned/backfilled timestamps to carrying Git commit (or now) to satisfy live timestamp checks."
+  },
+  "merge_sha": "9f00ed109e8558df53bba8d70186c2bdb7f54d17",
+  "merged_at": "2026-08-30T18:00:00+0800",
+  "integrator_review": {
+    "status": "accepted",
+    "received_at": "2026-08-30T18:00:00+0800",
+    "head_sha": "9f00ed1",
+    "notes": "HIST-EVID-FIX merged. 63 evidence finalized, live timestamp 0/0, all historical archive only."
+  }
+}
